@@ -1,0 +1,13 @@
+{
+  "stopWords": "a an the i me my we our you your to for of in on at and or is are do does can who how what where when with need get help find goa",
+  "intents": [
+    {"pattern":"snake|cobra|serpent|reptile","terms":["snake","rescue","wildlife"],"boost":["resource-590480849c","org-27"]},
+    {"pattern":"rubbish|garbage|trash|waste|recycl|segregat|plastic","terms":["waste","recycling","segregation"],"boost":[]},
+    {"pattern":"compost|kitchen scraps|food scraps","terms":["composting","organic","waste"],"boost":[]},
+    {"pattern":"volunteer|give back|lend a hand|take part","terms":["volunteer","participate","community"],"boost":[]},
+    {"pattern":"cut.*tree|tree.*cut|felling","terms":["tree","cutting","forest"],"boost":[]},
+    {"pattern":"gram sabha|village.*meeting|panchayat","terms":["panchayat","gram","sabha","citizen"],"boost":[]},
+    {"pattern":"injured.*animal|stray.*dog|animal.*rescue","terms":["animal","rescue","veterinary","welfare"],"boost":[]}
+  ],
+  "weights": {"title":8,"body":2,"topic":0.3,"expandedTitle":3,"expandedBody":0.7,"allTerms":4,"exactPhrase":10,"intentBoost":15,"minimum":1,"semanticThreshold":0.39,"semanticOffset":0.3,"semanticWeight":18}
+}

@@ -1,0 +1,25 @@
+name: Native iOS parity
+on:
+  pull_request:
+    paths: ['src/**', 'public/**', 'shared/**', 'ios/**', '.github/workflows/ios-parity.yml']
+  workflow_dispatch:
+jobs:
+  parity:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - name: Regenerate current web reference cases
+        run: node --import tsx ios/scripts/export_search_fixtures.ts
+      - name: Check native data, search, model and draft behavior
+        run: swift test --package-path ios --jobs 4
+      - name: Prepare canonical resources
+        run: python3 ios/scripts/sync_resources.py
+      - name: Compile the native app
+        run: xcodebuild -project ios/ActForGoa.xcodeproj -scheme ActForGoa -configuration Debug -destination 'generic/platform=iOS Simulator' -jobs 4 build CODE_SIGNING_ALLOWED=NO

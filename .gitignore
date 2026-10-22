@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 .next/
 dist/
 .vercel/
@@ -21,3 +21,10 @@ data/fetch-manifest.json
 reports/link-checks.jsonl
 *.tsbuildinfo
 *.log
+
+# Native generated content and build products
+ios/ActForGoa/Content/
+ios/.build/
+ios/build/
+ios/device-build/
+**/xcuserdata/
