@@ -25,3 +25,7 @@ FINISH: unreviewed and undocumented is unfinished; this build ends with the fini
 
 ## Boundaries
 Use the canonical public catalogue, model and search configuration. No account, remote AI, invented contacts, automatic sending or production web deployment. Phone installation is requested, but Device Hub requires separate explicit approval for this occasion. Verify light, dark and large Dynamic Type on an iPhone Simulator; report physical checks separately.
+
+## Published guide parity
+
+The web published five practical guides during implementation. The native reader keeps their draft status, source register, verification register and 17 downloadable templates. Use native section navigation, upright inline Markdown and stacked table rows for phone reading. Template files open in a native sheet with text selection and system file sharing. These are authored guides beside the original archive, not newly generated advice.

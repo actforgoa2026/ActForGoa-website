@@ -19,7 +19,7 @@ final class ActForGoaUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["153 results"].waitForExistence(timeout: 5))
         capture("phone-directory", app)
         app.tabBars.buttons["Library"].tap()
-        XCTAssertTrue(app.staticTexts["237 results"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.staticTexts["242 results"].waitForExistence(timeout: 5))
         app.tabBars.buttons["Community"].tap()
         app.buttons["Contact ActForGoa"].tap()
         XCTAssertTrue(app.textFields["contact-name"].waitForExistence(timeout: 5))
@@ -34,6 +34,61 @@ final class ActForGoaUITests: XCTestCase {
         XCTAssertTrue(prepare.isEnabled); prepare.tap()
         XCTAssertTrue(app.staticTexts["Nothing has been sent yet."].waitForExistence(timeout: 5))
         capture("phone-email-prepared", app)
+    }
+    func testPracticalGuidesAndTemplates() throws {
+        let app = XCUIApplication(); app.launch()
+        XCTAssertTrue(app.tabBars.buttons["Library"].waitForExistence(timeout: 20))
+        app.tabBars.buttons["Library"].tap()
+        let field = app.searchFields.firstMatch
+        field.tap(); field.typeText("Krishi Card")
+        let guide = app.buttons["record-guide-farming"]
+        XCTAssertTrue(guide.waitForExistence(timeout: 20)); guide.tap()
+        XCTAssertTrue(app.staticTexts["Start or sustain farming in Goa"].waitForExistence(timeout: 5))
+        capture("phone-practical-guide", app)
+        let templates = app.buttons["guide-templates"]
+        if !templates.isHittable { app.swipeUp() }
+        templates.tap()
+        let item = app.buttons["Farming registration enquiry"]
+        if !item.isHittable { app.swipeUp() }
+        XCTAssertTrue(item.waitForExistence(timeout: 5)); item.tap()
+        XCTAssertTrue(app.buttons["share-guide-file"].waitForExistence(timeout: 5))
+        capture("phone-template", app)
+        app.buttons["Done"].tap()
+        app.swipeUp()
+        capture("phone-guide-table", app)
+    }
+    func testGuideNavigationAndShare() throws {
+        let app = XCUIApplication(); app.launch()
+        XCTAssertTrue(app.searchFields.firstMatch.waitForExistence(timeout: 20))
+        app.searchFields.firstMatch.tap(); app.searchFields.firstMatch.typeText("Krishi Card")
+        let guide = app.buttons["record-guide-farming"]
+        XCTAssertTrue(guide.waitForExistence(timeout: 20)); guide.tap()
+        app.buttons["See what needs verification"].tap()
+        XCTAssertTrue(app.staticTexts["What still needs verification"].waitForExistence(timeout: 5))
+        capture("phone-verification-register", app)
+        app.navigationBars.buttons.element(boundBy: 0).tap()
+        app.buttons["On this page"].tap()
+        let section = app.buttons["Choose your first step"]
+        XCTAssertTrue(section.waitForExistence(timeout: 5)); section.tap()
+        capture("phone-guide-section", app)
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let landscape = NSPredicate { _, _ in app.windows.firstMatch.frame.width > app.windows.firstMatch.frame.height }
+        expectation(for: landscape, evaluatedWith: nil)
+        waitForExpectations(timeout: 5)
+        Thread.sleep(forTimeInterval: 1)
+        capture("phone-guide-landscape", app)
+        XCUIDevice.shared.orientation = .portrait
+        app.terminate(); app.launch()
+        app.searchFields.firstMatch.tap(); app.searchFields.firstMatch.typeText("Krishi Card")
+        XCTAssertTrue(guide.waitForExistence(timeout: 20)); guide.tap()
+        app.buttons["guide-templates"].tap()
+        let item = app.buttons["Farming registration enquiry"]
+        if !item.isHittable { app.swipeUp() }
+        item.tap()
+        XCTAssertTrue(app.buttons["share-guide-file"].waitForExistence(timeout: 5))
+        app.buttons["share-guide-file"].tap()
+        Thread.sleep(forTimeInterval: 2)
+        capture("phone-file-share", app)
     }
     func testEmptySearch() throws {
         let app = XCUIApplication(); app.launch()
@@ -52,6 +107,6 @@ final class ActForGoaUITests: XCTestCase {
         XCTAssertTrue(app.buttons["Snake rescue"].waitForExistence(timeout: 5))
     }
     private func capture(_ name: String, _ app: XCUIApplication) {
-        let attachment = XCTAttachment(screenshot: app.screenshot()); attachment.name = name; attachment.lifetime = .keepAlways; add(attachment)
+        let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot()); attachment.name = name; attachment.lifetime = .keepAlways; add(attachment)
     }
 }

@@ -50,7 +50,7 @@ struct AboutView: View {
                 Link("Press coverage", destination: URL(string: "https://actforgoa.org/press-coverage/")!).frame(minHeight: 44)
                 Divider()
                 Text("About this field guide").font(.title2.weight(.semibold)).accessibilityAddTraits(.isHeader)
-                Text("This development preview bundles \(store.records.count) public ActForGoa entries. Original content, source links and dates are retained. Some records are historical; contact details have not been independently verified.")
+                Text("This development preview bundles original ActForGoa entries and five practical guides with official sources, templates and visible verification flags. The practical guides remain drafts for legal and service review. Some original records are historical; contact details have not been independently verified.")
                 Text("Search combines keywords with the same MiniLM language model used by the web field guide. It runs on your phone, finds existing entries and does not generate advice. No account is needed, and your searches are not sent to an AI provider.")
                 Text("The catalogue and search work offline. Source websites, documents, calls and email need the appropriate connection or app. Content updates arrive with a new app build.")
                 Text("Contact forms prepare an email for you to review and send. The guide does not store submissions. The original ActForGoa website remains the source.")

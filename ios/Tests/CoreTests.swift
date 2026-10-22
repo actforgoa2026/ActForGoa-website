@@ -9,9 +9,10 @@ final class CoreTests: XCTestCase {
     }
     func fixtures() throws -> [Fixture] { try JSONDecoder().decode([Fixture].self, from: Data(contentsOf: Bundle.module.url(forResource: "search-fixtures", withExtension: "json")!)) }
     func records() throws -> [GuideRecord] { try JSONDecoder().decode([GuideRecord].self, from: Data(contentsOf: Self.root.appendingPathComponent("public/data/catalog.json"))) }
+    func guides() throws -> [PracticalGuide] { try JSONDecoder().decode([PracticalGuide].self, from: Data(contentsOf: Self.root.appendingPathComponent("src/content/guides.json"))) }
     func engine() throws -> SearchEngine {
         let config = try JSONDecoder().decode(SearchConfiguration.self, from: Data(contentsOf: Self.root.appendingPathComponent("shared/search-config.json")))
-        return try SearchEngine(records: records(), configuration: config)
+        return try SearchEngine(records: guides().filter(\.listed).map(\.record) + records(), configuration: config)
     }
     func testWebLexicalParity() throws {
         let engine = try engine()
@@ -69,6 +70,27 @@ final class CoreTests: XCTestCase {
         XCTAssertEqual(c.queryItems?.first { $0.name == "body" }?.value, draft.body)
         XCTAssertTrue(draft.body.contains("Entry: Some entry"))
         draft.message = String(repeating: "a", count: 4001); XCTAssertFalse(draft.valid)
+    }
+    func testPracticalGuideCorpusAndCitations() throws {
+        let guides = try guides()
+        XCTAssertEqual(guides.filter(\.listed).count, 5)
+        for guide in guides {
+            let parsed = GuideMarkdown(guide.markdown)
+            XCTAssertFalse(parsed.blocks.isEmpty, guide.id)
+            let rendered = parsed.blocks.map { $0.text + $0.headers.joined() + $0.rows.flatMap { $0 }.joined() }.joined()
+            XCTAssertNil(rendered.range(of: #"\[[^\]]+\]\[[^\]]+\]"#, options: .regularExpression), guide.id)
+            for file in [guide.download] + guide.templates.map(\.url) {
+                XCTAssertTrue(FileManager.default.fileExists(atPath: Self.root.appendingPathComponent("public" + file).path), file)
+            }
+        }
+    }
+    func testMarkdownPreservesStructureAndResolvesReferences() {
+        let markdown = "## A step\n\nRead [the source][S1].\n\n1. First\n- Next\n\n| Situation | Action |\n| --- | --- |\n| Garden | [Apply](/read/guide-farming) |\n\n[S1]: https://example.org/source"
+        let blocks = GuideMarkdown(markdown).blocks
+        XCTAssertEqual(blocks.count, 5)
+        XCTAssertEqual(blocks[1].text, "Read [the source](https://example.org/source).")
+        XCTAssertEqual(blocks[4].headers, ["Situation", "Action"])
+        XCTAssertEqual(blocks[4].rows, [["Garden", "[Apply](/read/guide-farming)"]])
     }
     func testHistoricalDatePreserved() {
         XCTAssertEqual(GuideRecord.dateLabel("22 October 2018"), "22 October 2018")

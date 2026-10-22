@@ -2,6 +2,7 @@ import SwiftUI
 
 @MainActor @Observable final class GuideStore {
     private(set) var records: [GuideRecord] = []
+    private(set) var practicalGuides: [PracticalGuide] = []
     private(set) var engine: SearchEngine?
     private(set) var error: String?
     private(set) var loading = false
@@ -17,13 +18,15 @@ import SwiftUI
         loading = true; error = nil
         do {
             let root = contentURL
-            let (records, engine) = try await Task.detached(priority: .userInitiated) {
+            let (records, guides, engine) = try await Task.detached(priority: .userInitiated) {
                 let decoder = JSONDecoder()
-                let records = try decoder.decode([GuideRecord].self, from: Data(contentsOf: root.appendingPathComponent("data/catalog.json")))
+                let archive = try decoder.decode([GuideRecord].self, from: Data(contentsOf: root.appendingPathComponent("data/catalog.json")))
+                let guides = try decoder.decode([PracticalGuide].self, from: Data(contentsOf: root.appendingPathComponent("data/practical-guides.json")))
+                let records = guides.filter(\.listed).map(\.record) + archive
                 let config = try decoder.decode(SearchConfiguration.self, from: Data(contentsOf: root.appendingPathComponent("search-config.json")))
-                return (records, SearchEngine(records: records, configuration: config))
+                return (records, guides, SearchEngine(records: records, configuration: config))
             }.value
-            self.records = records; self.engine = engine
+            self.records = records; self.practicalGuides = guides; self.engine = engine
         } catch { self.error = "The saved field guide couldn’t open. Try again, or visit ActForGoa online." }
         loading = false
     }
@@ -45,7 +48,8 @@ struct RouteDestinations: ViewModifier {
         content.navigationDestination(for: GuideRoute.self) { route in
             switch route {
             case .record(let id):
-                if let record = store.record(id) { RecordDetail(record: record) }
+                if let guide = store.practicalGuides.first(where: { $0.id == id }) { PracticalGuideView(guide: guide) }
+                else if let record = store.record(id) { RecordDetail(record: record) }
                 else { ContentUnavailableView("Entry not found", systemImage: "book.closed", description: Text("This entry isn’t in the bundled guide. Search the collection or open its web link.")) }
             }
         }

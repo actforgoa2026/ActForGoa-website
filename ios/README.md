@@ -34,10 +34,12 @@ Select the appropriate development team for an iPhone build. Do not launch Devic
 | Directory, library, stories | Directory and Library tabs; stories inside Community |
 | List/grid views | Open native list or image-rich adaptive layout via “Show images” |
 | Detail, historical dates, contacts, downloads, sources, related entries | Native reading screen with source notices and links |
+| Five practical guides and two review registers | Offline native reader with section navigation, source links, responsive table rows and visible draft status |
+| Seventeen editable templates and guide downloads | Bundled files with native preview, text selection and Save/Share actions |
 | Shareable entries | System share sheet with canonical web URL; `actforgoa://read/<id>` deep link |
 | About, participation, contact/correction | Community, About, native form, reviewable Mail composition |
 
-The canonical data remains `public/data/` and the model remains `public/models/`. Never edit `ios/ActForGoa/Content/`. Web content updates reach installed phones in the next development build; this app does not silently fetch a different corpus. The separate ongoing `corpus/` research is not imported until it becomes part of the canonical web catalogue.
+The canonical data remains `public/data/`, practical guide definitions are `src/content/guides.json`, downloadable files are `public/guides/`, and the model remains `public/models/`. Never edit `ios/ActForGoa/Content/`. This build contains 600 archived entries, five searchable practical guides, two review registers and 17 templates. Web content updates reach installed phones in the next development build; this app does not silently fetch a different corpus. The separate ongoing `corpus/` research is not imported until it becomes published web content. The five authored guides use keyword retrieval, matching the current web implementation; the semantic index continues to cover the 600 archived entries.
 
 When changing a web route or capability, update this table, the corresponding native flow, and its tests in the same PR. Shared data and ranking changes trigger the native CI workflow. Swift and JavaScript use different quantized runtime kernels: reference vectors must have cosine agreement above 0.995, and practical retrieval tests must still pass. Exact floating-point ordering of closely matched semantic results is not promised.
 

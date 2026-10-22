@@ -6,6 +6,8 @@ objectVersion = 60;
 objects = {
 954C0EF25876C6C3E6286441 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/ActForGoaApp.swift"; "sourceTree" = "<group>"; };
 F11C8E13DDB7494910EC1FBF = { "isa" = "PBXBuildFile"; "fileRef" = 954C0EF25876C6C3E6286441; };
+9AF7B60FEAA57D85340C2F12 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/Core/PracticalGuide.swift"; "sourceTree" = "<group>"; };
+B5B2EA385893618E39B0A57F = { "isa" = "PBXBuildFile"; "fileRef" = 9AF7B60FEAA57D85340C2F12; };
 912F4D56247575572A07A82A = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/Core/Record.swift"; "sourceTree" = "<group>"; };
 3E092533138805886B5CF125 = { "isa" = "PBXBuildFile"; "fileRef" = 912F4D56247575572A07A82A; };
 B5D5185A88F32D745DA5B89D = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/Core/SearchEngine.swift"; "sourceTree" = "<group>"; };
@@ -18,6 +20,8 @@ E95C8A2EC301014FF42C4CAD = { "isa" = "PBXFileReference"; "lastKnownFileType" = "
 030B4C82F204EB3545E28283 = { "isa" = "PBXBuildFile"; "fileRef" = E95C8A2EC301014FF42C4CAD; };
 53544DECFC9A7A70D6825F68 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/UI/GuideStore.swift"; "sourceTree" = "<group>"; };
 13C86500DB484D7B20E7ECCB = { "isa" = "PBXBuildFile"; "fileRef" = 53544DECFC9A7A70D6825F68; };
+BE230CB62FA0E9A1E1C7313B = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/UI/PracticalGuideView.swift"; "sourceTree" = "<group>"; };
+E869D4F294F6FA3992A7FC92 = { "isa" = "PBXBuildFile"; "fileRef" = BE230CB62FA0E9A1E1C7313B; };
 F0F4A0E8BFCFE1A35297C979 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/UI/RecordDetail.swift"; "sourceTree" = "<group>"; };
 5FD1E35A6CC8819AE49B7FBD = { "isa" = "PBXBuildFile"; "fileRef" = F0F4A0E8BFCFE1A35297C979; };
 E8543CB7E216E3CAA9E4CF61 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "ActForGoa/UI/RootView.swift"; "sourceTree" = "<group>"; };
@@ -31,12 +35,12 @@ B6CDB6E5D160E013280D3C68 = { "isa" = "PBXFileReference"; "explicitFileType" = "w
 A8D8270AA6DB8732282C9541 = { "isa" = "PBXFileReference"; "explicitFileType" = "wrapper.cfbundle"; "path" = "ActForGoaUITests.xctest"; "sourceTree" = "BUILT_PRODUCTS_DIR"; };
 FBDC4F23F93125BBEEAE800C = { "isa" = "PBXGroup"; "children" = (B6CDB6E5D160E013280D3C68, A8D8270AA6DB8732282C9541,); "name" = "Products"; "sourceTree" = "<group>"; };
 528CADEF339B428C50104580 = { "isa" = "PBXFileReference"; "lastKnownFileType" = "sourcecode.swift"; "path" = "UITests/ActForGoaUITests.swift"; "sourceTree" = "<group>"; };
-DC76E9F0C0006E8F919E0C51 = { "isa" = "PBXGroup"; "children" = (954C0EF25876C6C3E6286441, 912F4D56247575572A07A82A, B5D5185A88F32D745DA5B89D, B7121EFDF5D8F923011D8469, 5B965F07E56592CB421124BE, E95C8A2EC301014FF42C4CAD, 53544DECFC9A7A70D6825F68, F0F4A0E8BFCFE1A35297C979, E8543CB7E216E3CAA9E4CF61, B6AF5CAC0B2B8C57D0483237, D9A57961070BC1F1BFD651D1, 41C862799E99E9DFAEDA16FE, 7ADB92A1C4F8F0576D44558E, 528CADEF339B428C50104580, FBDC4F23F93125BBEEAE800C,); "sourceTree" = "<group>"; };
+DC76E9F0C0006E8F919E0C51 = { "isa" = "PBXGroup"; "children" = (954C0EF25876C6C3E6286441, 9AF7B60FEAA57D85340C2F12, 912F4D56247575572A07A82A, B5D5185A88F32D745DA5B89D, B7121EFDF5D8F923011D8469, 5B965F07E56592CB421124BE, E95C8A2EC301014FF42C4CAD, 53544DECFC9A7A70D6825F68, BE230CB62FA0E9A1E1C7313B, F0F4A0E8BFCFE1A35297C979, E8543CB7E216E3CAA9E4CF61, B6AF5CAC0B2B8C57D0483237, D9A57961070BC1F1BFD651D1, 41C862799E99E9DFAEDA16FE, 7ADB92A1C4F8F0576D44558E, 528CADEF339B428C50104580, FBDC4F23F93125BBEEAE800C,); "sourceTree" = "<group>"; };
 96EF9E2D237FC0159CF2690A = { "isa" = "XCRemoteSwiftPackageReference"; "repositoryURL" = "https://github.com/microsoft/onnxruntime-swift-package-manager"; "requirement" = { "kind" = "exactVersion"; "version" = "1.24.2"; }; };
 F586D860A7C4A459DF5CB4BD = { "isa" = "XCSwiftPackageProductDependency"; "package" = 96EF9E2D237FC0159CF2690A; "productName" = "onnxruntime"; };
 21A9FD4C8BAB666C2662CC8C = { "isa" = "PBXBuildFile"; "productRef" = F586D860A7C4A459DF5CB4BD; };
 6B387CED110858DCBCDA36ED = { "isa" = "PBXShellScriptBuildPhase"; "buildActionMask" = "2147483647"; "files" = (); "inputPaths" = (); "outputPaths" = (); "alwaysOutOfDate" = "1"; "runOnlyForDeploymentPostprocessing" = "0"; "shellPath" = "/bin/sh"; "shellScript" = "/usr/bin/python3 \"$SRCROOT/scripts/sync_resources.py\"\n"; "name" = "Sync canonical web catalogue"; };
-BCE16DD0260827ECF338C787 = { "isa" = "PBXSourcesBuildPhase"; "buildActionMask" = "2147483647"; "files" = (F11C8E13DDB7494910EC1FBF, 3E092533138805886B5CF125, B60F5389F7F7C794E0701C38, 3CD3FDC9724B94B3347732E2, 4C07E2957CF302BA8D4C8CD3, 030B4C82F204EB3545E28283, 13C86500DB484D7B20E7ECCB, 5FD1E35A6CC8819AE49B7FBD, DF89E4A72A4204C53C98AE22, 83CFB838C300FCD4461614CF,); "runOnlyForDeploymentPostprocessing" = "0"; };
+BCE16DD0260827ECF338C787 = { "isa" = "PBXSourcesBuildPhase"; "buildActionMask" = "2147483647"; "files" = (F11C8E13DDB7494910EC1FBF, B5B2EA385893618E39B0A57F, 3E092533138805886B5CF125, B60F5389F7F7C794E0701C38, 3CD3FDC9724B94B3347732E2, 4C07E2957CF302BA8D4C8CD3, 030B4C82F204EB3545E28283, 13C86500DB484D7B20E7ECCB, E869D4F294F6FA3992A7FC92, 5FD1E35A6CC8819AE49B7FBD, DF89E4A72A4204C53C98AE22, 83CFB838C300FCD4461614CF,); "runOnlyForDeploymentPostprocessing" = "0"; };
 7561BFB015D8F536760CB671 = { "isa" = "PBXFrameworksBuildPhase"; "buildActionMask" = "2147483647"; "files" = (21A9FD4C8BAB666C2662CC8C,); "runOnlyForDeploymentPostprocessing" = "0"; };
 FA784E1C5693271600BC485F = { "isa" = "PBXBuildFile"; "fileRef" = D9A57961070BC1F1BFD651D1; };
 453924BD81A2F3A51A943C3A = { "isa" = "PBXBuildFile"; "fileRef" = 41C862799E99E9DFAEDA16FE; };

@@ -168,7 +168,7 @@ struct CatalogueView: View {
                 Button("Browse all \(store.records.count) entries") { showAll = true }
             }
             GuideSection("Useful guides") {
-                ForEach(["resource-590480849c", "resource-5731eea370", "resource-34bc1772ee"], id: \.self) { id in
+                ForEach(["guide-farming", "guide-animal-welfare", "guide-environmental-protection"], id: \.self) { id in
                     if let record = store.record(id) { RecordRow(record: record, showImage: false) }
                 }
             }
@@ -218,7 +218,7 @@ struct RecordRow: View {
                         LocalPhoto(path: record.image).frame(height: 170).clipped().clipShape(RoundedRectangle(cornerRadius: 8))
                     }
                     Text(record.title).font(.headline).foregroundStyle(GuideTheme.ink).fixedSize(horizontal: false, vertical: true)
-                    Label(record.kind.label + (record.locality.map { " · \($0)" } ?? ""), systemImage: record.kind.symbol).font(.caption).foregroundStyle(GuideTheme.secondary)
+                    Label((record.editorialStatus == "authored-practical-guide" ? "Practical guide · Draft" : record.kind.label) + (record.locality.map { " · \($0)" } ?? ""), systemImage: record.kind.symbol).font(.caption).foregroundStyle(GuideTheme.secondary)
                     Text(record.displaySummary).font(.subheadline).foregroundStyle(GuideTheme.secondary).lineLimit(3)
                 }
             }.accessibilityIdentifier("record-\(record.id)")
