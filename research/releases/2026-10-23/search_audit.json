@@ -1,0 +1,2406 @@
+{
+  "checked_on": "2026-10-23",
+  "query_count": 194,
+  "all_150_individually_searched": true,
+  "notes": "Raw search-result bodies were reduced to query and used-source metadata to exclude unrelated private details returned by search. Review decisions and fetched primary evidence are saved separately.",
+  "queries": [
+    {
+      "audit_file": "search_000_011.json",
+      "index": 0,
+      "id": "goa-1e80169ac63c",
+      "name": "Goa State Pollution Control Board",
+      "query": "\"Goa State Pollution Control Board\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/basicsearch",
+        "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE3",
+        "https://goaspcb.gov.in/",
+        "https://goaspcb.gov.in/contact-us-2/",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 1,
+      "id": "goa-deb4a9c790b9",
+      "name": "Green Goa Works",
+      "query": "\"Green Goa Works\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://darryldsouza.com/",
+        "https://goafoundation.org/",
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://undpngddlsprod01.blob.core.windows.net/pdc/00096923-PPMPWM_Prodoc_valid_till_Dec_2027.docx.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 2,
+      "id": "goa-19dbe2150215",
+      "name": "Green Polymers",
+      "query": "\"Green Polymers\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/company/green-polymers-pvt-ltd"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 3,
+      "id": "goa-ff6ffd717a33",
+      "name": "Smitesh L",
+      "query": "\"Smitesh L\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 4,
+      "id": "goa-7f4a6924ddd3",
+      "name": "V Recycle",
+      "query": "\"V Recycle\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://undpngddlsprod01.blob.core.windows.net/pdc/00096923-PPMPWM_Prodoc_valid_till_Dec_2027.docx.pdf",
+        "https://vrecycle.in/who-we-are/"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 5,
+      "id": "goa-499c56ed7dd0",
+      "name": "Solution Providers Goa",
+      "query": "\"Solution Providers Goa\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://www.goa.gov.in",
+        "https://www.indianyellowpages.com/goa/solution-providers-bardez-goa-4225946/"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 6,
+      "id": "goa-a69a0f2d64a1",
+      "name": "The Sustainable Green Company",
+      "query": "\"The Sustainable Green Company\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaspcb.gov.in/",
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://www.greencompanygoa.com/"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 7,
+      "id": "goa-8df239802984",
+      "name": "Lila Digital and Environmental Solutions Pvt Ltd",
+      "query": "\"Lila Digital and Environmental Solutions Pvt Ltd\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 8,
+      "id": "goa-f25014da1bdd",
+      "name": "AASTHA (health and differently abled)",
+      "query": "\"AASTHA\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://anandniketan.org.in/about-aastha/"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 9,
+      "id": "goa-2118c1cd66a5",
+      "name": "Akhil Gomantak Maratha Rajak Samaj",
+      "query": "\"Akhil Gomantak Maratha Rajak Samaj\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://agmrs.org/?page_id=43",
+        "https://goaprintingpress.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 10,
+      "id": "goa-5b02cbac55a4",
+      "name": "All India Womens Conference",
+      "query": "\"All India Womens Conference\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.dpse.goa.gov.in",
+        "https://www.indiangoslist.com/ngo-address/all-india-womens-conference-in-panaji-goa_GA-2013-0056368"
+      ]
+    },
+    {
+      "audit_file": "search_000_011.json",
+      "index": 11,
+      "id": "goa-14f5cdfcd5c4",
+      "name": "Alterenergyz",
+      "query": "\"Alterenergyz\" Goa 2026 contact environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://alterenergyz.in/",
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 12,
+      "id": "goa-16baec5dfd29",
+      "name": "Amar Bharati Gram Vikas Sanstha",
+      "query": "\"Amar Bharati Gram Vikas Sanstha\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.blogger.com/profile/07221278453844067474"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 13,
+      "id": "goa-b1bf52ed66af",
+      "name": "Anyay Rahit Zindagi",
+      "query": "\"Anyay Rahit Zindagi\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://arzindia.org/"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 14,
+      "id": "goa-a60cb37b111e",
+      "name": "Apoorva Apte",
+      "query": "\"Apoorva Apte\" Shubhankar Goa 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://vmsiihe.edu.in/wp-content/uploads/2024/06/Final-Green-Audit-Report.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 15,
+      "id": "goa-f804515a6de6",
+      "name": "Asha Mahal Association for Social Health in India Goa State Branch",
+      "query": "\"Asha Mahal Association for Social Health in India Goa State Branch\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 16,
+      "id": "goa-e219d4398348",
+      "name": "Bailancho Ekvott",
+      "query": "\"Bailancho Ekvott\" 2026 upcycled",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://arzindia.org/",
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/vendors.html",
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/life-sunday/homegrown-vibes-this-community-turns-nuvem-farm-into-neighbourhood-tinto/141730.html"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 17,
+      "id": "goa-3c4662dbb767",
+      "name": "Bailancho Saad",
+      "query": "\"Bailancho Saad\" Goa 2026 environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://goafoundation.org/statement-of-all-environmental-planning-and-other-civil-society-associations-and-organizations-from-goa-on-the-occasion-of-world-environment-day-june-5-2023/",
+        "https://www.goa.gov.in",
+        "https://www.unigoa.ac.in"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 18,
+      "id": "goa-e8e46783271b",
+      "name": "Bavish",
+      "query": "\"Bavish\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://bavishgoa.org/contact",
+        "https://goaspcb.gov.in/"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 19,
+      "id": "goa-1cbc24250dab",
+      "name": "Bethesda Life Centre",
+      "query": "\"Bethesda Life Centre\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://blcgoa.org/",
+        "https://blcgoa.org/about-us/",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 20,
+      "id": "goa-477788cbe57b",
+      "name": "Bhagwan Mahaveer Wildlife Sanctuary",
+      "query": "Bhagwan Mahavir wildlife sanctuary Goa 2026 conservation forest",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://www.forest.goa.gov.in/wild-life-management",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 21,
+      "id": "goa-469302eeae9c",
+      "name": "BHARATEEYA SANSKRITI PRABHODINI",
+      "query": "\"BHARATEEYA SANSKRITI PRABHODINI\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.unigoa.ac.in"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 22,
+      "id": "goa-3fe126f9f071",
+      "name": "Care and Compassion Goa",
+      "query": "\"Care and Compassion Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 23,
+      "id": "goa-b80b220d2425",
+      "name": "Circlewallas",
+      "query": "\"Circlewallas\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://circlewallas.in/"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 24,
+      "id": "goa-c0623e027819",
+      "name": "COOJ Mental Health Foundation",
+      "query": "\"COOJ\" Goa official contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://cooj.co.in/contact/"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 25,
+      "id": "goa-ea1758725ddf",
+      "name": "Cosme Biotech",
+      "query": "\"Cosme Biotech\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://nstmis-dst.org/Pdfs/RD%20Directory%202025_final_26-02-2025.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 26,
+      "id": "goa-d6d5649c7bab",
+      "name": "Cyclingzens",
+      "query": "\"Cyclingzens\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://cyclingzens.com/rental/"
+      ]
+    },
+    {
+      "audit_file": "search_012_027.json",
+      "index": 27,
+      "id": "goa-1b5772faa6b9",
+      "name": "Waylon D’Souza",
+      "query": "\"Waylon D'Souza\" upcycling Goa 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/in/waylon-d-souza-77689b12",
+        "https://www.waylon.in/art"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 28,
+      "id": "goa-f0ef647fe454",
+      "name": "Dayasagar Medical Society",
+      "query": "\"Dayasagar Medical Society\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 29,
+      "id": "goa-3e16d6acb60c",
+      "name": "Department of Water Resources",
+      "query": "\"Department of Water Resources\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.goawrd.gov.in/administration/contact-details"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 30,
+      "id": "goa-bc03b29930e3",
+      "name": "Directorate of agriculture, Goa",
+      "query": "\"Directorate of agriculture, Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 31,
+      "id": "goa-65bb17d0e44d",
+      "name": "DIRECTORATE OF PANCHAYATS",
+      "query": "\"DIRECTORATE OF PANCHAYATS\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://swayampurnagoa.goa.gov.in/resources/departments/",
+        "https://www.goa.gov.in",
+        "https://www.goa.gov.in/department/panchayats/",
+        "https://www.gsic.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 32,
+      "id": "goa-7c48287c0d56",
+      "name": "Disability Rights Association of Goa",
+      "query": "\"Disability Rights Association of Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://sangam.org.in/CCI/SearchCCI/CCIDetails?src=21bb3952-58c7-4d1d-89a1-443ffaae0d81",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 33,
+      "id": "goa-7e2d122491e7",
+      "name": "Disha Charitable Trust",
+      "query": "\"Disha Charitable Trust\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://thenationaltrust.in/content/registered_organization.php?start=50"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 34,
+      "id": "goa-0352d2fc434c",
+      "name": "Shekhar Divadkar",
+      "query": "\"Shekhar Divadkar\" Goa environment sustainability 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://skalasia.org/executive-board/officers/"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 35,
+      "id": "goa-a33acf219566",
+      "name": "Darryl Dsouza",
+      "query": "\"Darryl Dsouza\" \"Earth Keepers\" contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 36,
+      "id": "goa-1d007ad3cecb",
+      "name": "Gavin DSouza",
+      "query": "\"Gavin\" \"Lila\" Goa environment contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://in.linkedin.com/company/lila-digital-and-environmental-solutions-private-limited"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 37,
+      "id": "goa-274792ca4d5a",
+      "name": "Earth Friendly",
+      "query": "\"Earth Friendly\" Goa waste contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/company/earth-friendly"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 38,
+      "id": "goa-a039a8446ff3",
+      "name": "Earth Keepers Market",
+      "query": "\"Earth Keepers Market\" Goa 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://darryldsouza.com/",
+        "https://earthkeepersconnect.org/ekm/"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 39,
+      "id": "goa-da1867f8d1c9",
+      "name": "Zeroposro (formerly Ecoposro)",
+      "query": "\"Zeroposro\" Goa contact 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.zeroposro.com/",
+        "https://www.zeroposro.com/find-us"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 40,
+      "id": "goa-d3621163881f",
+      "name": "El Shaddai Charitable Trust",
+      "query": "\"El Shaddai Charitable Trust\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://childrescue.net/contact/"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 41,
+      "id": "goa-1a7240f5fb0a",
+      "name": "Energy-XS",
+      "query": "\"Energy-XS\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/company/energy-xs"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 42,
+      "id": "goa-439a6ed7d7ec",
+      "name": "Donald Fernandes",
+      "query": "\"Donald Fernandes\" \"Food Bank\" Goa 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/goa-news/street-providence-launches-initiative-to-reuse-food-waste-from-factories/121175.html"
+      ]
+    },
+    {
+      "audit_file": "search_028_043.json",
+      "index": 43,
+      "id": "goa-c5dea29c8985",
+      "name": "Flycatcher Technologies LLP",
+      "query": "\"Flycatcher Technologies LLP\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://flycatchertech.com/contact/",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 44,
+      "id": "goa-a3ad1f85d474",
+      "name": "Goa Human Rights Commission (govt)",
+      "query": "Goa Human Rights Commission official contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/basicsearch",
+        "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzMw",
+        "https://goahumanrightscommission.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.goa.gov.in/department/goa-human-rights-commision/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 45,
+      "id": "goa-c66c5e2bb4ff",
+      "name": "GOA LIVELIHOODS FORUM",
+      "query": "\"GOA LIVELIHOODS FORUM\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goalivelihoods.in/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 46,
+      "id": "goa-3be8492c5821",
+      "name": "Goa Waste Management Corporation",
+      "query": "\"Goa Waste Management Corporation\" 2026 waste",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTI0",
+        "https://www.dpse.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.goa.gov.in/department/goa-waste-management-corporation/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 47,
+      "id": "goa-69d2aa8283f8",
+      "name": "Goenchi Mati",
+      "query": "\"Goenchi Mati\" 2026 mining",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://thefutureweneed.org/campaigns/",
+        "https://thefutureweneed.org/contact/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 48,
+      "id": "goa-0dbe3d9aebd3",
+      "name": "GOENCHINARISHAKTI",
+      "query": "\"GOENCHINARISHAKTI\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.redcrossgoa.org"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 49,
+      "id": "goa-aae97db574fe",
+      "name": "Green India Recycling Co Pvt Ltd",
+      "query": "\"Green India Recycling\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/company/green-india-recycling-company-pvt.-ltd."
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 50,
+      "id": "goa-582b1193de05",
+      "name": "HELP INDIA",
+      "query": "\"HELP INDIA\" NGO Goa Panaji",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://helpindiagoa.org/contact/",
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 51,
+      "id": "goa-fae07c2446fe",
+      "name": "Homecrafted Soaps",
+      "query": "\"Homecrafted Soaps\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://navhindtimes.in/buzz/igniting-joy/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 52,
+      "id": "goa-8b8eb0311b16",
+      "name": "Human Touch",
+      "query": "\"Human Touch\" NGO Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ykptaskteam.kos.co.th/project-stories/breaking-america-finally-revokes-emergency"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 53,
+      "id": "goa-8e08e6fcd3ba",
+      "name": "Institute of Psychiatry and Human Behaviour",
+      "query": "Institute Psychiatry Human Behaviour Goa contact official",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzIy",
+        "https://iphb.goa.gov.in/contact-us/",
+        "https://www.goa.gov.in",
+        "https://www.iphb.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 54,
+      "id": "goa-68083d2eb639",
+      "name": "Jesse Janssens",
+      "query": "\"Jesse Janssens\" Goa Caritas",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 55,
+      "id": "goa-e2d809db725c",
+      "name": "Lokvishwas Pratishthan",
+      "query": "\"Lokvishwas Pratishthan\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://lokvishwasgoa.in/contact-us/"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 56,
+      "id": "goa-8a8256756417",
+      "name": "Shawn Brian Jose Martins",
+      "query": "\"Shawn Brian Jose Martins\" Calangute environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 57,
+      "id": "goa-12953035df98",
+      "name": "Medini The Eco Store",
+      "query": "\"Medini The Eco Store\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://actforgoa.org/",
+        "https://actforgoa.org/directory/name/medini-the-eco-store/",
+        "https://mediniecolifestyle.wixsite.com/mediniecolifestyle"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 58,
+      "id": "goa-64ef78a321ab",
+      "name": "Mitsuko Trust",
+      "query": "\"Mitsuko Trust\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/in/shyamalee-roy-7156423a"
+      ]
+    },
+    {
+      "audit_file": "search_044_059.json",
+      "index": 59,
+      "id": "goa-48a8bc8e4475",
+      "name": "Parag Mody",
+      "query": "\"Parag Mody\" Goa \"water\"",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.thegoan.net/goa-news/translocated-porvorim-trees-hanging-by-a-leaf-expert-report/125412.html"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 60,
+      "id": "goa-e322300f7644",
+      "name": "Shaun Moitra",
+      "query": "\"Shaun Moitra\" Dogspeed Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.thegoan.net/goa-news/apex-court%E2%80%99s-order-on-stray-dogs-sparks-outcry-in-goa/138718.html"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 61,
+      "id": "goa-68def0f49e7b",
+      "name": "Mrugaya Xpeditions",
+      "query": "\"Mrugaya Xpeditions\" 2026 Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.mrugayaxpeditions.com/",
+        "https://www.mrugayaxpeditions.com/about-us",
+        "https://www.unigoa.ac.in"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 62,
+      "id": "goa-52af0ad45597",
+      "name": "National Association for the Blind – Goa State Branch",
+      "query": "National Association Blind Goa official contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://nabgoa.org/contactus.html",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 63,
+      "id": "goa-4f4e3556f0d6",
+      "name": "OffBeat Goa",
+      "query": "\"OffBeat Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.gomantaktimes.com/lifestyle/un-swipe-an-initiative-for-meet-ups-in-goa"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 64,
+      "id": "goa-1cd68e6d97f3",
+      "name": "Rise Nation Army",
+      "query": "\"Rise Nation Army\" Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://risenationarmy.com/about.php"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 65,
+      "id": "goa-0e30daa1ad12",
+      "name": "Saahas Zero Waste",
+      "query": "\"Saahas Zero Waste\" Goa 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://luma.com/lkkr0z5f"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 66,
+      "id": "goa-164f3000de70",
+      "name": "Sattvic Goa LLP",
+      "query": "\"Sattvic Goa\" contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://www.sattvicfoods.in/pages/customer-service-assurance"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 67,
+      "id": "goa-2ed323f2eed0",
+      "name": "Swapnil Sawant",
+      "query": "\"Swapnil Sawant\" \"Terra Conscious\"",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 68,
+      "id": "goa-a972125a5871",
+      "name": "Senior Citizens’ Guild (YMCA)",
+      "query": "\"Senior Citizens\" \"Guild\" \"Goa\" contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_82b3fe56-7138-4468-92d4-a7e8884269bc.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 69,
+      "id": "goa-cc7f546e976b",
+      "name": "SETHU Centre for Child Development and Family Guidance",
+      "query": "\"SETHU Centre for Child Development and Family Guidance\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.sethu.in/contact/"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 70,
+      "id": "goa-2ca9d0ff8cb0",
+      "name": "Sapna Shahani",
+      "query": "\"Sapna Shahani\" Blurb Goa sustainability",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/in/sapna-shahani",
+        "https://www.blurbgoa.com/about"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 71,
+      "id": "goa-247fe9604611",
+      "name": "Divya Sharma",
+      "query": "\"Divya Sharma\" Drishti Goa environment",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 72,
+      "id": "goa-75588b9fba06",
+      "name": "Vighnesh Shinde",
+      "query": "\"Vighnesh Shinde\" Arannya",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/post/outreach-marathon-karapur-sarvan"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 73,
+      "id": "goa-e70ae6cc662b",
+      "name": "Shikha Shukla Chhabra",
+      "query": "\"Shikha Shukla Chhabra\" Goa sustainability",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/in/shikha-shukla-chhabra-9b0b5427",
+        "https://yuvaindia.org/about/people/"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 74,
+      "id": "goa-ea282e24bf98",
+      "name": "Anish Sousa",
+      "query": "\"Anish Sousa\" SUN360 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://sun360.co.in/",
+        "https://sun360.co.in/about.html"
+      ]
+    },
+    {
+      "audit_file": "search_060_075.json",
+      "index": 75,
+      "id": "goa-92ed1ea4b9a9",
+      "name": "Steve Sousa",
+      "query": "\"Steve Sousa\" \"Karo Sambhav\"",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 76,
+      "id": "goa-96d91ae0dad9",
+      "name": "Studio Momo",
+      "query": "\"Studio Momo\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://momo-studios.com/"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 77,
+      "id": "goa-be11475289d4",
+      "name": "Prahlad Sukhtankar",
+      "query": "\"Prahlad Sukhtankar\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.nrai.org/team.aspx"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 78,
+      "id": "goa-289a3c387ef9",
+      "name": "Tara Trust",
+      "query": "\"Tara Trust\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.kakarartcollective.com/about-tara-trust",
+        "https://www.linkedin.com/company/tara-trust-india",
+        "https://www.netzkraft.net/profil.php?lg=de&teilnehmer=2562"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 79,
+      "id": "goa-cebcda794415",
+      "name": "Stan Teerlynck",
+      "query": "\"Stan Teerlynck\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 80,
+      "id": "goa-5a4b0df71d80",
+      "name": "The Owl House",
+      "query": "\"The Owl House\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.theowlhousegoa.org/what-we-do",
+        "https://www.unigoa.ac.in"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 81,
+      "id": "goa-48758fa138e2",
+      "name": "Zora Thind",
+      "query": "\"Zora Thind\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goa.me/post/learn-to-live-consciously-with-greenlane-tv"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 82,
+      "id": "goa-1d65f504afbc",
+      "name": "Sonny Thomas",
+      "query": "\"Sonny Thomas\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://in.linkedin.com/in/sonny-thomas-90b97817"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 83,
+      "id": "goa-f36ca3eea33e",
+      "name": "TKS Organic Greenhouse",
+      "query": "\"TKS Organic Greenhouse\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://m.justdial.com/jdmart/Goa/Greenhouse/jdm-1053659-ent-2-17701657"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 84,
+      "id": "goa-0d00bd0537bd",
+      "name": "Toxic Links",
+      "query": "\"Toxic Links\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaspcb.gov.in/"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 85,
+      "id": "goa-0d955998f5f5",
+      "name": "Universal Recycling Industry",
+      "query": "\"Universal Recycling Industry\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 86,
+      "id": "goa-2637977528be",
+      "name": "Video Volunteers",
+      "query": "\"Video Volunteers\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.videovolunteers.org/about/work-with-us/video-producer-2/",
+        "https://www.wti.org.in/"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 87,
+      "id": "goa-6e4b238d64e7",
+      "name": "Voluntary Health Association of Goa",
+      "query": "\"Voluntary Health Association of Goa\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://vhag.in/index.php/contact",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 88,
+      "id": "goa-ef457cdf438f",
+      "name": "Wildernest Nature Resort",
+      "query": "\"Wildernest Nature Resort\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.wildernest-goa.com/contact-us/"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 89,
+      "id": "goa-afc6b7792362",
+      "name": "Claude Alvares",
+      "query": "\"Claude Alvares\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://indiankanoon.org/doc/32086536/"
+      ]
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 90,
+      "id": "goa-edd3db148577",
+      "name": "Norma Alvares",
+      "query": "\"Norma Alvares\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_076_091.json",
+      "index": 91,
+      "id": "goa-47a47a8ec9e9",
+      "name": "Harshada Gauns",
+      "query": "\"Harshada Gauns\" Goa environment 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/about-aero",
+        "https://www.gbcn.in/",
+        "https://www.gomantaktimes.com/my-goa/art-culture/international-womens-day-a-womans-place-is-in-the-environment-these-women-in-goa-show-the-way",
+        "https://www.tdu.edu.in/people/harshada-s-gauns"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 92,
+      "id": "goa-a658211866dc",
+      "name": "Carry Your Bottle / EcoWorld Goa",
+      "query": "\"Carry Your Bottle / EcoWorld Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://carryyourbottle.com/pages/ecoworldgoa"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 93,
+      "id": "goa-471303f03e3a",
+      "name": "AYYA Waste Management",
+      "query": "\"AYYA Waste Management\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.awm.co.in/"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 94,
+      "id": "goa-d75970b01254",
+      "name": "I-Help Foundation Goa",
+      "query": "\"I-Help Foundation Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaspcb.gov.in/",
+        "https://ihelpfoundationgoa.org/contact-us/"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 95,
+      "id": "goa-882f1625644e",
+      "name": "Goa Khazan / Khazan Society of Goa",
+      "query": "\"Goa Khazan / Khazan Society of Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://goafoundation.org/statement-of-all-environmental-planning-and-other-civil-society-associations-and-organizations-from-goa-on-the-occasion-of-world-environment-day-june-5-2023/",
+        "https://www.scribd.com/document/881968973/2nd-AGM-Annual-Report-2024-25-KHAZAN-SOCIETY-OF-GOA"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 96,
+      "id": "goa-180dda32624d",
+      "name": "Act for Goa",
+      "query": "\"Act for Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://actforgoa.org/",
+        "https://epaper.navhindtimes.in/PageImages/PDF/2024/10/31/3110024-md-ga-07.pdf",
+        "https://goaprintingpress.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 97,
+      "id": "goa-af2cab640540",
+      "name": "Save Goa civic complaint portal",
+      "query": "\"Save Goa civic complaint portal\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.savegoa.in/"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 98,
+      "id": "goa-3cd9967e8a2b",
+      "name": "Gaurav Pokle",
+      "query": "\"Gaurav Pokle\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://esg.co.in",
+        "https://undpngddlsprod01.blob.core.windows.net/pdc/00096923-PPMPWM_Prodoc_valid_till_Dec_2027.docx.pdf",
+        "https://www.unigoa.ac.in",
+        "https://www.yimby.in/about"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 99,
+      "id": "goa-248a70ed752e",
+      "name": "Rohit Pandit",
+      "query": "\"Rohit Pandit\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.yimby.in/about"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 100,
+      "id": "goa-653cbcd201a0",
+      "name": "Atul Borker",
+      "query": "\"Atul Borker\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://gsbb.goa.gov.in",
+        "https://mhadeiresearchcenter.org/about/the-team/",
+        "https://mhadeiresearchcenter.org/about/the-team/atul-arun-sinai-borker/"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 101,
+      "id": "goa-5e5b918a6cd3",
+      "name": "WWF-India Goa State Office",
+      "query": "\"WWF-India Goa State Office\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://gsbb.goa.gov.in",
+        "https://missionprakriti.wwfindia.org/contact",
+        "https://people4planet.wwfindia.org/project.php?pid=761"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 102,
+      "id": "goa-928d6b060c93",
+      "name": "Aditya Kakodkar",
+      "query": "\"Aditya Kakodkar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/basicsearch",
+        "https://goaspcb.gov.in/",
+        "https://in.linkedin.com/in/kakodkaraditya",
+        "https://timesofindia.indiatimes.com/city/goa/wwf-goa-creates-habitat-gardens-in-6-schools/articleshow/134975856.cms"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 103,
+      "id": "goa-73a5083ccf7e",
+      "name": "People for Animals Goa",
+      "query": "\"People for Animals Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 104,
+      "id": "goa-c89ba2a5fac2",
+      "name": "Goa Animal Welfare Trust",
+      "query": "\"Goa Animal Welfare Trust\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 105,
+      "id": "goa-578235f4fd31",
+      "name": "Goa SPCA",
+      "query": "\"Goa SPCA\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 106,
+      "id": "goa-7ea4e7b557e9",
+      "name": "Panaji Animal Welfare Society (PAWS)",
+      "query": "\"Panaji Animal Welfare Society (PAWS)\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://goaprintingpress.gov.in",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_092_107.json",
+      "index": 107,
+      "id": "goa-a7cb92c2661e",
+      "name": "Akhil Vishwa Jaishriram Gosamvardhan Kendra",
+      "query": "\"Akhil Vishwa Jaishriram Gosamvardhan Kendra\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.ahvs.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 108,
+      "id": "goa-38ac81617a56",
+      "name": "South Goa Welfare Trust for Animals",
+      "query": "\"South Goa Welfare Trust for Animals\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 109,
+      "id": "goa-39171500bccb",
+      "name": "Dwarkapuri Goseva Ashram",
+      "query": "\"Dwarkapuri Goseva Ashram\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://goaprintingpress.gov.in",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 110,
+      "id": "goa-1036f48c1b7d",
+      "name": "Dhyan Foundation - Goa",
+      "query": "\"Dhyan Foundation - Goa\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.ahvs.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 111,
+      "id": "goa-27d1e6e6e36a",
+      "name": "Gomantak Gausevak Mahasangh",
+      "query": "\"Gomantak Gausevak Mahasangh\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://dip.goa.gov.in",
+        "https://goaprintingpress.gov.in",
+        "https://gsbb.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 112,
+      "id": "goa-c8185894af12",
+      "name": "Liv Synergy",
+      "query": "\"Liv Synergy\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 113,
+      "id": "goa-cd615cca4b78",
+      "name": "Sejal Vora",
+      "query": "\"Sejal Vora\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.angelsforanimals.in/pages/our-work/surakshit-goa"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 114,
+      "id": "goa-b7118c36cbee",
+      "name": "Shraddha Vora",
+      "query": "\"Shraddha Vora\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.angelsforanimals.in/pages/our-work/surakshit-goa",
+        "https://www.thegoan.net/goa-news/apex-court%E2%80%99s-order-on-stray-dogs-sparks-outcry-in-goa/138718.html"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 115,
+      "id": "goa-c42ab65d67d1",
+      "name": "Govind Shirodkar",
+      "query": "\"Govind Shirodkar\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dialogue.earth/en/justice/tourism-boom-in-goa-has-locals-fighting-to-save-their-land-and-water/",
+        "https://goaprintingpress.gov.in",
+        "https://gsbb.goa.gov.in",
+        "https://scroll.in/article/1091592/null",
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/goa-news/justice-rebello-stresses-need-to-protect-goa%E2%80%99s-farmland/155212.html"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 116,
+      "id": "goa-5b2fe98167b6",
+      "name": "Anthony D’Souza",
+      "query": "\"Anthony D’Souza\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.goavidhansabha.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 117,
+      "id": "goa-531ea33e4aab",
+      "name": "Amche Mollem",
+      "query": "\"Amche Mollem\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://goafoundation.org/recs-rejection-of-goa-govts-proposal-for-restoring-forest-clearances-for-railway-double-tracking/",
+        "https://goafoundation.org/statement-of-all-environmental-planning-and-other-civil-society-associations-and-organizations-from-goa-on-the-occasion-of-world-environment-day-june-5-2023/",
+        "https://unbiasthenews.org/a-beautiful-resistance-how-art-science-and-law-saved-goas-forests/",
+        "https://www.isprava.com/wp-content/uploads/large/Isprava-Insider-Volume-4.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 118,
+      "id": "goa-e23860ff4234",
+      "name": "Julio Cedric Aguiar",
+      "query": "\"Julio Cedric Aguiar\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://unbiasthenews.org/a-beautiful-resistance-how-art-science-and-law-saved-goas-forests/",
+        "https://www.heraldgoa.in/review/a-soldier-retires/141225/"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 119,
+      "id": "goa-27f3f6d7baca",
+      "name": "Apurva Kulkarni",
+      "query": "\"Apurva Kulkarni\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://thepinkmonkeyartforum.com/apurva-kulkarni/"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 120,
+      "id": "goa-2fe43464e0b1",
+      "name": "Enough is Enough movement",
+      "query": "\"Enough is Enough movement\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 121,
+      "id": "goa-7a965da43664",
+      "name": "Ferdino Rebello",
+      "query": "\"Ferdino Rebello\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goavidhansabha.gov.in",
+        "https://www.thegoan.net/goa-news/justice-rebello-stresses-need-to-protect-goa%E2%80%99s-farmland/155212.html"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 122,
+      "id": "goa-1b290e896c78",
+      "name": "Upcycle Goa",
+      "query": "\"Upcycle Goa\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://thenodmag.com/content/sustainable-fashion-goa-maka-naka-plastic-bags",
+        "https://www.sensible.earth/",
+        "https://www.sensible.earth/projects"
+      ]
+    },
+    {
+      "audit_file": "search_108_123.json",
+      "index": 123,
+      "id": "goa-8e076162dab0",
+      "name": "The Salvador Project",
+      "query": "\"The Salvador Project\" Goa environment 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.sensible.earth/",
+        "https://www.sensible.earth/projects"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 124,
+      "id": "goa-f513612ebfc4",
+      "name": "Save the Waters of Goa / Campal Creek",
+      "query": "\"Save the Waters of Goa / Campal Creek\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaforgiving.org/",
+        "https://goaforgiving.org/save-waters-goa/"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 125,
+      "id": "goa-708f3bcd7e92",
+      "name": "Mayem Biodiversity Atlas",
+      "query": "\"Mayem Biodiversity Atlas\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/mayem-biodiversity-atlas",
+        "https://www.arannya.in/post/mayem-biodiversity-atlas",
+        "https://www.goa.gov.in",
+        "https://www.tdu.edu.in/people/harshada-s-gauns"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 126,
+      "id": "goa-0b07c994c3d0",
+      "name": "Mayem Panlot Sangh",
+      "query": "\"Mayem Panlot Sangh\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/mayem-biodiversity-atlas",
+        "https://www.arannya.in/post/mayem-biodiversity-atlas"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 127,
+      "id": "goa-df0bc8d35178",
+      "name": "Mayem-Vainguinim Biodiversity Management Committee",
+      "query": "\"Mayem-Vainguinim Biodiversity Management Committee\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/mayem-biodiversity-atlas",
+        "https://www.arannya.in/post/mayem-biodiversity-atlas"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 128,
+      "id": "goa-a08af17f63fc",
+      "name": "Sakharam Pednekar",
+      "query": "\"Sakharam Pednekar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 129,
+      "id": "goa-ee25a03f7224",
+      "name": "Animal Rescue Centre (ARC), South Goa",
+      "query": "\"Animal Rescue Centre (ARC), South Goa\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://rescuemania.co.uk/2019/03/13/new-adventures-with-old-friends/",
+        "https://www.gofundme.com/f/the-first-120-miles-a-coastal-trek-for-goas-forgotten-dogs"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 130,
+      "id": "goa-6bf63d67e697",
+      "name": "Janie O’Connor",
+      "query": "\"Janie O’Connor\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://rescuemania.co.uk/our-projects/arc-animal-rescue-centre-south-goa/"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 131,
+      "id": "goa-a3d1e80106e7",
+      "name": "Mission Rabies - Goa programme",
+      "query": "\"Mission Rabies - Goa programme\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goa.gov.in",
+        "https://www.missionrabies.com/",
+        "https://www.missionrabies.com/en/about-rabies/faqs"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 132,
+      "id": "goa-077dd5d404ac",
+      "name": "SUN360",
+      "query": "\"SUN360\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://geda.goa.gov.in",
+        "https://geda.goa.gov.in/",
+        "https://geda.goa.gov.in/wp-content/uploads/2024/11/Empanelled_Vendors-19-11-2024.pdf",
+        "https://in.linkedin.com/company/sun-360",
+        "https://sun360.co.in/",
+        "https://sun360.co.in/about.html",
+        "https://sun360.co.in/contact.html"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 133,
+      "id": "goa-1c7679876453",
+      "name": "Omkar Dharwadkar",
+      "query": "\"Omkar Dharwadkar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://archgoadaman.com/",
+        "https://gsbb.goa.gov.in",
+        "https://indianbirds.in/wp-content/uploads/2024/08/IB_20_2_FonsecaETAL_PectoralSandpiper.pdf",
+        "https://museumofchristianart.com/whatsOn_detailed_view/goas-avian-heritage-with-omkar-dharwadkar",
+        "https://www.gbcn.in/",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 134,
+      "id": "goa-e95e080f25c2",
+      "name": "Shraddha Rangnekar",
+      "query": "\"Shraddha Rangnekar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://birdcount.in/partner-profile-gbcn/",
+        "https://www.gomantaktimes.com/my-goa/art-culture/international-womens-day-a-womans-place-is-in-the-environment-these-women-in-goa-show-the-way",
+        "https://www.mrugayaxpeditions.com/",
+        "https://www.mrugayaxpeditions.com/about-us",
+        "https://www.mrugayaxpeditions.com/discover-goa",
+        "https://www.unigoa.ac.in"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 135,
+      "id": "goa-a139edeebeb8",
+      "name": "Shivdas Dessai",
+      "query": "\"Shivdas Dessai\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://goaprintingpress.gov.in",
+        "https://gsbb.goa.gov.in",
+        "https://www.agri.goa.gov.in/Upload/Corrected_Citizen_Charter.pdf",
+        "https://www.dhe.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.mrugayaxpeditions.com/",
+        "https://www.mrugayaxpeditions.com/about-us"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 136,
+      "id": "goa-9974ee3f7f68",
+      "name": "Goa Bird Atlas",
+      "query": "\"Goa Bird Atlas\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://birdcount.in/regional-coordinators/",
+        "https://www.arannya.in/",
+        "https://www.arannya.in/goa-bird-atlas"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 137,
+      "id": "goa-a2007079b9fa",
+      "name": "Avocet & Peregrine",
+      "query": "\"Avocet & Peregrine\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://birding.avocet-peregrine.com/contact/",
+        "https://birding.avocet-peregrine.com/profiles/"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 138,
+      "id": "goa-aadf3e9ae586",
+      "name": "Savio Fonseca",
+      "query": "\"Savio Fonseca\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://birding.avocet-peregrine.com/profiles/",
+        "https://gsbb.goa.gov.in",
+        "https://indianbirds.in/wp-content/uploads/2024/08/IB_20_2_FonsecaETAL_PectoralSandpiper.pdf",
+        "https://www.ahvs.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_124_139.json",
+      "index": 139,
+      "id": "goa-1f550cd61602",
+      "name": "Aidan Fonseca",
+      "query": "\"Aidan Fonseca\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://birding.avocet-peregrine.com/profiles/",
+        "https://indianbirds.in/wp-content/uploads/2024/08/IB_20_2_FonsecaETAL_PectoralSandpiper.pdf"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 140,
+      "id": "goa-d1f6990a0ad4",
+      "name": "ReefWatch - Goa stranding contact",
+      "query": "\"ReefWatch - Goa stranding contact\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://reefwatchindia.org/resources/"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 141,
+      "id": "goa-264b6edf2a89",
+      "name": "Shantanu Kalambi",
+      "query": "\"Shantanu Kalambi\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.marinemammals.in/local-stranding-networks/",
+        "https://www.vetkraft.com/about-us"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 142,
+      "id": "goa-090eaf77fa14",
+      "name": "Dorothy Rodrigues",
+      "query": "\"Dorothy Rodrigues\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://homegrowningoa.com/"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 143,
+      "id": "goa-5988ba0a168f",
+      "name": "Krishna Anant Sinari Gaonkar",
+      "query": "\"Krishna Anant Sinari Gaonkar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://archgoadaman.com/",
+        "https://archgoadaman.com/sadbhav-mahotsav-2024-held-in-goa-velha/"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 144,
+      "id": "goa-06a2e129c471",
+      "name": "Vasudev Kunkolikar",
+      "query": "\"Vasudev Kunkolikar\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://archgoadaman.com/",
+        "https://archgoadaman.com/sadbhav-mahotsav-2024-held-in-goa-velha/",
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/igood/basicsearch",
+        "https://registration.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 145,
+      "id": "goa-9700a106411c",
+      "name": "Ana Nunes",
+      "query": "\"Ana Nunes\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 146,
+      "id": "goa-af901d5dae1f",
+      "name": "Jaime Soares",
+      "query": "\"Jaime Soares\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://archgoadaman.com/",
+        "https://archgoadaman.com/sadbhav-mahotsav-2024-held-in-goa-velha/"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 147,
+      "id": "goa-5f3ce3093eb7",
+      "name": "greenstories 2026",
+      "query": "\"greenstories 2026\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.green-stories.in/",
+        "https://www.green-stories.in/apply-2026",
+        "https://www.green-stories.in/volunteer-2026"
+      ]
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 148,
+      "id": "goa-daab5986ef1b",
+      "name": "South Goa Civil Defence volunteer enrolment",
+      "query": "\"South Goa Civil Defence volunteer enrolment\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "search_140_149.json",
+      "index": 149,
+      "id": "goa-23e96cde4017",
+      "name": "Magical Mangroves Goa 2026-27",
+      "query": "\"Magical Mangroves Goa 2026-27\" Goa 2026 contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://people4planet.wwfindia.org/project.php?pid=761"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "Smitesh rain water harvesting Goa Suraj Choudhari",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Solution Providers Goa\" Melvin",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8a48ebdb-edbc-4a88-acee-880f46eb827e.pdf",
+        "https://www.goa.gov.in",
+        "https://www.indianyellowpages.com/goa/solution-providers-bardez-goa-4225946/"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Lila\" \"Gavin\" waste Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://in.linkedin.com/company/lila-digital-and-environmental-solutions-private-limited"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"All India Womens Conference\" Goa branch contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.indiangoslist.com/ngo-address/all-india-womens-conference-in-panaji-goa_GA-2013-0056368"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Dayasagar Medical Society\" Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Earth Keepers Market\" Saraya Darryl Ria",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://darryldsouza.com/",
+        "https://earthkeepersconnect.org/ekm/"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Donald Fernandes\" food waste 2026 Street Providence",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/goa-news/street-providence-launches-initiative-to-reuse-food-waste-from-factories/121175.html"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Homecrafted\" Mirasha Emera 2026 soaps",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://navhindtimes.in/buzz/igniting-joy/"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Parag Mody\" 2026 trees Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.thegoan.net/goa-news/translocated-porvorim-trees-hanging-by-a-leaf-expert-report/125412.html"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Rohit Pandit\" YIMBY",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.yimby.in/about"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Anthony D’Souza\" \"Goa Worth\" 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dialogue.earth/en/justice/tourism-boom-in-goa-has-locals-fighting-to-save-their-land-and-water/",
+        "https://scroll.in/article/1091592/null"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Sakharam Pednekar\" Mayem",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arannya.in/",
+        "https://www.arannya.in/mayem-biodiversity-atlas"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Steve\" \"Karo Sambhav\" Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaspcb.gov.in/",
+        "https://goaspcb.gov.in/wp-content/uploads/2026/04/24404-KARO-SABHAV-PVT-LTD-MAPUSA-GOA-REVISED-CIRCULAR.pdf"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"Swapnil Sawant\" \"Terra Conscious\"",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"South Goa\" \"Civil Defence\" volunteer 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/enrollment-of-civil-defence-volunteers-in-south-goa-district/",
+        "https://goaprintingpress.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "followup_a.json",
+      "query": "\"TKS Organic Greenhouse\" Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://m.justdial.com/jdmart/Goa/Greenhouse/jdm-1053659-ent-2-17701657"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Green Polymers\" Goa \"contact\"",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"V Recycle\" Goa contact vrecycle.in",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://undpngddlsprod01.blob.core.windows.net/pdc/00096923-PPMPWM_Prodoc_valid_till_Dec_2027.docx.pdf",
+        "https://vrecycle.in/who-we-are/"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Saahas Zero Waste\" Goa contact email",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://restore.saahaszerowaste.com/contact-us/"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Toxics Link\" Goa Sushant",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Khazan Society of Goa\" contact 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://goafoundation.org/statement-of-all-environmental-planning-and-other-civil-society-associations-and-organizations-from-goa-on-the-occasion-of-world-environment-day-june-5-2023/",
+        "https://www.scribd.com/document/881968973/2nd-AGM-Annual-Report-2024-25-KHAZAN-SOCIETY-OF-GOA"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Animal Rescue Centre\" Goa arcgoa contact Instagram",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.arcgoa.in/",
+        "https://www.gofundme.com/f/the-first-120-miles-a-coastal-trek-for-goas-forgotten-dogs"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Goa SPCA\" 2026 animal rescue",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://goaprintingpress.gov.in",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"People for Animals Goa\" 2026 rescue",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/",
+        "https://www.ahvs.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Goa Animal Welfare Trust\" 2026 shelter",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://ahvs.goa.gov.in/animal-welfare-organisation-goa/"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Mission Rabies\" Goa 2026 vaccination",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/shri-halarnkar-inaugurated-mission-rabies-model-village-project/",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.missionrabies.com/",
+        "https://www.missionrabies.com/en/about-rabies/faqs"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Shree Mallikarjun\" college contact email",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.unigoa.ac.in",
+        "https://www.unigoa.ac.in/uploads/confg_docs/20220530.071433~Prospectus_2022-23_Rev.pdf"
+      ]
+    },
+    {
+      "audit_file": "followup_b.json",
+      "query": "\"Paryavaran Bachav Samiti\" Harmal contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.thegoan.net/goa-news/harmal-villagers-warn-of-march-to-assembly-over-land-conversion/141129.html"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "Goa 2026 village villagers conservation \"Pernem\" group",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://gsbb.goa.gov.in",
+        "https://vpagarwadachopdem.com/biodiversity-management-committee/",
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/goa-news/harmal-villagers-warn-of-march-to-assembly-over-land-conversion/141129.html"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "Goa 2026 \"Canacona\" \"volunteers\" conservation",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.gcq.ac.in",
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/campus/canacona-students-turn-up-for-cleaner-railway-station-slug-shree-mallikarjun-college/155174.html",
+        "https://www.workaway.info/en/host/416395152589",
+        "https://www.wti.org.in/",
+        "https://www.wti.org.in/news/international-coastal-cleanup-day-2026-wti-unites-communities-for-cleaner-seas-across-gujarat-goa-and-kerala/"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "Goa 2026 \"Sattari\" farmers restoration community",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://dip.goa.gov.in",
+        "https://dip.goa.gov.in/agricultural-diversification-and-modern-farming-practices-are-key-to-enhancing-farmers-income-cm/",
+        "https://gsbb.goa.gov.in",
+        "https://www.dpse.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.thegoan.net/goa-news/saleli-youth-plant-fruit-trees-in-forests-to-reduce-humanwildlife-conflict/151746.html"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "Goa 2026 \"Quepem\" village \"environment\" group",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://www.thegoan.net/goa-news/locals-object-to-growing-influx-of-visitors-to-river-of-joy-at-condy/147637.html"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "\"Goa Climate Party\" contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://luma.com/lkkr0z5f"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "\"Goa\" \"Maria\" feeds dogs volunteer village",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://thebetterindia.com/video/meet-maria-aunty-who-feeds-over-300-stray-dogs-across-the-city-every-single-day/amp",
+        "https://www.ahvs.goa.gov.in",
+        "https://www.goa.gov.in",
+        "https://www.gomantaktimes.com/lifestyle/the-animal-saviour-of-guimaraes"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "\"Claude Alvares\" \"2026\" \"Norma\" Goa Foundation",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goafoundation.org/",
+        "https://goafoundation.org/lawcourse4/",
+        "https://indiankanoon.org/doc/32086536/"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "\"Toxic Links\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaspcb.gov.in/"
+      ]
+    },
+    {
+      "audit_file": "village_search.json",
+      "query": "\"Offbeat Goa\" 2026 Instagram",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://www.gomantaktimes.com/lifestyle/un-swipe-an-initiative-for-meet-ups-in-goa"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Secret Hands\" \"Jyotsna\" Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/vendors.html",
+        "https://navhindtimes.in/buzz/turning-the-ordinary-around/"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Rebello Farms\" Charlane Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/vendors.html"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Lessely Pereira\" bees Goa contact",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/vendors.html",
+        "https://leesbeesgoa.in/",
+        "https://www.ahvs.goa.gov.in"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Micro Ferns\" \"Kayshel\" Goa",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/vendors.html"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Lorna Fernandes\" Cuncolim homestead",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://goaprintingpress.gov.in",
+        "https://scert.goa.gov.in/wp-content/uploads/2022/04/Student-6-Waste-Management.pdf"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Emelia Pereira\" Cansaulim 2026",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": [
+        "https://homegrowningoa.com/",
+        "https://homegrowningoa.com/archive"
+      ]
+    },
+    {
+      "audit_file": "farm_search.json",
+      "query": "\"Shree Mallikarjun\" \"Contact Us\" college",
+      "checked_on": "2026-10-23",
+      "search_completed": true,
+      "used_source_urls": []
+    }
+  ]
+}
