@@ -3,6 +3,7 @@ import assert from 'node:assert/strict';
 import {existsSync, readFileSync, readdirSync} from 'node:fs';
 import {guideDocuments, practicalGuides, guideHeadingId} from '../src/guides.ts';
 import {lexicalSearch} from '../src/search.ts';
+import {buildDiscoveryFeed} from '../src/discovery.ts';
 
 test('published guides resolve every citation, internal route and downloadable file', () => {
  const ids = new Set(guideDocuments.map(g => g.id));
@@ -38,4 +39,12 @@ test('new guides are discoverable without the semantic model', () => {
  for (const [query, id] of [['Krishi Card registration', 'guide-farming'], ['animal welfare', 'guide-animal-welfare'], ['environmental protection', 'guide-environmental-protection']]) {
   assert(lexicalSearch(records, query).slice(0, 10).some(r => r.record.id === id), query);
  }
+});
+
+test('guides respect phone-free presentation and appear in the mixed discovery feed', () => {
+ const text = guideDocuments.map(g => g.markdown).join('\n');
+ for (const number of ['9607948546', '8956863414', '0832-2228772', '0832-2750246', '0832-2492533', '8956487938']) assert(!text.includes(number));
+ const archive = JSON.parse(readFileSync('public/data/catalog.json', 'utf8'));
+ const first = buildDiscoveryFeed([...practicalGuides, ...archive]).slice(0,12);
+ for (const id of ['guide-farming','guide-animal-welfare','guide-environmental-protection']) assert(first.some(r=>r.id===id));
 });

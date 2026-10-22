@@ -18,7 +18,7 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 - Search across 600 imported entries plus five authored practical guides: reporting, building, farming, animal welfare and environmental protection.
 - Practical guides include official citations, 17 editable template downloads, section navigation and a visible verification register. They remain clearly labelled drafts pending legal and live-service review.
 - Hybrid retrieval: weighted keyword search, explicit intent expansion, and local MiniLM semantic vectors. Queries run in a browser worker and are not sent to an AI provider. Keyword results appear immediately while the local model loads.
-- Searchable directory, topic filters, grouped search answers, list/grid views, reading library, long-form records, original document links, click-to-call/email, and shareable URLs.
+- Searchable directory, topic filters, grouped search answers, list/grid views, reading library, long-form records, original document links, email links, and shareable URLs. Public presentation links to official contact directories while keeping source-listed phone data in the underlying research records.
 - About, participation, and contact routes. Contact/correction forms prepare a reviewable email; they do not send or store submissions.
 - Original mission, source links, publication dates, contact verification notices, and original site photography.
 - Phone and desktop layouts, keyboard focus, reduced-motion support, empty states, and keyword fallback if the semantic model is unavailable.

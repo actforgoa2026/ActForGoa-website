@@ -21,7 +21,7 @@ The AHVS [cruelty and distress contact page][AN1] links to veterinary, hospital,
 
 After a bite or scratch, wash the wound thoroughly with soap and running water for **at least 15 minutes** and seek urgent medical assessment for rabies post-exposure care. Saliva on broken skin or a mucous membrane can also be an exposure. A clinician determines the vaccine and any immunoglobulin or monoclonal-antibody treatment needed; do not wait for symptoms or for a complaint to be registered. [WHO rabies guidance, prevention and post-exposure prophylaxis][AN3]
 
-Tell the clinician when and how the exposure happened and any previous rabies vaccination. Keep the treatment record and follow the schedule provided. Report the animal's location separately to the veterinary/local authority without attempting to capture it yourself. For immediate danger to people, use **112**; Goa also lists **108/102** for ambulance services. [Goa emergency numbers][AN4]
+Tell the clinician when and how the exposure happened and any previous rabies vaccination. Keep the treatment record and follow the schedule provided. Report the animal's location separately to the veterinary/local authority without attempting to capture it yourself. For immediate danger to people, contact police or ambulance services through the official Goa emergency directory. [Goa emergency numbers][AN4]
 
 **Verification needed AW01:** a Goa clinician should check the final medical wording and current treatment-centre referral information. No facility's vaccine stock, immunoglobulin availability or opening hours has been confirmed. The emergency numbers are published channels, not tested dispatches.
 
@@ -29,7 +29,7 @@ Tell the clinician when and how the exposure happened and any previous rabies va
 
 ### Domestic animals
 
-Use the [AHVS emergency-contact directory][AN2] to locate the veterinary hospital or dispensary serving the area. The state portal also lists office contacts for Tonca, Mapusa, Sonsodo and Curti-Ponda. AHVS head office publishes **9607948546 / 8956863414** and **dir-ahvs.goa@nic.in** for departmental enquiries; these are not established here as round-the-clock rescue numbers. [Department directory][AN5]; [AHVS head office][AN6]
+Use the [AHVS emergency-contact directory][AN2] to locate the veterinary hospital or dispensary serving the area. The state portal also lists office contacts for Tonca, Mapusa, Sonsodo and Curti-Ponda. Use the AHVS head-office contact page for departmental enquiries; its office contacts are not established here as round-the-clock rescue services. [Department directory][AN5]; [AHVS head office][AN6]
 
 Before moving an animal, ask:
 
@@ -42,7 +42,7 @@ Use the [animal assistance request and handover record](/guides/templates/12-ani
 
 ### Wildlife
 
-The Forest Department publishes **0832-2228772 for North Goa** and **0832-2750246 for South Goa**, labelled as 24-hour helplines. Its general office contact is **0832-2492533**. Give the village, map pin, species if known and immediate risk. If you cannot identify the animal, describe it and send a photograph only if safe. [Forest contact page][AN7]
+The Forest Department contact page lists separate North and South Goa helplines, labelled as available around the clock, and a general office contact. Give the village, map pin, species if known and immediate risk. If you cannot identify the animal, describe it and send a photograph only if safe. [Forest contact page][AN7]
 
 Keep your distance; avoid crowding, feeding, capturing or relocating the animal. Ask the department to arrange or identify an authorised responder. A volunteer contact or social-media post is not a wildlife possession or relocation permission. The official Forest site provides the wildlife-law and protected-area references. [Forest Department][AN8]
 

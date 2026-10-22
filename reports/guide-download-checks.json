@@ -1,13 +1,13 @@
 {
   "environment": "production alias",
   "base_url": "https://actforgoa-field-guide.vercel.app/",
-  "deployment_id": "dpl_EP6Pgw7ys3VA5kCKAjK5i7Wa8Gm1",
+  "deployment_id": "dpl_9A6aH6XEGTdUGMckP7YAgio2D6NL",
   "checks": [
     {
       "path": "guides/ANIMAL_WELFARE_GUIDE_DRAFT.md",
       "status": 200,
       "content_type": "text/markdown; charset=utf-8",
-      "sha256": "b9a0bee87773c4ec7449059074a1117abec4104d4d687f194909529647a22446"
+      "sha256": "6ba875f97c0d9c63ee1ae7aadc30a37655c546396dca2de6c59aeab5481b0a0e"
     },
     {
       "path": "guides/BUILDING_GUIDE_DRAFT.md",
@@ -31,13 +31,13 @@
       "path": "guides/REPORTING_GUIDE_DRAFT.md",
       "status": 200,
       "content_type": "text/markdown; charset=utf-8",
-      "sha256": "db4715f564648116f18ebd9408d3c77da045e30a895ce14fa234bff8f8533c37"
+      "sha256": "6d84e7dfe95c50897cc7e10a3ea47597b9e503454ac3323ba776ffeb8d43e343"
     },
     {
       "path": "guides/sources.md",
       "status": 200,
       "content_type": "text/markdown; charset=utf-8",
-      "sha256": "3d9bbfd31bf88008cbe206fe16724326485e882f5f1da2806b8f2ea17377de60"
+      "sha256": "10c0adfd8c6ffcc7383c58a705f0c49f209a13999fcdca53b33698a13c35933f"
     },
     {
       "path": "guides/templates/01-complaint.txt",
@@ -145,7 +145,7 @@
       "path": "guides/verification.md",
       "status": 200,
       "content_type": "text/markdown; charset=utf-8",
-      "sha256": "3fe14b52a38ba9f2a30f958111444b85244d797ff180797ce09d1365ef18cc8c"
+      "sha256": "eec9db927345f5d4a0f512d4e39e0258f9b4add8b3346ed869f9e0a655162742"
     }
   ]
 }

@@ -8,7 +8,7 @@ Use this guide to document a problem, choose an authority, submit a complaint an
 
 ## Start here
 
-If someone is in immediate danger, move to safety and seek emergency assistance. Goa's official portal lists **112 for police assistance**, **101 for fire** and **108/102 for ambulance services**. An administrative complaint or RTI application is not an emergency response. [Official helplines][R1]
+If someone is in immediate danger, move to safety and seek emergency assistance. Use Goa's official emergency directory for police, fire and ambulance assistance. An administrative complaint or RTI application is not an emergency response. [Official helplines][R1]
 
 For other problems:
 
@@ -39,11 +39,11 @@ Basis: [Panchayat charter, printed pages 19–20][R2]; [Margao construction comp
 
 ## Use these published complaint channels
 
-**Pollution:** GSPCB's website says complaints and grievances are accepted at **mail.gspcb@gov.in**. It also publishes an [online complaint page][R8] and a noise-related helpline, **+91 8956487938**. Keep the sent email and attachments; ask for the complaint number. The online page requires JavaScript. These are source-listed channels; receipt, staffing and resolution have not been tested. [GSPCB announcement][R4]
+**Pollution:** GSPCB's website says complaints and grievances are accepted at **mail.gspcb@gov.in**. It also publishes an [online complaint page][R8] and a source-listed noise helpline. Keep the sent email and attachments; ask for the complaint number. The online page requires JavaScript. These are source-listed channels; receipt, staffing and resolution have not been tested. [GSPCB announcement][R4]
 
-**General government grievances:** the [CM Helpline portal][R9] publishes **1905** and describes online/phone registration with a tracking ID. Give the location, department if known, facts, requested action and supporting documents. Save the ID and check its status. Ask which department received the case.
+**General government grievances:** the [CM Helpline portal][R9] publishes its current contact route and describes online/phone registration with a tracking ID. Give the location, department if known, facts, requested action and supporting documents. Save the ID and check its status. Ask which department received the case.
 
-**Verification needed R01:** confirm the live submission flow, receipt process and current contact details. Different government pages list different general grievance numbers; this guide identifies 1905 specifically as the CM Helpline's published number. The portal's advertised resolution estimates are not used here as statutory deadlines.
+**Verification needed R01:** confirm the live submission flow, receipt process and current contact details. Different government pages list different general grievance numbers; use the CM Helpline portal to confirm its own published contact route. The portal's advertised resolution estimates are not used here as statutory deadlines.
 
 For paper submission, take a copy and request an inward stamp, date and reference on your copy. If posting, retain the delivery evidence. Where an office prescribes its own form, complete that form and attach the factual statement from the template.
 

@@ -34,7 +34,7 @@ Local Margao example: inspection, notice, hearing and order. Do not generalise t
 
 **Location:** Complaint/grievance email announcement and noise helpline.
 
-Official source lists mail.gspcb@gov.in and +91 8956487938. Availability not tested.
+Official source lists mail.gspcb@gov.in and a noise helpline. Availability not tested.
 
 ## R5 and B9
 
@@ -74,7 +74,7 @@ Page retrieved; JavaScript required. No complaint submitted.
 
 **Location:** How CM Helpline Works and public contact information.
 
-1905 and tracking described by portal. Marketing estimates are not treated as statutory guarantees.
+Contact and tracking routes described by portal. Marketing estimates are not treated as statutory guarantees.
 
 ## R10 and B11
 
@@ -370,7 +370,7 @@ Office contacts are not asserted to be emergency dispatch numbers.
 
 **Location:** Head office contact block.
 
-9607948546 / 8956863414 and director email read; office enquiries only, untested.
+Head-office contact details read; office enquiries only, untested.
 
 ## AN7
 

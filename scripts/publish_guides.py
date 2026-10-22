@@ -29,6 +29,27 @@ def source_register(text):
     return re.sub(r'\n{3,}', '\n\n', text).strip() + '\n'
 
 
+def public_copy(text):
+    # Preserve the website's phone-free presentation rule. Canonical research
+    # copies retain source-listed numbers; published guides link to directories.
+    replacements = {
+        'Goa\'s official portal lists **112 for police assistance**, **101 for fire** and **108/102 for ambulance services**.': 'Use Goa\'s official emergency directory for police, fire and ambulance assistance.',
+        'For immediate danger to people, use **112**; Goa also lists **108/102** for ambulance services.': 'For immediate danger to people, contact police or ambulance services through the official Goa emergency directory.',
+        'and a noise-related helpline, **+91 8956487938**': 'and a source-listed noise helpline',
+        'publishes **1905** and describes online/phone registration': 'publishes its current contact route and describes online/phone registration',
+        'The CM Helpline describes 1905 and tracking.': 'The CM Helpline describes contact and tracking routes.',
+        'Official source lists mail.gspcb@gov.in and +91 8956487938.': 'Official source lists mail.gspcb@gov.in and a noise helpline.',
+        '1905 and tracking described by portal.': 'Contact and tracking routes described by portal.',
+        "this guide identifies 1905 specifically as the CM Helpline's published number.": 'use the CM Helpline portal to confirm its own published contact route.',
+        'AHVS head office publishes **9607948546 / 8956863414** and **dir-ahvs.goa@nic.in** for departmental enquiries; these are not established here as round-the-clock rescue numbers.': 'Use the AHVS head-office contact page for departmental enquiries; its office contacts are not established here as round-the-clock rescue services.',
+        'The Forest Department publishes **0832-2228772 for North Goa** and **0832-2750246 for South Goa**, labelled as 24-hour helplines. Its general office contact is **0832-2492533**.': 'The Forest Department contact page lists separate North and South Goa helplines, labelled as available around the clock, and a general office contact.',
+        '9607948546 / 8956863414 and director email read; office enquiries only, untested.': 'Head-office contact details read; office enquiries only, untested.',
+    }
+    for original, replacement in replacements.items():
+        text = text.replace(original, replacement)
+    return text
+
+
 def main():
     PUBLIC.mkdir(exist_ok=True)
     CONTENT.mkdir(exist_ok=True)
@@ -40,6 +61,7 @@ def main():
     paths.update({'SOURCES.md': '/read/guide-sources', 'SOURCES_NEXT.md': '/read/guide-sources', 'VERIFICATION_REGISTER.md': '/read/guide-verification', 'README.md': '/library'})
 
     def prepare(text):
+        text = public_copy(text)
         def link(match):
             label, href = match.groups()
             if href in paths:

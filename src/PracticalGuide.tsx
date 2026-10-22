@@ -1,11 +1,14 @@
 import {useEffect} from 'react';
-import {Link} from 'react-router-dom';
+import {Link, useLocation, useNavigate} from 'react-router-dom';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import {ArrowLeft, ArrowRight, Download} from 'lucide-react';
 import {guideDocuments, guideHeadingId, type GuideDocument} from './guides';
+import {Button} from './components/arc/button/button';
 
 export function PracticalGuide({guide}: {guide: GuideDocument}) {
+ const location = useLocation();
+ const navigate = useNavigate();
  const headings = [...guide.markdown.matchAll(/^## (.+)$/gm)].map(m => m[1]);
  useEffect(() => {
   const previous = document.title;
@@ -13,7 +16,9 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
   return () => { document.title = previous; };
  }, [guide.title]);
  return <main className="detail shell practical-guide">
-  <Link className="back-link" to="/library"><ArrowLeft size={16}/>Back to library</Link>
+  {location.state?.fromCatalogue
+   ? <Button variant="ghost" className="back-link" onClick={() => navigate(-1)}><ArrowLeft size={16}/>{location.state?.fromHome ? 'Back to exploring' : 'Back to results'}</Button>
+   : <Link className="back-link" to="/library"><ArrowLeft size={16}/>Back to library</Link>}
   <div className="detail-layout">
    <article>
     <h1>{guide.heading}</h1>
@@ -21,7 +26,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
     <p className="guide-status"><strong>Draft for review.</strong> Sources checked 22 October 2026. Legal review and live service checks remain open. <Link to="/read/guide-verification">See what needs verification</Link>.</p>
     <details className="guide-contents" key={guide.id}>
      <summary>On this page</summary>
-     <nav aria-label="Guide sections">{headings.map(h => <a key={h} href={'#' + guideHeadingId(h)}>{h}</a>)}</nav>
+     <nav aria-label="Guide sections">{headings.map(h => <Link key={h} to={'#' + guideHeadingId(h)} replace state={location.state}>{h}</Link>)}</nav>
     </details>
     <div className="reading-body guide-body">
      <Markdown remarkPlugins={[remarkGfm]} components={{

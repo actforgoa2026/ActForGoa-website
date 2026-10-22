@@ -170,6 +170,9 @@ def main():
     # Reuse the reviewed, local image mapping without coupling extraction to image tooling.
     image_map=json.loads((ROOT/'data/image-map.json').read_text()) if (ROOT/'data/image-map.json').exists() else {}
     for r in records:r['image']=image_map.get(r['id'],{}).get('path','')
+    article_images=json.loads((ROOT/'data/record-image-map.json').read_text()) if (ROOT/'data/record-image-map.json').exists() else {}
+    for r in records:
+        if r['id'] in article_images:r.update(article_images[r['id']])
     records.sort(key=lambda r:(r['kind'],r['title'].lower()))
     save('catalog.json',records);save('documents.json',documents);save('migration-exclusions.json',excluded)
     public=ROOT/'public/data';public.mkdir(parents=True,exist_ok=True)
