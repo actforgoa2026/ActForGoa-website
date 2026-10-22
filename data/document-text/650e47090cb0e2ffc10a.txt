@@ -1,0 +1,63 @@
+How to check if a 
+construction is 
+legal?
+Get the survey number of the 
+plot. Check land-use of the 
+survey number in RP2021.
+image source: tripadvisor.in
+Get the survey number of the plot. 
+Example.
+Check land-use in the RP2021.
+01. Get the geo 
+location of the plot.
+02. Get the RP2021 of 
+the village.
+03. Overlay the 
+RP2021 on the 
+location. (Hint: match 
+the roads, natural 
+features like rivers, 
+nallas)
+The survey number 
+is 161 and the zone 
+is land settlement 
+area. In this case, 
+check for 
+permissions.
+K
+Hatch of eco-sensitive zones in the RP2021.
+ECO-SENSITIVE ZONES DO NOT 
+ALLOW BUILDING DEVELOPMENT.
+FILE RTI TO GET INFORMATION 
+To Þle RTIs, Þnd the pre-formatted letters on 
+actforgoa.org to pursue legal action.
+A. Collect evidence to validate your complaint, 
+when and if required.
+B. Get help from active groups in Goa working 
+on these issues, your photographs and RTI 
+info can prove important resources for them.
+Hatch of settlement zones in the RP2021.
+SETTLEMENT ZONE ALLOWS 
+BUILDING DEVELOPMENT.
+CHECK PERMISSIONS 
+If a notice board is not up, the construction 
+may be illegal and may have started without 
+any of the following permissions.
+A. Development Permission, by the Planning 
+and Development Authority (PDA) if under a 
+municipality or Technical Clearance, by the 
+Town and Country Planning (TCP) Department 
+for a village panchayat. 
+B. Building Licence Permit, by Municipal 
+Council/Corporation or by the Village 
+Panchayat.
+C. Conversion Sanad, by the Collectorate oﬃce 
+(North/South).
+A REGIONAL PLAN SHOWS THE LAND 
+USE OF GOA. 
+It is available for your area. You can get a copy of the 
+RP2021 from:
+01. TCP Department
+02. Village Panchayat Oﬃce
+03. Active Citizen Groups
+04. Send a request to actforgoa organisation.This is what a construction notice board looks like.

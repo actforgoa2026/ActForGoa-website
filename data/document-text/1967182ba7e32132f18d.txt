@@ -1,0 +1,411 @@
+FLOODED FUTURE:
+Global vulnerability 
+to sea level rise 
+worse than previously 
+understood
+October 29, 2019
+Report by
+Climate Central
+Flooding in Jakarta, Indonesia, February 2017.
+Source: World Meteorological Organization / Flickr
+FLOODED FUTURE
+Global Vulnerability to Sea Level 
+Rise Far Worse Than Previously 
+Sea level rise is one of the best known of climate change’s many dangers. As humanity pollutes the 
+atmosphere with greenhouse gases, the planet warms. And as it does so, ice sheets and glaciers melt 
+and warming sea water expands, increasing the volume of the world’s oceans. The consequences 
+range from near-term increases in coastal flooding that can damage infrastructure and crops to the 
+permanent displacement of coastal communities.
+Over the course of the twenty-first century, global sea levels are projected to rise between about 
+2 and 7 feet, and possibly more. The key variables will be how much warming pollution humanity 
+dumps into the atmosphere and how quickly the land-based ice sheets in Greenland and especially 
+Antarctica destabilize1. Projecting where and when that rise could translate into increased flooding 
+1 Bakker, A. M. R., Wong, T. E., Ruckert, K. L. & Keller, K. Sea-level projections representing the deeply uncertain contribution of 
+the West Antarctic ice sheet. Scientific Reports 7, 3880 (2017).
+Dangendorf, S. et al. Reassessment of 20th century global mean sea level rise. Proceedings of the National Academy of Sciences 
+114, 5946– 5951 (2017). 
+Kopp, R. E. et al. Probabilistic 21st and 22nd century sea-level projections at a global network of tide-gauge sites. Earth’s Future 2, 
+383–406 (2014). 
+Kopp, R. E. et al. Evolving Understanding of Antarctic Ice-Sheet Physics and Ambiguity in Probabilistic Sea-Level Projections. 
+Earth’s Future 5, 1217–1233 (2017).
+     
+Nauels, A., Meinshausen, M., Mengel, M., Lorbacher, K. & Wigley, T. M. L. Synthesizing long-term sea level rise projections the 
+MAGICC sea level model v2.0. Geoscientific Model Development 10, 2495–2524 (2017). 
+  
+Wong, T. E., Bakker, A. M. & Keller, K. Impacts of Antarctic fast dynamics on sea- level projections and coastal flood defense. 
+Climatic Change 144, 347–364 (2017). 
+2
+New elevation data show that by midcentury frequent coastal flooding will rise 
+higher than areas currently home to hundreds of millions of people
+EXECUTIVE SUMMARY
+• As a result of heat-trapping pollution from human activities, rising sea levels could within 
+three decades push chronic floods higher than land currently home to 300 million people 
+• By 2100, areas now home to 200 million people could fall permanently below the high tide 
+line
+• The new figures are the result of an improved global elevation dataset produced by Climate 
+Central using machine learning, and revealing that coastal elevations are significantly lower 
+than previously understood across wide areas
+• The threat is concentrated in coastal Asia and could have profound economic and political 
+consequences within the lifetimes of people alive today 
+• Findings are documented in a new peer-reviewed paper in the journal Nature Communications
+and permanent inundation is profoundly important for coastal planning and for reckoning the costs 
+of humanity’s emissions.
+Projecting flood risk involves not only estimating future sea level rise but also comparing it against 
+land elevations. However, sufÏciently accurate elevation data are either unavailable or inaccessible 
+to the public, or prohibitively expensive in most of the world outside the United States, Australia, and 
+parts of Europe. This clouds understanding of where and when sea level rise could affect coastal 
+communities in the most vulnerable parts of the world.
+A new digital elevation model produced by Climate Central helps fill the gap. That model, CoastalDEM, 
+shows that many of the world’s coastlines are far lower than has been generally known and that sea 
+level rise could affect hundreds of millions of more people in the coming decades than previously 
+understood.2
+Based on sea level projections for 2050, land currently home to 300 million people will fall below the 
+elevation of an average annual coastal flood. By 2100, land now home to 200 million people could sit 
+permanently below the high tide line. 
+Adaptive measures such as construction of levees and other defenses or relocation to higher ground 
+could lessen these threats. In fact, based on CoastalDEM, roughly 110 million people currently live 
+on land below high tide line. This population is almost certainly protected to some degree by existing 
+coastal defenses, which may or may not be adequate for future sea levels. 
+Jevrejeva, S., Moore, J. & Grinsted, A. Sea level projections to AD2500 with a new generation of climate change scenarios. Global 
+and Planetary Change (2012).
+     
+Stocker, T. et al. Climate Change 2013: The Physical Science basis. Contribution of Working Group I to the Fifth Assessment Re-
+port of the Intergovernmental Panel on Climate Change (Cambridge University Press, Cambridge, United Kingdom and New York, 
+NY, USA, 2013).
+     
+Le Bars, D., Drijfhout, S. & de Vries, H. A high-end sea level rise probabilistic projection including rapid Antarctic ice sheet mass 
+loss. Environmental Research Letters 12, 044013 (2017). 
+Jackson, L. P. & Jevrejeva, S. A probabilistic approach to 21st century regional sea-level projections using RCP and High-end 
+scenarios. Global and Planetary Change 146, 179–189 (2016).    
+     
+Nauels, A., Rogelj, J., Schleussner, C.-F., Meinshausen, M. & Mengel, M. Linking sea level rise and socioeconomic indicators 
+under the Shared Socioeconomic Pathways. Environmental Research Letters 12, 114002 (2017). 
+Bamber, J., et al. Ice sheet contributions to future sea-level rise from structured expert judgment. Proceedings of the National 
+Academy of Sciences, May 2019, 201817205; DOI:10.1073/pnas.1817205116
+2 Kulp, S. A & Strauss, B.H. New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. Nature 
+Communications, October 2019, DOI: 10.1038/s41467-019-12808-z
+3
+Box 1. Related resources
+•	 This report (PDF) https://climatecentral.org/pdfs/2019CoastalDEMReport
+•	 Scientific 	paper behind this report
+•	 Interactive threat maps at coastal.climatecentral.org
+•	 Spreadsheet with country-level threats: https://ccimgs-2019.s3.amazonaws.com/
+2019CoastalDEM/2019CoastalDEM_population_assessments.csv
+•	 CoastalDEM download: https://go.climatecentral.org/coastaldem/
+4
+Despite these existing defenses, increasing ocean flooding, permanent submergence, and coastal 
+defense costs are likely to deliver profound humanitarian, economic, and political consequences. 
+This will happen not just in the distant future, but also within the lifetimes of most people alive today.
+GROUND TRUTH
+Scientists have long worked to project how quickly various amounts of global warming could raise 
+the level of the world’s oceans—a question about which much uncertainty remains, given the 
+challenges of understanding how ice sheets will respond to the extreme pace of warming they are 
+now experiencing. Yet as researchers have labored over sea level rise models, another factor critical 
+to understanding the world’s vulnerability to rising waters has been largely overlooked. That factor is 
+coastal elevation. In the absence of coastal defenses such as levees, elevation determines the extent 
+to which ocean floods can wash over the land. 
+Accurately measuring coastal elevation over large areas is neither easy nor cheap. Some countries, 
+such as the United States, use a remote-sensing technology called lidar to reliably map the heights 
+of their coastlines, and publicly release the results. Lidar is relatively expensive, however, typically 
+requiring plane, helicopter, or drone overflights, as well as laser-based equipment. Where lidar data 
+are not available, researchers and analysts rely on one of several global datasets, most typically data 
+sensed from Earth’s orbit through a NASA project known as the Shuttle Radar Topography Mission, 
+or SRTM. 
+Although SRTM data are freely available online, they are less reliable than lidar. SRTM data measure 
+the tops of features that protrude from the ground—such as buildings and trees—as well as the 
+ground itself. As a result, SRTM data generally overestimate elevation, particularly in densely forested 
+and built-up areas. 3 In low-lying parts of coastal Australia, for instance, SRTM data overestimate 
+elevation by an average of 8.2 feet (2.5 meters). Globally, the average overestimate appears to be 
+roughly six feet (two meters). 4 These values match or exceed most of the highest sea level rise 
+projections for the entire century.
+In coastal regions, overestimates of elevation produce underestimates of future inundation driven by 
+sea level rise. Understanding the real threat posed by future sea level rise requires a better view of the 
+ground beneath our feet. 
+That is the purpose of CoastalDEM. Developed using machine learning working with more than 51 
+million data samples (see methodology), the new dataset is substantially more accurate than SRTM, 
+particularly in densely populated areas—precisely those places where the most people and structures 
+are threatened by rising seas. In low-elevation coastal areas in the United States with population 
+densities over 50,000 people per square mile, such as parts of Boston, Miami, and New York City, 
+SRTM overestimates elevation by 15.5 feet on average. CoastalDEM cuts the average error to less 
+3 Tighe, M. & Chamberlain, D. Accuracy Comparison of the SRTM, ASTER, NED, NEXTMAP USA Digital Terrain Model over Several 
+USA Study Sites DEMs. In Proceedings of the ASPRS/MAPPS 2009 Fall Conference 351 (2009).
+LaLonde, T., Shortridge, A. & Messina, J. The Influence of Land Cover on Shuttle Radar Topography Mission (SRTM) Elevations in 
+Low Relief Areas. Transactions in GIS 14, 461–479 (2010). 
+Shortridge, A. & Messina, J. Spatial structure and landscape associations of SRTM error. Remote Sensing of Environment 115, 
+1576–1587 (2011). URL http://www.sciencedirect.com/science/article/pii/S0034425711000678. 
+Becek, K. Assessing Global Digital Elevation Models Using the Runway Method: The Advanced Spaceborne Thermal Emission and 
+Reflection Radiometer Versus the Shuttle Radar Topography Mission Case. IEEE Transactions on Geoscience and Remote Sensing 
+52, 4823–4831 (2014). URL http://ieeexplore.ieee.org/articleDetails.jsp?arnumber=6651798.
+4 Kulp, S. A. & Strauss, B. H. CoastalDEM: A global coastal digital elevation model improved from SRTM using a neural network. 
+Remote Sensing of Environment 206, 231–239 (2018). URL https://www.sciencedirect.com/science/article/pii/S0034425717306016.
+than 2.5 inches.5
+Combining CoastalDEM with sea-level-rise and coastal-flood models produces new estimates of 
+exposure to rising seas around the world (box 2). Those estimates reveal that far more land--and more 
+people--will be vulnerable to sea level rise during this century than previously believed (chart 1). In 
+fact, using CoastalDEM’s improved data on coastal elevation makes a bigger difference in projected 
+exposure to ocean flooding than does switching from a low-end to a high-end sea-level-rise scenario 
+when SRTM data are used.6
+THREE DECADES FROM TODAY
+Sea level rise is a global story, and it affects every coastal nation. But in the coming decades, the 
+greatest effects will be felt in Asia, thanks to the number of people living in the continent’s low-lying 
+coastal areas. Mainland China, Bangladesh, India, Vietnam, Indonesia, and Thailand are home to the 
+most people on land projected to be below average annual coastal flood levels by 2050 (table 2). 
+5 Kulp, S. A & Strauss, B.H. New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. Nature 
+Communications, October 2019, DOI: 10.1038/s41467-019-12808-z
+6 Kulp, S. A & Strauss, B.H. New elevation data triple estimates of global vulnerability to sea-level rise and coastal flooding. Nature 
+Communications, October 2019, DOI: 10.1038/s41467-019-12808-z
+Box 2. Visualizing CoastalDEM’s improvements
+In	Bangkok,	Thailand,	CoastalDEM	reveals	significant	increases	in	areas	below	projected	
+average	annual	flood	heights	in	2050
+*Maps do not factor in potential coastal defenses, such as seawalls or levees, and are based 
+on	elevation,	rather	than	flood	models.	Emissions	pathway:	moderate	emissions	cuts	(RCP	
+4.5)	roughly	consistent	with	the	Paris	climate	agreement’s	two-degree	celsius	target.	Sea	
+level rise model: Kopp et al. 2014, median climate sensitivity.
+SRTM CoastalDEM
+5
+Together, those six nations account for roughly 75 percent of the 300 million people on land facing 
+the same vulnerability at midcentury. 
+Box 3 details caveats and limitations for this report’s findings.
+A closer look at the cases of mainland China, India, Bangladesh, and Vietnam sheds light on the 
+scope of the problem. 
+Start with mainland China. By 2050, land now home to 93 million people could be lower than the 
+height of the local average annual coastal flood. Shanghai, which is the country’s most populous 
+city, is projected to be particularly vulnerable to ocean flooding in the absence of coastal defenses 
+(box 4). 7 Low-lying Jiangsu Province, which abuts Shanghai, is also vulnerable. So are Tianjin, the 
+main port for the capital city of Beijing, and the Pearl River Delta region, an urban agglomeration 
+comprising several major mainland cities and the special administrative regions of Hong Kong and 
+Macau (explore map at coastal.climatecentral.org).
+Next, consider India’s situation in 2050. By that year, projected sea level rise could push average 
+annual floods above land currently home to some 36 million people. West Bengal and coastal Odisha 
+are projected to be particularly vulnerable, as is the eastern city of Kolkata (box 5; explore map at 
+coastal.climatecentral.org).
+Finally, take Bangladesh and Vietnam, where coastal land currently home to 42 million and 31 
+million people, respectively, could be threatened with saltwater flooding at least once per year at 
+midcentury. By that time, average annual coastal floods are projected to rise higher than a wide swath 
+of Bangladesh, including parts of the cities of Dhaka and Chittagong (box 6; explore map at coastal.
+climatecentral.org). In Vietnam, annual ocean floods are projected to particularly affect the densely 
+7 United Nations, Department of Economic and Social Affairs, Population Division (2018). World Urbanization Prospects: The 2018 
+Revision, custom data acquired via website.
+Country SRTM CoastalDEM Change
+1. China (mainland) 29 million people 93 million people +67 million people
+2. Bangladesh 5 million people 42 million people +37 million people
+3. India 5 million people 36 million people +31 million people
+4. Vietnam 9 million people 31 million people +22 million people
+5. Indonesia 5 million people 23 million people +18 million people
+6. Thailand 1 million people 12 million people +11 million people
+T otal, global 79 million people 300 million people +221 million people
+Chart	1.	Current	population	below	the	elevation	of	an	average	annual	flood	in	
+2050,	top	six	countries
+Moderate emissions cuts (RCP 4.5), Kopp et al. 2014, median climate sensitivity. Population exposure estimates do not factor in po-
+tential coastal defenses, such as seawalls or levees.
+6
+Box 3. Caveats and limitations
+Although values derived using CoastalDEM represent cutting-edge projections of human exposure 
+to global sea level rise this century, there are several caveats to note about the findings described in 
+this report: 
+1. Bias in CoastalDEM.  CoastalDEM represents an important improvement over SRTM. But 
+in places where it is possible to compare CoastalDEM compare against lidar, CoastalDEM 
+still underestimates population exposure, meaning that, on average, CoastalDEM appears to 
+overestimate coastal elevation in populated areas. As a result, projections based on CoastalDEM 
+may underestimate the extent of population exposure to future flooding. (Although lidar data are 
+publicly available for the United States and parts of Europe and Australia, as well as some other 
+areas, the analysis in this report relies exclusively on CoastalDEM.) 
+2. Population data. This report relies on 2010 LandScan data for global population estimates and 
+refers to that data as current.8 However, global population has grown since 2010 and is projected 
+to grow further this century, including in countries exposed to sea level rise and annual flooding. 
+Net migration toward or away from low-lying areas will also contribute to population change. 
+Finally, the relatively coarse spatial resolution of LandScan data likely introduces some error into 
+results (LandScan estimates population on a global grid of roughly 1km x 1km cells).
+3. Sea level rise models. In recent years, scientists have suggested that the sensitivity of Greenland 
+and especially Antarctic ice sheets to global warming could make the global ocean rise more 
+quickly than previously believed. 9 Those projections are near the upper end of current scientific 
+judgement about the plausible range of outcomes. However, this report focuses on median 
+projections from a sea level rise model that does not incorporate the higher end of potential ice 
+sheet sensitivity (Kopp et al. 2014).10 The potential response of major ice sheets to rapid warming 
+remains an area of deep and consequential uncertainty.
+4. Climate scenarios.  This report is based on a pollution scenario known as Representative 
+Concentration Pathway (RCP) 4.5, which assumes that humanity will moderately reduce warming 
+emissions roughly in line with the 2015 Paris climate agreement. In reality, however, the world 
+is not on track  to meet the Paris agreement’s goals. At midcentury, sea-level rise projections 
+under moderate cuts are similar to those under unchecked emissions (known as RCP 8.5); by 
+the end of the century, however, projections diverge much more. Unchecked emissions would 
+7
+8 Bright, E. A., Coleman, P. R., Rose, A. N. & Urban, M. L. Landscan 2010 (2011).
+9 Kopp, R. E., DeConto, R. M., Bader, D. A., Hay, C. C., Horton, R. M., Kulp, S., Oppenheimer, M., Pollard, D., & Strauss, B. H. 
+(2017). “Evolving Understanding of Antarctic Ice-Sheet Physics and Ambiguity in Probabilistic Sea-Level Projections,” Earth’s 
+Future, 5, 1217–1233, https://doi.org/10.1002/ 2017EF000663
+Jonathan L. Bamber, Michael Oppenheimer, Robert E. Kopp, Willy P. Aspinall, Roger M. Cooke. “Ice sheet contributions to future 
+sea-level rise from structured expert judgment.” Proceedings of the National Academy of Sciences, May 2019, 201817205; 
+DOI:10.1073/pnas.1817205116
+Wong, T. E., Bakker, A. M. R., & Keller, K. (2017). Impacts of Antarctic fast dynamics on sea-level projections and coastal flood 
+defense. Climatic Change, 144(2), 347–364. http://doi.org/10.1007/s10584-017-2039-4
+Bakker, A. M. R., Wong, T. E., Ruckert, K. L., & Keller, K. (2017). Sea-level projections representing the deeply uncertain contribu-
+tion of the West Antarctic ice sheet. Scientific Reports, 7(1), 3880. http://doi.org/10.1038/s41598-017-04134-5
+Le Bars, D., Drijfhout, S., & de Vries, H. (2017). A high-end sea level rise probabilistic projection including rapid Antarctic ice sheet
+mass loss. Environmental Research Letters, 12(4), 044013. http://doi.org/10.1088/1748-9326/aa6512
+10 Kopp, R. E., R. M. Horton, C. M. Little, J. X. Mitrovica, M. Oppenheimer, D. J. Rasmussen, B. H. Strauss, and C. Tebaldi (2014). 
+Probabilistic 21st and 22nd century sea-level projections at a global network of tide-gauge sites. Earth’s Future, 2, 383–406, 
+doi:10.1002/2014EF000239
+populated Mekong Delta and the northern coast around Vietnam’s capital, Hanoi, including the port 
+city of Haiphong (explore map at coastal.climatecentral.org).
+PERMANENT LOSSES
+As sea levels continue to rise throughout the century, chronic flooding will spread and more land will 
+be permanently lost to the ocean. By 2100, CoastalDEM’s elevation data show, land currently home 
+to 200 million people could fall permanently below the high tide line. 
+The bad news is again concentrated in Asia. China, Bangladesh, India, Vietnam, Indonesia, and 
+Thailand are home to the greatest number of people who today live on land that could be threatened 
+by permanent inundation by 2100—151 million in total, and 43 million in China alone.
+But the danger of permanent inundation is by no means be limited to Asia. In 19 countries, from 
+Nigeria and Brazil to Egypt and the United Kingdom, land now home to at least one million people 
+could fall permanently below the high tide line at the end of the century and become permanently 
+inundated, in the absence of coastal defenses.
+The residents of small island states could face particularly devastating losses. Three of every four 
+people in the Marshall Islands now live on land that could lie below high tide in the next eighty 
+years. In the Maldives, the figure is one in three. And well before that land is flooded, residents will 
+face saltwater intrusion into freshwater supplies and frequent flooding. In small islands states, as 
+elsewhere, land could become uninhabitable well before it disappears. 
+threaten the permanent inundation of land now home to 30 million more people than would be the 
+case under moderate emissions cuts, and 50 million more than would be the case under deep, 
+global emissions cuts (in line with the emissions pathway known as RCP 2.6). (See spreadsheet 
+download in “related resources.”)
+5.	 Protective features. Global data on protective features such as levees and seawalls are not 
+publicly available, so those features, which reduce exposure to sea level rise, are not incorporated 
+into this analysis. Moreover, such features are costly and require significant maintenance on an 
+ongoing basis in order to be effective; in the U.S., for example, the American Society of Civil 
+Engineers estimated in 2013 that only 8% of existing levees it had monitored were in “acceptable” 
+condition. 
+6. Local	annual	floods.	To estimate the height of local annual floods above sea level, this analysis 
+uses a global model developed by Muis et al.11 That model underestimates the height of annual 
+floods by an average of 4.3 inches, relative to one-year flood heights estimated using standard 
+methods at U.S. tide gauges with at least 30 years of hourly water level data. 12 Underestimates 
+of flood heights produce underestimates of inundation. However, this analysis assesses overland 
+flood exposure based on elevation, and does not use dynamic modeling. This approach is highly 
+efÏcient but overestimates inundation, because coastal floods take time to travel over land. A 
+flood peaking at a certain height will generally not inundate 100 percent of the nearby area below 
+that height, if the flood peaks and redescends rapidly.
+8
+11 Muis, S. et al. A global reanalysis of storm surges and extreme sea levels. Nat. Commun. 7:11969 doi: 10.1038/ncomms11969 
+(2016).
+12 Claudia Tebaldi et al 2012 Environ. Res. Lett. 7 014032 https://iopscience.iop.org/article/10.1088/1748-9326/7/1/014032/meta; 
+Buchanan, M.K., Kopp, R.E., Oppenheimer, M. et al. Climatic Change (2016) 137: 347. https://doi.org/10.1007/s10584-016-1664-7
+Maya K Buchanan et al 2017 Environ. Res. Lett. 12 064009 https://iopscience.iop.org/article/10.1088/1748-9326/aa6cb3/meta
+Even as land home to 200 million people today will be threatened by permanent inundation, areas 
+now home to an additional 360 million will face the threat of at-least annual floods, totalling more 
+than half-a-billion people on highly vulnerable land. Under a higher-emissions scenario, and near 
+the tail end (95th percentile) of sea-level rise sensitivity to warming for the model used in this study, 
+land home to 640 million people today—approaching 10 percent of the world’s population—could be 
+threatened by the end of the century, either by chronic flooding or permanent inundation. 
+AN INHUMAN TOLL
+Projecting the specific economic, humanitarian, and political costs of the upward revision in global 
+exposure to sea level rise revealed by CoastalDEM is beyond the scope of this report. But the evidence 
+suggests that those costs will be steep. In the decades ahead, sea level rise could disrupt economies 
+and trigger humanitarian crises around the world.
+Estimates of future economic losses from sea level rise vary depending on the amount of climate 
+pollution and subsequent rise projected, as well as other factors, such as whether future population 
+growth, innovation, or migration are considered. Some projections indicate that flooding could cause 
+Box	4.	Future	coastal	flood	threats	in	Shanghai,	China
+Home to 26 million people, Shanghai is China’s biggest single urban agglomeration.13 The city 
+is the world’s busiest container port and mainland China’s top financial	center.
+Annual	flood	threat	zone,	2050
+*Maps do not factor in potential coastal defenses, such as seawalls or levees, and are based 
+on	elevation,	rather	than	flood	models.	Emissions	pathway:	moderate	emissions	cuts	(RCP	4.5)	
+roughly consistent with the Paris climate agreement’s two-degree target. Sea level rise model: 
+Kopp et al. 2014, median climate sensitivity. Elevation model: CoastalDEM.
+13 United Nations, Department of Economic and Social Affairs, Population Division (2018). World Urbanization Prospects: The 2018 Revi -
+sion, custom data acquired via website.
+9
+tens of trillions of dollars in losses each year by the end of the century—or trillions per year, if extensive 
+adaptation measures are implemented. In practice, the costs will run deeper than immediate physical 
+damage to buildings and infrastructure, or the costs of adaptation, which will never be perfect. 
+Flooding can be costly because it can displace productive local economies dependent on density 
+and convenient coastal locations. 158It could also disrupt global supply chains by limiting access to 
+ports and coastal transportation.
+Take the case of the coastal provinces of China, the country that today is home to more people 
+who live on land vulnerable to chronic flooding at midcentury than any other. In recent decades, 
+China’s coastal provinces have attracted millions of migrants  from the country’s interior and have 
+become important centers in the global economy. Jiangsu Province, China’s most densely populated 
+15 Desmet, Klaus & Kopp, Robert & Kulp, Scott A. & Nagy, Dávid Krisztián & Oppenheimer, Michael & Rossi-Hansberg, Esteban & 
+Strauss, Benjamin H., 2018. “Evaluating the Economic Cost of Coastal Flooding,” CEPR Discussion Papers 13128, C.E.P.R. Discus-
+sion Papers.
+Box	5.	Future	coastal	flood	threats	in	Kolkata,	India
+Kolkata	 is	 home	 to	 15	 million	 people,	 and	 that	 number	 is	 growing.14 The city already faces 
+flooding driven by heavy rain and other events; by midcentury, much of Kolkata could lie in the 
+annual	coastal	flood	risk	zone.	
+Annual	flood	threat	zone,	2050
+*Maps do not factor in potential coastal defenses, such as seawalls or levees, and are based 
+on	elevation,	rather	than	flood	models.	Emissions	pathway:	moderate	emissions	cuts	(RCP	4.5)	
+roughly consistent with the Paris climate agreement’s two-degree target. Sea level rise model: 
+Kopp et al. 2014, median climate sensitivity. Elevation model: CoastalDEM. 
+14 United Nations, Department of Economic and Social Affairs, Population Division (2018). World Urbanization Prospects: The 2018 Revi -
+sion, custom data acquired via website.
+10
+province, could be highly vulnerable to chronic ocean flooding in just thirty years. The same is true of 
+Guangdong Province, another coastal economic powerhouse (explore map at coastal.climatecentral.
+org).169Economic losses in China would matter for the rest of the world: the country is responsible for 
+more than a quarter of the growth in today’s global economy and is projected to remain the world’s 
+biggest economy, in purchasing power parity terms, in 2050.
+Sea level rise could also produce humanitarian crises by stripping millions of people of their homes 
+and traditional livelihoods. The developing countries least able to protect their residents through 
+coastal defenses or planned evacuations could be particularly vulnerable—and are responsible for 
+just a small fraction of global emissions. 
+In Bangladesh, where per-capita emissions and per-capita GDP are more than thirty times lower than 
+in the United States, flooding-driven displacement is not just a future prospect; it has already arrived. 
+CoastalDEM data show that the problem is set to worsen. Today, one in every four Bangladeshis lives 
+on land that could flood at least once a year, on average, by 2050. (Even the country’s most infamous 
+refugee crisis could be exacerbated by sea level rise: in recent years, hundreds of thousands of 
+Rohingya people have fled violence in neighboring Myanmar, many settling in the low-lying region 
+south of Chittagong—an area that could itself be vulnerable to at-least-annual ocean flooding by 
+16 National Bureau of Statistics of China, National Data, custom information acquired via website. http://data.stats.gov.cn/english/
+Box	6.	Future	coastal	flood	threats	in	Dhaka,	Bangladesh
+Dhaka is Bangladesh’s capital and largest city. Already home to a growing number of internal 
+migrants	who	have	left	coastal	settlements	behind,	Dhaka	is	itself	projected	to	see	significant	
+saltwater	flood	risks	in	the	coming	decades.
+Annual	flood	threat	zone,	2050
+*Maps do not factor in potential coastal defenses, such as seawalls or levees, and are based 
+on	elevation,	rather	than	flood	models.	Emissions	pathway:	moderate	emissions	cuts	(RCP	4.5)	
+roughly consistent with the Paris climate agreement’s two-degree target. Sea level rise model: 
+Kopp et al. 2014, median climate sensitivity. Elevation model: CoastalDEM. 
+11
+2050, projections based on CoastalDEM show.)
+Sea level rise could have wide-ranging political consequences. Coastal displacement could shrink local 
+tax bases, straining municipalities’ abilities to pay for public goods such as education. The retreat of the 
+world’s coasts could affect countries’ near-shore maritime claims, encouraging international disputes 
+over fisheries and other ocean resources. 1710And in states around the world, mass displacement 
+could shape national politics. The recent migration that has figured so prominently in recent European 
+elections pales in comparison to the potential displacements of the coming decades, when many 
+millions of people could flee rising seas around the world—both across borders, and within them. 
+Drought, extreme heat, and the other dangers of climate change could displace many more.
+Deep, immediate cuts to global emissions would modestly reduce the danger posed by rising seas 
+this century. Such cuts would reduce the total number of people threatened by annual flooding and 
+permanent inundation at the end of the century by 20 million, relative to moderate emissions cuts 
+made roughly in line with the Paris agreement. Notably, the benefits of deep emissions cuts would 
+reach far beyond sea level rise, reducing the danger posed by climate change’s many other risks. If 
+governments seek to limit future impacts from ocean flooding, they could also avoid new construction 
+in areas at high risk of inundation, while protecting, relocating, or abandoning existing infrastructure 
+and settlements. Sea level rise is a near term danger: today’s communities must make choices not 
+just on the behalf of future generations, but also for themselves. 
+Methodology: CoastalDEM (Kulp and Strauss 2018) is a new digital elevation model based on SRTM 
+3.0, a near-global dataset derived from satellite radar during a NASA mission in 2000. SRTM is known 
+to contain significant error caused by factors such as topology, vegetation, buildings, and random 
+noise. Climate Central used machine learning techniques to estimate SRTM elevation error in coastal 
+areas between (and including) 1 and 20 meters (3.3 and 65.6 feet) in nominal SRTM elevation. Each 
+pixel in CoastalDEM represents the corrected elevation at that point — the result of subtracting 
+estimated error from SRTM 3.0. 
+Climate Central converted elevation data to reference local mean higher-high water levels (roughly, 
+high tide lines, derived using satellite measurements of sea surface heights and using global tidal 
+models), and compared these elevations to sea level rise projections (Kopp et al. 2014) to find regions 
+that could permanently fall under the new high tide line in the coming decades. Separately, Climate 
+Central added in local flood risk statistics approximating the one-year return level (approximately 
+annual) water height ( Muis et al. 2016 ), allowing the analysis to combine the water heights of such 
+flood events with projected sea level rise when identifying areas at high risk.
+Climate Central then added up populations (Landscan 201018)11within the identified areas to compute 
+how many people today live on implicated land. This process was repeated for a number of different 
+years and sea level rise model sensitivities, and under low, moderate, and high emissions pathways for 
+heat-trapping pollution (Representative Concentration Pathways 2.6, 4.5, and 8.5), in order to achieve 
+a comprehensive assessment of global coastal vulnerability.
+For more details, see Kulp and Strauss 2019 , published in Nature Communications. It is the peer-
+reviewed scientific paper upon which this report is based.
+17 Sefrioui S. (2017) Adapting to Sea Level Rise: A Law of the Sea Perspective. In: Andreone G. (eds) The Future of the Law of the 
+Sea. Springer, Cham. https://doi.org/10.1007/978-3-319-51274-7_1
+18 Bright, E. A., Coleman, P. R., Rose, A. N. & Urban, M. L. Landscan 2010 (2011).
+12

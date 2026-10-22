@@ -1,0 +1,8 @@
+Model: Xenova/all-MiniLM-L6-v2
+Original model: sentence-transformers/all-MiniLM-L6-v2
+ONNX conversion: Xenova
+License: Apache License 2.0
+Source: https://huggingface.co/Xenova/all-MiniLM-L6-v2
+Original model card: https://huggingface.co/sentence-transformers/all-MiniLM-L6-v2
+Retrieved: 22 October 2026
+The q8 model is bundled locally for private, on-device retrieval. It does not generate answers or verify contact information.

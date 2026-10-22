@@ -1,0 +1,2592 @@
+
+
+National Centre for
+Disease Control
+Government of India
+Goa
+State action Plan on 
+climate chanGe and human health
+2022-27
+
+Table of Contents | iii
+Acknowledgment iv
+Executive Summary v
+PART I: Climate Change and its Health Impacts
+1. Introduction 3
+2. Climate Vulnerability 5
+3. Climate Sensitive Diseases Prevalent in the State 12
+4. Vision, Goal and Objectives 16
+5. Organisational Structure 17
+PART II: Health Action Plans on Priority Climate Sensitive Health Issues
+6. Health Action Plan on Air Pollution Related Diseases  21
+7. Health Action Plan on Heat Related Illnesses  28
+8. Health Action Plan on Extreme Weather Event-Related Health Issues 35
+9. Health Action Plan on Vector-borne Illnesses in Context of Climate Change 39
+10. Action Plan for Green and Climate Resilient Health Care Facilities 43
+PART III: Budget
+11. Budget 51
+ Annexures 53
+table of contents
+iv | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+acknowledgement
+The guidance and oversight provided by Shri Vishwaj eet Rane, Hon’ble Minister for Health, Shri Puneet 
+Kumar Goel Principal Secretary Goa, Shri Arun Kumar  Mishra, State Mission Director, NHM Goa, and other  
+senior oﬃcials to develop the Goa State Action Plan  for Climate Change and Human Health are gratefully  
+acknowledged.
+This document is based on inputs provided by oﬃcial s and experts from the Goa Directorate of Health 
+Services, especially IDSP . The strategies and activities were planned under the guidance and administrative 
+support from Dr. Geeta Kakodkar, Director of Health  Services, Goa. We are also grateful to Dr. Pradip 
+Sarmukadam, Member Secretary, Goa State Biodiversit y Board for his support.
+Technical coordination and documentation support we re done under the leadership of Dr. Prashant 
+Suryavanshi, State Nodal Oﬃcer-National Program for  Climate Change and Human Health (NPCCHH), and 
+Dr. Utkarsh Betodker, State Surveillance Oﬃcer supp orted by Dr. Rajendra Kanekar, State Epidemiologist  
+and Dr. Geetanjali Sardessai Kare, State Consultant f or NPCCHH.
+Executive Summary | v
+executive Summary
+The impact of climate change is being experienced i n the Indian sub-continent as is evident from the 
+instances of increased heat waves, hazards, sea ris e, and such events. The state of Goa is also being 
+subjected to these changing climatic conditions as well as human health. 
+Climate change is a growing concern for sustainable  development. Climate change poses several threats 
+to the health of the population. Health eﬀects of c limate change occur either through direct eﬀects 
+(changes in temperature and precipitation and occur rence of heat waves, /f_loods, droughts, and cyclones,  
+etc.) or indirect eﬀects (ecological disruptions re sulting in crop failures, shifting patterns of dise ases’ 
+vectors, or displacement of the population).
+These pressing concerns about climate change’s impa ct on human health are being addressed by the 
+ongoing National Programme on Climate Change and Hu man Health. Under the programme, national, 
+state, and district action plans to address climate -sensitive illnesses are to be developed. National Action 
+Plan on Climate Change and Human Health (NAPCCHH) called for state-speci/f_ic action plans to be prepared. 
+As climate threat is determined by the demographic,  socio-economic, and physiographic situations 
+in the states, it is imperative to plan localized c limate action plans determining the precautionary a nd 
+anticipatory measures mitigating and adapting to th e same by using long-term strategic planning such 
+as state action plan on climate change and human he alth.
+The State Action Plan for Climate Change and Human Health (SAPCCHH) proposes a multi-pronged 
+approach to address the health-related aspects of cl imate change. It envisions strengthening the 
+population’s health against climate-sensitive illne sses. The goal is to reduce morbidity, mortality, i njuries, 
+and health vulnerability to climate variability and  extreme weather. The objective is to build the cap acity 
+of healthcare services against the adverse impact o f climate change on human health.
+Director
+Directorate of Health Services
+GOA
+
+Part i
+climate change and its 
+health impacts
+
+Chapter 1: Introduction | 3
+Climate change is de/f_ined as, “a change of climate w hich is attributed directly or indirectly to human 
+activity that alters the composition of the global atmosphere and which is in addition to natural clim ate 
+variability observed over comparable time periods. ”  It aﬀects the social and environmental determinants  
+of health like clean air, safe drinking water, suﬃc ient food, and secure shelter.
+Climate change may negatively aﬀect human health in  several ways, but the most commonly experienced 
+are increased frequency and intensity of heat waves  leading to a rise in heat-related illnesses and de aths, 
+increased precipitation, /f_loods, droughts, and deser ti/f_ication costing lives directly. High temperature 
+is known to increase the level of ‘ground level ozo ne’ and other ‘climate-altering pollutants’ other t han 
+carbon dioxide, which further exacerbates cardio-re spiratory and allergic diseases and certain cancers . 
+Besides these, there is an increase in the transmiss ion and spread of infectious diseases, changes in t he 
+distribution of water-borne, food-borne, and, vecto r-borne diseases, and eﬀects of the risk of disaste rs 
+and malnutrition.
+The United Nations Framework Convention on Climate Chan ge (UNFCCC) came into force on 21st March 
+1994. Since then many steps have been initiated to reduce the eﬀect of climate change at the global 
+level including the “Rio Convention 1992” , “Kyoto protocol 1997” , “Male’ Declaration 1998” , “Convention of 
+Parties” , “Cancun Agreement 2010” , “Durban Platform 2011” , and the “Nationally Determined Contributions” 
+(NDCs) at the Conference of Parties 21” . 
+India is a signatory to the “Male’ Declaration” which calls for the strengthening of the health sec tor and 
+achieving climate resilience. According to the “Mal e’ Declaration” , it is desired that healthcare faci lities 
+should be prepared to address human needs in face of  climate change-induced vagaries and adopt 
+climate-resilient practices, particularly to encour age that these can withstand any climatic event and 
+that essential services such as water, sanitation, waste management, and electricity are functional dur ing 
+such events. Further, for achieving climate resilie nce, the health department has to undertake measure s 
+to initiate the greening of the health sector by ad opting environment-friendly technologies and using 
+energy-eﬃcient services.
+In this regard, initiatives undertaken by the Gover nment of India include the identi/f_ication of the Min istry 
+of Environment, Forest & Climate Change (MoEF&CC) as the nodal ministry, the formulation of the National 
+Environmental Policy 2006, and the formulation of t he Prime Minister’s Council on Climate Change for 
+matters related to Climate Change. MoEF&CC has deve loped National Action Plan on Climate Change 
+with eight missions. Later on, four new missions (i ncluding Health Mission) were identi/f_ied. 
+chaPter 1
+introduction
+4 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+The Health Mission  aims to reduce climate-sensitive illnesses through  integration with other missions 
+under National Action Plan for Climate Change (NAPC C) as well as through programmes run by various 
+ministries. As a follow-up action, the Ministry of Health and Family Welfare (MoHFW) constituted a National 
+Expert Group on Climate Change & Health (NEGCCH) to prepare National Action Plan on Climate Change 
+and Human Health (NAPCCHH) and recommend strategies  for indicators, mitigation, capacity building, 
+etc. for the health sector to respond to the climat e emergency. 
+National Centre for Diseases Control (NCDC) is iden ti/f_ied as the ‘technical nodal agency’ by MoHFW for 
+the proposed National Mission on Health. The Centre  for Environmental and Occupational Health Climate 
+Change & Health (CEOH&CCH), NCDC, is implementing t he National Programme of Climate Change and 
+Human Health (NPCCHH), as a part of which the State  Action Plan on Climate Change and Human Health 
+(SAPCCHH) has been prepared for the state of Goa. SAPCCHH is a long-term vision and planning document 
+prepared by the Department of Health Services, Goa,  applicable till the year 2027. It highlights the c urrent 
+and future vulnerabilities to climate change, the di sease burden, and the initiatives to be undertaken to 
+ameliorate the same by formulating a climate-respon sive and sustainable health care system in the stat e. 
+Chapter 2: Climate Vulnerability | 5
+Goa - Geography and Demographics
+Goa, a tiny emerald land on the west coast 
+of India, was liberated from Portuguese rule 
+in 1961. It was a part of the Union Territory 
+of Goa, Daman & Diu till 30th May 1987 
+when it was carved out to form a separate 
+state. It is located in the Konkan belt in the 
+western part of India between N14°53’57” 
+and N15°47”59” latitude and E73°40’54” 
+and E74°20’11” longitude.  It comprises 
+of two revenue districts viz North Goa 
+headquartered at the capital city of Panaji, 
+and South Goa headquartered at Margao.
+The boundaries of the state are de/f_ined 
+in the north by the Terekhol river which 
+separates it from the Sindhudurg district 
+of Maharashtra, in the north-east by the 
+Belgaum district of Karnataka, in the east 
+and south by Uttar Kannada district of 
+Karnataka and by the Arabian Sea in the 
+west. Goa lies on the Western Coast of 
+India and is 594 km (by road) away from 
+Mumbai city. Further, its coastline covers a 
+length of 105 km from north to south and 
+approximately 60 km from east to west 
+covering an area of 3702 sq. km.
+The population of the state is 14.59 lakhs (as per 2011 Census) with a population density of 394 per s q.km 
+with a considerable population nestled in urban are as. Although the economy is primarily agricultural,  
+some mining activity and a signi/f_icant amount of ind ustry also exist in the state. Tourism, /f_isheries, a nd 
+related activities are also major industries in Goa .
+chaPter 2
+climate Vulnerability
+6 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Health Pro/f_ile
+Background 
+Goa has one of the most extensive health systems in India and is one of the states with the best health 
+indicators. 
+Goa supports a human population of 14.59 Lakhs (Census 2011) which is about 0.12% of India’s population. 
+The average population density has increased in the last 20 years from 272 persons per sq. km to 394 persons 
+per sq. km. The population density of Goa is higher than the national population density of 382 persons 
+per sq. km. While the population density of Goa has increased the decennial population growth rate has 
+reduced signi/f_icantly from 26% in 1987-88 to 8.23% as per the Census 2011. The decadal growth rate of the 
+population for the decade 1991-2001 was 15.21%. 
+Indicator Goa India
+Total population (In crore) (Census 2011) 0.14 121.01
+Decadal Growth (Census 2011) (%) 8.17 17.64
+Crude Birth Rate (SRS 2018) 12.4 20.0
+Crude Death Rate (SRS 2018) 5.9 6.2
+Sex Ratio (Census 2011) 973 940
+Child Sex Ratio (Census 2011) 920 914
+More than 62% of the state’s population resides in urban areas and about 38% in rural areas. The sex ratio 
+stands at 973 females per thousand males as against the national sex ratio of 940. As per the 2011 Census, 
+11,65,487 persons in the state are reported to be literate which constitutes 88.70 % of the total population. 
+The state’s workforce is about 577548, which constitutes 39.58% of the total population.
+Status of Health Indicators
+Indicator/Source India Goa SDG Target by 2030
+Maternal Mortality Ratio (MMR)/ (SRS 2016-18) 113 NA 70
+Infant Mortality Rate (IMR)/ (SRS 2018) 32 7 -
+Neonatal Mortality Rate (NMR)/ (SRS 2018) 23 NA 12
+Under 5 Mortality Rate (U5MR)/ (SRS 2018) 36 NA 25
+Total Fertility Rate (TFR)/ (SRS 2018) 2.2 1.3 -
+Modern Contraceptive Prevalence Rate (MCPR) / (NFHS-4) 47.8 66.2 -
+Goa has already attained the targets set by SDG well in advance. The Total Fertility Rate has already fallen 
+below replacement levels and hence it is indicative of a decline in the indigenous population. However, the 
+population density especially towards the coastline is proportionally higher and is expected to remain so 
+because of continuing tourism activities in addition to migration.
+The Directorate of Health Services, Goa primarily seeks to provide preventive, promotive, curative, and 
+rehabilitative health services to the people through the primary health care approach, which has been 
+Chapter 2: Climate Vulnerability | 7
+accepted as one of the main instruments of action for the development of human resources, accelerating 
+the socio-economic development and attaining improved quality of life. 
+Goa is a small coastal state with a population of 0.14 crores (2011 census). However, it is seen that due to the 
+increasing migrant population in urban areas, the facilities are not enough to provide healthcare facilities to 
+all especially the increasing migrant population living in urban slums. 
+Indicator Status
+Operational AB-HWCs 
+Sub Health Centers 102
+Primary Health Centers 55
+Urban Primary Health Centers 5
+Source: AB-HWC Portal (till    July 2022)
+Indicator Status
+Human Resources (In-Place)
+Medical oﬃcer 219
+Specialist 127
+Ayush Doctors 107
+Staﬀ  Nurses 625
+ANMs 458
+Paramedics 215
+AYUSH Paramedics 27
+Ambulances
+108-Type 25 under NHM and 25 under State 
+Bike ambulance 35
+Mobile Medical Units
+Community Participation
+Rogi Kalyan Samitis (RKS) 37
+Village Health Sanitation & Nutrition Committees (VHSNCs) 261
+Village Health & Nutrition Days (19-20) 2000
+ASHAs NA
+24*7 Facilities 
+24*7 PHCs 13
+24*7 CHCs 6
+FRUs 2
+Source: NHM-MIS report as on September 2022
+The above tables detail the infrastructure and manpower in the health services. 4 of these have already 
+achieved NQAS certi/f_ication and the rest of the centres will soon apply for the same. Private practitioners 
+and nursing homes also take care of the health needs of the population. 
+8 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Over and above the existing medical infrastructure, Goa has launched Deen Dayal Swasthya Yojana in 2016. 
+It is a universal insurance scheme providing insurance cover to the entire population. Also, under the Goa 
+Mediclaim scheme, /f_inancial assistance is provided to every permanent resident of the state availing super 
+specialty treatment that is not available in the Government Hospitals. The Goa State Illness Assistance 
+Society scheme provides /f_inancial assistance to the extent of INR 1.50 lakhs per patient below the poverty 
+line for availing super specialty treatment.
+Climate Vulnerability
+Indian sub-continent is experiencing rapid warming,  particularly since the 1980s. As per IMD’s (2019) 
+analysis, the annual mean temperature during the 19 01-2018 period showed an increasing trend of 
+0.6°C/100 years. Also, a signi/f_icant increasing tren d was seen in maximum temperature (1.0°C/100 years) , 
+and a relatively lower increasing trend (0.2°C/100 years) in the minimum temperature over India. 
+As per Chaturvedi et al 2012, “under the business as usual (between RCP6 and RCP8.5) scenario, mean 
+warming in India is likely to be in the range of 1.7 to 2°C by 2030s and 3.3 to 4.8°C by 2080s relative to pre-
+industrial times” , further it was projected that “all India precipitation under the business as usual scenario is 
+to increase from 4% to 5% by 2030s and from 6% to 14% towards the end of the century (2080s) compared to 
+the 1961-1990 baseline” . (Annexure 7). These studies conducted at the national level, lend an understanding 
+of the current and future climate projections and variations, although state-level projections are yet  
+to be made.
+Being a small state, the climate variations in Goa are negligible. The summer season in the state lasts between 
+March to June. The state experiences extreme humidity due to the presence of the Arabian Sea towards its 
+western border. The months between July to September experiences a rainy season due to the southwest 
+monsoon. And mild winter season is experienced between November-February. In the state, summers are 
+extraordinarily hot and humid, with maximum daily temperatures occasionally exceeding 35°C. Winters are 
+somewhat cooler and less humid making it more comfortable.
+Goa’s mean annual temperature has increased by over 1°C since the beginning of the 20th century till date, 
+much of it during the 1990-2018 period. Mean annual rainfall in Goa has increased by 68% over the same 
+period. With increasing rainfall, the inter-annual rainfall variability in the state has also increased especially 
+since the 1970s. While mean annual rainfall in the state has increased, moderate to light rainfall days (IMD 
+category I) in Goa have declined over the 1901-2015 period, whereas very heavy and exceptionally heavy 
+rainfall events (IMD category III) in the state have increased by more than 100%. 
+Mean annual temperatures (model ensemble) in Goa may increase by around 2°C in the 2030s compared 
+to the 1901-1950 period, and further to by around 4°C by 2080s under high emission scenarios. Goa will 
+start experiencing heat waves (>40C) beyond the 2040s, as maximum temperature increases by about 5°C 
+towards the century end under high emission scenarios. Minimum temperatures are expected to rise even 
+more by up to 8°C by the century end under the high emission scenarios. 
+Chapter 2: Climate Vulnerability | 9
+30
+28
+26
+24
+1900 1950 2000
+Y ear
+2050
+Temperature trends Goa (1900-2100)
+2100
+Temperature
+Observations
+Models
+CRU
+ACCESS1-0 rcp 4.5
+ACCESS1-0 rcp 8.5
+CCSM4 rcp 4.5
+CCSM4 rcp 8.5
+MPI-ESM-LR rcp 4.5
+MPI-ESM-LR rcp 4.5
+Ensemble rcp 4.5
+Ensemble rcp 8.5
+The /f_igure below shows the mean annual temperature map of Goa over the long-term period of 1951-
+2014. The methodology and data source for this /f_igure is described in Venkateswaran and Chaturvedi (in 
+Preparation). The mean temperature in Goa is found to be 26.7 0C, which is higher than the national average 
+annual temperature i.e. 23.3 0C (Chaturvedi et al 2012). While spatial temperature variability is not high in 
+Goa, hilly areas in the eastern parts of the state are generally cooler than the coastal areas in the west.
+
+10 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+The /f_igure below shows the future mean annual temperature projections in the short-term, mid-term, and 
+long-term
+The /f_igure below shows the future mean annual rainfall projections in the short-term, medium-term, and 
+long-term.
+
+Chapter 2: Climate Vulnerability | 11
+ ! Extreme temperature and extreme rainfall events are projected to further increase in the state. An 
+increase in extreme rainfall events could jeopardize the rich biodiversity
+ ! The /f_lood vulnerability analysis of the state reveals that 14.73% of the land is under 15-meter elevation, 
+much of it is in the coastal zone and is severely vulnerable to /f_looding both from extreme rainfall 
+events and sea-level rise. This includes the mangrove ecosystems which are of immense ecological 
+and socio-economic signi/f_icance and are most vulnerable to rising sea levels. Three talukas including 
+Salcete, Tiswadi, and Bardez are found to be the most vulnerable. 
+ ! Warming oceans, sea level rise, changes in precipitation, and ocean acidi/f_ication due to increased CO2 
+also aﬀect corals which are biodiversity hotspots.
+ ! Much of Goa’s forest cover will be impacted adversely by the impacts of climate change by 2050 
+if the current trend continues. Livelihoods dependent khazan lands and the low-lying ecosystems 
+including riparian ecosystems are in particular the immediate and most vulnerable groups.
+12 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+chaPter 3
+climate Sensitive diseases 
+Prevalent in the State
+Climate change attributes new challenges to public health around the world. The phenomenon is linked 
+with rising instances of diseases in the state, for  instance through higher temperatures, /f_looding, air  
+pollution, heat waves, and water scarcity.
+Following are the major climate-sensitive diseases prevalent in Goa:
+ ! Air pollution-related illnesses
+ ! Heat-related illnesses 
+ ! Vector-borne diseases 
+ ! Disaster-related health issues
+Air Pollution Related Illnesses
+Chronic respiratory diseases
+India is experiencing a rapid health transition wit h the rising burden of non-communicable diseases 
+(NCDs) surpassing the burden of communicable diseas es like water-borne or vector-borne diseases, TB, 
+HIV, etc. Non-Communicable diseases like cardiovasc ular diseases, cancer, chronic respiratory diseases , 
+diabetes, etc. are estimated to account for around 60% of all deaths. All of these are projected to in crease 
+soon due to the eﬀect of adverse climatic changes.
+Leading causes of DALYs 2016 in the state (India: H ealth of the Nation’s States. The India State-Level  
+Disease Burden Initiative –Report 2017) are:
+ !  Ischemic heart disease [11.0%]
+ !  Diabetes [4.1%]
+ !  COPD [4.1%]
+ !  Stroke [4.0%]
+ !  Road injuries [2.8%]
+ !  Falls [2.7%]
+ !  Depressive disorders [2.3%]
+ !  Chronic kidney disease [2.3%]
+Chapter 3: Climate Sensitive Diseases Prevalent in the State | 13
+Leading causes of DALYs 1990
+Lower respiratory infections [7.8%]
+Diarrhoeal diseases [7.0%]
+Preterm birth complications [6.0%]
+Ischaemic heart disease [5.6%]
+Congenital birth defects [4.0%]
+Other neonatal disorders [3.9%]
+Tuberculosis [3.8%]
+Neonatal haemolytic disease [2.8%] Neonatal haemolytic disease [2.8%]
+Stroke [2.8%]
+Neonatal encephalopathy [2.6%]
+COPD1 [2.6%]
+Self-harm5 [2.2%]
+Sense organ diseases1 [2.1%]
+Low back & neck pain [2.0%]
+Iron-de/f_iciency anaemia [1.9%]
+Road injuries [1.8%]
+Migraine [1.8%]
+Skin diseases [1.8%]
+Falls [1.7%]
+Depressive disorders [1.4%]
+Chronic kidney disease [1.3%]
+Other musculoskeletal disorders [1.3%]
+Diabetes [1.2%]
+Ischaemic heart disease [11.0%]
+Sense organ diseases1 [4.1%]
+Diabetes [4.1%]
+COPD1 [4.1%]
+Stroke [4.0%]*
+Low back & neck pain [3.6%]
+Migraine [3.0%]
+Falls [2.7%]
+Skin diseases [2.5%]
+Iron-de/f_iciency anaemia [2.4%]
+Other musculoskeletal disorders [2.4%]
+Lower respiratory infections [2.3%]
+Depressive disorders [2.3%]
+Chronic kidney disease [2.3%]
+Self-harms5 [2.1%]*
+Preterm birth complications [2.0%]
+Diarrhoeal diseases [1.5%]
+Congenital birth defects [1.4%]
+Tuberculosis[1.3%]
+Other neonatal disorders [1.1%]
+Neonatal encephalopathy [0.9%]
+Neonatal haemolytic disease [0.4%]
+1COPD is chronic obstructive pulmonary disease.
+2Sense organ diseases includes mainly hearing and vision loss.
+5Self-harm refers to suicide and the nonfatal outcomes of self-harm.
++Change not signi/f_icant.
+The percent /f_igure in brackets next to each cause is
+DALYs from that cause out of total DALYs.
+Leading causes of DALYs 2016
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+22
+24
+25
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+20
+21
+22
+26
+31
+60
+Communicable, maternal, neonatal, and nutritional diseases Non-communicable diseases Injuries Same or increase decrease
+COPD has risen to the 4th leading cause of DALY in Goa with the 4% contribution compared to its 2.6% 
+contribution in the 1990’s.
+2018-19 2019-20 2020-21 2021-22 2022-23
+Newly Diagnosed Cases 267 2231 1319 1697 810
+Follow up 598 8093 4004 3634 421
+Pertaining to ARI cases, as per the data received and the graph below, there seems to be a decline in ARI 
+cases recorded by IDSP . However, IHIP usage has been streamlined only post-2021, the data from prior years 
+is from a diﬀerent portal. Hence data discrepancy could cause alteration of inferences to some degree.
+160000
+140000
+120000
+100000
+80000
+60000
+40000
+20000
+ARI Cases ------->
+0
+2018 2019 2020
+Y e ar ----->
+2021 2022
+ARI Cases
+ARI Cases
+14 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+With the COVID pandemic, cases of lung involvement are also expected  to add to the above burden.   
+Asthma is a genetic disease triggered by both extri nsic and intrinsic factors. Cases are expected to r ise 
+with the increase in air pollution levels.
+Heat-Related Illnesses
+Indian sub-continent is experiencing rapid warming,  particularly since the 1980s. As per IMD’s (2019) 
+analysis, the annual mean temperature during the 19 01-2018 period showed an increasing trend of 
+0.6°C/100 years. 
+Goa’s mean annual temperature has increased by over  1°C since the beginning of the 20th century till 
+date, much of it during the 1990-2018 period.  Mean  annual temperatures (model ensemble) in Goa may 
+increase by around 2°C in the 2030s compared to the  1901-1950 period, and further to by around 4°C by 
+2080s under high emission scenarios. 
+The IMD provides the state with forecasts as well a s warnings via Mausam, Meghdoot, and Damini Apps 
+and also issues public advisories.  The state of Go a experienced a heat wave once in the last decade, with 
+no cases of stroke or deaths reported.
+(https://mausam.imd.gov.in/Forecast/mcmarq/mcmarq_d ata/Possibility%20of%20Heat%20wave%20
+on%2014th_March%20.pdf )
+As per the projections, Goa may experience heat wav es (>40C) in a couple of years, as and when the 
+maximum temperature is increased by about 5°C. Ther eby, underlining the need for Hence, there will be a 
+need for strengthening the healthcare system’s resp onse to heat wave-related illnesses including train ing 
+and surveillance activities in the state.
+Vector-Borne Diseases
+The trend of vector-borne illnesses in Goa for the last /f_ive years is indicated in the table below. 
+Y ear Malaria Dengue Chikungunya
+Cases Pf Cases Deaths Cases Deaths Cases Deaths
+2018 377 50 0 335 1 77 0
+2019 272 54 0 992 0 366 0
+2020 102 32 0 376 0 15 0
+2021 90 48 0 649 0 12 0
+2022 
+(Till October)
+2 1 0 429 0 106 0
+The number of malaria cases indicates a steady decline since 2015 and there have been no deaths reported 
+since 2018. Goa is in the Malaria Elimination phase as the API (Annual Parasite incidence is the number of 
+positive cases per one thousand population) in both districts is less than one.
+The increased construction activity in the suburbs, growing population densities, and inadequate sanitation 
+conditions have contributed to the creation of fertile ground for mosquito breeding. The Aedes Aegypti 
+Chapter 3: Climate Sensitive Diseases Prevalent in the State | 15
+mosquito which spreads dengue, chikungunya, yellow fever, and other diseases is a highly domesticated 
+urban mosquito that prefers to live in the human habitat.
+Focal cases of dengue and chikungunya are reported all over Goa and these are now under control due 
+to sustained source reduction measures carried out with the involvement of local authorities. There have 
+been no dengue or chikungunya-related deaths in the state since 2019. Also, no Filariasis cases have been 
+reported in the state since 2014 as reported by NVBDCP .
+In the current times, Goa is experiencing intermittent extended monsoon till November which also may 
+result in the high density of mosquitoes in the urban areas. Hence, indicating a /f_luctuation in cases as a 
+resultant of vector-borne diseases due to climate change. 
+Extreme Weather Related Health Issues
+The health of human populations is sensitive to shifts in weather patterns and other aspects of climate 
+change. Increased variability in the weather pattern will further impact the ability of the human body to 
+adjust. Based on the climate change projections it is expected that:
+1.  The temperature in Goa may rise by 4-5 degrees and beyond a decade state may experience heat 
+wave conditions as well which are currently not exp erienced in the state. This can cause health eﬀects  
+like dehydration, heatstroke, etc. which are known to be occurring in other states during heatwave 
+conditions. 
+2. Mortality and morbidity rate due to mudslides, /f_lood ing, cyclonic events are also likely to rise. 
+3. Changing weather pattern is likely to increase the window for the occurrence of vector-borne disease 
+4.  It is predicted that climate change can disrupt the  health services related infrastructure and its 
+capacity to serve due to severe events and rise in t he number of illnesses 
+5. New diseases can be introduced in the state 
+16 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Under the framework of the National Action Plan on Climate Change and Human Health, the IDSP Cell at the 
+Department of Health Services, Goa has adopted the vision, goal, and objectives for the State Action Plan on 
+Climate Change and Human Health.
+Vision: Strengthening of healthcare services for all the citizens of the state especially vulnerable groups like 
+children, women, elderly, tribal, and marginalized populations against climate-sensitive illnesses.  
+Goal:  To reduce morbidity, mortality, injuries, and health vulnerability due to climate variability and extreme 
+weather.
+Objective: To strengthen health care services against the adverse impact of climate change on health.
+Speci/f_ic Objectives
+Objective 1:  To create awareness among the general population (vulnerable community), healthcare 
+providers, and policy makers regarding the impacts of climate change on human health.
+Objective 2:  To strengthen the capacity of the healthcare system to reduce illnesses/ diseases due to 
+variability in climate. 
+Objective 3: To strengthen health preparedness and response by performing situational analysis at national/ 
+state/ district/ below district levels.
+Objective 4: To develop partnerships and create synchrony/ synergy with other missions and ensure that 
+health is adequately represented in the climate change agenda in the country in coordination with the 
+Ministry of Health & Family Welfare.
+Objective 5: To strengthen state research capacity to /f_ill the evidence gap on climate change’s impact on 
+human health
+chaPter 4
+Vision, Goal & objectives
+Chapter 5: Organisational Structure | 17
+Committees for implementation of the National programme on Climate Change and Human Health (NPCCH) 
+are as follows:
+A) State Level - Governing Body
+The state-level governing body shall be working under the Chairpersonship of the Honourable State Health 
+Minister. 
+chaPter 5
+organisational Structure
+ORGANISATIONAL STRUCTURE
+NATIONAL LEVEL
+Prime Minister’s Council on Climate Change 
+Key Nodal Agency
+Head, NPCCHH
+(NCDC, MoHFW)
+Health Mission
+Ministry of Health and Family Welfare (MoHFW), Govt of India
+State Governing Body - Environmental Health
+State Level Task Force - Environmental Health
+District Task Force - Environmental Health
+District Environmental Health Cell
+State Environmental Health Cell
+DISTRICT LEVEL
+Key Nodal Point
+(DNO-NPCCHH)
+STATE LEVEL
+Key Nodal Point
+(SNO-NPCCHH)
+18 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+The other members may be as follows:
+Honourable State Health Minister Chairperson
+Principal Secretary (Health) Vice Chairperson
+Director Health Services Member Secretary
+Mission Director-National Health Mission Member
+Director Medical Education Member
+Regional Director -Health & Family Welfare Member
+B) State-Level Task Force
+This task force shall be working under the guidance of the Principal Secretary (Health) of the state. It shall 
+be directly overseeing the implementation of the State Action Plan for Climate Change and Human Health 
+(SAPCCHH) in Goa. It shall be working through the Directorate of Health Services (DHS) of the state, which 
+will be the implementing agency for SAPCCHH. (Annexure 1)
+The State Level Governing Body are yet to be constituted.
+C) State Environmental Health Cell
+Establishment of the State Environmental Cell under the Directorate of Health Services has been approved 
+and the constitution of the Multi-Sectoral Task Force has been noti/f_ied. (Annexure 1)
+Roles and Responsibilities of the State Environmental Health Cell
+ ! Preparation and implementation of State Action Plan for Climate Change and Human Health.
+ ! Conduct Vulnerability assessment and risk mapping for commonly occurring climate-sensitive 
+illnesses in the state/ UT.
+ ! Assessment of needs for health care professionals (like training, capacity building) and organize 
+training, workshop, and meetings.
+ ! Maintain state and district-level data on physical, /f_inancial, and epidemiological pro/f_iles for climate-
+sensitive illnesses.
+ ! Ensure convergence with NHM activities and other related programs in the state / district
+ ! Monitor programme, review meetings and /f_ield observations.
+ ! Timely issue of warning/ alerts to health professionals and related stakeholders as well as the general 
+public through a campaign or using mass media (electronic or printed).
+ ! Social mobilization against preventive measures through the involvement of women’s self-help 
+groups, community leaders, NGOs, etc.
+ ! Advocacy and public awareness through media (street plays, folk methods, wall paintings, hoardings, etc.)
+ ! Conduct operational research and evaluation studies for climate change and its impact on human 
+health. 
+Note: Goa, being a small state, has not formed any district-level committees for any programme and 
+conducts all activities from the headquarters
+Part ii
+health action Plans on 
+Priority climate Sensitive 
+health issues
+
+Chapter 6: Health Action Plan on  Air Pollution Related Diseases | 21
+chaPter 6
+health action Plan on  
+air Pollution related diseases
+Air pollution is a major environmental risk to health. The formation, transport, and dispersion of many air 
+pollutants are determined partly by climate and weather factors such as temperature, humidity, wind, storms, 
+drought, and precipitation and by human activities like industrialization, construction and demolition 
+activities, vehicular pollution, episodic crop residue burning, etc. known to produce various air pollutants. 
+Air pollution is also associated with acid rain, and eutrophication due to nitrogen oxide emission in the air 
+from power plants, cars, trucks, and other sources, haze, toxic eﬀects on wildlife, ozone depletion in the 
+atmosphere, crop, and forest damage, etc.
+The health risks due to air pollution are associated with exposure to high levels of particulate matter 
+(PM), ozone (O3), nitrogen dioxide (NO2) and sulphur dioxide (SO2), etc. Air quality levels in an area are 
+collectively communicated to the public as Air Quality Index (AQI). The particulate matters of less than 10 
+and 2.5 micrometers (PM10 and PM2.5) are capable of penetrating deep into the airway passages, entering 
+the bloodstream, causing illnesses from acute and chronic respiratory systems, increase in malfunction of 
+the other organs aﬀecting the health of cardio-cerebrovascular renal diseases, and among pregnant females 
+due to trans-placental crossing of pollutants aﬀect foetus resulting in low birth congenital problems and 
+associated complications.
+Causes of air pollution 
+Ambient Air Pollution
+ ! Pollution by automobiles
+ !  Industrial Emission
+ !  Tourism related activities
+ !  Fisheries/ Agriculture & related activities
+ !  Mining and related activities 
+Indoor Air Pollution
+ ! Use of biomass, kerosene as fuel for cooking
+ ! Burning of waste, cow dung, and coal in villages
+ ! Tobacco smoke/ cigarettes/ beedi/ hookah/ recreational uses
+ ! Mosquito coil/ candles/incense
+22 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Ambient (outdoor) air pollution in both cities and rural areas was estimated to cause approximately 7 million 
+deaths worldwide, and 90% of these deaths have occurred in low and middle-income countries. In India, 
+nearly 12.5% of deaths have been attributed to air pollution.  An ICMR report concluded that Outdoor Air 
+Pollution caused 6.7 lakh premature deaths, while Indoor Air Pollution caused 4.8 lakh premature deaths 
+in 2017. Thus, it is logical to assume that a reduction in air pollution levels can help reduce the burden of 
+diseases like acute and chronic respiratory diseases, heart diseases, strokes, and other allergic problems.
+The quality of air is expressed by Air Quality Index (AQI) which is broadly categorized into six levels, i.e. Good, 
+Satisfactory, Moderately Polluted, Poor, Very Poor, and Severe to communicate and help understand the AQI 
+as well as the associated health problems.
+Health Impacts of Air Pollution
+According to the report of the Steering Committee on Air Pollution from the MoHFW (2015) and WHO 
+reports on Air Pollution and Health, certain short-term and long-term health eﬀects due to air pollution are 
+shown in table 1 (Annexure 2)
+As air pollution is recognized to impact the health of a large population living in both urban and rural areas 
+in India, there is an urgent need to develop state-speci/f_ic health adaptation plans related to air pollution 
+to meet the objectives and targets to prioritize resources to address health-related issues in context of air 
+pollution.
+Activity Matrix
+Health action plan on ‘Air Pollution and Health’ in Goa has been developed to protect, prevent control health 
+problems and reduce morbidity and mortality due to illnesses related to air pollution.  
+The major components of the health action plan on air pollution and health are mentioned below-
+Awareness generation 
+To increase general awareness amongst all the relevant stakeholders including the general population 
+especially vulnerable communities, health care providers, and policy makers regarding the impacts of 
+air pollution on human health, the state has developed information, education and communication 
+(IEC) communicating messages for preventable actions and seeking medical support using multiple 
+communication materials such as posters, audios, videos, and organizing public health events.
+IEC activities and dissemination plan at the state level
+Using posters on climate change and health impacts including messages of prevention and protection from 
+air pollution for the general population, targeting vulnerable groups, and seeking medical support.  These 
+are disseminated in all healthcare facilities and all government educational institutes, along with using mass 
+media channels for reaching out to the general population.  (Annexure 3) Also, 7 audio-videos have been 
+disseminated (reference links attached). (Annexure 4)
+Chapter 6: Health Action Plan on  Air Pollution Related Diseases | 23
+i. Target population:  
+Urban areas (Primarily Municipal corporations)
+Industrial areas (like Corlim, Kundaim, Madkai, Margao, Pissurlem, Verna, etc.)
+Vulnerable groups (children, women, older adults, traﬃc police, and outdoor workers)
+ii. Annual IEC dissemination plan for Air Pollution and Health under NPCCHH, Goa
+Table i: IEC dissemination plan
+Indicator 
+Statement
+Indicator Unit Target
+2022-23
+Target
+2023-24
+Target
+2024-25
+Target
+2025-26
+Target
+2026-27
+IEC campaigns 
+(see list *)
+% of Districts implemented IEC 
+campaign on Air Pollution
+% 50% 50% 100% 100% 100%
+% of Districts included climate 
+sensitive issues in the VHSNCs
+% 50% 50% 100% 100% 100%
+iii. Listed IEC activities for an IEC campaign for Air Pollution
+ ! 1 or 2 video clips of 1-2 min duration broadcasted 1-2 times a day throughout the year on air pollution 
+and its health impacts.
+ ! 1-2 Large Wall Poster and/or 1-2 Foam board printed and disseminated in all healthcare facilities and 
+all government educational institutes. One each at each facility/institute per year. 
+ ! Social Media – active circulation of audio-video clips and poster slideshow in prominent social media 
+handles.
+ ! Sensitization workshops for district, state, and regional level oﬃcers  
+ ! Community participation through meetings, education in school, Panchayati Raj Institutions and 
+gram sabhas. 
+Sl. 
+No.
+IEC 
+Content
+Priority 
+Districts 
+Dissemination 
+Plan 
+Mechanism Timeline Budget (in lakhs)
+(2022-
+23)
+2 years 
+(2022-24)
+(2024-
+25)
+(2025-26) (2026-27)
+1. Posters 2 districts 2 Posters per 
+Healthcare 
+facilities in all 
+districts bit.ly/
+NPCCHHIEC
+Printing of copies 
+for state-level 
+dissemination at 
+health facilities, 
+public places/
+building By 
+email to DNO for 
+dissemination to 
+health facilities, 
+schools and other 
+public/government 
+buildings
+Sep to Nov 1 lakhs 1.2 lakhs 1.5 
+lakhs
+1.8 lakhs 2 lakhs
+2. Audio 2 districts 3 audios bit.ly/
+NPCCHHIEC
+Radio October
+3. Videos 2 districts 7 videos bit.ly/
+NPCCHHIEC
+Social media/
+TV/ public 
+events- videos 
+circulated during 
+celebrations of 
+important days. 
+October
+4. Social 
+Media
+2 districts All above 
+material + 
+relevant activity 
+updates
+Twitter WhatsApp 
+groups(State  DNO, 
+Health  facility 
+group)
+Throughout 
+the year
+24 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Public Health Advisories
+Health advisories (bit.ly/NPCCHHPrg) are issued to alert population of potential harmful impact of impending 
+environmental phenomena like cold wave/frost, heat wave and elevated air pollution. Advisories are issued 
+at central level and will be forwarded to the distr icts through State/UTs for public dissemination. St ate will 
+be responsible to ensure timely dissemination of he alth advisories in locally acceptable language.
+Observation of Health Related Days with Emphasis on Air Pollution Related Events 
+Day Activities
+International Day of Clean Air for Blue Skies 
+(September 7)
+Other days:
+ y World Car Free Day ( September 22)
+ y  World Environmental Health Day ( September 26)
+ y  Green Consumer Day ( September 28)
+ y IEC Campaigns 
+ y  Health Facility-Based Patient Awareness Sessions
+ y Audio- Video spots broadcasting
+ y  Targeted Awareness Sessions – Traﬃc Police / 
+Schools/ Women & Children
+ y  Street Plays and local cultural activities
+ y  Rallies
+ y  Sports events
+ y  Competitions: Poster/ Poetry/ Essay/ Quiz 
+Capacity Building
+To strengthen the capacity of the healthcare system  to adapt/address illnesses/ diseases due to the 
+impacts of air pollution, the following capacity bu ilding and training programme will be deployed by t he 
+state. Further, refresher training at regular intervals will be conducted to regularly help appraise the staﬀ to 
+strengthen the health sector response to air pollut ion-related illnesses.    
+i. Training material
+Guidelines: (available bit.ly/NPCCHHguidelines)
+ ! Health Adaptation Plan for Disease Due to Air Pollution
+ ! Health Sector Preparedness for Air Pollution
+ ! Handbook for Health Professionals on Air Pollution & Its Impact on Health
+Chapter 6: Health Action Plan on  Air Pollution Related Diseases | 25
+Training modules: (available bit.ly/NPCCHHguidelines)
+ !  Women Training Manual (English, Hindi)
+ !  Children Training Manual (English, Hindi)
+ !  Traﬃc Police Training Manual (English, Hindi)
+ !  Municipal Worker Training Manual (English/Hindi)
+Other training resources: NPCCHHchannel https://bit.ly/NPCCHHyt
+Training calendar
+Table 3: NPCCHH Training Plan at the State Level
+Training Programme Trainer Participants Training Content
+Medical Oﬃcers (3 Days) SNO/DNO MO (DH,CHC,PHC) Air pollution 
+related illness
+Community Health Care Workers 
+(HWC)
+ (2 days)
+MO Community Health 
+Workers and Extension 
+Educators
+Panchayati Raj Institutions (1 day) MO,
+MPHW
+Panchayati Raj
+Institutions, communities
+Training Programme Trainer Training Contents Timeline
+Health facility level 
+(MO of DH/CHC/PHC) 
+2 days
+District Level 
+Trainers DNO-CC
+Air pollution-health impact, prevention 
+measures
+Surveillance case identi/f_ication and 
+reporting
+Health facility preparedness
+August-September
+December-January 
+(review/repeat if 
+necessary)
+Community Health 
+care workers 
+(MPHW, ANM 
+etc.) 2 days
+State & District 
+Trainers
+Surveillance case identi/f_ication and 
+reporting
+August-September 
+December-January 
+(review/repeat if 
+necessary)
+Panchayati Raj 
+Institutions/ 
+Communities 1 day
+District Level 
+Trainers, MO, 
+Extension 
+Educators
+Air pollution-health impact prevention September-October
+Table 4: Recommended schedule of training for 5 years (2022-2027)
+Trainer Priority 
+Districts
+Time of 
+year
+Content 
+matter
+Budget
+(2022-23) (2022-24) (2024-25) (2025-26) (2026-27)
+SNO-CC 2 Districts July-
+September
+Air pollution-
+related 
+illnesses Cardio 
+pulmonary 
+diseases 
+Allergic 
+diseases
+0.8 lakhs 1 lakh 1.2 lakhs 1.5 lakhs 1.8 lakhs
+MO 2 Districts October-
+November
+MO, Health 
+care workers
+2 Districts December
+26 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Surveillance
+The state has established surveillance mechanisms on illnesses due to air pollution to help understand 
+the health problems in the area and establish a pattern to better inform the impact of air pollution on the 
+population as well as strengthen the healthcare facility’s response to the illnesses. The state has initiated 
+Sentinel Surveillance for illnesses in the context of air pollution by identifying hospitals across the region.
+There are NIL non-attainment cities as identi/f_ied under the National Clean Air Programme of the MoEFCC as 
+of yet in Goa.
+Sentinel hospitals selected for ari surveillance activity
+Currently, 2 sentinel hospitals have been identi/f_ied in Goa for acute respiratory illnesses (ARI) surveillance, 
+the details of these include-
+ARI Sentinel Surveillance
+Sl. 
+No.
+District 
+Name
+Facility Name Nodal Oﬃcer Name Mobile Number E-mail
+1 North Goa 
+District 
+North Goa District 
+Hospital-Asilo
+Dr. Saloni Prabhu
+District Epidemiologist 
+North 
++917767960688 dsungoa@gmail.com
+drsaloni95@gmail.com
+2 South Goa 
+District 
+South Goa District 
+Hospital-Hospicio
+Dr. Annet Oliveira District 
+Epidemiologist South
++919850926226 dsusgoa@gmail.com
+oliveiraannet@gmail.com
+Roles and Responsibilities
+In accordance with the action plan on air pollution and its impact on human health, the following roles and 
+responsibilities have been identi/f_ied to be implemented at the state, district, block as well as healthcare 
+facility level-  
+Responsibilities
+SNO  y Finalization of IEC material and dissemination plan
+ y Organize IEC campaigns at the state level on the observance of important environment-
+health days
+ y Organize training sessions for district-level oﬃcers and surveillance nodal oﬃcer
+ y Facilitate training of medical oﬃcers in clinical aspects of air pollution’s health impact
+ y Real-time air quality data dashboard in proposed cities 
+ y Monitor AQI levels in states especially in hotspots and NCAP cities
+ y Ensure reporting from sentinel hospitals and DNO
+ y Ensure necessary health facility preparedness
+ y Review surveillance reporting and monthly report submission by DNO
+ y Submit a report of activities 
+ y Review implementation of IEC and surveillance activities at all levels
+ y Evaluate and update relevant sections of SAPCCHH with the support from State Task Force
+ y Liaison with State Pollution Control Board for AQI alerts and its dissemination
+ y Liaison with the Department of Environment for combined IEC campaigns and information 
+sharing on health indicators for targeted air pollution reduction activities
+Chapter 6: Health Action Plan on  Air Pollution Related Diseases | 27
+Responsibilities
+ y Awareness and action plan input sharing with the local bodies of cities with high AQI
+ y Create organization support and strengthen Environmental Health cell to implement 
+NPCCHH vision, goal, and objectives
+ y Organize sensitization workshops for other stakeholders and line departments
+ y Organize seminars on Air Pollution and conferences to share knowledge and action under 
+NPCCHH.
+ y Collaborate with academic institute/s for support in updating SAPCCHH
+ y Surveillance activity monitoring, vulnerability assessment, and applied research 
+ y Advocate for reduction in the source of air pollution
+DNO  y Ensure IEC dissemination to the community level
+ y Facilitate community level IEC activities
+ y Organize training for Medical oﬃcer and Sentinel hospital nodal oﬃcers with relevant 
+training manuals
+ y Organize training of vulnerable groups: police oﬃcers, outdoor works, women, children
+ y Organize IEC campaigns at the district-level on observance of important environment-
+health days
+ y Collect and monitor AQI levels in states especially in hotspots and NCAP cities
+ y Ensure daily reporting from Sentinel hospitals and compile the data
+ y Analyze daily health data with AQI level to monitor trends and hotspot in health impacts 
+ y Submit analysed monthly report to SNO, NPCCHH Headquarter, and other departments for 
+necessary action
+ y Submit report of activities 
+ y Advocate for reduction in the source of air pollution 
+Surveillance 
+hospital nodal 
+oﬃcer 
+ y Train hospital staﬀ and clinician responsible for daily reporting in case indentation and 
+reporting /f_low
+ y Compile daily reports for the health facility and submit it to DNO and NPCCHH, Headquarter
+Medical oﬃcer  y Conduct health facility-based IEC activities
+ y Support community-level IEC activities
+ y Be aware of AQI levels and health impact of air pollution
+ y Ensure necessary health facility preparedness in early diagnosis and management of cases
+Panchayati Raj 
+Institutions
+ y Conduct community-level IEC activities
+28 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+chaPter 7
+health action Plan on  
+heat related illnesses
+Introduction 
+Heat-related illnesses (HRI) encompass a spectrum of disorders ranging from heat syncope, muscle cramps, 
+and heat exhaustion to a life-threatening emergency such as heat stroke. These illnesses arise when there 
+is a disruption in the regulation of the body’s temperature because heat input from the environment and 
+body metabolism is increased in comparison to without the rise in temperatures from the skin via radiation, 
+evaporation, and convection.
+In India, a signi/f_icant number of deaths occur 
+every year due to heat-related illnesses. Integrated 
+Disease Surveillance Programme (IDSP) at the 
+National Centre for Disease Control (NCDC) 
+under MoHFW, GoI is collecting and reporting the 
+morbidity and mortality data of HRI from heat-
+vulnerable states since 2015. In the context of 
+global warming, extreme weather events are on 
+the rise and among them heat waves are projected 
+to increase in number, intensity, and duration with 
+consequent health risks.
+The entire Goa state (both districts 
+of North Goa and South Goa) are 
+vulnerable to Heat hazard
+Goa - extreme heat hazard is classi/f_ied as high 
+based on modeled heat information currently 
+available to this tool. This means that prolonged 
+exposure to extreme heat, resulting in heat stress, 
+is expected to occur at least once in the next /f_ive 
+years. Project planning decisions, project design, 
+and construction methods must take into account 
+the level of extreme hazard.
+Source : https://www.thinkhazard.org/en/report/1490-india-
+goa/EH
+Chapter 7: Health Action Plan on  Heat Related Illnesses | 29
+In India, a heat wave is considered if the maximum temperature of a station reaches at least 40°C or more 
+for plains, 37°C or more for coastal stations, and at least 30°C or more for hilly regions. The following criteria 
+are used to declare a heat wave:
+A. Based on Departure from Normal
+ ! Heat Wave: Departure from the normal is 4.5°C to 6.4°C
+ ! Severe Heat Wave: Departure from the normal is>6.4°C    
+B. Based on Actual Maximum Temperature (for plains only)   
+ ! Heat Wave: When the actual maximum temperature ≥ 45°C
+ ! Severe Heat Wave: When the actual maximum temperature ≥47°C
+To declare a heat wave, the above criteria should be met at least at two stations in a Meteorological sub-
+division for at least two consecutive days. A heat wave gets declared on the second day.
+Types of heat-related illnesses
+Clinical 
+Entity
+Age 
+Range
+Setting Cardinal Symptoms Cardinal/ 
+Important 
+Signs
+Pertinent Negative
+Findings
+Heat rash/ 
+prickly heat/ 
+Miliaria
+All, but 
+frequently 
+children
+Hot 
+environment; 
++/- insulating 
+clothing or 
+swaddling 
+(wrap in tight 
+clothes)
+ITCHY RASH with 
+SMALL RED BUMPS 
+at pores in the skin. As 
+seen in the setting of 
+heat exposure; bumps 
+can sometimes be /f_illed 
+with clear or white /f_luid
+DIFFUSED RED 
+COLOUR SKIN 
+OR VESICULAR 
+RASH, itching of 
+the skin without 
+visible eruption
+NOT FOCALLY 
+DISTRIBUTED like a 
+contact dermatitis
+Heat cramps All Hot 
+environment, 
+TYPICALLY 
+WITH 
+EXERTION, 
++/- insulating 
+clothing
+PAINFUL SPASMS of 
+large and frequently 
+used muscle groups
+Uncomfortable 
+appearance, may 
+have DIFFICULTY 
+FULLY 
+EXTENDING 
+AFFECTED 
+LIMBS/JOINTS
+No contaminated 
+wounds/tetanus 
+exposure; no seizure 
+activity
+Heat 
+exhaustion
+All Hot 
+environment; 
++/- exertion; 
++/- insulating 
+clothing or 
+swaddling 
+(wrap in a tight 
+clothes)
+Feeling overheated, 
+light headedness, 
+EXHAUSTED AND
+WEAK, unsteady, 
+feeling of VOMITING, 
+SWEATY AND THIRSTY, 
+inability to continue 
+activities
+SWEATY/
+diaphoretic; 
+/f_lushed skin; 
+hot skin; 
+NORMAL CORE 
+TEMPERATURE; 
++/- dazed, +/- 
+generalized 
+weakness, slight 
+disorientation
+No coincidental signs 
+and symptoms of 
+infection; no focal 
+weakness; no diﬃculty 
+in swallowing food or 
+speech; no overdose 
+history
+Heat 
+syncope
+Typically 
+adults
+Hot 
+environment; 
++/- exertion; 
++/- insulating 
+clothing or 
+swaddling 
+(wrap in a tight 
+clothes)
+Feeling hot and weak; 
+light headedness 
+followed by a 
+BRIEF LOSS OF 
+CONSCIOUSNESS
+Brief, generalized 
+loss of 
+consciousness 
+in hot setting, 
+short period of 
+disorientation, 
+if any
+NO SEIZURE ACTIVITY, 
+no loss of bowel or 
+bladder continence, 
+no focal weakness, 
+no diﬃculties in food 
+swallowing 
+30 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Clinical 
+Entity
+Age 
+Range
+Setting Cardinal Symptoms Cardinal/ 
+Important 
+Signs
+Pertinent Negative
+Findings
+Heat Stroke All Hot 
+environment; 
++/- exertion;  
++/- insulating 
+clothing or 
+swaddling 
+(wrap in a tight 
+clothes)
+Severe overheating; 
+profound weakness; 
+DISORIENTATION, 
+NOT FULLY ALERT, 
+CONVULSION, OR 
+OTHER ALTERED 
+MENTAL STATUS
+Flushed, DRY 
+SKIN (not 
+always), CORE 
+TEMP ≥40°C 
+OR 104°F; 
+altered mental 
+status with 
+disorientation, 
+incoherent 
+behaviour, 
+COMA, 
+CONVULSION; 
+tachycardia; +/- 
+hypotension
+No coincidental signs 
+and symptoms of 
+infection; no focal 
+weakness; no diﬃculties 
+in swallowing food or 
+speech, no overdose 
+history
+Vulnerability Assessment for heat-related illness: 
+ !  Children below 5 years and elders above 65 years 
+ !  Pregnant women 
+ ! Labourers including those at construction sites/ Outdoor workers 
+ ! Farmers/ MNREGS workers 
+ ! Police personnel/ security staﬀ 
+ ! Industrial workers working at High Temperatures 
+ ! Street hawkers/ Coolies/ salesmen
+ ! Auto drivers/ Travellers/ Bus drivers 
+ ! Slum residents/ Beggars/ Homeless 
+ ! Alcoholics, Smokers, People consuming hot drinks frequently. 
+ ! Persons suﬀering from chronic diseases like Cardiovascular, Renal, Skin, Liver, Diabetes, Obesity, 
+debilated / malnourished etc. 
+Health Adaptaion Plan
+The Heat wave action plan provides a framework for the implementation, coordination, and evaluation of 
+extreme heat response activities in cities in Goa to reduce extreme heat-related illnesses.
+The primary objective of the action plan is to alert the populations at risk of heat-related illness in places 
+where extreme heat conditions either exist or are imminent and to take appropriate precautions. Severe and 
+extended heat waves can also disrupt general, social, and economic services.
+The Heat Action Plan is a comprehensive early warning system and preparedness plan for extreme heat 
+events. The plan presents immediate as well as longer-term actions to increase preparedness, information-
+sharing, and response coordination to reduce the health impacts of extreme heat on vulnerable populations. 
+It is intended to mobilize individuals and communities to help protect their neighbours, friends, relatives, 
+and themselves against avoidable health problems during spells of very hot weather. 
+The major components of the action plan are mentioned below-
+Chapter 7: Health Action Plan on  Heat Related Illnesses | 31
+Awareness Generation  
+To increase general awareness amongst all the relevant stakeholders, including the general population, 
+especially vulnerable communities, health-care providers, and policy makers regarding the impacts of heat 
+and ways to address them.
+IEC  
+In accordance with the guidance provided, various communication materials will be adopted by the state 
+in the local language and shared with the district for further dissemination. These include posters, audio, 
+videos, advisories, and other mediums of awareness generation. These illustrate the preventive measures 
+for the general as well as vulnerable populations to undertake in situations of a heat wave as well as in 
+seeking medical support. At the community level, the IEC material is to help the population to be aware of 
+the heat wave situation as well as adapt to the same. The developed IEC material will be disseminated in the 
+state during the intensive summer months regularly for maximum population reach-out in all the cities and 
+districts with high susceptibility and exposure to heat wave-related events as per current as well as future 
+climatic conditions.
+Table 1: Plan for IEC dissemination on Heat for 5 years  
+Indicator 
+Statement
+Indicator Unit Target
+2022-23
+Target
+2023-24
+Target
+2024-25
+Target
+2025-26
+Target
+2026-27
+IEC campaigns 
+(see list *)
+% of Districts 
+implemented IEC 
+campaign on heat-
+related illnesses
+% 50% 50% 100% 100% 100%
+% of Districts 
+included climate-
+sensitive issues in 
+the VHSNCs
+% 50% 50% 100% 100% 100%
+Listed IEC activities for an IEC campaign for heat-related illness
+ ! 1 or 2 audio/ video clips of 1-2 min duration broadcasted 1-2 times a day throughout the year on the 
+heat-related illness and its health impacts relevant to that part of the year
+ ! 1-2 Large Wall Poster and/or 1-2 Foam board printed and disseminated in all healthcare facilities and 
+all government educational institutes. One each at each facility/institute per year
+ ! Social Media – active circulation of audio-video clips and poster slideshow on prominent social media 
+handles
+Sl. 
+No.
+IEC 
+Content
+Priority 
+Districts 
+Dissemination 
+Plan for 5 years  
+(2022-27)
+Timeline Budget (in lakhs)
+ (2022-23)  (2022-24) (2024-25) (2025-26) (2026-27)
+1. Posters 2 districts 2 posters for 
+Healthcare facilities 
+in all districts 
+February 
+to March
+0.4  lakhs 0.5 lakhs 0.6 lakhs 0.7lakhs 0.85 
+Lakhs
+2. Audio 4 audios (received 
+from GOI)
+April to 
+May
+3. Videos 7 videos (received 
+from GOI)
+April to 
+May
+32 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Public Health Advisories
+Health advisories are issued to alert the population of the potentially harmful impact of increasing 
+heat. Advisories are issued at the central level i.e. NCDC and will be forwarded to the districts for public 
+dissemination. Districts are responsible for ensuring timely dissemination of health advisories in locally 
+acceptable language.
+Observance of important days
+World Environmental Day will be observed for heat under NPCCHH every year 
+ !  Activities like poster competitions/ essay competitions/ drama competitions can be held in educational 
+institutions 
+ !  Walkathons
+ !  Advertisements/ publicity on social media
+ !  Tree plantation drives and plant distribution
+ !  IEC activities in organizations/ health centres
+ !  Street plays/ songs etc.
+Capacity Building 
+To strengthen the capacity of the healthcare systems to adapt/address illnesses/ diseases due to the heat 
+waves in the state of Goa, capacity building and training plans will be developed. This is indicated in the 
+table below-
+Table 2: Training schedule
+Training Programme 
+for
+Trainer Topics Timeline
+District level 
+(DNO-CC, trainers)
+State Level Trainers 
+SNO-CC, Consultant
+Heat-health impact, prevention measures 
+Surveillance reporting and analysis 
+with weather parameters Health facility 
+preparedness
+March
+Health facility level  
+(MO of DH/CHC/PHC)
+District Level Trainers 
+DNO-CC
+Heat-health impact, prevention measures 
+Surveillance case identi/f_ication and reporting 
+Health facility preparedness Clinical 
+management of HRI
+March 
+Community Health care 
+workers 
+(MPH, ANM, etc)
+District Level Trainers, 
+MO
+Heat-health impact prevention Indoor and 
+outdoor mitigation measures
+March-April
+Panchayati Raj 
+Institutions
+District Level trainers, 
+MO, Extension 
+Educators
+Heat-health impact prevention Indoor and 
+outdoor mitigation measures
+March –April
+Chapter 7: Health Action Plan on  Heat Related Illnesses | 33
+Table 3: Schedule of training for the next 5 years (2022-2027)
+Trainer Priority 
+Districts
+Time of year Content 
+matter
+Budget
+2022-23 2022-24 2024-25 2025-26 2026-27
+DNO-CC 2 Districts March to April Heat-related 
+illnesses
+0.6 lakhs 0.75 lakhs 0.9 lakhs 1.1 lakhs 1.25 lakhs
+MO March to April
+District level 
+trainers, MO, 
+Health care 
+workers
+May to June
+Sensitization/ Knowledge building workshops  will be planned for seeking updates on various heat-
+related health issues between district oﬃcials, medical oﬃcers, and academic institutions working on 
+climate change impact.
+Surveillance
+HRI surveillance is conducted to establish a baseline of HRI morbidity and mortality, monitor HRI incidence 
+concerning environmental parameters, and improve health system preparedness to extreme heat. The state 
+is collecting HRI data reports from IDSP and sharing with NCDC every month. The IHIP platform for HRI 
+surveillance has been initiated and reporting is being streamlined.
+Guidelines National Action Plan on Heat-Related Illnesses (https://bit.ly/NAPHRI)
+Roles and responsibilities
+The roles and responsibilities of the state staﬀ to implement the action plan for heat-related illnesses is 
+de/f_ined below:
+Responsibilities
+SNO  y Disseminate early warnings to the district level
+ y Finalization of IEC material and dissemination plan
+ y Liaison with IMD for weather alerts and their dissemination
+ y Liaison with other departments for combined IEC campaigns, coordinated response and 
+information sharing of health indicators for targeted action
+ y Organize IEC campaigns at the state level on the observance of important environment-health 
+days
+ y Organize training sessions for the district level and the surveillance nodal oﬃcers
+ y Facilitate training of medical oﬃcers in clinical aspects of the heat-health impact
+ y Ensure daily surveillance reporting from the district level
+ y Ensure submission and analysis of heat-related death at the state and district level
+ y Monitor daily health data with temperature and humidity levels to monitor trends and 
+hotspots in the state
+ y Review health facility preparedness and ambulance services to manage HRI
+ y Identify health facilities at diﬀerent levels that can have heat illness wards with necessary 
+treatment/cooling facilities 
+ y Keep existing Rapid Response Teams under IDSP prepared to manage HRI if needed for an 
+emergency response to extreme heat
+34 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Responsibilities
+ y Review implementation of the IEC and surveillance activities at all levels
+ y Evaluate and update relevant sections of SAPCCHH with support from State Task Force
+ y Create organizational support and strengthen the Environmental Health cell to implement the 
+NPCCHH vision, goal, and objectives
+ y Organize sensitization workshops for other stakeholders and line departments
+ y Organize seminars and conferences to share knowledge and action under NPCCHH.
+ y Collaborate with academic institute/s for support in updating SAPCCHH, Surveillance activity 
+monitoring, training of health care professionals, vulnerability assessment, and applied 
+research 
+ y Submit a report of activities on heat-health under NPCCHH
+ y Advocate for a reduction in source of greenhouse gas emissions
+DNO  y Disseminate early warning at the block and health facility level
+ y Ensure IEC dissemination to the community level and facilitate community-level IEC activities
+ y Liaison with IMD to receive daily observed temperature and relative humidity information
+ y Liaison with other departments for combined IEC campaigns, coordinated response and 
+information sharing of health indicators for targeted action 
+ y Conduct training for health oﬃcers, and medical oﬃcers, with relevant training manuals
+ y Conduct sensitization of vulnerable groups: police oﬃcers, outdoor workers, women, children, 
+etc
+ y Organize IEC campaigns at the district level on the observance of important environment-
+health days
+ y Ensure daily reporting from health facilities and compile the data
+ y Analyze daily health data with temperature and humidity levels to monitor trends and 
+hotspots in the district
+ y Support timely suspected heatstroke death analysis and its reporting
+ y Submit analyzed weekly report to SNO, NPCCHH, and other departments for necessary action
+ y Coordinate with other agencies for response
+ y Submit a report of activities on heat-health under NPCCHH
+ y Advocate for the reduction in source of greenhouse gas emissions
+City Health 
+Department
+ y Support in the development and implementation of the city-speci/f_ic heat-health action plan
+Medical 
+Oﬃcer
+ y Conduct health facility-based IEC activities
+ y Support community-level IEC activities
+ y Be aware of temperature levels and the health impact of heat stress
+ y Ensure necessary health facility preparedness in early diagnosis and management of cases
+Panchayati Raj 
+Institutions
+ y Conduct community-level IEC activities
+Chapter 8: Health Action Plan on Extreme Weather Event-Related Health Issues | 35
+Floods, droughts, cyclones, earthquakes, and landslides have been a recurrent phenomenon in the history 
+of the Indian sub-continent. About 60% of the landmass is prone to earthquakes of various intensities, over 
+40 million hectares is prone to /f_loods, about 8% of the total area is prone to cyclones and 68% of the area is 
+susceptible to drought. 
+India has been experiencing an increasing number of climate change related natural disasters, resulting 
+in extensive loss of lives, livelihoods, the environment and economy. During Kerala /f_loods of 2018, almost 
+5.4 million people were aﬀected while Cyclone Fani in Orissa aﬀected almost 16.5 million people. These 
+two disasters led to total loss and damages of almost 5 billion USD. Diﬀerent disasters can be linked with 
+diﬀerent health implications, which are summarized in the Table ( Annexure 8)
+General Disaster Pro/f_ile:
+Goa is prone to excessive rainfall and /f_looding/ landslides. The coastal regions of the state are also prone to 
+coastal /f_looding along with some internal areas  The entire coastal zone of Goa is exposed to the impacts of 
+/f_loods, cyclones, and tsunami.
+ ! There has been an increase in /f_lood incidents in Goa
+ !  Rainfall peak events have increased. Coastline erosion has also been observed. Illegal sand mining, 
+/f_illing up and reclamation of marshy lands, and loss of mangrove systems is also contributing to 
+increase waterlogging and /f_looding. However, more data analysis is needed in this context.
+ !  There is a rise in temperature as well as the sea level, aﬀecting the ecosystems signi/f_icantly. This in turn 
+aﬀects the sea catch and thus the nutrition of coastal population.
+ !  Wind speed changes aﬀect the spread of infectious agents causing the diseases.
+ !  There has been an decrease in the cases of vector-borne diseases in the past few years like malaria, 
+dengue, chikungunya etc.
+ !  Even non-communicable diseases incidence and severity is aﬀected in the event of disasters due to 
+hindrances in the supply chain of medicines.
+ !  There is also an increase in injuries and violence against the vulnerable populations’ post- disasters.
+ !  Occupational health of industrial workers is aﬀected due to changing temperatures, making them 
+take longer and more frequent breaks during the day and at the same time increasing the hours of 
+late-nightshifts.
+ !  Accessibility to health care facilities and health workers is also decreased due to extreme  
+weather events.
+chaPter 8
+health action Plan on extreme 
+Weather event-related health 
+issues
+36 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Following are districts with Hotspots identi/f_ied for events:  
+ ! Floods: parts of Salcete, Ponda, Dharbandora, Sanguem, Tiswadi, Bardez, Pernem, Sattari, Bicholim
+ !  Landslides: parts of Salcete, Ponda, Quepem, Canacona  
+Strengthening Health Sector Preparedness 
+ ! Early warning: Dissemination of early warnings for Cold wave, Flood, Cyclone etc to health facility 
+level and community level 
+ !  Surveillance 
+ !  Post-disaster health impact assessment 
+ !  Support post-disaster surveillance of communicable disease, health facility aﬀected conducted by 
+SDMA, IDSP or other agencies 
+Health Facility Preparedness 
+ !  Vulnerability assessment of health facility in context of climate change-extreme weather events 
+ !  Identify structural changes/retro/f_itting measures at the facility level to equip the healthcare facility 
+ !  Formalize disaster management plan and committee 
+ !  Emergency procurement arrangements & functioning of essential health services (safe water, 
+immunization, maternal-child care etc) 
+ !  Post-disaster damage assessment and referral plan in case of health facility damage 
+ !  Ensure routine monitoring and maintenance of support functions (Water quality, waste management) 
+ !  Establish Sustainable procurement committee 
+Adaptation Plan
+Awareness generation and sensitization programmes:
+To increase the general awareness amongst all the relevant stakeholders including vulnerable communities, 
+healthcare providers, and policy makers regarding the impacts of extreme weather events and disasters 
+and ways to address them. The districts are aimed to create awareness by Information Education and 
+Communication Activities (IEC) through the development of locally and culturally acceptable messages in 
+posters, audio, video, organising public health events, and issuing advisories related to health impacts of 
+extreme weather events. Some of the pathways identi/f_ied in this regard include:
+ !  Mass meetings to be organized for schools and college students
+ !  Advertisement and promotion through IEC
+ !  Posters, pamphlets, billboards and other advertisement modes like social media
+ !  Rallies
+ !  Wall paintings on earthquake resistant buildings in important places to educate people and give 
+information on earthquake resistant technology
+ !  Public awareness programmes on safe construction practices
+Chapter 8: Health Action Plan on Extreme Weather Event-Related Health Issues | 37
+Capacity building
+To strengthen the capacity of healthcare system to adapt/address illnesses/ diseases due to extreme weather 
+events or disasters.
+ ! Training of trainers at the state, district and block levels to enhance the capacity of disaster management 
+committee
+ ! Medical professional training
+ ! Training of doctors and other health workers on health impacts due to disasters
+ ! Increased training of the community-level staﬀ.
+ ! Specialist trainings like Search & Rescue and First Aid for disaster management teams
+ ! Studies and Research
+ ! Preparation of Training manuals, standard operating procedure, and documentation on best practices
+ ! Mock drills to be carried out before the disaster season by the key players to /f_ind out the feasibility of 
+the plan and ensure greater role.
+Training plan
+Training 
+Programme for
+Trainer Topics Timeline
+District level  
+(DNO-CC, trainers)
+State Level Trainers
+SNO-CC, Consultant
+ y Climate change and impact of extreme weather 
+events in India
+ y Formation of disaster management committees 
+and plans
+ y Health facility vulnerability, resilient measures 
+and disaster preparedness
+ y Disaster response in coordination with state/
+district disaster management authority
+ y Post-disaster health impact assessment and 
+response
+February
+Health facility level 
+(MO of DH/CHC/PHC)
+District Level 
+Trainers
+DNO-CC
+ y Health facility disaster vulnerability assessment
+ y Disaster management committee and plan
+ y Climate resiliency measures (structural/
+functional)
+ y Health facility preparedness for EWE/disaster 
+response
+ y Post-disaster surveillance and damage 
+assessment
+February
+Community Health 
+care workers (MPH, 
+ASHA, ANM etc)
+District Level 
+Trainers, MO
+ y Climate change and health impact of extreme 
+weather events 
+ y Disaster planning and response
+February-March
+Panchayati Raj 
+Institutions
+District level 
+trainers, MO, Health 
+care workers
+ y Climate change and health impact of extreme 
+weather events 
+ y Disaster planning and response with
+ y community participation
+February-April
+38 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Roles and Responsibilities
+Responsibilities
+SNO  y Disseminate early warnings to the district level
+ y Finalization of IEC material and dissemination plan
+ y Formalize inter-sectoral coordination for disaster planning, management and response with 
+SDMA/IMD and other response departments
+ y Organize training of district level oﬃcers
+ y Facilitate assessment and implement of climate resilient measures in health facilities
+ y Review implementation of IEC, training, and surveillance activities at all levels
+ y Evaluate and update relevant sections of SAPCCHH with support from the State Task Force
+ y Create organizational support and strengthen Environmental Health cell to implement 
+NPCCHH vision, goal and objectives
+ y Organize sensitization workshops for other stakeholders and line departments
+ y Collaborate with academic institute/s for support in updating SAPCCHH, Surveillance activity 
+monitoring, training of health care professionals, vulnerability assessment and applied research 
+ y Submit reports of activities on EWE and health under NPCCHH ( Extreme Weather Events)
+DNO  y Disseminate early warning to the block and health facility level
+ y Ensure IEC dissemination to community level and facilitate community level IEC activities
+ y Organize training for block health oﬃcers and MO
+ y Formalize intersectoral coordination for disaster planning, management and response with 
+SDMA/IMD and other response departments
+ y Liaison with other departments for combined IEC campaigns, coordinated response and 
+information sharing of health indicators for targeted action 
+ y Identi/f_ication and communication of evacuation routes &relief camps
+ y Support planning and management of health care services in relief camps 
+ y Provide necessary IEC on health and sanitation in relief camps
+ y  Training for block health oﬃcers and medical oﬃcers with relevant training manuals
+ y Conduct sensitization of vulnerable groups: police oﬃcers, outdoor works, women, children etc
+ y Organize IEC campaigns at district level on observance of important environment-health days
+ y Facilitate disaster vulnerability assessments in health facilities and maintain records of such 
+assessment and health facility damage due to EWE
+ y Submit reports of activities on EWE and health under NPCCHH
+Medical 
+oﬃcer
+ y Conduct health facility-based IEC activities
+ y Support community-level IEC activities
+ y Preparation of Disaster Management Plans and hospital safety plan
+ y Assessment of health facility in context of climate change-extreme weather events
+ y Identifying structural changes/retro/f_itting measures at the facility level to equip the healthcare 
+facility 
+ y Ensuring routine monitoring and maintenance of support functions (water quality, waste 
+management)
+ y Health facility preparedness for seasonal events
+Panchayati 
+Raj 
+Institutions
+ y Conduct community level IEC activities
+ y Community involvement in planning and demonstration of measure taken before-during-after 
+an EWE
+Chapter 9: Health Action Plan on Vector-borne Illnesses in Context of Climate Change | 39
+The eﬀects of variation in climate has been well established for illnesses which are spread through vectors 
+or which are transmitted from animals to humans. According to World Health Organization (WHO) climate 
+change is considered as one of the paramount threat to human health. Climate change can have an eﬀect 
+on the geographic spread, transmission dynamics, and re-emergence of vector-borne diseases through 
+multiple pathways. The eﬀects of climate change can be seen on the pathogen, the vector, non-human 
+hosts, and humans.
+Vector-borne diseases (VBD) are climate-sensitive as the arthropod vectors such as mosquitoes, sand /f_lies, 
+ticks and mites are cold-blooded creatures. The development of vectors is aﬀected by the temperature, 
+rainfall, and relative humidity (RH). At lower temperatures, the rate of development is slow while at the 
+higher temperatures the life cycle of vectors gets completed in a shorter time. Rainfall helps in the creation 
+of breeding grounds for mosquitoes, while the RH helps in the survival and longevity of vectors. However, 
+climate change poses a risk for such areas, as the unsuitable areas are likely to become suitable with the 
+variations in temperature and precipitation patterns. 
+The major global vector-borne diseases identi/f_ied by World Health Organization and are observed in 
+India are malaria, dengue, chikungunya, Zika virus disease, Lymphatic Filaria, Leishmaniasis and Japanese 
+Encephalitis (J.E.). The most prevalent vector- borne diseases in the state of Goa include malaria, dengue and 
+chikungunya. The monitoring and prevention of outbreaks for these is looked into by the National Vector-
+Borne Diseases Control Programme, Directorate of Health Services, Government of Goa.
+Malaria
+Malaria is a life threatening disease caused by Plasmodium parasites that are transmitted to people through 
+the bites of infected mosquitoes. Malaria is preventable and curable. Non immune travellers from malaria 
+free areas are very vulnerable to the disease. Dengue is a mosquito borne viral infection. The infection causes 
+/f_lu like illness and occasionally develops into a potentially lethal complication called dengue haemorrhagic 
+fever (DHF) and dengue shock syndrome (DSS). Chikungunya is a viral disease transmitted to humans by 
+infected mosquitoes. It causes fever and severe joint pain. Other symptoms include muscle pain, headache, 
+chaPter 9
+health action Plan on Vector-
+borne illnesses in context of 
+climate change
+40 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+nausea, fatigue and rash. The registered cases of vector-borne illnesses in Goa over the last /f_ive years are 
+indicated in the table below:
+Y ear Malaria Dengue Chikungunya
+Cases Pf Cases Deaths Cases Deaths Cases Deaths
+2018 377 50 0 335 1 77 0
+2019 272 54 0 992 0 366 0
+2020 102 32 0 376 0 15 0
+2021 90 48 0 649 0 12 0
+2022
+(Till October)
+2 1 0 429 0 106 0
+*https://ncvbdc.mohfw.gov.in/WriteReadData/l892s/4278785141677647046.pdf
+*https://ncvbdc.mohfw.gov.in/index4.php?lang=1&level=0&linkid=431&lid=3715
+*https://ncvbdc.mohfw.gov.in/index4.php?lang=1&level=0&linkid=486&lid=3765
+As indicated above, the number of malaria cases in the state are declining since 2015 and no deaths have 
+been reported since 2018. The state of Goa is in the Malaria Elimination phase as the API (Annual Parasite 
+incidence is the number of positive cases per one thousand population) in both the districts is less than one.
+Focal cases of dengue and chikungunya are reported throughout the state and are being checked and 
+monitored. Further, reduction in cases is witnessed due to sustained source reduction measures carried out 
+with the involvement of local authorities. There have been no dengue or chikungunya related deaths in the 
+state since 2019. Furthermore, no Filariasis cases have been reported in the state since 2014 as per NVBDCP .
+In recent times, Goa is experiencing intermittent extended monsoon till November which leads to a high 
+density of mosquito presence in urban areas. Hence, potentially increasing the vector-borne disease burden 
+in the state.
+Awareness generation and IEC activities
+The IEC activities for vector borne disease are jointly done by nvbdcp division and ehc -
+a. Advertisement and promotion through IEC:
+i. Person to person communication method by ASHAs, MPWs and Insect collectors.
+ii. Messages to community through cultural programs and Street plays during Ganesh festival etc
+iii. Pamphlets, Radio jingles, Hoards, billboards, as and other advertisement modes
+b. Medical professional training:
+i. Expanded training of doctors and associate staﬀ
+ii. Increased training of NGOs and Asha workers
+c. Carry out mass media campaigns
+d. Promote a culture of risk prevention, mitigation, and better risk management
+e.  Promote attitude and behaviour change in the awareness campaigns linking air pollution and 
+climate change.
+Chapter 9: Health Action Plan on Vector-borne Illnesses in Context of Climate Change | 41
+f. Engage local and regional media (community radio, TV) 
+IEC type Material Timeline Mechanism
+Posters  y Posters on VBD and 
+climate change (English, 
+Marathi) 
+ y Adopt posters made by 
+state NVBDC 
+ y Pre monsoon 
+and Post 
+monsoon 
+ y Collaborate with NVBDCP 
+Wall painting Wall painting malaria 
+endemic Districts 
+Seasonal Government school, oﬃces and Gram 
+panchayat buidlings
+Hoardings Seasonal To be planned with hotspot Municipalities and 
+District 
+Audio-Visual  y Audio Jingles Pre monsoon and 
+Post monsoon 
+Radio Channels
+Digital 
+display
+ y Available GIF
+ y Above mentioned video 
+messages
+Seasonal Display in health facilities Public digital display 
+boards in major cities
+Social medial All above material + 
+Relevant activity updates
+ y Facebook and Twitter handle of state 
+NPCCHH, NHM
+ y WhatsApp groups (State DNO, Health facility 
+group)
+Links to materials: ( Annexure 4)
+Observance of important environment-health days 
+Observance of the following days is recommended for awareness on climate change and vector borne 
+diseases:
+Day Activities List
+ y World Malaria Day ( April 25)  y Targeted awareness sessions: urban slums, schools, women, 
+children 
+ y Street plays, local cultural activities, rallies 
+ y Clinical Management Training for Dengue 
+ y Dengue Awareness Week 
+ y World Mosquito Day ( August 20 )
+ y World Environmental Health Day 
+(September 26)
+Capacity Building : 
+To strengthen the capacity of healthcare system to adapt/address illnesses/ diseases due to vector-borne 
+diseases:
+Training Programme Trainer Budget Timeline
+District level (DNO-CC, trainers) NVBDCP , DHS Goa NVBDCP funds March
+Health facility level (MO of DH/CHC/PHC) Feb-March 
+Community Health care workers (MPH, ANM etc) Feb-March
+Panchayati Raj Institutions March–April
+42 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Roles and Responsibilities
+In order to address the current as well as future exposure of the state to vector-borne diseases due to the 
+changes in temperature and rainfall patterns, the following roles and responsibilities have been identi/f_ied to 
+be conducted by the departments at the state, district, block, and healthcare facility level:
+NVBDCP , Goa Overall guidance and 
+policy formulation
+Guide the state governments in resurgence and 
+containment of any VBD
+State Nodal Oﬃcer, Climate 
+Change
+To support the state govt. 
+in control of VBDs 
+Oversee vector control measures
+Oversee health sector preparedness
+Oversee VBD surveillance, control in post-disaster 
+situations in community and relief camps
+Train DNO, DMO
+Sensitization workshops to increase awareness on 
+climate change and its impact on VBD
+India Meteorological 
+Department
+To provide 
+meteorological data as 
+and when required
+To help the state govt. in building collaboration with 
+any research institute, analysis of relationship between 
+climatic factors and a particular VBD so as to forewarn the 
+impending outbreaks
+NGO at state and 
+district level for reach to 
+community
+Heath education at 
+community level
+Conduct workshops for IEC activities for diﬀerent level of 
+staﬀ in the identi/f_ied areas in consultation with the state 
+govt.
+State Programme Oﬃcer Overall planning and 
+execution of surveillance 
+and intervention 
+measures to control VBDs
+Supervise and guide the DMOs in control of VBDs
+State Entomologist To provide guidance in 
+vector control
+Generate data on fortnightly /f_luctuations in density of 
+vector species so as to guide the state government in 
+choosing appropriate time of IRS activities. To generate 
+data on susceptibility status of disease vectors for using 
+appropriate insecticide for IRS/larvicide for vector control
+Chief Medical Oﬃcer/
+District Malaria Oﬃcer/
+Disease Surveillance oﬃcer
+Execution of task 
+assigned by the SPO
+Supervise and guide surveillance and intervention 
+measures for control of VBDs in the district.
+Chapter 10: Action Plan for Green and Climate Resilient Health Care Facilities  | 43
+chaPter 10
+action Plan for Green and 
+climate resilient health care 
+Facilities 
+“Climate-resilient and environmentally sustainable health care facilities anticipate,  respond to, cop e 
+with, recover from and adapt to climate-related sho cks and stresses, while minimizing negative impacts  
+on the environment and leveraging opportunities to restore and improve it, so as to bring ongoing 
+and sustained health care to their target populatio n and protect the health and well-being of future 
+generations. (WHO)” .
+As the climate continues to change, risks to health  systems and facilities – including hospitals, clin ics, 
+and community care centres – are increasing, reduci ng the ability of health professionals to protect 
+people from a range of climate hazards. Health care  facilities are the /f_irst and last line of defence t o 
+climate change impacts as they can be responsible f or large emissions of greenhouse gases (GHGs), and 
+because they provide the needed services and care t o people harmed by extreme weather and other 
+long-term climate hazards.
+Framework for building climate-resilient and environmentally sustainable HCF
+Source: WHO Guidance for Climate-Resilient and Environmentally Sustainable Health Care Facilities
+GHGs
+Climate
+resilience
+Total environmet
+Environmental
+sustainabilityHealthy people,
+Healthy environment
+Health care facilities
+Health workforce
+• Human resources, • Capacity development,
+• Communication & awareness raising
+Climate change:
+• Floods,
+• Droughts,
+• Fires,
+• Storms,
+• Temperature 
+extremes,
+• Sea-level rise
+• Climate sensitive    
+   disease outbreaks
+Environmental 
+impacts:
+•  Water
+•  Sanitation
+•  Wastes
+•  Air pollution
+•  Chemicals
+•  Radiation
+•  GHGs
+Water, sanitation hygiene and health care waste
+• Monitoring & assessment, • Risk management,
+• Health & safety regulation
+Energy
+• Monitoring & assessment, • Risk management,
+• Health & safety regulation
+Infrastructure, technologies and products
+• Adaptationof current systems & infrastructures 
+• Promotion of new systems & technologies • Sustainability
+of  health care facility operation
+44 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+The National Programme on Climate Change and Human Health (NPCCHH) is engaging critically with 
+strengthening the healthcare services and facilities to adapt to as well as mitigate the impacts of climate 
+change. The key components recognized under the programme include –
+1. Environmentally Sustainable (Green) Measures at Health Care Facilities  
+ ! Energy Auditing
+ ! Installation of LED lighting at Health Care Facilities 
+ ! Installation of Solar panels 
+ ! Water Conservation Measures – Rain water Harvesting 
+2. Climate Resilient Infrastructure at Health Care Facilities including Retro Fitting of Existing Health Care 
+Facilities  
+1. Environmentally Sustainable (Green) Measures at Health Care Facilities
+a. Energy Auditing: 
+An energy audit identi/f_ies all energy end-users within the building, estimates how much energy is used 
+in each department, and determines the amount of energy used in relation to the desired values. 
+The guiding principles in this respect include:
+ ! The HCFs would develop a plan for the energy audit to assess the level of energy consumption. 
+ !  The responsibility for the energy audit would be of the IPC committee of the facility. If the healthcare 
+facility lacks quali/f_ied staﬀ, then the energy audit would be conducted by the state health department 
+as well.
+ !  The energy audit would also consider load management, poor maintenance aspects, and extreme 
+temperature to avoid /f_ire-related accidents. Audit would be conducted in the facility biannually.
+ !  Installing sub-meters in the facility premises would be useful in understanding how much energy is 
+used across the healthcare facility
+b. Replacing the existing non-LED lights with LEDs: 
+ Replacing the incandescent bulbs with LEDs leads to 75% less energy consumption. Each LED light 
+saves approximately INR 700-1400 over the course of a year. 
+ The guiding principle in this respect would be: Healthcare facilities would have a policy on purchasing 
+and using energy- eﬃcient equipment and devices. The facilities would gradually phase out the 
+incandescent bulbs with LEDs. 
+c. Installation of Solar panels: 
+ Healthcare facilities both in urban and rural areas consume a lot of energy throughout the day as the 
+electrical equipment used directly or indirectly to treat patients requires uninterrupted power. 
+  The guiding principle in this area would be: The state would, in a phased manner, install PV solar panels 
+in unused spaces like the roof of the facility. This would reduce grid-based electricity consumption 
+and decrease the peak demand of a facility, which means the organization has lower operating costs, 
+and hence these saved costs can be utilized for better patient care.
+d. Water conservation: 
+ In an HCF, sanitary /f_ixtures consume 42 per cent of water while heating ventilation and air conditioning 
+(HVAC) consumes 23 per cent of water; thus, major water-consuming area needs to be focused on 
+reducing water consumption. 
+Chapter 10: Action Plan for Green and Climate Resilient Health Care Facilities  | 45
+ Rainwater harvesting for healthcare facilities has the potential to save thousands of liters of water 
+every year. This in turn can result in substantial cost savings in addition to adopting climate-smart 
+practices.
+ The guiding principles for water conservation in a HCF would be as follows:
+ ! The healthcare facility would develop a strategy for the optimum usage of water. 
+ !  The HCFs would develop a plan for the conservation of water. e.g., water- eﬃcient /f_ixtures, dual 
+/f_lush mechanism, sensor operated urinals, waterless urinals, rainwater harvesting
+ !  The HCFs would have a plan for the wastewater treatment. e.g., sewage treatment plant and 
+eﬄuent treatment plant at sites of generation of contaminated grey water, like pathology. 
+ !  The HCFs would develop a programme/plan for the conservation of water
+ !  The HCFs would have a water management programme for the conservation of water by 
+establishing a team, setting goals with timelines, conducting water audits, determining the cost 
+of water and preparing an action plan
+ !  The HCFs would have an ongoing educational programme for the eﬃcient usage and conservation 
+of water for all the stakeholders (staﬀ, patient and visitors)
+ !  The HCFs would have a plan to train the staﬀ on water savings techniques
+ !  The HCFs would develop a wide variety of methods to communicate through IEC materials, new 
+and/or revised operating guides and manuals
+2.  Climate Resilient Infrastructure at Health Care Facilities including Retro Fitting of 
+Existing Health Care Facilities
+It is essential that HCF planning and designing should be responsive to local climate and hazard pro/f_ile 
+of the district.  Strong focus should be given to designing all aspects of infrastructure and services as 
+per relevant IS standards, building codes and local byelaws, and history of emergencies in the district to 
+ensure patient safety and continuity of health service during emergencies. Few key interventions that 
+would be undertaken to make the HCFs into green buildings would include:
+New Buildings
+ ! Climate risk assessment at the time of planning and designing the building.
+ !  Use of high-performance glass on windows, doors, and roofs to prevent the heat inside and allows 
+sunlight and fresh air to enter the room.
+ !  Use double glazing glass on windows; it provides thermal and optical properties to the building and 
+reduce the noise level.
+ !  Insulation of building from inside and outside in colder regions of the country.
+ !  Ensure the plinth level is above the high /f_lood level as known locally or storm surge level ( in costal 
+districts) and make the building accessible with ramps and railing to create a barrier free environment. 
+ !  Installation of Rainwater Harvesting System
+ !  Installation of alternative energy systems
+ !  Installation of STP & ETP
+46 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Existing Infrastructure
+ !  Introduction of electronic patient records in the facility to reduce the use of paper
+ !  Availability of 10-30 per cent area for the herbal garden in the facility
+ !  Floor and wall /f_inishes are conducive for infection prevention control practices
+ !  Modi/f_ications in the critical care rooms to make them functional during disasters
+ !  Installation of Rainwater Harvesting System
+ !  Installation of alternative energy systems
+ !  Installation of STP & ET
+Implementation Plan 
+Health Sector Preparedness 
+Objective Activities Identi/f_ied 
+Health 
+facilities
+timeline Budget (in lakhs)
+2022-23 2023-24 2024-25 2025-26 2026-27
+Strengthening 
+Healthcare 
+System
+Energy Audit PHCs
+CHCs
+SDH
+DH
+January to 
+February 
+120 145 175 210 260
+Energy 
+Saving 
+appliances
+PHCs
+CHCs
+SDH
+DH
+February
+Solar Panels 
+installation
+PHCs
+CHCs
+SDH
+December
+Rainwater 
+Harvesting
+PHCs
+CHCs
+SDH
+DH
+January 
+Retro/f_itting 
+of Health care 
+facilities
+PHCs
+CHCs
+SDH
+DH
+February
+Awareness Generation 
+ !  Awareness and sensitization on climate change events such as heat waves, /f_looding, air pollution 
+events, and waste management
+ !  Sensitization workshops on Sustainable Procurement
+ !  Awareness on energy eﬃcient measures and water conservation measures  
+Chapter 10: Action Plan for Green and Climate Resilient Health Care Facilities  | 47
+IEC dissemination plan 
+IEC type Material ( Link/ 
+Annexure)
+Dissemination 
+Timeline
+Budget in Lakhs
+2022-23 2023-24 2024-25 2025-26 2026-27
+Posters 1-2 Posters per HCF 
+per year
+November 0.6 lakhs 0.75 lakhs 0.9 lakhs 1.1 lakhs 1.32 lakhs
+Wall Painting December 
+Audio-visual March 
+Capacity Building 
+The plan for training of ToTs, DNO-CC and Medical oﬃcers on guidelines and operational framework of Green 
+and Climate resilient measures in Health Care Facilities is mentioned in the table below: 
+Sl. 
+No.
+Activities Timeline Budget
+2022-23 2023-24 2024-25 2025-26 2026-27
+1. Training - TOTs November 0.6 lakhs 0.75 lakhs 0.9 Lakhs 1.1 lakhs 1.32 lakhs
+2. Training of DNO-CC December
+3. Training of Medical Oﬃcers December
+Roles and Responsibilities
+The table below highlights the roles and responsibilities of the associated staﬀ to help support green climate 
+and resilience infrastructure development in order to strengthen healthcare infrastructure.
+Responsibilities
+SNO  y Finalization of IEC material and dissemination plan
+ y Organize training sessions for the district-level oﬃcers and trainers
+ y Identify health facilities for priority implementation based on disaster and health facility vulnerability
+ y Identify relevant state level nodal agencies and collaborate with them for assessment of health 
+facilities for implementation of measures
+ y Facilitate and monitor necessary assessments at the health facility level
+ y Facilitate implementation of structural and functional measures at the health facility level
+ y Monitor the implementation of the activities
+ y Support districts to identify sources of funding
+ y Advocate for reduction in source of greenhouse gas emissions
+DNO  y Conduct training for health oﬃcers, medical oﬃcers, with relevant training manuals
+ y Support conduction for the following assessment at the health facility level
+ y Energy audit
+ y Water audit
+ y Disaster-vulnerability assessment
+ y Support the following functional measures at the health facility level
+ y Water committee
+ y Sustainable procurement committee
+ y Operational measures to make health facilities function during the disasters or power cut
+ y Coordinate with other agencies for assessment and implementation of identi/f_ied structural and 
+functional measures
+48 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Responsibilities
+Medical 
+oﬃcer
+ y Conduct health facility assessment 
+ y Energy audit
+ y Water audit
+ y Disaster-vulnerability assessment
+ y Lead following functional measures
+ y Water committee
+ y Sustainable procurement committee
+ y Operational measures to make health facility functioning during disasters or power cut
+ y Support community level IEC activities
+ y Identify local funding opportunities: e.g. CSR initiative, NGO funding
+ y Organize PRI sensitization workshop 
+Panchayati 
+Raj 
+Institution
+ y Support retro/f_itting and new health facilities with local funding source and community 
+involvement 
+Chapter 10: Action Plan for Green and Climate Resilient Health Care Facilities  | 49
+Part iii
+Budget
+
+Chapter 11: Budget | 51
+Sl. 
+No. 
+Activities Indicator Target Budget (In Lakhs)
+Year 
+1
+Year  
+2
+Year  
+3
+Year  
+4
+Year  
+5
+Year 
+1
+Year  
+2
+Year  
+3
+Year  
+4
+Year  
+5
+PROGRAMME MANAGEMENT
+1 Taskforce 
+meeting to 
+draft health 
+sector plan 
+for heat and 
+air pollution
+% State Task 
+Force Quarterly 
+Meetings 
+conducted in a 
+year
+25% 50% 75% 100% 100% 1 1.2 1.45 1.74 2.1
+2 Sensitization 
+workshop/
+meeting of 
+the state 
+programme 
+Oﬃcers 
+and District 
+level Health 
+Oﬃcers.
+100% - -
+GENERAL AWARENESS
+3 Development 
+of IEC 
+material, 
+campaigns, 
+Innovative 
+IEC/ BCC 
+Strategies
+% of Districts 
+implemented 
+IEC campaign 
+on all climate 
+sensitive issues
+50% 100% 100% 100% 100% 2 2.45 3 3.6 4.17
+CAPACITY BUILDING OF HEALTH PROFESSIONALS AND HEALTH WORKERS
+4 Orientation/ 
+Training /
+capacity 
+Building of 
+healthcare 
+staﬀs
+% Of Districts 
+completed TOT
+100% - - - - 2 2.5 3 3.7 4.37
+% of Medical 
+Oﬃcers trained 
+in Districts
+50% 50% 70% 90% 100%
+% of health 
+workers and 
+MPHW /AWW 
+trained on 
+NPCCHH in 
+District
+50% 50% 70% 90% 100%
+chaPter 11
+Budget
+52 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Sl. 
+No. 
+Activities Indicator Target Budget (In Lakhs)
+Year 
+1
+Year  
+2
+Year  
+3
+Year  
+4
+Year  
+5
+Year 
+1
+Year  
+2
+Year  
+3
+Year  
+4
+Year  
+5
+% of targeted 
+sensitization 
+trainings 
+planned for 
+vulnerable 
+population in 
+district (PRI 
+Training)
+50% 50% 70% 100% 100%
+STRENGTHENING OF THE HEALTH SYSTEM
+5 Green and 
+Climate- 
+resilient 
+Health care 
+facilities and 
+Surveillance 
+(SRRE)
+Energy 
+auditing of 
+the Healthcare 
+for energy 
+eﬃciency in the 
+HCFs
+100%
+% of HCF 
+that replaced 
+existing (Non-
+LED) lighting 
+facility with LED 
+in Districts
+100% 100%
+% HCF with 
+installed solar 
+Panels in 
+Districts
+10% 20% 30% 40% 50% 120 145 175 210 260
+% HCF with 
+Rain water 
+harvesting 
+system in 
+districts
+10% 20% 30% 40% 50%
+%HCF with 
+installed 
+Retro/f_itting 
+of healthcare 
+facilities
+10% 20% 30% 40% 50%
+Surveillance, 
+Research, 
+Review, 
+Evaluation 
+(SRRE)
+1 1.2 1.45 1.75 2.1
+6 Infrastructure/ 
+equipment
+Furniture etc for 
+oﬃce excluding 
+computers
+0.5
+7 Human 
+Resource
+1 Accountant 
+@20000 pm 1 
+Data manager 
+@ 20000 pm 
+1 Data Entry 
+Operator @ 
+11000pm 1 MTS 
+@10000pm 
+TOTAL= Rs 
+61000 pm
+7.32 7.69 8.0703 8.474 8.9
+2 MO @65000 
+pm ( if MBBS 
+not available  
+AYUSH will be 
+capped @ 50000 
+pm) TOTAL= Rs 
+130000 pm
+15.6 16.38 17.20 18.06 18.963
+Total 149.42 176.42 208.9203 247.324 300.603
+Note: Year 1 = FY 2022-23; Year 2 = FY 2023-24; Year 3 = FY 2024-25; Year 4 = FY 2025-26; Year 5 = FY 2026-27.
+Annexures | 53
+Annexure 1
+annexures
+54 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+District Nodal Oﬃcer—NPCCHH, Goa
+DISTRICT NAME PH ONE NO. Oﬃcial E-MAIL
+NORTH GOA Dr. Saloni Prabhu 7767960688 dsungoa@gmail.com
+SOUTH GOA Dr. Annet Oliveira 9850926226 dsusgoa@gmail.com
+Annexures | 55
+Annexure 2
+Table 1: Health Eﬀects attributed to short-term and long-term exposures to Air Pollution
+Health Eﬀects attributed to short-term exposure to 
+air pollution
+Health Eﬀects attributed to long-term exposure to 
+air pollution
+Respiratory & cardiovascular emergency department 
+visits
+Respiratory & cardiovascular primary care visits 
+Use of respiratory & cardiovascular medications
+Respiratory & cardiovascular hospital admissions
+Days of restricted activity
+Work absenteeism 
+School absenteeism
+Daily mortality/deaths
+Acute symptoms (Wheezing, coughing, phlegm 
+production, respiratory infections)
+Chronic respiratory diseases incidence&prevalence 
+(asthma, COPD, chronic pathological changes) 
+Physiological changes (e.g. lung function)
+Chronic changes in physiologicfunctions
+Chronic cardiovascular diseases
+Intrauterine growth restrictions (lowbirthweight at term, 
+intra-uterine growthretardation, small for gestational age)
+Mortality due to cardiovascular &respiratory diseases 
+Lung cancers
+
+56 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Annexure 3
+IEC on Air Pollution and Health under the NPCCHH
+Annexure: Posters Distributed to the Districts (English & Local language)
+
+Annexures | 57
+
+58 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Annexure 4
+Air Pollution
+Links are given below 
+https://drive.google.com/drive/u/0/folders/1LbPjTB8B6bIBnpiIpCgz3qxXz8LLZTxw
+https://drive.google.com/drive/folders/1x2eXBjdjrrv-Rw2pcchMTVOl8tQzm623?usp
+https://pib.gov.in/PressReleseDetail.aspx?PRID=1842630
+IEC ( NVBDCP)
+https://nvbdcp.gov.in/Doc/Lea/f_lets.pdf
+https://nvbdcp.gov.in/Doc/Wall%20Paintings.pdf
+https://nvbdcp.gov.in/Doc/JE-IECBCC-Posters.pdf
+https://nvbdcp.gov.in/Media/KA-Tool-kit/01_Poster%20for%20community.jpg
+https://nvbdcp.gov.in/Doc/PosterDengue.pdf
+https://nvbdcp.gov.in/Doc/DengueEnglish.pdf
+Annexures | 59
+Annexure 5
+Observance of Important Days in the State of Goa
+National Programme on Climate Change and Human Health (NPCCHH) is a /f_lagship programme of Ministry 
+of Health and family Welfare,Government of India shaping Health system response to climate change in the 
+country with goal to reduce morbidity, mortality, injuries and health vulnerability to climate variability and 
+extreme weather events.
+There are a number of days that are celebrated internationally which focus on environment and climate. 
+In this context, the Goan cell of the NPCCHH and DHS Goa is organising a yearlong event. This PEDAL FOR 
+WORK activity is for staﬀ working under the Directorate of Health Services-Goa and was launched on 7th 
+April 2022 on the occasion of World Health Day. 
+The objective of this activity is to:
+ !  To promote cycling ( increased physical activity) amongst staﬀ
+ !  Toward reduction of carbon footprint
+ !  As a part of the Fit India movement and also to set an example of the physical activities for  
+reducing NCDs
+ !  To set an example to other Non DHS staﬀ and general public that cycle can be used as a mode of 
+transport. 
+Terms and Conditions are as follows 
+ ! Quali/f_ication Round:  To get Entry / qualify for this activity, participant has to cover atleast 50km 
+(cycling for work) and send screenshot along with the sel/f_ie to the programme. The activity may be 
+shared to social media platform with hashtag as #PedalForWorkGoa
+ ! Once the entry is con/f_irmed the participant will get Entry Kit as a participation gift and also qualify for 
+next round ( Participants will get jerseys/ bib shorts) 
+ ! Tracking/ Data Checking
+1. Participant has to track their acticity on any tracking App and the HO has to certify their activity
+2.  For State level participation HOs certi/f_ication along with sel/f_ie and tracking data in prescribed 
+format is compulsory
+Tasks and Rewards
+ ! Bronze : to participate in the Bronze Category, participant has to complete 200 kms of cycling to work 
+ ! Silver : to participate in the Silver Category, participant has to complete 400 kms of cycling to work 
+ ! Gold : to participate in the Gold Category, participant has to complete 1000 kms of cycling to work 
+Prizes/Awards
+ ! Prizes/ Awards will be given category-wise. Values of the prizes diﬀer depending on the category.
+ !  Daily/Monthly Basis- the respective Health Oﬃcer will congratulate the staﬀ who travelled to work 
+by cycle. Also provision of small gift will be kept depending on the budget approval. ( Small gift with 
+Programme branding will be awarded).
+ !  Final Annual Prizes will ne awarded category wise on the basis of lucky draw.
+ ! Annual Prizes will be given during state function on World Health Day 2023.  
+60 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+The 3rd International Day of Clean Air for Blue Skies was celebrated on 7 th September 2022 at PHC Shiroda, 
+with the Theme being ‘The Air We Share’ .  A brief introduction of NPCCHH was given to all by the State Nodal 
+Oﬃcer for Climate Change Dr. PrashantSuryavanshi. Tree Plantation activity and distribution of medicinal 
+plants and fruit/ /f_lower saplings was carried out in the presence of ShriSubhashShirodkar, Honourable 
+Minister/ MLA of Shiroda constituency. A Walkathon was organised featuring the students of ShriKamaxi 
+Annexures | 61
+Homeopathy College along with the organisers/ PHC staﬀ was /f_lagged of by the Chief Guest. The students 
+displayed the winning Posters which were created on the theme #TheAirWeSharefor visually driving home 
+the message to the villagers and other onlookers. The participants made their way through the village streets 
+and market shouting simple easy to understand slogans in the vernacular language. Queries of bystanders 
+were answered along the way. A talk on the International Day of Clean Air for Blue Skies was given by Dr. 
+GeetanjaliSardessaiKare (Goa state Consultant, NPCCHH ) to emphasise the impact of air pollution on their 
+lives and how their involvement and community participation can impact preservation of natural resources 
+including air for future generations.
+62 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Annexure 6
+CMIP5 model ensemble mean precipitation change (%) projected for 2030s (2021-2050), 2060s (2046-2075) and 
+2080s (2070-2099) relative to the pre-industrial period (1880s i.e over 1861-1900) (Source: Chaturvedi et al 2012)
+Annexures | 63
+\ CMIP5 model ensemble mean temperature change (°C) projected for 2030s (2021-2050), 2060s (2046-2075) and 
+2080s (2070-2099) relative to the pre-industrial period (1880s i.e over 1861-1900)
+
+64 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+Annexure 7
+Health implications associated with diﬀerent types of climate change related disasters
+Primary Secondary
+Heavy Rainfall Floods Injuries, water borne diseases, vector-borne
+Flash /f_loods Diseases, death, drowning, hypothermia, and animal bites
+Urban /f_loods Indirect (infected wounds, complications of injury, poisoning, poor 
+mental health, communicable diseases, and starvation)
+Landslides/slope 
+failures
+High mortality and few injuries: trauma and suﬀocation by entrapment
+Dry spells/ Low 
+Rainfall
+Drought Nutrition-related, Dust-related and airborne,
+Deserti/f_ication Migration-related
+Forest /f_ire
+Oceanic storms Cyclones Trauma, Drowning, Injuries, gastroenteritis, vector-borne disease and 
+acute respiratory illness.
+Winds Dust storms / 
+Sandstorms
+Respiratory problems, eye problems.
+Thunderstorms Injuries, Thunderstorm asthma.
+Air Pollution Respiratory Disorders, Cardiovascular
+Disorders, Ophthalmic Disorders
+Temperature 
+extremes
+Heat wave Dehydration, Heat cramps, Heat stroke; accelerated respiratory disease & 
+cardiovascular disease
+Cold wave Heart attacks, Injuries, frost nip and frost bite,
+Hypothermia, immersion foot, in/f_luenza, Norovirus, Asthma, Sore throats
+Fires (urban, rural, 
+industrial)
+Burns, Mortality, wheezing, coughing, sore eyes, respiratory issues, heat 
+induced illnesses, Carbon Monoxide poisoning
+Lightening Lightening disaster Mortality, Injury, Burn, Disability
+Annexures | 65
+Annexure 8
+Name of the State Name of the State Nodal Oﬃcer (SNO) Quarter Period
+___________________________ __________________________________________ ______________________
+O.M. of appointment of State Nodal Oﬃcer Annexed: (Yes_____/No_____) 
+Postal Address of State Nodal Oﬃcer 
+Phone (O) ___________________(M) _________________ E-Mail ID: _______________________________________
+Consultant*
+No of Consultant permitted 1 or 2
+No of Consultant appointed 
+O.M of appointment of Consultant Annexed: (Yes_____/No_____) 
+Programme Activities /Deliverable
+1 Constitution of State Governing Body (SGB)
+A If State Governing Body (SGB) constituted? Yes____/ No_____
+B If Yes, provide O.M. of constitution of SGB Annexed: (Yes_____/No_____) 
+C SGB meeting held in past quarter Yes____ / No_____
+D Minutes of last meeting held Date of Meeting 
+_____/_______
+Annexed: (Yes_____/No_____) 
+2 Formation of State Multisectoral Task Force (SMTF)
+A If State Multisectoral Task Force (SMTF) formed? Yes____/ No_____
+B If Yes, provide O.M. of constitution of SMTF Annexed: (Yes_____/No_____) 
+C SMTF meeting held in past quarter Yes/No
+D Minutes of last meeting held Date of Meeting 
+_____/________
+Annexed: (Yes_____/No_____) 
+3 Establishment of Environmental Health Cell (EHC)
+A If State has established EHC? Yes_____/ No_____
+B If Yes, provide O.M. of establishment of EHC Annexed: (Yes_____/No_____) 
+C If Yes, provide list of members Annexed: (Yes_____/No_____) 
+4 State Action Plan on Climate Change and Human Health (SAPCCHH)
+A If State has submitted SAPCCHH? Yes_____/ No_____
+B If Yes, version number of SAPCCHH No: Month/Year _____/________ 
+5 Designated District Nodal Oﬃcer -Climate Change (DNO-CC)
+A If State has identi/f_ied DNO-CC in all districts? Yes_____/ No_____
+B No of Districts in State/UT
+C No of Districts appointed DNO-CC
+66 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+D O.M. of appointment of DNO-CC’s Annexed: (Yes_____/No_____), If Yes,  
+No of Districts______________________
+6 Formation of District Multisectoral Task Force (DMTF)
+A If District Multisectoral Task Force (DMTF) 
+formed?
+Yes_____/ No_____
+No of Districts appointed DTF
+B If Yes, provide O.M. of constitution of DMTF Annexed: (Yes_____/No_____), If Yes,  
+No of Districts______________________
+C DMTF meeting held in past quarter Yes_____/No_____, If Yes, No of Districts________________
+D Minutes of meeting held in past quarter Annexed: (Yes____/No____) If Yes, No of Districts________
+7 Capacity Building of State & District Nodal Oﬃcers on Climate Change 
+A Have the SNO attended the TOT? Yes/No
+B Have the Consultant/s attended the TOT? Yes/No
+C Whether the training has been conducted on 
+Climate Change and Human Health in past 
+quarter for
+DNO -CC Yes/No
+Medical Oﬃcer Yes/No
+Health Workers Yes/No
+D No of health care professionals trained in past 
+quarter on Climate change and Human Health 
+Health care personnel No of trained
+DNO -CC
+Medical Oﬃcer
+Health Workers 
+E Training on Air pollution Training on Heat Related Illnesses
+Health care personnel No of trained Health care personnel No of trained
+DNO -CC DNO -CC
+Medical Oﬃcer Medical Oﬃcer
+Health Workers Health Workers 
+F Training on any other Climate issues Health care personnel No of trained
+DNO-CC
+Medical Oﬃcer
+Health Workers 
+G No of Sensitization workshop/ meeting at State 
+level on CC&HH matters in past quarter
+No : Report Annexed:  
+(Yes_____/No_____) 
+H No of Sensitization workshop/ meeting at 
+District level on CC&HH matters in past quarter
+No : Report Annexed: (Yes___/No___) 
+If Yes, No ____________________
+I Training of Panchayat Raj Institutions in past 
+quarter
+No of Blocks :
+No of activities held: Report Annexed: (Yes___/No___) 
+If Yes, No ____________________
+Annexures | 67
+8 IEC in past quarter
+A At Block level in past quarter
+Pollution Total No Heat  Total No Other Climate issues Total No 
+No of audio No of audio No of audio
+No of video No of video No of video
+No of social media No of social 
+media
+No of social media
+No of posters No of posters No of posters 
+B At District Level in past quarter
+Pollution Total No Heat  Total No Other Climate -issues Total No 
+No of audio No of audio No of audio
+No of video No of video No of video
+No of social media No of social 
+media
+No of social media
+No of posters No of posters No of posters 
+C At State level in past quarter
+Pollution Total No Heat  Total No Other Climate issues Total No 
+No of audio No of audio No of audio
+No of video No of video No of video
+No of social media No of social media No of social media
+No of posters No of posters No of posters 
+9 Observation of public health days related to Climate Change in past quarter
+A World Environment Day observed? Yes/No/Not Applicable
+If Yes, report submitted with details Report Annexed Yes/No
+B International day of Clean Air and Blue Skies 
+observed?
+Yes/No/Not Applicable
+If Yes, report submitted with details Report Annexed Yes/No
+C Other events observed in past quarter YES_____/No____
+If Yes, report submitted with details Report Annexed Yes/No
+10 Printing in past quarter
+A No of Training modules printed in past quarter 
+B IEC printed 
+C Others printed Details.. YES_____/No____
+C Articles contributed to NPCCHH Newsletter for 
+past quarter activities
+Attached.. YES_____/No____
+68 | STATE ACTION PLAN ON CLIMATE CHANGE AND HUMAN HEALTH – Goa
+11 Budget 
+A Total budget sanctioned in ROP for Financial 
+Year (Rs in lakhs)**
+B Total received by SNO for expenses in FY
+C Total budget spent till the end of past quarter 
+(Rs in lakhs)
+D Total budget distributed to districts (for all the 
+districts ) 
+District-1 OM Annexed: YES_____/No____
+District-2 OM Annexed: YES_____/No____
+At the State level 
+Sl. 
+No.
+FMR code Activities Budget 
+Received
+Quarter I Quarter 
+II
+Quarter III Quarter 
+IV
+Total 
+Expenditure
+1 3.3.3.3 Training of PRI
+2 5.1.1.2.13 Greening
+3 9.2.4.9 Training of MO’s, 
+Health workers, 
+Programme Oﬃcer’s
+4 10.2.14 Surveillance
+5 11.4.7 IEC
+6 12.17.3 Printing
+7 16.1.2.1.23 Task force Meeting
+8 16.1.2.1.24 Review of DNO-CCHH 
+with SNO-CCHH
+9 16.4.1.5.2 Consultant-CCHH
+Date of submission Signature of SNO
+** The budget approved under ROP of all the States/UT is annexed in Annexure II
+
+
+

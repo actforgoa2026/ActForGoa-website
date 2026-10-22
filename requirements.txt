@@ -1,0 +1,5 @@
+requests>=2.32,<3
+beautifulsoup4>=4.13,<5
+lxml>=6,<7
+pypdf>=6,<7
+fonttools>=4.60,<5

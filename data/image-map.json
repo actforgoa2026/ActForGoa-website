@@ -1,0 +1,58 @@
+{
+  "hero": {
+    "path": "/assets/goa-river.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2018/09/home-img.jpeg",
+    "archivePath": "archive/assets/228f57534d889384f1d90a7b.jpeg",
+    "retrievedAt": "2026-10-22T14:13:18.873785+00:00",
+    "sha256": "fbcc6f14f3b63696c1d4e78f23182f8ee19982ce3d854f3633a4218ceabd16e0"
+  },
+  "wp-9352": {
+    "path": "/assets/candolim-cleanup.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2025/03/IMG-20250320-WA0080.jpg",
+    "archivePath": "archive/assets/86d2299d80402ccdb4db3d62.jpg",
+    "retrievedAt": "2026-10-22T14:13:20.703828+00:00",
+    "sha256": "3e7f9f310bff8c20eca860c0595709a25bae984534bf0f1e8b4ed1ee24970b09"
+  },
+  "wp-7757": {
+    "path": "/assets/wp-7757.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2020/12/WhatsApp-Image-2020-12-18-at-10.37.25.jpeg",
+    "archivePath": "archive/assets/3f9fb9475ed580db4b1056a0.jpeg",
+    "retrievedAt": "2026-10-22T14:13:21.500585+00:00",
+    "sha256": "4eb7f6d8304f2f0c0e131495b900f08ab957c41d1a61ea8b7bef2f45d767638f"
+  },
+  "wp-6358": {
+    "path": "/assets/wp-6358.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2020/08/WhatsApp-Image-2020-08-07-at-10.33.40-1.jpeg",
+    "archivePath": "archive/assets/061182194e254827c864ff7a.jpeg",
+    "retrievedAt": "2026-10-22T14:13:22.132321+00:00",
+    "sha256": "079e2130bf8bca95980c60c92a10da44bdf6fe0bd8d0c046264ab203dfcaefa5"
+  },
+  "wp-2460": {
+    "path": "/assets/wp-2460.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2018/10/vRecycle-600x390.png",
+    "archivePath": "archive/assets/4e11f4d416e940405a8223d0.png",
+    "retrievedAt": "2026-10-22T14:10:17.419036+00:00",
+    "sha256": "ec73f24e8da362c4c40c335c4e992ec483ac972b8354ee62143903f3c3654017"
+  },
+  "resource-5731eea370": {
+    "path": "/assets/resource-5731eea370.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2021/01/WhatsApp-Image-2021-01-15-at-13.52.46-3-300x300.jpeg",
+    "archivePath": "archive/assets/551785fefaf95a690cdc3cb7.jpeg",
+    "retrievedAt": "2026-10-22T14:13:22.740120+00:00",
+    "sha256": "60d37159da2a7f1cdc71c259d230414d7561b42ab578cb19334b6d472d63f89c"
+  },
+  "resource-34bc1772ee": {
+    "path": "/assets/resource-34bc1772ee.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2024/06/Citizens-E-Handbook.png",
+    "archivePath": "archive/assets/f36384c4bd22b3fe7abcf400.png",
+    "retrievedAt": "2026-10-22T14:13:23.218628+00:00",
+    "sha256": "c0c726a72f0eea0f2593abb112a065f8b99e35cd6f8e56d004d87c5cea596304"
+  },
+  "resource-96e1739bcc": {
+    "path": "/assets/resource-96e1739bcc.webp",
+    "source": "https://actforgoa.org/wp-content/uploads/2021/01/WhatsApp-Image-2021-01-15-at-13.36.28-5-300x300.jpeg",
+    "archivePath": "archive/assets/43ca1a0904c9223999428242.jpeg",
+    "retrievedAt": "2026-10-22T14:13:23.826974+00:00",
+    "sha256": "9d2eccbe27e695ac14ad23840fad0013d59bb6fb666720e6fd22db959dfa7ee7"
+  }
+}

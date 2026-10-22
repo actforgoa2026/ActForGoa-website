@@ -1,0 +1,15 @@
+{
+  "records": 600,
+  "byKind": {
+    "contact": 49,
+    "organisation": 104,
+    "page": 72,
+    "resource": 237,
+    "story": 138
+  },
+  "phoneEntries": 272,
+  "emailEntries": 101,
+  "documents": 164,
+  "migrationExclusions": 56,
+  "retrievedAt": "2026-10-22"
+}

@@ -1,0 +1,43 @@
+{
+  "fetchedURLs": 10568,
+  "httpStatuses": {
+    "200": 9204,
+    "401": 5,
+    "404": 3,
+    "500": 38,
+    "403": 1219,
+    "None": 98,
+    "202": 1
+  },
+  "archivedBytes": 1445062090,
+  "htmlResponses": 2806,
+  "usableHtmlResponses": 1531,
+  "forms": 8726,
+  "staticFragmentIssues": 1608,
+  "documentsWithExtractedText": 60,
+  "catalogue": {
+    "records": 600,
+    "byKind": {
+      "contact": 49,
+      "organisation": 104,
+      "page": 72,
+      "resource": 237,
+      "story": 138
+    },
+    "phoneEntries": 272,
+    "emailEntries": 101,
+    "documents": 164,
+    "migrationExclusions": 56,
+    "retrievedAt": "2026-10-22"
+  },
+  "linkAudit": {
+    "ok": 1917,
+    "broken": 19,
+    "restricted-or-rate-limited": 2701,
+    "unreachable": 138,
+    "server-error": 6,
+    "excluded": 223,
+    "soft-error": 15,
+    "non-http": 17
+  }
+}

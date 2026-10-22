@@ -1,0 +1,10 @@
+{
+  "ok": 1917,
+  "broken": 19,
+  "restricted-or-rate-limited": 2701,
+  "unreachable": 138,
+  "server-error": 6,
+  "excluded": 223,
+  "soft-error": 15,
+  "non-http": 17
+}
