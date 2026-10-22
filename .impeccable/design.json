@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-22T20:50:56.232390Z",
+  "generatedAt": "2026-10-22T21:00:14.605895Z",
   "title": "Design System: ActForGoa",
   "extensions": {
     "colorMeta": {
@@ -324,8 +324,44 @@
         "src/components/RecordCard.tsx",
         "src/guide-presentation.ts"
       ],
-      "captures": [],
-      "limits": "Current wireframe/topic-menu source remains in polish. Earlier colour-hierarchy captures are superseded. Framework-free component specimens document appearance only; no final visual, interaction, or deployment verification is claimed."
+      "captures": [
+        ".impeccable/review/wireframe-flow/collection-desktop.png",
+        ".impeccable/review/wireframe-flow/collection-mobile.png",
+        ".impeccable/review/wireframe-flow/dumping-desktop.png",
+        ".impeccable/review/wireframe-flow/dumping-mobile.png",
+        ".impeccable/review/wireframe-flow/guide-desktop.png",
+        ".impeccable/review/wireframe-flow/guide-mobile.png",
+        ".impeccable/review/wireframe-flow/guide-table-mobile.png",
+        ".impeccable/review/wireframe-flow/home-desktop.png",
+        ".impeccable/review/wireframe-flow/home-mobile.png",
+        ".impeccable/review/wireframe-flow/home-user-viewport.png",
+        ".impeccable/review/wireframe-flow/waste-desktop.png",
+        ".impeccable/review/wireframe-flow/waste-mobile.png"
+      ],
+      "limits": "Final finish review returned ship on corrected captures with no material fixes. Local browser, build, and test checks passed; deployment remains outstanding. Earlier colour-hierarchy captures are superseded. Sidecar snippets document appearance and do not replace the React behavior or establish guide-content verification.",
+      "verification": {
+        "captureDirectory": ".impeccable/review/wireframe-flow",
+        "viewports": {
+          "desktop": "1440x1000",
+          "phone": "390x844",
+          "actualAppPanel": "508x724"
+        },
+        "finishReview": "ship; no material fixes",
+        "browserChecks": [
+          "topic to collection to type",
+          "reporting link destinations",
+          "service navigation and back-scroll restoration",
+          "input focus",
+          "menu closing",
+          "guide contents navigation",
+          "mobile reference tables"
+        ],
+        "build": "passed",
+        "tests": {
+          "passed": 22
+        },
+        "deployment": "not deployed"
+      }
     },
     "tonalRampPolicy": "Synthesised inspection aids; exact source colours in DESIGN.md remain normative.",
     "discovery": {
@@ -396,7 +432,12 @@
         "needMinimum": "120px",
         "needPhoneMinimum": "100px"
       },
-      "grid": "Home: four columns, two at 850px. Need choices: three, two at 850px, one at 620px. Action destinations: two, one at 620px."
+      "grid": "Home: four columns, two at 850px. Six-choice need menus: three desktop columns. Four-choice menus: two desktop columns via choice-grid-pairs. Both need layouts use two columns at 850px and one at 620px. Action destinations: two, one at 620px.",
+      "sourcePriority": "TopicPage prioritises specified people, linked resources, and pinned resources before the remaining matching records."
+    },
+    "navigationExit": {
+      "source": "src/components/arc/site-header/site-header.tsx",
+      "behavior": "PresenceLayer makes the closing mobile sheet and scrim inert and sets pointer-events:none as soon as exit starts, preventing interception of the next tap during the exit animation."
     }
   },
   "components": [

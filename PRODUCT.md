@@ -26,6 +26,8 @@ ActForGoa. Original mission and factual source material retained. The current us
 ## Evidence on Hand
 https://actforgoa.org/ and its public WordPress API, sitemaps, HTML, linked resources, and assets. Archived source evidence and derived records live in archive/ and data/. Original story/resource photography is restored from the existing crawl; article-image-map.json records source and rendition provenance, and missing sources remain reported.
 
+The restrained topic-menu implementation has corrected captures in .impeccable/review/wireframe-flow at desktop 1440 × 1000, phone 390 × 844, and the actual app-panel size 508 × 724. Final finish review returned “ship” with no material fixes. Local build and 22 tests passed, alongside browser checks of the topic/collection/type flow, reporting destinations, service/back-scroll restoration, focus, menu closing, guide contents, and mobile tables. Deployment remains outstanding; these checks do not establish legal or live-service verification of guide content.
+
 ## Product Principles
 - Start with a topic and a person's need, then show a concrete next action before related resources and contacts.
 - Retain source, retrieval date, and verification state in the evidence layer; show useful source context and practical cautions to readers, with detailed audit material available optionally.

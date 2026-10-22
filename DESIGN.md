@@ -239,7 +239,7 @@ The visitor chooses a topic, identifies a need, and reaches a useful next action
 - Original local photography in discovery and reading.
 - Shared Arc controls, stable text-field focus, and browsing continuity.
 
-This direction supersedes the colourful welcome area and filled illustration experiment. Normative values come from the current implementation; source and styling are still being polished. The surface brief owns page-specific order and flow. Documentation does not establish final browser review or deployment.
+This direction supersedes the colourful welcome area and filled illustration experiment. Normative values come from the current implementation. The surface brief owns page-specific order and flow. Corrected wireframe-flow captures have completed final visual review with a “ship” result and no material fixes. Local build, tests, and browser checks are recorded below; deployment remains outstanding.
 
 ## Colors
 
@@ -292,7 +292,7 @@ The centred shell is at most 1320px wide. Gutters are 48px by default, 32px at 1
 
 Home begins with the mission, a short plain-language introduction, and search, followed by eight outlined topic controls. The intro uses 52px top and 36px bottom spacing; on phones both are 32px. Search is at most 760px wide. The topic grid uses four columns, then two at 850px and below. Desktop home targets are at least 164px tall with 24px padding; padding becomes 20px at 1150px and 16px on phones while the height remains generous.
 
-Need-choice grids use three columns, two at 850px, and one at 620px. Their controls are at least 120px tall with 24px padding, becoming 100px with 20px padding on phones. Final action destinations use two columns, then one on phones. Breadcrumbs and a clear heading sit above choices. Related people and useful reading follow the choice or action area, separated by horizontal rules and 48px of preceding space.
+Six-choice need menus use three columns on desktop. Four-choice menus use two columns through the `choice-grid-pairs` variant. Both use two columns at 850px and one at 620px. Their controls are at least 120px tall with 24px padding, becoming 100px with 20px padding on phones. Final action destinations use two columns, then one on phones. Breadcrumbs and a clear heading sit above choices. Related people and useful reading follow the choice or action area, separated by horizontal rules and 48px of preceding space.
 
 Mixed discovery batches keep a 1.3:1 lead arrangement: a larger image-led record spans two rows beside two text-led records. Remaining entries use three columns with 40px gaps, then two at 850px and one at 620px. Search grids use two columns until 620px. The catalogue filter rail is 236px wide, sticky at 120px, and separated from results by 48px; at 850px it becomes a horizontal scroller above results.
 
@@ -318,7 +318,7 @@ Controls use a 4px radius. Photographs and editorial structures remain square. R
 
 ### Topic, need, and action controls
 
-Use the shared outlined choice treatment for topic navigation, need selection, and next actions. Keep the whole surface a real link with a visible label and directional icon. Labels name a recognisable topic or action, such as “Waste & recycling”, “Get extra rubbish collected”, or “Report illegal dumping”. Optional small text explains an external destination as “Opens the official service”. Downloads use the download icon; external actions use the external-link arrow.
+Use the shared outlined choice treatment for topic navigation, need selection, and next actions. Keep the whole surface a real link with a visible label and directional icon. Labels name a recognisable topic or action, such as “Waste & recycling”, “Get extra rubbish collected”, or “Report illegal dumping”. Downloads use the download icon; external actions use the external-link arrow. In-page destinations retain anchor navigation to the relevant section.
 
 `TopicIcon.tsx` maps the shared Lucide outline family to topics and actions. Use a 1.7 stroke with no filled illustration substitute. Home icons are 44px, becoming 40px on phones; topic-page and guide-heading icons are 52px, becoming 40px on phones. Need-choice icons use 40px, and catalogue filter icons use 28px. Adjacent visible labels provide the accessible names; decorative icons are hidden from assistive technology.
 
@@ -334,7 +334,7 @@ Use the installed Arc Button for button actions. Primary pairs green with paper;
 
 Anchor actions keep real routing and link behavior. Their primary treatment has a 52px minimum height and 12px by 20px padding. Links, buttons, and comparable non-text controls use a 2px green keyboard outline with a 3px offset.
 
-The official Arc SiteHeader keeps the nine categories Home, Take action, Blog, Inspiring stories, Resources, About, Work with us, Volunteer, and Community, plus Search. Take action and About disclose destinations; internal links use React Router. Desktop targets are 44px and current navigation has a 2px underline. The compact sheet retains the same destinations, locks background scrolling, and confines Tab focus to visible header controls. Escape restores trigger focus; route changes dismiss menus.
+The official Arc SiteHeader keeps the nine categories Home, Take action, Blog, Inspiring stories, Resources, About, Work with us, Volunteer, and Community, plus Search. Take action and About disclose destinations; internal links use React Router. Desktop targets are 44px and current navigation has a 2px underline. The compact sheet retains the same destinations, locks background scrolling, and confines Tab focus to visible header controls. Escape restores trigger focus; route changes dismiss menus. During mobile-menu exit, the scrim and sheet use `PresenceLayer` to become inert and set pointer-events to none immediately, so the closing overlay cannot catch the next tap while its exit motion finishes.
 
 ### SearchField, Input, and Textarea
 
@@ -407,4 +407,4 @@ Community descriptions use original non-heading paragraphs and prioritise actual
 - Don't expose crawl dates, editorial check codes, or research-process language as primary reader guidance.
 - Don't invent biographies, photographs, contact details, service availability, or message-delivery claims.
 
-Evidence: current App, TopicPage, topic-flows, TopicIcon, RecordCard, PracticalGuide, guide-presentation, public-record, stylesheet, Arc components, discovery state, and original-image provenance. Earlier colour-hierarchy captures describe a superseded direction. Current source remains in polish; this documentation pass makes no final visual, interaction, or deployment claim. Sidecar specimens are framework-free appearance examples, not substitutes for the React behavior.
+Evidence: current App, TopicPage, topic-flows, TopicIcon, RecordCard, PracticalGuide, guide-presentation, public-record, stylesheet, Arc components, discovery state, and original-image provenance. Corrected captures in `.impeccable/review/wireframe-flow/` cover desktop (1440 × 1000), phone (390 × 844), and the actual app panel (508 × 724). Final finish review returned “ship” with no material fixes. Browser checks passed for topic → collection → type, reporting-link destinations, service navigation and back-scroll restoration, input focus, menu closing, guide contents navigation, and mobile tables. The build and 22 tests passed. Deployment has not occurred. Earlier colour-hierarchy captures are superseded. Sidecar specimens remain framework-free appearance examples; the React components own interaction behavior.

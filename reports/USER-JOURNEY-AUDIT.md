@@ -79,6 +79,7 @@ Home → topic → need → next action. 8 topics, 34 first-level needs, and 4 w
 - Browser checks: 1440px desktop and 390px phone menus, nested waste choices, reporting links, service detail/back navigation, input focus, mobile menu, guide contents and two-column table reflow. Topic controls are 100px high on phones. No horizontal document overflow in checked screens. Guide body is 18px with 31.5px leading.
 - Service detail/back restored scrollY 386.5 to 386.5 in the checked journey. The mobile menu exit layer now stops intercepting input while closing.
 - No italic/oblique declarations or decorative side borders found in source. Impeccable implementation scan: 28 advisory type-ramp findings, no non-advisory findings. Existing and superseded CSS size declarations account for much of the advisory list; current rendered hierarchy was inspected.
+- Independent Impeccable finish review: ship, with no material fixes in the reviewed scope after correcting screenshot filename/state mismatches.
 - Official government complaint service and GSPCB complaint page were read successfully. No report, booking, email or complaint was submitted. Buttons link to services or information; the site does not pretend to book a collection itself.
 
 ## Practical limits
