@@ -23,7 +23,7 @@ test("first page offers reading, community stories, organisations and direct con
     new Set(["resource", "organisation", "contact", "story"]),
   );
   assert.ok(page.some((record) => record.image));
-  assert.ok(page.some((record) => record.id === "resource-590480849c"));
+  assert.ok(page.some((record) => record.id === "resource-5731eea370"));
 });
 test("pagination remains stable for history restoration and handles sparse categories", () => {
   assert.deepEqual(

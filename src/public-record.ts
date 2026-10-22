@@ -28,11 +28,11 @@ export function publicRecord(record: RecordItem, cataloguePattern?: RegExp | nul
 
 export function communityDescription(record: RecordItem): string {
   if (record.kind === 'contact') {
-    return `Snake rescue volunteer${record.locality ? ` listed for ${record.locality}` : ' listed in Goa'}. Part of ActForGoa’s locality guide to wildlife rescue. The source listing dates to 2018; current availability needs confirmation.`;
+    return `Snake rescue volunteer${record.locality ? ` listed for ${record.locality}` : ' listed in Goa'}. Check current availability before making plans.`;
   }
   const paragraphs = record.blocks.filter(block => block.type !== 'heading').map(block => block.text.trim()).filter(Boolean);
   const text = paragraphs.join(' ') || record.text.trim();
-  if (!text) return `Listed in ActForGoa’s community directory${record.locality ? ` in ${record.locality}` : ''}. A description of their work has not yet been provided in the source listing.`;
+  if (!text) return `Listed in ActForGoa’s community directory${record.locality ? ` in ${record.locality}` : ''}. A description of their work is not available yet.`;
   // Prefer actual work over legal registration boilerplate, preserving source sentences.
   const sentences = text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [text];
   const description = sentences.filter(sentence => !/^\s*(registered under|registration number|reg\.? no)/i.test(sentence)).join(' ').replace(/\s+/g, ' ').trim() || text;
