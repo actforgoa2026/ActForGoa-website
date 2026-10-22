@@ -22,13 +22,8 @@ import {
   ArrowUpRight,
   Search,
   Leaf,
-  Recycle,
-  Waves,
   Users,
   Heart,
-  Landmark,
-  Sprout,
-  Route as RouteIcon,
   BookOpen,
   Mail,
   MapPin,
@@ -47,6 +42,10 @@ import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
 import { guideDocuments } from "./guides";
 import { PracticalGuide } from "./PracticalGuide";
+import {TopicIcon} from "./components/TopicIcon";
+import {topicFlows, topicFor, topicHref} from "./topic-flows";
+import {TopicPage, TopicChoices} from "./TopicPage";
+import {RecordCard} from "./components/RecordCard";
 import { buildDiscoveryFeed } from "./discovery";
 import { Button } from "./components/arc/button/button";
 import { SearchField } from "./components/arc/search-field/search-field";
@@ -54,22 +53,6 @@ import { Input } from "./components/arc/input/input";
 import { Textarea } from "./components/arc/textarea/textarea";
 import SegmentedControl from "./components/arc/segmented-control/segmented-control";
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
-const topicIcons = [
-  Recycle,
-  Leaf,
-  Waves,
-  Users,
-  Sprout,
-  Landmark,
-  RouteIcon,
-  Heart,
-];
-const starts = [
-  "Snake rescue",
-  "Waste & recycling",
-  "Composting at home",
-  "Get involved",
-];
 const recordPath = (r: RecordItem) => "/read/" + r.id;
 const formatDate = (s: string) => {
   const d = new Date(s);
@@ -181,144 +164,23 @@ function Footer() {
   );
 }
 
-function RecordCard({
-  record: r,
-  list = false,
-  showImage = true,
-}: {
-  record: RecordItem;
-  list?: boolean;
-  showImage?: boolean;
-}) {
-  const location = useLocation();
-  const fromCatalogue = [
-    "/",
-    "/search",
-    "/library",
-    "/directory",
-    "/stories",
-    "/blog",
-  ].includes(location.pathname);
-  const community = r.kind === "organisation" || r.kind === "contact";
-  const description = community ? communityDescription(r) : r.summary;
-  const Icon =
-    r.kind === "organisation" || r.kind === "contact"
-      ? Users
-      : r.kind === "resource"
-        ? BookOpen
-        : r.kind === "story"
-          ? Leaf
-          : FileText;
-  return (
-    <article className={"record-card " + (list ? "list-card " : "") + (community ? "community-entry" : "")}>
-      {showImage && !list && r.image && (
-        <Link
-          to={recordPath(r)}
-          state={{ fromCatalogue, fromHome: location.pathname === "/" }}
-          tabIndex={-1}
-          aria-hidden="true"
-          className="card-image"
-        >
-          <img src={r.image} alt="" loading="lazy" />
-        </Link>
-      )}
-      <div className="card-content">
-        <div className="record-meta">
-          <span>
-            <Icon size={15} />
-            {r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}
-          </span>
-          {r.locality && <span>{r.locality}</span>}
-        </div>
-        <h3>
-          <Link
-            to={recordPath(r)}
-            state={{ fromCatalogue, fromHome: location.pathname === "/" }}
-          >
-            {r.title}
-            <ArrowUpRight size={19} />
-          </Link>
-        </h3>
-        {description && description !== "Read the original resource from ActForGoa." && (
-          <p>
-            {r.id === "resource-590480849c"
-              ? "A locality-by-locality list of snake rescue volunteers, published in 2018. Contact details need current confirmation."
-              : description}
-          </p>
-        )}
-        <div className="card-bottom">
-          <span>{community ? r.topics.join(" · ") : r.topics[0]}</span>
-        </div>
-
-      </div>
-    </article>
-  );
-}
 function Home({ records }: { records: RecordItem[] }) {
-  return (
-    <main>
-      <section className="hero shell">
-        <div className="hero-copy">
-          <h1>
-            Enabling people
-            <br />
-            to care for Goa.
-          </h1>
-          <p>
-            Good people. Local knowledge. Practical ways to help.
-            <br className="desktop-break" /> Find your next step, right here.
-          </p>
-          <SearchBox large />
-          <div className="starter-queries">
-            <span>Start here</span>
-            {starts.map((x, i) => (
-              <Link
-                key={x}
-                to={
-                  i === 3
-                    ? "/get-involved"
-                    : "/search?q=" + encodeURIComponent(x)
-                }
-              >
-                {x}
-                <ArrowUpRight size={13} />
-              </Link>
-            ))}
-          </div>
-        </div>
-        <div className="hero-photo">
-          <img
-            src="/assets/goa-river.webp"
-            alt="Palms reflected in a quiet Goan waterway"
-            fetchPriority="high"
-          />
-          <span>For the Goa we love.</span>
-        </div>
-      </section>
-      <section className="topics-section shell">
-        <div className="section-heading">
-          <h2>What do you care about?</h2>
-          <span>There’s a place to start.</span>
-        </div>
-        <div className="topic-index">
-          {TOPICS.map((topic, i) => {
-            const Icon = topicIcons[i];
-            return (
-              <Link
-                key={topic}
-                to={"/search?topic=" + encodeURIComponent(topic)}
-              >
-                <Icon size={23} />
-                <span>{topic}</span>
-                <ArrowUpRight size={17} />
-              </Link>
-            );
-          })}
-        </div>
-      </section>
-      <DiscoveryFeed records={records} />
-    </main>
-  );
+  return <main>
+    <section className="home-intro shell">
+      <h1>Enabling people to care for Goa.</h1>
+      <p>Find practical help, local people, and your next step.</p>
+      <SearchBox large />
+    </section>
+    <section className="home-topics shell" aria-labelledby="home-topics-heading">
+      <h2 id="home-topics-heading">What do you need help with?</h2>
+      <nav className="choice-grid home-choice-grid" aria-label="Choose a topic">
+        {topicFlows.map(flow => <Link className="choice-link" key={flow.slug} to={topicHref(flow.topic)}>
+          <TopicIcon name={flow.icon}/><span>{flow.label}</span><ArrowRight size={22}/>
+        </Link>)}
+      </nav>
+    </section>
+    <DiscoveryFeed records={records}/>
+  </main>;
 }
 
 function DiscoveryFeed({ records }: { records: RecordItem[] }) {
@@ -451,7 +313,7 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
                 <h3>Explore {TOPICS[batchIndex].toLowerCase()}</h3>
                 <Link
                   className="text-link"
-                  to={"/search?topic=" + encodeURIComponent(TOPICS[batchIndex])}
+                  to={topicHref(TOPICS[batchIndex])}
                 >
                   Find guides, people and local projects{" "}
                   <ArrowRight size={18} />
@@ -663,6 +525,7 @@ function Catalogue({
         <p>{description}</p>
       </div>
       <SearchBox initial={query} />
+      {topic && !query && topicFor(topic) && <TopicChoices flow={topicFor(topic)!} />}
       <div className="catalogue-layout">
         <aside className="filter-rail">
           <h2>
@@ -677,8 +540,7 @@ function Catalogue({
           >
             All topics <span>{base.length}</span>
           </Button>
-          {TOPICS.map((t, i) => {
-            const Icon = topicIcons[i];
+          {TOPICS.map((t) => {
             return (
               <Button
                 variant="ghost"
@@ -687,15 +549,13 @@ function Catalogue({
                 key={t}
                 onClick={() => change("topic", t)}
               >
-                <Icon size={17} />
-                {t}
+                <TopicIcon name={topicFor(t)?.icon || "community"} />
+                <span className="filter-topic-label">{t}</span>
               </Button>
             );
           })}
           <p>
-            Original resources and practical guides.
-            <br />
-            Every entry keeps its sources.
+            Choose a topic to narrow your results.
           </p>
         </aside>
         <div className="results-area">
@@ -725,11 +585,11 @@ function Catalogue({
               {query && (
                 <p className="search-status" role="status">
                   {status === "loading"
-                    ? "Keyword results ready. Matching meaning on your device…"
+                    ? "Finding more results…"
                     : status === "ready"
-                      ? "Matched by meaning and keywords."
+                      ? ""
                       : status === "fallback"
-                        ? "Keyword search is available. Meaning search could not load."
+                        ? ""
                         : ""}
                 </p>
               )}
@@ -755,17 +615,6 @@ function Catalogue({
               <X size={14} />
               <span className="sr-only">Remove topic filter</span>
             </Button>
-          )}
-          {query && /snake|cobra/i.test(query) && (
-            <div className="source-note">
-              <Leaf size={22} />
-              <p>
-                <strong>Looking for snake rescue?</strong> The volunteer list
-                and wildlife contacts below come from the original site. Confirm
-                availability directly; these numbers have not been independently
-                reverified.
-              </p>
-            </div>
           )}
           {results.length ? (
             <>
@@ -898,7 +747,7 @@ function Detail({ records }: { records: RecordItem[] }) {
       <div className="detail-layout">
         <article>
           <div className="record-meta">
-            <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}</span>
+            <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide" : kindLabel[r.kind]}</span>
             <span>{r.topics[0]}</span>
           </div>
           <h1>{r.title}</h1>
@@ -908,12 +757,6 @@ function Detail({ records }: { records: RecordItem[] }) {
           </div>
           {r.image && (
             <img className="detail-image" src={r.image} alt={r.title} />
-          )}
-          {(r.phones.length > 0 || r.kind === "organisation") && (
-            <div className="verification-note">
-              This is an archived source listing. Contact details and service
-              availability need confirmation. Retrieved 22 October 2026.
-            </div>
           )}
           <div className="reading-body">
             {!r.blocks.length && (r.kind === "organisation" || r.kind === "contact") && <p>{communityDescription(r)}</p>}
@@ -948,7 +791,7 @@ function Detail({ records }: { records: RecordItem[] }) {
                     {d.pages && <small>{d.pages} pages</small>}
                     {d.status && d.status >= 400 && (
                       <small>
-                        Original link returned {d.status}; it may be unavailable
+                        This download may no longer be available
                       </small>
                     )}
                   </span>
@@ -960,7 +803,7 @@ function Detail({ records }: { records: RecordItem[] }) {
           {externalLinks.length > 0 && (
             <details className="source-links">
               <summary>
-                Links from the original entry ({externalLinks.length})
+                Useful links ({externalLinks.length})
               </summary>
               {externalLinks.map((l, i) => (
                 <a key={i} href={l.url} target="_blank" rel="noreferrer">
@@ -989,14 +832,12 @@ function Detail({ records }: { records: RecordItem[] }) {
                 </div>
               ))}
               <small>
-                Published contact information, not a confirmation of current
-                availability. See the original entry for full context.
+                Check opening hours and availability before visiting.
               </small>
             </section>
           )}
           <section>
-            <h2>Keep the source close.</h2>
-            <p>Read this entry in its original context.</p>
+            <h2>More information</h2>
             <a
               className="text-link"
               href={r.source}
@@ -1005,16 +846,6 @@ function Detail({ records }: { records: RecordItem[] }) {
             >
               Original ActForGoa page <ArrowUpRight size={16} />
             </a>
-            {r.sourceApi && (
-              <a
-                className="subtle-link"
-                href={r.sourceApi}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Public directory record <ExternalLink size={14} />
-              </a>
-            )}
             <Button
               variant="ghost"
               className="subtle-link"
@@ -1126,23 +957,9 @@ function About({ records }: { records: RecordItem[] }) {
       </div>
       <section id="sources" className="about-sources">
         <h2>About this field guide</h2>
-        <p>
-          This preview brings together publicly available information from
-          ActForGoa, retrieved on 22 October 2026. Original content and links
-          have been preserved in a local archive. Five practical guides add official sources, downloadable templates and visible verification flags. They remain drafts for legal and service review. Some records are historical;
-          their publication date is shown where available.
-        </p>
-        <p>
-          Search combines keyword matching with a language model that runs on
-          your device. It finds relevant entries; it does not generate advice or
-          verify contact details. No account is needed and search queries are
-          not sent to an AI provider.
-        </p>
-        <p>
-          Contact forms prepare an email for you to review and send. The preview
-          does not store submissions. The existing ActForGoa website remains the
-          original source.
-        </p>
+        <p>Find local organisations, practical guides and stories from people caring for Goa. You do not need an account.</p>
+        <p>Some articles and listings are older. Check current services and requirements with the relevant organisation before making plans.</p>
+        <p>The contact form opens an email for you to review and send.</p>
       </section>
     </main>
   );
@@ -1350,6 +1167,7 @@ export default function App() {
         ) : (
           <Routes>
             <Route path="/" element={<Home records={records} />} />
+            <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records}/>} />
             <Route path="/search" element={<Catalogue records={records} />} />
             <Route
               path="/directory"
@@ -1380,12 +1198,6 @@ export default function App() {
       </div>
       <ScrollRestoration />
       <Footer />
-      <div className="preview-note">
-        A new field guide, in progress.{" "}
-        <a href="https://actforgoa.org/">
-          Visit the original site <ArrowUpRight size={12} />
-        </a>
-      </div>
     </>
   );
 }

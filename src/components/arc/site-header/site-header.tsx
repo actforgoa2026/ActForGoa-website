@@ -4,7 +4,7 @@ import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, use
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useIsPresent, useReducedMotion } from "motion/react";
-import type { Transition, Variants } from "motion/react";
+import type { Transition, Variants, HTMLMotionProps } from "motion/react";
 import { ArrowRight, BookOpen, Boxes, ChevronDown, History, LayoutTemplate, Menu, MessagesSquare, Palette, PanelsTopLeft, Route, X } from "lucide-react";
 import { motionTokens } from "../lib/motion-tokens";
 import styles from "./site-header.module.css";
@@ -141,6 +141,12 @@ function Face({ direction, reduced, onHeight, children }: { direction: number; r
   return <motion.div ref={ref} className={styles.face} data-face="" data-leaving={present ? undefined : ""} inert={!present} custom={direction} variants={reduced ? fadeVariants : faceVariants} initial="hidden" animate="shown" exit="gone">
     {children}
   </motion.div>;
+}
+
+// Closing overlays must stop intercepting input while their exit motion finishes.
+function PresenceLayer(props: HTMLMotionProps<"div">) {
+  const present = useIsPresent();
+  return <motion.div {...props} inert={!present} style={{ ...props.style, pointerEvents: present ? undefined : "none" }} />;
 }
 
 type DestinationProps = Omit<HTMLAttributes<HTMLElement>, "onClick" | "children"> & { link: { href?: string; label: string }; onChoose: (event: ReactMouseEvent) => void; children: ReactNode };
@@ -449,8 +455,8 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
 
     <AnimatePresence>
       {menuOpen && <>
-        <motion.div key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
-        <motion.div
+        <PresenceLayer key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
+        <PresenceLayer
           key="sheet"
           id={`${id}-sheet`}
           className={styles.sheet}
@@ -491,7 +497,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
               {primaryAction && actionNode(primaryAction, "primary")}
             </motion.div>}
           </nav>
-        </motion.div>
+        </PresenceLayer>
       </>}
     </AnimatePresence>
   </header>;

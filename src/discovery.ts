@@ -22,7 +22,6 @@ const featured = [
   "guide-environmental-protection",
   "guide-reporting",
   "guide-building",
-  "resource-590480849c",
   "resource-5731eea370",
   "resource-34bc1772ee",
 ];
