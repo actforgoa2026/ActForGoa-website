@@ -23,7 +23,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
    <article>
     <h1>{guide.heading}</h1>
     {guide.summary && <p className="guide-summary">{guide.summary}</p>}
-    <p className="guide-status"><strong>Draft for review.</strong> Sources checked 22 October 2026. Legal review and live service checks remain open. <Link to="/read/guide-verification">See what needs verification</Link>.</p>
+    <p className="guide-status"><strong>Draft for review.</strong> Sources checked 23 October 2026. Legal review and live service checks remain open. <Link to="/read/guide-verification">See what needs verification</Link>.</p>
     <details className="guide-contents" key={guide.id}>
      <summary>On this page</summary>
      <nav aria-label="Guide sections">{headings.map(h => <Link key={h} to={'#' + guideHeadingId(h)} replace state={location.state}>{h}</Link>)}</nav>

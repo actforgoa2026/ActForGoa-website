@@ -6,7 +6,7 @@ export type GuideDocument = (typeof documents)[number];
 export const practicalGuides: RecordItem[] = documents.filter(d => d.listed).map(d => ({
  id: d.id, title: d.title, kind: 'resource', source: '/read/guide-sources', sourceApi: '', sourceStatus: null,
  summary: d.summary, text: d.markdown, blocks: [], topics: d.topics, image: '', imageSource: '',
- publishedAt: '', updatedAt: '2026-10-22', retrievedAt: '2026-10-22', phones: [], emails: [], locations: [],
+ publishedAt: '', updatedAt: '2026-10-23', retrievedAt: '2026-10-23', phones: [], emails: [], locations: [],
  documents: d.templates.map(t => ({...t, status: null})), links: [], verification: 'draft-review-required', editorialStatus: 'authored-practical-guide',
 }));
 

@@ -1,0 +1,131 @@
+{
+  "review_date": "2026-10-23",
+  "stage": "local_http_and_build",
+  "tests_passed": 19,
+  "build_passed": true,
+  "guide_routes": 7,
+  "downloads": [
+    {
+      "path": "/guides/ANIMAL_WELFARE_GUIDE_DRAFT.md",
+      "status": 200,
+      "sha256": "864648c7cdfb843a884e5e073302af32839b8b0d2d3483b0ac1fcac44d001d85"
+    },
+    {
+      "path": "/guides/BUILDING_GUIDE_DRAFT.md",
+      "status": 200,
+      "sha256": "73ad3f8d092d0a955e7d94d7038e398cf34dfb93e3e1fb2b1d53255b3c5695ff"
+    },
+    {
+      "path": "/guides/ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md",
+      "status": 200,
+      "sha256": "b7ec032771786f557ab0a2591ea38d53acf086eefcb2a31bffdbebc9f4b1c462"
+    },
+    {
+      "path": "/guides/FARMING_GUIDE_DRAFT.md",
+      "status": 200,
+      "sha256": "dfe9ffdcf7d90ff1b205e6a0c5b9d41babe33756afb7ad595161d458b6b000b9"
+    },
+    {
+      "path": "/guides/REPORTING_GUIDE_DRAFT.md",
+      "status": 200,
+      "sha256": "f72627e966a7963f3a7a201fa0a50b785c7545e2fd4cb76429bbab44d4f99077"
+    },
+    {
+      "path": "/guides/sources.md",
+      "status": 200,
+      "sha256": "ba67f4d83596cdc23ef175a2f76ca2b92ba829147e206a6eb7df93cc52420817"
+    },
+    {
+      "path": "/guides/templates/01-complaint.txt",
+      "status": 200,
+      "sha256": "3c35eb5854e200f45db6bef0ff0d1cab0eec96d0fd0d55e66d5a894ad968dff5"
+    },
+    {
+      "path": "/guides/templates/02-follow-up.txt",
+      "status": 200,
+      "sha256": "a16d06b3b9f4da88b5b12e4a224a2049c0c9e8a1624b2b770a56659236022a1e"
+    },
+    {
+      "path": "/guides/templates/03-rti-records-request.txt",
+      "status": 200,
+      "sha256": "1251b5556887494fc38ac940abb650d9429636e91ba7ed7535efc2f962a920f8"
+    },
+    {
+      "path": "/guides/templates/04-rti-first-appeal.txt",
+      "status": 200,
+      "sha256": "d9cb2f52494ef4c866a1552251322e8d46b944b58161a3999bbb90327de98cd1"
+    },
+    {
+      "path": "/guides/templates/05-case-log.md",
+      "status": 200,
+      "sha256": "b0e0dbd2bba2a1492a514ed1e884eb4c3161bb520f26a4d1a038609297d0ff07"
+    },
+    {
+      "path": "/guides/templates/06-project-enquiry.txt",
+      "status": 200,
+      "sha256": "2bd19c30cae1362a925a09daa732124a132b6ab5a43b33986c1ea8234d6e84f4"
+    },
+    {
+      "path": "/guides/templates/07-building-checklist.md",
+      "status": 200,
+      "sha256": "48c5a83150231eabe65da2f930e037bb0d71ee0e5d6b2d20ca8f00614234a4b3"
+    },
+    {
+      "path": "/guides/templates/08-completion-enquiry.txt",
+      "status": 200,
+      "sha256": "841369edf3e2b8d7626332eecb30798711ccd0c2e6560de1f134a37b70776fd9"
+    },
+    {
+      "path": "/guides/templates/09-farming-registration-enquiry.txt",
+      "status": 200,
+      "sha256": "3c9281ef8972bb397653a0bdca08c4aa65b8dca3f3eb8e44efe574c20450b597"
+    },
+    {
+      "path": "/guides/templates/10-farm-plan-and-log.md",
+      "status": 200,
+      "sha256": "ce872bf419a6122de1477abe633086c8cf5c0ead31f8e0ca2a58cfc11f507191"
+    },
+    {
+      "path": "/guides/templates/11-farming-support-or-damage.txt",
+      "status": 200,
+      "sha256": "be7bbb240ce498473cda8c73aa38878aa58ef0e04cd205482318ed027fb4b2f6"
+    },
+    {
+      "path": "/guides/templates/12-animal-assistance.txt",
+      "status": 200,
+      "sha256": "e0c661bfcb38f91b72ed6c4afd0e14474faecf81463a0d8aa2028cae881f4d26"
+    },
+    {
+      "path": "/guides/templates/13-animal-cruelty-complaint.txt",
+      "status": 200,
+      "sha256": "46f8173f7760a62a87e70a169a21b608c528237f988adee44cec0acdd3697bc0"
+    },
+    {
+      "path": "/guides/templates/14-community-animal-service.txt",
+      "status": 200,
+      "sha256": "18b679b272c0b47d0b1ba8de5217e4ab22f51c66dff34cc19e163d2afbec7011"
+    },
+    {
+      "path": "/guides/templates/15-environment-site-check.md",
+      "status": 200,
+      "sha256": "0ba0e005d294eb22527c3b5073349ee2df7d7c9d5ff38ddfa40bf692ca156cc5"
+    },
+    {
+      "path": "/guides/templates/16-environment-records-and-inspection.txt",
+      "status": 200,
+      "sha256": "59522cb9d06068f9fa43a3df3156ca435cc7e7ebe669733b544d9e7b34245798"
+    },
+    {
+      "path": "/guides/templates/17-environment-consultation.txt",
+      "status": 200,
+      "sha256": "fbafbaa17ac9c213aaafe6c8533c96d1318762a289c5f649548c0b0b8799b993"
+    },
+    {
+      "path": "/guides/verification.md",
+      "status": 200,
+      "sha256": "062cd0c61b32bc554bc71f6ac8a387848756de4239af28e9b1af10327b194dad"
+    }
+  ],
+  "visual_check": "pending: Mac locked; browser transport unavailable",
+  "production_deployed": false
+}

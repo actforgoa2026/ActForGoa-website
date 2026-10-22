@@ -1,0 +1,204 @@
+{
+  "review_date": "2026-10-23",
+  "flags": [
+    {
+      "flag": "R01",
+      "supported": "Published pollution, grievance and emergency routes remain supported.",
+      "remaining": "Test acknowledgement, form requirements, office hours and fallback after a failed submission; no contact was made.",
+      "reviewer": "Service-directory editor with authorised contact checks"
+    },
+    {
+      "flag": "R02",
+      "supported": "Manual and FAQ recovered: ₹10, BPL proof, payment options, registration/status, PDF attachment and no first-appeal fee. [V01] [V02]",
+      "remaining": "Confirm current authority list, upload size, paper route, copying/certification fees and live gateway; no filing or payment tested.",
+      "reviewer": "Receiving SPIO or Goa RTI practitioner"
+    },
+    {
+      "flag": "R03",
+      "supported": "AWBI’s 2025 handbook and the 2026 MHA explanation provide a current police-procedure reference. [V14] [V15]",
+      "remaining": "Exact local body, forest range/Tree Officer, utility and police/veterinary responsibility for the location.",
+      "reviewer": "Local directory editor and subject authority"
+    },
+    {
+      "flag": "R04",
+      "supported": "Panchayat section 66 and official charter support the village-body sequence; municipal process is separate.",
+      "remaining": "Current delegation, amendments, judicial directions, standing and exact appeal route/deadline for the case.",
+      "reviewer": "Goa planning/local-government lawyer"
+    },
+    {
+      "flag": "R05",
+      "supported": "DPDP section 44(3) and its commencement notification establish the substituted personal-information exemption. [V03] [V04]",
+      "remaining": "Current case law, the application of public-interest/severability provisions and response/appeal clocks from actual receipts, transfers and fee notices.",
+      "reviewer": "Goa RTI practitioner or lawyer"
+    },
+    {
+      "flag": "B01",
+      "supported": "Published procedure separates PDA/TCP and the local building licence.",
+      "remaining": "Current planning boundary, applicable plan, responsible local body and site-specific orders.",
+      "reviewer": "Registered local professional and planning authority"
+    },
+    {
+      "flag": "B02",
+      "supported": "Repair and Notary Architect Engineer forms are on official sources, including the rechecked TCP index. [V24]",
+      "remaining": "Repair definition, structural limits and conditions of delegated/special routes; no exemption assumed.",
+      "reviewer": "Registered architect/engineer and receiving local body"
+    },
+    {
+      "flag": "B03",
+      "supported": "Transfer-Act commencement and rules, final wetland notifications and a final CZMP map are now available. [V09] [V18] [V22] [V23]",
+      "remaining": "Title, tenancy, access, conversion, forest status and overlapping protections for the actual parcel.",
+      "reviewer": "Goa land lawyer and competent departments"
+    },
+    {
+      "flag": "B04",
+      "supported": "6 August 2026 amendment published 13 August, with immediate commencement; 24 December 2025 industrial-access amendment also recovered. [V05] [V06]",
+      "remaining": "Complete amendment chain, later stays/judgments and project-specific FAR, height, setback, use and access standards.",
+      "reviewer": "Planning lawyer and registered designer"
+    },
+    {
+      "flag": "B05",
+      "supported": "TCP downloads index rechecked and official application/completion forms retained. [V24]",
+      "remaining": "Accepted version, portal coverage, signatures, copies, certification and local checklist; no transaction tested.",
+      "reviewer": "Receiving authority and submitting professional"
+    },
+    {
+      "flag": "B06",
+      "supported": "Guide retains the distinction between delay and legally effective permission.",
+      "remaining": "Current fees/cess, designated service clocks, validity, renewal, appeals and all conditions of any deemed permission.",
+      "reviewer": "Receiving authority and Goa planning lawyer"
+    },
+    {
+      "flag": "B07",
+      "supported": "C&D 2025 rules took effect 1 April 2026; Ministry confirms Labour Codes implemented 21 November 2025. [V07] [V08]",
+      "remaining": "Project categories/thresholds, current central and Goa rules/transitions, registration, cess, safety, waste destinations and local charges.",
+      "reviewer": "Labour/local/pollution authority and project professional"
+    },
+    {
+      "flag": "B08",
+      "supported": "Professional certification, planning completion and local occupancy are separate steps.",
+      "remaining": "Actual inspection/NOC route, partial occupancy, special schemes and commercial operating permissions.",
+      "reviewer": "Supervising professional and approving authorities"
+    },
+    {
+      "flag": "AG01",
+      "supported": "13 October 2026 official report confirms the new Valpoi Zonal Agriculture Office. [V12]",
+      "remaining": "Exact counter address, village jurisdiction, opening hours, appointments and submission channel.",
+      "reviewer": "Zonal Agriculture Office and directory editor"
+    },
+    {
+      "flag": "AG02",
+      "supported": "Act commenced 18 April 2023; 2023 Rules provide agriculturist proof/certification and Collector permission Forms I–IV. [V09] [V23]",
+      "remaining": "Later amendments/courts, title/tenancy, the Act’s definitions and transaction-specific applicability.",
+      "reviewer": "Goa land and tenancy lawyer"
+    },
+    {
+      "flag": "AG03",
+      "supported": "Published individual/group checklist, nominee and soil-sampling requirements are confirmed. [V25]",
+      "remaining": "Accepted form, identity alternatives, current charges, processing time and actual bank/payment mapping.",
+      "reviewer": "Receiving Zonal office and applicant’s bank"
+    },
+    {
+      "flag": "AG04",
+      "supported": "ICAR/KVK and laboratory service sources retained.",
+      "remaining": "Current tests/charges, crop/input-specific advice, organic certification and regulated input-business requirements.",
+      "reviewer": "KVK/ICAR specialist and relevant licensing authority"
+    },
+    {
+      "flag": "AG05",
+      "supported": "9 March 2026 Assembly statement identifies programmes being implemented. [V11]",
+      "remaining": "Current notification, window, funding, applicant eligibility, amount, prior approval, claims and review process.",
+      "reviewer": "Agriculture scheme officer"
+    },
+    {
+      "flag": "AG06",
+      "supported": "WRD, TCP and Agriculture frameworks identify relevant permission families.",
+      "remaining": "Site/water permits, tenancy/association rights, bund management and environmental overlap.",
+      "reviewer": "WRD, Agriculture Soil Conservation Division and land/planning specialists"
+    },
+    {
+      "flag": "AG07",
+      "supported": "Revised Shetkari Adhar Nidhi notification provides 15 working days, Annexure I, photographs, valid Krishi Card and inspection; corroborated in 2023 and programme listed in 2026. [V10] [V26] [V11]",
+      "remaining": "Later terms, prescribed Annexure I availability, working-day calculation, covered crop/event, funding, assessment and any separate insurer deadline.",
+      "reviewer": "Scheme authority and insurer where relevant"
+    },
+    {
+      "flag": "AW01",
+      "supported": "Official Indian NCDC guideline recovered; 15-minute wound-washing page visually checked. [V13]",
+      "remaining": "Clinical review, current Goa treatment referral/hours and vaccine/immunoglobulin availability.",
+      "reviewer": "Goa public-health clinician and receiving facility"
+    },
+    {
+      "flag": "AW02",
+      "supported": "AHVS and Forest service directories remain available as published routes.",
+      "remaining": "Calls answered, coverage, transport, dispatch, admission, fees and responder authorisation.",
+      "reviewer": "AHVS/Forest service editor with authorised checks"
+    },
+    {
+      "flag": "AW03",
+      "supported": "2025 AWBI handbook and 2026 MHA explanation clarify BNSS reporting, including electronic information signed within three days. [V14] [V15]",
+      "remaining": "Offence classification, evidence, custody/seizure powers, current Goa SOP, competent welfare body and actual police submission route.",
+      "reviewer": "Animal-welfare lawyer and relevant authority"
+    },
+    {
+      "flag": "AW04",
+      "supported": "AWBI institutional SOP and July 2026 follow-up recovered; nodal-officer and authorised shelter process now included. [V16] [V17]",
+      "remaining": "Later Supreme Court/Goa High Court orders, site-specific directions, designated feeding/dispute process and actual shelter/operator capacity.",
+      "reviewer": "Animal-welfare lawyer and local implementation authority"
+    },
+    {
+      "flag": "AW05",
+      "supported": "Duty-of-care and factual handover workflow retained.",
+      "remaining": "Species-specific adoption/transport, local pet registration, livestock and commercial requirements.",
+      "reviewer": "Veterinarian and local/licensing authority"
+    },
+    {
+      "flag": "EP01",
+      "supported": "Official department routes retained; new records identify relevant bodies.",
+      "remaining": "Exact site jurisdiction, officer, accepted records/complaint route and acknowledgement.",
+      "reviewer": "Directory editor and receiving authority"
+    },
+    {
+      "flag": "EP02",
+      "supported": "November 2025 Tree Authority reconstitution establishes the current published composition and Member Secretary designation. [V21]",
+      "remaining": "Territorial Tree Officer, delegated powers, later amendments, fee bands, exceptions, emergency/co-owner/transit/appeal rules and actual forest status.",
+      "reviewer": "Forest authority and Goa environmental lawyer"
+    },
+    {
+      "flag": "EP03",
+      "supported": "Live GCZMA Final CZMP Goa menu exposes 17 map links; Map 1 downloaded and visually inspected. [V22]",
+      "remaining": "Latest approval/correction package, applicable CRZ regime, parcel demarcation and later orders; one sheet cannot establish statewide currency.",
+      "reviewer": "GCZMA and qualified coastal/planning specialist"
+    },
+    {
+      "flag": "EP04",
+      "supported": "Final notifications for ten named wetlands, with schedules/maps, found in 9 January 2025 Gazette; published GSWA email identified. [V18]",
+      "remaining": "Site-specific boundaries, later amendments/court protection and live GSWA contact/index. The ten wetlands are not a complete inventory.",
+      "reviewer": "GSWA and environmental lawyer"
+    },
+    {
+      "flag": "EP05",
+      "supported": "SWM 2026 and C&D 2025 rules both effective 1 April 2026; four-stream segregation and construction-waste responsibilities now cited. [V19] [V07]",
+      "remaining": "Actual collection/charges, project consent/authorisation, other applicable waste rules and authorised inspection/sampling.",
+      "reviewer": "GSPCB and local/water authority"
+    },
+    {
+      "flag": "EP06",
+      "supported": "Official public-hearing example and comment workflow retained.",
+      "remaining": "Actual project notice/corrigenda, exemption/clearance route, documents, comment deadline and decision.",
+      "reviewer": "Hearing/clearance authority and reviewer"
+    },
+    {
+      "flag": "EP07",
+      "supported": "BMC/PBR functions supported by GSBB pages.",
+      "remaining": "Current committee, meeting/access procedure, sensitive knowledge handling and research/access/benefit-sharing permissions.",
+      "reviewer": "Local BMC and GSBB"
+    },
+    {
+      "flag": "EP08",
+      "supported": "Official government copy of NGT Act recovered: sections 14–16 distinguish disputes, relief and appeals with different limitation clauses. [V20]",
+      "remaining": "Current consolidated law/courts, forum, standing, filing requirements, trigger dates and possible condonation. Do not calculate from this guide alone.",
+      "reviewer": "Environmental litigation practitioner"
+    }
+  ],
+  "transactions_or_contacts_performed": false
+}
