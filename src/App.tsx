@@ -1284,14 +1284,6 @@ function Contact({ involve = false }: { involve?: boolean }) {
             <Mail size={18} />
             info@actforgoa.org
           </a>
-          <a href="https://wa.me/918554833885">
-            <Phone size={18} />
-            +91 85548 33885
-          </a>
-          <a href="https://wa.me/919823912012">
-            <Phone size={18} />
-            +91 98239 12012
-          </a>
           <p>
             1 Design Valley
             <br />
