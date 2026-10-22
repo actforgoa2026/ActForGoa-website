@@ -1,0 +1,151 @@
+{
+  "environment": "production alias",
+  "base_url": "https://actforgoa-field-guide.vercel.app/",
+  "deployment_id": "dpl_EP6Pgw7ys3VA5kCKAjK5i7Wa8Gm1",
+  "checks": [
+    {
+      "path": "guides/ANIMAL_WELFARE_GUIDE_DRAFT.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "b9a0bee87773c4ec7449059074a1117abec4104d4d687f194909529647a22446"
+    },
+    {
+      "path": "guides/BUILDING_GUIDE_DRAFT.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "67eed05f473d04204c5747292b5b58822c754ee9b26a0122c00ca2b352e59332"
+    },
+    {
+      "path": "guides/ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "38631610bf5bf620ee5063c20d232623827fb3b8d4ff1379dcd65fa86c3a4681"
+    },
+    {
+      "path": "guides/FARMING_GUIDE_DRAFT.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "9ef58087082fccfb17b63ce7ee372839f57de3c851c08eb4e23d42598307d7a0"
+    },
+    {
+      "path": "guides/REPORTING_GUIDE_DRAFT.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "db4715f564648116f18ebd9408d3c77da045e30a895ce14fa234bff8f8533c37"
+    },
+    {
+      "path": "guides/sources.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "3d9bbfd31bf88008cbe206fe16724326485e882f5f1da2806b8f2ea17377de60"
+    },
+    {
+      "path": "guides/templates/01-complaint.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "3c35eb5854e200f45db6bef0ff0d1cab0eec96d0fd0d55e66d5a894ad968dff5"
+    },
+    {
+      "path": "guides/templates/02-follow-up.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "a16d06b3b9f4da88b5b12e4a224a2049c0c9e8a1624b2b770a56659236022a1e"
+    },
+    {
+      "path": "guides/templates/03-rti-records-request.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "56f92911c2d4c8300cdb6cc1adf1444ecc89be66a72d79bfded6397abd353d9d"
+    },
+    {
+      "path": "guides/templates/04-rti-first-appeal.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "d9cb2f52494ef4c866a1552251322e8d46b944b58161a3999bbb90327de98cd1"
+    },
+    {
+      "path": "guides/templates/05-case-log.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "b0e0dbd2bba2a1492a514ed1e884eb4c3161bb520f26a4d1a038609297d0ff07"
+    },
+    {
+      "path": "guides/templates/06-project-enquiry.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "2bd19c30cae1362a925a09daa732124a132b6ab5a43b33986c1ea8234d6e84f4"
+    },
+    {
+      "path": "guides/templates/07-building-checklist.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "c05ea636707c2f6274fe5ea47425a26b52e56b27bab775637b8b41f40c7d6c75"
+    },
+    {
+      "path": "guides/templates/08-completion-enquiry.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "841369edf3e2b8d7626332eecb30798711ccd0c2e6560de1f134a37b70776fd9"
+    },
+    {
+      "path": "guides/templates/09-farming-registration-enquiry.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "3c9281ef8972bb397653a0bdca08c4aa65b8dca3f3eb8e44efe574c20450b597"
+    },
+    {
+      "path": "guides/templates/10-farm-plan-and-log.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "ce872bf419a6122de1477abe633086c8cf5c0ead31f8e0ca2a58cfc11f507191"
+    },
+    {
+      "path": "guides/templates/11-farming-support-or-damage.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "719b00c0194d19fe3ba8b17d9c163e23b88b2313d3ff5b6672ee2cf36f790b71"
+    },
+    {
+      "path": "guides/templates/12-animal-assistance.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "e0c661bfcb38f91b72ed6c4afd0e14474faecf81463a0d8aa2028cae881f4d26"
+    },
+    {
+      "path": "guides/templates/13-animal-cruelty-complaint.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "cc7f22cf279cf1a847865d0b2475ca30c7ff7662935ed2511967e06bd7a45883"
+    },
+    {
+      "path": "guides/templates/14-community-animal-service.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "6b47d650b50300fa839897b21ba6aeb6d7eae91982b556d22a30badb524a2352"
+    },
+    {
+      "path": "guides/templates/15-environment-site-check.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "0ba0e005d294eb22527c3b5073349ee2df7d7c9d5ff38ddfa40bf692ca156cc5"
+    },
+    {
+      "path": "guides/templates/16-environment-records-and-inspection.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "0e795f7e424a805857557de0c0a965aeba2ae03d0ef6eaeaf3aebc7e633cd050"
+    },
+    {
+      "path": "guides/templates/17-environment-consultation.txt",
+      "status": 200,
+      "content_type": "text/plain; charset=utf-8",
+      "sha256": "fbafbaa17ac9c213aaafe6c8533c96d1318762a289c5f649548c0b0b8799b993"
+    },
+    {
+      "path": "guides/verification.md",
+      "status": 200,
+      "content_type": "text/markdown; charset=utf-8",
+      "sha256": "3fe14b52a38ba9f2a30f958111444b85244d797ff180797ce09d1365ef18cc8c"
+    }
+  ]
+}

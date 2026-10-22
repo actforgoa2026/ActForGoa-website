@@ -1,0 +1,25 @@
+ENVIRONMENTAL RECORDS AND INSPECTION REQUEST
+Ordinary administrative request. For a statutory RTI application use template 03 and the relevant SPIO route separately. An RTI request does not itself stop work.
+
+To: [competent authority]
+Date: [date]
+Subject: Request to verify [activity/protection/permission] at [location]
+
+Location and identifiers: [village, taluka, survey/subdivision, landmark, pin; identify uncertainty]
+Observed facts and dates: [specific activity, changing conditions and effects]
+Records already available: [title, number/date, source; distinguish draft from final]
+Uncertainty: [boundary, permission, substance or other question]
+
+Please inspect the reported activity as appropriate and confirm:
+1. Your jurisdiction and the applicable site protection/permission regime.
+2. The relevant final notification, approved map/schedule, permission and conditions.
+3. Whether the observed activity is consistent with those records, following official assessment.
+4. Any action or referral taken and the written outcome.
+
+Particular records sought: [precise list, project/parcel/reference and period]
+Why prompt assessment is requested: [facts showing continuing or irreversible change]
+Other authorities informed and their distinct issue: [office/reference or none]
+Evidence index: [photos, map, documents]
+Name/contact: [details]
+
+Please acknowledge and provide a reference and responsible contact. This request does not assert a legal classification that has not been established.

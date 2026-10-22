@@ -1,0 +1,42 @@
+DRAFT TEMPLATE: FIRST APPEAL UNDER RTI
+Use the First Appellate Authority for the public authority concerned. Confirm the current submission procedure. This is not a second appeal to the Information Commission.
+
+To: The First Appellate Authority
+[Public authority and address]
+Date: [date]
+Subject: First appeal under section 19(1), Right to Information Act, 2005
+
+Appellant: [name and correspondence address]
+SPIO/public authority: [details]
+Original RTI date and registration number: [details]
+Date received by the authority: [date and evidence]
+SPIO response date and date received: [dates, or no response received]
+Relevant transfer/additional-fee notices: [details, or none]
+
+Grounds of appeal:
+[State the relevant ground: no decision within the applicable period, specified unanswered items, disputed refusal, fee or other specific issue.]
+
+Item-by-item issues:
+Original question [number]: [record requested]
+Response received: [brief description]
+Issue requiring decision: [specific missing information or reason for challenge]
+
+Relief requested:
+Please decide this appeal and direct supply of the disclosable information or other appropriate relief under the Act. For any part not supplied, please provide a reasoned decision identifying the applicable provision. Please identify the route for any further appeal.
+
+Timing:
+[State the date from which you calculate the appeal period and the basis. If late, provide the actual reason and request admission for sufficient cause; do not assume admission is automatic.]
+
+Attachments:
+1. Original RTI application.
+2. Submission/receipt and payment or exemption evidence.
+3. Transfer/fee notices and responses, if any.
+4. SPIO reply, if any.
+5. Supporting chronology or documents relied on.
+
+Name and signature: [details]
+Address/email for reply: [details]
+
+The facts stated are true to the best of my knowledge.
+
+Keep separately: appeal acknowledgement and reference, submission date, decision and date received. Calculate the next deadline from the actual procedural history.
