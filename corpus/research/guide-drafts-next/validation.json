@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-22",
+  "guides": 3,
+  "citation_labels": 42,
+  "unique_cited_urls": 39,
+  "source_statuses": {
+    "downloaded": 36,
+    "web_only": 2,
+    "failed": 1
+  },
+  "raw_files_hash_verified": 37,
+  "new_verification_flags": 20,
+  "new_templates": 9,
+  "errors": [],
+  "limits": [
+    "Source integrity is not legal currency verification.",
+    "Live service operation and site-specific legal conclusions are not verified."
+  ]
+}

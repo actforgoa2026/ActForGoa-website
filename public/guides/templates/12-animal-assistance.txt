@@ -1,0 +1,26 @@
+ANIMAL ASSISTANCE REQUEST AND HANDOVER RECORD
+For veterinary/authorised rescue coordination. This is not medical advice, capture permission or an ownership-transfer deed. Human exposure requires urgent medical care separately.
+
+Time of request: [date/time]
+Location: [village/town, taluka, landmark, pin, safe access]
+Species and number: [known/uncertain]
+Description/identifier: [colour, markings, collar/tag if safely visible]
+Observed condition: [facts; do not diagnose]
+Immediate hazards: [traffic, people, other animals, suspected poison]
+Possible human exposure: [yes/no/unknown; medical care sought; avoid unnecessary patient details]
+Ownership/custody: [known owner or unknown]
+Requester and callback: [details]
+
+Please confirm whether you can attend or receive this animal, suitable handling/transport arrangements, charges or admission conditions, and the responsible person/case reference. If outside your remit, please identify the correct service.
+
+HANDOVER
+Accepted by and role: [person/organisation]
+Authority or owner consent recorded by: [details if applicable]
+Date/time/place: [details]
+Animal identity and observed condition: [details]
+Destination and case number: [details]
+Documents/items handed over: [index]
+Next update and responsible contact: [details]
+Custody status and unresolved questions: [temporary care/other; confirm with authority]
+
+Keep original photographs and private contact information securely. Do not publish exact wildlife locations unnecessarily.

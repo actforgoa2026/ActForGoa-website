@@ -1,0 +1,914 @@
+[
+  {
+    "labels": [
+      "FR1"
+    ],
+    "url": "https://agri.goa.gov.in/Upload/Corrected_Citizen_Charter.pdf",
+    "title": "Goa Directorate of Agriculture corrected citizen charter, document metadata dated 5 January 2026",
+    "source_id": "04df6ad0572e8c2e8d77a360",
+    "status": "downloaded",
+    "locator": "Krishi Card checklist physical page 2; support headings pages 3–31; regulated input businesses pages 33–41; offices pages 42–43.",
+    "use_and_limit": "Checklist page visually inspected. Scheme rates, eligibility and service operation require current confirmation.",
+    "retrieved_at": "2026-10-22T14:41:36.911770+00:00",
+    "raw_path": "corpus/raw/2851c0d45fe3847db6f0f3326e31dbef877ca705b59a47381a67c12ee84bd1c7.pdf",
+    "sha256": "2851c0d45fe3847db6f0f3326e31dbef877ca705b59a47381a67c12ee84bd1c7",
+    "text_path": "corpus/text/04df6ad0572e8c2e8d77a360.txt",
+    "pages_path": "corpus/pages/04df6ad0572e8c2e8d77a360.json",
+    "error": null,
+    "label_notes": {
+      "FR1": {
+        "locator": "Krishi Card checklist physical page 2; support headings pages 3–31; regulated input businesses pages 33–41; offices pages 42–43.",
+        "limit": "Checklist page visually inspected. Scheme rates, eligibility and service operation require current confirmation."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR2"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2025/10/Goa-Restriction-on-Transfer-of-Agricultural-Land-Act.pdf",
+    "title": "Goa Restriction on Transfer of Agricultural Land Act, 2023",
+    "source_id": "02542cbdf7cad2e42026e1de",
+    "status": "downloaded",
+    "locator": "Sections 1–4, physical pages 1–3.",
+    "use_and_limit": "Original 2023 Act; narrow statutory definition read. Commencement, rules, amendments and parcel application not consolidated.",
+    "retrieved_at": "2026-10-22T14:16:01.018389+00:00",
+    "raw_path": "corpus/raw/36b3084fcf3097bff738855d6a7c35df72fab6747cc37929197dc6e301c71ed1.pdf",
+    "sha256": "36b3084fcf3097bff738855d6a7c35df72fab6747cc37929197dc6e301c71ed1",
+    "text_path": "corpus/text/02542cbdf7cad2e42026e1de.txt",
+    "pages_path": "corpus/pages/02542cbdf7cad2e42026e1de.json",
+    "error": null,
+    "label_notes": {
+      "FR2": {
+        "locator": "Sections 1–4, physical pages 1–3.",
+        "limit": "Original 2023 Act; narrow statutory definition read. Commencement, rules, amendments and parcel application not consolidated."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR3"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2026/09/Goa-Agricultural-Tenancy-Act-1964.pdf",
+    "title": "Goa, Daman and Diu Agricultural Tenancy Act, 1964",
+    "source_id": "44b6756ed52cf8a4a230787b",
+    "status": "downloaded",
+    "locator": "Title and tenancy framework; opening provisions.",
+    "use_and_limit": "Use for separate tenancy review, not transaction eligibility or a consolidated current-law opinion.",
+    "retrieved_at": "2026-10-22T14:17:08.765255+00:00",
+    "raw_path": "corpus/raw/fa2168e2fd9443920360f3751d67cba52cf1e654ea9804e455a6839f213d3223.pdf",
+    "sha256": "fa2168e2fd9443920360f3751d67cba52cf1e654ea9804e455a6839f213d3223",
+    "text_path": "corpus/text/44b6756ed52cf8a4a230787b.txt",
+    "pages_path": "corpus/pages/44b6756ed52cf8a4a230787b.json",
+    "error": null,
+    "label_notes": {
+      "FR3": {
+        "locator": "Title and tenancy framework; opening provisions.",
+        "limit": "Use for separate tenancy review, not transaction eligibility or a consolidated current-law opinion."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR4"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2020/03/krishi-card-Application-for-individual-farmer.pdf",
+    "title": "krishi card Application for individual farmer",
+    "source_id": "bae18973c85bd97ad48f6766",
+    "status": "downloaded",
+    "locator": "Individual farmer application.",
+    "use_and_limit": "Official form collected previously; current acceptance to confirm.",
+    "retrieved_at": "2026-10-22T14:16:28.366637+00:00",
+    "raw_path": "corpus/raw/4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c.pdf",
+    "sha256": "4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c",
+    "text_path": "corpus/text/bae18973c85bd97ad48f6766.txt",
+    "pages_path": "corpus/pages/bae18973c85bd97ad48f6766.json",
+    "error": null,
+    "label_notes": {
+      "FR4": {
+        "locator": "Individual farmer application.",
+        "limit": "Official form collected previously; current acceptance to confirm."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR5"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2020/03/Krishi-card-Application-for-farmers-group.pdf",
+    "title": "Krishi card Application for farmers group",
+    "source_id": "837a7b4d14c7c7a12f816e3a",
+    "status": "downloaded",
+    "locator": "Farmers group application.",
+    "use_and_limit": "Official form collected previously; applicant category and acceptance to confirm.",
+    "retrieved_at": "2026-10-22T14:16:27.929361+00:00",
+    "raw_path": "corpus/raw/75c1d357f456a0ef0eba370a5fec9132752a31423149b72a2bb67fbadf3c73bb.pdf",
+    "sha256": "75c1d357f456a0ef0eba370a5fec9132752a31423149b72a2bb67fbadf3c73bb",
+    "text_path": "corpus/text/837a7b4d14c7c7a12f816e3a.txt",
+    "pages_path": "corpus/pages/837a7b4d14c7c7a12f816e3a.json",
+    "error": null,
+    "label_notes": {
+      "FR5": {
+        "locator": "Farmers group application.",
+        "limit": "Official form collected previously; applicant category and acceptance to confirm."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR6"
+    ],
+    "url": "https://dip.goa.gov.in/farmers-urged-to-incorporate-aadhaar-seeded-bank-details-into-krishi-card/",
+    "title": "Krishi card bank mandate update notice",
+    "source_id": "a74962fdae918223f63607ec",
+    "status": "downloaded",
+    "locator": "Press release dated 19 June 2025.",
+    "use_and_limit": "Bank mandate and Aadhaar Payment Bridge update; individual bank mapping not tested.",
+    "retrieved_at": "2026-10-22T15:44:33.462284+00:00",
+    "raw_path": "corpus/raw/2faa2246241c72f1e76d1f26c4172bff3d06816f8e60d1a543fe8bb84cc518ac.html",
+    "sha256": "2faa2246241c72f1e76d1f26c4172bff3d06816f8e60d1a543fe8bb84cc518ac",
+    "text_path": "corpus/text/a74962fdae918223f63607ec.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "FR6": {
+        "locator": "Press release dated 19 June 2025.",
+        "limit": "Bank mandate and Aadhaar Payment Bridge update; individual bank mapping not tested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR7"
+    ],
+    "url": "https://ccari.res.in/soilgoa/where.php",
+    "title": "Goa ICAR soil testing laboratories",
+    "source_id": "719e42fe015ef0f9813fbffc",
+    "status": "downloaded",
+    "locator": "Where to analyse your soil samples table.",
+    "use_and_limit": "Three laboratory locations listed. Page also returns a PHP warning; laboratory availability and prices untested.",
+    "retrieved_at": "2026-10-22T15:44:32.109338+00:00",
+    "raw_path": "corpus/raw/a72a0f2b50004b89681f81baec77c9fc1c556b759a045dbf4a489e701decc9b5.html",
+    "sha256": "a72a0f2b50004b89681f81baec77c9fc1c556b759a045dbf4a489e701decc9b5",
+    "text_path": "corpus/text/719e42fe015ef0f9813fbffc.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "FR7": {
+        "locator": "Where to analyse your soil samples table.",
+        "limit": "Three laboratory locations listed. Page also returns a PHP warning; laboratory availability and prices untested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR8"
+    ],
+    "url": "https://ccari.res.in/atdcnew.html",
+    "title": "ICAR-CCARI farmer technology and advice services",
+    "source_id": "2578b8e7449ee7d0318ea18a",
+    "status": "downloaded",
+    "locator": "Dissemination Centre objectives and services.",
+    "use_and_limit": "Crop advice, practices, publications and planting-material service scope; availability untested.",
+    "retrieved_at": "2026-10-22T14:07:57.587419+00:00",
+    "raw_path": "corpus/raw/3a4a20f356cb529041c1ebd1e3585bf38cbb53c5f5a2598d04404756381dc352.html",
+    "sha256": "3a4a20f356cb529041c1ebd1e3585bf38cbb53c5f5a2598d04404756381dc352",
+    "text_path": "corpus/text/2578b8e7449ee7d0318ea18a.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "FR8": {
+        "locator": "Dissemination Centre objectives and services.",
+        "limit": "Crop advice, practices, publications and planting-material service scope; availability untested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR9",
+      "EN6"
+    ],
+    "url": "https://www.goawrd.gov.in/acts-rules/ground-water-act",
+    "title": "Groundwater Act and rules",
+    "source_id": "b3d8aebea54ca3472baff3d5",
+    "status": "downloaded",
+    "locator": "Ground Water Act index.",
+    "use_and_limit": "Separate regulatory framework; no universal well exemption or permit granted.",
+    "retrieved_at": "2026-10-22T14:02:29.688028+00:00",
+    "raw_path": "corpus/raw/a9445c7e6394076d6ccc4f9a3e4325bc527af0acb98b08605a7518219d29ad0b.html",
+    "sha256": "a9445c7e6394076d6ccc4f9a3e4325bc527af0acb98b08605a7518219d29ad0b",
+    "text_path": "corpus/text/b3d8aebea54ca3472baff3d5.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "FR9": {
+        "locator": "Ground Water Act index.",
+        "limit": "Separate regulatory framework; no universal well exemption or permit granted."
+      },
+      "EN6": {
+        "locator": "Groundwater legal framework index.",
+        "limit": "Locate applicable WRD rules/authority; watercourse ownership or project requirements not determined."
+      }
+    }
+  },
+  {
+    "labels": [
+      "FR10",
+      "EN4"
+    ],
+    "url": "https://tcp.goa.gov.in/procedure-to-obtain-the-permission-under-section-17a/",
+    "title": "Procedure to obtain the permission under Section 17A",
+    "source_id": "d6ba82b99b77c520ba7bd32b",
+    "status": "downloaded",
+    "locator": "Section 17A procedure and document list.",
+    "use_and_limit": "Hill cutting/low-lying filling permission enquiry; site classification unverified.",
+    "retrieved_at": "2026-10-22T14:08:38.078788+00:00",
+    "raw_path": "corpus/raw/b1ce6350c7a998e5a2bbff95e12c715cc973f9b77c9c165fb3b330978fceeeb1.html",
+    "sha256": "b1ce6350c7a998e5a2bbff95e12c715cc973f9b77c9c165fb3b330978fceeeb1",
+    "text_path": "corpus/text/d6ba82b99b77c520ba7bd32b.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "FR10": {
+        "locator": "Section 17A procedure and document list.",
+        "limit": "Hill cutting/low-lying filling permission enquiry; site classification unverified."
+      },
+      "EN4": {
+        "locator": "Section 17A procedure.",
+        "limit": "Separate hill cutting and filling permission enquiry."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN1"
+    ],
+    "url": "https://ahvs.goa.gov.in/emergency-contact-for-cruelty/",
+    "title": "Emergency contact for Cruelty",
+    "source_id": "e43cb3509aeee4b259cbdb41",
+    "status": "downloaded",
+    "locator": "Emergency Contact against Animal Cruelty, Animals in Distress, Animal accidents and Animal Rescue.",
+    "use_and_limit": "Official routing page to veterinary, police, Panchayat, DSPCA and nodal resources; downstream rosters and live dispatch not tested.",
+    "retrieved_at": "2026-10-22T14:12:37.979456+00:00",
+    "raw_path": "corpus/raw/34f847c322faed4ea8469a75c65eaf76d7464114bbda0eed8c89d77d99b8f81f.html",
+    "sha256": "34f847c322faed4ea8469a75c65eaf76d7464114bbda0eed8c89d77d99b8f81f",
+    "text_path": "corpus/text/e43cb3509aeee4b259cbdb41.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN1": {
+        "locator": "Emergency Contact against Animal Cruelty, Animals in Distress, Animal accidents and Animal Rescue.",
+        "limit": "Official routing page to veterinary, police, Panchayat, DSPCA and nodal resources; downstream rosters and live dispatch not tested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN2"
+    ],
+    "url": "https://ahvs.goa.gov.in/emergency-contact/",
+    "title": "Emergency Contact",
+    "source_id": "5a71f2320e95412a521995b0",
+    "status": "downloaded",
+    "locator": "Emergency Contact directory.",
+    "use_and_limit": "Published veterinary locations and officers; hours, service coverage and phone availability untested.",
+    "retrieved_at": "2026-10-22T14:12:46.717778+00:00",
+    "raw_path": "corpus/raw/e9a0bf18a8c5c7afac4a7755da9b5cc9fecf354a49aa100329f6054269a106dc.html",
+    "sha256": "e9a0bf18a8c5c7afac4a7755da9b5cc9fecf354a49aa100329f6054269a106dc",
+    "text_path": "corpus/text/5a71f2320e95412a521995b0.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN2": {
+        "locator": "Emergency Contact directory.",
+        "limit": "Published veterinary locations and officers; hours, service coverage and phone availability untested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN3"
+    ],
+    "url": "https://www.who.int/news-room/fact-sheets/detail/rabies",
+    "title": "Rabies",
+    "source_id": "6fd871657b41a75da75c46ce",
+    "status": "downloaded",
+    "locator": "Prevention; Post-exposure prophylaxis; exposure-risk table.",
+    "use_and_limit": "WHO official medical source used for immediate washing and urgent assessment. No treatment dose or local stock claim.",
+    "retrieved_at": "2026-10-22T15:46:36.281923+00:00",
+    "raw_path": "corpus/raw/b55e19a52b6bd0c7e254ba7f148bc47f9333646471596503438dc344fc7a6978.html",
+    "sha256": "b55e19a52b6bd0c7e254ba7f148bc47f9333646471596503438dc344fc7a6978",
+    "text_path": "corpus/text/6fd871657b41a75da75c46ce.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN3": {
+        "locator": "Prevention; Post-exposure prophylaxis; exposure-risk table.",
+        "limit": "WHO official medical source used for immediate washing and urgent assessment. No treatment dose or local stock claim."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN4"
+    ],
+    "url": "https://www.goa.gov.in/",
+    "title": "AN4 official source",
+    "source_id": null,
+    "status": "web_only",
+    "locator": "Important Helpline Numbers.",
+    "use_and_limit": "Official web reading from the earlier reporting-guide check; no calls made.",
+    "retrieved_at": null,
+    "raw_path": null,
+    "sha256": null,
+    "text_path": null,
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN4": {
+        "locator": "Important Helpline Numbers.",
+        "limit": "Official web reading from the earlier reporting-guide check; no calls made."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN5"
+    ],
+    "url": "https://www.goa.gov.in/department/department-of-animal-husbandry-and-veterinary-services/",
+    "title": "Goa animal husbandry department and veterinary directory",
+    "source_id": "99877e13fc2da43df1ec0753",
+    "status": "downloaded",
+    "locator": "Aims/objectives; hospital and APIO directory.",
+    "use_and_limit": "Office contacts are not asserted to be emergency dispatch numbers.",
+    "retrieved_at": "2026-10-22T15:44:30.208600+00:00",
+    "raw_path": "corpus/raw/29ec3adbd6d233484781ed4d6574fa19f2ae664ade1698d709fea0eaaee7d0a5.html",
+    "sha256": "29ec3adbd6d233484781ed4d6574fa19f2ae664ade1698d709fea0eaaee7d0a5",
+    "text_path": "corpus/text/99877e13fc2da43df1ec0753.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN5": {
+        "locator": "Aims/objectives; hospital and APIO directory.",
+        "limit": "Office contacts are not asserted to be emergency dispatch numbers."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN6"
+    ],
+    "url": "https://ahvs.goa.gov.in/head-office/",
+    "title": "Goa animal husbandry head office",
+    "source_id": "381fbad5fe7711123f64b830",
+    "status": "downloaded",
+    "locator": "Head office contact block.",
+    "use_and_limit": "9607948546 / 8956863414 and director email read; office enquiries only, untested.",
+    "retrieved_at": "2026-10-22T15:44:36.618984+00:00",
+    "raw_path": "corpus/raw/a95309f716e68e11a28daa36063bc9cc54bfa78d15b8a7a6c135f199700a3d2f.html",
+    "sha256": "a95309f716e68e11a28daa36063bc9cc54bfa78d15b8a7a6c135f199700a3d2f",
+    "text_path": "corpus/text/381fbad5fe7711123f64b830.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN6": {
+        "locator": "Head office contact block.",
+        "limit": "9607948546 / 8956863414 and director email read; office enquiries only, untested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN7"
+    ],
+    "url": "https://forest.goa.gov.in/contact-us",
+    "title": "CONTACT US | Forest Department",
+    "source_id": "b0ba3eeb208dcfc7b0464530",
+    "status": "downloaded",
+    "locator": "Contact Us helpline block.",
+    "use_and_limit": "North/South labels and 24 X 7 wording published by Forest Department; no operational test.",
+    "retrieved_at": "2026-10-22T15:46:37.399715+00:00",
+    "raw_path": "corpus/raw/d7b0fea3a5ad72c3f774c9579f292b32211c5292317f9b293d323dfa826d8812.html",
+    "sha256": "d7b0fea3a5ad72c3f774c9579f292b32211c5292317f9b293d323dfa826d8812",
+    "text_path": "corpus/text/b0ba3eeb208dcfc7b0464530.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN7": {
+        "locator": "Contact Us helpline block.",
+        "limit": "North/South labels and 24 X 7 wording published by Forest Department; no operational test."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN8",
+      "EN1"
+    ],
+    "url": "https://forest.goa.gov.in/",
+    "title": "Home | Forest Department",
+    "source_id": "51a321bdf308174ef16db4e9",
+    "status": "downloaded",
+    "locator": "Forest responsibilities and wildlife/private-forest resource links.",
+    "use_and_limit": "Routing/reference index, not a complete current wildlife-law consolidation.",
+    "retrieved_at": "2026-10-22T14:08:03.630986+00:00",
+    "raw_path": "corpus/raw/7049f959a7564e985eaf38d184be308400f9f1d27706066f468bfa1be7bb9ee1.html",
+    "sha256": "7049f959a7564e985eaf38d184be308400f9f1d27706066f468bfa1be7bb9ee1",
+    "text_path": "corpus/text/51a321bdf308174ef16db4e9.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN8": {
+        "locator": "Forest responsibilities and wildlife/private-forest resource links.",
+        "limit": "Routing/reference index, not a complete current wildlife-law consolidation."
+      },
+      "EN1": {
+        "locator": "Private forest, tree felling, wildlife and protected-area resource links.",
+        "limit": "Site-specific final boundaries, delegated officers and subsequent orders need checking."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN9"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2019/12/1.-The_prevention_of_cruelty_to_animals_act_1960.pdf",
+    "title": "The prevention of cruelty to animals act,1960",
+    "source_id": "b7ec22dc6a7f76aea328a5e8",
+    "status": "downloaded",
+    "locator": "PCA Act sections 3 and 11.",
+    "use_and_limit": "Basic duty and cruelty framework; current offence selection/procedure must be checked for the case.",
+    "retrieved_at": "2026-10-22T14:18:37.779869+00:00",
+    "raw_path": "corpus/raw/fed06460fca7c7152521d7d307dd354c5134a888177afe602d183fc15691603b.pdf",
+    "sha256": "fed06460fca7c7152521d7d307dd354c5134a888177afe602d183fc15691603b",
+    "text_path": "corpus/text/b7ec22dc6a7f76aea328a5e8.txt",
+    "pages_path": "corpus/pages/b7ec22dc6a7f76aea328a5e8.json",
+    "error": null,
+    "label_notes": {
+      "AN9": {
+        "locator": "PCA Act sections 3 and 11.",
+        "limit": "Basic duty and cruelty framework; current offence selection/procedure must be checked for the case."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN10"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2020/08/SOP-For-Offences-Of-Animal-Cruelty.pdf",
+    "title": "Standard Operation Procedure For Offences Of Animal Cruelty - DAHVS",
+    "source_id": "f1d2a5eb8b110938a0576517",
+    "status": "downloaded",
+    "locator": "Physical page 1 of 2020 SOP.",
+    "use_and_limit": "Earlier visual inspection recorded. Old criminal-law citations must not be reused as current charges.",
+    "retrieved_at": "2026-10-22T14:18:15.275381+00:00",
+    "raw_path": "corpus/raw/bb156e2e15f174747fc449abc3f10ac967f79886dea359a0189a4a53437b1fbb.pdf",
+    "sha256": "bb156e2e15f174747fc449abc3f10ac967f79886dea359a0189a4a53437b1fbb",
+    "text_path": "corpus/text/f1d2a5eb8b110938a0576517.txt",
+    "pages_path": "corpus/pages/f1d2a5eb8b110938a0576517.json",
+    "error": null,
+    "label_notes": {
+      "AN10": {
+        "locator": "Physical page 1 of 2020 SOP.",
+        "limit": "Earlier visual inspection recorded. Old criminal-law citations must not be reused as current charges."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN11"
+    ],
+    "url": "https://goa.nalsa.gov.in/legal-aid/",
+    "title": "Goa legal aid eligibility and services",
+    "source_id": "94501ca7af05a8d95f5fee7e",
+    "status": "downloaded",
+    "locator": "Legal Aid page.",
+    "use_and_limit": "Service/eligibility signpost; no representation promised.",
+    "retrieved_at": "2026-10-22T14:02:52.638816+00:00",
+    "raw_path": "corpus/raw/61df2f1ecfa1d35ef989979a752b54a9f33eb12a75e3abe72e514007f55d51e1.html",
+    "sha256": "61df2f1ecfa1d35ef989979a752b54a9f33eb12a75e3abe72e514007f55d51e1",
+    "text_path": "corpus/text/94501ca7af05a8d95f5fee7e.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "AN11": {
+        "locator": "Legal Aid page.",
+        "limit": "Service/eligibility signpost; no representation promised."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN12"
+    ],
+    "url": "https://awbi.gov.in/uploads/regulations/167956418266ABC%20Rule%202023.pdf",
+    "title": "4 Animal Birth Control Rules, 2023 - Download",
+    "source_id": "c03710c8bd7c9669f88ad2e1",
+    "status": "downloaded",
+    "locator": "English rules 3, 8–14, 20 and monitoring schedules; physical pages 24–32 and 38–40.",
+    "use_and_limit": "Read together with later court directions. No universal feeding/re-release claim.",
+    "retrieved_at": "2026-10-22T14:09:09.525626+00:00",
+    "raw_path": "corpus/raw/296ca06eb669fb252844cc74e18082203867ddda013718728669ecac7bd403f4.pdf",
+    "sha256": "296ca06eb669fb252844cc74e18082203867ddda013718728669ecac7bd403f4",
+    "text_path": "corpus/text/c03710c8bd7c9669f88ad2e1.txt",
+    "pages_path": "corpus/pages/c03710c8bd7c9669f88ad2e1.json",
+    "error": null,
+    "label_notes": {
+      "AN12": {
+        "locator": "English rules 3, 8–14, 20 and monitoring schedules; physical pages 24–32 and 38–40.",
+        "limit": "Read together with later court directions. No universal feeding/re-release claim."
+      }
+    }
+  },
+  {
+    "labels": [
+      "AN13"
+    ],
+    "url": "https://www.sci.gov.in/sci-get-pdf/?diary_no=417062025&from=latest_judgements_order&order_date=2026-05-19&type=j",
+    "title": "Supreme Court judgment 19 May 2026 stray animals",
+    "source_id": "dbcd487767deef187d426fe8",
+    "status": "downloaded",
+    "locator": "2026 INSC 506, paragraphs 75–76, 108(D), 111; physical pages 90–91, 119, 124–128.",
+    "use_and_limit": "Institutional-premises conclusion visually inspected on page 90. Later Supreme Court/Goa High Court and local implementation review remains open.",
+    "retrieved_at": "2026-10-22T15:44:30.209323+00:00",
+    "raw_path": "corpus/raw/97b44df8f105b0f3d42eaf2aea777eccdad4be987eb886bd9229f28c6c08876e.pdf",
+    "sha256": "97b44df8f105b0f3d42eaf2aea777eccdad4be987eb886bd9229f28c6c08876e",
+    "text_path": "corpus/text/dbcd487767deef187d426fe8.txt",
+    "pages_path": "corpus/pages/dbcd487767deef187d426fe8.json",
+    "error": null,
+    "label_notes": {
+      "AN13": {
+        "locator": "2026 INSC 506, paragraphs 75–76, 108(D), 111; physical pages 90–91, 119, 124–128.",
+        "limit": "Institutional-premises conclusion visually inspected on page 90. Later Supreme Court/Goa High Court and local implementation review remains open."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN2"
+    ],
+    "url": "https://envcc.goa.gov.in/Assest/Latest_uploads/CitizensCharter.pdf",
+    "title": "Citizen Charter",
+    "source_id": "ed47e552b560c3cef6f1a9ae",
+    "status": "downloaded",
+    "locator": "Citizen Charter, physical pages 1 and 5.",
+    "use_and_limit": "Department and authority roles; historical contact material.",
+    "retrieved_at": "2026-10-22T14:09:24.835078+00:00",
+    "raw_path": "corpus/raw/1bec0645113018942005ecdf0c818aae73672171e437bdcd85e4d3350b9853d1.pdf",
+    "sha256": "1bec0645113018942005ecdf0c818aae73672171e437bdcd85e4d3350b9853d1",
+    "text_path": "corpus/text/ed47e552b560c3cef6f1a9ae.txt",
+    "pages_path": "corpus/pages/ed47e552b560c3cef6f1a9ae.json",
+    "error": null,
+    "label_notes": {
+      "EN2": {
+        "locator": "Citizen Charter, physical pages 1 and 5.",
+        "limit": "Department and authority roles; historical contact material."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN3"
+    ],
+    "url": "https://www.czma.goa.gov.in/Default.aspx",
+    "title": "Goa Coastal Zone Management Authority",
+    "source_id": "daaadaf65c6cda05ee1bc8ed",
+    "status": "downloaded",
+    "locator": "GCZMA home and Final CZMP navigation.",
+    "use_and_limit": "Web search/read available; local HTML is minimal/script dependent, not a downloaded approved map.",
+    "retrieved_at": "2026-10-22T14:02:26.730384+00:00",
+    "raw_path": "corpus/raw/46aa8aeb88259e756887a41a9d6431959bd5927086f3712c6f8e5fed48eafa68.html",
+    "sha256": "46aa8aeb88259e756887a41a9d6431959bd5927086f3712c6f8e5fed48eafa68",
+    "text_path": null,
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN3": {
+        "locator": "GCZMA home and Final CZMP navigation.",
+        "limit": "Web search/read available; local HTML is minimal/script dependent, not a downloaded approved map."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN5"
+    ],
+    "url": "https://goaspcb.gov.in/",
+    "title": "Goa State Pollution Control Board",
+    "source_id": "10c805b0134f9238abafa453",
+    "status": "downloaded",
+    "locator": "Complaint email notice on home page.",
+    "use_and_limit": "Source inspected in earlier reporting draft; current web refetch timed out; no complaint submitted.",
+    "retrieved_at": "2026-10-22T14:02:19.851882+00:00",
+    "raw_path": "corpus/raw/78868fcf0405975aad4ac590acc989b282a887525acdf0b3619312486744747a.html",
+    "sha256": "78868fcf0405975aad4ac590acc989b282a887525acdf0b3619312486744747a",
+    "text_path": "corpus/text/10c805b0134f9238abafa453.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN5": {
+        "locator": "Complaint email notice on home page.",
+        "limit": "Source inspected in earlier reporting draft; current web refetch timed out; no complaint submitted."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN7"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2026/10/Goa-Tree-Preservation-Act-1984.pdf",
+    "title": "The Goa, Daman and Diu Preservation of Trees Act, 1984",
+    "source_id": "18740046f779c126848df2b6",
+    "status": "downloaded",
+    "locator": "Preservation of Trees Act sections 8–10, physical pages 4–5.",
+    "use_and_limit": "Goa portal compilation, not certified current consolidation; do not infer publication date from upload path.",
+    "retrieved_at": "2026-10-22T14:16:52.238669+00:00",
+    "raw_path": "corpus/raw/e9ff2d55068bfca431e0708624a3f3a4e6ff791e4543605c9b97e0e1a4b32686.pdf",
+    "sha256": "e9ff2d55068bfca431e0708624a3f3a4e6ff791e4543605c9b97e0e1a4b32686",
+    "text_path": "corpus/text/18740046f779c126848df2b6.txt",
+    "pages_path": "corpus/pages/18740046f779c126848df2b6.json",
+    "error": null,
+    "label_notes": {
+      "EN7": {
+        "locator": "Preservation of Trees Act sections 8–10, physical pages 4–5.",
+        "limit": "Goa portal compilation, not certified current consolidation; do not infer publication date from upload path."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN8"
+    ],
+    "url": "https://goaonline.gov.in/Appln/UIL/deptServices?__DocId=FOR&__ServiceId=FOR66",
+    "title": "Tree felling Goa Online Form B",
+    "source_id": "c9c22db6998604e0ce736cf7",
+    "status": "downloaded",
+    "locator": "Goa Online Form B service.",
+    "use_and_limit": "Search-visible procedure; local HTML is minimal/script dependent. Submission not tested.",
+    "retrieved_at": "2026-10-22T15:44:35.082143+00:00",
+    "raw_path": "corpus/raw/6e5f2803d5ad2a0180fa8a6e0a7a935e08d7ef5f8f5678bf79ba1a39e390ae06.html",
+    "sha256": "6e5f2803d5ad2a0180fa8a6e0a7a935e08d7ef5f8f5678bf79ba1a39e390ae06",
+    "text_path": null,
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN8": {
+        "locator": "Goa Online Form B service.",
+        "limit": "Search-visible procedure; local HTML is minimal/script dependent. Submission not tested."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN9"
+    ],
+    "url": "https://www.goaipb.goa.gov.in/wp-content/uploads/2025/02/Form-B-Tree-felling-Fee-Procedure-Checklist.pdf",
+    "title": "Tree felling Form B checklist and procedure",
+    "source_id": "c8b5ef2828174ebcb551f784",
+    "status": "downloaded",
+    "locator": "Form B procedure/checklist, physical pages 1–6.",
+    "use_and_limit": "Approval-band inequalities overlap in published checklist; no threshold or deadline copied into guide.",
+    "retrieved_at": "2026-10-22T15:44:35.860394+00:00",
+    "raw_path": "corpus/raw/a2dc93ed2a6e0dd788db31ef511ab8be63bcacf903870923bf9830b6c22f78da.pdf",
+    "sha256": "a2dc93ed2a6e0dd788db31ef511ab8be63bcacf903870923bf9830b6c22f78da",
+    "text_path": "corpus/text/c8b5ef2828174ebcb551f784.txt",
+    "pages_path": "corpus/pages/c8b5ef2828174ebcb551f784.json",
+    "error": null,
+    "label_notes": {
+      "EN9": {
+        "locator": "Form B procedure/checklist, physical pages 1–6.",
+        "limit": "Approval-band inequalities overlap in published checklist; no threshold or deadline copied into guide."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN10"
+    ],
+    "url": "https://www.czma.goa.gov.in/ViewDoc.aspx",
+    "title": "GOA COASTAL ZONE MANAGEMENT AUTHORITY",
+    "source_id": "6a700c45233809e33cd90c04",
+    "status": "downloaded",
+    "locator": "Final CZMP Goa navigation/page.",
+    "use_and_limit": "Obtain actual approved sheets and approval letters; page name alone does not settle draft/final status.",
+    "retrieved_at": "2026-10-22T15:48:48.724129+00:00",
+    "raw_path": "corpus/raw/2153ec7e2e6ea4cd975466dc52d1e11ec06b3877c4bca55db8cf40d8b3ba6382.html",
+    "sha256": "2153ec7e2e6ea4cd975466dc52d1e11ec06b3877c4bca55db8cf40d8b3ba6382",
+    "text_path": null,
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN10": {
+        "locator": "Final CZMP Goa navigation/page.",
+        "limit": "Obtain actual approved sheets and approval letters; page name alone does not settle draft/final status."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN11"
+    ],
+    "url": "https://envt.kerala.gov.in/wp-content/uploads/2025/02/CRZ-Notification-2019-with-Amendments.pdf",
+    "title": "Central CRZ Notification 2019 with amendments official Kerala-hosted compilation",
+    "source_id": "ae223b97cc4b3317b4ddce54",
+    "status": "downloaded",
+    "locator": "Central CRZ 2019 and amendments compilation.",
+    "use_and_limit": "Official Kerala-hosted central instrument; not proof of the applicable Goa plan or plot classification.",
+    "retrieved_at": "2026-10-22T14:03:03.997239+00:00",
+    "raw_path": "corpus/raw/07b35483a595bdd30328621cdbaaaf037fb0fb1fd2e8d506b3509cf5699145fd.pdf",
+    "sha256": "07b35483a595bdd30328621cdbaaaf037fb0fb1fd2e8d506b3509cf5699145fd",
+    "text_path": "corpus/text/ae223b97cc4b3317b4ddce54.txt",
+    "pages_path": "corpus/pages/ae223b97cc4b3317b4ddce54.json",
+    "error": null,
+    "label_notes": {
+      "EN11": {
+        "locator": "Central CRZ 2019 and amendments compilation.",
+        "limit": "Official Kerala-hosted central instrument; not proof of the applicable Goa plan or plot classification."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN12"
+    ],
+    "url": "https://indianwetlands.in/uploads/Wetlands2017.pdf",
+    "title": "Wetlands2017.pdf",
+    "source_id": "dd52ae29e610334b02a42b34",
+    "status": "downloaded",
+    "locator": "Wetlands Rules 2017 rules 2(g), 3 and 4, physical page 9.",
+    "use_and_limit": "Official national wetlands portal copy; definitions/exclusions and scope retained, site/court protection unresolved.",
+    "retrieved_at": "2026-10-22T15:48:48.723452+00:00",
+    "raw_path": "corpus/raw/75ec4f94d45b7fdd851ecc510baa0f3cd73f81959d1993e0a64fd617d35930b7.pdf",
+    "sha256": "75ec4f94d45b7fdd851ecc510baa0f3cd73f81959d1993e0a64fd617d35930b7",
+    "text_path": "corpus/text/dd52ae29e610334b02a42b34.txt",
+    "pages_path": "corpus/pages/dd52ae29e610334b02a42b34.json",
+    "error": null,
+    "label_notes": {
+      "EN12": {
+        "locator": "Wetlands Rules 2017 rules 2(g), 3 and 4, physical page 9.",
+        "limit": "Official national wetlands portal copy; definitions/exclusions and scope retained, site/court protection unresolved."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN13"
+    ],
+    "url": "https://www.goa.gov.in/wp-content/uploads/2023/04/Wetland-notifications.pdf",
+    "title": "Draft wetland notifications 2023",
+    "source_id": "9ec6cf77c8352ae02ddb0736",
+    "status": "downloaded",
+    "locator": "Draft-notification notices and proposed schedules.",
+    "use_and_limit": "Expressly draft; not final designation evidence or an open 2026 submission window.",
+    "retrieved_at": "2026-10-22T14:02:40.449073+00:00",
+    "raw_path": "corpus/raw/9040d04523be9d4753e8b212147d0a73b2c0fa7b622e0f8eeabcfd282af669ce.pdf",
+    "sha256": "9040d04523be9d4753e8b212147d0a73b2c0fa7b622e0f8eeabcfd282af669ce",
+    "text_path": "corpus/text/9ec6cf77c8352ae02ddb0736.txt",
+    "pages_path": "corpus/pages/9ec6cf77c8352ae02ddb0736.json",
+    "error": null,
+    "label_notes": {
+      "EN13": {
+        "locator": "Draft-notification notices and proposed schedules.",
+        "limit": "Expressly draft; not final designation evidence or an open 2026 submission window."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN14"
+    ],
+    "url": "https://indianwetlands.in/uploads/final-version-and-printed-wetland-guidelines-rules-2017-03.01.20.pdf",
+    "title": "final-version-and-printed-wetland-guidelines-rules-2017-03.01.20.pdf",
+    "source_id": "5e1dcd484b60877c8d6fe991",
+    "status": "downloaded",
+    "locator": "2020 implementation guidance sections II, V–VI, VIII–XIV.",
+    "use_and_limit": "National guidance for identification, delineation, activities and notification; no individual site designation.",
+    "retrieved_at": "2026-10-22T15:48:48.723222+00:00",
+    "raw_path": "corpus/raw/c0d7f0adcb4e0244245773242ae457e70d63d50f7110b1859b8fbb5b55dabef2.pdf",
+    "sha256": "c0d7f0adcb4e0244245773242ae457e70d63d50f7110b1859b8fbb5b55dabef2",
+    "text_path": "corpus/text/5e1dcd484b60877c8d6fe991.txt",
+    "pages_path": "corpus/pages/5e1dcd484b60877c8d6fe991.json",
+    "error": null,
+    "label_notes": {
+      "EN14": {
+        "locator": "2020 implementation guidance sections II, V–VI, VIII–XIV.",
+        "limit": "National guidance for identification, delineation, activities and notification; no individual site designation."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN15"
+    ],
+    "url": "https://gswa.goa.gov.in/gazette-notification/",
+    "title": "EN15 official source",
+    "source_id": "c97e4416eeedd702913d3ba3",
+    "status": "failed",
+    "locator": "Gazette Notification index, official search discovery.",
+    "use_and_limit": "Direct requests failed (404; web 403). Final notifications and maps not established from this page.",
+    "retrieved_at": "2026-10-22T15:45:52.465569+00:00",
+    "raw_path": "corpus/raw/f4f42cd3eedc601ed8a50516910ad004801adf402500395e8de765a98548848f.html",
+    "sha256": "f4f42cd3eedc601ed8a50516910ad004801adf402500395e8de765a98548848f",
+    "text_path": null,
+    "pages_path": null,
+    "error": "HTTP 404; response archived, excluded from usable sources",
+    "label_notes": {
+      "EN15": {
+        "locator": "Gazette Notification index, official search discovery.",
+        "limit": "Direct requests failed (404; web 403). Final notifications and maps not established from this page."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN16"
+    ],
+    "url": "https://goaspcb.gov.in/public-hearing-as-per-environmental-impact-assessment-2006-with-respect-to-block-ix-surla-sonshi-mineral-block-for-mining-of-iron-ore-with-production-capacity-of-1-1-mtpa-0b-waste-2-59-million/",
+    "title": "Public Hearing as per Environmental Impact Assessment 2006 with respect to Block IX Surla Sonshi Mineral Block for mining of Iron Ore with production capacity of  1.1 MTPA, 0B/Waste 2.59 Million TPA (Total Excavation : 3.69 Million TPA) along with Installation of Wet Beneficiation Plant with throughput Capacity:1.1 MTPA over ML area of 254.51 Ha by M/s. JSW Steel Ltd. located at Villages Surla, Cudnem and Sonus Vonvoliem, Taluka; Bicholim & Sattari, District: North Goa (Goa).",
+    "source_id": "7d493154e068d2a4a31a0c5f",
+    "status": "downloaded",
+    "locator": "Project-specific public hearing notice and supporting document links.",
+    "use_and_limit": "Example of notice-led participation; not an invitation to an assumed currently open hearing.",
+    "retrieved_at": "2026-10-22T14:10:18.464985+00:00",
+    "raw_path": "corpus/raw/db4602e197634326b007bb56160ca273dc30777e5d7f220766cbd5f4c80acc56.html",
+    "sha256": "db4602e197634326b007bb56160ca273dc30777e5d7f220766cbd5f4c80acc56",
+    "text_path": "corpus/text/7d493154e068d2a4a31a0c5f.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN16": {
+        "locator": "Project-specific public hearing notice and supporting document links.",
+        "limit": "Example of notice-led participation; not an invitation to an assumed currently open hearing."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN17"
+    ],
+    "url": "https://gsbb.goa.gov.in/bmc.html",
+    "title": "Biodiversity Management Committees (BMC)",
+    "source_id": "4103110405ac7fcc292c4439",
+    "status": "downloaded",
+    "locator": "Opening BMC functions and local-committee list.",
+    "use_and_limit": "Current membership and meeting availability require local check.",
+    "retrieved_at": "2026-10-22T14:09:34.624352+00:00",
+    "raw_path": "corpus/raw/a6b035e5d0091b172c506150185c5b4ee2338b841d9477fc5e0015c54b47bf1f.html",
+    "sha256": "a6b035e5d0091b172c506150185c5b4ee2338b841d9477fc5e0015c54b47bf1f",
+    "text_path": "corpus/text/4103110405ac7fcc292c4439.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN17": {
+        "locator": "Opening BMC functions and local-committee list.",
+        "limit": "Current membership and meeting availability require local check."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN18"
+    ],
+    "url": "https://gsbb.goa.gov.in/pbr.html",
+    "title": "People's Biodiversity Register (PBR)",
+    "source_id": "5df349d6c1b52b1179004d1d",
+    "status": "downloaded",
+    "locator": "Opening PBR explanation.",
+    "use_and_limit": "Documentation/traditional knowledge role; no licence to collect or disclose sensitive knowledge.",
+    "retrieved_at": "2026-10-22T14:09:34.761908+00:00",
+    "raw_path": "corpus/raw/89a416cfdac0949fe21dab7baf9abfd49cf942d5f56a3fac7ec8ef3158c4c97f.html",
+    "sha256": "89a416cfdac0949fe21dab7baf9abfd49cf942d5f56a3fac7ec8ef3158c4c97f",
+    "text_path": "corpus/text/5df349d6c1b52b1179004d1d.txt",
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN18": {
+        "locator": "Opening PBR explanation.",
+        "limit": "Documentation/traditional knowledge role; no licence to collect or disclose sensitive knowledge."
+      }
+    }
+  },
+  {
+    "labels": [
+      "EN19"
+    ],
+    "url": "https://www.indiacode.nic.in/indiacode/handle/123456789/2025?view_type=browse",
+    "title": "EN19 official source",
+    "source_id": null,
+    "status": "web_only",
+    "locator": "India Code NGT Act record and sections 14–16 listing.",
+    "use_and_limit": "Act record available through official web retrieval. Fresh PDF timed out; no numerical limitation advice copied.",
+    "retrieved_at": null,
+    "raw_path": null,
+    "sha256": null,
+    "text_path": null,
+    "pages_path": null,
+    "error": null,
+    "label_notes": {
+      "EN19": {
+        "locator": "India Code NGT Act record and sections 14–16 listing.",
+        "limit": "Act record available through official web retrieval. Fresh PDF timed out; no numerical limitation advice copied."
+      }
+    }
+  }
+]

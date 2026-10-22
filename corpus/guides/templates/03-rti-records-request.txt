@@ -1,0 +1,40 @@
+DRAFT TEMPLATE: RTI REQUEST FOR EXISTING RECORDS
+For an Indian citizen. Address it to the relevant public authority's SPIO. Select the relevant questions; do not send every example indiscriminately. Follow the accepted form and fee/payment requirements.
+
+To: The State Public Information Officer
+[Public authority and address]
+Date: [date]
+Subject: Application under section 6(1) of the Right to Information Act, 2005
+
+I am an Indian citizen and request the following records held by your authority.
+
+Property/matter: [village/town, survey/subdivision number and location, or complaint reference]
+Period covered: [start date to end date]
+
+Select and adapt:
+1. Copies of the development permission/technical clearance, building licence, sanctioned plans and approved amendments relating to [identified property/application].
+2. Copies of inspection reports and recorded findings concerning [identified property or complaint].
+3. Copies of notices, replies, orders, recorded decisions and action-taken records relating to complaint [reference/date].
+4. A copy of the rule, circular, notified service standard or published checklist used by your authority for [identified service or decision].
+5. The record identifying the office/designation to which complaint [reference] was assigned and the dates of recorded transfers or action.
+
+Preferred access: [electronic copies where held and available in that form / certified paper copies / inspection followed by selected copies].
+
+If any requested part is held by another public authority and transfer is applicable under section 6(3), please transfer that part and inform me. If disclosure of a part is refused, please identify the applicable provision, give the decision and reasons, and supply any reasonably separable disclosable portion. Please provide the relevant appeal particulars.
+
+Please inform me of any additional fee with its calculation and payment instructions before supplying chargeable copies.
+
+Application fee: [accepted payment mode and receipt/reference]
+OR fee-exemption claim: [BPL status and applicable proof; remove if not applicable]
+
+Name: [name]
+Postal address for correspondence: [address]
+Email: [if desired]
+Phone: [if desired/required by the selected portal]
+Signature: [if on paper]
+
+Attachments: [fee receipt/exemption proof; minimal identifying location/reference material]
+
+Keep separately: full submitted application, receipt, date of actual receipt by the authority, registration number, transfer/additional-fee notices and calculated response deadline.
+
+This template requests records. Submit a separate complaint if you also want inspection or corrective action. Access remains subject to the Act's disclosure, exemption and third-party provisions.
