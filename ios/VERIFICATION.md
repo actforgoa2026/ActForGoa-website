@@ -15,10 +15,10 @@
 - The signed application is also packaged as `ios/device-build/ActForGoa-Development.ipa` (28 MB). Its development profile expires on 20 October 2027. The profile is specific to its registered devices; this is not a general distribution package.
 - Nine shipping raster assets have embedded provenance. Changed Swift source contains no italic/oblique styling or decorative side stripes.
 - Independent Impeccable finish review returned `ship` for all 18 supplied captures, including the native guide additions. The verdict is scoped to those rendered states, not physical-device certification.
+- Native design documentation is complete in `ios/DESIGN.md`. The independent documenter compared the implementation with the existing web system and preserved the root design files. Pre-existing stale root design metadata is recorded without repair.
 
 ## Remaining before completion
 
-- Final native design documentation check.
 - Physical phone installation and launch. No USB or network phone was visible during this run. `ios/scripts/install_on_phone.py` uses libimobiledevice's USB installation service without opening Device Hub or Xcode, and verifies the installed bundle version. The script requires one connected, trusted phone included in the signed app's development profile.
 - Physical-device performance, gestures, VoiceOver, Mail handoff and telephone handoff are not yet verified.
 - CI workflow is authored locally; no GitHub run, push, merge of native work into `main`, or production web deployment has happened in this task.
