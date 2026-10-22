@@ -18,13 +18,13 @@ Make ActForGoa's existing knowledge searchable, understandable, and actionable. 
 Public browsing on phones and desktop computers. Users may arrive with an urgent practical question or a desire to learn and contribute.
 
 ## Capabilities and Constraints
-Deep archive of publicly accessible source content, downloadable documents, link graph, and broken-link audit. Searchable directory, reading library, stories, contacts, and participation paths. Source provenance is mandatory. Contact information extracted from old pages is not independently verified. No fabricated organisations, telephone numbers, service availability, testimonials, or claims. No live-site replacement is authorised; GitHub repository creation and a Vercel preview are authorised.
+Deep archive of publicly accessible source content, downloadable documents, link graph, and broken-link audit. Searchable directory, reading library, stories, people, and participation paths. The homepage mixes the current 528 eligible records in 12-entry batches with automatic loading, pause/manual controls, and history restoration. Source provenance is mandatory. Contact information extracted from old pages is not independently verified. Phone data is retained in the original catalogue and archive but removed from frontend record presentation by the public-record layer. Organisation descriptions use original source paragraphs with an explicit missing-biography fallback. No fabricated organisations, telephone numbers, service availability, testimonials, or claims. No live-site replacement is authorised; GitHub repository creation and a Vercel preview are authorised.
 
 ## Brand Commitments
-ActForGoa. Original mission and factual content retained. User chose a calm Goan field-guide direction, warm paper, deep green, clear typography, and real local imagery. No italic or oblique text and no decorative side stripes on containers.
+ActForGoa. Original mission and factual content retained. User approved the open Goan field-guide refinement: continuous warm paper, deep green, upright Manrope throughout with no serif type, original local photography, generous topic labels, and shared Arc controls including SiteHeader. Content uses open layouts and structural rules rather than boxed introductions or card panels. No italic or oblique text and no decorative side stripes on containers.
 
 ## Evidence on Hand
-https://actforgoa.org/ and its public WordPress API, sitemaps, HTML, linked resources, and assets. Archived source evidence and derived records live in archive/ and data/.
+https://actforgoa.org/ and its public WordPress API, sitemaps, HTML, linked resources, and assets. Archived source evidence and derived records live in archive/ and data/. Original story/resource photography is restored from the existing crawl; article-image-map.json records source and rendition provenance, and missing sources remain reported.
 
 ## Product Principles
 - Start with a person's need, then show concrete resources and contacts.
