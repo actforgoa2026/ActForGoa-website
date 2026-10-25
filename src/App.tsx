@@ -42,6 +42,7 @@ import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
 import { guideDocuments } from "./guides";
 import { PracticalGuide } from "./PracticalGuide";
+import CRM from "./CRM";
 import {TopicIcon} from "./components/TopicIcon";
 import {topicFlows, topicFor, topicHref} from "./topic-flows";
 import {TopicPage, TopicChoices} from "./TopicPage";
@@ -126,7 +127,7 @@ const navigation = [
 ];
 function Header() {
   const { pathname } = useLocation();
-  const current = pathname === "/" ? "home" : pathname === "/directory" ? "community" : pathname === "/library" ? "resources" : pathname === "/get-involved" ? "action" : pathname.slice(1);
+  const current = pathname === "/" ? "home" : pathname.startsWith("/directory") || pathname.startsWith("/crm") ? "community" : pathname === "/library" ? "resources" : pathname === "/get-involved" ? "action" : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={navigation} current={current} label="Main navigation"
@@ -1137,6 +1138,8 @@ function NotFound() {
   );
 }
 export default function App() {
+  const { pathname } = useLocation();
+  const crmRoute = (pathname.startsWith('/directory') && pathname !== '/directory/archive') || pathname.startsWith('/crm');
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
     error: boolean;
@@ -1148,7 +1151,7 @@ export default function App() {
       </a>
       <Header />
       <div id="content">
-        {error ? (
+        {error && !crmRoute ? (
           <main className="empty-state shell">
             <h1>The field guide couldn’t load.</h1>
             <p>
@@ -1170,11 +1173,15 @@ export default function App() {
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records}/>} />
             <Route path="/search" element={<Catalogue records={records} />} />
             <Route
-              path="/directory"
+              path="/directory/archive"
               element={
                 <Catalogue key="directory" records={records} mode="directory" />
               }
             />
+            <Route path="/directory" element={<CRM />} />
+            <Route path="/directory/:recordId" element={<CRM />} />
+            <Route path="/crm" element={<CRM />} />
+            <Route path="/crm/:recordId" element={<CRM />} />
             <Route
               path="/library"
               element={
