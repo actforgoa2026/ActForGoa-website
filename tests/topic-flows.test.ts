@@ -5,6 +5,8 @@ import {topicFlows, actionHref, topicFor, type TopicAction} from '../src/topic-f
 import {TOPICS} from '../src/types.ts';
 import {guideDocuments, guideHeadingId} from '../src/guides.ts';
 import {guideForReaders} from '../src/guide-presentation.ts';
+import {actionsInBranch, topicPeople} from '../src/topic-records.ts';
+import type {RecordItem} from '../src/types.ts';
 
 const records = JSON.parse(readFileSync('public/data/catalog.json', 'utf8'));
 const ids = new Set([...records, ...guideDocuments].map(r=>r.id));
@@ -31,7 +33,14 @@ test('every menu outcome has usable destinations, valid record ids, anchors and 
   for(const id of [...(action.resourceIds ?? []),...(action.peopleIds ?? [])]) assert(ids.has(id),id);
   for(const {href,download} of action.links!) {
    const url=new URL(href,'https://actforgoa-field-guide.vercel.app');
-   if(href==='#topic-people') continue;
+   if(href==='#topic-people') {
+    assert(topicPeople(records,flow,action).length,`${flow.slug}/${action.id} points to an empty directory`);
+    continue;
+   }
+   if(href==='#topic-reading') {
+    assert(action.resourceIds?.length,`${flow.slug}/${action.id} needs curated reading`);
+    continue;
+   }
    if(href.startsWith('/read/')) {
     const id=url.pathname.slice(6); assert(ids.has(id),href);
     if(url.hash) {
@@ -40,9 +49,49 @@ test('every menu outcome has usable destinations, valid record ids, anchors and 
      assert(headings.includes(url.hash.slice(1)),`Missing heading: ${href}`);
     }
    } else if(download) assert(existsSync('public'+url.pathname),href);
-   else if(href.startsWith('/')) assert(['/directory','/search','/library','/stories','/get-involved','/contact'].includes(url.pathname),href);
+   else if(href.startsWith('/topics/')) {
+    const [, ,slug,actionId,choiceId]=url.pathname.split('/');
+    const target=topicFlows.find(f=>f.slug===slug)?.actions.find(a=>a.id===actionId);
+    assert(target && (!choiceId || target.choices?.some(c=>c.id===choiceId)),href);
+   } else if(href.startsWith('/')) assert(['/directory','/search','/library','/stories','/get-involved','/contact'].includes(url.pathname),href);
+   else if(url.protocol==='mailto:') assert(records.some((r:RecordItem)=>r.emails.includes(url.pathname)),`Email absent from source catalogue: ${href}`);
    else assert.equal(url.protocol,'https:');
   }
+ }
+});
+
+test('non-waste needs lead to a specific action instead of a generic text or search page',()=>{
+ for(const flow of topicFlows.filter(f=>f.slug!=='waste')) {
+  assert(flow.actions.some(a=>a.choices?.length),`${flow.slug} has no follow-up choices`);
+  for(const action of actionsInBranch(flow.actions)) {
+   if(action.choices) {
+    assert(action.question);
+    assert(action.choices.length>=2 && action.choices.length<=4);
+    assert.equal(new Set(action.choices.map(c=>c.id)).size,action.choices.length);
+    assert(!action.choices.some(c=>c.choices),'Routes support one follow-up question');
+   } else {
+    assert(action.links!.length>=2,`${flow.slug}/${action.id} needs a useful next step and alternative`);
+    assert(action.links!.some(l=>l.download || l.href.startsWith('#') || l.href.startsWith('https:') || l.href.startsWith('mailto:') || /^\/(contact|get-involved|topics)/.test(l.href)),`${flow.slug}/${action.id} only leads to more reading`);
+    assert(!action.links!.some(l=>/^\/(search|directory|library)/.test(l.href)),`${flow.slug}/${action.id} falls back to generic results`);
+   }
+  }
+ }
+});
+
+test('curated services cross incomplete source tags and stay scoped to the selected need',()=>{
+ const health=topicFlows.find(f=>f.slug==='health')!;
+ const mental=health.actions.find(a=>a.id==='mental-health')!;
+ assert(!records.find((r:RecordItem)=>r.id==='org-186').topics.includes(health.topic));
+ assert.deepEqual(topicPeople(records,health,mental.choices!.find(a=>a.id==='clinic')).map(r=>r.id),['org-186']);
+ const disability=health.actions.find(a=>a.id==='disability')!;
+ assert(topicPeople(records,health,disability).some(r=>r.id==='org-14'));
+ const planning=topicFlows.find(f=>f.slug==='planning')!;
+ const design=planning.actions.find(a=>a.id==='professionals')!.choices!.find(a=>a.id==='design')!;
+ assert.deepEqual(topicPeople(records,planning,design).map(r=>r.id),['org-119','org-108']);
+ for(const flow of topicFlows) for(const action of actionsInBranch(flow.actions)) {
+  const result=topicPeople(records,flow,action);
+  assert.equal(new Set(result.map(r=>r.id)).size,result.length);
+  for(const id of action.peopleIds ?? []) assert(result.some(r=>r.id===id),`${flow.slug}/${action.id}: missing ${id}`);
  }
 });
 

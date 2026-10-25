@@ -1695,7 +1695,7 @@ a.button.green {
 .action-steps li { padding-left: 8px; margin-bottom: 16px; }
 .action-steps li::marker { font-weight: 800; }
 .topic-directory, .topic-reading { padding-top: 40px; border-top: 1px solid var(--line); margin-top: 48px; }
-#topic-people { scroll-margin-top: 120px; }
+#topic-people, #topic-reading { scroll-margin-top: 120px; }
 .topic-page > .back-link { margin-top: 48px; }
 .section-heading h2 { font-size: 2rem; font-weight: 800; letter-spacing: -.025em; }
 .record-card h3, .discovery-lead > :first-child h3 { font-weight: 750; }
