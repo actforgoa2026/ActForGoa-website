@@ -44,7 +44,7 @@ def test_real_hybrid_search_and_complete_document(collection):
     pages=lib.pages(found[0]['document_id'])
     assert len(pages)==2 and 'Final page' in pages[-1]['text']
     assert found[0]['text']==pages[0]['text'][found[0]['start']:found[0]['end']]
-    assert found[0]['page_context']==pages[0]['text'][:1400]
+    assert 'page_context' not in found[0]
     assert lib.search('springs rainfall laterite')[0]['title']=='Laterite aquifer study'
     assert len(lib.search('gecko',doc_id=found[0]['document_id']))<=4
     assert manifest['stats']['documents']==3
