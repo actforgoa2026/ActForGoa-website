@@ -8,7 +8,7 @@ ROOT=Path(__file__).resolve().parents[1]
 processes=[]
 try:
     processes.append(subprocess.Popen([sys.executable,'-m','uvicorn','backend.app:app','--host','127.0.0.1','--port','8091'],cwd=ROOT))
-    processes.append(subprocess.Popen(['npm','run','dev','--','--port','4174'],cwd=ROOT))
+    processes.append(subprocess.Popen(['npm','run','dev:web','--','--port','4174'],cwd=ROOT))
     print('ActForGoa research: http://127.0.0.1:4174/ask',flush=True)
     while all(p.poll() is None for p in processes):time.sleep(.5)
 except KeyboardInterrupt:

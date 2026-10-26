@@ -23,4 +23,5 @@ backend/
 .research-release/
 requirements-research.txt
 .env*
+.reports/
 deploy/
