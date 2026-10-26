@@ -1,5 +1,8 @@
 # Sources for the draft guides
 
+**Earlier review: 22 October 2026.** Resolved retrieval questions and newer findings are recorded in the [23 October source review](SOURCES_VERIFIED.md) and [current verification register](VERIFICATION_REGISTER.md). The notes below describe the earlier review, not the current unresolved list.
+
+
 Source review: 22 October 2026. Each entry identifies the material used, a local original where downloaded, and the limit of the claim. The reference labels match those in the guides. Source checking is distinct from legal consolidation and testing a service.
 
 ## R1

@@ -12,7 +12,7 @@ Uncertainty: [boundary, permission, substance or other question]
 
 Please inspect the reported activity as appropriate and confirm:
 1. Your jurisdiction and the applicable site protection/permission regime.
-2. The relevant final notification, approved map/schedule, permission and conditions.
+2. The relevant final notification, approved map/schedule with sheet and approval date, subsequent corrections/amendments or court orders, permission and conditions. Please identify the site against the actual schedule/map, not only an online pin.
 3. Whether the observed activity is consistent with those records, following official assessment.
 4. Any action or referral taken and the written outcome.
 

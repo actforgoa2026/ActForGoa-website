@@ -1,0 +1,65 @@
+.topic-icon { width: 40px; height: 40px; flex-shrink: 0; stroke-width: 1.8; }
+.home-topic-choices { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.home-topic-choice, .choice-link {
+  display: flex;
+  align-items: center;
+  border: 1px solid #9faea5;
+  border-radius: 4px;
+  transition: background-color 120ms ease-out, border-color 120ms ease-out;
+}
+.home-topic-choice { min-height: 82px; padding: 12px; gap: 10px; }
+.home-topic-choice > .topic-icon { width: 26px; height: 26px; }
+.home-topic-choice > span, .choice-link > span { flex: 1; min-width: 0; }
+.home-topic-choice > svg:last-child { flex-shrink: 0; }
+.home-topic-choice strong { display: block; font-size: 16px; font-weight: 800; line-height: 1.35; }
+.home-topic-choice small { display: block; margin-top: 4px; font-size: 13px; font-weight: 650; line-height: 1.4; color: var(--muted); }
+.topic-choices > h2 { font-size: 24px; line-height: 1.35; font-weight: 750; margin-bottom: 24px; letter-spacing: -0.02em; }
+.choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.choice-grid-pairs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.choice-link { gap: 20px; min-height: 120px; padding: 24px; font-size: 20px; font-weight: 750; line-height: 1.4; }
+.choice-link > svg:last-child:not(.topic-icon) { width: 22px; height: 22px; flex-shrink: 0; }
+.home-topic-choice:active, .choice-link:active { background: var(--line); }
+.topic-page { padding-block: 28px 64px; }
+.topic-breadcrumb { display: flex; flex-wrap: wrap; gap: 8px 12px; font-size: 14px; font-weight: 650; color: var(--muted); }
+.topic-breadcrumb a { text-decoration: underline; min-height: 44px; align-content: center; }
+.topic-breadcrumb > span { align-content: center; }
+.topic-page-heading { display: flex; align-items: center; gap: 24px; margin-block: 24px 36px; }
+.topic-page-heading .topic-icon { width: 52px; height: 52px; }
+.topic-page-heading h1 { font-size: clamp(32px, 4vw, 48px); font-weight: 800; line-height: 1.15; letter-spacing: -0.03em; }
+.topic-choices { margin-bottom: 48px; }
+.catalogue > .topic-choices { margin-top: 32px; }
+.action-destinations { margin-bottom: 36px; }
+.action-destinations .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.action-steps { max-width: 70ch; margin-block: 40px 56px; }
+.action-steps h2 { font-size: 24px; font-weight: 750; line-height: 1.35; margin-bottom: 20px; }
+.action-steps ol { margin: 0; padding-left: 28px; font-size: 18px; line-height: 1.7; }
+.action-steps li { padding-left: 8px; margin-bottom: 16px; }
+.action-steps li::marker { font-weight: 800; }
+.topic-directory, .topic-reading { padding-top: 40px; border-top: 1px solid var(--line); margin-top: 48px; }
+#topic-people, #topic-reading { scroll-margin-top: 120px; }
+.topic-page > .back-link { margin-top: 48px; }
+@media (hover: hover) and (pointer: fine) {
+  .home-topic-choice:hover, .choice-link:hover { background: var(--pale); border-color: var(--green); text-decoration: none; }
+}
+@media (max-width: 1150px) {
+  .home-topic-choice > svg:last-child { display: none; }
+  .home-topic-choice { gap: 8px; }
+}
+@media (max-width: 850px) {
+  .home-topic-choices, .choice-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .home-topic-choice { min-height: 82px; padding: 10px; gap: 8px; }
+  .home-topic-choice > .topic-icon { display: none; }
+  .home-topic-choice strong { font-size: 15px; }
+  .home-topic-choice small { font-size: 12px; }
+  .choice-grid { grid-template-columns: 1fr; gap: 12px; }
+  .choice-link { min-height: 100px; padding: 20px; font-size: 18px; gap: 16px; }
+  .topic-page-heading { gap: 16px; margin-block: 20px 28px; }
+  .topic-page-heading .topic-icon { width: 40px; height: 40px; }
+  .topic-breadcrumb { gap: 4px 8px; }
+  .topic-breadcrumb > [aria-current] { flex-basis: 100%; }
+  .topic-choices > h2 { font-size: 20px; }
+  .action-destinations .choice-grid { grid-template-columns: 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .home-topic-choice, .choice-link { transition: none; } }

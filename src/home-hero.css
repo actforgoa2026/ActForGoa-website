@@ -1,0 +1,123 @@
+.home-hero {
+  position: relative;
+  isolation: isolate;
+  min-width: 0;
+  margin-top: 12px;
+  background: var(--green);
+  color: var(--white);
+  touch-action: pan-y;
+}
+.home-carousel-images, .home-hero-shade { position: absolute; inset: 0; overflow: hidden; }
+.home-carousel-images { z-index: -2; touch-action: pan-y; }
+.home-carousel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 900ms ease-in-out; }
+.home-carousel-slide[data-active="true"] { opacity: 1; }
+.home-carousel-slide img { width: 100%; height: 100%; object-fit: cover; }
+.home-hero-shade {
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgb(10 28 20 / 25%), rgb(10 28 20 / 12%) 55%, rgb(10 28 20 / 70%)), rgb(10 28 20 / 50%);
+}
+.home-hero-content { display: flex; flex-direction: column; align-items: center; padding: 18px 24px 62px; }
+.home-hero h1 {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.22em;
+  margin: 0;
+  font-size: clamp(42px, 4.6vw, 64px);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.14;
+  white-space: nowrap;
+}
+.home-hero-content > p { margin: 4px 0 22px; font-size: 16px; font-weight: 650; line-height: 1.5; color: var(--white); }
+.hero-word-slot { position: relative; display: inline-block; width: 4.8em; height: 1.36em; vertical-align: bottom; clip-path: inset(0 -50vw); transition-property: width; transition-timing-function: cubic-bezier(.76,0,.24,1); }
+.hero-word-ruler { position: absolute; visibility: hidden; white-space: nowrap; pointer-events: none; }
+.hero-word { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; white-space: nowrap; }
+.ask-box {
+  width: min(100%, 720px);
+  padding: 12px 12px 8px 20px;
+  border: 1px solid var(--line);
+  border-radius: 24px;
+  background: var(--white);
+  color: var(--green);
+  text-align: left;
+  transition: background-color 120ms ease-out;
+}
+.ask-box:focus-within { background: var(--pale); }
+.ask-box > div > label { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
+.ask-box textarea {
+  display: block;
+  min-height: 48px;
+  height: 48px;
+  max-height: 160px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  resize: vertical;
+  font-size: 16px;
+  font-weight: 650;
+  line-height: 1.5;
+  caret-color: var(--green);
+}
+.ask-box textarea:hover, .ask-box textarea:focus-visible { background: transparent; box-shadow: none; outline: none; }
+.ask-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.ask-toolbar > span { color: var(--muted); font-size: 12px; font-weight: 650; line-height: 1.4; }
+.ask-toolbar > button { width: 44px; height: 44px; padding: 0; flex-shrink: 0; border-radius: 50%; }
+.home-carousel-footer { position: absolute; bottom: 10px; left: 20px; right: 16px; display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px; }
+.home-carousel-caption { min-width: 0; max-width: 65%; font-size: 12px; font-weight: 650; line-height: 1.4; color: var(--white); }
+.home-carousel-caption a { color: inherit; text-underline-offset: 3px; }
+.home-photo-credit { display: block; }
+.home-carousel-controls { display: flex; align-items: center; flex-shrink: 0; }
+.home-carousel-controls > button { width: 44px; min-width: 44px; padding: 0; color: var(--white); --text-secondary: var(--white); --surface-muted: rgb(255 254 248 / 15%); --foreground: var(--white); --focus-outline: var(--white); }
+.home-carousel-controls > button:focus-visible, .home-carousel-caption a:focus-visible { outline-color: var(--white); }
+.home-carousel-count { width: 30px; text-align: center; font-size: 12px; font-variant-numeric: tabular-nums; }
+.home-actions { padding-block: 16px 40px; }
+.home-actions .section-heading { align-items: center; margin-bottom: 10px; gap: 16px; }
+.home-actions .section-heading h2 { font-size: 28px; font-weight: 800; }
+.home-actions a.button.emergency-entry { min-height: 44px; margin: 0; padding: 8px 14px; gap: 10px; }
+.home-actions .emergency-entry strong { font-size: 14px; }
+.home-actions .topic-index { column-gap: 24px; }
+.home-actions .topic-index > a { min-height: 68px; gap: 10px; font-size: 17px; font-weight: 800; }
+@media (hover: hover) and (pointer: fine) {
+  .home-carousel-caption a:hover { text-decoration: underline; }
+  .home-actions .topic-index > a:hover { background: var(--pale); text-decoration: none; }
+}
+@media (max-width: 1150px) {
+  .home-actions .topic-index { grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: 20px; }
+  .home-actions .topic-index > a { font-size: 15px; }
+  .home-actions .topic-index > a > svg:last-child { display: none; }
+}
+@media (max-width: 850px) {
+  .home-actions .topic-index { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .home-actions .topic-index > a { min-height: 56px; font-size: 16px; }
+  .home-hero-content { padding-inline: 20px; }
+  .home-actions .section-heading h2 { font-size: 24px; }
+}
+@media (max-width: 620px) {
+  .home-hero.shell { width: 100%; margin-top: 0; }
+  .home-hero-content { padding: 14px 20px 72px; }
+  .home-hero h1 { font-size: clamp(30px, 8.2vw, 42px); }
+  .home-hero-content > p { margin: 8px 0 18px; font-size: 14px; }
+  .ask-box { padding: 10px 10px 6px 16px; }
+  .ask-toolbar > span { max-width: 24ch; }
+  .home-carousel-footer { left: 20px; right: 12px; bottom: 12px; align-items: end; }
+  .home-carousel-caption { max-width: none; flex: 1; }
+  .home-carousel-controls { gap: 0; }
+  .home-carousel-count { display: none; }
+  .home-actions { padding-block: 16px 32px; }
+  .home-actions .section-heading { flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
+  .home-actions .section-heading h2 { font-size: 24px; width: 100%; }
+  .home-actions a.button.emergency-entry { width: 100%; }
+  .home-actions .topic-index { column-gap: 16px; }
+  .home-actions .topic-index > a { min-height: 48px; gap: 8px; font-size: 14px; }
+  .home-actions .topic-index > a > svg:first-child { width: 19px; height: 19px; flex-shrink: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .home-carousel-slide, .ask-box, .hero-word-slot { transition: none; } }
+@media (max-width: 620px) and (max-height: 740px) {
+  .home-hero-content { padding-top: 18px; padding-bottom: 66px; }
+  .home-hero-content > p { margin-block: 6px 14px; }
+  .home-carousel-footer { bottom: 8px; }
+}

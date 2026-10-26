@@ -5,6 +5,7 @@ import {topicFlows, actionHref, topicFor, type TopicAction} from '../src/topic-f
 import {TOPICS} from '../src/types.ts';
 import {guideDocuments, guideHeadingId} from '../src/guides.ts';
 import {guideForReaders} from '../src/guide-presentation.ts';
+import {needsCatalogue, createCatalogueLoader} from '../src/catalogue-loader.ts';
 import {actionsInBranch, topicPeople} from '../src/topic-records.ts';
 import type {RecordItem} from '../src/types.ts';
 
@@ -93,6 +94,22 @@ test('curated services cross incomplete source tags and stay scoped to the selec
   assert.equal(new Set(result.map(r=>r.id)).size,result.length);
   for(const id of action.peopleIds ?? []) assert(result.some(r=>r.id===id),`${flow.slug}/${action.id}: missing ${id}`);
  }
+});
+
+test('direct topic visits load the catalogue for menus and service outcomes', async()=>{
+ const paths = topicFlows.flatMap(flow => [
+  '/topics/'+flow.slug,
+  ...flow.actions.flatMap(action => [actionHref(flow,action), ...(action.choices ?? []).map(choice => actionHref(flow,choice,action))]),
+ ]);
+ for(const path of paths) assert(needsCatalogue(path), path);
+ let requests=0;
+ const load=createCatalogueLoader(async()=>{ requests++; return new Response(JSON.stringify(records)); });
+ for(const path of ['/topics/waste/collection/household','/topics/water','/topics/health/disability']) {
+  const result=await load(path);
+  assert.equal(result.error,false,path);
+  assert(result.records.some(r=>r.id==='org-165'),path);
+ }
+ assert.equal(requests,1);
 });
 
 test('reader guides remove process notes while keeping source documents, cautions and citations',()=>{

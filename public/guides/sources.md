@@ -1,5 +1,221 @@
 # Official sources for the practical guides
 
+These 26 official documents and pages support the verification updates. Page references are physical PDF pages unless a printed page is also specified. Original files, retrieval metadata and SHA-256 hashes are retained in the local corpus. Published evidence is distinguished from current consolidation, parcel applicability and live service operation.
+
+The earlier 22 October source notes follow as historical research context. Where their retrieval limitations or open questions have now been resolved, use this review and the current verification register.
+
+## V01
+
+[Goa RTI Online applicant manual](https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf)
+
+**Location:** Physical pages 4–11: application, BPL proof, fee payment, receipt and application status.
+
+**Scope and remaining checks:** Published workflow, not a test of the current payment gateway or authority list.
+
+## V02
+
+[Goa RTI Online FAQ](https://www.rtionline.goa.gov.in/FAQ)
+
+**Location:** Questions 1–8: state authorities, 3,000-character text field and PDF attachment, application fee/payment, registration, additional fees and first appeals.
+
+**Scope and remaining checks:** The FAQ was successfully downloaded in this review. No application, payment or appeal was submitted; attachment size and live availability remain untested.
+
+## V03
+
+[Digital Personal Data Protection Act, 2023](https://www.meity.gov.in/static/uploads/2024/06/2bf1f0e9f04e6fb4f8fef35e82c42aa5.pdf)
+
+**Location:** Section 44(3), physical page 20: substitution of RTI Act section 8(1)(j).
+
+**Scope and remaining checks:** Read with the commencement notification V04. This is not a determination that any specific record must be disclosed or withheld.
+
+## V04
+
+[DPDP commencement notification, G.S.R. 843(E), dated 13 November 2025](https://www.meity.gov.in/static/uploads/2025/11/c56ceae6c383460ca69577428d36828b.pdf)
+
+**Location:** English text, physical page 2, paragraph (a): section 44(3) commences on Gazette publication.
+
+**Scope and remaining checks:** Other DPDP provisions have different commencement periods. Do not apply those later periods to section 44(3).
+
+## V05
+
+[Goa Gazette, Series I No. 20, 13 August 2026](https://goaprintingpress.gov.in/downloads/2627/2627-20-SI-OG.pdf)
+
+**Location:** Physical pages 28–31, printed pages 1036–1039: development-control amendment dated 6 August 2026, including regulation 6A.2.1.
+
+**Scope and remaining checks:** Publication and the stated immediate commencement are established. Full amendment consolidation, project standards and judicial effects remain open.
+
+## V06
+
+[Goa development-control amendment, 24 December 2025](https://tcp.goa.gov.in/wp-content/uploads/2026/01/2526-38-SI-EOG-1.pdf)
+
+**Location:** Single-page Gazette: Annexure XII changes for access to industrial plots.
+
+**Scope and remaining checks:** An additional amendment in the chain, not a consolidated regulation or a finding that it applies to every plot.
+
+## V07
+
+[Environment (Construction and Demolition) Waste Management Rules, 2025](https://moef.gov.in/uploads/pdf-uploads/pdf_68400a20010e08.34881498.pdf)
+
+**Location:** Physical page 19, rule 1: effective 1 April 2026; pages 20–21, definitions; page 25, rule 9 responsibilities.
+
+**Scope and remaining checks:** Check the waste-generator/producer distinction and thresholds before applying producer registration, EPR or plan duties to a project. Local collection and charges need confirmation.
+
+## V08
+
+[Ministry of Labour and Employment year-end review, 30 December 2025](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2209767)
+
+**Location:** PIB release, implementation of all four Labour Codes from 21 November 2025.
+
+**Scope and remaining checks:** Official implementation statement; not a substitute for central/state rules, transitional provisions or a project-specific cess determination.
+
+## V09
+
+[Goa Restrictions on Transfer of Agricultural Land Rules, 2023](https://goaprintingpress.gov.in/downloads/2324/2324-29-SI-SUG-1.pdf)
+
+**Location:** Gazette 19 October 2023, physical pages 1–7: rules 3–8 and Forms I–IV.
+
+**Scope and remaining checks:** Supports agriculturist proof/certification and the Collector permission process. Later amendments, title, tenancy and the proposed transaction still require professional review.
+
+## V10
+
+[Revised Shetkari Adhar Nidhi scheme](https://www.goa.gov.in/wp-content/uploads/2023/12/SAN.pdf)
+
+**Location:** Gazette 2 June 2022, physical pages 1–5; clause 6, physical page 4: report within 15 working days, Annexure I, applicant/representative and photographs; valid Krishi Card and assessment provisions.
+
+**Scope and remaining checks:** The URL was uploaded in December 2023; that is not the notification date. Obtain the current prescribed Annexure I and confirm later amendments, day-counting and eligibility. This is not a deadline for every relief or insurance scheme.
+
+## V11
+
+[Goa Agriculture Minister statement to the Assembly, 9 March 2026](https://static.goavidhansabha.gov.in/goalpub/docs/docs/679_file_CallAtt-DR.pdf)
+
+**Location:** Physical pages 1–3: state and centrally supported agriculture programmes, including Shetkari Adhar Nidhi.
+
+**Scope and remaining checks:** Evidence that programmes were described as implemented in 2026; no proof of an open application window, available funding or individual eligibility.
+
+## V12
+
+[Goa DIP report of the new Valpoi Zonal Agriculture Office, 13 October 2026](https://dip.goa.gov.in/agricultural-diversification-and-modern-farming-practices-are-key-to-enhancing-farmers-income-cm/)
+
+**Location:** Report identifying inauguration of the Valpoi office.
+
+**Scope and remaining checks:** Confirms a recent office development. Exact public counter address, village coverage, hours and appointment arrangements still need direct confirmation.
+
+## V13
+
+[NCDC National Guidelines for Rabies Prophylaxis, 2019](https://rabiesfreeindia.mohfw.gov.in/resources/uploads/PageContentPdf/171214085536.pdf)
+
+**Location:** Section 2.6.1, physical page 16 (printed page 6): immediate washing and 15-minute soap-and-water wound care; visually inspected.
+
+**Scope and remaining checks:** Official Indian guideline recovered successfully. Used for first aid only; clinical assessment, current treatment protocol and Goa facility availability remain for health professionals.
+
+## V14
+
+[Animal Welfare Board of India Law Enforcement Handbook, 2025](https://awbi.gov.in/uploads/regulations/174073569382IO_HandBook_compressed.pdf)
+
+**Location:** Physical pages 9–11: BNSS complaint/FIR route and cognizable/non-cognizable distinctions.
+
+**Scope and remaining checks:** Official handbook, not primary criminal legislation or a decision on the offence, seizure or custody powers in an individual case.
+
+## V15
+
+[Ministry of Home Affairs electronic FIR statement, 11 August 2026](https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297624)
+
+**Location:** PIB explanation of BNSS section 173: electronic information, territorial jurisdiction and signature within three days.
+
+**Scope and remaining checks:** Does not make every cruelty complaint cognizable or establish Goa portal availability. Confirm the appropriate police route for the facts.
+
+## V16
+
+[AWBI institutional animal-management SOP, 27 November 2025](https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf)
+
+**Location:** Physical pages 4–9: institutional nodal officer, prevention, authorised handling, shelter care and implementation; page 4 visually inspected.
+
+**Scope and remaining checks:** Read with subsequent Supreme Court and Goa High Court orders. The SOP does not prove actual local shelter capacity or authorise private capture/relocation.
+
+## V17
+
+[AWBI follow-up circular listed on 21 July 2026](https://awbi.gov.in/uploads/circular/178480784970document.pdf)
+
+**Location:** Physical pages 1–2, paragraphs 3–6: institutional SOP, Supreme Court directions and High Court compliance reporting.
+
+**Scope and remaining checks:** Date comes from the official AWBI circular index. Local compliance and later orders remain unverified.
+
+## V18
+
+[Ten final Goa wetland notifications, Gazette 9 January 2025](https://goaprintingpress.gov.in/downloads/2425/2425-41-SI-SUG-1.pdf)
+
+**Location:** Notification starting physical pages: Betal 1; Karmale Arla Keri 7; Kodal 13; Kolamwada 18; Macasana 24; Panchami 29; Parra 34; Sapu Tollem Bandar 38; Bandolem 47; Talaulim Talsal Tollem 52. Each includes schedules and maps.
+
+**Scope and remaining checks:** Final notifications dated 1 January 2025, not the earlier drafts. This is not an exhaustive statewide inventory or a check of later amendments/court orders. Published GSWA email is not live-tested.
+
+## V19
+
+[Solid Waste Management Rules, 2026](https://moef.gov.in/uploads/pdf-uploads/pdf_69a16e3b04c107.91022257.pdf)
+
+**Location:** English text begins physical page 79; rule 1 commencement on 1 April 2026; rule 5, physical page 84: four-stream segregation and waste-generator duties.
+
+**Scope and remaining checks:** Supersedes the 2016 rules subject to the notification. Local collection arrangements, user fees, enforcement and specific authorisations need confirmation.
+
+## V20
+
+[National Green Tribunal Act, 2010, official government reproduction](https://megbiodiversity.nic.in/sites/default/files/national-green-tribunal-act.pdf)
+
+**Location:** Physical pages 6–7, sections 14–16: distinct dispute, relief/compensation and appeal provisions and limitation clauses.
+
+**Scope and remaining checks:** Original Gazette hosted by Meghalaya Biodiversity Board, not a verified current consolidated Act. India Code refresh timed out. Current amendments, case law, forum, standing, trigger dates and condonation require a litigation practitioner.
+
+## V21
+
+[Goa Tree Authority reconstitution](https://goaprintingpress.gov.in/downloads/2526/2526-35-SII-OG.pdf)
+
+**Location:** Gazette 27 November 2025, physical page 4, printed page 1146; order dated 20 November 2025, No. 7/1/2022/FOR/311, superseding the 5 December 2022 order.
+
+**Scope and remaining checks:** Identifies the Conservator of Forests (Forest Conservation) as Member Secretary. Does not identify every territorial Tree Officer or resolve current delegated powers and fee bands.
+
+## V22
+
+[GCZMA Final CZMP Goa, Map 1](https://czma.goa.gov.in/Docs/HPSCANS/ga%201.pdf)
+
+**Location:** Single map, GA 1 / D43I/NW; visually inspected. Sheet states preparation under CRZ Notification 2011 and bears an approval dated 6 September 2022.
+
+**Scope and remaining checks:** The live GCZMA Final CZMP Goa menu exposed 17 map links. One inspected map is not proof of the complete current approval/correction package, the applicable regime or a parcel boundary.
+
+## V23
+
+[Goa Restriction on Transfer of Agricultural Land Act, 2023, with commencement](https://www.goa.gov.in/wp-content/uploads/2025/10/Goa-Restriction-on-Transfer-of-Agricultural-Land-Act.pdf)
+
+**Location:** Physical pages 1–3, Act; physical page 4, notification appointing 18 April 2023 as commencement.
+
+**Scope and remaining checks:** Closes the earlier missing commencement flag. Preserve the Act’s paddy-linked definition; title, tenancy, later changes and transaction-specific permission remain open.
+
+## V24
+
+[Goa TCP downloads index](https://tcp.goa.gov.in/downloads/)
+
+**Location:** Application and questionnaire links; completion/occupancy forms; regulation and amendment links. Rechecked 23 October 2026.
+
+**Scope and remaining checks:** An indexed form is not proof that a receiving office accepts that version or that a live portal transaction works.
+
+## V25
+
+[Goa Agriculture corrected citizen charter](https://agri.goa.gov.in/Upload/Corrected_Citizen_Charter.pdf)
+
+**Location:** Physical page 2: individual/group Krishi Card checklist, nominee and soil-sampling instructions; pages 42–43: office directory.
+
+**Scope and remaining checks:** Published requirements are distinguishable from live acceptance, identity alternatives, bank mapping and charges. Older scheme summaries must be checked against later notifications such as V10.
+
+## V26
+
+[Goa Assembly answer on Shetkari Adhar Nidhi, 31 July 2023](https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_e5aedd43-0e94-4295-8113-677ef5a44a4a.pdf)
+
+**Location:** Single page: valid Krishi Card, inspection and 15-working-day reporting requirement.
+
+**Scope and remaining checks:** Corroborates the 2022 notification. The 2026 programme list V11 confirms continued mention, not every scheme term or an open claim window.
+
+## Sources for the draft guides
+
+**Earlier review: 22 October 2026.** Resolved retrieval questions and newer findings are recorded in the [23 October source review](/read/guide-sources) and [current verification register](/read/guide-verification). The notes below describe the earlier review, not the current unresolved list.
+
 Source review: 22 October 2026. Each entry identifies the material used, a local original where downloaded, and the limit of the claim. The reference labels match those in the guides. Source checking is distinct from legal consolidation and testing a service.
 
 ## R1
@@ -238,7 +454,9 @@ Guide research directory (retained locally) retains the retrieval lists, form UR
 
 The eight templates are newly drafted supporting text. They are not reproductions of statutory forms and do not supply professional certification.
 
-## Farming animal welfare and environmental protection
+## Sources for farming animal welfare and environmental protection
+
+**Earlier review: 22 October 2026.** Resolved retrieval questions and newer findings are recorded in the [23 October source review](/read/guide-sources) and [current verification register](/read/guide-verification). The notes below describe the earlier review, not the current unresolved list.
 
 Source review: 22 October 2026. Official source material supports the linked steps. Published information, current legal effect and live service operation are distinct checks. Local originals are retained separately from new explanatory text.
 

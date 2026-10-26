@@ -54,11 +54,14 @@ def main():
     PUBLIC.mkdir(exist_ok=True)
     CONTENT.mkdir(exist_ok=True)
     (PUBLIC / 'templates').mkdir(exist_ok=True)
-    for path in (SOURCE / 'templates').iterdir():
+    templates_content = {}
+    for path in sorted((SOURCE / 'templates').iterdir()):
         if path.suffix in {'.txt', '.md'}:
             shutil.copyfile(path, PUBLIC / 'templates' / path.name)
+            templates_content[path.name] = path.read_text()
+    (CONTENT / 'templates.json').write_text(json.dumps(templates_content, ensure_ascii=False, indent=2) + '\n')
     paths = {name: '/read/guide-' + slug for slug, name, *_ in SPECS}
-    paths.update({'SOURCES.md': '/read/guide-sources', 'SOURCES_NEXT.md': '/read/guide-sources', 'VERIFICATION_REGISTER.md': '/read/guide-verification', 'README.md': '/library'})
+    paths.update({'SOURCES.md': '/read/guide-sources', 'SOURCES_NEXT.md': '/read/guide-sources', 'SOURCES_VERIFIED.md': '/read/guide-sources', 'VERIFICATION_REGISTER.md': '/read/guide-verification', 'README.md': '/library'})
 
     def prepare(text):
         text = public_copy(text)
@@ -77,13 +80,19 @@ def main():
         (PUBLIC / filename).write_text(prepare(original))
         templates = list(dict.fromkeys(re.findall(r'\]\((templates/[^)]+)\)', original)))
         documents.append({'id': 'guide-' + slug, 'title': title, 'heading': original.splitlines()[0].removeprefix('# '), 'summary': summary, 'topics': topics, 'markdown': prepare(original.split('\n', 1)[1].strip()), 'download': '/guides/' + filename, 'templates': [{'label': Path(t).stem[3:].replace('-', ' ').capitalize(), 'url': '/guides/' + t} for t in templates], 'listed': True})
-    sources = source_register((SOURCE / 'SOURCES.md').read_text()) + '\n' + source_register((SOURCE / 'SOURCES_NEXT.md').read_text()).replace('# Sources for farming animal welfare and environmental protection', '## Farming animal welfare and environmental protection', 1)
+    sources = source_register((SOURCE / 'SOURCES_VERIFIED.md').read_text()) + '\n' + '\n'.join(source_register((SOURCE / name).read_text()).replace('# ', '## ', 1) for name in ['SOURCES.md', 'SOURCES_NEXT.md'])
     verification = source_register((SOURCE / 'VERIFICATION_REGISTER.md').read_text())
     for slug, title, text in [('sources', 'Official sources for the practical guides', sources), ('verification', 'What still needs verification', verification)]:
         body = prepare(text.split('\n', 1)[1].strip())
         (PUBLIC / (slug + '.md')).write_text('# ' + title + '\n\n' + body + '\n')
         documents.append({'id': 'guide-' + slug, 'title': title, 'heading': title, 'summary': '', 'topics': [], 'markdown': body, 'download': '/guides/' + slug + '.md', 'templates': [], 'listed': False})
     (CONTENT / 'guides.json').write_text(json.dumps(documents, ensure_ascii=False, indent=2) + '\n')
+    records = [dict(id=d['id'], title=d['title'], kind='resource', source='/read/guide-sources', sourceApi='', sourceStatus=None,
+        summary=d['summary'], text=d['markdown'], blocks=[], topics=d['topics'], image='', imageSource='', publishedAt='',
+        updatedAt='2026-10-23', retrievedAt='2026-10-23', phones=[], emails=[], locations=[],
+        documents=[dict(**t, status=None) for t in d['templates']], links=[], verification='draft-review-required',
+        editorialStatus='authored-practical-guide') for d in documents if d['listed']]
+    (CONTENT / 'guide-records.json').write_text(json.dumps(records, ensure_ascii=False, indent=2) + '\n')
     print(f'Prepared {len(SPECS)} guides, 2 review documents and {len(list((PUBLIC / "templates").iterdir()))} templates')
 
 

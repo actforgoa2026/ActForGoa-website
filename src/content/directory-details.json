@@ -1,0 +1,991 @@
+{
+  "org-187": {
+    "tags": [
+      "Disability support",
+      "Health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-206": {
+    "tags": [
+      "Biodiversity",
+      "Environmental education",
+      "Citizen science"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://www.arannya.in/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.arannya.in/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/arannya_ero/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/arannyaero"
+      },
+      {
+        "label": "Goa Bird Atlas",
+        "url": "https://www.arannya.in/goa-bird-atlas"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "address": "H.No. 7, Near Morlem Panchayat, Morlem, Sanquelim, Goa 403505",
+    "locality": "Sanquelim",
+    "description": "A Goa-based non-profit working on biodiversity research, environmental education and community engagement. Its projects include the Goa Bird Atlas and the Mayem Biodiversity Atlas.",
+    "photo": {
+      "src": "/assets/directory/org-206.webp",
+      "source": "https://static.wixstatic.com/media/2f33be_bc1eeaec93e34d4d88bc6c12f2e10d13~mv2.jpg",
+      "sourcePage": "https://www.arannya.in/",
+      "credit": "AERO",
+      "alt": "Birdwatching and environmental education with AERO"
+    }
+  },
+  "org-188": {
+    "tags": [
+      "Women"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-129": {
+    "tags": [
+      "Waste management",
+      "Water & sanitation",
+      "Solar energy"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-91": {
+    "tags": [
+      "Solar energy"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-13": {
+    "tags": [
+      "Anti-trafficking",
+      "Human rights"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-136": {
+    "tags": [
+      "Energy management",
+      "Waste management"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-53": {
+    "tags": [
+      "Animal welfare",
+      "Veterinary care",
+      "Animal shelter"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-170": {
+    "tags": [
+      "Wildlife",
+      "Forests",
+      "Birdwatching"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-184": {
+    "tags": [
+      "Environmental education",
+      "Community learning"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://www.ceeindia.org/goa"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.ceeindia.org/goa"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/cee_india/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/ceeindia.org/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-1": {
+    "tags": [
+      "Community dialogue"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-25": {
+    "tags": [
+      "Marine conservation",
+      "Coral reefs",
+      "Beach cleanups"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://coastalimpact.in/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://coastalimpact.in/contact.php"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/coastalimpact/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/CoastalImpact/"
+      },
+      {
+        "label": "Get involved",
+        "url": "https://coastalimpact.in/contribute.php"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "photo": {
+      "src": "/assets/directory/org-25.webp",
+      "source": "https://coastalimpact.in/images/ci-main-bg-1.jpg",
+      "sourcePage": "https://coastalimpact.in/",
+      "credit": "Coastal Impact",
+      "alt": "Coral reef and fish featured on the Coastal Impact website"
+    }
+  },
+  "org-17": {
+    "tags": [
+      "Mental health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-161": {
+    "tags": [
+      "Organic farming",
+      "Soil health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-42": {
+    "tags": [
+      "Cycling",
+      "Responsible tourism"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-203": {
+    "tags": [
+      "Health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-115": {
+    "tags": [
+      "Permaculture",
+      "Art",
+      "Eco stays"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-29": {
+    "tags": [
+      "Water management"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-180": {
+    "tags": [
+      "Farming"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-185": {
+    "tags": [
+      "Local government"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-5": {
+    "tags": [
+      "Disability rights"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-16": {
+    "tags": [
+      "Disability support",
+      "Education"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-157": {
+    "tags": [
+      "Food support",
+      "Homelessness support"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-162": {
+    "tags": [
+      "Natural materials"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-57": {
+    "tags": [
+      "Organic food",
+      "Local markets"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-50": {
+    "tags": [
+      "Zero waste",
+      "Refill shopping"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-201": {
+    "tags": [
+      "Community support"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-179": {
+    "tags": [
+      "Clean energy"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-131": {
+    "tags": [
+      "Biogas",
+      "Waste management"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://flycatchertech.com/contact/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://flycatchertech.com/contact/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-98": {
+    "tags": [
+      "Wastewater treatment"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-168": {
+    "tags": [
+      "Human rights"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-202": {
+    "tags": [
+      "Livelihoods"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-183": {
+    "tags": [
+      "Water protection",
+      "Pollution control"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://goaspcb.gov.in/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://goaspcb.gov.in/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-182": {
+    "tags": [
+      "Waste management",
+      "Recycling"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://gwmc.goa.gov.in/contact-us/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://gwmc.goa.gov.in/contact-us/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/gwmcgoa"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://facebook.com/Goa-Waste-Management-Corporation-261847837708482"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-19": {
+    "tags": [
+      "Mining reform",
+      "Environmental protection"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://thefutureweneed.org/contact/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://thefutureweneed.org/contact/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/thefutureweneed"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://facebook.com/thefutureweneed"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-142": {
+    "tags": [
+      "Organic gardening",
+      "Workshops"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://greenessentials.in/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://greenessentials.in/pages/contact"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/green.essentials/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/greenessentials/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/green.essentials/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/greenessentials/"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "address": "House No. 994, Ambirna Wado, Socorro, Bardez, Goa 403501",
+    "locality": "Socorro",
+    "photo": {
+      "src": "/assets/directory/org-142.webp",
+      "source": "https://greenessentials.in/cdn/shop/files/WhatsApp_Image_2026-04-25_at_14.55.10.jpg?v=1777110053&width=1500",
+      "sourcePage": "https://greenessentials.in/",
+      "credit": "Green Essentials",
+      "alt": "Vegetable seedlings at Green Essentials"
+    }
+  },
+  "org-32": {
+    "tags": [
+      "Eco products",
+      "Environmental services"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-166": {
+    "tags": [
+      "Recycling",
+      "Waste management"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-181": {
+    "tags": [
+      "Upcycling",
+      "Cleanups"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-177": {
+    "tags": [
+      "Handmade soaps",
+      "Natural products"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-7": {
+    "tags": [
+      "Youth",
+      "Community development"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-186": {
+    "tags": [
+      "Mental health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-95": {
+    "tags": [
+      "Outdoor learning"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://www.khojaao.com/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.khojaao.com/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/khojaao/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/khojaaoadventures/"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "photo": {
+      "src": "/assets/directory/org-95.webp",
+      "source": "https://www.khojaao.com/wp-content/uploads/2021/07/Forest_Goa-1280x533.jpeg",
+      "sourcePage": "https://www.khojaao.com/",
+      "credit": "Khoj-aao! Adventures",
+      "alt": "Goa forest from Khoj-aao! Adventures"
+    },
+    "description": "Outdoor learning and nature experiences in Goa, including forest walks, birdwatching and camping. Explore the team’s activities and contact them to plan a visit."
+  },
+  "org-51": {
+    "tags": [
+      "Waste segregation",
+      "Workshops"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-174": {
+    "tags": [
+      "Community",
+      "Waste management",
+      "Heritage"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://livehappygoa.com/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://livehappygoa.com/index.php/contact-us/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://instagram.com/livehappygoa?igshid=1o1qxc6xebsw7"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://m.facebook.com/livehappygoa"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "photo": {
+      "src": "/assets/directory/org-174.webp",
+      "source": "https://livehappygoa.com/wp-content/uploads/2021/02/slider1-min.jpg",
+      "sourcePage": "https://livehappygoa.com/",
+      "credit": "Live Happy Goa",
+      "alt": "An outdoor community walk with Live Happy Goa"
+    }
+  },
+  "org-15": {
+    "tags": [
+      "Disability support",
+      "Education"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-178": {
+    "tags": [
+      "Plastic-free living",
+      "Eco products"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-173": {
+    "tags": [
+      "Wildlife",
+      "Responsible tourism"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://www.mrugayaxpeditions.com/about-us"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.mrugayaxpeditions.com/about-us"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/mrugayaxpeditions/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/Mrugaya-Xpeditions-656921427771821/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-14": {
+    "tags": [
+      "Disability support"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-176": {
+    "tags": [
+      "Community",
+      "Responsible tourism"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-90": {
+    "tags": [
+      "Water treatment"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-24": {
+    "tags": [
+      "Youth",
+      "Leadership"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-54": {
+    "tags": [
+      "Recycling",
+      "Eco products"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-128": {
+    "tags": [
+      "Senior citizens"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-12": {
+    "tags": [
+      "Child development",
+      "Family support",
+      "Education"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://sethu.in/",
+      "https://sethu.in/contact/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://sethu.in/"
+      },
+      {
+        "label": "Get involved",
+        "url": "https://sethu.in/join-us/volunteers/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/sethu.goa/"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "photo": {
+      "src": "/assets/directory/org-12.webp",
+      "source": "https://sethu.in/images/features/family-centered-approach.jpg",
+      "sourcePage": "https://sethu.in/",
+      "credit": "Sethu",
+      "alt": "Family-centred activities at Sethu",
+      "position": "50% 25%"
+    },
+    "address": "Sethu Centre for Child Development and Family Guidance, 5/84, Dhonvaddo, Saligao, Goa 403511",
+    "locality": "Saligao"
+  },
+  "org-71": {
+    "tags": [
+      "Pet care",
+      "Dog training"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-111": {
+    "tags": [
+      "Rainwater harvesting"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-158": {
+    "tags": [
+      "Water management",
+      "Waste management"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-172": {
+    "tags": [
+      "E-waste"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-119": {
+    "tags": [
+      "Architecture",
+      "Heritage restoration"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-108": {
+    "tags": [
+      "Architecture",
+      "Community",
+      "Mentoring"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://architecturert.wordpress.com/2011/11/23/contact-us/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://architecturert.wordpress.com/2011/11/23/contact-us/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-10": {
+    "tags": [
+      "Art",
+      "Education",
+      "Women’s livelihoods"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-3": {
+    "tags": [
+      "Marine conservation",
+      "Coastal ecosystems",
+      "Responsible tourism"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://terraconscious.com/"
+    ],
+    "links": [
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/terraconscious/"
+      }
+    ],
+    "checkedAt": "2026-10-23"
+  },
+  "org-18": {
+    "tags": [
+      "Environmental protection",
+      "Advocacy"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://goafoundation.org/",
+      "https://goafoundation.org/contact/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://goafoundation.org/contact/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/goa.foundation"
+      },
+      {
+        "label": "Facebook",
+        "url": "http://facebook.com/GoaFoundation"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "address": "H.No. E-463, Near Hotel Embassy, Corte do Oieteiro (Emidio Garcia Road), Panaji, Goa 403001",
+    "locality": "Panaji"
+  },
+  "org-175": {
+    "tags": [
+      "Autism support",
+      "Inclusion"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-55": {
+    "tags": [
+      "Recycled packaging"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-160": {
+    "tags": [
+      "Organic farming",
+      "Microgreens"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-171": {
+    "tags": [
+      "E-waste"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-164": {
+    "tags": [
+      "Plastic recycling"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-20": {
+    "tags": [
+      "Waste management",
+      "Recycling"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-21": {
+    "tags": [
+      "Community media",
+      "Human rights"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-27": {
+    "tags": [
+      "Wildlife conservation",
+      "Environmental education"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-9": {
+    "tags": [
+      "Public health"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-2": {
+    "tags": [
+      "Animal welfare",
+      "Animal shelter",
+      "Adoption"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/",
+      "https://www.wagoa.com/"
+    ],
+    "links": [
+      {
+        "label": "Website",
+        "url": "https://www.wagoa.com/"
+      },
+      {
+        "label": "Get involved",
+        "url": "https://www.wagoa.com/contact-us"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/welfare_for_animals_in_goa/"
+      },
+      {
+        "label": "Facebook",
+        "url": "https://www.facebook.com/wag.india/"
+      }
+    ],
+    "checkedAt": "2026-10-23",
+    "description": "An animal welfare trust in Siolim caring for rescued dogs, cats, cattle and other animals. Contact the team about volunteering, adoptions and ways to support the shelter.",
+    "address": "WAG Shelter, 1198, Mulga Vaddo, Siolim, North Goa 403517",
+    "locality": "Siolim",
+    "photo": {
+      "src": "/assets/directory/org-2.webp",
+      "source": "https://static.wixstatic.com/media/702d44_549b3341937b49d4b5dd92c8ecb6d0ac~mv2.jpg",
+      "sourcePage": "https://www.wagoa.com/",
+      "credit": "Welfare for Animals in Goa",
+      "alt": "Animals at the WAG shelter"
+    }
+  },
+  "org-169": {
+    "tags": [
+      "Biodiversity",
+      "Eco stays"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-52": {
+    "tags": [
+      "Veterinary care",
+      "Animal welfare"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  },
+  "org-117": {
+    "tags": [
+      "Permaculture",
+      "Art",
+      "Eco stays"
+    ],
+    "sources": [
+      "https://actforgoa.org/directory/"
+    ]
+  }
+}

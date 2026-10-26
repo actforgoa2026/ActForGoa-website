@@ -1,0 +1,234 @@
+{
+  "source_branch": "codex/guide-verification-20261023",
+  "content_commit": "7d1f87fbbe7f6aab415a74d5801f5cf3edccc5be",
+  "verification_commit": "4b36a165d9400eef990ab9da72399a5852fb4f0d",
+  "worktree": "/Users/zakkrevitt/.codex/worktrees/guide-verification/ActForGoa",
+  "compared_main": "04e721cd3ad1a8daebc90c84d3cedb3ccbaf07f7",
+  "independent_deployment_on_hold": true,
+  "live_evidence": "corpus/research/verification-2026-10-23/publication-checks.json",
+  "integration_notes": [
+    "Apply canonical guide/register and six template updates from 7d1f87f; preserve the newer service-enquiry template and any other additions.",
+    "Merge only SOURCES_VERIFIED.md routing and newest-source-register ordering in scripts/publish_guides.py; retain template-editor templates.json generation.",
+    "Regenerate published guides and templates with the integrated publisher instead of replacing the public directory wholesale.",
+    "Do not replace src/PracticalGuide.tsx with this branch version. Its only requested change was the source review date from 22 to 23 October; preserve current template editor links, current guide routes, navigation and reader presentation.",
+    "src/guides.ts changes only updatedAt/retrievedAt to 2026-10-23. Source research was not refreshed on the 26 October deployment verification date.",
+    "4b36a16 records live verification; latest release already contained all 24 reviewed downloads. No independent deploy or alias promotion was performed in that turn."
+  ],
+  "files": [
+    {
+      "path": "corpus/guides/ANIMAL_WELFARE_GUIDE_DRAFT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/BUILDING_GUIDE_DRAFT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/FARMING_GUIDE_DRAFT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/README.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/REPORTING_GUIDE_DRAFT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/SOURCES.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/SOURCES_NEXT.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/SOURCES_VERIFIED.md",
+      "group": "canonical_content",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/guides/VERIFICATION_REGISTER.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/03-rti-records-request.txt",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/07-building-checklist.md",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/11-farming-support-or-damage.txt",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/13-animal-cruelty-complaint.txt",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/14-community-animal-service.txt",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/guides/templates/16-environment-records-and-inspection.txt",
+      "group": "canonical_content",
+      "main_state": "different"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/README.md",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/czmp-browser-evidence.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/evidence-manifest.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/flag-status.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/publication-checks.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/seeds-2.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/seeds-3.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/seeds-4.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/seeds.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "corpus/research/verification-2026-10-23/source-urls.json",
+      "group": "evidence",
+      "main_state": "absent"
+    },
+    {
+      "path": "public/guides/ANIMAL_WELFARE_GUIDE_DRAFT.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/BUILDING_GUIDE_DRAFT.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/FARMING_GUIDE_DRAFT.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/REPORTING_GUIDE_DRAFT.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/sources.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/03-rti-records-request.txt",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/07-building-checklist.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/11-farming-support-or-damage.txt",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/13-animal-cruelty-complaint.txt",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/14-community-animal-service.txt",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/templates/16-environment-records-and-inspection.txt",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "public/guides/verification.md",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "scripts/publish_guides.py",
+      "group": "implementation",
+      "main_state": "different"
+    },
+    {
+      "path": "src/PracticalGuide.tsx",
+      "group": "implementation",
+      "main_state": "different"
+    },
+    {
+      "path": "src/content/guides.json",
+      "group": "generated_content",
+      "main_state": "different"
+    },
+    {
+      "path": "src/guides.ts",
+      "group": "implementation",
+      "main_state": "different"
+    }
+  ]
+}

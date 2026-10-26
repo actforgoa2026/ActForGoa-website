@@ -1,4 +1,4 @@
-node_modules/
+node_modules
 .next/
 dist/
 .vercel/
@@ -22,6 +22,7 @@ reports/link-checks.jsonl
 *.tsbuildinfo
 *.log
 
+# Private incident reports, photographs and local reviewer credentials
 .research-index/
 .research-release/
 .pytest_cache/
@@ -32,3 +33,7 @@ corpus/pages/
 corpus/text/
 corpus/ocr/
 .reports/
+.vercel
+
+.DS_Store
+.vercel_python_packages/

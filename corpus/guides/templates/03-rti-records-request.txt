@@ -20,7 +20,7 @@ Select and adapt:
 
 Preferred access: [electronic copies where held and available in that form / certified paper copies / inspection followed by selected copies].
 
-If any requested part is held by another public authority and transfer is applicable under section 6(3), please transfer that part and inform me. If disclosure of a part is refused, please identify the applicable provision, give the decision and reasons, and supply any reasonably separable disclosable portion. Please provide the relevant appeal particulars.
+If any requested part is held by another public authority and transfer is applicable under section 6(3), please transfer that part and inform me. If disclosure of a part is refused, please identify the applicable provision, give the decision and reasons, and supply any reasonably separable disclosable portion under section 10. Where relevant, please consider section 8(2); any specific public-interest grounds are: [state factual grounds or remove]. Please provide the relevant appeal particulars.
 
 Please inform me of any additional fee with its calculation and payment instructions before supplying chargeable copies.
 
@@ -38,3 +38,5 @@ Attachments: [fee receipt/exemption proof; minimal identifying location/referenc
 Keep separately: full submitted application, receipt, date of actual receipt by the authority, registration number, transfer/additional-fee notices and calculated response deadline.
 
 This template requests records. Submit a separate complaint if you also want inspection or corrective action. Access remains subject to the Act's disclosure, exemption and third-party provisions.
+
+The personal-information exemption was amended through DPDP Act section 44(3). Avoid unnecessary personal identifiers; request redacted records where appropriate. Disclosure and public-interest balancing require a decision under the current law.
