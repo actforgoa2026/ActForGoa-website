@@ -29,3 +29,27 @@ However, its top-level `notice` is absent. V16's reviewed metadata explicitly re
 Citation `64eed0b3b39365cd0a949e93c0901765`, physical page 35 of the [9 January 2025 Gazette](https://goaprintingpress.gov.in/downloads/2425/2425-41-SI-SUG-1.pdf), contains clause 13 preserving pre-existing ownership and Schedule I's complete prose sentence describing Parra Lake as 2,000 square metres. The response does not infer a statewide wetland inventory or transfer ownership to GSWA. Its legal-currency notice is visible in the updated main-search UI.
 
 This review does not verify later amendments/orders, parcel boundaries or live authority availability. Final runtime reruns and their disposition must be recorded by the release coordinator before claiming acceptance.
+
+## Targeted Luna follow-up
+
+Reviewed the first three entries of ECO's `luna-targeted.json`, SHA-256 `ecd6d3c0a157cf7d511c1c18bd427455a161bd1573fd891f75c51759c6b291de`, against their cited passages and saved full pages in the same validated v2 generation. ECO's worktree was at `b4eb94719f8d24baddbf54c2fc79ecec1bf802e9` when inspected; this targeted artifact is not a complete acceptance run. Earlier Nano failures and findings above remain part of the record.
+
+| Case | Targeted follow-up disposition |
+| --- | --- |
+| Farming | Earlier material officer/citation findings resolved in this output. Krishi Card action now cites `491bdce0608f55429949dadfbf6b11c1`, and the reporting destination, 15-working-day period, Annexure I and photographs cite `49c4df829e149d7df512df066a379ae0`. Current-form and later-amendment caveats are preserved. |
+| RTI | Procedure is supported and refusal to invent a fee is appropriate for the retrieved excerpts. However, retrieval misses an explicit fee statement already indexed in the same cited manual; resolve this coverage gap before declaring this case complete. |
+| TCP | Core separation of planning approval and building licence is supported. One factual authority/approval conflation remains and needs correction. |
+
+### RTI: the relevant fee passage exists
+
+The output selects the [official applicant manual](https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf) title page (`3ff91ad9b3fe76d360034f758fb24e04`, physical page 1). This contributes no procedural evidence. Physical page 7 instead explicitly states that a non-BPL applicant selecting NO must pay Rs 10, in a complete prose sentence. It is already indexed as `e5d0e7777a79a19cf17cced54e173507`. Retrieve and cite this passage when answering what the saved manual states; retain the caveat that the live gateway and current procedures have not been tested.
+
+Do not confuse this application-fee statement with the manual's illustrative Rs 25 additional-fee example on physical pages 12 and 18. The FAQ citations support Goa-state authority scope, the 3,000-character field/PDF attachment route and payment workflow. Its refusal to invent a numeric fee was safe, but the broader corpus can supply the requested historical-source detail.
+
+### TCP: keep the approval names attached to their issuing authority
+
+The targeted answer says “The Town and Country Planning Department/PDA grants the technical clearance.” Its cited source distinguishes these: Appendix A1-PDA goes to PDA for Development Permission; Appendix A1-TCP goes to the Town Planning Department for Technical Clearance. Physical page 40, regulation 3.7, separately lists PDA Development Permission (C1) and Technical Clearance (C2), before Municipal/Panchayat licences (C3/C4).
+
+The supported formulation is that TCP technical clearance (or PDA development permission, as applicable) is distinct from the Municipal Council/Village Panchayat building licence. Do not merge PDA and TCP into a single issuer of technical clearance. Relevant evidence IDs are `6453618429d81ad36ea31f0be7ecfe06` and `d0afba61a78bf1e1b5827ce778c5f1be`. Keep the current-applicability caveat.
+
+The targeted farming output is approved only for the claim-to-evidence scope reviewed here. Updated dog/Parra cases, corrected RTI/TCP outputs and the exact final runtime's full acceptance remain pending.
