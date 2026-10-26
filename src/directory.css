@@ -8,6 +8,20 @@
 .directory-actions a { display: inline-flex; align-items: center; gap: 6px; min-height: 44px; font-size: 14px; font-weight: 650; text-decoration: underline; text-underline-offset: 4px; overflow-wrap: anywhere; }
 .directory-actions a:hover { color: var(--muted); }
 .directory-actions svg { flex-shrink: 0; }
+.listing-link { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; max-width: 100%; font-size: 14px; font-weight: 650; text-decoration: underline; text-underline-offset: 4px; }
+.listing-link svg, .listing-location svg { flex: 0 0 18px; }
+.listing-link span, .listing-location span { min-width: 0; overflow-wrap: anywhere; }
+.listing-link:hover { color: var(--muted); }
+.listing-contact-actions { align-items: flex-start; flex-direction: column; gap: 4px; }
+.listing-location { display: flex; align-items: flex-start; gap: 8px; max-width: 100%; padding-block: 8px; font-size: 14px; color: var(--muted); }
+.listing-location svg { margin-top: 3px; }
+.listing-detail.shell, .crm-record-page.shell { max-width: 680px; }
+.listing-detail .detail-layout { display: block; }
+.listing-detail .detail-aside { display: block; padding-top: 8px; }
+.listing-detail .detail-aside section { margin-bottom: 32px; }
+.listing-detail .detail-aside .listing-link { display: flex; width: fit-content; }
+.listing-detail .listing-copy-link { margin-top: 4px; gap: 8px; font-weight: 650; }
+.listing-detail .related .card-grid { grid-template-columns: minmax(0, 1fr); }
 .directory-photo { margin: 0 0 20px; min-width: 0; }
 .directory-photo > a { display: block; }
 .directory-photo img { display: block; width: 100%; aspect-ratio: 1.9; object-fit: cover; }
