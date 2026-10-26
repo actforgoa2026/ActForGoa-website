@@ -1,0 +1,835 @@
+{
+  "generation": "20261022T155701-21661179",
+  "checks": [
+    {
+      "query": "How do khazans manage saline water with sluice gates?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 698,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 39,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Chorao khazan field account",
+          "source": "https://goawaterstories.livingwatersmuseum.org/stories/khazans-of-chorao-island",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Chorao khazan field account",
+          "source": "https://goawaterstories.livingwatersmuseum.org/stories/khazans-of-chorao-island",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Gazette: Goa State Amritkal Agriculture Policy 2025, 1 August 2025",
+          "source": "https://goaprintingpress.gov.in/downloads/2526/2526-18-SI-SUG-2.pdf",
+          "page": 34,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "How do laterite plateaus supply groundwater and springs?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 112,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 112,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "CGWB national assessment 2024, Goa chapter",
+          "source": "https://www.jalshakti-dowr.gov.in/static/uploads/2024/12/ef14a888b8fda9609ebb2d776720b52a.pdf",
+          "page": 63,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 54,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 316,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What is Goa State Water Policy 2021?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "State Water Policy 2021",
+          "source": "https://goawrd.gov.in/sites/default/files/State%20water%20policy%202021.pdf",
+          "page": 6,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "State Water Policy 2021",
+          "source": "https://goawrd.gov.in/sites/default/files/State%20water%20policy%202021.pdf",
+          "page": 6,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "State Water Policy",
+          "source": "https://www.goawrd.gov.in/content/State-Water-Policy",
+          "page": 1,
+          "matches": [
+            "keyword"
+          ]
+        },
+        {
+          "title": "Goa Water Prevention and Control of Pollution Rules, 2021",
+          "source": "https://www.goa.gov.in/wp-content/uploads/2022/11/Water-Air-Rules-2021.pdf",
+          "page": 10,
+          "matches": [
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa Water Prevention and Control of Pollution Amendment Rules, 2022",
+          "source": "https://www.goa.gov.in/wp-content/uploads/2022/11/AMEND_RULE_AIRWATER_22.pdf",
+          "page": 1,
+          "matches": [
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What does the climate action plan say about rainfall and flooding?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa climate action plan",
+          "source": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+          "page": 10,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa climate action plan",
+          "source": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+          "page": 14,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 372,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "state-action-plan-for-climate-change",
+          "source": "https://actforgoa.org/resource/state-action-plan-for-climate-change/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 105,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What are Goa monsoon rainfall trends?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa rainfall variability research",
+          "source": "https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/download/796/680/2837",
+          "page": 8,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa rainfall variability research",
+          "source": "https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/download/796/680/2837",
+          "page": 8,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Forest fire management report",
+          "source": "https://forest.goa.gov.in/sites/default/files/2024-04/Identification%20and%20Managementof%20Forest%20Fire.pdf",
+          "page": 13,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "IMD rainfall study",
+          "source": "https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/view/796",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 109,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What is the Mhadei Mandovi river basin?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa river profile and source compilation",
+          "source": "https://sandrp.in/2016/11/25/goa-river-profile/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa river profile and source compilation",
+          "source": "https://sandrp.in/2016/11/25/goa-river-profile/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "State Water Policy 2021",
+          "source": "https://goawrd.gov.in/sites/default/files/State%20water%20policy%202021.pdf",
+          "page": 10,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa climate action plan",
+          "source": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+          "page": 48,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 190,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What are the habitats of Cnemaspis goaensis?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Cnemaspis taxonomic supplementary material",
+          "source": "https://www.zoores.ac.cn/fileDWXYJ/journal/article/file/6c484395-f6a6-4821-aa85-ab20fa7fa091.pdf",
+          "page": 82,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Cnemaspis taxonomic supplementary material",
+          "source": "https://www.zoores.ac.cn/fileDWXYJ/journal/article/file/6c484395-f6a6-4821-aa85-ab20fa7fa091.pdf",
+          "page": 83,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "2. EIA and BMP for 400 KV transmission\n            Line Corridor Passing through Protected area of Goa State pdf",
+          "source": "https://envcc.goa.gov.in/document-category/environment-reports/upload/0476969 ERM BIA_BMP_TL_Goa Final Report 08032019_compressed.pdf",
+          "page": 50,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "ZSI Goa bird report",
+          "source": "https://forest.goa.gov.in/sites/default/files/2024-04/Status%20and%20Distribution%20of%20Avifauna.pdf",
+          "page": 75,
+          "matches": [
+            "keyword"
+          ]
+        },
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 236,
+          "matches": [
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What is the bird diversity of Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "ZSI Goa bird report",
+          "source": "https://forest.goa.gov.in/sites/default/files/2024-04/Status%20and%20Distribution%20of%20Avifauna.pdf",
+          "page": 23,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "ZSI Goa bird report",
+          "source": "https://forest.goa.gov.in/sites/default/files/2024-04/Status%20and%20Distribution%20of%20Avifauna.pdf",
+          "page": 18,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Social media boosts Goa as a birding destination",
+          "source": "https://actforgoa.org/social-media-boosts-goa-as-a-birding-destination/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Desai and Shanbhag 2012",
+          "source": "https://threatenedtaxa.org/index.php/JoTT/article/view/24",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Desai and Shanbhag 2012",
+          "source": "https://threatenedtaxa.org/index.php/JoTT/article/view/24",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What are threats to sacred groves in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa Forest Department sacred groves",
+          "source": "https://forest.goa.gov.in/sacred-groves",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 628,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "action-plan_250529_134919",
+          "source": "https://actforgoa.org/wp-content/uploads/2025/05/action-plan_250529_134919.pdf",
+          "page": 573,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 584,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 578,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "Where do olive ridley turtles nest in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Dongre and Shambhu on community turtle conservation",
+          "source": "https://iotn.org/iotn07-05-notes/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Dongre and Shambhu on community turtle conservation",
+          "source": "https://iotn.org/iotn07-05-notes/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Government of Goa on Galgibaga",
+          "source": "https://www.goa.gov.in/places/galgibaga-turtle-beach/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Central CRZ Notification 2019 with amendments official Kerala-hosted compilation",
+          "source": "https://envt.kerala.gov.in/wp-content/uploads/2025/02/CRZ-Notification-2019-with-Amendments.pdf",
+          "page": 97,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Central CRZ Notification 2019 with amendments official Kerala-hosted compilation",
+          "source": "https://envt.kerala.gov.in/wp-content/uploads/2025/02/CRZ-Notification-2019-with-Amendments.pdf",
+          "page": 97,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What causes forest fires in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "REPORT ON FOREST FIRE-2023",
+          "source": "https://forest.goa.gov.in/sites/default/files/2023-07/Report%20on%20Forest%20Fire-.pdf",
+          "page": 8,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "REPORT ON FOREST FIRE-2023",
+          "source": "https://forest.goa.gov.in/sites/default/files/2023-07/Report%20on%20Forest%20Fire-.pdf",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Forest fire prone areas in Goa and their management",
+          "source": "https://ccari.res.in/Technical%20Bulletin%20No.%2075.pdf",
+          "page": 18,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Forest fire prone areas in Goa and their management",
+          "source": "https://ccari.res.in/Technical%20Bulletin%20No.%2075.pdf",
+          "page": 54,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "FSI definitions",
+          "source": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-1_2023.pdf",
+          "page": 141,
+          "matches": [
+            "keyword"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What are the impacts of mining on groundwater?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 199,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 202,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "3",
+          "source": "https://actforgoa.org/resource/page/3/",
+          "page": 1,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa Foundation v Sesa Sterlite mining judgment 7 February 2018",
+          "source": "https://api.sci.gov.in/supremecourt/2014/30090/30090_2014_Judgement_07-Feb-2018.pdf",
+          "page": 60,
+          "matches": [
+            "semantic"
+          ]
+        },
+        {
+          "title": "Agricultural Technology Options",
+          "source": "https://ccari.res.in/TB.No.30.pdf",
+          "page": 8,
+          "matches": [
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "How is water quality monitored by GSPCB?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 240,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa Economic Survey 2025-26",
+          "source": "https://www.dpse.goa.gov.in/economic-survey-2025-26.pdf",
+          "page": 220,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 791,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Solid Waste Management Rules 2016",
+          "source": "https://goaspcb.gov.in/Media/Default/Rules/SWM_2016.pdf",
+          "page": 66,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Municipal Solid Waste Rules",
+          "source": "https://goaspcb.gov.in/Media/Default/uploads/1)%20Municipal%20Solid%20Waste%20Rules.pdf",
+          "page": 9,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What does Goa agriculture policy say about farming?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Gazette: Goa State Amritkal Agriculture Policy 2025, 1 August 2025",
+          "source": "https://goaprintingpress.gov.in/downloads/2526/2526-18-SI-SUG-2.pdf",
+          "page": 9,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Gazette: Goa State Amritkal Agriculture Policy 2025, 1 August 2025",
+          "source": "https://goaprintingpress.gov.in/downloads/2526/2526-18-SI-SUG-2.pdf",
+          "page": 20,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa Economic Survey 2025-26",
+          "source": "https://www.dpse.goa.gov.in/economic-survey-2025-26.pdf",
+          "page": 68,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Agriculture Policy 2025",
+          "source": "https://goacollegeofagriculture.edu.in/wp-content/uploads/2025/02/Goa-State-Agriculture-Policy-2025-dated-12-02-25.pdf",
+          "page": 14,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa State Agriculture Policy 2025",
+          "source": "https://goacollegeofagriculture.edu.in/wp-content/uploads/2025/02/Goa-State-Agriculture-Policy-2025-dated-12-02-25.pdf",
+          "page": 31,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What is the pre-monsoon groundwater level in Goa in 2025?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "CGWB national assessment 2024, Goa chapter",
+          "source": "https://www.jalshakti-dowr.gov.in/static/uploads/2024/12/ef14a888b8fda9609ebb2d776720b52a.pdf",
+          "page": 70,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "CGWB national assessment 2024, Goa chapter",
+          "source": "https://www.jalshakti-dowr.gov.in/static/uploads/2024/12/ef14a888b8fda9609ebb2d776720b52a.pdf",
+          "page": 66,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "State Water Policy 2021",
+          "source": "https://goawrd.gov.in/sites/default/files/State%20water%20policy%202021.pdf",
+          "page": 12,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "1. EIA & EMP of four lanning of existing Goa/Karnataka\n            Border-Panaji Goa section of NH-4A from km.84.00 to km.153.07 in the\n            State of Goa on BOT (Toll) basis under NHDP-III (Anmod to Panaji\n            Section) pdf",
+          "source": "https://envcc.goa.gov.in/document-category/environment-reports/upload/EIA report-NH4A mollem.pdf",
+          "page": 40,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa groundwater and mining research report",
+          "source": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+          "page": 114,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "query": "What is Goa forest cover in the India State of Forest Report?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true,
+      "results": [
+        {
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "source": "https://gsbb.goa.gov.in/assets/docs/gsbsap-draft.pdf",
+          "page": 20,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "FSI definitions",
+          "source": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-1_2023.pdf",
+          "page": 80,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "Goa climate action plan",
+          "source": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+          "page": 65,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "FSI definitions",
+          "source": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-1_2023.pdf",
+          "page": 63,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        },
+        {
+          "title": "FSI Goa tables",
+          "source": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-2_2023.pdf",
+          "page": 105,
+          "matches": [
+            "keyword",
+            "semantic"
+          ]
+        }
+      ]
+    }
+  ],
+  "queries_passed": 16,
+  "queries_total": 16,
+  "original_checksums_passed": 1156,
+  "originals_total": 1156,
+  "failures": [],
+  "limits": "Top-five term coverage is a retrieval smoke check, not a factual-answer or entailment benchmark. Live OpenAI generation is a separate check."
+}

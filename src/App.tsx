@@ -43,6 +43,7 @@ import { hybridSearch } from "./search";
 import { guideDocuments } from "./guides";
 import { PracticalGuide } from "./PracticalGuide";
 import CRM from "./CRM";
+import { Research, ResearchDocument, ResearchMemoryProvider } from "./Research";
 import {TopicIcon} from "./components/TopicIcon";
 import {topicFlows, topicFor, topicHref} from "./topic-flows";
 import {TopicPage, TopicChoices} from "./TopicPage";
@@ -114,7 +115,7 @@ const navigation = [
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", href: "/library" },
+  { value: "resources", label: "Resources", links: [{ label: "Reading library", href: "/library" }, { label: "Research library", description: "Search ecological sources and read full documents.", href: "/ask" }] },
   { value: "about", label: "About", links: [
     { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
     { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/read/wp-8905" },
@@ -127,7 +128,7 @@ const navigation = [
 ];
 function Header() {
   const { pathname } = useLocation();
-  const current = pathname === "/" ? "home" : pathname.startsWith("/directory") || pathname.startsWith("/crm") ? "community" : pathname === "/library" ? "resources" : pathname === "/get-involved" ? "action" : pathname.slice(1);
+  const current = pathname === "/" ? "home" : pathname.startsWith("/directory") || pathname.startsWith("/crm") ? "community" : (pathname === "/library" || pathname === "/ask" || pathname.startsWith("/documents/")) ? "resources" : pathname === "/get-involved" ? "action" : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={navigation} current={current} label="Main navigation"
@@ -1139,19 +1140,20 @@ function NotFound() {
 }
 export default function App() {
   const { pathname } = useLocation();
+  const researchRoute = pathname === "/ask" || pathname.startsWith("/documents/");
   const crmRoute = (pathname.startsWith('/directory') && pathname !== '/directory/archive') || pathname.startsWith('/crm');
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
     error: boolean;
   };
   return (
-    <>
+    <ResearchMemoryProvider>
       <a href="#content" className="skip-link">
         Skip to content
       </a>
       <Header />
       <div id="content">
-        {error && !crmRoute ? (
+        {error && !crmRoute && !researchRoute ? (
           <main className="empty-state shell">
             <h1>The field guide couldn’t load.</h1>
             <p>
@@ -1169,6 +1171,8 @@ export default function App() {
           </main>
         ) : (
           <Routes>
+            <Route path="/ask" element={<Research />} />
+            <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/" element={<Home records={records} />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records}/>} />
             <Route path="/search" element={<Catalogue records={records} />} />
@@ -1205,6 +1209,6 @@ export default function App() {
       </div>
       <ScrollRestoration />
       <Footer />
-    </>
+    </ResearchMemoryProvider>
   );
 }

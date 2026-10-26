@@ -1,0 +1,6 @@
+[
+  {"source":"/api/status","destination":"https://RESEARCH_SERVICE_HOST/api/status"},
+  {"source":"/api/search","destination":"https://RESEARCH_SERVICE_HOST/api/search"},
+  {"source":"/api/chat","destination":"https://RESEARCH_SERVICE_HOST/api/chat"},
+  {"source":"/api/documents/:path*","destination":"https://RESEARCH_SERVICE_HOST/api/documents/:path*"}
+]
