@@ -7,6 +7,20 @@ related_targets: ["src/styles.css", "src/components/arc/foundation.css", "src/co
 
 # Directory surface
 
+## Corpus answer extension, 26 October 2026
+
+THESIS: A submitted practical question receives a short answer supported by saved sources, followed by the existing catalogue results.
+
+OWN-WORLD: Inherit the open warm paper, green upright Manrope, Arc controls and structural horizontal rules. No new visual identity or boxed answer card.
+
+STORY: Read the next step, check the numbered source passage, return to the same search, then explore guides, people and articles. Keep emergency access ahead of the generated answer.
+
+FIRST VIEWPORT: Preserve the search heading and field. Put the answer immediately below the field and any urgent-help link, with 18px reading text, inline citations and a compact source disclosure. Existing filters and results follow.
+
+FORM: A local extension of the established Operate/Read surface, with code-led implementation. No concept seed or replacement world. Loading, missing evidence and budget/service failure leave catalogue results usable.
+
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, DESIGN.md, and every shipping raster carrying its provenance
+
 Mode: Operate, with Read for the library and record pages.
 
 ## Direction contract
