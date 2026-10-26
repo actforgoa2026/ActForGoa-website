@@ -43,12 +43,14 @@ function Source({source,number,returnTo}:{source:Evidence;number?:number;returnT
 export function Research(){
  const [params]=useSearchParams();const docId=params.get('document')||undefined;const sourceGeneration=params.get('generation')||undefined;
  const scope=docId?'?'+new URLSearchParams({document:docId,...(sourceGeneration?{generation:sourceGeneration}:{})}):'';
- return <ResearchConversation key={scope} scope={scope} docId={docId} sourceGeneration={sourceGeneration}/>;
+ const initialQuestion=(params.get('q')||'').slice(0,2000);
+ return <ResearchConversation key={scope} scope={scope} docId={docId} sourceGeneration={sourceGeneration} initialQuestion={initialQuestion}/>;
 }
-function ResearchConversation({scope,docId,sourceGeneration}:{scope:string;docId?:string;sourceGeneration?:string}){
+function ResearchConversation({scope,docId,sourceGeneration,initialQuestion}:{scope:string;docId?:string;sourceGeneration?:string;initialQuestion:string}){
  const memory=useContext(ResearchMemory);if(!memory)throw Error('Research memory provider is required.');
  const {question,turns,mode}=memory.sessions[scope]||emptySession;const returnTo='/ask'+scope;
  const setQuestion=(question:string)=>memory.update(scope,{question});
+ useEffect(()=>{if(initialQuestion)memory.update(scope,{question:initialQuestion});},[initialQuestion,scope]);
  const setMode=(mode:'search'|'ask')=>memory.update(scope,{mode});
  const setTurns=(change:(turns:Turn[])=>Turn[])=>memory.update(scope,previous=>({turns:change(previous.turns)}));
  const [status,setStatus]=useState<Status|null>(null);const [statusError,setStatusError]=useState('');const [busy,setBusy]=useState(false);const request=useRef<AbortController|null>(null);const questionInput=useRef<HTMLTextAreaElement>(null);const latestTurn=useRef<HTMLElement|null>(null);
@@ -94,7 +96,7 @@ function ResearchConversation({scope,docId,sourceGeneration}:{scope:string;docId
  </main>
 }
 export function ResearchDocument(){
- const location=useLocation();const returnTo=typeof location.state?.researchReturn==='string'&&/^\/ask(?:\?|$)/.test(location.state.researchReturn)?location.state.researchReturn:'/ask';
+ const location=useLocation();const returnTo=typeof location.state?.researchReturn==='string'&&/^\/(?:ask|search)(?:\?|$)/.test(location.state.researchReturn)?location.state.researchReturn:'/ask';
  const {id}=useParams();const [params,setParams]=useSearchParams();const generation=params.get('generation')||'';const page=Math.max(1,Number(params.get('page'))||1);
  const [view,setView]=useState<'text'|'original'>('text');const [imageError,setImageError]=useState(false);
  const [highlight,setHighlight]=useState<{page:number;start:number;end:number}|null>(null);const passageId=params.get('passage');
@@ -104,7 +106,7 @@ export function ResearchDocument(){
   if(passageId)api<{page:number;start:number;end:number}>(`/api/documents/${id}/passages/${passageId}${qs}`,{signal:controller.signal}).then(setHighlight).catch(()=>{});return()=>controller.abort();
  },[id,generation,page,passageId]);
  function go(value:number){if(!doc||!Number.isFinite(value))return;const next=new URLSearchParams(params);next.set('page',String(Math.max(1,Math.min(doc.page_count,Math.floor(value)))));next.delete('passage');setParams(next,{state:location.state});}
- return <main className="research-reader shell"><Link className="back-link" to={returnTo}><ArrowLeft size={16}/>{location.state?.researchReturn?'Back to your research':'Research library'}</Link>{loading?<p role="status">Opening the source document…</p>:error?<div role="alert"><h1>This document could not open.</h1><p>{error}</p><Link to={returnTo}>Return to research</Link></div>:doc&&content&&<>
+ return <main className="research-reader shell"><Link className="back-link" to={returnTo}><ArrowLeft size={16}/>{returnTo.startsWith('/search')?'Back to search results':location.state?.researchReturn?'Back to your research':'Research library'}</Link>{loading?<p role="status">Opening the source document…</p>:error?<div role="alert"><h1>This document could not open.</h1><p>{error}</p><Link to={returnTo}>Return to research</Link></div>:doc&&content&&<>
   <header><h1>{doc.title}</h1><p className="reader-meta">{doc.format==='pdf'?'PDF':'Document'} · {doc.page_count} {doc.format==='pdf'?'pages':'sections'} · Saved {date(doc.retrieved_at)}</p><p className="research-small">Saved date is the retrieval date, not the publication date.</p><div className="reader-actions"><a className="button green" href={doc.original_url}>{doc.format==='pdf'?'Download original PDF':'Download original'}<Download size={17}/></a><a className="text-link" href={doc.text_url}>Download full text<Download size={16}/></a><a className="text-link" href={doc.url} target="_blank" rel="noreferrer">Publisher’s source<ArrowUpRight size={16}/></a></div></header>
   <div className="reader-body"><article><nav className="reader-pagination" aria-label="Document pages"><Button variant="secondary" disabled={page<=1} onClick={()=>go(page-1)} aria-label="Previous page"><ArrowLeft size={17}/></Button><form onSubmit={e=>{e.preventDefault();go(Number(jump));}}><Input label={doc.format==='pdf'?'Page':'Section'} id="page-number" type="number" min={1} max={doc.page_count} value={jump} onChange={e=>setJump(e.target.value)} required/><span>of {doc.page_count}</span><Button variant="ghost" className="text-link" type="submit">Go</Button></form><Button variant="secondary" disabled={page>=doc.page_count} onClick={()=>go(page+1)} aria-label="Next page"><ArrowRight size={17}/></Button></nav>
    <div className="reader-view"><h2>{content.label}</h2>{doc.format==='pdf'&&<SegmentedControl label="Document view" options={[{value:'text',label:'Read text'},{value:'original',label:'Original page'}]} value={view} onValueChange={value=>setView(value as 'text'|'original')}/>}</div>{content.warning&&view==='text'&&<p className="research-message">{content.warning}</p>}<div className="document-text">{view==='original'&&doc.format==='pdf'?(imageError?<p role="alert">This page image could not load. Download the original PDF to view it.</p>:<img className="original-page" src={`/api/documents/${doc.id}/pages/${page}/image?generation=${encodeURIComponent(doc.generation)}`} alt={`Original ${content.label} of ${doc.title}. Use Read text for the extracted text.`} onError={()=>setImageError(true)}/>):highlight?.page===page?<>{content.text.slice(0,highlight.start)}<mark>{content.text.slice(highlight.start,highlight.end)}</mark>{content.text.slice(highlight.end)}</>:content.text||'No readable text was extracted from this page. Open the original to see it.'}</div>

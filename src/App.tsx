@@ -67,6 +67,7 @@ import { buildDiscoverySections } from "./discovery";
 import { DiscoveryLinks, DiscoveryTopics } from "./DiscoveryLinks";
 import "./discovery.css";
 import { Research, ResearchDocument, ResearchMemoryProvider } from "./Research";
+import { SearchAnswer } from "./SearchAnswer";
 import { Button } from "./components/arc/button/button";
 import { SearchField } from "./components/arc/search-field/search-field";
 import { Input } from "./components/arc/input/input";
@@ -612,6 +613,7 @@ function Catalogue({
         <p>For a police, fire or medical emergency, call <a href="tel:112">112</a>. Archived directory entries do not confirm live availability.</p>
         <Link className="text-link" to="/emergency">Open emergency services <ArrowRight size={18} /></Link>
       </section>}
+      {mode === "search" && query.trim() && <SearchAnswer key={query.trim()} question={query.trim()} />}
       {query.trim() && <div className="meaning-search">
         {!meaningEnabled && !semantic ? <>
           <Button variant="ghost" onClick={() => setMeaningEnabled(true)}>Expand search by meaning</Button>
