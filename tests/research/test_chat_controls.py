@@ -153,12 +153,20 @@ def test_brief_answer_has_separate_cache_and_enforced_bound(config,evidence):
 def test_prompt_retains_legal_provenance_without_internal_metadata(evidence):
     meta={'publisher_class':'government_or_court','legal_currency':'not_consolidated_or_legally_verified',
           'source_date_metadata':[{'field':'citation_publication_date','value':'2025-01-01'}],'topics':['water'],
-          'page_context':'National report: Arunachal Pradesh. This section is not Goa.',
+          'page_heading':'7.2 ARUNACHAL PRADESH',
           'document_kind_hint':'report','guide_verification':{'status':'source_verified'}}
-    prepared=prepare_answer(ChatRequest(question='What does the water policy require?'),[dict(evidence[0],**meta)])
+    prepared=prepare_answer(ChatRequest(question='What does the water policy require?'),[dict(evidence[0],**meta,page_context='Uncited rainfall was 1093 mm in July.')])
     sent=json.loads(prepared.messages[-1]['content'])['evidence'][0]
     assert all(sent[k]==v for k,v in meta.items())
     assert 'raw_path' not in sent
+    assert 'page_context' not in sent
+    assert '1093' not in json.dumps(prepared.messages)
+
+def test_page_heading_keeps_geographic_scope_without_uncited_page_prose():
+    from backend.library import page_heading
+    page='7.2 ARUNACHAL PRADESH\nAnnual rainfall was 1093 mm in July.\nThe report estimates 3.88 bcm of groundwater.\n7.2.1 Resource assessment\n'
+    assert page_heading(page)=='7.2 ARUNACHAL PRADESH\n7.2.1 Resource assessment'
+    assert page_heading('A normal prose paragraph on this page.')==''
 
 def test_default_five_dollar_budget_is_enforced_across_instances(tmp_path):
     assert PublicLimits(tmp_path).reserve_answer(5_000_000)

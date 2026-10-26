@@ -16,6 +16,16 @@ def authority_score(score, meta, legal_query):
     # A small relevance-bounded preference; authority is not proof of legal currency.
     return score * (1.15 if legal_query and meta.get('publisher_class')=='government_or_court' else 1)
 
+def page_heading(text):
+    """Scope hints only: prose outside a cited chunk must not become uncited evidence."""
+    headings=[]
+    for line in text.splitlines():
+        line=line.strip();letters=[c for c in line if c.isalpha()]
+        if not 3<=len(letters) or len(line)>140:continue
+        if sum(c.isupper() for c in letters)/len(letters)>=.65 or re.match(r'^\d+(?:\.\d+)+\.?\s+\D',line):
+            headings.append(line)
+    return '\n'.join(headings[:6])[:500]
+
 class Library:
     def __init__(self, root=ROOT, index_root=None):
         self.root=Path(root);self.index=Path(index_root or self.root/'.research-index')
@@ -116,7 +126,7 @@ class Library:
                 qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
                 results.append({'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
                     'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],
-                    'page_context':row['page_context'],
+                    'page_heading':page_heading(row['page_context']),
                     'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':channels[identifier],
                     **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification')},
                     'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation})
