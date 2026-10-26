@@ -1,3 +1,5 @@
+import { crmDirectoryTags } from './crm-directory';
+
 export type CRMRecord = Record<string, string> & { record_id: string; name: string; collection: 'community' | 'government' };
 export type CRMSnapshot = { version: string; records: CRMRecord[]; opportunities: CRMRecord[] };
 export const stages = { new: 'Not contacted', shortlisted: 'Shortlisted', contacted: 'Contacted', conversation: 'In conversation', partner: 'Working together', closed: 'Closed', do_not_contact: 'Do not contact' };
@@ -47,7 +49,7 @@ export function filterRecords(records: CRMRecord[], opportunities: Set<string>, 
     if (filters.activity && r.activity_status !== filters.activity || filters.verification && verification(r) !== filters.verification) return false;
     if (filters.stage && note.stage !== filters.stage || filters.due && !isDue(note, date)) return false;
     if (filters.contact === 'phone' && !r.public_phone || filters.contact === 'email' && !r.public_email || filters.contact === 'missing' && (r.public_phone || r.public_email)) return false;
-    const haystack = normalize([r.name, r.organization, r.role, r.summary, r.goa_location, r.jurisdiction, r.focus_areas.replaceAll('_', ' '), r.public_phone, r.public_email].join(' '));
+    const haystack = normalize([r.name, r.organization, r.role, r.summary, r.goa_location, r.jurisdiction, r.focus_areas.replaceAll('_', ' '), r.public_phone, r.public_email, crmDirectoryTags(r).join(' ')].join(' '));
     return tokens.every(t => haystack.includes(t));
   }).sort((a, b) => {
     if (filters.sort === 'followup') { const difference = (workspace[a.record_id]?.followUp || '9999').localeCompare(workspace[b.record_id]?.followUp || '9999'); if (difference) return difference; }

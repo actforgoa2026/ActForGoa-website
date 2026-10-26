@@ -1,7 +1,8 @@
 import {Link, useLocation} from "react-router-dom";
-import {Users, BookOpen, Leaf, FileText, ArrowUpRight} from "lucide-react";
+import {Users, BookOpen, Leaf, FileText, ArrowUpRight, MapPin} from "lucide-react";
 import {communityDescription} from "../public-record";
 import {kindLabel, type RecordItem} from "../types";
+import {DirectoryActions, DirectoryPhoto, DirectoryTags} from "../DirectoryInfo";
 const recordPath = (r:RecordItem) => "/read/" + r.id;
 export function RecordCard({
   record: r,
@@ -17,7 +18,7 @@ export function RecordCard({
     "/",
     "/search",
     "/library",
-    "/directory",
+    "/directory/archive",
     "/stories",
     "/blog",
   ].includes(location.pathname) || location.pathname.startsWith("/topics/");
@@ -33,7 +34,8 @@ export function RecordCard({
           : FileText;
   return (
     <article className={"record-card " + (list ? "list-card " : "") + (community ? "community-entry" : "")}>
-      {showImage && !list && r.image && (
+      {showImage && r.directory?.photo && <DirectoryPhoto key={r.id} record={r} />}
+      {showImage && !list && r.image && !r.directory?.photo && (
         <Link
           to={recordPath(r)}
           state={{ fromCatalogue, fromHome: location.pathname === "/" }}
@@ -46,13 +48,13 @@ export function RecordCard({
       )}
       <div className="card-content">
         
-        <div className="record-meta">
+        {community ? <DirectoryTags record={r} /> : <div className="record-meta">
           <span>
             <Icon size={15} />
             {r.editorialStatus === "authored-practical-guide" ? "Practical guide" : kindLabel[r.kind]}
           </span>
           {r.locality && <span>{r.locality}</span>}
-        </div>
+        </div>}
         <h3>
           <Link
             to={recordPath(r)}
@@ -62,6 +64,7 @@ export function RecordCard({
             <ArrowUpRight size={19} />
           </Link>
         </h3>
+        {community && (r.locations[0] || r.locality) && <div className="directory-location"><MapPin size={15} aria-hidden="true" /><span>{r.locations[0] || r.locality}</span></div>}
         {description && description !== "Read the original resource from ActForGoa." && (
           <p>
             {r.id === "resource-590480849c"
@@ -69,9 +72,9 @@ export function RecordCard({
               : description}
           </p>
         )}
-        <div className="card-bottom">
-          <span>{community ? r.topics.join(" · ") : r.topics[0]}</span>
-        </div>
+        {community ? <DirectoryActions record={r} /> : <div className="card-bottom">
+          <span>{r.topics[0]}</span>
+        </div>}
 
       </div>
     </article>

@@ -1,0 +1,74 @@
+[
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/directory.css",
+    "line": 14,
+    "snippet": "font-size: 12px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "12px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/crm.css",
+    "line": 5,
+    "snippet": "font-size: 22px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "22px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/crm.css",
+    "line": 14,
+    "snippet": "font-size: 12px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "12px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/crm.css",
+    "line": 46,
+    "snippet": "font-size: 38px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "38px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/crm.css",
+    "line": 61,
+    "snippet": "font-size: 12px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "12px"
+  },
+  {
+    "antipattern": "design-system-font-size",
+    "name": "Font size outside DESIGN.md",
+    "description": "A literal font-size is off the type ramp documented in DESIGN.md typography. Use a documented size step or update the design system if the new step is intentional.",
+    "severity": "advisory",
+    "category": "quality",
+    "file": "/Users/zakkrevitt/.codex/worktrees/directory-place-details/ActForGoa/src/crm.css",
+    "line": 64,
+    "snippet": "font-size: 30px is off the DESIGN.md type ramp",
+    "advisory": true,
+    "ignoreValue": "30px"
+  }
+]

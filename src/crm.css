@@ -63,3 +63,10 @@
 @media (max-width: 620px) {
   .crm { padding-top: 28px; }.crm h1 { font-size: 30px; }.crm-detail h2 { font-size: 30px; }.crm-filter-grid { grid-template-columns: 1fr; gap: 16px; }.crm-result-tools { align-items: start; flex-direction: column; gap: 12px; }.crm-result-tools > .crm-actions { width: 100%; justify-content: space-between; }.crm-result-tools .crm-select { gap: 8px; }.crm-result-tools select { max-width: 165px; }.crm-detail dl > div { grid-template-columns: 1fr; gap: 3px; }.crm-detail { gap: 24px; }.crm-table .crm-meta { font-size: 14px; }.crm-pagination { gap: 12px; font-size: 14px; }
 }
+
+/* Reviewed place/work photos and direct actions share the archive presentation. */
+.crm-table .directory-photo { max-width: 320px; margin-bottom: 16px; }
+.crm-table .directory-tags { margin-bottom: 12px; }
+.crm-detail header .directory-tags { margin-top: 20px; }
+.crm-detail header .directory-photo { max-width: 680px; }
+.crm .directory-actions { margin-top: 8px; }

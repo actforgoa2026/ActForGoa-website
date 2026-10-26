@@ -1,5 +1,11 @@
 export type Kind='organisation'|'contact'|'resource'|'story'|'page';
+export interface DirectoryDetails {
+ tags:string[]; sources:string[]; checkedAt?:string;
+ links?:{label:string;url:string}[]; description?:string; address?:string; locality?:string;
+ photo?:{src:string;source:string;sourcePage:string;credit:string;alt:string;position?:string};
+}
 export interface RecordItem {
+ directory?:DirectoryDetails;
  id:string;title:string;kind:Kind;source:string;sourceApi:string;sourceStatus:number|null;
  summary:string;text:string;documentText?:string;blocks:{type:string;text:string}[];topics:string[];
  images?:{src:string;source:string;alt:string;width?:number;height?:number}[];
