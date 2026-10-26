@@ -48,10 +48,28 @@ try {
     }
     const current = JSON.parse(run('vercel', ['inspect', 'https://actforgoa-field-guide.vercel.app', '--json']));
     if (current.id !== inspect.id) throw new Error('Another deployment landed during checks. Reconcile first.');
-    execFileSync('vercel', ['deploy', '--yes', '--prod', '--project', 'actforgoa-field-guide',
+    const deploymentUrl = execFileSync('vercel', ['deploy', '--yes', '--prod', '--skip-domain', '--project', 'actforgoa-field-guide',
       '--build-env', 'VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app',
-      '--meta', `releaseCommit=${commit}`, '--meta', `releaseTree=${tree}`], { stdio: 'inherit' });
-    console.log('Deployment command completed. Verify the public alias and record its deployment ID before declaring it live.');
+      '--meta', `releaseCommit=${commit}`, '--meta', `releaseTree=${tree}`], {
+      encoding: 'utf8', stdio: ['inherit', 'pipe', 'inherit'],
+    }).trim();
+    if (!/^https:\/\/actforgoa-field-guide-[a-z0-9-]+\.vercel\.app$/.test(deploymentUrl)) {
+      throw new Error('Deployment did not return the expected project URL. Nothing promoted.');
+    }
+    const staged = JSON.parse(run('vercel', ['inspect', deploymentUrl, '--json']));
+    if (staged.readyState !== 'READY' && staged.status !== 'READY') throw new Error('Deployment is not ready. Nothing promoted.');
+    // Remote builds take time too. Check the release boundary again before promotion.
+    git('fetch', 'origin', 'main');
+    if (git('rev-parse', 'HEAD') !== commit || git('rev-parse', 'origin/main') !== commit
+        || git('status', '--porcelain', '--untracked-files=all')) {
+      throw new Error('Source changed during the remote build. Nothing promoted.');
+    }
+    const beforePromotion = JSON.parse(run('vercel', ['inspect', 'https://actforgoa-field-guide.vercel.app', '--json']));
+    if (beforePromotion.id !== inspect.id) throw new Error('Live site changed during the remote build. Nothing promoted.');
+    execFileSync('vercel', ['promote', deploymentUrl, '--yes'], { stdio: 'inherit' });
+    const published = JSON.parse(run('vercel', ['inspect', 'https://actforgoa-field-guide.vercel.app', '--json']));
+    if (published.id !== staged.id) throw new Error('Public alias does not match the verified deployment. Inspect the release before continuing.');
+    console.log(`Promoted ${staged.id} from ${commit}. Verify the public site in the browser before declaring it live.`);
   }
 } finally {
   rmSync(lock, { recursive: true });
