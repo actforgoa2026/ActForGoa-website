@@ -55,6 +55,8 @@ import "./topic-navigation.css";
 import "./home-hero.css";
 import { communityDescription } from "./public-record";
 import { storyContent } from "./story-content";
+import { directoryTags } from "./directory";
+import { DirectoryActions, DirectoryPhoto, DirectoryTags } from "./DirectoryInfo";
 import type { RecordItem } from "./types";
 import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
@@ -414,6 +416,7 @@ function Catalogue({
   const [params, setParams] = useSearchParams();
   const query = params.get("q") || "";
   const { topic, type: filter } = catalogueFilters(params.toString());
+  const tag = params.get("tag") || "";
   const location = useLocation();
   const saved = browsingState.get(location.key);
   const [page, setPage] = useState({
@@ -528,6 +531,7 @@ function Catalogue({
       const ranked = hybridSearch(base, query, semantic);
       if (mode === "directory" && !query.trim()) ranked.sort((a, b) =>
         Number(b.record.kind === "organisation") - Number(a.record.kind === "organisation") ||
+        Number(Boolean(b.record.directory?.photo)) - Number(Boolean(a.record.directory?.photo)) ||
         Number(b.record.text.trim().length > 80) - Number(a.record.text.trim().length > 80) ||
         a.record.title.localeCompare(b.record.title));
       return ranked;
@@ -537,6 +541,7 @@ function Catalogue({
   const relatedResults = ranked.filter(
     ({ record: r }) =>
       (!topic || r.topics.includes(topic)) &&
+      (!tag || directoryTags(r).includes(tag)) &&
       (filter === "all" ||
         r.kind === filter ||
         (filter === "organisation" && r.kind === "contact")),
@@ -545,7 +550,7 @@ function Catalogue({
   const focusedResults = useMemo(
     () => intent ? focusSearchResults(ranked, query, intent) : ranked,
     [ranked, query, intent],
-  ).filter(({ record }) => !topic || record.topics.includes(topic));
+  ).filter(({ record }) => (!topic || record.topics.includes(topic)) && (!tag || directoryTags(record).includes(tag)));
   const canFocus = mode === "search" && filter === "all" && intent !== null;
   const focused = canFocus && params.get("scope") !== "all" && focusedResults.length > 0;
   const results = focused ? focusedResults : relatedResults;
@@ -716,6 +721,7 @@ function Catalogue({
               <span className="sr-only">Remove topic filter</span>
             </Button>
           )}
+          {tag && <Button variant="ghost" className="active-filter" onClick={() => change("tag", "")}><span>{tag}</span><X size={14} /><span className="sr-only">Remove keyword filter</span></Button>}
           {results.length ? (
             <>
               {grouped ? (
@@ -851,16 +857,17 @@ function Detail({ records }: { records: RecordItem[] }) {
 
       <div className="detail-layout">
         <article>
-          <div className="record-meta">
+          {r.directory ? <DirectoryTags record={r} /> : <div className="record-meta">
             <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}</span>
             <span>{r.topics[0]}</span>
-          </div>
+          </div>}
           <h1>{r.title}</h1>
           <div className="detail-byline">
             From ActForGoa
             {r.publishedAt && <> · Published {formatDate(r.publishedAt)}</>}
           </div>
-          {r.image && (
+          {r.directory?.photo && <DirectoryPhoto key={r.id} record={r} detail />}
+          {r.image && !r.directory?.photo && (
             <img className="detail-image" src={r.image} alt={r.title} />
           )}
           {(r.kind === "contact" || r.kind === "organisation" || r.id === "resource-590480849c") && (
@@ -876,6 +883,7 @@ function Detail({ records }: { records: RecordItem[] }) {
             <a className="text-link" href={r.editorialCorrection.source}>{r.kind === "story" ? "Read the original article" : "Read the official text"} <ExternalLink size={15} /></a>
           </div>}
           <div className="reading-body">
+            {r.directory?.description && r.blocks.length > 0 && <p>{r.directory.description}</p>}
             {!r.blocks.length && (r.kind === "organisation" || r.kind === "contact") && <p>{communityDescription(r)}</p>}
             {content.blocks.map((b, i) =>
               b.href ? (
@@ -937,6 +945,7 @@ function Detail({ records }: { records: RecordItem[] }) {
           )}
         </article>
         <aside className="detail-aside">
+          {r.directory && <section><h2>Explore & connect</h2><DirectoryActions record={r} full /></section>}
           {(r.emails.length > 0 ||
             r.locations.length > 0) && (
             <section>
@@ -981,6 +990,7 @@ function Detail({ records }: { records: RecordItem[] }) {
                 Public directory record <ExternalLink size={14} />
               </a>
             )}
+            {r.directory?.sources.filter(source => source !== r.source).map(source => <a className="subtle-link" key={source} href={source} target="_blank" rel="noreferrer">{new URL(source).hostname.replace(/^www\./, "")}<ExternalLink size={14} /></a>)}
             <Button
               variant="ghost"
               className="subtle-link"

@@ -1,5 +1,6 @@
 import type { RecordItem } from './types';
 import { contentCorrections } from './content-corrections';
+import { enrichDirectory } from './directory';
 
 // Presentation only: the source catalogue and archived records retain every field.
 // Apply to prose too, since the source repeats numbers inside biographies and lists.
@@ -37,6 +38,7 @@ export function publicRecord(record: RecordItem, cataloguePattern?: RegExp | nul
 }
 
 export function communityDescription(record: RecordItem): string {
+  if (record.directory?.description) return record.directory.description;
   if (record.kind === 'contact') {
     return `Snake rescue volunteer${record.locality ? ` listed for ${record.locality}` : ' listed in Goa'}. Part of ActForGoa’s locality guide to wildlife rescue. The source listing dates to 2018; current availability needs confirmation.`;
   }
@@ -57,5 +59,5 @@ export function publicCatalogue(records: RecordItem[]): RecordItem[] {
   // volunteer's landline even when that article's parser missed the field.
   const numbers = [...new Set(records.flatMap(record => record.phones.map(phone => phone.display)))];
   const pattern = phonePattern(numbers);
-  return records.map(record => publicRecord(record, pattern));
+  return records.map(record => publicRecord(enrichDirectory(record), pattern));
 }

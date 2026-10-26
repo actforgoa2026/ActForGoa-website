@@ -16,7 +16,7 @@ export function lexicalSearch(records:RecordItem[],query:string){
  if(!query.trim())return records.map(record=>({record,score:0}));
  if(!terms.length&&!expanded.length)return [];
  const matches=records.map(record=>{
-  const title=record.title.toLowerCase(), body=(record.text+' '+(record.documentText||'')).toLowerCase(),topic=record.topics.join(' ').toLowerCase();
+  const title=record.title.toLowerCase(), body=(record.text+' '+(record.documentText||'')+' '+(record.directory?.description||'')+' '+(record.locality||'')+' '+record.locations.join(' ')+' '+(record.directory?.tags||[]).join(' ')).toLowerCase(),topic=record.topics.join(' ').toLowerCase();
   const tset=new Set(tokens(title)),bset=new Set(tokens(body));
   let score=0,hit=0;
   for(const t of terms){if(tset.has(t)||title.includes(t)){score+=8;hit++}else if(bset.has(t)){score+=2;hit++}else if(topic.includes(t)){score+=.3}}
