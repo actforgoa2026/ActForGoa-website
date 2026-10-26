@@ -21,3 +21,4 @@ data/fetch-manifest.json
 reports/link-checks.jsonl
 *.tsbuildinfo
 *.log
+.reports/

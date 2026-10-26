@@ -17,3 +17,5 @@ requirements.txt
 PRODUCT.md
 DESIGN.md
 README.md
+.reports/
+deploy/
