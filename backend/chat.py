@@ -85,7 +85,6 @@ def prepare_answer(request, evidence):
     schema=GroundedAnswer.model_json_schema()
     schema['properties']['paragraphs']['items']=schema.pop('$defs')['Paragraph']
     schema['properties']['paragraphs']['maxItems']=1 if request.answer_style=='brief' else 4
-    if request.answer_style=='brief':schema['properties']['paragraphs']['items']['properties']['text']['maxLength']=650
     instruction=INSTRUCTIONS
     if request.answer_style=='brief':
         instruction+='\nGive a direct practical answer in one short paragraph, aiming for 80 words and never exceeding 120 words. Retain essential limitations and citations. Do not add unrelated background.'
@@ -129,6 +128,8 @@ def validate_answer(answer, evidence, answer_style='standard'):
     for paragraph in paragraphs:
         if not paragraph['text'].strip() or not paragraph['citations'] or any(c not in allowed for c in paragraph['citations']):
             raise ValueError('Answer contains missing or unknown citations')
+        if not re.search(r'[.!?。！？][\)\]"\u2019\u201d]*$',paragraph['text']):
+            raise ValueError('Answer paragraph appears incomplete')
         for citation in paragraph['citations']:
             if citation not in used:used.append(citation)
     result={'status':'answered','paragraphs':paragraphs, 'citations':[allowed[c] for c in used]}

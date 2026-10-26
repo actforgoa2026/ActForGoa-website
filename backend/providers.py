@@ -16,6 +16,7 @@ PRICES = {
     ('openrouter', 'qwen/qwen3.7-flash'): ('0.030', '0.130'),
     ('openrouter', 'qwen/qwen3.8-flash'): ('0.15', '0.47'),
     ('openrouter', 'openai/gpt-5-nano'): ('0.05', '0.40'),
+    ('openrouter', 'openai/gpt-5.6-luna'): ('0.20', '1.20'),
     ('qwen', 'qwen3.7-flash-2026-07-15'): ('0.030', '0.130'),
     ('qwen', 'qwen3.8-flash'): ('0.15', '0.47'),
     ('openai', 'gpt-5-mini'): ('0.25', '2.00'),
@@ -49,7 +50,7 @@ class ChatConfig:
 def chat_config():
     provider = os.getenv('RESEARCH_CHAT_PROVIDER', 'openrouter')
     if provider == 'openrouter':
-        model=os.getenv('OPENROUTER_CHAT_MODEL', 'openai/gpt-5-nano')
+        model=os.getenv('OPENROUTER_CHAT_MODEL', 'openai/gpt-5.6-luna')
         is_openai=model.startswith('openai/')
         config = ChatConfig(provider, model,
                             'OpenRouter and OpenAI' if is_openai else 'OpenRouter and Alibaba Cloud (Qwen)', 'OPENROUTER_API_KEY',

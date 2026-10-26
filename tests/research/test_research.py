@@ -26,7 +26,7 @@ def collection(tmp_path_factory):
     for sid,title,text in sources:
         pdf=pymupdf.open()
         for page_text in [text,'Final page of '+title+'. The complete document includes this last page.']:
-            page=pdf.new_page();page.insert_text((40,60),page_text,fontsize=10)
+            page=pdf.new_page();page.insert_textbox((40,40,550,800),page_text,fontsize=10)
         raw=pdf.tobytes();pdf.close();checksum=hashlib.sha256(raw).hexdigest();relative=f'corpus/raw/{checksum}.pdf';(root/relative).write_bytes(raw)
         meta={'id':sid,'url':f'https://example.org/{sid}.pdf','title':title,'status':'downloaded','sha256':checksum,'raw_path':relative,'format':'pdf','publisher_class':'research','retrieved_at':'2026-10-22T00:00:00Z'}
         (root/'corpus/metadata'/f'{sid}.json').write_text(json.dumps(meta))

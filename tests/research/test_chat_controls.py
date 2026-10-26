@@ -180,10 +180,14 @@ def test_inline_internal_ids_are_removed_without_removing_facts(evidence):
     assert result['paragraphs'][0]['text']=='The policy (2025) proposes monitoring. Read it.'
     assert result['paragraphs'][0]['citations']==['passage-1']
 
+def test_schema_bounded_partial_sentence_is_not_a_complete_answer(evidence):
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':'The application fee is the','citations':['passage-1']}]})
+    with pytest.raises(ValueError,match='incomplete'):validate_answer(answer,evidence,'brief')
+
 def test_selected_model_uses_strict_schema_correct_prices_and_disclosure(evidence,monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter');monkeypatch.delenv('OPENROUTER_CHAT_MODEL',raising=False)
     config=chat_config();captured=[]
-    assert config.model=='openai/gpt-5-nano' and config.label=='OpenRouter and OpenAI'
+    assert config.model=='openai/gpt-5.6-luna' and config.label=='OpenRouter and OpenAI'
     def handle(request):
         captured.append(json.loads(request.content))
         return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[{'text':'Gates regulate water.','citations':['passage-1']}]})))
@@ -195,8 +199,8 @@ def test_selected_model_uses_strict_schema_correct_prices_and_disclosure(evidenc
     assert schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']==['passage-1']
     assert body['reasoning']=={'effort':'low'} and 'temperature' not in body
     assert body['provider']['only']==['openai'] and body['provider']['allow_fallbacks'] is False
-    assert body['provider']['max_price']=={'prompt':.05,'completion':.4,'request':0}
-    assert config.maximum_cost_microusd(26048)==2703
+    assert body['provider']['max_price']=={'prompt':.2,'completion':1.2,'request':0}
+    assert config.maximum_cost_microusd(26048)==9410
 
 @pytest.mark.parametrize('kind',['legislation_or_notification','official_procedure','SOP','final_policy'])
 def test_legal_currency_limitation_is_returned_with_cited_legal_answer(evidence,kind):
