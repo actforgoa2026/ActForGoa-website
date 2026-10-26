@@ -1,6 +1,6 @@
 # ActForGoa integration
 
-The user appointed the “Coordinate site feature integration” chat to coordinate concurrent feature work, PRs, merges and review-site releases. During concurrent work, prepare an isolated commit/PR and give the coordinator the exact head, scope, dependencies and verification evidence. The coordinator owns the combined deployment unless the user directs otherwise.
+The user appointed the “ORCHESTRATOR” chat (`01a17774-6d09-7751-915c-3fbf3a8994c4`) to coordinate concurrent feature work, PRs, merges and review-site releases. During concurrent work, prepare an isolated commit/PR and give the coordinator the exact head, scope, dependencies and verification evidence. The coordinator owns the combined deployment unless the user directs otherwise.
 
 - Start from freshly fetched `origin/main`; preserve newer features when resolving conflicts.
 - The primary shared checkout can contain other agents' unfinished work. Do not reset, stash, sweep-commit or publish it. Use a suitable isolated worktree.
