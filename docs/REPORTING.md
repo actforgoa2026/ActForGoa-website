@@ -1,6 +1,8 @@
 # Private incident reporting
 
-Deployed on 26 October 2026 at https://actforgoa-field-guide.vercel.app/report, with the private inbox at /reports/review. Vercel serves the frontend; an isolated Railway service stores reports and photos on a persistent volume. Nothing is published or forwarded to an authority automatically.
+Verified deployed on 26 October 2026 at https://actforgoa-field-guide.vercel.app/report, with the private inbox at /reports/review. Vercel serves the frontend; an isolated Railway service stores reports and photos on a persistent volume. Nothing is published or forwarded to an authority automatically. This records that audited release, not the status of a later deployment.
+
+This source-control package restores the backend and operational tooling. The frontend routes, reporting components and general website audit changes are being restored separately by the release integration chat. See [the integration handoff](REPORTING-INTEGRATION.md) for exact provenance, configuration and verification boundaries. This package alone does not add `/report` or `/reports/review` to the current-main frontend.
 
 ## Run
 
@@ -48,11 +50,11 @@ Use a securely provisioned random secret of at least 32 characters in `ACTFORGOA
 
 The site administrator must operate the review inbox manually. Reports have no automatic expiry or deletion policy; records remain until administratively removed. Daily Railway volume backups are configured with six-day retention. Storage is SQLite on the private persistent volume; the application does not add database encryption. Review ownership, retention and public privacy terms remain organizational decisions. If the group grows, replace the shared key with named reviewer accounts. No authority forwarding or external notification destination has been configured.
 
-## Verification
+## Verification of the original audited release
 
 - `npm test`: 57 tests passed, including report/photo persistence across a service restart; deduplication; private inbox/photo access; invalid fields; invalid image contents; photo-count limits; missing consent; future times; cross-origin requests; rate limiting; status updates and conflict protection.
 - `npm run build`: passed frontend and server type checks and the frontend production build.
-- Browser: category, photo upload, written location and manual coordinates, review, consent, submission, receipt download, rejected reviewer key, authenticated photo read, and status update tested with a clearly labeled synthetic report. No real allegation or contact was submitted.
+- Browser: category, written location and manual coordinates, review, consent, submission, receipt download, rejected reviewer key, authenticated photo read, and status update tested with a clearly labeled synthetic report. The final native file-picker check could not be repeated because Chrome file-URL access was disabled and the Mac locked; upload/metadata stripping and private image rendering were verified through the API and inbox. No real allegation or contact was submitted.
 - Desktop and phone visual evidence is in `.impeccable/review/reporting/`. Device GPS permission, physical phone camera behavior, HEIC conversion, remain outside the browser-emulation checks. Hosted submission, private photo access, review changes and persistence across a real service restart were verified separately on production.
 - Full-frame portrait and landscape previews and the full-photo dialog were checked at phone and desktop sizes. Escape closes the dialog and returns focus to the photo control. The Impeccable reviewer scored both requested fixes resolved (complete photo viewing and the first-viewport privacy explanation), with disposition `ship` for that fix-list verdict.
 
@@ -64,7 +66,7 @@ The site administrator must operate the review inbox manually. Reports have no a
 - Reviewer secret is stored in the Railway environment and locally in `.reports/production-reviewer-token` (0600). Never put it in a URL or frontend environment variable. Open that local file to sign into the private review screen.
 - `node scripts/package-reporting.mjs` prepares a source allowlist in `.reports/deployment`; it includes no database, token, test photos or research archive. Deploy with `railway up .reports/deployment --path-as-root --project 512430bc-234d-4582-b4dd-47770e3c9114 --service reports --environment production --detach --json`.
 - Vercel production environment variable: `VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app`.
-- The frontend was deployed from a frozen source snapshot in `.reports/frontend-release-2026-10-26`. Its manifest and verification evidence are in `reports/reporting-audit-2026-10-26/`.
+- The audit frontend was deployed from a frozen source snapshot in `.reports/frontend-release-2026-10-26`. Its manifest and verification evidence are in `reports/reporting-audit-2026-10-26/` in the original shared workspace. Those evidence files are not included in this focused source package.
 - The final audit service image runs an idempotent cleanup for exactly two synthetic audit IDs, additionally checking their full synthetic description before deleting anything. Its source is retained in the audit evidence. Future normal packages omit this one-time cleanup.
 - Cursor pagination preserves older pages when new reports arrive. Review revisions advance monotonically; stale saves receive 409. Unsaved notes are protected on navigation, sign out and refresh.
 

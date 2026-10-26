@@ -8,5 +8,9 @@ await mkdir(destination, { recursive: true });
 for (const name of ['package.json', 'package-lock.json', 'Dockerfile', 'railway.json']) {
   await cp(resolve('deploy/reporting', name), resolve(destination, name));
 }
-for (const name of ['server', 'shared']) await cp(resolve(name), resolve(destination, name), { recursive: true });
+// Keep this service independent of other backends added to the repository.
+for (const name of ['server/reporting.ts', 'shared/reporting.ts', 'shared/submission-identity.ts']) {
+  await mkdir(resolve(destination, name, '..'), { recursive: true });
+  await cp(resolve(name), resolve(destination, name));
+}
 console.log('Reporting deployment package prepared at .reports/deployment.');
