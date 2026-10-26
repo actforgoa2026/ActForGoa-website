@@ -15,6 +15,7 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 
 ## What works
 
+- The community CRM at `/directory` includes 3,267 sourced records, searchable public contacts, activity and verification filters, participation routes, and browser-local relationship notes with JSON backup/restore. [CRM usage and maintenance](docs/CRM.md).
 - Search across 600 imported entries plus five authored practical guides: reporting, building, farming, animal welfare and environmental protection.
 - Practical guides include official citations, 17 editable template downloads, section navigation and a visible verification register. They remain clearly labelled drafts pending legal and live-service review.
 - Hybrid retrieval: weighted keyword search, explicit intent expansion, and local MiniLM semantic vectors. Queries run in a browser worker and are not sent to an AI provider. Keyword results appear immediately while the local model loads.
@@ -25,7 +26,7 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 
 ## Start with the evidence
 
-The [23 October 2026 directory release](https://github.com/ZakKrevitt/ActForGoa/releases/tag/directory-2026-10-23) contains CSVs with 499 community records, 2,768 government office/representative records and 28 linked participation routes. [Import instructions and research limitations](research/releases/2026-10-23/READ_ME.txt) explain the stable IDs, source links and activity labels. The CSVs include historical and unconfirmed leads; the participation routes are a subset, and contacts have not been delivery-tested. This research release is maintained separately from the website catalogue.
+The [23 October 2026 directory release](https://github.com/ZakKrevitt/ActForGoa/releases/tag/directory-2026-10-23) contains CSVs with 499 community records, 2,768 government office/representative records and 28 linked participation routes. [Import instructions and research limitations](research/releases/2026-10-23/READ_ME.txt) explain the stable IDs, source links and activity labels. The CSVs include historical and unconfirmed leads; the participation routes are a subset, and contacts have not been delivery-tested. The CRM publishes this snapshot separately from the original website catalogue, which remains at `/directory/archive`.
 
 - [Crawl and build plan](docs/PLAN.md)
 - [Crawl coverage and limitations](reports/CRAWL-REPORT.md)
