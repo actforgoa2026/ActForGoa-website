@@ -1058,7 +1058,7 @@ function Contact({ involve = false }: { involve?: boolean }) {
                 defaultValue={
                   params.get("entry")
                     ? "Suggest a correction"
-                    : params.get("reason") === "Work with ActForGoa" ? "Work with ActForGoa"
+                    : ["Ask a question", "Work with ActForGoa", "Suggest a correction", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].includes(params.get("reason") || "") ? params.get("reason")!
                     : involve
                       ? "Volunteer with ActForGoa"
                       : "Ask a question"
