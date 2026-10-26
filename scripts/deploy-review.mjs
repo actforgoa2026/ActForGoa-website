@@ -49,15 +49,19 @@ try {
     }
     const current = JSON.parse(run('vercel', ['inspect', 'https://actforgoa-field-guide.vercel.app', '--json']));
     if (current.id !== inspect.id) throw new Error('Another deployment landed during checks. Reconcile first.');
-    const deploymentUrl = execFileSync('vercel', ['deploy', '--yes', '--prod', '--skip-domain', '--project', 'actforgoa-field-guide',
+    const deploymentResult = JSON.parse(execFileSync('vercel', ['deploy', '--json', '--yes', '--prod', '--skip-domain', '--project', 'actforgoa-field-guide',
       '--build-env', 'VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app',
       '--meta', `releaseCommit=${commit}`, '--meta', `releaseTree=${tree}`], {
       encoding: 'utf8', stdio: ['inherit', 'pipe', 'inherit'],
-    }).trim();
-    if (!/^https:\/\/actforgoa-field-guide-[a-z0-9-]+\.vercel\.app$/.test(deploymentUrl)) {
+    }));
+    // Agent mode wraps the same deployment object in a status envelope.
+    const deployment = deploymentResult.deployment ?? deploymentResult;
+    const deploymentUrl = deployment.url;
+    if (typeof deploymentUrl !== 'string' || !/^https:\/\/actforgoa-field-guide-[a-z0-9-]+\.vercel\.app$/.test(deploymentUrl)) {
       throw new Error('Deployment did not return the expected project URL. Nothing promoted.');
     }
     const staged = JSON.parse(run('vercel', ['inspect', deploymentUrl, '--json']));
+    if (staged.id !== deployment.id) throw new Error('Staged deployment identity does not match the build. Nothing promoted.');
     if (staged.readyState !== 'READY' && staged.status !== 'READY') throw new Error('Deployment is not ready. Nothing promoted.');
     const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
       '--', '--fail', '--silent', '--show-error', '--max-time', '30']));

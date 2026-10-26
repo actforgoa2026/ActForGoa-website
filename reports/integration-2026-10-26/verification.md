@@ -12,7 +12,7 @@ Prepared 26 October 2026 in the isolated integration worktree. Exact final sourc
 
 ## Checks completed
 
-- 102 JavaScript tests, including nine mocked release-command cases; 18 Python research tests. The Python suite used the ecology-research-chat virtual environment and reported five dependency deprecation warnings.
+- 104 JavaScript tests, including eleven mocked release-command cases; 18 Python research tests. The Python suite used the ecology-research-chat virtual environment and reported five dependency deprecation warnings.
 - Production TypeScript/Vite build passed. No new package dependency from integration.
 - Desktop 1280x900 and phone 390x844 browser checks: homepage, guided choices, emergency page, guide reader, CRM result/detail, archive result/detail and template editing. Phone navigation exposes both reading and research libraries.
 - Archive tests in the browser preserved the snake query, Nature & wildlife filter, exact work-tag filter and list layout across opening a record and returning. CRM retained its search query across detail navigation.
@@ -23,6 +23,7 @@ Prepared 26 October 2026 in the isolated integration worktree. Exact final sourc
 - Independent focused review through 451ad57 found no further actionable release-wrapper issue after the archive-return fix. Final conflict-resolution review through f306e54 found no actionable issues: reporting/research/CRM independence, rewrite separation, all 600 archive identities, corrections, phone filtering and return navigation were preserved.
 - Research PR #8 merged at e31e492 after its owner verified all 1,172 archive/index file checksums and the public backend. The combined preview independently passed six real Goa queries, 30 exact passage identities, a complete original PDF checksum, all 20 extracted-text pages of that sample and its original-page PNG. The same-origin preview report is retained in .reports/research-preview-http.json.
 - Desktop and phone research checks returned real khazan sources, opened the cited document at page 698, loaded the original page image and preserved the question when returning to the library. Source and document views had no horizontal overflow or italic styling. Generated-answer unavailability was correctly disclosed.
+- The first remote build completed, but the guard correctly withheld public promotion when Vercel's CLI output differed from a bare URL. The parser now requests explicit JSON, accepts its documented agent envelope and verifies the inspected deployment identity. Tests cover both JSON forms and identity mismatch.
 
 Screenshots are retained under .impeccable/review/integration/ in the integration worktree. Source-linked evidence and final public deployment confirmation are recorded under ignored .reports/ so publishing evidence does not alter the source tree being released. Public-alias verification must pass before declaring the release live.
 

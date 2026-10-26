@@ -23,7 +23,10 @@ if(tool==='git') {
 }
 if(tool==='vercel') {
  if(args[0]==='curl') process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable'}));
- if(args[0]==='deploy') process.stdout.write('https://actforgoa-field-guide-test.vercel.app');
+ if(args[0]==='deploy') {
+  const deployment={id:scenario==='wrong-deployment'?'unexpected':'new',url:'https://actforgoa-field-guide-test.vercel.app'};
+  process.stdout.write(JSON.stringify(scenario==='flat-json'?deployment:{status:'ok',deployment}));
+ }
  if(args[0]==='inspect') {
   const staged=args[1].includes('-test.');
   const id=staged||promoted?'new':scenario==='alias-during-build'&&deployed?'other':'old';
@@ -53,7 +56,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable']) {
+for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable','wrong-deployment']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);
@@ -61,13 +64,14 @@ for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-d
  });
 }
 
-test('release stages a configured build and promotes only after repeated boundary checks',()=>{
- const result=runRelease('ok');
+for(const scenario of ['ok','flat-json']) test(`release stages ${scenario} output and promotes only after repeated boundary checks`,()=>{
+ const result=runRelease(scenario);
  assert.equal(result.status,0,result.stderr);
  const deployment=result.calls.findIndex(x=>x.tool==='vercel'&&x.args[0]==='deploy');
  const promotion=result.calls.findIndex(x=>x.tool==='vercel'&&x.args[0]==='promote');
  assert(deployment>=0&&promotion>deployment);
  assert(result.calls[deployment].args.includes('--skip-domain'));
+ assert(result.calls[deployment].args.includes('--json'));
  assert(result.calls[deployment].args.includes('VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='git'&&x.args[0]==='fetch'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[1]==='https://actforgoa-field-guide.vercel.app'));
