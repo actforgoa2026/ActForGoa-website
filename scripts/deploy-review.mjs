@@ -59,6 +59,9 @@ try {
     }
     const staged = JSON.parse(run('vercel', ['inspect', deploymentUrl, '--json']));
     if (staged.readyState !== 'READY' && staged.status !== 'READY') throw new Error('Deployment is not ready. Nothing promoted.');
+    const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
+      '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
+    if (research.search_ready !== true) throw new Error('Staged research routing or service is unavailable. Nothing promoted.');
     // Remote builds take time too. Check the release boundary again before promotion.
     git('fetch', 'origin', 'main');
     if (git('rev-parse', 'HEAD') !== commit || git('rev-parse', 'origin/main') !== commit

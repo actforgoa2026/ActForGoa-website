@@ -12,7 +12,7 @@ Prepared 26 October 2026 in the isolated integration worktree. Exact final sourc
 
 ## Checks completed
 
-- 101 JavaScript tests, including eight mocked release-command cases; 18 Python research tests. The Python suite used the ecology-research-chat virtual environment and reported five dependency deprecation warnings.
+- 102 JavaScript tests, including nine mocked release-command cases; 18 Python research tests. The Python suite used the ecology-research-chat virtual environment and reported five dependency deprecation warnings.
 - Production TypeScript/Vite build passed. No new package dependency from integration.
 - Desktop 1280x900 and phone 390x844 browser checks: homepage, guided choices, emergency page, guide reader, CRM result/detail, archive result/detail and template editing. Phone navigation exposes both reading and research libraries.
 - Archive tests in the browser preserved the snake query, Nature & wildlife filter, exact work-tag filter and list layout across opening a record and returning. CRM retained its search query across detail navigation.

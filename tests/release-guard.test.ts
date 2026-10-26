@@ -22,6 +22,7 @@ if(tool==='git') {
  }
 }
 if(tool==='vercel') {
+ if(args[0]==='curl') process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable'}));
  if(args[0]==='deploy') process.stdout.write('https://actforgoa-field-guide-test.vercel.app');
  if(args[0]==='inspect') {
   const staged=args[1].includes('-test.');
@@ -52,7 +53,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build']) {
+for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);
@@ -70,5 +71,6 @@ test('release stages a configured build and promotes only after repeated boundar
  assert(result.calls[deployment].args.includes('VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='git'&&x.args[0]==='fetch'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[1]==='https://actforgoa-field-guide.vercel.app'));
+ assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[0]==='curl'&&x.args.includes('/api/status')&&x.args.includes('https://actforgoa-field-guide-test.vercel.app')));
  assert.equal(result.calls[promotion].args[1],'https://actforgoa-field-guide-test.vercel.app');
 });
