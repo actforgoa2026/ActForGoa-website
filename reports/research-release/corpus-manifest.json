@@ -1,0 +1,15 @@
+{
+  "generation": "20261022T155701-21661179",
+  "documents": 1156,
+  "originals": 1156,
+  "directory": "/Users/zakkrevitt/.codex/worktrees/research-live/ActForGoa/.research-release/data",
+  "files_manifest_sha256": "afa9e3264dde6c1d496017770edf9c41ee0edabf709bd53a2aea5bba8576b64b",
+  "service": "/Users/zakkrevitt/.codex/worktrees/research-live/ActForGoa/.research-release/service",
+  "scope": "Only indexed original files, current immutable index, code and bundled model. No keys or private report/CRM data.",
+  "directories": [
+    ".research-index/generations/20261022T155701-21661179/zvec",
+    ".research-index/generations/20261022T155701-21661179/zvec/0",
+    ".research-index/generations/20261022T155701-21661179/zvec/1",
+    ".research-index/generations/20261022T155701-21661179/zvec/idmap.0"
+  ]
+}

@@ -18,5 +18,10 @@ PRODUCT.md
 DESIGN.md
 README.md
 
+backend/
+.research-index/
+.research-release/
+requirements-research.txt
+.env*
 .reports/
 deploy/

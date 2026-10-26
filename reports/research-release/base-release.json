@@ -1,0 +1,52 @@
+{
+  "verified_at": "2026-10-26T09:04:46.916755+00:00",
+  "site": "https://actforgoa-field-guide.vercel.app",
+  "release_directory": "/Users/zakkrevitt/code/ActForGoa/.reports/discovery-release-2026-10-26",
+  "published": true,
+  "tests": {
+    "passed": 57,
+    "failed": 0
+  },
+  "build": "passed",
+  "live_checks": [
+    "Desktop 1440 x 1000",
+    "Mobile 390 x 844",
+    "Named guide, people, topic, tools, story, document and participation sections",
+    "No page or section overflow",
+    "No italic text in changed sections",
+    "Topic link shows 105 entries and opens 105 results",
+    "Published entry assets match isolated release"
+  ],
+  "git_commit_created": false,
+  "assets": [
+    {
+      "path": "/assets/index-Cv8h_igv.js",
+      "sha256": "4e02aefaa837b2869168c6953f7991622ef0af8b34e0b08b8ad0bbdd124cc259",
+      "matches_release": true
+    },
+    {
+      "path": "/assets/button-D_ncOjne.js",
+      "sha256": "62ed33ae246884353e090205f6eafb178728011d705494f280465b30473f2e3e",
+      "matches_release": true
+    },
+    {
+      "path": "/assets/button-C0G24rIZ.css",
+      "sha256": "2b0169e2114db330bd0c6956396b42b25ba847027e5910956126b62492458267",
+      "matches_release": true
+    },
+    {
+      "path": "/assets/index-B758BvsA.css",
+      "sha256": "bd144cf0c44772d33ac892f752133e136e2cc1ded398103fe49d03f8027b9f50",
+      "matches_release": true
+    }
+  ],
+  "deployment": {
+    "id": "dpl_7Tm5WYN8Go4GfxAzRJ3KBBN7bkpB",
+    "url": "actforgoa-field-guide-ij4mwxilw-zakkrevitt-gmailcoms-projects.vercel.app",
+    "readyState": "READY",
+    "aliases": [
+      "actforgoa-field-guide.vercel.app",
+      "actforgoa-field-guide-zakkrevitt-gmailcoms-projects.vercel.app"
+    ]
+  }
+}

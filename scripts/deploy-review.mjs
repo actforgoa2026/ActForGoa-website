@@ -19,9 +19,10 @@ const tree = git('rev-parse', 'HEAD^{tree}');
 if (commit !== git('rev-parse', 'origin/main')) {
   throw new Error('Release HEAD must equal freshly fetched origin/main. Integrate and merge first.');
 }
-const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry'];
+const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask'];
 if (evidence.treeSha !== tree || evidence.desktop !== true || evidence.mobile !== true
-    || !requiredRoutes.every(route => evidence.routes?.includes(route))) {
+    || !requiredRoutes.every(route => evidence.routes?.includes(route))
+    || !evidence.routes?.some(route => route.startsWith('/documents/'))) {
   throw new Error('Browser evidence must cover this exact source tree on desktop and phone, including all required routes.');
 }
 const lock = resolve(git('rev-parse', '--git-common-dir'), 'actforgoa-release.lock');

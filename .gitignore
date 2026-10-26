@@ -23,6 +23,15 @@ reports/link-checks.jsonl
 *.log
 
 # Private incident reports, photographs and local reviewer credentials
+.research-index/
+.research-release/
+.pytest_cache/
+corpus/raw/
+corpus/extracted/
+corpus/metadata/
+corpus/pages/
+corpus/text/
+corpus/ocr/
 .reports/
 .vercel
 

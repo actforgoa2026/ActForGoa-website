@@ -16,6 +16,8 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 ## What works
 
 - Eight guided topic menus with 95 topic, submenu and outcome routes.
+- Research library at `/ask` with hybrid source retrieval, page-level citations, full extracted documents and original downloads. Generated answers require a separately configured server key; source search remains available without it. [Research architecture and checks](RESEARCH.md).
+- Sourced photographs, work tags and direct actions connect reviewed archive records to the CRM through exact source identities. [Directory evidence](reports/DIRECTORY-ENRICHMENT.md).
 - Private incident reporting with photo/location intake and an authenticated review inbox.
 - The community CRM at `/directory` includes 3,267 sourced records, searchable public contacts, activity and verification filters, participation routes, and browser-local relationship notes with JSON backup/restore. [CRM usage and maintenance](docs/CRM.md).
 - Search across 600 imported entries plus five authored practical guides: reporting, building, farming, animal welfare and environmental protection.

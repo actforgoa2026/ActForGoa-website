@@ -38,7 +38,7 @@ function runRelease(scenario:string, check=false) {
   const executable=join(root,'bin','mock.cjs');
   writeFileSync(executable,mock,{mode:0o755});
   for(const command of ['git','npm','vercel']) symlinkSync(executable,join(root,'bin',command));
-  writeFileSync(join(root,'evidence.json'),JSON.stringify({treeSha:scenario==='wrong-tree'?'old-tree':'tree-a',desktop:true,mobile:true,previousDeploymentId:'old',routes:['/','/topics/waste','/directory','/directory/archive','/emergency','/report','/read/guide-farming','/templates/18-service-enquiry']}));
+  writeFileSync(join(root,'evidence.json'),JSON.stringify({treeSha:scenario==='wrong-tree'?'old-tree':'tree-a',desktop:true,mobile:true,previousDeploymentId:'old',routes:['/','/topics/waste','/directory','/directory/archive','/emergency','/report','/read/guide-farming','/templates/18-service-enquiry','/ask','/documents/verified-source']}));
   const result=spawnSync(process.execPath,[wrapper,'--evidence','evidence.json',...(check?['--check']:[])],{cwd:root,encoding:'utf8',env:{...process.env,PATH:join(root,'bin')+':'+process.env.PATH,RELEASE_TEST_SCENARIO:scenario}});
   const calls=existsSync(join(root,'calls.jsonl'))?readFileSync(join(root,'calls.jsonl'),'utf8').trim().split('\n').map(line=>JSON.parse(line)):[];
   assert(!existsSync(join(root,'.git','actforgoa-release.lock')),'release lock must be released');

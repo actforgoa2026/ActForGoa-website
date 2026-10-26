@@ -66,6 +66,7 @@ import EmergencyServices from "./EmergencyServices";
 import { buildDiscoverySections } from "./discovery";
 import { DiscoveryLinks, DiscoveryTopics } from "./DiscoveryLinks";
 import "./discovery.css";
+import { Research, ResearchDocument, ResearchMemoryProvider } from "./Research";
 import { Button } from "./components/arc/button/button";
 import { SearchField } from "./components/arc/search-field/search-field";
 import { Input } from "./components/arc/input/input";
@@ -178,7 +179,7 @@ const navigation = [
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", href: "/library" },
+  { value: "resources", label: "Resources", links: [{ label: "Reading library", href: "/library" }, { label: "Research library", description: "Search ecological sources and read full documents.", href: "/ask" }] },
   { value: "about", label: "About", links: [
     { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
     { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/read/wp-8905" },
@@ -191,7 +192,7 @@ const navigation = [
 ];
 function Header() {
   const { pathname } = useLocation();
-  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : pathname === "/library" ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.slice(1);
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname === "/ask" || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={navigation} current={current} label="Main navigation"
@@ -1328,7 +1329,7 @@ export default function App() {
     return () => observer.disconnect();
   }, [pathname, search, navigationType, error]);
   return (
-    <>
+    <ResearchMemoryProvider>
       <a href="#content" className="skip-link">
         Skip to content
       </a>
@@ -1353,6 +1354,8 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
+            <Route path="/ask" element={<Research />} />
+            <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/" element={<Home records={records} />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
             <Route path="/search" element={<Catalogue records={records} />} />
@@ -1399,6 +1402,6 @@ export default function App() {
           Visit the original site <ArrowUpRight size={12} />
         </a>
       </div>
-    </>
+    </ResearchMemoryProvider>
   );
 }

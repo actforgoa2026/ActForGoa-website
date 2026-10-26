@@ -26,7 +26,7 @@ test('medical and emergency searches offer official help independently of archiv
 
 test('independent pages do not fetch the catalogue, including on cold starts', async () => {
   const loader = createCatalogueLoader((async () => { throw new Error('Should not fetch'); }) as typeof fetch);
-  for (const path of ['/directory', '/directory/example', '/crm', '/crm/example', '/emergency', '/emergency/', '/contact', '/get-involved', '/templates/03-rti-records-request', '/read/guide-farming', '/read/guide-sources', '/missing']) {
+  for (const path of ['/ask', '/documents/source-id', '/directory', '/directory/example', '/crm', '/crm/example', '/emergency', '/emergency/', '/contact', '/get-involved', '/templates/03-rti-records-request', '/read/guide-farming', '/read/guide-sources', '/missing']) {
     assert(!needsCatalogue(path), path);
     assert.deepEqual(await loader(path), { records: [], error: false });
   }
