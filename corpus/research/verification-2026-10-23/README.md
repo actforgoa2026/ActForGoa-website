@@ -6,7 +6,7 @@ This review updated all five practical guides, six supporting templates and the 
 - flag-status.json: all 33 topic flags, supported findings, remaining questions and suggested reviewers. No authority was contacted and no form, payment or complaint was submitted.
 - czmp-browser-evidence.json: read-only GCZMA Final CZMP Goa menu and its 17 observed links.
 - source-urls.json and seeds*.json: bounded source discovery/download inputs.
-- publication-checks.json: local tests, build and byte-matched download checks; the visual and production stage must be updated after completion.
+- publication-checks.json: local tests/build plus production and browser checks completed on 26 October 2026. All 24 reviewed downloads match the live site; a later production release had already included the update, so no redeployment was needed.
 
 Original source files, extraction/page metadata and machine OCR remain in the main local corpus under /Users/zakkrevitt/code/ActForGoa/corpus. Only selected evidence metadata is versioned here; original documents are not republished on the website. Download failures remain failures, not evidence of non-existence.
 
