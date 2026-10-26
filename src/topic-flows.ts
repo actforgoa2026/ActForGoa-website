@@ -6,6 +6,16 @@ export interface TopicAction {
  steps?: string[]; links?: ActionLink[]; resourceIds?: string[]; peopleIds?: string[];
 }
 export interface TopicFlow { slug: string; topic: string; label: string; icon: TopicIconName; actions: TopicAction[] }
+export const topicDescriptions: Record<string, string> = {
+ waste: 'Collection, recycling & dumping',
+ nature: 'Animal help & conservation',
+ water: 'Water supply & pollution',
+ community: 'Local problems & your rights',
+ food: 'Growing food & farm support',
+ culture: 'Heritage, arts & local groups',
+ planning: 'Building work & getting around',
+ health: 'Care, support & accessibility',
+};
 const guide = (label: string, id: string, section = ''): ActionLink => ({label, href: '/read/' + id + (section ? '#' + section : '')});
 const report = (label = 'Open the government complaint service'): ActionLink => ({label, href:'https://cmhelpline.dpg.goa.gov.in/'});
 const complaint: ActionLink = {label:'Download a complaint template',href:'/guides/templates/01-complaint.txt',download:true};

@@ -4,7 +4,7 @@ import { forwardRef, useCallback, useEffect, useId, useLayoutEffect, useRef, use
 import type { AnchorHTMLAttributes, ButtonHTMLAttributes, HTMLAttributes, KeyboardEvent as ReactKeyboardEvent, MouseEvent as ReactMouseEvent, PointerEvent as ReactPointerEvent, ReactNode, RefObject } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { AnimatePresence, LayoutGroup, motion, useIsPresent, useReducedMotion } from "motion/react";
-import type { Transition, Variants, HTMLMotionProps } from "motion/react";
+import type { Transition, Variants } from "motion/react";
 import { ArrowRight, BookOpen, Boxes, ChevronDown, History, LayoutTemplate, Menu, MessagesSquare, Palette, PanelsTopLeft, Route, X } from "lucide-react";
 import { motionTokens } from "../lib/motion-tokens";
 import styles from "./site-header.module.css";
@@ -143,12 +143,6 @@ function Face({ direction, reduced, onHeight, children }: { direction: number; r
   </motion.div>;
 }
 
-// Closing overlays must stop intercepting input while their exit motion finishes.
-function PresenceLayer(props: HTMLMotionProps<"div">) {
-  const present = useIsPresent();
-  return <motion.div {...props} inert={!present} style={{ ...props.style, pointerEvents: present ? undefined : "none" }} />;
-}
-
 type DestinationProps = Omit<HTMLAttributes<HTMLElement>, "onClick" | "children"> & { link: { href?: string; label: string }; onChoose: (event: ReactMouseEvent) => void; children: ReactNode };
 /** Renders an anchor when the destination has an href and a button otherwise, so demos and real sites share one path. */
 function Destination({ link, onChoose, children, ...rest }: DestinationProps) {
@@ -156,6 +150,11 @@ function Destination({ link, onChoose, children, ...rest }: DestinationProps) {
   return link.href
     ? <a {...(rest as AnchorHTMLAttributes<HTMLAnchorElement>)} href={link.href} onClick={onChoose}>{children}</a>
     : <button {...(rest as ButtonHTMLAttributes<HTMLButtonElement>)} type="button" onClick={onChoose}>{children}</button>;
+}
+
+function focusPanelLink(link?: HTMLElement | null) {
+  link?.focus({ preventScroll: true });
+  link?.scrollIntoView({ block: "nearest", inline: "nearest" });
 }
 
 /**
@@ -192,6 +191,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   const [menuOpen, setMenuOpen] = useState(false);
   const [expanded, setExpanded] = useState<string | null>(null);
   const rootRef = useRef<HTMLElement | null>(null);
+  const innerRef = useRef<HTMLDivElement>(null);
   const menuButtonRef = useRef<HTMLButtonElement>(null);
   const triggerRefs = useRef(new Map<string, HTMLButtonElement | HTMLAnchorElement>());
   const panelRef = useRef<HTMLDivElement>(null);
@@ -199,6 +199,28 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   const focusFirst = useRef(false);
   const hasPanels = variant === "mega";
   const openItem = open ? items.find(item => item.value === open.value) : undefined;
+
+  // Keep the compact dropdown under its trigger, including after font loading or resizing.
+  useLayoutEffect(() => {
+    const inner = innerRef.current;
+    const dropdown = panelRef.current;
+    const trigger = open ? triggerRefs.current.get(open.value) : undefined;
+    if (!inner || !dropdown || !trigger) return;
+    const position = () => {
+      const bounds = inner.getBoundingClientRect();
+      const anchor = trigger.getBoundingClientRect();
+      const left = Math.max(0, Math.min(anchor.left - bounds.left, inner.clientWidth - dropdown.offsetWidth));
+      dropdown.style.left = `${left}px`;
+      dropdown.style.top = `${anchor.bottom - bounds.top + 8}px`;
+      dropdown.style.maxHeight = `${Math.max(44, window.innerHeight - anchor.bottom - 24)}px`;
+    };
+    position();
+    const observer = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(position);
+    observer?.observe(inner);
+    observer?.observe(trigger);
+    window.addEventListener("resize", position);
+    return () => { observer?.disconnect(); window.removeEventListener("resize", position); };
+  }, [open?.value]);
 
   const setRefs = useCallback((node: HTMLElement | null) => {
     rootRef.current = node;
@@ -287,7 +309,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   useEffect(() => {
     if (!open || !focusFirst.current) return;
     focusFirst.current = false;
-    const frame = requestAnimationFrame(() => panelRef.current?.querySelector<HTMLElement>("[data-panel-link]")?.focus({ preventScroll: true }));
+    const frame = requestAnimationFrame(() => focusPanelLink(panelRef.current?.querySelector<HTMLElement>("[data-panel-link]")));
     return () => cancelAnimationFrame(frame);
   }, [open]);
 
@@ -318,7 +340,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
     if (open) { const item = items[nextIndex]; openPanel(item && hasPanels && item.links?.length ? item.value : null); }
   }
   function onTriggerKeyDown(event: ReactKeyboardEvent, value: string) {
-    if (event.key === "ArrowDown") { event.preventDefault(); focusFirst.current = true; openPanel(value); if (open?.value === value) panelRef.current?.querySelector<HTMLElement>("[data-panel-link]")?.focus({ preventScroll: true }); }
+    if (event.key === "ArrowDown") { event.preventDefault(); focusFirst.current = true; openPanel(value); if (open?.value === value) focusPanelLink(panelRef.current?.querySelector<HTMLElement>("[data-panel-link]")); }
   }
   function onPanelKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
     if (event.key !== "ArrowDown" && event.key !== "ArrowUp" && event.key !== "Home" && event.key !== "End") return;
@@ -328,7 +350,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
     const index = unique.indexOf(document.activeElement as HTMLElement);
     const next = event.key === "Home" ? 0 : event.key === "End" ? unique.length - 1 : event.key === "ArrowDown" ? Math.min(index + 1, unique.length - 1) : index - 1;
     if (next < 0) { close(true); return; }
-    unique[next]?.focus({ preventScroll: true });
+    focusPanelLink(unique[next]);
   }
 
   // Growing carries a little life; shrinking settles without overshoot.
@@ -351,7 +373,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
     data-variant={variant}
     data-scrolled={scrolled || menuOpen || !!open ? "" : undefined}
   >
-    <div className={styles.inner} onPointerLeave={onRegionPointerLeave} onPointerEnter={onRegionPointerEnter}>
+    <div ref={innerRef} className={styles.inner} onPointerLeave={onRegionPointerLeave} onPointerEnter={onRegionPointerEnter}>
       <div className={styles.bar}>
         <div className={styles.brandSlot}>{brandNode}</div>
         <LayoutGroup id={id}>
@@ -426,14 +448,14 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
           aria-label={openItem.label}
           onKeyDown={onPanelKeyDown}
           initial={reduced ? { opacity: 0 } : { opacity: 0, y: -6, scale: .985 }}
-          animate={{ opacity: 1, y: 0, scale: 1, height: panel.height ?? "auto" }}
+          animate={{ opacity: 1, y: 0, scale: 1, height: panel.height === null ? "auto" : panel.height + 2 }}
           exit={reduced ? { opacity: 0, transition: { duration: motionTokens.duration.instant } } : { opacity: 0, y: -4, scale: .99, transition: { duration: motionTokens.duration.exit, ease: standard } }}
           transition={reduced ? { duration: 0 } : { height: panel.grow ? GROW : SHRINK, y: GROW, scale: GROW, opacity: { duration: motionTokens.duration.fast, ease: enter } }}
         >
           <AnimatePresence initial={false} custom={open?.direction ?? 0}>
             <Face key={openItem.value} direction={open?.direction ?? 0} reduced={reduced} onHeight={onHeight}>
               <div className={styles.faceGrid} data-featured={openItem.feature ? "" : undefined}>
-                <ul className={styles.panelLinks}>
+                <ul className={styles.panelLinks} data-with-icons={openItem.links.some(link => link.icon) ? "" : undefined}>
                   {openItem.links.map(link => <li key={link.label}>
                     <Destination link={link} className={styles.panelLink} data-panel-link="" onChoose={() => choose({ label: link.label, href: link.href, section: openItem.value }, openItem.value)}>
                       {link.icon && <span className={styles.panelIcon}>{link.icon}</span>}
@@ -455,8 +477,8 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
 
     <AnimatePresence>
       {menuOpen && <>
-        <PresenceLayer key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
-        <PresenceLayer
+        <motion.div key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
+        <motion.div
           key="sheet"
           id={`${id}-sheet`}
           className={styles.sheet}
@@ -497,7 +519,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
               {primaryAction && actionNode(primaryAction, "primary")}
             </motion.div>}
           </nav>
-        </PresenceLayer>
+        </motion.div>
       </>}
     </AnimatePresence>
   </header>;

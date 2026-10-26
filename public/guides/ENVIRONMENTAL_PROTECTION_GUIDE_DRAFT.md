@@ -1,6 +1,6 @@
 # Protect trees, water, coast and biodiversity in Goa
 
-**Draft reviewed against collected sources on 22 October 2026. Site classifications, current orders and submission channels still need verification.**
+**Draft reviewed against collected sources on 23 October 2026. Site classifications, current orders and submission channels still need verification.**
 
 Begin with the place and the observed activity. A tree-felling permission, building licence, coastal clearance and pollution consent answer different questions. Several protections may apply to the same site. Use this guide to gather the relevant records, request inspection and participate in a decision; a map pin alone cannot establish a breach.
 
@@ -32,7 +32,9 @@ Request the application, site sketch, inspection report, tree inventory, permiss
 
 For somebody seeking permission, Goa Online provides **Form B** and an official checklist describes application, verification, inspection and approval stages. Use the prescribed route with the current required ownership/authority documents and site details; confirm payment only through the official process. [Goa Online service][EN8]; [official checklist][EN9]
 
-**Verification needed EP02:** check the current Act/rules, subsequent notifications, species exceptions, emergency-tree procedure, co-owner requirements, felling and transit conditions, fees and appeal rights. The checklist contains overlapping tree-count bands, so this draft does not reproduce its approval thresholds. Do not rely on elapsed time alone as permission or attempt emergency felling using this guide.
+**Source update EP02:** the notification dated 20 November 2025, published on 27 November, reconstitutes the State Tree Authority and supersedes the 2022 constitution. The Conservator of Forests (Conservation) is listed as Member Secretary. This is distinct from identifying the Tree Officer for an individual application. [Gazette, physical page 4][V21]
+
+**Verification needed EP02:** check the current Act/rules, delegated powers, species exceptions, emergency-tree procedure, co-owner requirements, felling and transit conditions, fees and appeal rights. The checklist contains overlapping tree-count bands, so this draft does not reproduce its approval thresholds. Do not rely on elapsed time alone as permission or attempt emergency felling using this guide.
 
 If forest status is uncertain, ask Forest authorities for the applicable records and orders, including any private-forest identification, protected-area boundary or eco-sensitive-zone notification. A revenue entry or visible absence of dense trees does not resolve all forest questions. The Forest website publishes separate private-forest and protected-area resources. [Forest Department][EN1]
 
@@ -40,7 +42,9 @@ Act for Goa already has [tree-cutting guidance](https://actforgoa.org/resource/h
 
 ## 3. Establish the coastal plan and clearance applying to the site
 
-Open the [GCZMA website][EN3] and its [Final CZMP Goa document page][EN10]. Ask for the **approved plan sheet, approval letter, amendments/corrections and applicable CRZ notification** for the exact location. Record the map edition, scale and authority. A page heading, draft sheet or third-party overlay is not proof of the operative boundary.
+Open the [GCZMA website][EN3], go to its [document page][EN10] and select **Final CZMP Goa**. The live page exposes **17 numbered PDF map links**; this navigation was checked on 23 October 2026, and [Map 1][V22] was downloaded and visually inspected. That sheet states preparation under CRZ Notification 2011 and bears an approval dated 6 September 2022; confirm any newer applicable approval or correction for your site. The default page opens a draft public-hearing document, so selecting the final-map option matters.
+
+Ask for the **approved sheet, approval letter, amendments/corrections and applicable CRZ notification** for the exact location. Record edition and scale. Availability under a “Final” heading does not establish that the sheet is the latest operative map for your parcel or that a later correction/order is absent.
 
 Request the project's coastal application, authorised demarcation/site plan where applicable, clearance or refusal, conditions and inspection records. Compare the actual activity with the permission's stated purpose and location. Also check the separate planning, local-body and other environmental permissions relevant to the work.
 
@@ -56,9 +60,13 @@ The Wetlands Rules 2017 distinguish their definition and scope from ordinary des
 
 **A draft notification is a proposal, not the final notification.** The corpus's March 2023 Goa gazette expressly invites objections and suggestions. Use it to trace the process and obtain the eventual outcome; do not cite it as proof that its proposed schedules became operative. Conversely, absence from one final-notification list does not prove that a place has no protection under another law or court direction. [Goa draft notifications][EN13]; [implementation guidance][EN14]
 
-The GSWA [gazette index][EN15] is a discovery route. Direct retrieval failed during review. If it remains unavailable, ask GSWA or the environment department for the numbered final notification and maps, using the [records and inspection request](/guides/templates/16-environment-records-and-inspection.txt) and, if necessary, the RTI route in the [reporting guide](/read/guide-reporting).
+**Final notifications located:** Series I No. 41, Supplement, **9 January 2025**, contains final notifications for Betal, Karmale/Arla Keri Tollem, Kodal, Kolamwada, Macasana, Panchami, Parra, Sapu/Tollem Bandar, Bandolem and Talaulim/Talsal Tollem. Each has its own schedules and map. The notification text records that objections were heard and decided, distinguishing it from the earlier drafts. [Official Gazette][V18]
 
-**Verification needed EP04:** verify final versus draft status, amendments, applicable court protection, boundary, zone of influence and the current GSWA contact/submission channel. The national guidance does not determine an individual lake's present status.
+For example, Betal's notification begins on physical page 1; its schedules and map occupy pages 2–6. Other entries begin on pages 7, 13, 18, 24, 29, 34, 38, 47 and 52 respectively. Use the matching name, village and survey details; do not copy one lake's boundary or allowed activities to another.
+
+The notification publishes **ms-gswa.goa@gov.in** as a route to the Member Secretary for permission requests. Delivery and current handling have not been tested. If the [GSWA gazette index][EN15] remains unavailable, use the official Gazette and request the full current site package through the [records template](/guides/templates/16-environment-records-and-inspection.txt).
+
+**Verification needed EP04:** the final-versus-draft question is resolved for this ten-notification package only. Later amendments, court orders, accurate site boundaries/zone of influence, other lakes and live GSWA receipt still need checking. This package is not an exhaustive list of Goa wetlands.
 
 ## 5. Report pollution, filling or obstruction with specific observations
 
@@ -70,7 +78,13 @@ For hill cutting or low-lying filling, identify both the excavation/fill locatio
 
 For a blocked watercourse or abstraction, ask WRD to identify the competent office, relevant record and inspection route. Do not excavate a new channel, collect hazardous samples or enter flowing/flooded water to prove a case. [WRD legal framework][EN6]
 
-**Verification needed EP05:** confirm live complaint handling, the applicable consent or authorisation, current pollution/waste requirements and the inspection/sampling authority. No universal response period or automatic enforcement outcome is claimed.
+### Current waste rules to use in a complaint
+
+The **Solid Waste Management Rules, 2026 took effect on 1 April 2026**, replacing the 2016 rules subject to savings. Rule 5 requires separation at source into **wet, dry, sanitary and special-care waste**, with handover through authorised arrangements. Ask the local body for its collection schedule, segregated destinations and special-care collection point. Record mixing, dumping or burning as observations and request inspection. [Rules 1–2 and 5, physical pages 79 and 84][V19]
+
+Construction rubble has a separate framework: the **2025 construction-and-demolition rules also took effect on 1 April 2026**. For dumped rubble, ask who generated/transported it and which authorised destination was required; see the [building guide](/read/guide-building) for waste preparation steps. [C&D Rules 1–3 and 9][V07]
+
+**Verification needed EP05:** these two national rule changes are checked. Live complaint handling, local collection/charges, project-specific pollution consents, other waste streams and sampling authority remain case-specific. No response deadline or automatic enforcement result is promised.
 
 ## 6. Make a useful consultation submission
 
@@ -100,7 +114,17 @@ Keep one case log with every authority, receipt, inspection, notice and decision
 
 If irreversible damage is continuing, or you receive a permission/order you may need to challenge, seek prompt advice on the correct statutory appeal, tribunal or court route. The NGT Act distinguishes environmental disputes, relief and appeals; not every complaint belongs in the same proceeding. An ordinary grievance or pending RTI request should not be assumed to suspend a legal filing period. [NGT Act, sections 14–16][EN19]
 
-**Verification needed EP08:** a practitioner must verify jurisdiction, standing, cause-of-action/communication dates, limitation, permitted extensions and the current filing procedure. The fresh India Code PDF download timed out. No universal appeal deadline or guarantee of a stop order is supplied.
+The official Gazette reproduction of the NGT Act supplies three different limitation routes:
+
+| Route | Statutory starting point in the Act |
+| --- | --- |
+| Section 14 environmental dispute within the Tribunal's jurisdiction | Six months from when the cause of action first arose; a further period up to 60 days requires sufficient cause. |
+| Section 15 compensation or restitution claim | Five years from when the cause first arose; a further period up to 60 days requires sufficient cause. |
+| Section 16 appeal against a listed decision/order | 30 days from communication; a further period up to 60 days requires sufficient cause. |
+
+These are different remedies, not a choice of whichever deadline is longest. The further periods are discretionary, not automatic. [Official Gazette reproduction, sections 14–16, physical pages 6–7][V20]
+
+**Verification needed EP08:** a practitioner must check the correct remedy, standing, current amendments/judgments, when the legal clock started and the filing/bench procedure. The recovered government-hosted Gazette is the enacted text, not a certified current consolidation; the India Code PDF still timed out. Do not wait for RTI or a grievance reply before seeking advice on a challenge.
 
 ## Worked example and templates
 
@@ -130,3 +154,10 @@ If trucks are filling a field beside a lake, record the field and lake separatel
 [EN17]: https://gsbb.goa.gov.in/bmc.html
 [EN18]: https://gsbb.goa.gov.in/pbr.html
 [EN19]: https://www.indiacode.nic.in/indiacode/handle/123456789/2025?view_type=browse
+
+[V07]: https://moef.gov.in/uploads/pdf-uploads/pdf_68400a20010e08.34881498.pdf
+[V18]: https://goaprintingpress.gov.in/downloads/2425/2425-41-SI-SUG-1.pdf
+[V19]: https://moef.gov.in/uploads/pdf-uploads/pdf_69a16e3b04c107.91022257.pdf
+[V20]: https://megbiodiversity.nic.in/sites/default/files/national-green-tribunal-act.pdf
+[V21]: https://goaprintingpress.gov.in/downloads/2526/2526-35-SII-OG.pdf
+[V22]: https://czma.goa.gov.in/Docs/HPSCANS/ga%201.pdf

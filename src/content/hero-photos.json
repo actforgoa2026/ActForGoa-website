@@ -1,0 +1,47 @@
+[
+  {
+    "id": "vagator",
+    "caption": "Vagator, Goa",
+    "alt": "Coconut palms above the rocky shore and sea at Vagator, Goa",
+    "position": "50% 50%",
+    "href": "https://commons.wikimedia.org/wiki/File:Vagator,_Goa,_India,_Palms.jpg",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/0/05/Vagator%2C_Goa%2C_India%2C_Palms.jpg",
+    "credit": "Vyacheslav Argenberg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "src": "/assets/hero/vagator-1600.webp",
+    "srcSet": "/assets/hero/vagator-800.webp 800w, /assets/hero/vagator-1600.webp 1600w, /assets/hero/vagator-2400.webp 2400w",
+    "width": 1600,
+    "height": 1067
+  },
+  {
+    "id": "arambol",
+    "caption": "Arambol Festival",
+    "alt": "Dancers in colourful traditional dress at the Arambol Festival on the beach",
+    "position": "50% 47%",
+    "href": "/read/wp-5256",
+    "source": "https://actforgoa.org/wp-content/uploads/2019/11/IMG_20190929_120750-1.jpg",
+    "credit": "ActForGoa archive",
+    "license": "Existing ActForGoa website asset",
+    "licenseUrl": "",
+    "src": "/assets/hero/arambol-1600.webp",
+    "srcSet": "/assets/hero/arambol-800.webp 800w, /assets/hero/arambol-1600.webp 1600w, /assets/hero/arambol-2400.webp 2400w",
+    "width": 1600,
+    "height": 1200
+  },
+  {
+    "id": "farming",
+    "caption": "Safeguarding agriculture & food",
+    "alt": "Farmers working the earth with cattle beside green fields and trees",
+    "position": "50% 50%",
+    "href": "https://actforgoa.org/safeguarding-agriculture-and-food/",
+    "source": "https://actforgoa.org/wp-content/uploads/2022/09/nature-2795521-scaled.jpg",
+    "credit": "ActForGoa archive",
+    "license": "Existing ActForGoa website asset",
+    "licenseUrl": "",
+    "src": "/assets/hero/farming-1600.webp",
+    "srcSet": "/assets/hero/farming-800.webp 800w, /assets/hero/farming-1600.webp 1600w, /assets/hero/farming-2400.webp 2400w",
+    "width": 1600,
+    "height": 745
+  }
+]

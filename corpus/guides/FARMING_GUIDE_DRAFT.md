@@ -1,6 +1,6 @@
 # Start or sustain farming in Goa
 
-**Draft reviewed against collected sources on 22 October 2026. Legal and service verification remains open.**
+**Draft reviewed against collected sources on 23 October 2026. Legal and service verification remains open.**
 
 Start with the right to use the land, then register the farming activity, get advice for the site and check support before spending. A Krishi Card, a subsidy sanction and a permission to change land use serve different purposes. This guide helps individual growers and community groups organise those steps; it does not certify a land transaction or a scheme entitlement.
 
@@ -16,7 +16,7 @@ Start with the right to use the land, then register the farming activity, get ad
 
 The Directorate's charter lists Zonal Agriculture Offices, soil laboratories, training and subject officers on physical pages 42–43. ICAR-CCARI describes access to crop advice, planting material and publications through its dissemination centre. [Agriculture charter][FR1]; [ICAR services][FR8]
 
-**Verification needed AG01:** confirm the office serving the particular village, opening hours, appointment requirements and current submission route. Published staff lists are not proof of an available appointment.
+**Source update AG01:** the government reports a newly opened Zonal Agriculture Office at Valpoi on 13 October 2026. Older office lists may need address updates. **Verification needed AG01:** confirm the office serving your holding, exact current address, hours, appointment and submission route. An opening announcement is not a tested service. [Official Valpoi announcement][V12]
 
 ## 1. Establish the land and your authority to cultivate
 
@@ -26,7 +26,11 @@ Before signing a transaction, ask a Goa land-law practitioner to check title and
 
 The **2023 agricultural-transfer Act uses a specific definition tied to paddy cultivation**, with an exclusion for land earmarked for other uses in a TCP plan. Its section 3 restricts transfers of land within that definition and provides a Collector-permission mechanism in specified circumstances. Do not apply a blanket “anyone can buy farmland” or “no newcomer can farm” rule. [2023 Act, sections 2–4][FR2]
 
-**Verification needed AG02:** check commencement, current rules and amendments, the actual parcel's legal classification, the proposed transaction, and any necessary Collector or Mamlatdar process. The original Act alone is not a complete transaction checklist. For inherited or tenanted holdings, obtain case-specific advice before promising a sale, lease or change of use.
+**Commencement and rules checked:** the Act's Gazette includes notification 16/1/2/2020-Rev-I/Pt.III/489 appointing **18 April 2023** as its commencement date (physical page 4). The **2023 Rules**, published on **19 October 2023**, supply the procedure omitted from the earlier draft. [Act and commencement notice][FR2]; [Rules 3–8 and Forms I–IV][V09]
+
+For a proposed purchase/acquisition, rule 3 lists a Krishi Card, a Mamlatdar certificate, a competent State authority's certificate or another document showing agriculturist status. For the Collector-permission route, rules 5–8 provide Form I, supporting documents and an undertaking, scrutiny, a Mamlatdar-led joint inspection with Agriculture/Talathi participation, and a reasoned permission or refusal. Obtain the actual prescribed form; the guide's enquiry template is not Form I. Rule 4 also requires cultivation to begin within three years of acquisition and continue, with serious consequences for non-compliance; ask the lawyer to explain this duty and the monitoring provisions before committing to a transfer.
+
+**Verification needed AG02:** title, tenancy, the paddy-linked definition and plan exclusion, proposed transaction, buyer status, conditions and later amendments/orders still require a Goa land-law review. A Krishi Card supports the registration question; it is not proof of transferable title or blanket permission to build.
 
 Write down a simple proposed activity: crops, cultivated area, water source, intended structures, earthworks and whether any produce will be processed or sold through a new business. This makes separate permission questions easier to answer.
 
@@ -43,7 +47,7 @@ Official starting forms are available for an [individual farmer][FR4] and a [far
 5. Submit the accepted application, retain a full copy and obtain a dated receipt or reference.
 6. Check the issued card or record for correct names, holdings and bank details; request corrections in writing.
 
-**Verification needed AG03:** confirm the accepted form version, fees if any, nominee requirements, identity alternatives where applicable, sampling arrangements and processing time. Do not present this checklist as a fixed legal requirement for every applicant category.
+**Published checklist checked:** the charter's individual list includes nominee bank/identity details and soil samples for each survey number. Its group list instead includes the group's registration and authority documents. These were previously left as wholly unresolved; the published distinction is now recorded. **Verification needed AG03:** ask the receiving office which version applies, how to provide samples, which identity alternatives it accepts, and whether fees or further documents apply. Actual processing time and bank-payment mapping remain untested. [Charter, physical page 2][FR1]
 
 A June 2025 Agriculture notice asks farmers to update Aadhaar-seeded bank details through the Zonal office and warns that a later bank-seeding change can change the account receiving benefits. Ask both the bank and the office to confirm the relevant account and mapping. Do not disclose an OTP or banking password to a helper. [Official bank-update notice][FR6]
 
@@ -74,7 +78,7 @@ For each possible scheme, obtain written answers to:
 
 Keep the notification, application, acknowledgement, sanction, invoices and payment record together. A received application is not a sanction. A sanction is not proof of payment. Budget using your confirmed contribution and the actual payment conditions.
 
-**Verification needed AG05:** all amounts, current financial-year terms, eligibility, spending sequence, claim periods and appeal routes need checking against the relevant scheme notification. Older handbook figures have deliberately not been reproduced.
+**Scheme-existence check:** the Agriculture reply to the Assembly dated 9 March 2026 lists current support categories including Shetkari Adhar Nidhi, horticulture, irrigation and agricultural mechanisation. This is evidence of the programme list, not your eligibility or available funds. **Verification needed AG05:** obtain the relevant current notification, application window, budget availability, prior-sanction conditions, amount and claim process before spending. [2026 Assembly reply][V11]
 
 ## 5. Treat water, khazan works and farm structures separately
 
@@ -94,7 +98,15 @@ Notify the Zonal Agriculture Office promptly and ask for an inspection, the rele
 
 Use the [reporting guide](REPORTING_GUIDE_DRAFT.md) for a numbered follow-up or a targeted RTI request for inspection and decision records. Record an office-promised date separately from a statutory or scheme deadline.
 
-**Verification needed AG07:** compensation is not automatic. Check current notified events, eligible crops/areas, evidence requirements, reporting period, assessment authority and interaction with insurance.
+### Shetkari Adhar Nidhi crop-loss route
+
+The revised scheme published on **2 June 2022**, still included in the March 2026 official scheme list, provides a specific starting procedure. It says it continues until withdrawn. The portal's December 2023 upload date is not the notification date. [Scheme, physical pages 1–4][V10]; [2026 programme list][V11]
+
+- Apply to the taluka Zonal Agricultural Officer **as early as possible or within 15 working days of the calamity**, using prescribed Annexure I, estimated losses and representative damage photographs with the applicant or representative.
+- The scheme requires a valid Krishi Card and provides for official inspection and assessment. Disclose other relief/insurance because the scheme provides for adjustment.
+- Preserve the date of loss, submission receipt, crop/area records, photographs and assessment reference. The supporting template below helps prepare the facts; it does not replace Annexure I.
+
+The older seven-day guidance belongs to an earlier version. **Verification needed AG07:** confirm any later amendment, how working days are counted, the event/crop's eligibility, assessment, funding and interactions with insurance. Do not wait for that enquiry to notify damage promptly. A claim under another scheme or insurance policy may have a different deadline. Compensation is not automatic.
 
 ## Worked example
 
@@ -105,7 +117,7 @@ A group wants to restart cultivation on a low-lying holding and buy a pump. Firs
 - [Registration enquiry](templates/09-farming-registration-enquiry.txt)
 - [Farm plan and log](templates/10-farm-plan-and-log.md)
 - [Support or damage enquiry](templates/11-farming-support-or-damage.txt)
-- [Verification register](VERIFICATION_REGISTER.md) and [source register](SOURCES_NEXT.md)
+- [Verification register](VERIFICATION_REGISTER.md) and [source register](SOURCES_VERIFIED.md)
 
 These supporting templates do not replace statutory forms, land documents or a sanction. Existing Act for Goa farmer stories and resources remain useful background; current legal and application steps should point to the official sources below.
 
@@ -119,3 +131,8 @@ These supporting templates do not replace statutory forms, land documents or a s
 [FR8]: https://ccari.res.in/atdcnew.html
 [FR9]: https://www.goawrd.gov.in/acts-rules/ground-water-act
 [FR10]: https://tcp.goa.gov.in/procedure-to-obtain-the-permission-under-section-17a/
+
+[V09]: https://goaprintingpress.gov.in/downloads/2324/2324-29-SI-SUG-1.pdf
+[V10]: https://www.goa.gov.in/wp-content/uploads/2023/12/SAN.pdf
+[V11]: https://static.goavidhansabha.gov.in/goalpub/docs/docs/679_file_CallAtt-DR.pdf
+[V12]: https://dip.goa.gov.in/agricultural-diversification-and-modern-farming-practices-are-key-to-enhancing-farmers-income-cm/

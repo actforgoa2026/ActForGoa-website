@@ -30,7 +30,8 @@ Professional responsible and registration/competence checked: [details]
 | Conditions required before the relevant work satisfied | [ ] | [ ] | [ ] |
 | Validity, amendments and any renewal requirements checked | [ ] | [ ] | [ ] |
 | Supervision, stage notices and inspections agreed | [ ] | [ ] | [ ] |
-| Applicable labour, site-safety and waste responsibilities assigned | [ ] | [ ] | [ ] |
+| Current Labour Code/Goa rule, transition, registration, cess and site-safety responsibilities confirmed | [ ] | [ ] | [ ] |
+| C&D Waste Management Rules 2025 category/thresholds, segregation, approved destination, transport and receipts confirmed | [ ] | [ ] | [ ] |
 | Completion and occupancy requirements agreed | [ ] | [ ] | [ ] |
 
 For every approval, record the issuer, reference, issue date, validity, approved use/area, plan version, conditions, and the document showing that each pre-work condition has been met.

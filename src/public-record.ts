@@ -1,4 +1,5 @@
 import type { RecordItem } from './types';
+import { contentCorrections } from './content-corrections';
 
 // Presentation only: the source catalogue and archived records retain every field.
 // Apply to prose too, since the source repeats numbers inside biographies and lists.
@@ -7,6 +8,15 @@ function phonePattern(numbers: string[]): RegExp | null {
   return values.length ? new RegExp('\\+?(?:' + values.map(number => number.split('').join('[\\s().-]*')).join('|') + ')', 'g') : null;
 }
 export function publicRecord(record: RecordItem, cataloguePattern?: RegExp | null): RecordItem {
+  const correction = contentCorrections[record.id];
+  if (correction) record = {
+    ...record, title: correction.title, summary: correction.summary,
+    text: correction.preserveBody ? record.text : correction.summary,
+    blocks: correction.preserveBody ? record.blocks : [{ type: 'paragraph', text: correction.summary }],
+    documents: record.documents.map(document => ({ ...document, label: /1976/.test(document.label) ? 'Archived wildlife overview (original download)' : document.label })),
+    links: record.links.map(link => ({ ...link, label: /1976/.test(link.label) ? 'Archived wildlife overview (original download)' : link.label })),
+    editorialCorrection: { note: correction.note, source: correction.source, checkedAt: correction.checkedAt },
+  };
   const pattern = cataloguePattern ?? phonePattern(record.phones.flatMap(phone => [phone.display, phone.href?.replace(/^tel:/, '') ?? '']));
   const redact = (value: string) => {
     const result = pattern ? value.replace(pattern, '') : value;
@@ -28,11 +38,11 @@ export function publicRecord(record: RecordItem, cataloguePattern?: RegExp | nul
 
 export function communityDescription(record: RecordItem): string {
   if (record.kind === 'contact') {
-    return `Snake rescue volunteer${record.locality ? ` listed for ${record.locality}` : ' listed in Goa'}. Check current availability before making plans.`;
+    return `Snake rescue volunteer${record.locality ? ` listed for ${record.locality}` : ' listed in Goa'}. Part of ActForGoa’s locality guide to wildlife rescue. The source listing dates to 2018; current availability needs confirmation.`;
   }
   const paragraphs = record.blocks.filter(block => block.type !== 'heading').map(block => block.text.trim()).filter(Boolean);
   const text = paragraphs.join(' ') || record.text.trim();
-  if (!text) return `Listed in ActForGoa’s community directory${record.locality ? ` in ${record.locality}` : ''}. A description of their work is not available yet.`;
+  if (!text) return `Listed in ActForGoa’s community directory${record.locality ? ` in ${record.locality}` : ''}. A description of their work has not yet been provided in the source listing.`;
   // Prefer actual work over legal registration boilerplate, preserving source sentences.
   const sentences = text.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [text];
   const description = sentences.filter(sentence => !/^\s*(registered under|registration number|reg\.? no)/i.test(sentence)).join(' ').replace(/\s+/g, ' ').trim() || text;

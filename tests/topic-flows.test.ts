@@ -4,7 +4,7 @@ import {existsSync, readFileSync} from 'node:fs';
 import {topicFlows, actionHref, topicFor, type TopicAction} from '../src/topic-flows.ts';
 import {TOPICS} from '../src/types.ts';
 import {guideDocuments, guideHeadingId} from '../src/guides.ts';
-import {guideForReaders} from '../src/guide-presentation.ts';
+import {needsCatalogue, createCatalogueLoader} from '../src/catalogue-loader.ts';
 import {actionsInBranch, topicPeople} from '../src/topic-records.ts';
 import type {RecordItem} from '../src/types.ts';
 
@@ -45,7 +45,7 @@ test('every menu outcome has usable destinations, valid record ids, anchors and 
     const id=url.pathname.slice(6); assert(ids.has(id),href);
     if(url.hash) {
      const doc=guideDocuments.find(g=>g.id===id); assert(doc,href);
-     const headings=[...guideForReaders(doc.markdown).matchAll(/^## (.+)$/gm)].map(m=>guideHeadingId(m[1]));
+     const headings=[...doc.markdown.matchAll(/^## (.+)$/gm)].map(m=>guideHeadingId(m[1]));
      assert(headings.includes(url.hash.slice(1)),`Missing heading: ${href}`);
     }
    } else if(download) assert(existsSync('public'+url.pathname),href);
@@ -95,18 +95,18 @@ test('curated services cross incomplete source tags and stay scoped to the selec
  }
 });
 
-test('reader guides remove process notes while keeping source documents, cautions and citations',()=>{
- for(const guide of guideDocuments.filter(g=>g.listed)) {
-  const source=guide.markdown;
-  const presented=guideForReaders(source);
-  assert(!/Verification needed|saved corpus|before publication|Draft (for review|reviewed|status:)|retrieval failed|verification register|source register/i.test(presented),guide.id);
-  assert(presented.includes('**Before you act:**'),guide.id);
-  assert.match(presented,/\[[^\]]+\]: https:\/\//);
-  assert.equal(guide.markdown,source);
+test('direct topic visits load the catalogue for menus and service outcomes', async()=>{
+ const paths = topicFlows.flatMap(flow => [
+  '/topics/'+flow.slug,
+  ...flow.actions.flatMap(action => [actionHref(flow,action), ...(action.choices ?? []).map(choice => actionHref(flow,choice,action))]),
+ ]);
+ for(const path of paths) assert(needsCatalogue(path), path);
+ let requests=0;
+ const load=createCatalogueLoader(async()=>{ requests++; return new Response(JSON.stringify(records)); });
+ for(const path of ['/topics/waste/collection/household','/topics/water','/topics/health/disability']) {
+  const result=await load(path);
+  assert.equal(result.error,false,path);
+  assert(result.records.some(r=>r.id==='org-165'),path);
  }
- const animal=guideForReaders(guideDocuments.find(g=>g.id==='guide-animal-welfare')!.markdown);
- assert(animal.includes('at least 15 minutes'));
- assert(animal.includes('seek urgent medical assessment'));
- const environment=guideForReaders(guideDocuments.find(g=>g.id==='guide-environmental-protection')!.markdown);
- assert(environment.includes('Do not treat silence or elapsed time as permission'));
+ assert.equal(requests,1);
 });

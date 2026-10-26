@@ -19,7 +19,7 @@ test('public presentation removes phone fields and inline numbers without changi
 });
 test('community descriptions use real work and are explicit when a biography is missing', () => {
   assert.match(communityDescription(publicRecord(records.find(record => record.id === 'org-206')!)), /environmental education/);
-  assert.match(communityDescription(publicRecord(records.find(record => record.id === 'org-187')!)), /description of their work is not available/);
+  assert.match(communityDescription(publicRecord(records.find(record => record.id === 'org-187')!)), /not yet been provided/);
   const volunteer = publicRecord(records.find(record => record.kind === 'contact')!);
   assert.match(communityDescription(volunteer), /Snake rescue volunteer/);
   assert.ok(!/\d{7,}/.test(communityDescription(volunteer)));

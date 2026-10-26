@@ -1,6 +1,6 @@
 # Plan building or repair work in Goa
 
-**Draft for Act for Goa. Source review: 22 October 2026.**
+**Draft for Act for Goa. Source review: 23 October 2026.**
 
 Use this guide before commissioning building work, an extension, reconstruction, a change of use or repairs. It helps you identify the land and responsible authorities, assemble the application, check what must happen before work starts, and obtain the required completion and occupancy documents.
 
@@ -101,7 +101,7 @@ This is a preparation list. The authority's current checklist determines the req
 | Conversion recommendation | [Recommendation form][F4]; distinguish a planning recommendation from the conversion sanad issued under the revenue process. |
 | Occupancy application | [Municipal Council/Village Panchayat application][F5] |
 
-**Verification needed B05:** forms linked by an official site may still be older versions. Confirm the accepted form, current online/paper process, enclosures and copies with the receiving authority. TCP links to BPAMS; its submission process and current coverage were not tested. Use the TCP website to reach it rather than an unofficial intermediary. [TCP downloads][B5]
+**Source check B05:** TCP's downloads index was rechecked on 23 October 2026 and still lists the forms and the December 2025/August 2026 amendment documents. This confirms their publication, not that every receiving office accepts a paper application. **Verification needed B05:** confirm the accepted version, BPAMS coverage, digital signatures, enclosures and copies with the authority and submitting professional. No application was submitted. [TCP downloads][B5]
 
 At each submission, retain the complete version submitted, acknowledgement, application number and payment receipt. If more information is requested, answer by reference to the same file and save the revised version. Ask which stage has been approved and which approvals remain outstanding.
 
@@ -115,7 +115,9 @@ Read the permission and licence with the sanctioned plans. Use the pre-work chec
 4. The work falls within the approval's validity and scope; any renewal or amendment is dealt with.
 5. The professional responsible for supervision knows the inspection and stage-notice requirements.
 
-**Verification needed B04:** recent building-regulation amendments are in the corpus, including a TCP-hosted notification dated 6 August 2026. Their commencement, effect and any related court directions have not been fully consolidated. The designer must use the rules legally applicable to the project, not just the original 2010 document. [TCP regulations and amendments][B10]
+**Source check B04 resolved in part:** notification 21/1/TCP/GLDBCR-2010/TCP/2026/1603, dated 6 August 2026, was published in Series I No. 20 on **13 August 2026**, printed pages 1036–1039. It states commencement on publication and substitutes regulation 6A.2.1 on prohibited uses. The separate **24 December 2025** Gazette amendment changes Annexure XII's industrial-access wording. Include both in the designer's rule check. [August Gazette, physical pages 28–31][V05]; [December Gazette][V06]
+
+**Verification needed B04:** a registered designer/planning lawyer must still assemble the complete amendment chain, applicable plan and any later stay/order for the project. These two verified amendments do not establish a complete current set of FAR, height, setback or use controls.
 
 **Verification needed B06:** fees, time limits, renewals and appeal rights vary by service and approval. Ask for the applicable notification and a written fee calculation. The Panchayat Act contains specific appeal/deeming provisions concerning permission applications; a receipt or elapsed time alone is not enough to establish that those conditions have been met. Get case-specific advice before relying on a deemed approval. [Panchayat Act, section 66][B11]
 
@@ -127,7 +129,13 @@ Keep the sanctioned plans and approvals available to the supervising professiona
 
 Ask for the required approval before departing from the approved design or use. Record the authority's answer; do not assume a change can be settled at completion. Keep excavation, drainage, tree and waste conditions with the main site documents so the contractor can follow them.
 
-**Verification needed B07:** confirm applicable construction-worker registration, cess, safety and waste obligations for the project. This draft does not calculate them. The corpus includes Goa construction-worker rules and newer construction-and-demolition waste rules; their application needs a separate project check. [Labour Department charter][B12]; [construction waste rules][B13]
+The **Environment (Construction and Demolition) Waste Management Rules, 2025 took effect on 1 April 2026**, superseding the 2016 rules subject to their savings. They cover construction, demolition, renovation and repair, with stated exclusions. Rule 9 requires generators to separate material streams, arrange reuse/recycling and authorised delivery, and prevent dust, litter and public nuisance. [Rules 1–3 and 9, physical pages 19–21 and 25][V07]
+
+Before work, agree a waste plan with the contractor: separated storage, dust controls, the authorised collector/recycler or designated collection point, transport arrangements and evidence of delivery. Ask the local body to confirm the destination and charges. Additional producer/EPR duties depend on the rules' definitions and project size; they are not automatically the same for every small repair.
+
+The Labour Ministry confirms implementation of the four Labour Codes from **21 November 2025**. Older Goa construction-worker documents alone are therefore insufficient for a current compliance checklist. [Ministry's implementation review][V08]
+
+**Verification needed B07:** confirm the operative Goa/central rules and transitional requirements, project coverage, employer/contractor duties, registration, cess and worker safety. Confirm local C&D collection arrangements and any producer registration, waste plan or recycling obligation. No cess rate or worker-count exemption is assumed here.
 
 ## Complete the approval process before occupation
 
@@ -145,7 +153,7 @@ Use the [reporting guide](REPORTING_GUIDE_DRAFT.md). Identify the parcel, record
 
 ## Sources and review notes
 
-The [source register](SOURCES.md) links the official sources to saved corpus copies and exact sections/pages. The [verification register](VERIFICATION_REGISTER.md) lists B01–B08 and the remaining review work. Act for Goa's existing [construction resources](https://actforgoa.org/resource/application-form-for-village-construction-licences/) and [illegal-construction pamphlet](https://actforgoa.org/resource/illegal-construction-pamphlet/) remain useful starting points; the official forms above avoid relying on inaccessible legacy-domain links.
+The [source register](SOURCES_VERIFIED.md) links the official sources to saved corpus copies and exact sections/pages. The [verification register](VERIFICATION_REGISTER.md) lists B01–B08 and the remaining review work. Act for Goa's existing [construction resources](https://actforgoa.org/resource/application-form-for-village-construction-licences/) and [illegal-construction pamphlet](https://actforgoa.org/resource/illegal-construction-pamphlet/) remain useful starting points; the official forms above avoid relying on inaccessible legacy-domain links.
 
 [B1]: https://tcp.goa.gov.in/procedure-to-obtain-the-permission/
 [B2]: https://tcp.goa.gov.in/wp-content/uploads/2017/GLDBCR_2010/regulations/1011-24-SI-OG.pdf
@@ -165,3 +173,8 @@ The [source register](SOURCES.md) links the official sources to saved corpus cop
 [F3]: https://tcp.goa.gov.in/wp-content/uploads/2021/08/Municipal-Council-for-Building-Licence.pdf
 [F4]: https://tcp.goa.gov.in/wp-content/uploads/2021/08/Recommendation-for-conversion-sanad.pdf
 [F5]: https://tcp.goa.gov.in/wp-content/uploads/2021/08/Municipal-CouncilVillage-Panchayat-for-Occupancy-Certificate.pdf
+
+[V05]: https://goaprintingpress.gov.in/downloads/2627/2627-20-SI-OG.pdf
+[V06]: https://tcp.goa.gov.in/wp-content/uploads/2026/01/2526-38-SI-EOG-1.pdf
+[V07]: https://moef.gov.in/uploads/pdf-uploads/pdf_68400a20010e08.34881498.pdf
+[V08]: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2209767

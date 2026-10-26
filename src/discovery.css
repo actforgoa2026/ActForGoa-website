@@ -1,0 +1,152 @@
+.discovery {
+  --discovery-section-space: 64px;
+  --discovery-column-gap: 32px;
+  padding-bottom: 72px;
+}
+.discovery > .section-heading { margin-bottom: 24px; }
+.discovery-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 40px;
+}
+.discovery-controls > :first-child { min-width: 0; }
+.discovery-controls .auto-load-toggle {
+  flex-shrink: 0;
+  color: var(--muted);
+  font-size: 13px;
+}
+.discovery-section {
+  border-top: 2px solid var(--ink, var(--green));
+  padding-top: 24px;
+  margin-bottom: var(--discovery-section-space);
+  scroll-margin-top: 120px;
+}
+.discovery-section-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.discovery-section-heading h2 {
+  font-size: 28px;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+}
+.discovery-section-heading p {
+  color: var(--muted);
+  margin-top: 8px;
+  max-width: 65ch;
+}
+.discovery-section-heading .text-link { flex-shrink: 0; }
+.discovery-grid,
+.discovery-link-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px var(--discovery-column-gap);
+}
+.discovery-grid .record-card { height: 100%; }
+.discovery-grid .record-card h3 { font-size: 22px; }
+.discovery-section--stories .record-card { border-top: 0; padding-top: 0; }
+.discovery-section--stories .card-image { aspect-ratio: 1.6; margin-bottom: 20px; }
+.discovery-people-list .record-card { padding-block: 24px; }
+.discovery-people-list > :last-child .record-card { padding-bottom: 0; }
+.discovery-people-list .card-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr);
+  column-gap: 64px;
+  align-items: start;
+}
+.discovery-people-list .record-meta,
+.discovery-people-list h3,
+.discovery-people-list .card-bottom { grid-column: 1; }
+.discovery-people-list .record-card p {
+  grid-column: 2;
+  grid-row: 1 / span 3;
+  -webkit-line-clamp: 5;
+  max-width: 65ch;
+}
+.discovery-people-list h3 { margin-block: 12px 0; }
+.discovery-people-list .card-bottom { margin-top: 12px; }
+.discovery-topic-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  column-gap: 48px;
+}
+.discovery-topic-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding-block: 24px;
+  border-top: 1px solid var(--line);
+}
+.discovery-topic-link > svg { margin-top: 4px; color: var(--green); }
+.discovery-topic-link > svg:last-child { margin-left: auto; }
+.discovery-topic-link > span { display: grid; gap: 8px; }
+.discovery-topic-link strong { font-size: 20px; line-height: 1.4; }
+.discovery-topic-link span > span { color: var(--muted); font-size: 15px; }
+.discovery-topic-link small { color: var(--muted); font-size: 13px; }
+.discovery-action-link {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  border-top: 1px solid var(--line);
+  padding-top: 24px;
+}
+.discovery-action-link h3 { font-size: 22px; line-height: 1.4; letter-spacing: -0.025em; }
+.discovery-action-link p { margin-block: 12px 16px; color: var(--muted); font-size: 16px; }
+.discovery-action-link > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  min-height: 44px;
+  margin-top: auto;
+  font-size: 14px;
+  font-weight: 750;
+  color: var(--green);
+}
+.discovery-links--participate { border-top-color: var(--green); }
+.discovery-more {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 16px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  overflow-anchor: none;
+  text-align: center;
+}
+.discovery-more > p { color: var(--muted); font-size: 13px; }
+.discovery-more .subtle-link { min-height: 44px; }
+.discovery-section a { overflow-wrap: anywhere; }
+@media (hover: hover) {
+  .discovery-action-link:hover h3,
+  .discovery-topic-link:hover strong { text-decoration: underline; }
+}
+@media (max-width: 1000px) {
+  .discovery-section-heading { display: block; }
+  .discovery-section-heading .text-link { margin-top: 8px; }
+  .discovery-people-list .card-content { column-gap: 32px; }
+  .discovery-grid,
+  .discovery-link-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
+  .discovery { --discovery-section-space: 48px; padding-bottom: 48px; }
+  .discovery > .section-heading { display: block; }
+  .discovery-controls { display: block; margin-bottom: 24px; }
+  .discovery-controls .auto-load-toggle { display: flex; margin-top: 8px; padding-inline: 0; }
+  .discovery-section { padding-top: 20px; }
+  .discovery-section-heading { margin-bottom: 24px; }
+  .discovery-section-heading h2 { font-size: 26px; }
+  .discovery-grid,
+  .discovery-link-grid,
+  .discovery-topic-grid { grid-template-columns: minmax(0, 1fr); }
+  .discovery-people-list .card-content { display: block; }
+  .discovery-people-list h3 { margin-block: 12px; }
+  .discovery-people-list .record-card p { -webkit-line-clamp: 5; }
+  .discovery-section-heading > svg { display: none; }
+}

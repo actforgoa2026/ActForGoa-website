@@ -1,5 +1,6 @@
 export type Kind='organisation'|'contact'|'resource'|'story'|'page';
 export interface RecordItem {
+ editorialCorrection?: {note: string; source: string; checkedAt: string};
  id:string;title:string;kind:Kind;source:string;sourceApi:string;sourceStatus:number|null;
  summary:string;text:string;documentText?:string;blocks:{type:string;text:string}[];topics:string[];
  images?:{src:string;source:string;alt:string;width?:number;height?:number}[];

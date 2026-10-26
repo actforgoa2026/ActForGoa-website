@@ -1,0 +1,119 @@
+[
+  {
+    "id": "vagator",
+    "caption": "Vagator, Goa",
+    "alt": "Coconut palms above the rocky shore and sea at Vagator, Goa",
+    "position": "50% 50%",
+    "href": "https://commons.wikimedia.org/wiki/File:Vagator,_Goa,_India,_Palms.jpg",
+    "source": "https://upload.wikimedia.org/wikipedia/commons/0/05/Vagator%2C_Goa%2C_India%2C_Palms.jpg",
+    "credit": "Vyacheslav Argenberg",
+    "license": "CC BY 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/4.0/",
+    "originalWidth": 3072,
+    "originalHeight": 2048,
+    "originalSha256": "a3129d61a469a744ce27adfcb22edd1da8fe734d4cbdbc407cb33d05e9dcf991",
+    "retrievedAt": "2026-10-26T03:52:11.383127+00:00",
+    "changes": "Resized and converted to WebP; responsive crop in the interface.",
+    "variants": [
+      {
+        "path": "/assets/hero/vagator-800.webp",
+        "width": 800,
+        "height": 533,
+        "bytes": 102360,
+        "sha256": "cbc26b6d80b0452b0a85268d5af7953b8f56c7cd2130093224eb2a4158f1b571"
+      },
+      {
+        "path": "/assets/hero/vagator-1600.webp",
+        "width": 1600,
+        "height": 1067,
+        "bytes": 335958,
+        "sha256": "d47e04f11f019f5767309cfb6c4c6f7ca5a6532485174f8eed1553efdcc64e45"
+      },
+      {
+        "path": "/assets/hero/vagator-2400.webp",
+        "width": 2400,
+        "height": 1600,
+        "bytes": 614438,
+        "sha256": "677c988313fd210465d1f5cfc69cdfc84acec86031c00f9c71541a94aa2e4885"
+      }
+    ]
+  },
+  {
+    "id": "arambol",
+    "caption": "Arambol Festival",
+    "alt": "Dancers in colourful traditional dress at the Arambol Festival on the beach",
+    "position": "50% 47%",
+    "href": "/read/wp-5256",
+    "source": "https://actforgoa.org/wp-content/uploads/2019/11/IMG_20190929_120750-1.jpg",
+    "credit": "ActForGoa archive",
+    "license": "Existing ActForGoa website asset",
+    "licenseUrl": "",
+    "originalWidth": 2624,
+    "originalHeight": 1968,
+    "originalSha256": "d3bb5b455b353cb1ddd4bffa0dfcd1a9b9d7bd86541b4d51b0c8903db911166d",
+    "retrievedAt": "2026-10-26T03:52:13.106934+00:00",
+    "changes": "Resized and converted to WebP; responsive crop in the interface.",
+    "variants": [
+      {
+        "path": "/assets/hero/arambol-800.webp",
+        "width": 800,
+        "height": 600,
+        "bytes": 126218,
+        "sha256": "3351ca3a64fb88555d38784f662e6f2607e3f205d7d03c333c1785f48361acfa"
+      },
+      {
+        "path": "/assets/hero/arambol-1600.webp",
+        "width": 1600,
+        "height": 1200,
+        "bytes": 282496,
+        "sha256": "db4efb570e2ccfac30109f220992029cc9046873adf439fa774f16301b5937f4"
+      },
+      {
+        "path": "/assets/hero/arambol-2400.webp",
+        "width": 2400,
+        "height": 1800,
+        "bytes": 444754,
+        "sha256": "6a70dda4726884a294ac49aa6ee7b2a72b9d42fcb3271e67d870f6b9edf0883a"
+      }
+    ]
+  },
+  {
+    "id": "farming",
+    "caption": "Safeguarding agriculture & food",
+    "alt": "Farmers working the earth with cattle beside green fields and trees",
+    "position": "50% 50%",
+    "href": "https://actforgoa.org/safeguarding-agriculture-and-food/",
+    "source": "https://actforgoa.org/wp-content/uploads/2022/09/nature-2795521-scaled.jpg",
+    "credit": "ActForGoa archive",
+    "license": "Existing ActForGoa website asset",
+    "licenseUrl": "",
+    "originalWidth": 2560,
+    "originalHeight": 1192,
+    "originalSha256": "1b70959958de27beee3b5f801d0221533c00bb01c35ecaf66f4498a9fce9898e",
+    "retrievedAt": "2026-10-26T03:52:14.184857+00:00",
+    "changes": "Resized and converted to WebP; responsive crop in the interface.",
+    "variants": [
+      {
+        "path": "/assets/hero/farming-800.webp",
+        "width": 800,
+        "height": 372,
+        "bytes": 117816,
+        "sha256": "d153f56aa6e024613189d1e920082fcb16c1c8281b36b9f58aad5d9bc2e59b62"
+      },
+      {
+        "path": "/assets/hero/farming-1600.webp",
+        "width": 1600,
+        "height": 745,
+        "bytes": 384912,
+        "sha256": "d6b73ce8aba2161531f38f69945c45e294901eaf726fd87cbb2383298b5dff20"
+      },
+      {
+        "path": "/assets/hero/farming-2400.webp",
+        "width": 2400,
+        "height": 1118,
+        "bytes": 663050,
+        "sha256": "ca7b42cbef8bb601f480df0ddf351a34a0d0401ba0ad428b17c2e2f868ec5452"
+      }
+    ]
+  }
+]

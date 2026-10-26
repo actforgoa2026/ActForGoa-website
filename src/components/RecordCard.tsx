@@ -1,8 +1,13 @@
-import {Link, useLocation} from "react-router-dom";
-import {Users, BookOpen, Leaf, FileText, ArrowUpRight} from "lucide-react";
-import {communityDescription} from "../public-record";
-import {kindLabel, type RecordItem} from "../types";
-const recordPath = (r:RecordItem) => "/read/" + r.id;
+import { Link, useLocation } from "react-router-dom";
+import { Users, BookOpen, Leaf, FileText, ArrowUpRight } from "lucide-react";
+import { communityDescription } from "../public-record";
+import { kindLabel, type RecordItem } from "../types";
+const recordPath = (r: RecordItem) => "/read/" + r.id;
+const formatDate = (value: string) => {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+};
+
 export function RecordCard({
   record: r,
   list = false,
@@ -32,7 +37,7 @@ export function RecordCard({
           ? Leaf
           : FileText;
   return (
-    <article className={"record-card " + (list ? "list-card " : "") + (community ? "community-entry" : "")}>
+    <article data-record-id={r.id} className={"record-card " + (list ? "list-card " : "") + (community ? "community-entry" : "")}>
       {showImage && !list && r.image && (
         <Link
           to={recordPath(r)}
@@ -45,13 +50,14 @@ export function RecordCard({
         </Link>
       )}
       <div className="card-content">
-        
         <div className="record-meta">
           <span>
             <Icon size={15} />
-            {r.editorialStatus === "authored-practical-guide" ? "Practical guide" : kindLabel[r.kind]}
+            {r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}
           </span>
           {r.locality && <span>{r.locality}</span>}
+          {r.publishedAt && <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>}
+          {community && <span>Archived listing · availability unconfirmed</span>}
         </div>
         <h3>
           <Link

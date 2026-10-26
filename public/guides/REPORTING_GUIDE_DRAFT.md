@@ -1,10 +1,10 @@
 # Report a civic or environmental problem in Goa
 
-**Draft for Act for Goa. Source review: 22 October 2026.**
+**Draft for Act for Goa. Source review: 23 October 2026.**
 
 Use this guide to document a problem, choose an authority, submit a complaint and keep track of the response. It also explains how to request official records through the Right to Information Act. It covers Goa's village and municipal areas; the correct office depends on where the problem is and what it concerns.
 
-**Draft status:** steps marked **Verification needed** require the checks listed in the [verification register](/read/guide-verification) before publication. Contact details below were checked against published sources, not tested by calling or submitting a case. These drafts do not determine whether a particular activity is unlawful.
+**Review status:** published procedures have been checked against the sources linked below. **Verification needed** now identifies the remaining local, legal or service checks in the [verification register](/read/guide-verification). No complaint, application, payment or service call was made. These guides do not determine whether a particular activity is unlawful.
 
 ## Start here
 
@@ -35,7 +35,7 @@ These five steps are practical recommendations. They do not create a legal deadl
 
 Basis: [Panchayat charter, printed pages 19–20][R2]; [Margao construction complaints][R3]; [GSPCB][R4]; [TCP section 17A procedure][R5]; [Environment Department charter][R6]; [Goa animal-cruelty SOP][R7]. The table is a starting-point guide, not an exclusive allocation of legal jurisdiction.
 
-**Verification needed R03:** confirm the relevant forest range, coastal/wetland authority, utility and municipal office for the location. Complete the proposed locality directory before publishing specific office contacts. The 2020 animal-cruelty SOP is scanned and cites older criminal provisions. Its first page was visually checked; detailed offence and procedure instructions need a review against current law.
+**Verification needed R03:** confirm the relevant forest range, coastal/wetland authority, utility and municipal office for the location. For animal cases, use the current procedure references in the [animal welfare guide](/read/guide-animal-welfare); the 2020 Goa SOP is historical and its criminal-law section numbers should not be copied into a new complaint.
 
 ## Use these published complaint channels
 
@@ -98,9 +98,17 @@ Ask for identifiable records and a defined period. Useful requests include:
 
 Use the [RTI template](/guides/templates/03-rti-records-request.txt), addressed to the public authority's State Public Information Officer (SPIO). It asks for existing records, allows partial disclosure where appropriate and requests transfer of relevant parts if another public authority holds them. Exemptions and third-party procedures can affect disclosure; do not promise access to every record.
 
-The [Goa RTI Online portal][R13] advertises application and appeal services. Its FAQ describes first appeals using the original registration number and email. **Verification needed R02:** direct retrieval of the portal failed during this review, so confirm the live authority list, upload limits, fee/payment route and paper alternative before publication. A portal outage does not remove the option of writing to the correct SPIO.
+The [Goa RTI Online portal][R13] publishes this application route. Its manual and FAQ were retrieved in this review. [Applicant manual, physical pages 4–11][V01]; [official FAQ, questions 1–8][V02]
 
-The Goa fee rules in the corpus specify a **₹10 application fee** and address further charges. Confirm the presently accepted payment method and any applicable copying/certification charge; keep the receipt. The Act provides a fee exemption for people below the poverty line, subject to the applicable proof requirements. [Goa fee rules, rule 3][R14]; [RTI Act, section 7(5)][R12]
+1. Select the Goa State public authority listed in the request form. Central-government requests need the appropriate central route.
+2. Enter the request; the FAQ describes a 3,000-character text field and a PDF attachment for a longer request.
+3. For a non-BPL application, pay **₹10** through the official eChallan flow. The manual lists internet banking, cards and UPI. For BPL exemption, provide the government-issued proof requested by the portal.
+4. Save the unique registration number, submitted request and payment acknowledgement. Use Application Status for responses and additional-fee notices.
+5. For a first appeal, use Submit First Appeal with the original registration number and email address. The FAQ states that **no first-appeal fee** is charged.
+
+**Verification needed R02:** the published route is checked; successful live payment/submission, the chosen authority's availability, accepted attachment size/type and current copying or certification charges are not tested. For paper filing, confirm the SPIO's current address, accepted payment instrument and receipt process. A portal outage does not remove the option of writing to the correct SPIO.
+
+The Goa fee rules and current portal manual both support the ₹10 application fee. Keep any additional-fee calculation and receipt. The Act provides BPL exemption and free information where the authority misses the applicable statutory response limit; the actual clock must be calculated from the receipt, transfer and fee history. [Goa fee rules, rule 3][R14]; [RTI Act, sections 7(5)–(6)][R12]
 
 ## Keep RTI deadlines separate from complaint follow-up
 
@@ -115,9 +123,13 @@ The Goa fee rules in the corpus specify a **₹10 application fee** and address 
 
 Source: [RTI Act, sections 6(3), 7 and 19][R12]. Calculate the deadline for the actual case: APIO submission adds time, additional-fee notices can pause the response clock, and third-party procedures have separate provisions. Delayed appeals may be admitted for sufficient cause; do not depend on that discretion.
 
-**Verification needed R05:** the time limits above were checked in the collected official Act text. Compare it with the latest consolidated Act before publication, especially the disclosure provisions; the newer India Code download was unavailable during this review.
+**Disclosure law updated:** section 44(3) of the Digital Personal Data Protection Act substitutes RTI section 8(1)(j) with an exemption for information relating to personal information. G.S.R. 843(E), dated 13 November 2025, brings that amendment into force on Gazette publication. The older TCP compilation predates this change. [DPDP Act, section 44(3)][V03]; [commencement notification, paragraph (a)][V04]
 
-If there is no timely response or the answer is incomplete, use the [first-appeal template](/guides/templates/04-rti-first-appeal.txt) and identify the exact unanswered items. Keep the original application, receipt, response and relevant dates. The portal FAQ says it charges no first-appeal fee; reconfirm the current route under R02. A second appeal requires its own current Commission procedure and is outside this template pack.
+Request identifiable official decisions and inspection records, and ask for disclosable portions with protected material removed under section 10. Where relevant, explain a specific public-interest basis for consideration under section 8(2); neither redaction nor public interest guarantees disclosure. If refused, request the provision, reasons and appeal particulars. [RTI Act, sections 7(8), 8(2) and 10][R12]
+
+**Verification needed R05:** the amendment and commencement question is resolved. A practitioner must still assess current court interpretation, the exemption claimed, third-party procedure and the actual case's deadlines. This review is not a complete consolidation of every RTI amendment or judgment.
+
+If there is no timely response or the answer is incomplete, use the [first-appeal template](/guides/templates/04-rti-first-appeal.txt) and identify the exact unanswered items. Keep the original application, receipt, response and relevant dates. The published first-appeal route and no-fee position are checked above; keep proof of filing. A second appeal requires its own current Commission procedure and is outside this template pack.
 
 ## A short worked example
 
@@ -141,3 +153,8 @@ The [source register](/read/guide-sources) provides local corpus copies, documen
 [R12]: https://tcp.goa.gov.in/wp-content/uploads/2016/11/rti.pdf
 [R13]: https://rtionline.goa.gov.in/
 [R14]: https://tcp.goa.gov.in/wp-content/uploads/2016/11/rti.pdf
+
+[V01]: https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf
+[V02]: https://www.rtionline.goa.gov.in/FAQ
+[V03]: https://www.meity.gov.in/static/uploads/2024/06/2bf1f0e9f04e6fb4f8fef35e82c42aa5.pdf
+[V04]: https://www.meity.gov.in/static/uploads/2025/11/c56ceae6c383460ca69577428d36828b.pdf

@@ -1,0 +1,60 @@
+/** Presentation corrections only. Original imported records remain untouched. */
+export const contentCorrections: Record<string, { title: string; summary: string; note: string; source: string; checkedAt: string; preserveBody?: boolean }> = {
+  'wp-9389': {
+    title: 'Green Viksit Goa consultation (2025 archive)',
+    summary: 'An archived invitation to the 2025 consultation on Goa’s future. The source gave a 30 June deadline; it does not establish that submissions are open now.',
+    note: 'The invitation was published in May 2025. Its original wording is preserved below as historical material, not a current call for submissions.',
+    source: 'https://actforgoa.org/greenviksitgoa/',
+    checkedAt: '2026-10-26',
+    preserveBody: true,
+  },
+  'resource-bb06378baa': {
+    title: 'Wild Life (Protection) Amendment Act, 2002 (Act 16 of 2003)',
+    summary: 'Historical amendment to the Wild Life (Protection) Act, 1972. Its short title uses 2002, while its Act number is 16 of 2003.',
+    note: 'Clarified the difference between the statutory short title and the 2003 Act number, following the Wildlife Institute of India legislation register. This archived amendment is not a consolidated current Act.',
+    source: 'https://v1.wii.gov.in/environmental_legislations_wildlife',
+    checkedAt: '2026-10-26',
+  },
+  'resource-157e87af3d': {
+    title: 'E-Waste (Management) Rules, 2016 (historical)',
+    summary: 'Historical e-waste rules, superseded by the E-Waste (Management) Rules, 2022 from 1 April 2023. Use the official rules and subsequent amendments for current obligations.',
+    note: 'The archived 2016 rules should not be presented as current requirements. The 2022 notification expressly supersedes them, subject to its savings provision.',
+    source: 'https://eprewaste.cpcb.gov.in/assets/PDF/e-waste_rules_2022.pdf',
+    checkedAt: '2026-10-26',
+  },
+  'resource-daf2a818f4': {
+    title: 'Implementation Guidelines for E-Waste Rules, 2016 (historical)',
+    summary: 'Archived guidance for the superseded 2016 e-waste rules. Check the 2022 rules and subsequent amendments before using this material.',
+    note: 'The underlying 2016 rules were superseded from 1 April 2023. These guidelines remain available as historical material.',
+    source: 'https://eprewaste.cpcb.gov.in/assets/PDF/e-waste_rules_2022.pdf',
+    checkedAt: '2026-10-26',
+  },
+  'resource-7c2e21c9d1': {
+    title: 'Batteries (Management and Handling) Rules, 2001 (historical)',
+    summary: 'Archived battery rules from 2001, replaced by the Battery Waste Management Rules, 2022. Check official rules and later amendments for current obligations.',
+    note: 'The original entry did not identify the replacement rules. The Environment Ministry announced the replacement in August 2022.',
+    source: 'https://www.pib.gov.in/Pressreleaseshare.aspx?PRID=1854433&lang=2&reg=48',
+    checkedAt: '2026-10-26',
+  },
+  'resource-b6b16d2e70': {
+    title: 'How the Farm Laws impact the Environment and Climate Crisis (historical)',
+    summary: 'Archived commentary on the 2020 farm laws. Those laws were repealed by the Farm Laws Repeal Act, 2021; this entry preserves the earlier discussion.',
+    note: 'Added the repeal context so the original commentary is not mistaken for a description of laws still in force.',
+    source: 'https://www.indiacode.nic.in/bitstream/123456789/16976/1/A2021-40.pdf',
+    checkedAt: '2026-10-26',
+  },
+  'resource-008a023335': {
+    title: 'Wild Life (Protection) Act, 1972',
+    summary: 'An archived overview of wildlife protection. The principal Act is from 1972; consult India Code for the official text and amendments.',
+    note: 'The original entry incorrectly labels the Act as 1976. India Code identifies it as the Wild Life (Protection) Act, 1972. The archived download has not been replaced or certified as current.',
+    source: 'https://www.indiacode.nic.in/bitstream/123456789/1726/1/a1972-53.pdf',
+    checkedAt: '2026-10-26',
+  },
+  'resource-51740e8285': {
+    title: 'Wild Life (Protection) Amendment Act, 2006',
+    summary: 'The 2006 Act amends the Wild Life (Protection) Act, 1972. It does not replace a 1976 Act. This is an archived amendment document, not a complete statement of current law.',
+    note: 'Corrected the original claim that the 2006 amendment replaced a 1976 Act. The original entry’s claims about current sanctuary counts and proposals are historical and have not been carried into this summary.',
+    source: 'https://www.indiacode.nic.in/repealedfileopen?rfilename=A2006-39.pdf',
+    checkedAt: '2026-10-26',
+  },
+};

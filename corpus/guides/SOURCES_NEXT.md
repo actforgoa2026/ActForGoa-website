@@ -1,5 +1,8 @@
 # Sources for farming animal welfare and environmental protection
 
+**Earlier review: 22 October 2026.** Resolved retrieval questions and newer findings are recorded in the [23 October source review](SOURCES_VERIFIED.md) and [current verification register](VERIFICATION_REGISTER.md). The notes below describe the earlier review, not the current unresolved list.
+
+
 Source review: 22 October 2026. Official source material supports the linked steps. Published information, current legal effect and live service operation are distinct checks. Local originals are retained separately from new explanatory text.
 
 ## FR1

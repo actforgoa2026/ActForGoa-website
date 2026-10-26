@@ -1,6 +1,6 @@
 # Help an animal and report cruelty in Goa
 
-**Draft reviewed against collected sources on 22 October 2026. Contact availability and current local implementation still need verification.**
+**Draft reviewed against collected sources on 23 October 2026. Contact availability and current local implementation still need verification.**
 
 Choose the response by the situation: a person exposed to rabies needs medical care; an injured domestic animal needs veterinary assistance; cruelty may need police action; wildlife needs the Forest Department. An organisation's listing does not establish that it can dispatch a vehicle or accept an animal.
 
@@ -23,7 +23,9 @@ After a bite or scratch, wash the wound thoroughly with soap and running water f
 
 Tell the clinician when and how the exposure happened and any previous rabies vaccination. Keep the treatment record and follow the schedule provided. Report the animal's location separately to the veterinary/local authority without attempting to capture it yourself. For immediate danger to people, use **112**; Goa also lists **108/102** for ambulance services. [Goa emergency numbers][AN4]
 
-**Verification needed AW01:** a Goa clinician should check the final medical wording and current treatment-centre referral information. No facility's vaccine stock, immunoglobulin availability or opening hours has been confirmed. The emergency numbers are published channels, not tested dispatches.
+**Indian clinical source recovered:** the National Centre for Disease Control's National Guidelines for Rabies Prophylaxis (2019), physical page 16, also instructs prompt washing with soap/running water for 15 minutes. It supports the immediate first-aid step above; a clinician must decide treatment. [NCDC guideline, section 2.6.1][V13]
+
+**Verification needed AW01:** a Goa clinician should check current local referral information and the final medical wording. Vaccine/immunoglobulin availability, opening hours and actual emergency response remain unconfirmed. No treatment schedule is prescribed by this guide.
 
 ## Find the right animal service
 
@@ -59,9 +61,9 @@ The Prevention of Cruelty to Animals Act places a duty on people in charge of an
 5. Submit the [cruelty complaint](templates/13-animal-cruelty-complaint.txt), request acknowledgement and ask what complaint/FIR or other record has been made, as applicable.
 6. Ask for veterinary examination and preservation of relevant evidence through the authorities. Do not seize an animal or enter private premises yourself.
 
-The **2020 Goa SOP contains historical criminal-law references**. It supports coordination, but its old offence numbers should not be copied into a current complaint. Police or a lawyer should identify the current provisions and procedure. [Goa SOP][AN10]
+The **2020 Goa SOP contains historical criminal-law references**. Use the AWBI's **2025 Law Enforcement Handbook**, physical pages 9–11, for its explanation of BNSS complaint procedure. It distinguishes cognizable offences from non-cognizable cases, which need a different process. For information about a cognizable offence, the Home Ministry confirms that BNSS section 173 permits reporting irrespective of where it happened, including electronically, with the informant's signature within three days for electronic information to be taken on record. Ask police to explain the applicable route and provide the record/reference. An email alone should not be assumed to complete registration. [AWBI handbook][V14]; [Home Ministry, 11 August 2026][V15]
 
-**Verification needed AW03:** confirm current criminal-law provisions, cognizability and police procedure for the actual facts, competent local welfare bodies and the latest SOP. This guide does not promise that every allegation must result in the same criminal process, or that a complainant may take custody.
+**Verification needed AW03:** the current procedural references have been located; the actual offence, cognizability, any preliminary enquiry, evidence, custody and local welfare authority still need a lawyer/police assessment. The handbook is guidance, not a substitute for the applicable statute or court order. Do not copy old IPC/CrPC section numbers or assume every cruelty report follows one FIR process.
 
 If no action follows, send a dated factual follow-up with the original reference and new evidence. Use the [reporting guide](REPORTING_GUIDE_DRAFT.md) and [case log](templates/05-case-log.md). Obtain legal advice promptly about urgent protection, an adverse decision or a refused criminal complaint; the [Goa legal-aid service][AN11] explains its assistance and eligibility.
 
@@ -85,7 +87,11 @@ The **Supreme Court judgment of 19 May 2026, 2026 INSC 506**, upholds the instit
 
 Consequently, do not publish a universal “release every dog at the same spot” rule or a universal feeding entitlement from an older leaflet. For a school, hospital, transport facility or other disputed place, ask the responsible authority for the applicable order, site designation, nodal officer and humane management arrangements. For a residential feeding dispute, ask for the applicable designated arrangement and dispute process, taking account of the current court directions as well as the rules. [ABC Rules, rule 20][AN12]; [2026 judgment][AN13]
 
-**Verification needed AW04:** retrieve and reconcile the latest Supreme Court, Bombay High Court/Goa orders, AWBI institutional SOP and local implementation decisions before giving site-specific advice. The May judgment is verified source material, not a certification that no later order exists. No operational euthanasia advice is provided; such decisions require the competent veterinary and legal process.
+**AWBI documents recovered:** the **27 November 2025 institutional SOP**, physical pages 4–9, addresses nodal officers, authorised removal and designated shelters, veterinary arrangements and waste/feeding management. AWBI's **21 July 2026 circular** expressly calls for compliance with that SOP, the ABC Rules and the May 2026 Supreme Court judgment. [Institutional SOP][V16]; [follow-up circular, paragraphs 3–6][V17]
+
+For an institutional-site enquiry, ask for the named nodal officer, the written site decision, the designated receiving shelter, recognition/veterinary arrangements and the case record. For feeding, ask for the location's designated arrangement rather than assuming permission from a generic leaflet.
+
+**Verification needed AW04:** later Supreme Court and Bombay High Court/Goa implementation orders, site designation and actual local arrangements remain unresolved. This search did not establish a complete current Goa court-order chain. The SOP and July circular are verified documents, not authority for a resident to capture, relocate or euthanise an animal.
 
 ## Keep care and custody records
 
@@ -102,7 +108,7 @@ For an injured dog near a school, arrange urgent veterinary help and tell the sc
 - [Assistance and handover](templates/12-animal-assistance.txt)
 - [Cruelty complaint](templates/13-animal-cruelty-complaint.txt)
 - [Community-animal service enquiry](templates/14-community-animal-service.txt)
-- [Verification register](VERIFICATION_REGISTER.md) and [source register](SOURCES_NEXT.md)
+- [Verification register](VERIFICATION_REGISTER.md) and [source register](SOURCES_VERIFIED.md)
 
 Build on Act for Goa's [animal-rights resource](https://actforgoa.org/resource/animal-rights-in-india/) and [snake-volunteer list](https://actforgoa.org/resource/snake-rescue-volunteers-in-goa/), while checking dates, current law and actual service availability.
 
@@ -119,3 +125,9 @@ Build on Act for Goa's [animal-rights resource](https://actforgoa.org/resource/a
 [AN11]: https://goa.nalsa.gov.in/legal-aid/
 [AN12]: https://awbi.gov.in/uploads/regulations/167956418266ABC%20Rule%202023.pdf
 [AN13]: https://www.sci.gov.in/sci-get-pdf/?diary_no=417062025&from=latest_judgements_order&order_date=2026-05-19&type=j
+
+[V13]: https://rabiesfreeindia.mohfw.gov.in/resources/uploads/PageContentPdf/171214085536.pdf
+[V14]: https://awbi.gov.in/uploads/regulations/174073569382IO_HandBook_compressed.pdf
+[V15]: https://www.pib.gov.in/PressReleasePage.aspx?PRID=2297624
+[V16]: https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf
+[V17]: https://awbi.gov.in/uploads/circular/178480784970document.pdf

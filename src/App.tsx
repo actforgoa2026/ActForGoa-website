@@ -1,4 +1,6 @@
 import {
+  lazy,
+  Suspense,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -15,15 +17,22 @@ import {
   useParams,
   useSearchParams,
   useLoaderData,
+  useNavigationType,
   ScrollRestoration,
 } from "react-router-dom";
 import {
   ArrowRight,
   ArrowUpRight,
+  ArrowUp,
   Search,
   Leaf,
+  Recycle,
+  Waves,
   Users,
   Heart,
+  Landmark,
+  Sprout,
+  Route as RouteIcon,
   BookOpen,
   Mail,
   MapPin,
@@ -34,26 +43,49 @@ import {
   FileText,
   SlidersHorizontal,
   Download,
+  Siren,
 } from "lucide-react";
 import SiteHeader from "./components/arc/site-header/site-header";
+import HomeCarousel from "./HomeCarousel";
+import { RecordCard } from "./components/RecordCard";
+import { TopicIcon } from "./components/TopicIcon";
+import { TopicPage, TopicChoices } from "./TopicPage";
+import { topicFlows, topicFor, topicHref, topicDescriptions } from "./topic-flows";
+import "./topic-navigation.css";
+import "./home-hero.css";
 import { communityDescription } from "./public-record";
+import { storyContent } from "./story-content";
 import type { RecordItem } from "./types";
 import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
-import { guideDocuments } from "./guides";
-import { PracticalGuide } from "./PracticalGuide";
-import CRM from "./CRM";
-import {TopicIcon} from "./components/TopicIcon";
-import {topicFlows, topicFor, topicHref} from "./topic-flows";
-import {TopicPage, TopicChoices} from "./TopicPage";
-import {RecordCard} from "./components/RecordCard";
-import { buildDiscoveryFeed } from "./discovery";
+import { inferSearchIntent, focusSearchResults, groupIntentResults } from "./search-intent";
+import { catalogueFilters, searchDestination, showEmergencyShortcut } from "./search-navigation";
+import EmergencyServices from "./EmergencyServices";
+import { buildDiscoverySections } from "./discovery";
+import { DiscoveryLinks, DiscoveryTopics } from "./DiscoveryLinks";
+import "./discovery.css";
 import { Button } from "./components/arc/button/button";
 import { SearchField } from "./components/arc/search-field/search-field";
 import { Input } from "./components/arc/input/input";
 import { Textarea } from "./components/arc/textarea/textarea";
 import SegmentedControl from "./components/arc/segmented-control/segmented-control";
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
+const CRM = lazy(() => import("./CRM"));
+const GuideRoute = lazy(() => import("./GuideRoute"));
+const TemplateEditor = lazy(() => import("./TemplateEditor"));
+const ReportIncident = lazy(() => import("./ReportIncident"));
+const ReportInbox = lazy(() => import("./ReportInbox"));
+
+const topicIcons = [
+  Recycle,
+  Leaf,
+  Waves,
+  Users,
+  Sprout,
+  Landmark,
+  RouteIcon,
+  Heart,
+];
 const recordPath = (r: RecordItem) => "/read/" + r.id;
 const formatDate = (s: string) => {
   const d = new Date(s);
@@ -79,10 +111,38 @@ function SearchBox({
   useEffect(() => setValue(initial), [initial]);
   function submit(e: FormEvent) {
     e.preventDefault();
-    navigate("/search?q=" + encodeURIComponent(value.trim()), {
-      preventScrollReset: location.pathname === "/search",
+    if (large && !value.trim()) return;
+    navigate(searchDestination(location.pathname, location.search, value), {
+      preventScrollReset: location.pathname !== "/",
     });
   }
+  if (large) return (
+    <form className="ask-box" role="search" onSubmit={submit} aria-label="Ask ActForGoa">
+      <Textarea
+        id="home-search"
+        label="What would you like help with in Goa?"
+        placeholder="What would you like help with in Goa?"
+        value={value}
+        onChange={(event) => setValue(event.target.value)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
+            event.preventDefault();
+            if (value.trim()) event.currentTarget.form?.requestSubmit();
+          }
+        }}
+        rows={2}
+        autoComplete="off"
+        enterKeyHint="send"
+        aria-describedby="ask-hint"
+      />
+      <div className="ask-toolbar">
+        <span id="ask-hint">Find people, guides &amp; local knowledge</span>
+        <Button type="submit" size="sm" disabled={!value.trim()} aria-label="Ask ActForGoa">
+          <ArrowUp size={21} aria-hidden="true" />
+        </Button>
+      </div>
+    </form>
+  );
   return (
     <form
       className={"search-box " + (large ? "large" : "")}
@@ -107,8 +167,10 @@ function SearchBox({
 const navigation = [
   { value: "home", label: "Home", href: "/" },
   { value: "action", label: "Take action", links: [
+    { label: "Report an infraction", description: "Record a concern with photos and a location.", href: "/report", icon: <MapPin size={21} aria-hidden="true" /> },
+    { label: "Emergency services", description: "Police, ambulance, fire and other helplines.", href: "/emergency", icon: <Siren size={21} aria-hidden="true" /> },
     { label: "Take action", description: "Find your way to contribute to Goa.", href: "/get-involved" },
-    { label: "Green Viksit Goa", description: "Explore the shared vision for Goa’s future.", href: "/read/wp-9389" },
+    { label: "Green Viksit Goa", description: "Read the archived 2025 consultation.", href: "/read/wp-9389" },
     { label: "Amche Mollem", description: "Learn about the campaign for Mollem.", href: "/read/wp-6263" },
     { label: "Donations", description: "Support ActForGoa through the original site.", href: "https://actforgoa.org/donation-form/" },
   ] },
@@ -127,7 +189,7 @@ const navigation = [
 ];
 function Header() {
   const { pathname } = useLocation();
-  const current = pathname === "/" ? "home" : pathname.startsWith("/directory") || pathname.startsWith("/crm") ? "community" : pathname === "/library" ? "resources" : pathname === "/get-involved" ? "action" : pathname.slice(1);
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : pathname === "/library" ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={navigation} current={current} label="Main navigation"
@@ -166,22 +228,31 @@ function Footer() {
 }
 
 function Home({ records }: { records: RecordItem[] }) {
-  return <main>
-    <section className="home-intro shell">
-      <h1>Enabling people to care for Goa.</h1>
-      <p>Find practical help, local people, and your next step.</p>
-      <SearchBox large />
-    </section>
-    <section className="home-topics shell" aria-labelledby="home-topics-heading">
-      <h2 id="home-topics-heading">What do you need help with?</h2>
-      <nav className="choice-grid home-choice-grid" aria-label="Choose a topic">
-        {topicFlows.map(flow => <Link className="choice-link" key={flow.slug} to={topicHref(flow.topic)}>
-          <TopicIcon name={flow.icon}/><span>{flow.label}</span><ArrowRight size={22}/>
-        </Link>)}
-      </nav>
-    </section>
-    <DiscoveryFeed records={records}/>
-  </main>;
+  return (
+    <main>
+      <HomeCarousel><SearchBox large /></HomeCarousel>
+      <section className="home-actions shell" aria-labelledby="home-actions-heading">
+        <div className="section-heading">
+          <h2 id="home-actions-heading">What do you care about?</h2>
+          <Link to="/emergency" className="button green emergency-entry">
+            <Siren size={20} aria-hidden="true" />
+            <span><strong>Emergency services</strong></span>
+            <ArrowRight size={18} aria-hidden="true" />
+          </Link>
+        </div>
+        <nav className="home-topic-choices" aria-label="Choose a topic">
+          {topicFlows.map(flow => (
+            <Link key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
+              <TopicIcon name={flow.icon} />
+              <span><strong>{flow.label}</strong><small>{topicDescriptions[flow.slug]}</small></span>
+              <ArrowRight size={18} aria-hidden="true" />
+            </Link>
+          ))}
+        </nav>
+      </section>
+      <DiscoveryFeed records={records} />
+    </main>
+  );
 }
 
 function DiscoveryFeed({ records }: { records: RecordItem[] }) {
@@ -194,18 +265,12 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
   const feedRoot = useRef<HTMLDivElement>(null);
   const pendingFocus = useRef<number | null>(null);
   const [announcement, setAnnouncement] = useState("");
-  const mixed = useMemo(() => buildDiscoveryFeed(records), [records]);
-  const entries = useMemo(
-    () =>
-      mixed.filter(
-        (r) =>
-          kind === "all" ||
-          r.kind === kind ||
-          (kind === "organisation" && r.kind === "contact"),
-      ),
-    [mixed, kind],
-  );
+  const sections = useMemo(() => buildDiscoverySections(records, kind), [records, kind]);
+  const entries = useMemo(() => sections.flatMap(section => section.records), [sections]);
   const shown = entries.slice(0, limit);
+  const shownSections = sections.filter(section => section.start < limit).map(section => ({
+    ...section, records: section.records.slice(0, limit - section.start),
+  }));
   const hasMore = shown.length < entries.length;
   useLayoutEffect(() => {
     homeFeedState.set(location.key, { limit, kind, automatic });
@@ -250,19 +315,13 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
       `${Math.min(12, entries.length - shown.length)} more entries added.`,
     );
   };
-  const batches = Array.from({ length: Math.ceil(shown.length / 12) }, (_, i) =>
-    shown.slice(i * 12, (i + 1) * 12),
-  );
   return (
     <section className="discovery shell" aria-labelledby="discovery-heading">
       <div className="section-heading">
         <div>
-          <h2 id="discovery-heading">A little knowledge goes a long way.</h2>
-          <p>Guides to read. People to meet. More ways to care for Goa.</p>
+          <h2 id="discovery-heading">Explore the field guide</h2>
+          <p>Practical help first. Then people, stories and more ways to take part.</p>
         </div>
-        <Link className="text-link" to="/directory">
-          Explore the directory <ArrowUpRight size={18} />
-        </Link>
       </div>
       <div className="discovery-controls">
         <SegmentedControl
@@ -286,41 +345,32 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
         </Button>
       </div>
       <div ref={feedRoot} className="discovery-feed">
-        {batches.map((batch, batchIndex) => (
-          <div className="discovery-batch" key={batchIndex}>
-            <div
-              className={kind === "all" ? "discovery-lead" : "discovery-grid"}
-            >
-              {batch.slice(0, 3).map((record, index) => (
-                <div data-feed-index={batchIndex * 12 + index} key={record.id}>
-                  <RecordCard record={record} />
+        {shownSections.map(section => (
+          <div key={section.id}>
+            <section className={`discovery-section discovery-section--${section.type}`} aria-labelledby={`discovery-${section.id}`}>
+              <div className="discovery-section-heading">
+                <div>
+                  <h2 id={`discovery-${section.id}`}>{section.title}</h2>
+                  <p>{section.description}</p>
                 </div>
-              ))}
-            </div>
-            {batch.length > 3 && (
-              <div className="discovery-grid">
-                {batch.slice(3).map((record, index) => (
-                  <div
-                    data-feed-index={batchIndex * 12 + index + 3}
-                    key={record.id}
-                  >
-                    <RecordCard record={record} />
+                <Link className="text-link" to={section.href}>
+                  {section.linkLabel} <ArrowRight size={18} aria-hidden="true" />
+                </Link>
+              </div>
+              <div className={section.type === "people" ? "discovery-people-list" : "discovery-grid"}>
+                {section.records.map((record, index) => (
+                  <div data-feed-index={section.start + index} key={record.id}>
+                    <RecordCard record={record} showImage={section.type === "stories"} />
                   </div>
                 ))}
               </div>
+            </section>
+            {kind === "all" && section.type === "people" && section.round < 2 && (
+              <DiscoveryTopics records={records} second={section.round === 1} />
             )}
-            {batchIndex < TOPICS.length && (
-              <div className="discovery-way-in">
-                <h3>Explore {TOPICS[batchIndex].toLowerCase()}</h3>
-                <Link
-                  className="text-link"
-                  to={topicHref(TOPICS[batchIndex])}
-                >
-                  Find guides, people and local projects{" "}
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
-            )}
+            {section.type === "people" && section.round === 0 && kind === "all" && <DiscoveryLinks group="tools" />}
+            {section.type === "documents" && section.round === 0 && kind === "all" && <DiscoveryLinks group="participate" />}
+            {section.type === "documents" && section.round === 1 && kind === "all" && <DiscoveryLinks group="checklists" />}
           </div>
         ))}
       </div>
@@ -363,8 +413,7 @@ function Catalogue({
 }) {
   const [params, setParams] = useSearchParams();
   const query = params.get("q") || "";
-  const topic = params.get("topic") || "";
-  const filter = params.get("type") || "all";
+  const { topic, type: filter } = catalogueFilters(params.toString());
   const location = useLocation();
   const saved = browsingState.get(location.key);
   const [page, setPage] = useState({
@@ -382,6 +431,9 @@ function Catalogue({
     });
   }
   const { view, limit } = page;
+  const resultsRoot = useRef<HTMLDivElement>(null);
+  const nextResultFocus = useRef<string | null>(null);
+  const [resultAnnouncement, setResultAnnouncement] = useState("");
   const setView = (view: "grid" | "list") =>
     setPage((current) => ({ ...current, view }));
   const setLimit = (limit: number) =>
@@ -394,12 +446,17 @@ function Catalogue({
   >(semantic ? "ready" : "idle");
   useLayoutEffect(() => {
     browsingState.set(location.key, { view, limit });
+    if (nextResultFocus.current) {
+      resultsRoot.current?.querySelector<HTMLAnchorElement>(`[data-record-id="${CSS.escape(nextResultFocus.current)}"] h3 a`)?.focus();
+      nextResultFocus.current = null;
+    }
   }, [location.key, view, limit]);
   const [semanticQuery, setSemanticQuery] = useState(query);
   if (semanticQuery !== query) {
     setSemanticQuery(query);
     setSemantic(semanticCache.get(query) ?? null);
   }
+  const [meaningEnabled, setMeaningEnabled] = useState(false);
   const worker = useRef<Worker | null>(null);
   const seq = useRef(0);
   useEffect(() => () => worker.current?.terminate(), []);
@@ -409,11 +466,17 @@ function Catalogue({
       setStatus("ready");
       return;
     }
-    if (!query.trim()) {
+    if (!query.trim() || !meaningEnabled) {
       setStatus("idle");
       return;
     }
     setStatus("loading");
+    const deadline = setTimeout(() => {
+      if (id !== seq.current) return;
+      worker.current?.terminate();
+      worker.current = null;
+      setStatus("fallback");
+    }, 45000);
     const timer = setTimeout(() => {
       try {
         worker.current ||= new Worker(
@@ -422,6 +485,7 @@ function Catalogue({
         );
         worker.current.onmessage = ({ data }) => {
           if (data.id !== seq.current) return;
+          clearTimeout(deadline);
           if (data.error) {
             console.warn("Local search:", data.error);
             setStatus("fallback");
@@ -433,15 +497,17 @@ function Catalogue({
           setStatus("ready");
         };
         worker.current.onerror = () => {
+          clearTimeout(deadline);
           if (id === seq.current) setStatus("fallback");
         };
         worker.current.postMessage({ query, id });
       } catch {
+        clearTimeout(deadline);
         setStatus("fallback");
       }
     }, 250);
-    return () => clearTimeout(timer);
-  }, [query]);
+    return () => { clearTimeout(timer); clearTimeout(deadline); };
+  }, [query, meaningEnabled]);
   const base = useMemo(
     () =>
       records.filter((r) =>
@@ -468,15 +534,23 @@ function Catalogue({
     },
     [base, query, semantic, mode],
   );
-  const results = ranked.filter(
+  const relatedResults = ranked.filter(
     ({ record: r }) =>
       (!topic || r.topics.includes(topic)) &&
       (filter === "all" ||
         r.kind === filter ||
         (filter === "organisation" && r.kind === "contact")),
   );
+  const intent = useMemo(() => inferSearchIntent(query), [query]);
+  const focusedResults = useMemo(
+    () => intent ? focusSearchResults(ranked, query, intent) : ranked,
+    [ranked, query, intent],
+  ).filter(({ record }) => !topic || record.topics.includes(topic));
+  const canFocus = mode === "search" && filter === "all" && intent !== null;
+  const focused = canFocus && params.get("scope") !== "all" && focusedResults.length > 0;
+  const results = focused ? focusedResults : relatedResults;
   const grouped = query.trim() && mode === "search" && filter === "all";
-  const groups = [
+  const groups = focused ? groupIntentResults(results, query, intent) : [
     { title: "People & organisations", kinds: ["organisation", "contact"] },
     { title: "Guides & reading", kinds: ["resource"] },
     { title: "Stories & projects", kinds: ["story"] },
@@ -488,7 +562,7 @@ function Catalogue({
     }))
     .filter((group) => group.items.length)
     .sort((a, b) => results.indexOf(a.items[0]) - results.indexOf(b.items[0]));
-  const perGroup = Math.max(6, Math.floor(limit / 4));
+  const perGroup = focused ? Math.max(3, Math.floor(limit / 8)) : Math.max(6, Math.floor(limit / 4));
   const moreAvailable = grouped
     ? groups.some((group) => group.items.length > perGroup)
     : limit < results.length;
@@ -527,6 +601,17 @@ function Catalogue({
       </div>
       <SearchBox initial={query} />
       {topic && !query && topicFor(topic) && <TopicChoices flow={topicFor(topic)!} />}
+      {showEmergencyShortcut(query) && <section className="search-emergency" aria-labelledby="emergency-search-heading">
+        <h2 id="emergency-search-heading">Need urgent help?</h2>
+        <p>For a police, fire or medical emergency, call <a href="tel:112">112</a>. Archived directory entries do not confirm live availability.</p>
+        <Link className="text-link" to="/emergency">Open emergency services <ArrowRight size={18} /></Link>
+      </section>}
+      {query.trim() && <div className="meaning-search">
+        {!meaningEnabled && !semantic ? <>
+          <Button variant="ghost" onClick={() => setMeaningEnabled(true)}>Expand search by meaning</Button>
+          <p>Optional download of about 50 MB, then runs on this device. Keyword search works without it.</p>
+        </> : <p role="status">{status === "loading" ? "Loading optional meaning search. Keyword results are already available." : status === "fallback" ? "Meaning search could not load. Keyword results are still available." : semantic ? "Meaning search is ready on this device." : ""}</p>}
+      </div>}
       <div className="catalogue-layout">
         <aside className="filter-rail">
           <h2>
@@ -541,7 +626,8 @@ function Catalogue({
           >
             All topics <span>{base.length}</span>
           </Button>
-          {TOPICS.map((t) => {
+          {TOPICS.map((t, i) => {
+            const Icon = topicIcons[i];
             return (
               <Button
                 variant="ghost"
@@ -550,23 +636,25 @@ function Catalogue({
                 key={t}
                 onClick={() => change("topic", t)}
               >
-                <TopicIcon name={topicFor(t)?.icon || "community"} />
-                <span className="filter-topic-label">{t}</span>
+                <Icon size={17} />
+                {t}
               </Button>
             );
           })}
           <p>
-            Choose a topic to narrow your results.
+            Original resources and practical guides.
+            <br />
+            Every entry keeps its sources.
           </p>
         </aside>
-        <div className="results-area">
+        <div className="results-area" ref={resultsRoot}>
           {mode === "search" && (
             <SegmentedControl
               className="result-tabs"
               label="Result type"
               value={filter}
               options={[
-                { value: "all", label: "Everything" },
+                { value: "all", label: intent && params.get("scope") !== "all" && focusedResults.length > 0 ? "Best matches" : "Everything" },
                 { value: "organisation", label: "People" },
                 { value: "resource", label: "Guides" },
                 { value: "story", label: "Stories" },
@@ -579,18 +667,17 @@ function Catalogue({
           )}
           <div className="results-bar">
             <div>
-              <h2 aria-live="polite">
-                {results.length} {results.length === 1 ? "result" : "results"}
-                {query && <> for “{query}”</>}
+              <h2 aria-live="polite" className={focused ? "intent-heading" : undefined}>
+                {focused ? intent.title : <>{results.length} {results.length === 1 ? "result" : "results"}{query && <> for “{query}”</>}</>}
               </h2>
               {query && (
                 <p className="search-status" role="status">
-                  {status === "loading"
-                    ? "Finding more results…"
+                  {focused ? intent.description : canFocus && !focusedResults.length ? relatedResults.length ? "No focused matches yet. Showing related results." : "No matches within these filters. Try another topic or search." : status === "loading"
+                    ? "Keyword results ready. Matching meaning on your device…"
                     : status === "ready"
-                      ? ""
+                      ? "Matched by meaning and keywords."
                       : status === "fallback"
-                        ? ""
+                        ? "Keyword search is available. Meaning search could not load."
                         : ""}
                 </p>
               )}
@@ -606,6 +693,18 @@ function Catalogue({
               onValueChange={(value) => setView(value as "grid" | "list")}
             />
           </div>
+          {canFocus && focusedResults.length > 0 && (
+            <div className="search-focus-options">
+              {intent.id === "snake-rescue" && (
+                <p>Start with the <a className="text-link" href="https://forest.goa.gov.in/contact-us">Goa Forest Department contact directory <ArrowUpRight size={15} /></a>. Volunteer listings below date to 2018; availability needs confirmation.</p>
+              )}
+              {intent.id === "animal-rescue" && <p>Check the <a className="text-link" href="https://ahvs.goa.gov.in/emergency-contact/">official veterinary directory <ArrowUpRight size={15} /></a> and confirm which service can help.</p>}
+              <Button variant="ghost" onClick={() => change("scope", focused ? "all" : "")}>
+                {focused ? `See all related results (${relatedResults.length})` : "Back to best matches"}
+                <ArrowRight size={16} />
+              </Button>
+            </div>
+          )}
           {topic && (
             <Button
               variant="ghost"
@@ -667,7 +766,11 @@ function Catalogue({
                 <Button
                   variant="ghost"
                   className="button load-more"
-                  onClick={() => setLimit(limit + 24)}
+                  onClick={() => {
+                    nextResultFocus.current = (grouped ? groups.find(group => group.items.length > perGroup)?.items[perGroup] : results[limit])?.record.id ?? null;
+                    setLimit(limit + 24);
+                    setResultAnnouncement("More results added.");
+                  }}
                 >
                   Show more results <ArrowRight size={18} />
                 </Button>
@@ -687,6 +790,7 @@ function Catalogue({
               <Link to="/contact">Ask ActForGoa for help</Link>
             </div>
           )}
+          <p className="sr-only" role="status">{resultAnnouncement}</p>
         </div>
       </div>
     </main>
@@ -699,8 +803,7 @@ function Detail({ records }: { records: RecordItem[] }) {
   const { id } = useParams();
   const r = records.find((x) => x.id === id);
   const [copied, setCopied] = useState(false);
-  const guide = guideDocuments.find(g => g.id === id);
-  if (guide) return <PracticalGuide key={guide.id} guide={guide} />;
+  if (id?.startsWith("guide-")) return <GuideRoute />;
   if (!r) return <NotFound />;
   const related = records
     .filter(
@@ -710,7 +813,8 @@ function Detail({ records }: { records: RecordItem[] }) {
         x.topics.some((t) => r.topics.includes(t)),
     )
     .slice(0, 3);
-  const externalLinks = r.links.filter(
+  const content = storyContent(r);
+  const externalLinks = content.links.filter(
     (l) => !l.url.startsWith("mailto:") && !l.url.startsWith("tel:"),
   );
   return (
@@ -729,7 +833,7 @@ function Detail({ records }: { records: RecordItem[] }) {
           className="back-link"
           to={
             r.kind === "organisation" || r.kind === "contact"
-              ? "/directory"
+              ? "/directory/archive"
               : r.kind === "story"
                 ? "/stories"
                 : "/library"
@@ -748,7 +852,7 @@ function Detail({ records }: { records: RecordItem[] }) {
       <div className="detail-layout">
         <article>
           <div className="record-meta">
-            <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide" : kindLabel[r.kind]}</span>
+            <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}</span>
             <span>{r.topics[0]}</span>
           </div>
           <h1>{r.title}</h1>
@@ -759,10 +863,26 @@ function Detail({ records }: { records: RecordItem[] }) {
           {r.image && (
             <img className="detail-image" src={r.image} alt={r.title} />
           )}
+          {(r.kind === "contact" || r.kind === "organisation" || r.id === "resource-590480849c") && (
+            <div className="verification-note">
+              This is an archived source listing. Contact details and service
+              availability need confirmation.{r.retrievedAt && <> Retrieved {formatDate(r.retrievedAt)}.</>}
+            </div>
+          )}
+          {(r.kind === "story" || r.kind === "page") && <p className="verification-note">Archived source content. Dates, invitations and opportunities describe the original publication; check the source before acting.</p>}
+          {r.kind === "resource" && <p className="verification-note">Archived reference material. Rules, schemes and service details may have changed since publication. Check the official sources before acting.</p>}
+          {r.editorialCorrection && <div className="verification-note">
+            <strong>Source correction.</strong> {r.editorialCorrection.note}{" "}
+            <a className="text-link" href={r.editorialCorrection.source}>{r.kind === "story" ? "Read the original article" : "Read the official text"} <ExternalLink size={15} /></a>
+          </div>}
           <div className="reading-body">
             {!r.blocks.length && (r.kind === "organisation" || r.kind === "contact") && <p>{communityDescription(r)}</p>}
-            {r.blocks.map((b, i) =>
-              b.type === "heading" ? (
+            {content.blocks.map((b, i) =>
+              b.href ? (
+                <p key={i}>
+                  <a href={b.href} target="_blank" rel="noreferrer">{b.text}</a>
+                </p>
+              ) : b.type === "heading" ? (
                 <h2 key={i}>{b.text}</h2>
               ) : b.type === "list" ? (
                 <p className="reading-list-item" key={i}>
@@ -792,7 +912,7 @@ function Detail({ records }: { records: RecordItem[] }) {
                     {d.pages && <small>{d.pages} pages</small>}
                     {d.status && d.status >= 400 && (
                       <small>
-                        This download may no longer be available
+                        Original link returned {d.status}; it may be unavailable
                       </small>
                     )}
                   </span>
@@ -804,9 +924,10 @@ function Detail({ records }: { records: RecordItem[] }) {
           {externalLinks.length > 0 && (
             <details className="source-links">
               <summary>
-                Useful links ({externalLinks.length})
+                Links from the original entry ({externalLinks.length})
               </summary>
               {externalLinks.map((l, i) => (
+                /^https?:\/\/staging\./i.test(l.url) ? <p key={i}>{l.label}: historical staging link; a current destination has not been confirmed.</p> :
                 <a key={i} href={l.url} target="_blank" rel="noreferrer">
                   {l.label}
                   <ExternalLink size={13} />
@@ -833,12 +954,15 @@ function Detail({ records }: { records: RecordItem[] }) {
                 </div>
               ))}
               <small>
-                Check opening hours and availability before visiting.
+                Published contact information, not a confirmation of current
+                availability. See the original entry for full context.
               </small>
             </section>
           )}
           <section>
-            <h2>More information</h2>
+            <h2>Keep the source close.</h2>
+            <p>Read this entry in its original context.</p>
+            {r.sourceStatus !== null && r.sourceStatus >= 400 && <p>The original page returned an error when archived. Use the public directory record below where available.</p>}
             <a
               className="text-link"
               href={r.source}
@@ -847,6 +971,16 @@ function Detail({ records }: { records: RecordItem[] }) {
             >
               Original ActForGoa page <ArrowUpRight size={16} />
             </a>
+            {r.sourceApi && (
+              <a
+                className="subtle-link"
+                href={r.sourceApi}
+                target="_blank"
+                rel="noreferrer"
+              >
+                Public directory record <ExternalLink size={14} />
+              </a>
+            )}
             <Button
               variant="ghost"
               className="subtle-link"
@@ -958,9 +1092,23 @@ function About({ records }: { records: RecordItem[] }) {
       </div>
       <section id="sources" className="about-sources">
         <h2>About this field guide</h2>
-        <p>Find local organisations, practical guides and stories from people caring for Goa. You do not need an account.</p>
-        <p>Some articles and listings are older. Check current services and requirements with the relevant organisation before making plans.</p>
-        <p>The contact form opens an email for you to review and send.</p>
+        <p>
+          This preview brings together publicly available information from
+          ActForGoa, retrieved on 22 October 2026. Original content and links
+          have been preserved in a local archive. Five practical guides add official sources, downloadable templates and visible verification flags. They remain drafts for legal and service review. Some records are historical;
+          their publication date is shown where available.
+        </p>
+        <p>
+          Search starts with keywords. You can optionally download a language model to expand matches by meaning on
+          your device. It finds relevant entries; it does not generate advice or
+          verify contact details. No account is needed and search queries are
+          not sent to an AI provider.
+        </p>
+        <p>
+          Contact forms prepare an email for you to review and send. The preview
+          does not store submissions. The existing ActForGoa website remains the
+          original source.
+        </p>
       </section>
     </main>
   );
@@ -1012,8 +1160,8 @@ function Contact({ involve = false }: { involve?: boolean }) {
           </Link>
           <a href="https://actforgoa.org/greenviksitgoa/">
             <Leaf size={24} />
-            <h2>Shape Goa’s future</h2>
-            <p>Explore the Green Viksit Goa initiative.</p>
+            <h2>Explore Goa’s future</h2>
+            <p>Read the archived Green Viksit Goa consultation.</p>
             <ArrowUpRight size={21} />
           </a>
         </div>
@@ -1058,7 +1206,7 @@ function Contact({ involve = false }: { involve?: boolean }) {
                 defaultValue={
                   params.get("entry")
                     ? "Suggest a correction"
-                    : ["Ask a question", "Work with ActForGoa", "Suggest a correction", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].includes(params.get("reason") || "") ? params.get("reason")!
+                    : params.get("reason") === "Work with ActForGoa" ? "Work with ActForGoa"
                     : involve
                       ? "Volunteer with ActForGoa"
                       : "Ask a question"
@@ -1138,20 +1286,45 @@ function NotFound() {
   );
 }
 export default function App() {
-  const { pathname } = useLocation();
-  const crmRoute = (pathname.startsWith('/directory') && pathname !== '/directory/archive') || pathname.startsWith('/crm');
+  const { pathname, search } = useLocation();
+  const navigationType = useNavigationType();
+  const previousPath = useRef(pathname);
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
     error: boolean;
   };
+  useEffect(() => {
+    const moved = previousPath.current !== pathname;
+    previousPath.current = pathname;
+    const content = document.getElementById("content");
+    if (!content) return;
+    let focused = false;
+    const update = () => {
+      const heading = content.querySelector<HTMLHeadingElement>("h1");
+      if (!heading) return;
+      const query = new URLSearchParams(search).get("q");
+      const title = heading.innerText.replace(/\s+/g, " ").trim();
+      document.title = `${title}${query ? `: ${query}` : ""} | ActForGoa`;
+      if (moved && navigationType === "PUSH" && !focused && !window.location.hash) {
+        heading.tabIndex = -1;
+        heading.focus({ preventScroll: true });
+        focused = true;
+      }
+    };
+    update();
+    // Lazy guide/editor headings arrive after the route shell.
+    const observer = new MutationObserver(update);
+    observer.observe(content, { childList: true, subtree: true, characterData: true });
+    return () => observer.disconnect();
+  }, [pathname, search, navigationType, error]);
   return (
     <>
       <a href="#content" className="skip-link">
         Skip to content
       </a>
       <Header />
-      <div id="content">
-        {error && !crmRoute ? (
+      <div id="content" tabIndex={-1}>
+        {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
           <main className="empty-state shell">
             <h1>The field guide couldn’t load.</h1>
             <p>
@@ -1168,20 +1341,21 @@ export default function App() {
             <a href="https://actforgoa.org/">Visit ActForGoa</a>
           </main>
         ) : (
+          <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
             <Route path="/" element={<Home records={records} />} />
-            <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records}/>} />
+            <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
             <Route path="/search" element={<Catalogue records={records} />} />
+            <Route path="/directory" element={<CRM />} />
+            <Route path="/directory/:recordId" element={<CRM />} />
+            <Route path="/crm" element={<CRM />} />
+            <Route path="/crm/:recordId" element={<CRM />} />
             <Route
               path="/directory/archive"
               element={
                 <Catalogue key="directory" records={records} mode="directory" />
               }
             />
-            <Route path="/directory" element={<CRM />} />
-            <Route path="/directory/:recordId" element={<CRM />} />
-            <Route path="/crm" element={<CRM />} />
-            <Route path="/crm/:recordId" element={<CRM />} />
             <Route
               path="/library"
               element={
@@ -1196,15 +1370,25 @@ export default function App() {
             />
             <Route path="/blog" element={<Catalogue key="blog" records={records} mode="blog" />} />
             <Route path="/read/:id" element={<Detail records={records} />} />
+            <Route path="/templates/:id" element={<TemplateEditor />} />
             <Route path="/about" element={<About records={records} />} />
             <Route path="/get-involved" element={<Contact involve />} />
-            <Route path="/contact" element={<Contact />} />
+            <Route path="/report" element={<ReportIncident />} />
+            <Route path="/reports/review" element={<ReportInbox />} />
+            <Route path="/contact" element={<Contact key={pathname + search} />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
+          </Suspense>
         )}
       </div>
       <ScrollRestoration />
       <Footer />
+      <div className="preview-note">
+        A new field guide, in progress.{" "}
+        <a href="https://actforgoa.org/">
+          Visit the original site <ArrowUpRight size={12} />
+        </a>
+      </div>
     </>
   );
 }

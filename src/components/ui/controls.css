@@ -1,0 +1,10 @@
+.ui-switch { display:inline-flex; align-items:center; flex-shrink:0; width:44px; height:26px; padding:3px; border:1px solid var(--muted); border-radius:999px; background:var(--line); transition:background-color 160ms ease-out; }
+.ui-switch[data-state=checked] { background:var(--green); border-color:var(--green); }
+.ui-switch-thumb { display:block; pointer-events:none; width:18px; height:18px; border-radius:50%; background:var(--white); transition:transform 160ms ease-out; }
+.ui-switch-thumb[data-state=checked] { transform:translateX(18px); }
+.ui-checkbox { display:grid; place-content:center; flex-shrink:0; width:22px; height:22px; padding:0; border:1px solid var(--muted); border-radius:var(--radius-control); background:var(--white); color:var(--white); }
+.ui-checkbox[data-state=checked] { background:var(--green); border-color:var(--green); }
+.ui-checkbox-indicator { display:grid; place-content:center; }
+.ui-switch:focus-visible,.ui-checkbox:focus-visible { outline:2px solid var(--green); outline-offset:4px; }
+.ui-switch:disabled,.ui-checkbox:disabled { cursor:not-allowed; opacity:.5; }
+@media(prefers-reduced-motion:reduce) { .ui-switch,.ui-switch-thumb { transition:none; } }

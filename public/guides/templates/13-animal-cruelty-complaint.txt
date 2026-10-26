@@ -22,3 +22,5 @@ My name and safe contact method: [details]
 Signature/date: [details]
 
 I have distinguished observations from suspicions. I have not taken custody or entered premises under authority of this template.
+
+Procedure check: the AWBI 2025 handbook distinguishes cognizable and non-cognizable reporting under BNSS. Under the published section 173 procedure, electronic information about a cognizable offence must be signed within three days. Confirm how to complete the applicable police process; an ordinary email is not proof that an FIR has been registered.
