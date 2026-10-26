@@ -53,7 +53,7 @@ def chat_config():
         is_openai=model.startswith('openai/')
         config = ChatConfig(provider, model,
                             'OpenRouter and OpenAI' if is_openai else 'OpenRouter and Alibaba Cloud (Qwen)', 'OPENROUTER_API_KEY',
-                            'https://openrouter.ai/api/v1',route='openai' if is_openai else 'alibaba',
+                            'https://openrouter.ai/api/v1',max_output_tokens=3500 if is_openai else 1800,route='openai' if is_openai else 'alibaba',
                             structured=is_openai or model=='qwen/qwen3.8-flash')
     elif provider == 'qwen':
         model = os.getenv('QWEN_CHAT_MODEL', 'qwen3.7-flash-2026-07-15')

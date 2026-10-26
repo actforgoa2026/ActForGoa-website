@@ -191,14 +191,16 @@ def test_selected_model_uses_strict_schema_correct_prices_and_disclosure(evidenc
         answer_question(client,config,prepare_answer(ChatRequest(question='Khazan water?',answer_style='brief'),evidence))
     body=captured[0];assert body['response_format']['type']=='json_schema'
     schema=body['response_format']['json_schema']['schema']
-    assert '$defs' not in schema and schema['properties']['paragraphs']['maxItems']==2
-    assert body['reasoning']=={'effort':'minimal'} and 'temperature' not in body
+    assert '$defs' not in schema and schema['properties']['paragraphs']['maxItems']==1
+    assert schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']==['passage-1']
+    assert body['reasoning']=={'effort':'low'} and 'temperature' not in body
     assert body['provider']['only']==['openai'] and body['provider']['allow_fallbacks'] is False
     assert body['provider']['max_price']=={'prompt':.05,'completion':.4,'request':0}
-    assert config.maximum_cost_microusd(26048)==2023
+    assert config.maximum_cost_microusd(26048)==2703
 
-def test_legal_currency_limitation_is_returned_with_cited_legal_answer(evidence):
-    evidence[0]['document_kind_hint']='legislation_or_notification'
+@pytest.mark.parametrize('kind',['legislation_or_notification','official_procedure','SOP','final_policy'])
+def test_legal_currency_limitation_is_returned_with_cited_legal_answer(evidence,kind):
+    evidence[0]['document_kind_hint']=kind
     answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':'The saved Act requires permission.','citations':['passage-1']}]})
     result=validate_answer(answer,evidence,'brief')
     assert 'current consolidated status is not verified' in result['notice']
