@@ -88,13 +88,16 @@ def test_document_endpoints_and_original_checksum(collection):
         assert client.get('/api/status',headers={'host':'evil.example'}).status_code==400
 
 def test_missing_credential_keeps_search_working(collection,monkeypatch):
-    monkeypatch.delenv('OPENAI_API_KEY',raising=False)
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    monkeypatch.delenv('OPENROUTER_API_KEY',raising=False)
     with TestClient(create_app(collection[0])) as client:
         assert client.get('/api/status').json()['chat_ready'] is False
         assert client.post('/api/chat',json={'question':'How do sluice gates work?'}).status_code==503
         assert client.get('/api/search',params={'q':'sluice'}).json()['results']
 
-def test_responses_sdk_citation_contract(collection):
+def test_responses_sdk_citation_contract(collection,monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openai')
+    monkeypatch.setenv('OPENAI_CHAT_MODEL','gpt-5-mini')
     captured=[]
     def provider(request):
         body=json.loads(request.content);captured.append(body)
@@ -193,3 +196,87 @@ def test_corrupted_text_is_flagged_for_search_exclusion():
     from backend.extraction import text_quality_warning
     assert text_quality_warning('abc\ufffd\ufffd\ufffd\x01')
     assert not text_quality_warning('Goa’s rivers include the Mandovi.\nRainfall: 2,900 mm.')
+
+
+def test_openrouter_chat_citations_documents_followup_and_cache(collection,monkeypatch):
+    from tests.research.test_chat_controls import completion
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    captured=[]
+    def provider(request):
+        body=json.loads(request.content);captured.append(body)
+        evidence=json.loads(body['messages'][-1]['content'])['evidence'][0]
+        return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[
+            {'text':evidence['text'],'citations':[evidence['id']]}]})))
+    with OpenAI(api_key='fixture-only',base_url='https://openrouter.ai/api/v1',max_retries=0,
+                http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            question='How do khazan gates regulate saline water?'
+            first=client.post('/api/chat',json={'question':question})
+            assert first.status_code==200,first.text
+            answer=first.json()
+            assert client.post('/api/chat',json={'question':question}).json()==answer and len(captured)==1
+            for cite in answer['citations']:
+                doc=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']}).json()
+                assert hashlib.sha256(client.get(doc['original_url']).content).hexdigest()==doc['sha256']
+                text=client.get(doc['text_url']);assert text.status_code==200 and 'Final page' in text.text
+                pages=client.get('/api/documents/'+cite['document_id']+'/pages',params={'start':cite['page'],'generation':cite['generation']}).json()['pages']
+                assert cite['text'] in pages[0]['text']
+            followup={'question':'And during the monsoon?','history':[
+                {'role':'user','content':question},{'role':'assistant','content':answer['paragraphs'][0]['text']}]}
+            assert client.post('/api/chat',json=followup).status_code==200
+            assert client.post('/api/chat',json=followup).status_code==200
+            assert len(captured)==3
+            assert captured[-1]['messages'][1:3]==followup['history']
+            cite=answer['citations'][0]
+            scoped=client.post('/api/chat',json={'question':question,'document_id':cite['document_id'],'generation':cite['generation']})
+            assert scoped.status_code==200
+            assert all(c['document_id']==cite['document_id'] for c in scoped.json()['citations'])
+
+
+@pytest.mark.parametrize('failure',['401','402','429','timeout','bad-citation'])
+def test_provider_failure_is_safe_not_retried_or_cached_and_reservation_persists(collection,monkeypatch,failure):
+    import sqlite3
+    from tests.research.test_chat_controls import completion
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    count=[0]
+    def provider(request):
+        count[0]+=1
+        if failure=='timeout':raise httpx.ReadTimeout('private diagnostic',request=request)
+        if failure=='bad-citation':
+            return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[
+                {'text':'Unsupported','citations':['invented']}]})))
+        return httpx.Response(int(failure),json={'error':{'message':'private diagnostic','type':'failure'}})
+    with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+        before=db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]
+    with OpenAI(api_key='fixture-only',max_retries=0,http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            for _ in range(2):
+                response=client.post('/api/chat',json={'question':'What controls khazan tidal water?'})
+                assert response.status_code==502
+                assert 'private diagnostic' not in response.text and 'fixture-only' not in response.text
+            assert count[0]==2
+            assert client.get('/api/search',params={'q':'khazan'}).status_code==200
+    with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+        assert db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]>before
+
+
+def test_exhausted_budget_does_not_call_provider(collection,monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','0')
+    def provider(_):raise AssertionError('A depleted budget must prevent dispatch')
+    with OpenAI(api_key='fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            assert client.post('/api/chat',json={'question':'How do khazan sluice gates work?'}).status_code==429
+            assert client.get('/api/search',params={'q':'khazan'}).json()['results']
+
+
+def test_service_only_package_does_not_require_or_replace_corpus(tmp_path):
+    output=tmp_path/'release';service=output/'service';service.mkdir(parents=True)
+    (service/'stale-secret.env').write_text('fixture that must not survive regeneration')
+    data=output/'data';data.mkdir();(data/'keep.txt').write_text('existing volume package')
+    script=Path(__file__).resolve().parents[2]/'scripts/package_research.py'
+    report=json.loads(subprocess.check_output([sys.executable,str(script),'--service-only',
+        '--data-root',str(tmp_path/'not-present'),'--output',str(output)],text=True))
+    assert (Path(report['service'])/'backend/providers.py').exists()
+    assert not (service/'stale-secret.env').exists()
+    assert (data/'keep.txt').read_text()=='existing volume package'
