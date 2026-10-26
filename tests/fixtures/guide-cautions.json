@@ -1,0 +1,108 @@
+{
+  "sourceCommit": "7d1f87fbbe7f6aab415a74d5801f5cf3edccc5be",
+  "source": "src/content/guides.json",
+  "cases": [
+    {
+      "id": "AG01",
+      "guide": "guide-farming",
+      "markdown": "**Source update AG01:** the government reports a newly opened Zonal Agriculture Office at Valpoi on 13 October 2026. Older office lists may need address updates. **Verification needed AG01:** confirm the office serving your holding, exact current address, hours, appointment and submission route. An opening announcement is not a tested service. [Official Valpoi announcement][V12]\n\n[V12]: https://dip.goa.gov.in/agricultural-diversification-and-modern-farming-practices-are-key-to-enhancing-farmers-income-cm/",
+      "required": [
+        "An opening announcement is not a tested service."
+      ]
+    },
+    {
+      "id": "AG03",
+      "guide": "guide-farming",
+      "markdown": "**Published checklist checked:** the charter's individual list includes nominee bank/identity details and soil samples for each survey number. Its group list instead includes the group's registration and authority documents. These were previously left as wholly unresolved; the published distinction is now recorded. **Verification needed AG03:** ask the receiving office which version applies, how to provide samples, which identity alternatives it accepts, and whether fees or further documents apply. Actual processing time and bank-payment mapping remain untested. [Charter, physical page 2][FR1]\n\n[FR1]: https://agri.goa.gov.in/Upload/Corrected_Citizen_Charter.pdf",
+      "required": [
+        "Actual processing time and bank-payment mapping remain untested."
+      ]
+    },
+    {
+      "id": "AG07",
+      "guide": "guide-farming",
+      "markdown": "The older seven-day guidance belongs to an earlier version. **Verification needed AG07:** confirm any later amendment, how working days are counted, the event/crop's eligibility, assessment, funding and interactions with insurance. Do not wait for that enquiry to notify damage promptly. A claim under another scheme or insurance policy may have a different deadline. Compensation is not automatic.\n\n",
+      "required": [
+        "Do not wait for that enquiry to notify damage promptly.",
+        "A claim under another scheme or insurance policy may have a different deadline.",
+        "Compensation is not automatic."
+      ]
+    },
+    {
+      "id": "AW01",
+      "guide": "guide-animal-welfare",
+      "markdown": "**Verification needed AW01:** a Goa clinician should check current local referral information and the final medical wording. Vaccine/immunoglobulin availability, opening hours and actual emergency response remain unconfirmed. No treatment schedule is prescribed by this guide.\n\n",
+      "required": [
+        "Vaccine/immunoglobulin availability, opening hours and actual emergency response remain unconfirmed.",
+        "No treatment schedule is prescribed by this guide."
+      ]
+    },
+    {
+      "id": "AW04",
+      "guide": "guide-animal-welfare",
+      "markdown": "**Verification needed AW04:** later Supreme Court and Bombay High Court/Goa implementation orders, site designation and actual local arrangements remain unresolved. This search did not establish a complete current Goa court-order chain. The SOP and July circular are verified documents, not authority for a resident to capture, relocate or euthanise an animal.\n\n",
+      "required": [
+        "The SOP and July circular are verified documents, not authority for a resident to capture, relocate or euthanise an animal."
+      ]
+    },
+    {
+      "id": "EP04",
+      "guide": "guide-environmental-protection",
+      "markdown": "**Verification needed EP04:** the final-versus-draft question is resolved for this ten-notification package only. Later amendments, court orders, accurate site boundaries/zone of influence, other lakes and live GSWA receipt still need checking. This package is not an exhaustive list of Goa wetlands.\n\n",
+      "required": [
+        "This package is not an exhaustive list of Goa wetlands."
+      ]
+    },
+    {
+      "id": "EP08",
+      "guide": "guide-environmental-protection",
+      "markdown": "**Verification needed EP08:** a practitioner must check the correct remedy, standing, current amendments/judgments, when the legal clock started and the filing/bench procedure. The recovered government-hosted Gazette is the enacted text, not a certified current consolidation; the India Code PDF still timed out. Do not wait for RTI or a grievance reply before seeking advice on a challenge.\n\n",
+      "required": [
+        "The recovered government-hosted Gazette is the enacted text, not a certified current consolidation",
+        "Do not wait for RTI or a grievance reply before seeking advice on a challenge."
+      ]
+    },
+    {
+      "id": "R02",
+      "guide": "guide-reporting",
+      "markdown": "**Verification needed R02:** the published route is checked; successful live payment/submission, the chosen authority's availability, accepted attachment size/type and current copying or certification charges are not tested. For paper filing, confirm the SPIO's current address, accepted payment instrument and receipt process. A portal outage does not remove the option of writing to the correct SPIO.\n\n",
+      "required": [
+        "For paper filing, confirm the SPIO's current address, accepted payment instrument and receipt process.",
+        "A portal outage does not remove the option of writing to the correct SPIO."
+      ]
+    },
+    {
+      "id": "R05",
+      "guide": "guide-reporting",
+      "markdown": "**Verification needed R05:** the amendment and commencement question is resolved. A practitioner must still assess current court interpretation, the exemption claimed, third-party procedure and the actual case's deadlines. This review is not a complete consolidation of every RTI amendment or judgment.\n\n",
+      "required": [
+        "A practitioner must still assess current court interpretation, the exemption claimed, third-party procedure and the actual case's deadlines.",
+        "This review is not a complete consolidation of every RTI amendment or judgment."
+      ]
+    },
+    {
+      "id": "B02",
+      "guide": "guide-building",
+      "markdown": "**Verification needed B02:** do not label structural alteration or expansion as “repairs” yourself. Margao publishes a repair procedure involving ownership/survey documents, photographs, an engineer's stability certificate, inspection and permission. Its requirements are a local example, not a statewide checklist. The Panchayat charter also describes a limited repair route, but its current scope and conditions need confirmation. [Margao repair procedure][B3]; [Panchayat charter, printed pages 24–25][B4]\n\n[B3]: https://mmcmargao.goa.gov.in/services/technical/construction-license/\n[B4]: https://www.goa.gov.in/wp-content/uploads/2016/05/Panchayat-Citizen-Charter.pdf",
+      "required": [
+        "Its requirements are a local example, not a statewide checklist."
+      ]
+    },
+    {
+      "id": "B01",
+      "guide": "guide-building",
+      "markdown": "**Verification needed B01:** confirm the current jurisdiction and plan applicable to the particular property. **B02:** the TCP downloads page also lists Notary Architect Engineer forms for certain single-family dwellings. The eligibility, current operation and conditions of that special route have not been verified; this guide does not assume it is available. [TCP forms][B5]\n\n[B5]: https://tcp.goa.gov.in/downloads/",
+      "required": [
+        "The eligibility, current operation and conditions of that special route have not been verified; this guide does not assume it is available."
+      ]
+    },
+    {
+      "id": "B04",
+      "guide": "guide-building",
+      "markdown": "**Verification needed B04:** a registered designer/planning lawyer must still assemble the complete amendment chain, applicable plan and any later stay/order for the project. These two verified amendments do not establish a complete current set of FAR, height, setback or use controls.\n\n",
+      "required": [
+        "These two verified amendments do not establish a complete current set of FAR, height, setback or use controls."
+      ]
+    }
+  ]
+}
