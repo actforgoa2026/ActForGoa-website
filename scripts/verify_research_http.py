@@ -19,6 +19,7 @@ CASES = [
 def main():
     parser=argparse.ArgumentParser()
     parser.add_argument('origin')
+    parser.add_argument('--frontend',action='store_true',help='Verify same-origin API rewrites; healthz belongs only to the backend origin.')
     parser.add_argument('--output',type=Path,default=Path('reports/research-release/http-verification.json'))
     args=parser.parse_args();origin=args.origin.rstrip('/')
     def get(path):
@@ -27,7 +28,7 @@ def main():
     def data(path):return json.loads(get(path)[0])
     status=data('/api/status');assert status['search_ready']
     assert status['search_mode']=='zvec+fts5+rrf'
-    assert data('/healthz')['ready']
+    if not args.frontend:assert data('/healthz')['ready']
     checks=[];sample=None
     for query,terms in CASES:
         hits=data('/api/search?'+urlencode({'q':query,'limit':5}))['results']
