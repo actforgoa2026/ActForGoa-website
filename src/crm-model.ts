@@ -36,26 +36,99 @@ export function safeUrl(value: string) {
 export function today() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
 export function isDue(note: CRMNote | undefined, date = today()) { return !!note?.followUp && note.followUp <= date && !['closed', 'do_not_contact'].includes(note.stage); }
 export type Filters = { q: string; collection: string; type: string; focus: string; location: string; activity: string; verification: string; contact: string; stage: string; due: boolean; sort: string };
+export const collections = { community: 'Community', government: 'Government', opportunities: 'Participation', all: 'All records' };
+export const contactLabels = { phone: 'Has a phone', email: 'Has an email', missing: 'No phone or email' };
 export function filtersFrom(params: URLSearchParams): Filters {
-  return { q: params.get('q') || '', collection: params.get('collection') || 'community', type: params.get('type') || '', focus: params.get('focus') || '', location: params.get('location') || '', activity: params.get('activity') || '', verification: params.get('verification') || '', contact: params.get('contact') || '', stage: params.get('stage') || '', due: params.get('due') === '1', sort: params.get('sort') || 'name' };
+  const choice = (key: string, values: Record<string, unknown>, fallback = '') => {
+    const value = params.get(key) || ''; return Object.hasOwn(values, value) ? value : fallback;
+  };
+  return { q: params.get('q') || '', collection: choice('collection', collections, 'community'), type: params.get('type') || '', focus: params.get('focus') || '', location: params.get('location') || '', activity: choice('activity', activityLabels), verification: choice('verification', verificationLabels), contact: choice('contact', contactLabels), stage: choice('stage', stages), due: params.get('due') === '1', sort: choice('sort', { relevance: 1, name: 1, activity: 1, followup: 1 }, 'relevance') };
+}
+
+// Prepare source text once per snapshot, rather than rebuilding it on every keystroke.
+const searchText = (value = '') => normalize(value).replace(/[’']/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
+const searchCache = new WeakMap<CRMRecord, ReturnType<typeof prepareRecord>>();
+function prepareRecord(r: CRMRecord) {
+  const name = searchText(r.name);
+  const identity = searchText([r.name, r.organization, r.role].join(' '));
+  const location = searchText([r.goa_location, r.jurisdiction].join(' '));
+  const topics = searchText([r.focus_areas, crmDirectoryTags(r).join(' ')].join(' '));
+  const haystack = [identity, location, topics, searchText(r.summary), searchText(r.public_email), searchText(r.public_phone)].join(' ');
+  return { name, identity, location, topics, haystack, phones: split(r.public_phone).map(p => p.replace(/\D/g, '')), focus: split(r.focus_areas) };
+}
+function indexed(r: CRMRecord) {
+  let entry = searchCache.get(r);
+  if (!entry) { entry = prepareRecord(r); searchCache.set(r, entry); }
+  return entry;
+}
+function queryMatch(q: string) {
+  const phrase = searchText(q), tokens = [...new Set(phrase.split(' ').filter(Boolean))];
+  const digits = !/[\p{L}]/u.test(q) ? q.replace(/\D/g, '') : '';
+  return (r: CRMRecord) => {
+    const entry = indexed(r);
+    if (digits.length >= 5 && entry.phones.some(phone => phone.includes(digits))) return 100;
+    if (!tokens.every(token => entry.haystack.includes(token))) return -1;
+    if (!tokens.length) return 0;
+    let score = entry.name === phrase ? 1000 : entry.name.startsWith(phrase) ? 500 : entry.name.includes(phrase) ? 250 : 0;
+    for (const token of tokens) {
+      if (entry.name.split(' ').some(word => word === token)) score += 80;
+      else if (entry.name.split(' ').some(word => word.startsWith(token))) score += 40;
+      else if (entry.identity.includes(token)) score += 25;
+      else if (entry.topics.includes(token)) score += 15;
+      else if (entry.location.includes(token)) score += 10;
+      else score += 1;
+    }
+    return score;
+  };
+}
+type FacetKey = 'collection' | 'type' | 'focus' | 'contact' | 'due';
+function matchesFilters(r: CRMRecord, opportunities: Set<string>, f: Filters, workspace: Workspace, date: string, except?: FacetKey) {
+  const note = workspace[r.record_id] || emptyNote(r);
+  if (except !== 'collection' && (f.collection === 'opportunities' ? !opportunities.has(r.record_id) : f.collection !== 'all' && r.collection !== f.collection)) return false;
+  if (except !== 'type' && f.type && r.record_type !== f.type) return false;
+  if (except !== 'focus' && f.focus && !indexed(r).focus.includes(f.focus)) return false;
+  if (f.location && !indexed(r).location.includes(searchText(f.location))) return false;
+  if (f.activity && r.activity_status !== f.activity) return false;
+  if (f.verification && verification(r) !== f.verification) return false;
+  if (f.stage && note.stage !== f.stage) return false;
+  if (except !== 'due' && f.due && !isDue(note, date)) return false;
+  if (except !== 'contact' && (f.contact === 'phone' && !r.public_phone || f.contact === 'email' && !r.public_email || f.contact === 'missing' && (r.public_phone || r.public_email))) return false;
+  return true;
 }
 export function filterRecords(records: CRMRecord[], opportunities: Set<string>, filters: Filters, workspace: Workspace, date = today()) {
-  const tokens = normalize(filters.q.trim()).split(/\s+/).filter(Boolean);
-  return records.filter(r => {
-    const note = workspace[r.record_id] || emptyNote(r);
-    if (filters.collection === 'opportunities' ? !opportunities.has(r.record_id) : filters.collection !== 'all' && r.collection !== filters.collection) return false;
-    if (filters.type && r.record_type !== filters.type || filters.focus && !split(r.focus_areas).includes(filters.focus)) return false;
-    if (filters.location && !normalize(r.goa_location + ' ' + r.jurisdiction).includes(normalize(filters.location))) return false;
-    if (filters.activity && r.activity_status !== filters.activity || filters.verification && verification(r) !== filters.verification) return false;
-    if (filters.stage && note.stage !== filters.stage || filters.due && !isDue(note, date)) return false;
-    if (filters.contact === 'phone' && !r.public_phone || filters.contact === 'email' && !r.public_email || filters.contact === 'missing' && (r.public_phone || r.public_email)) return false;
-    const haystack = normalize([r.name, r.organization, r.role, r.summary, r.goa_location, r.jurisdiction, r.focus_areas.replaceAll('_', ' '), r.public_phone, r.public_email, crmDirectoryTags(r).join(' ')].join(' '));
-    return tokens.every(t => haystack.includes(t));
-  }).sort((a, b) => {
-    if (filters.sort === 'followup') { const difference = (workspace[a.record_id]?.followUp || '9999').localeCompare(workspace[b.record_id]?.followUp || '9999'); if (difference) return difference; }
-    if (filters.sort === 'activity') { const difference = b.activity_evidence_date.localeCompare(a.activity_evidence_date); if (difference) return difference; }
-    return a.name.localeCompare(b.name);
-  });
+  const match = queryMatch(filters.q);
+  return records.map(record => ({ record, score: match(record) }))
+    .filter(({ record, score }) => score >= 0 && matchesFilters(record, opportunities, filters, workspace, date))
+    .sort((a, b) => {
+      if (filters.sort === 'relevance' && a.score !== b.score) return b.score - a.score;
+      if (filters.sort === 'followup') { const difference = (workspace[a.record.record_id]?.followUp || '9999').localeCompare(workspace[b.record.record_id]?.followUp || '9999'); if (difference) return difference; }
+      if (filters.sort === 'activity') { const difference = (b.record.activity_evidence_date || '').localeCompare(a.record.activity_evidence_date || ''); if (difference) return difference; }
+      return a.record.name.localeCompare(b.record.name);
+    }).map(({ record }) => record);
+}
+// Each facet counts alternatives while respecting every other active filter and the query.
+export function directoryFacets(records: CRMRecord[], opportunities: Set<string>, filters: Filters, workspace: Workspace, date = today()) {
+  const facets: Record<FacetKey, Record<string, number>> = { collection: {}, type: {}, focus: {}, contact: {}, due: {} };
+  const match = queryMatch(filters.q);
+  const add = (key: FacetKey, value: string) => { facets[key][value] = (facets[key][value] || 0) + 1; };
+  for (const r of records) {
+    if (match(r) < 0) continue;
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'collection')) {
+      add('collection', r.collection); add('collection', 'all');
+      if (opportunities.has(r.record_id)) add('collection', 'opportunities');
+    }
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'type')) { add('type', ''); add('type', r.record_type); }
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'focus')) {
+      add('focus', ''); for (const value of new Set(indexed(r).focus)) add('focus', value);
+    }
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'contact')) {
+      if (r.public_phone) add('contact', 'phone');
+      if (r.public_email) add('contact', 'email');
+      if (!r.public_phone && !r.public_email) add('contact', 'missing');
+    }
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'due') && isDue(workspace[r.record_id] || emptyNote(r), date)) add('due', '1');
+  }
+  return facets;
 }
 const validDate = (s: string) => s === '' || /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(Date.parse(s)) && new Date(s).toISOString().slice(0, 10) === s;
 export function parseBackup(raw: string): Workspace {
