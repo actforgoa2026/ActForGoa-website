@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { activityLabel, backupJSON, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, verification, type CRMSnapshot } from '../src/crm-model';
+import { activityLabel, backupJSON, emptyNote, exportCSV, directoryFacets, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, verification, type CRMSnapshot } from '../src/crm-model';
 
 const data: CRMSnapshot = JSON.parse(readFileSync(new URL('../public/data/crm.json', import.meta.url), 'utf8'));
 const ids = new Set(data.records.map(r => r.record_id));
@@ -59,4 +59,43 @@ test('filtered export retains provenance and escapes formula-like notes and phon
   assert.ok(csv.startsWith('\uFEFF')); assert.ok(csv.includes('"source_urls"'));
   assert.ok(csv.includes('"\'=HYPERLINK(""https://example.org"")\nquoted, note"'));
   assert.ok(csv.includes('"crm_follow_up"'));
+});
+
+test('search ranks exact and partial names before mentions while respecting explicit sort', () => {
+  const base = data.records[0];
+  const rows = [
+    { ...base, record_id: 'goa-mention', name: 'A local project', summary: 'Works with Maria Gomes' },
+    { ...base, record_id: 'goa-name', name: 'Maria Gomes', summary: 'Community work' },
+    { ...base, record_id: 'goa-long', name: 'Maria Gomes Foundation', summary: 'Community work' },
+  ];
+  assert.deepEqual(filterRecords(rows, new Set(), filters('q=maria+gomes'), {}).map(r => r.record_id), ['goa-name', 'goa-long', 'goa-mention']);
+  assert.equal(filterRecords(rows, new Set(), filters('q=mari+gom'), {})[0].record_id, 'goa-name');
+  assert.equal(filterRecords(rows, new Set(), filters('q=maria&sort=name'), {})[0].record_id, 'goa-mention');
+  assert.equal(filterRecords(rows, new Set(), filters('q=maria+nonexistent'), {}).length, 0);
+});
+test('search normalizes accents, apostrophes, hyphens and phone formatting', () => {
+  const row = { ...data.records[0], name: 'José D’Souza', goa_location: 'Ona-Maulingem', public_phone: '+919876543210 | +918765432109' };
+  for (const query of ['jose d\'souza', 'jose dsouza', 'ona maulingem', '+91 (98765) 43210', '98765-43210']) {
+    assert.equal(filterRecords([row], new Set(), filters('q=' + encodeURIComponent(query)), {}).length, 1, query);
+  }
+  assert.equal(filterRecords([row], new Set(), filters('q=432108765'), {}).length, 0, 'cannot match across separate phone numbers');
+});
+test('invalid enum parameters recover safely and relevance is the default', () => {
+  const value = filters('collection=bogus&stage=toString&contact=invalid&sort=bad&verification=constructor&activity=invalid');
+  assert.equal(value.collection, 'community'); assert.equal(value.stage, ''); assert.equal(value.contact, '');
+  assert.equal(value.verification, ''); assert.equal(value.activity, ''); assert.equal(value.sort, 'relevance');
+});
+
+test('facet counts predict replacements without silently dropping other filters', () => {
+  const f = filters('q=goa&collection=all&focus=wildlife_rescue&contact=phone');
+  const facets = directoryFacets(data.records, opportunities, f, {}, '2026-10-26');
+  for (const [key, choices] of Object.entries({ collection: ['community', 'government', 'all', 'opportunities'], type: ['individual', 'organization'], focus: ['wildlife_rescue', 'waste', ''], contact: ['phone', 'email', 'missing'] })) {
+    for (const value of choices) assert.equal(facets[key as keyof typeof facets][value] || 0, filterRecords(data.records, opportunities, { ...f, [key]: value }, {}, '2026-10-26').length, `${key}: ${value}`);
+  }
+  const row = data.records.find(r => r.collection === 'community')!;
+  const workspace = { [row.record_id]: { ...emptyNote(row), followUp: '2026-10-26' } };
+  const dueFilters = filters('due=1');
+  assert.equal(directoryFacets(data.records, opportunities, dueFilters, workspace, '2026-10-26').due['1'], 1);
+  assert.equal(filterRecords(data.records, opportunities, dueFilters, workspace, '2026-10-26').length, 1);
+  assert.equal(directoryFacets(data.records, opportunities, dueFilters, workspace, '2026-10-25').due['1'] || 0, 0);
 });

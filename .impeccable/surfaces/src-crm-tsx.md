@@ -17,7 +17,7 @@ OWN-WORLD: Inherit upright Manrope, warm paper, forest green, open rows and Arc 
 
 STORY: Search or filter the directory, open a record, inspect public contacts and evidence, save notes and dates, return to the same results, and export or restore a backup.
 
-FIRST VIEWPORT: A compact CRM heading, storage and snapshot context, search, collection selector, expandable filters, count and open results. Desktop uses a readable table; phones use labelled rows. Record detail uses a content column and a working-notes column which stack on phones.
+FIRST VIEWPORT: A compact CRM heading, storage and snapshot context, search and large collection buttons. Desktop exposes work, place and type filters; phone shows a two-column collection grid and a View records shortcut, with the filters following. Removable active criteria connect controls to a readable desktop table or labelled phone rows. Evidence and outreach filters remain expandable. Record detail uses a content column and a working-notes column which stack on phones.
 
 FORM: Precisely scoped extension of the existing directory, code-led. No concept roll required. Seed: none (existing surface). Contact details requested by the user appear in this CRM only; the older catalogue presentation remains intact at /directory/archive.
 
