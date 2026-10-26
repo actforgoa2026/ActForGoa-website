@@ -49,6 +49,30 @@ def test_real_hybrid_search_and_complete_document(collection):
     assert len(lib.search('gecko',doc_id=found[0]['document_id']))<=4
     assert manifest['stats']['documents']==3
 
+def test_offline_evidence_gate_detects_invalid_citation_slice(collection,monkeypatch):
+    from scripts.evaluate_retrieval_evidence import evaluate_case
+    lib=Library(collection[0]);question='How do khazan sluice gates manage saline water?'
+    hits=lib.search(question,10)
+    case={'id':'fixture','question':question,'required_evidence':[{'name':'Sluice mechanism','any_of':[hits[0]['id']]}]}
+    assert evaluate_case(lib,case)['passed']
+    hits[0]=dict(hits[0],text=hits[0]['text']+' This claim is outside the cited slice.')
+    monkeypatch.setattr(lib,'search',lambda *args:hits)
+    result=evaluate_case(lib,case)
+    assert result['required_evidence'][0]['in_model_prompt']
+    assert not result['passage_integrity'] and not result['passed']
+
+def test_offline_evidence_gate_checks_prompt_budget_not_only_retrieval(collection,monkeypatch):
+    from scripts.evaluate_retrieval_evidence import evaluate_case
+    lib=Library(collection[0]);hits=lib.search('khazan sluice gates',10)
+    # Metadata is model input too. Simulate lower-ranked evidence being dropped by
+    # the real prompt budget while keeping all cited text/page slices intact.
+    padded=[dict(hits[0],legal_currency='Recorded limitation. '*300) for _ in range(9)]+[hits[-1]]
+    monkeypatch.setattr(lib,'search',lambda *args:padded)
+    case={'id':'fixture','question':'How do khazans manage water?','required_evidence':[{'name':'Last passage','any_of':[hits[-1]['id']]}]}
+    result=evaluate_case(lib,case)
+    assert result['passage_integrity'] and result['required_evidence'][0]['retrieved']
+    assert not result['required_evidence'][0]['in_model_prompt'] and not result['passed']
+
 @pytest.mark.parametrize('staged',[True,False])
 def test_release_package_reopens_zvec_and_keeps_only_indexed_originals(collection,tmp_path,staged):
     root,_=collection
