@@ -1,174 +1,186 @@
 ---
 name: ActForGoa
-description: A restrained Goan field guide with large outlined choices, upright Manrope,
-  real photography, and Arc controls.
+description: An open Goan field guide with warm paper, green ink, upright typography, real photography, and Arc controls.
 colors:
   paper: "#f7f6ee"
   green: "#193e32"
   muted: "#56675c"
   line: "#d0d8ca"
+  choice-border: "#9faea5"
   pale: "#e9eddf"
   white: "#fffef8"
   search-focus: "#dae3cf"
   link-button-hover: "#29523e"
-  choice-border: "#9faea5"
 typography:
   display:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: clamp(2.25rem, 4.5vw, 3.5rem)
+    fontSize: "clamp(42px, 4.6vw, 64px)"
     fontWeight: 800
-    lineHeight: 1.12
-    letterSpacing: "-0.035em"
+    lineHeight: 1.14
+    letterSpacing: "-0.04em"
   headline:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 48px
-    fontWeight: 800
+    fontSize: "48px"
+    fontWeight: 750
     lineHeight: 1.2
     letterSpacing: "-0.035em"
   title:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 32px
-    fontWeight: 800
+    fontSize: "32px"
+    fontWeight: 750
     lineHeight: 1.25
-    letterSpacing: "-0.025em"
+    letterSpacing: "-0.035em"
   feed-lead:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 36px
+    fontSize: "36px"
     fontWeight: 750
   header-label:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 13px
-    fontWeight: 650
+    fontSize: "13px"
+    fontWeight: 750
     letterSpacing: "-0.01em"
-  wordmark:
-    fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 28px
-    fontWeight: 800
-    letterSpacing: "-0.04em"
   record-title:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 24px
+    fontSize: "24px"
     fontWeight: 750
     lineHeight: 1.35
     letterSpacing: "-0.025em"
+  topic:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "16px"
+    fontWeight: 800
+    lineHeight: 1.35
+  topic-phone:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "15px"
+    fontWeight: 800
+    lineHeight: 1.35
   body:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 16px
-    fontWeight: 400
+    fontSize: "16px"
+    fontWeight: 550
     lineHeight: 1.6
   reading:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 18px
-    fontWeight: 450
-    lineHeight: 1.75
+    fontSize: "17px"
+    fontWeight: 550
+    lineHeight: 1.9
   summary:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 16px
-    fontWeight: 450
-    lineHeight: 1.7
+    fontSize: "16px"
+    fontWeight: 550
+    lineHeight: 1.8
   control:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 14px
-    fontWeight: 500
+    fontSize: "14px"
+    fontWeight: 700
     lineHeight: 1.4
   search:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 18px
+    fontSize: "16px"
     fontWeight: 550
     lineHeight: 1.6
     letterSpacing: "-0.01em"
   field:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 16px
-    fontWeight: 400
+    fontSize: "16px"
+    fontWeight: 550
     lineHeight: 1.4
     letterSpacing: "-0.01em"
   metadata:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 14px
-    fontWeight: 550
-    lineHeight: 1.5
-  filter-label:
+    fontSize: "13px"
+    fontWeight: 650
+    lineHeight: 1.6
+  hero-question:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 16px
+    fontSize: "16px"
+    fontWeight: 650
+    lineHeight: 1.5
+  home-action:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "28px"
+    fontWeight: 800
+    lineHeight: 1.25
+  discovery-record:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "22px"
+    fontWeight: 750
+    lineHeight: 1.35
+  discovery-topic:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "20px"
+    fontWeight: 750
+    lineHeight: 1.4
+  discovery-topic-description:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "15px"
+    fontWeight: 550
+    lineHeight: 1.6
+  discovery-heading-phone:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "26px"
+    fontWeight: 800
+    lineHeight: 1.3
+  topic-description:
+    fontFamily: "'Manrope Variable', sans-serif"
+    fontSize: "13px"
     fontWeight: 650
     lineHeight: 1.4
-  guide-title:
+  topic-description-phone:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: clamp(2.25rem, 3.5vw, 3rem)
-    fontWeight: 800
-    lineHeight: 1.14
-    letterSpacing: "-0.03em"
-  reading-subhead:
+    fontSize: "12px"
+    fontWeight: 650
+    lineHeight: 1.4
+  guided-choice:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 24px
-    fontWeight: 750
-    lineHeight: 1.35
-  topic-title:
-    fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: clamp(2rem, 4vw, 3rem)
-    fontWeight: 800
-    lineHeight: 1.15
-    letterSpacing: "-0.03em"
-  choice:
-    fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 20px
+    fontSize: "20px"
     fontWeight: 750
     lineHeight: 1.4
-  choice-phone:
+  guided-choice-phone:
     fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 18px
+    fontSize: "18px"
     fontWeight: 750
     lineHeight: 1.4
-  home-choice-phone:
-    fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 16px
-    fontWeight: 750
-    lineHeight: 1.4
-  choice-question:
-    fontFamily: "'Manrope Variable', sans-serif"
-    fontSize: 24px
-    fontWeight: 750
-    lineHeight: 1.35
-    letterSpacing: "-0.02em"
 rounded:
-  control: 4px
+  control: "4px"
+  question-entry: "24px"
 spacing:
-  space-2: 0.5rem
-  space-3: 0.75rem
-  space-4: 1rem
-  space-5: 1.25rem
-  space-6: 1.5rem
-  space-8: 2rem
-  space-10: 2.5rem
-  space-12: 3rem
-  space-16: 4rem
-  space-20: 5rem
-  space-24: 6rem
+  space-2: "0.5rem"
+  space-3: "0.75rem"
+  space-4: "1rem"
+  space-5: "1.25rem"
+  space-6: "1.5rem"
+  space-8: "2rem"
+  space-10: "2.5rem"
+  space-12: "3rem"
+  space-16: "4rem"
+  space-20: "5rem"
+  space-24: "6rem"
 components:
   button-primary:
     backgroundColor: "{colors.green}"
     textColor: "{colors.paper}"
     typography: "{typography.control}"
     rounded: "{rounded.control}"
-    padding: 0 16px
+    padding: "0 16px"
   button-secondary:
     backgroundColor: "{colors.white}"
     textColor: "{colors.green}"
     typography: "{typography.control}"
     rounded: "{rounded.control}"
-    padding: 0 20px
+    padding: "0 20px"
   button-ghost:
     textColor: "{colors.muted}"
     typography: "{typography.control}"
     rounded: "{rounded.control}"
-    padding: 0 16px
+    padding: "0 16px"
   search-field:
     backgroundColor: "{colors.pale}"
     textColor: "{colors.green}"
     typography: "{typography.search}"
     rounded: "{rounded.control}"
-    padding: 8px
+    padding: "8px"
   search-field-focus:
     backgroundColor: "{colors.search-focus}"
   input:
@@ -176,7 +188,7 @@ components:
     textColor: "{colors.green}"
     typography: "{typography.field}"
     rounded: "{rounded.control}"
-    padding: 0 12px
+    padding: "0 12px"
   input-focus:
     backgroundColor: "{colors.pale}"
   textarea:
@@ -184,40 +196,41 @@ components:
     textColor: "{colors.green}"
     typography: "{typography.field}"
     rounded: "{rounded.control}"
-    padding: 12px
+    padding: "12px"
   textarea-focus:
     backgroundColor: "{colors.pale}"
   segmented-control:
     textColor: "{colors.muted}"
     typography: "{typography.control}"
-    padding: 0 12px
-  segmented-filter:
-    textColor: "{colors.muted}"
-    typography: "{typography.filter-label}"
-    padding: 0 12px
+    padding: "0 12px"
   segmented-control-selected:
     backgroundColor: "{colors.pale}"
     textColor: "{colors.green}"
   navigation:
     textColor: "{colors.green}"
-    padding: 0 8px
+    padding: "0 8px"
+  topic-link:
+    textColor: "{colors.green}"
+    typography: "{typography.topic}"
+    rounded: "{rounded.control}"
+    padding: "12px"
+  guided-choice:
+    textColor: "{colors.green}"
+    typography: "{typography.guided-choice}"
+    rounded: "{rounded.control}"
+    padding: "24px"
   record-row:
     textColor: "{colors.green}"
-    padding: 24px 0
-  choice-link:
+    padding: "24px 0"
+  question-entry:
+    backgroundColor: "{colors.white}"
     textColor: "{colors.green}"
-    typography: "{typography.choice}"
-    rounded: "{rounded.control}"
-    padding: 24px
-  home-choice:
-    textColor: "{colors.green}"
-    typography: "{typography.choice}"
-    rounded: "{rounded.control}"
-    padding: 24px
-  topic-filter:
-    textColor: "{colors.muted}"
-    typography: "{typography.filter-label}"
-    rounded: "{rounded.control}"
+    typography: "{typography.hero-question}"
+    rounded: "{rounded.question-entry}"
+    padding: "12px 12px 8px 20px"
+    width: "min(100%, 720px)"
+  question-entry-focus:
+    backgroundColor: "{colors.pale}"
 ---
 
 # Design System: ActForGoa
@@ -226,185 +239,201 @@ components:
 
 **Creative North Star: "The Open Goan Field Guide"**
 
-ActForGoa is a restrained, practical field guide. Warm paper, forest-green ink, upright Manrope, outline icons, and clear rules make the next step easy to find. Strong headings and large outlined choices provide hierarchy without decorative imagery or bright accent fields.
+ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.
 
-The visitor chooses a topic, identifies a need, and reaches a useful next action before browsing the related directory and reading. The menu should feel as direct as a public information kiosk, with plain words and generous targets. Original photographs continue to carry local character in the discovery feed and articles. Official Arc components provide the common controls and interaction behavior.
+The approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.
 
 **Key Characteristics:**
 
-- Warm paper, forest-green text, and a restrained neutral palette.
-- Upright Manrope with clear page, section, choice, and reading hierarchy.
-- Large outlined topic and action controls with Lucide outline icons.
-- Plain visible labels and a topic-to-need-to-action progression.
-- Original local photography in discovery and reading.
-- Shared Arc controls, stable text-field focus, and browsing continuity.
+- Continuous warm paper and forest-green text.
+- Strong upright Manrope throughout, including mission, article, and feed headings.
+- Bordered topic choices with strong labels and helpful descriptions; open resource rows.
+- Real local photographs with square crops.
+- Shared Arc control behavior with fill-based text-field focus.
 
-This direction supersedes the colourful welcome area and filled illustration experiment. Normative values come from the current implementation. The surface brief owns page-specific order and flow. Corrected wireframe-flow captures have completed final visual review with a “ship” result and no material fixes. Local build, tests, and browser checks are recorded below; deployment remains outstanding.
+This document records the user-approved refinement in `src/styles.css`, `src/App.tsx`, `src/home-hero.css`, the hero components, and `src/components/arc/`. It replaces the preceding boxed visual system. Frontmatter values are normative; page-specific composition lives in the matching surface brief.
 
 ## Colors
 
 ### Primary
 
-- **Forest green** (`green`) supplies primary text, action fills, caret, selection background, and keyboard focus.
-- **Link-action hover** (`link-button-hover`) is the hover fill for anchor-based primary actions.
+- **Forest green** (`green`) is the primary text, action fill, caret, selection background, and shared keyboard-focus colour.
 
 ### Neutral
 
-- **Warm paper** (`paper`) is the page ground and primary-button text.
-- **Quiet green** (`muted`) supplies supporting text, metadata, and inactive control text.
-- **Soft rule** (`line`) separates records and sections and defines existing input borders.
-- **Choice border** (`choice-border`) makes large outlined destinations recognisable as controls.
-- **Pale leaf** (`pale`) is the search fill, selected-control fill, and input or choice hover treatment.
-- **Control paper** (`white`) is the resting input and textarea surface.
-- **Search focus leaf** (`search-focus`) is the search form's focused fill.
+- **Warm paper** (`paper`) is the continuous page background and Arc primary-button text.
+- **Quiet green** (`muted`) is supporting text, metadata, and inactive control text.
+- **Soft rule** (`line`) is the divider and existing input-border colour.
+- **Choice outline** (`choice-border`) is the restored neutral full border around homepage topic choices and guided action links; it is not a new accent palette.
+- **Pale leaf** (`pale`) identifies search, selected controls, and input focus/hover.
+- **Control paper** (`white`) is the resting input and textarea surface, plus photograph-caption text.
+- **Search focus leaf** (`search-focus`) is the search form’s focused fill.
+- **Link-action hover** (`link-button-hover`) is the pointer-hover fill for anchor-based primary actions.
 
-Arc aliases map background to paper, foreground and accent to green, surface to white, surface-muted to pale, and text/border roles to muted/line. They do not introduce additional palette primitives. Generic themes in the Arc foundation are not part of this surface. Sidecar tonal ramps are inspection aids only.
-
-**The Restrained Colour Rule.** Use the documented green and neutral roles. Do not restore yellow or pink welcome fields, hero flowers, or filled pictorial illustration families.
+Project aliases map Arc `background` to paper, `foreground` and `accent` to green, `surface` to white, `surface-muted` to pale, and text/border roles to muted/line. These are semantic aliases, not extra palette primitives. The shared foundation contains other default palettes and themes; their presence does not make them part of this implemented surface. The sidecar’s generated tonal ramps are inspection aids only.
 
 ## Typography
 
-Manrope Variable is the only implemented family, with a generic sans-serif fallback. Page and major section headings use weight 800; record titles and choice labels use 750. Reading copy uses 450. Font synthesis is disabled.
+Manrope Variable is the only implemented font family, with a generic sans-serif fallback. It supplies mission and article headings, the header, topic links, records, controls, and body text. The serif import has been removed. Body copy uses weight 550, most explicit page, record, and feed headings use 750, and the homepage hero and action headings use 800. The global heading fallback is also 800. Control labels use 700 and header navigation uses 750. Font synthesis is disabled.
 
 | Role | Implemented use |
 | --- | --- |
-| Display | Home mission heading from the frontmatter, with a 20ch measure; 36px on phones. |
-| Headline | Catalogue and article headings at 48px/800; 36px on phones. |
-| Topic title | Fluid 32–48px/800 topic or action heading; 32px on phones. |
-| Guide title | Fluid 36–48px/800; 36px on phones. |
-| Title | Major section headings at 32px/800; 28px on phones. |
-| Choice question | Need-selection headings at 24px/750; 20px for topic questions on phones. |
-| Choice | Large need and action labels at 20px/750, reducing to 18px on phones. Home labels use 18px at 1150px and 16px on phones. |
-| Record title / feed lead | Ordinary records use 24px/750. Mixed-feed leads use 36px/750, reducing to 32px at 850px. |
-| Body / summary | General copy uses 16px. Record summaries use 16px/450 with 1.7 leading; guide summaries use 18px/550 with 1.6 leading. |
-| Reading | 18px/450 with 1.75 leading and a 66ch measure on phones and desktop. Reading h2 is 32px/800 and h3 is 24px/750; phone sizes are 28px and 22px. |
-| Field / control | Search entry uses 18px/550. Contact entry remains 16px. Arc controls generally retain 14px/500; topic and feed/result filters use 16px/650. |
-| Metadata | Record metadata, topic text, and detail bylines use 14px/550. Compact result counts and the auto-load utility label retain 12px. |
-| Header | Navigation labels use 13px/650. The upright wordmark uses 28px/800, becoming 26px in the phone header. |
+| Display | Homepage word wheel and “in Goa” share the fluid frontmatter display scale; at 620px and below it becomes `clamp(30px, 8.2vw, 42px)`. |
+| Headline | Page/detail titles at weight 750; 36px on phones. |
+| Discovery | Record and tool titles use 22px; topic links use 20px with 15px descriptions. Section headings use 28px, reducing to 26px on phones. |
+| Header label | Desktop navigation uses 13px at weight 750. Dropdown destination labels use 15px at weight 750, with 13px descriptions. Compact top-level rows use 750 and child links use 650. |
+| Title | Section headings use 32px at weight 750, reducing to 28px on phones. The homepage action heading uses the separate home-action role, reducing to 24px at 850px. |
+| Topic | Homepage choice titles use 16px at weight 800 with 1.35 leading, becoming 15px at 620px. Descriptions use 13px at weight 650 with 1.4 leading, becoming 12px on phones. Inner guided choices use 20px at weight 750, becoming 18px on phones; their question headings use 24px, becoming 20px. |
+| Record title | 24px at weight 750 in both grid and list layouts, including phones. |
+| Body / summary | General copy and record summaries use 16px at weight 550; summaries keep 1.8 leading. |
+| Reading | 17px at weight 550, with 1.9 leading and a 70ch measure, becoming 16px on phones. |
+| Field / control | Text entry uses 16px at inherited weight 550; the hero question uses 650. Arc labels use 14px at weight 700; the search submit override uses 16px at 750. |
+| Metadata | Record type, dates, and topic metadata use 13px at weight 650. Result counts use 13px with inherited body weight. Hero captions and the composer hint are compact exceptions at 12px and 650. |
 
-**The Upright Type Rule.** Use upright text throughout, including wordmarks, quotations, labels, and numerals. Emphasis comes from size, weight, and space.
+The Arc header wordmark is the single upright string “actforgoa.” in Manrope at weight 800, 28px, with -0.04em tracking. It becomes 26px when the header container is at most 620px. The footer retains its separate wordmark styling.
 
-**The Reading Hierarchy Rule.** Keep reading copy at 18px on phones and desktop. Separate headings through size, weight, and space; do not reduce body text to make more content fit.
+**The Upright Type Rule.** Use upright text throughout, including the wordmark, quotations, labels, and numerals. Emphasis comes from size, weight, and space.
 
 ## Layout
 
-The centred shell is at most 1320px wide. Gutters are 48px by default, 32px at 1150px, and 20px at 620px. The actual Arc SiteHeader uses its own container queries: a 96px desktop bar becomes an 80px compact bar below a 1200px container width. Header gutters are 48px, then 32px, then 20px at 620px.
+The centred page shell is at most 1320px wide. Side gutters are 48px by default, 32px at 1150px, and 20px at 620px. The actual Arc SiteHeader has its own container queries: its bar is 96px tall and switches to an 80px compact bar below a 1200px container width. Header gutters are 48px, then 32px below 1200px, then 20px at 620px. Old global header selectors do not define the mounted Arc component.
 
-Home begins with the mission, a short plain-language introduction, and search, followed by eight outlined topic controls. The intro uses 52px top and 36px bottom spacing; on phones both are 32px. Search is at most 760px wide. The topic grid uses four columns, then two at 850px and below. Desktop home targets are at least 164px tall with 24px padding; padding becomes 20px at 1150px and 16px on phones while the height remains generous.
+The homepage hero layers its heading, supporting line, and rounded question composer over a full-width photograph within the page shell. Its height comes from the content and padding, not a separate fixed-height photo column. The content is centred with 18px top, 24px side, and 62px bottom padding; the composer is at most 720px wide. Captions and carousel controls sit inside the lower edge over a dark scrim. At 620px and below, the photograph spans the viewport and content padding becomes 14px 20px 72px; the supporting line stays visible. A short-phone rule at heights up to 740px reduces top and bottom padding to 18px and 66px.
 
-Six-choice need menus use three columns on desktop. Four-choice menus use two columns through the `choice-grid-pairs` variant. Both use two columns at 850px and one at 620px. Their controls are at least 120px tall with 24px padding, becoming 100px with 20px padding on phones. Final action destinations use two columns, then one on phones. Breadcrumbs and a clear heading sit above choices. Related people and useful reading follow the choice or action area, separated by horizontal rules and 48px of preceding space.
+Immediately below, the emergency action shares the “What do you care about?” heading row on larger screens. On phones it follows that heading at full width. All eight bordered topic choices follow in four columns with 8px gaps, changing to two columns at 850px. Each choice is at least 82px tall, with 12px padding that becomes 10px on phones. The restored-topic captures show the question, photo controls, emergency action, and all eight topics within the 1408×800 desktop and 390×844 phone viewports. Parent browser measurements place the phone choices’ lower edge at 835px; at 375×667 the choices extend to 861px and scroll naturally. The sectioned discovery feed follows.
 
-Mixed discovery batches keep a 1.3:1 lead arrangement: a larger image-led record spans two rows beside two text-led records. Remaining entries use three columns with 40px gaps, then two at 850px and one at 620px. Search grids use two columns until 620px. The catalogue filter rail is 236px wide, sticky at 120px, and separated from results by 48px; at 850px it becomes a horizontal scroller above results.
+Guided action choices use three columns and 16px gaps, with two columns when there are two or four choices. At 850px all choice grids use two columns; at 620px they use one column with 12px gaps. Discovery uses named sections with equal three-column grids and 32px gaps. At 1000px grids become two columns, and at 620px one column. People use open two-column rows and topics use a two-column link index, both stacking on phones. Search grids use two columns until 620px. Related-record grids keep their existing separate responsive rules.
 
-Standard articles allow a 760px reading column and separate aside. Practical guides use a 780px article column with a 72px gap, reducing to 40px at 1150px and one column at 850px. Listed guides show an open desktop contents list; smaller screens use a native disclosure before the body. Two-column reference tables stack into labelled rows at 620px; wider tables retain horizontal scrolling.
+The catalogue has a 236px sticky filter rail, offset 120px below the sticky header, and a flexible results column with a 48px gap. At 850px the rail becomes a horizontal scroller and the layout becomes one column. Grouped answers retain headings, total match counts, and 48px between groups. Empty groups disappear; each group and its members follow retrieval ranking. Reading details allow up to 760px for the article and a separate aside; the aside follows the article on smaller screens.
 
-**The Open Page Rule.** Content records, reading, and source context stay on the page ground with spacing and structural rules. Outlined topic and action choices are interactive controls, not a general card-container system.
+**The Open Page Rule.** Keep the introduction, editorial pairings, records, and source context on the page ground. Use spacing and structural rules instead of enclosing them in panels.
 
 ## Elevation & Depth
 
-Content, photographs, choices, the header bar, and mobile sheet have no visible surface shadows. The functional desktop navigation dropdown uses a control-paper surface, a 1px border, 4px corners, and `0 16px 32px #193e3214` shadow. The mobile sheet uses a transparent-black scrim (`oklch(0% 0 0 / .16)`).
+The page, photographs, record rows, source notices, header bar, and mobile sheet have no visible surface shadows. Structure comes from the paper ground, fine horizontal rules, and image boundaries. The functional desktop dropdown is an exception: a white surface with a 1px border, 4px corners, and `0 16px 32px #193e3214` shadow separates navigation from the page. Its mobile counterpart uses a transparent-black scrim (`oklch(0% 0 0 / .16)`) behind the sheet. Homepage headings, captions, credits, and carousel controls use white text over the photograph. A layered dark-green scrim supplies contrast: `linear-gradient(180deg, rgb(10 28 20 / 25%), rgb(10 28 20 / 12%) 55%, rgb(10 28 20 / 70%)), rgb(10 28 20 / 50%)`. Captions do not use text shadows; the white composer retains green text.
 
-Arc primary buttons retain their subtle hover shadow (`0 1px 2px oklch(0% 0 0 / .035)`). This is a control response, not a direction for content panels. Textarea halo values resolve to transparent.
+Arc primary buttons retain the foundation’s subtle hover shadow (`0 1px 2px oklch(0% 0 0 / .035)`). This belongs to a control response, not a panel system. The foundation’s larger generic shadow tokens are not a direction for new page surfaces; the header dropdown uses its explicit project override. Textarea halo values resolve to transparent; they are not visible focus rings.
 
-Motion stays functional: short colour transitions, button press feedback, segmented selection, search clearing, and SiteHeader transitions. Arc fast transitions use 160ms with `cubic-bezier(.22,1,.36,1)`; search and large choices use 120ms ease-out fill transitions. Components honour reduced motion, and the page disables CSS transitions, animations, and smooth scrolling for that preference. Do not add decorative page entrances or photograph zoom.
+Motion follows Arc’s shared presets: short colour transitions, width-aware button press feedback, a moving segmented selection, search-clear entry/exit, and the SiteHeader’s dropdown and sheet transitions. CSS fast transitions use 160ms with `cubic-bezier(.22,1,.36,1)`; the outer search fill changes in 120ms ease-out. Components honour reduced motion, and the page disables CSS transitions, animations, and smooth scrolling under that preference. The homepage uses one shared 4000ms beat: words roll over 620ms with `cubic-bezier(.76,0,.24,1)`, and photographs crossfade over 900ms ease-in-out on every second beat. The carousel behavior is specified below. Reduced motion disables autoplay, word movement, width transitions, and photo fades. Do not add photograph zoom or decorative page entrances.
 
 ## Shapes
 
-Controls use a 4px radius. Photographs and editorial structures remain square. Records begin with a horizontal rule and 24px top space, with no enclosing border or filled shell. Large destination controls have a complete 1px outline; selected and hover states are quiet fills. No single edge acts as decoration.
+Controls share the project’s 4px radius, except the user-requested conversational homepage composer, which uses 24px corners and a circular send button. Photograph crops and editorial structures are square. Topic and guided action choices use a full 1px neutral border and the shared 4px control corners; their resting fill stays on the paper ground. Records have a top rule and 24px top space; they have no filled card shell, surrounding border, or internal panel padding. List rows use 24px vertical space. Segmented items resolve to square corners inside a borderless control because their source radius is the control radius minus 4px.
 
-**The Structural Line Rule.** Horizontal rules may separate records or sections; complete borders may identify controls. Never add decorative side stripes to content containers.
+**The Structural Line Rule.** Horizontal rules may separate records or sections; existing control borders may define inputs. Never add decorative side stripes to content containers.
 
 ## Components
 
-### Topic, need, and action controls
-
-Use the shared outlined choice treatment for topic navigation, need selection, and next actions. Keep the whole surface a real link with a visible label and directional icon. Labels name a recognisable topic or action, such as “Waste & recycling”, “Get extra rubbish collected”, or “Report illegal dumping”. Downloads use the download icon; external actions use the external-link arrow. In-page destinations retain anchor navigation to the relevant section.
-
-`TopicIcon.tsx` maps the shared Lucide outline family to topics and actions. Use a 1.7 stroke with no filled illustration substitute. Home icons are 44px, becoming 40px on phones; topic-page and guide-heading icons are 52px, becoming 40px on phones. Need-choice icons use 40px, and catalogue filter icons use 28px. Adjacent visible labels provide the accessible names; decorative icons are hidden from assistive technology.
-
-The topic route is `/topics/:slug/:actionId?/:choiceId?`. It supports a topic, a need, and an optional further choice before the final action links and short steps. Breadcrumbs expose the chosen path. The related directory and reading are below the choice/action area, with links to complete filtered results. Invalid paths offer a clear return to topic selection. Exact topic order and route content belong to the surface brief and `topic-flows.ts`.
-
-**The Choice First Rule.** Present the next understandable choice before directory records and reading. A visitor should not need to interpret a result list to discover what action to take.
-
-**The Picture and Label Rule.** Pair outline icons with plain visible labels. Icons support recognition but do not replace accessible names or translated content.
-
 ### Arc buttons and navigation
 
-Use the installed Arc Button for button actions. Primary pairs green with paper; secondary uses the white control surface, a line-colour border, and green text; ghost is transparent with muted text and gains pale fill and green text on hover. Standard small, medium, and large heights are 44px, 48px, and 52px. Primary hover uses opacity 0.91 and press uses 0.84. Press scaling respects reduced motion.
+Use the installed `Button` for button actions. The implemented variants are primary, ghost, and secondary. Secondary uses the white control surface, a line-colour border, and green text; the feed’s manual-load control uses its large size. Standard heights are 44px, 48px, and 52px for small, medium, and large controls. Primary pairs green with paper; ghost is transparent with muted text, gaining pale fill and green text on hover/press. Primary hover uses opacity 0.91 and the subtle resting shadow; press uses opacity 0.84. Button press scale comes from Arc Motion and respects reduced motion.
 
-Anchor actions keep real routing and link behavior. Their primary treatment has a 52px minimum height and 12px by 20px padding. Links, buttons, and comparable non-text controls use a 2px green keyboard outline with a 3px offset.
+Anchor actions preserve routing and links; their primary treatment uses a 52px minimum height, 12px × 20px padding, and the shared control radius. Header actions use the SiteHeader’s own 44px controls; the separate page anchor treatment is not the header sizing rule.
 
-The official Arc SiteHeader keeps the nine categories Home, Take action, Blog, Inspiring stories, Resources, About, Work with us, Volunteer, and Community, plus Search. Take action and About disclose destinations; internal links use React Router. Desktop targets are 44px and current navigation has a 2px underline. The compact sheet retains the same destinations, locks background scrolling, and confines Tab focus to visible header controls. Escape restores trigger focus; route changes dismiss menus. During mobile-menu exit, the scrim and sheet use `PresenceLayer` to become inert and set pointer-events to none immediately, so the closing overlay cannot catch the next tap while its exit motion finishes.
+The shared foundation sets keyboard focus on links, buttons, and comparable non-text controls to a 2px green outline with a 3px offset. Pointer focus does not introduce that outline.
+
+### Arc SiteHeader
+
+The installed free Arc SiteHeader is mounted with `variant="mega"`, sticky positioning, the original nine top-level categories, and a primary Search link. The categories are Home, Take action, Blog, Inspiring stories, Resources, About, Work with us, Volunteer, and Community. Take action and About disclose their related destinations; other items navigate directly. Internal destinations use React Router links.
+
+Desktop navigation uses 44px targets, 13px labels at weight 750, and a 2px current-item indicator. Take action offers Report an infraction, Emergency services, contribution, Green Viksit Goa, Amche Mollem, and Donations. About offers the overview, Newsletters, Annual reports, and Press coverage. Each dropdown is a 336px single-column list anchored 8px below its trigger and kept within the header edges. The surface has 8px padding; links use 8px vertical and 12px horizontal padding, 15px labels, 13px descriptions, and a 44px minimum target height. Labels align through a shared icon gutter when an icon is present. A viewport height limit allows the list to scroll on short screens. A closed dropdown opens by clicking or ArrowDown; pointer movement switches an already open menu. Escape restores focus to its trigger, and outside clicks or route changes dismiss it.
+
+Below a 1200px header-container width, navigation becomes an overlay sheet with the same nine categories. Rows are at least 52px high; child links are at least 44px. Take action and About expand in place. The sheet locks background scrolling, keeps Tab focus among visible header controls, and closes through its scrim, Escape, route navigation, or a wider layout. Escape restores focus to the menu button. Reduced-motion handling remains in the actual Arc component.
 
 ### SearchField, Input, and Textarea
 
-Search uses a pale borderless outer form with 8px padding, a borderless field, and a green large Button. Focus changes the outer fill to search-focus. A permanent 44px clear slot prevents width shifts; clearing returns focus without scrolling. The field is labelled, and submit keeps its accessible name when visible text is hidden on compact screens.
+Use the installed Arc fields. The homepage uses an Arc Textarea in a 24px rounded composer with a stable 1px border, fill-based focus, two-line entry, and a circular Arc send button. Enter submits; Shift+Enter adds a line; blank questions cannot submit. The question routes to the existing sourced search results. Other search forms retain a pale borderless outer form with 8px padding, a borderless inner field, and a green large Button. Its focus-within fill changes to `search-focus`. The accessible field label is visually hidden in this composition. A permanent 44px slot prevents the clear action from changing the input width; clearing returns focus without scrolling. Search submit keeps its accessible label when its visible text hides on compact layouts.
 
-Contact Input and Textarea retain their 1px border and white resting fill. Focus or hover changes the fill to pale without adding a new border or visible ring. Inputs are at least 48px tall with 12px horizontal padding. Textareas use 12px padding, a 110px minimum height, and vertical resize. The reason selector remains native; required validation is native.
+Contact Input and Textarea retain their existing 1px borders and white resting fill. Focus/hover changes the fill to pale without adding a new border or visible ring. Inputs are at least 48px tall with 12px horizontal padding. Textareas have 12px padding, a 110px minimum height, and vertical resize. Contact labels use 14px at weight 750 through the page override; the shared Arc label token is 700. The current reason selector remains a native select. Required validation is native; the page does not supply custom Arc error messages.
 
-**The Stable Focus Rule.** Text-entry focus changes fill and caret without a new border, visible ring, or size change. Links and buttons retain the Arc keyboard outline.
+**The Stable Focus Rule.** Text-entry focus changes the fill and caret without adding a new border, visible ring, or size change. Links and buttons retain the shared Arc keyboard outline.
 
-### SegmentedControl and filters
+### Homepage photo hero
 
-Use Arc SegmentedControl for result type, Grid/List, and discovery kind filters. The borderless track scrolls within its width. Selected items use pale fill and green text without changing weight. Items have a 44px minimum height and 12px horizontal padding, reducing to 10px at 380px. Arrow keys, Home, and End select and focus options; only the selected option is in the tab sequence. Overflow fades signal more options, and selection scrolls into view. Keyboard and reduced-motion selection changes are immediate.
+The source-backed carousel contains Vagator, Arambol Festival, and farming photographs. Its six phrases are “Volunteer in Goa”, “Build in Goa”, “Create in Goa”, “Recycle in Goa”, “Culture in Goa”, and “Health in Goa”. A single beat drives the word and photo indices; words change each beat and photographs every second beat. The word slot measures the live word, retains enough width for the outgoing word during the roll, then shrinks after 620ms. Font loading and resizing trigger remeasurement. The heading exposes the current whole phrase as its accessible label while decorative word spans are hidden from assistive technology.
 
-Catalogue topic filters use Arc ghost buttons with 28px outline icons, 16px/650 labels, and a 60px minimum height. A selected filter has pale fill. A topic-only catalogue route may show the same need choices above its results.
+Autoplay runs only when enabled, the document is visible, the hero intersects the viewport through an observer configured with a 25% threshold, the carousel controls are not hovered, and the next photograph has loaded. Only hovering the controls temporarily suspends the timer; hovering the photograph or composer does not. Focusing a link, button, input, textarea, or select inside the hero sets a persistent pause, except for the pause/play control itself. Programmatic focus on the heading does not pause it. Previous/next and qualifying touch swipes also pause persistently; play resumes explicitly. Swipes require more than 40px of horizontal travel with less than 40px vertical travel, and do not start on interactive elements. Photo navigation is disabled with fewer than two usable images. Failed images are excluded; an all-image failure shows “For the Goa we love.” Caption announcements are polite while paused or under reduced motion and off while autoplay is enabled.
 
-### Records, source context, and browsing continuity
+Reduced motion starts with a static phrase and photograph, removes the play control, and retains manual navigation. Manual photo selection moves the shared beat by two, keeping the word and photo sequence coordinated. The current photo caption links to its source or related record. Vagator additionally shows its creator, licence link, and cropped-image disclosure. Captions, credits, 44px navigation targets, and the numeric counter sit over the bottom scrim; the counter hides on phones.
 
-Records use muted metadata, a large linked title, a readable summary, and topic text. Normal image previews use a 1.6 aspect ratio; the first mixed-feed lead uses 1.4, and companion images are hidden. General grid summaries clamp to three lines and list summaries to two. Community descriptions have a five-line allowance and show all topics. Source publication dates remain useful historical context; internal crawl dates do not belong in the primary reading flow.
+The composer routes to existing sourced search results. It uses the 24px corner token, a stable 1px line-colour border, a 48px-high two-line textarea that can resize to 160px, and a circular 44px send button. It changes to pale fill on focus without adding a ring or border. Enter submits, Shift+Enter adds a line, input composition is respected, and blank questions cannot submit.
 
-Original sources, useful links, and contact availability cautions remain available. Prepared-email feedback follows a rule and plainly says nothing has been sent. Presentation changes must not suggest current verification, guaranteed service availability, or successful delivery.
+The carousel uses 2,560–3,072px originals, served as 800, 1,600 and 2,400px WebP variants without upscaling. `public/assets/hero/provenance.json` records sources, dimensions, checksums, transformations and credits. Vagator is by Vyacheslav Argenberg under CC BY 4.0, with visible attribution and a licence link. Arambol Festival and agriculture photographs come from existing ActForGoa assets. The former river image was 768px at source and is no longer used in the hero.
 
-**The Source Proximity Rule.** Keep useful historical context and practical cautions near the information they qualify. Make detailed audit records optional; a prepared email is not a sent message.
+### SegmentedControl and topic filters
 
-The router uses ScrollRestoration after catalogue data is available. Search filtering and resubmission use `preventScrollReset`. Result layout and extent are cached per history entry. Records opened from catalogues, discovery, or topic routes retain a history-based return; direct entry retains a section link. The discovery feed also restores its kind, extent, and auto-load preference.
+Use the installed Arc SegmentedControl for result type, Grid/List, and the discovery feed’s Everything, Guides & resources, People & services, and Stories filters. The track is borderless and scrolls inside its own width. Selected items receive a pale highlight and green text without changing weight. Controls use 44px minimum item height and 12px horizontal padding, reduced to 10px at 380px. Arrow keys, Home, and End select and focus items; only the selected item is in the tab sequence. Overflow fades indicate additional options, and selection scrolls into view. Keyboard and reduced-motion selection changes do not animate the highlight.
 
-**The Browsing Continuity Rule.** Preserve scroll position when filtering or resubmitting a search. Returning to a catalogue history entry restores its expanded results and chosen layout.
+Catalogue topic filters are Arc ghost buttons. Their selected state uses a pale fill and weight 750. Home topic navigation is a separate set of bordered choice buttons that leads to the restored guided topic routes. Starter queries are underlined text links with 44px minimum height, not pills.
 
-### Practical guide presentation
+### Restored topic choices and guided routes
 
-Five listed practical guides remain authored drafts in the source data. Reader-facing presentation leads with the topic icon, title, summary, and useful content. `guide-presentation.ts` removes internal draft banners and editorial check codes from listed guides, rewrites relevant cautions as plain “Before you act” guidance, and simplifies internal research language. It does not establish legal review or current service verification.
+The homepage uses the eight flows in `src/topic-flows.ts` in their source order: Waste & recycling, Water & environment, Community & rights, Nature & wildlife, Food & farming, Building & transport, Health & wellbeing, and Culture & heritage. Each choice shows the source label and short description, a 26px topic icon, and a trailing arrow. The arrow hides at 1150px and the topic icon hides at 620px, leaving readable text on phones. Discovery topic links retain their separate open index and now enter the same guided routes.
 
-Useful cautions, source citations, official-source links, and original source files remain intact. An optional “About this guide” disclosure after the body explains that review is continuing and links to detailed review notes. Source and verification registers remain available as supporting documents. The desktop contents list and mobile disclosure use the reader-facing headings. Templates, download/correction actions, and related guides remain in the aside. Two-column tables stack on phones while preserving semantics.
+The route is `/topics/:slug/:actionId?/:choiceId?`. Selecting a topic shows “What would you like to do?” and its action choices; actions with children show their specific follow-up question. Selecting a leaf shows the configured destination links and, where supplied, “How to get started” steps. For example, Waste & recycling leads to Get extra rubbish collected, then Household rubbish. Breadcrumbs and the final “Choose a different…” link preserve the path back through the choices. Missing topics or actions show an unavailable-option state with a route home. A topic-only search view also exposes the corresponding choices.
 
-**The Reader Language Rule.** Show the person what to do, what to check, and where to go. Keep crawl dates, editorial review codes, and research-process language out of the primary guide flow while retaining useful cautions and optional audit detail.
+Inner choices use 40px icons, at least 120px height, 24px padding, 20px gaps, and 20px labels at weight 750. At 620px, height is at least 100px, padding is 20px, gap is 16px, and labels are 18px. Topic page headings use fluid 32–48px type at weight 800 and a 52px icon, reduced to 40px on phones. Destination links use two columns on larger screens and one on phones. Steps remain an ordered list, with 18px text and 1.7 leading within a 70ch measure.
 
-### Mixed discovery feed and original photography
+The full border uses `choice-border`. Hover changes it to green with pale fill; active choices use the line-colour fill. Keyboard focus follows the shared green outline. Colour and border transitions are 120ms ease-out and disappear under reduced motion. These bounded navigation controls do not introduce filled content cards, side stripes, or a new colour world.
 
-The current feed has 533 eligible entries: 242 resources, 138 stories, 104 organisations, and 49 volunteer contacts. Five resources are the listed practical guides; supporting registers are not listed feed entries. This is a catalogue snapshot, not a product limit. Each eligible record appears once in a deterministic mixed sequence.
+People and reading remain below the choices with source context. Curated people are selected across the chosen action branch; waste actions without curated people may use relevant search results. Curated reading and linked records lead a deduplicated set of up to six items. The extracted shared `RecordCard` preserves catalogue-history state from `/topics/` routes, so opening a record and returning retains the guided context. `src/TopicPage.tsx`, `src/topic-flows.ts`, `src/topic-records.ts`, `src/topic-navigation.css`, `src/components/TopicIcon.tsx`, and `src/components/RecordCard.tsx` own this restored behavior.
 
-The feed starts with 12 entries and appends batches of 12. Auto-loading observes a 400px margin and runs only while the document is visible. Pause/Resume and manual loading remain available. Manual loading announces additions and focuses the first new title without scrolling. Kind changes reset the visible extent. Periodic topic links enter the topic-choice flow. Batch spacing is 56px, reducing to 40px on phones.
+### Records, notices, and browsing continuity
 
-Original article and story images come from the existing archive and retain source/rendition provenance. The first restored image is the lead; additional images form a two-column gallery with 24px gaps and natural height, becoming one column at 620px. Source alternative text can appear as a 14px muted caption. Missing original images remain reported; do not fabricate replacements. The home introduction has no hero photograph or decorative flower; photography continues in the feed and articles.
+Open records begin with metadata, a large linked title, a readable description, and topic text. Ordinary image previews and discovery story images use a consistent 1.6 aspect ratio. Discovery guides and documents are text-led; people use open rows. General grid summaries clamp to three lines and list summaries to two within 72ch. Organisation and volunteer descriptions use a five-line allowance and show all topics, giving their work more room.
 
-### Public record presentation
+Source notices are open text with an icon and strong lead. Verification notes sit between horizontal rules. Prepared-email feedback also starts after a rule and explicitly says nothing has been sent.
 
-The route loader passes catalogue data through `publicRecord` before search, feed, cards, and reading. Presentation clears structured phone fields, removes phone/WhatsApp actions, and sanitises recognised numbers in titles, summaries, prose, document text, locations, image descriptions, and link labels. The original catalogue and archive retain their fields. This is presentation behavior, not deletion or access control for downloadable originals.
+**The Source Proximity Rule.** Keep historical dates, original-source links, and contact caveats close to the records they qualify. A prepared email is not a sent message.
 
-Community descriptions use original non-heading paragraphs and prioritise actual work over registration boilerplate, with an honest missing-description fallback. Do not invent biographies. Keep practical availability cautions without exposing internal processing language.
+The router uses ScrollRestoration after catalogue data is available. Topic/type changes and query resubmission on the search route use `preventScrollReset`. Layout and expanded-result limits are cached per history entry; cached semantic results prevent unnecessary restoration churn. A record opened from a catalogue or guided topic route exposes a history-based “Back to results” action; direct entry retains a link to its section. Preserve these behaviors when composing new catalogue controls.
+
+**The Browsing Continuity Rule.** Preserve scroll position when filtering or resubmitting a query on search. Returning to a catalogue history entry restores its expanded results and chosen layout.
+
+### Sectioned discovery feed
+
+Home discovery starts with practical guides, then local people and organisations, topic navigation, editable templates and tools, photo-led stories, documents and handbooks, and ways to participate. Later sections add the remaining topics, an incident-form link, a building checklist, and a case log. These support links point to existing routes; they are separate from catalogue record counts. Filtered views keep the selected record types and omit unrelated support sections.
+
+`buildDiscoverySections` partitions the deterministic catalogue sequence into guides, people, stories and documents, with up to three records per section. Authored practical guides stay in the guide group even when they include template documents. Each eligible record appears once. The full sequence is built before pagination, so appending records never inserts them above previously read content. Source dates, draft status and historical contact caveats remain visible.
+
+Every section starts with a full-width 2px structural rule, a 28px heading, a short explanation and a collection link where applicable. Space between sections is 64px (48px on phones). Guide, document and story grids use equal columns: three on desktop, two below 1000px and one below 620px. Stories use equal 1.6-ratio original image crops. People use open ruled rows with identity and topics beside the description on desktop, stacking in DOM order on phones. Topic navigation is a two-column index with descriptions and live catalogue counts; tools and participation links use compact open three-column groups. No decorative side stripes, italic text or boxed panels are introduced.
+
+The feed starts at 12 records and appends 12 at a time. Automatic loading observes a marker 400px below the viewport and only runs while the document is visible. Pause/Resume and a manual “Show more to explore” fallback remain available. Manual loading announces additions and focuses the first new record without moving the scroll. The four filters reset the displayed extent to 12. The bounded tab-local cache retains extent, filter and automatic-loading preference per history entry before ScrollRestoration measures the page.
+
+Implementation: `src/discovery.ts`, `src/DiscoveryLinks.tsx`, `src/discovery.css`, and `DiscoveryFeed` in `src/App.tsx`. The hero, shared record renderer and source catalogue are outside this change.
+
+### Record presentation and original photography
+
+The route loader maps every catalogue record through `publicRecord` before it reaches search, feed, cards, or reading views. The presentation copy clears structured phone fields, removes phone/WhatsApp link actions, and strips recognised phone numbers from titles, summaries, prose, document text, locations, and link labels. The original catalogue and archive retain their fields. This is a presentation rule, not deletion or access control for the underlying downloadable data.
+
+Organisation descriptions use original non-heading paragraphs, prioritising the actual work over registration boilerplate, with a maximum of about 620 characters. A missing biography explicitly says that the source listing has not provided a description; do not fabricate one. Volunteer descriptions retain locality and the 2018 source context. Historical availability caveats and original-source routes remain visible even when phone actions are absent.
+
+Original story/resource photographs are restored by `scripts/restore_article_images.py` from the existing crawl. The script uses recorded media and content images, archived WordPress renditions, and gallery references; it does not invent image URLs. The first restored image becomes the lead. Later images render in a two-column article gallery with 24px gaps and natural height, becoming one column at 620px. Non-empty source alternative text appears as a 14px muted caption. Preserve source, rendition, archive path, retrieval time, and file hash in the image map. Missing archived images remain explicitly reported rather than replaced with invented scenes.
+
+The sidecar specimens are framework-free visual translations of the actual components. Their CSS reflects the settled appearance; the real React components own keyboard selection, clear behavior, routing, state caches, and Motion transitions.
 
 ## Do's and Don'ts
 
 ### Do
 
-- Do use restrained green and neutral roles, upright Manrope, and Lucide outline icons.
-- Do make topic, need, and next-action choices large and plainly labelled.
-- Do keep waste first among the eight home topics and treat wildlife help as one relevant need within its topic.
-- Do preserve original photographs in discovery and articles.
-- Do keep reading copy at 18px and provide a strong, consistent heading hierarchy.
-- Do preserve Arc focus, keyboard behavior, search, feed controls, and history restoration.
-- Do keep practical cautions and source access while making detailed audit material optional.
-- Do preserve original source files and keep phone data out of record presentation.
+- Do preserve the open paper ground, green ink, and real local photographs.
+- Do use Manrope throughout and the installed Arc components, including SiteHeader, with project overrides.
+- Do preserve the feed’s automatic, paused, manual, and restored states.
+- Do keep the stronger type hierarchy, readable record titles, and text fields at 16px.
+- Do keep text-entry focus stable and preserve shared keyboard focus on actions.
+- Do preserve browsing position, expanded results, and the selected layout through history navigation.
+- Do keep source context and contact caveats visible, while keeping phone data out of record presentation.
 
 ### Don't
 
-- Don't restore bright yellow/pink welcome fields, hero flowers, or filled illustration families.
-- Don't make snake rescue the default emphasis of the homepage or all-topic navigation.
-- Don't turn content records into enclosed panels because topic choices have borders.
-- Don't use serif, italic, or oblique type, decorative side stripes, or eyebrow labels.
-- Don't replace visible labels with icons or rely on colour alone for meaning.
-- Don't expose crawl dates, editorial check codes, or research-process language as primary reader guidance.
-- Don't invent biographies, photographs, contact details, service availability, or message-delivery claims.
+- Don't restore the boxed green introduction, filled record cards, or pale story panel.
+- Don't reintroduce the withdrawn brown, pink, and yellow palette, colourful filled topic tiles, a dark header, yellow search buttons, or ochre focus outlines.
+- Don't add a new focus border, visible ring, or layout shift to text fields.
+- Don't use serif, italic, or oblique type anywhere.
+- Don't add decorative side stripes, eyebrow labels, or fabricated local imagery.
+- Don't invent organisation biographies or replace missing original photographs with fabricated images.
+- Don't imply current contact verification or successful message delivery without evidence.
 
-Evidence: current App, TopicPage, topic-flows, TopicIcon, RecordCard, PracticalGuide, guide-presentation, public-record, stylesheet, Arc components, discovery state, and original-image provenance. Corrected captures in `.impeccable/review/wireframe-flow/` cover desktop (1440 × 1000), phone (390 × 844), and the actual app panel (508 × 724). Final finish review returned “ship” with no material fixes. Browser checks passed for topic → collection → type, reporting-link destinations, service navigation and back-scroll restoration, input focus, menu closing, guide contents navigation, and mobile tables. The build and 22 tests passed. Deployment has not occurred. Earlier colour-hierarchy captures are superseded. Sidecar specimens remain framework-free appearance examples; the React components own interaction behavior.
+Evidence: current stylesheets, App, hero components, photo manifest and provenance, restored topic routes and record helpers, Arc SiteHeader and controls, route loader, discovery builder, browsing caches, public-record presentation helpers, and image-restoration code/report. All nine supplied `.impeccable/review/restored-topics/` captures were inspected: `desktop-home.png`, `mobile-home.png`, `small-phone-home.png`, `tablet-home.png`, `desktop-waste.png`, `desktop-report.png`, `mobile-waste.png`, `mobile-collection.png`, and `mobile-household.png`. They show the current topic buttons and guided menus. Earlier hero-bold and hero-carousel captures are historical composition evidence.
+
+The parent reports 62 automated tests and browser journeys passing; `menu-checks.json` records the seven non-waste menu checks with no overflow, and the supplied detector report has zero primary findings. Its advisories cover the restored neutral choice border, compact type, and inherited hero scrim. `reports/TOPIC-RESTORATION-HANDOFF.md` records the parent’s successful TypeScript/Vite production build, with `index-CaOemWGg.js` and `index-BHzalREE.css`, and the frozen runtime snapshot at `.reports/topic-restoration-2026-10-26`. Runtime/test hashes were checked by the parent. This pass did not rerun that build or those tests. Deployment is held while the release coordinator consolidates changes. Sidecar specimens are structurally checked, not separately browser-rendered; this documentation makes no live-deployment claim.

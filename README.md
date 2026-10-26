@@ -15,9 +15,13 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 
 ## What works
 
+- Eight guided topic menus with 95 topic, submenu and outcome routes.
+- A sourced community CRM at `/directory`, with 3,267 records, 28 participation routes and browser-local relationship notes; the original catalogue remains at `/directory/archive`.
+- Private incident reporting with photo/location intake and an authenticated review inbox.
+
 - The community CRM at `/directory` includes 3,267 sourced records, searchable public contacts, activity and verification filters, participation routes, and browser-local relationship notes with JSON backup/restore. [CRM usage and maintenance](docs/CRM.md).
 - Search across 600 imported entries plus five authored practical guides: reporting, building, farming, animal welfare and environmental protection.
-- Practical guides include official citations, 17 editable template downloads, section navigation and a visible verification register. They remain clearly labelled drafts pending legal and live-service review.
+- Practical guides include official citations, 18 editable template downloads, section navigation and a visible verification register. They remain clearly labelled drafts pending legal and live-service review.
 - Hybrid retrieval: weighted keyword search, explicit intent expansion, and local MiniLM semantic vectors. Queries run in a browser worker and are not sent to an AI provider. Keyword results appear immediately while the local model loads.
 - Searchable directory, topic filters, grouped search answers, list/grid views, reading library, long-form records, original document links, email links, and shareable URLs. Public presentation links to official contact directories while keeping source-listed phone data in the underlying research records.
 - About, participation, and contact routes. Contact/correction forms prepare a reviewable email; they do not send or store submissions.
@@ -80,7 +84,7 @@ After editing `corpus/guides/`, run `python3 scripts/publish_guides.py`, then `n
 
 Vercel serves the Vite `dist/` directory. `vercel.json` supplies route fallbacks and keeps the preview out of search engines. Deployment is a client-review preview; a production cutover requires an explicit decision. The model and runtime are lazily loaded, with a roughly 50 MB uncompressed first-use semantic payload; keyword search remains usable during loading or failure.
 
-The separate Vercel project is `actforgoa-field-guide`. Its public review URL uses that project's production alias; it has no connection to the `actforgoa.org` domain or original hosting. `.vercelignore` excludes the raw archive, Python tooling, development notes and unrelated research, while retaining `public/data/`. Deploy with `vercel deploy --yes --prod --project actforgoa-field-guide` to update this review URL.
+The separate Vercel project is `actforgoa-field-guide`. Its public review URL uses that project's production alias; it has no connection to the `actforgoa.org` domain or original hosting. `.vercelignore` excludes the raw archive, Python tooling, development notes and unrelated research, while retaining `public/data/`. Use the coordinated, commit-checked release workflow in [Releasing](docs/RELEASING.md) to update this review URL.
 
 ## Before a production launch
 

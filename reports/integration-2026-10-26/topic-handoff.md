@@ -2,7 +2,9 @@
 
 Source snapshot: `/Users/zakkrevitt/code/ActForGoa/.reports/topic-restoration-2026-10-26`
 
-Runtime source is frozen and build-tested. Design documentation is being synchronised before the final seal. Source hashes are in `source-manifest.json`.
+Handoff complete. Runtime source, design documentation and evidence are frozen. Source hashes are in `source-manifest.json`.
+
+Snapshot source identity (SHA-256): `e95496af4ea71507d05a2b8fa16f177de0a771800a1528b5b947ef098c52106b`.
 
 ## Source identity and release status
 
@@ -34,7 +36,7 @@ Runtime source is frozen and build-tested. Design documentation is being synchro
 - Desktop 1408x800, phone390x844, small phone375x667, tablet768x1024 inspected. No horizontal overflow. All eight homepage choices end at y835 on390x844; shorter phones scroll naturally.
 - Evidence in `.impeccable/review/restored-topics/`: desktop-home, mobile-home, small-phone-home, tablet-home, desktop-waste, desktop-report, mobile-waste, mobile-collection, mobile-household PNGs; menu-checks.json and detector.json.
 - Impeccable detector: zero primary findings; advisories describe restored neutral border/compact descriptions and inherited hero scrim/type exceptions. Changed visual source has no italic/oblique styling or decorative side stripes.
-- Fresh finish reviewer found no material code or pixel defects; design-document update and final verdict pending.
+- Fresh Impeccable finish reviewer returned `disposition: ship`, with no material fixes. Documentation/schema/token validation passed. Final review evidence is `finish-review.md` in the evidence directory. This is verification of the frozen local restoration, not of the coordinated live release.
 
 ## Snapshot exclusions
 
