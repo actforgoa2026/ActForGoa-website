@@ -2,6 +2,7 @@
 from contextlib import asynccontextmanager
 from functools import lru_cache
 import os
+import logging
 from pathlib import Path
 import threading
 from fastapi import FastAPI, HTTPException, Query, Request
@@ -10,6 +11,7 @@ import pymupdf
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from dotenv import load_dotenv
 from openai import APIError
+from pydantic import ValidationError
 from .embeddings import ROOT
 from .library import Library
 from .hosting import public_config, PublicLimits, RequestSizeLimit
@@ -22,7 +24,7 @@ def create_app(root=None, index_root=None, client=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
     limits=PublicLimits(root/'.research-usage',chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100')),
-                        monthly_usd=os.getenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','10'))
+                        monthly_usd=os.getenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5'))
     config=chat_config()
     answers=AnswerCache()
     @asynccontextmanager
@@ -156,7 +158,10 @@ def create_app(root=None, index_root=None, client=None):
             if status==402:detail='The answer service has no available credit. Search and full documents still work.'
             if status==429:detail='The answer service has reached its usage limit. Try again later or read the sources.'
             raise HTTPException(502,detail) from None
-        except ValueError:
+        except ValueError as error:
+            # Log failure categories only: never provider payloads, questions or evidence.
+            reason=','.join(e['type']+':'+'.'.join(map(str,e['loc'])) for e in error.errors(include_input=False)) if isinstance(error,ValidationError) else str(error)
+            logging.getLogger(__name__).warning('Answer validation failed: %s',reason)
             raise HTTPException(502,'The answer could not be verified against its citations. Try again or read the sources.') from None
         finally:chat_slots.release()
     return app

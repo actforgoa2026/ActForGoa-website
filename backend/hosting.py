@@ -45,7 +45,7 @@ def public_config():
 
 class PublicLimits:
     """Single-instance aggregate limits. No client identifiers are collected."""
-    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='10'):
+    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5'):
         self.root=Path(root);self.search_limit=search_per_minute;self.chat_limit=chats_per_day
         amount=Decimal(str(monthly_usd))
         if not amount.is_finite() or amount<0:raise ValueError('Monthly answer budget must be non-negative')

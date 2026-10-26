@@ -2,11 +2,11 @@
 
 Date: 2026-10-26. Base: origin/main 3858a45754bd467c4fdc23598b2f4e9a3c30a782.
 
-Status: implemented and locally verified; live model validation and deployment remain blocked on the funded OpenRouter key. No paid model calls or production changes were made for this report. `/api/status.chat_ready` indicates a configured credential, not a proven working provider.
+Status: the funded OpenRouter credential works. Production remains unchanged. Qwen 3.7 failed live quality review (three rejected structures in 50 cases, plus claim concerns); GPT-5 Nano passed targeted structure, geographic-scope and brief-answer comparisons and is undergoing the final acceptance run. `/api/status.chat_ready` indicates a configured credential, not a proven working provider.
 
 ## Scope
 
-Qwen 3.7 Flash through OpenRouter, explicit alternative providers, conservative persistent monthly model budget, bounded prompts/output, strict citation identity validation, ten-minute first-question response reuse, provider disclosure, and Ask as the initial research mode. Existing Arc components, typography, palette and source reader remain in use. Source ingestion/index contents are unchanged.
+GPT-5 Nano through OpenRouter, explicit alternative providers, conservative persistent monthly model budget, bounded prompts/output, strict citation identity validation, ten-minute first-question response reuse, provider disclosure, and Ask as the initial research mode. Existing Arc components, typography, palette and source reader remain in use. Source ingestion/index contents are unchanged.
 
 ## Verification
 
@@ -19,9 +19,9 @@ Qwen 3.7 Flash through OpenRouter, explicit alternative providers, conservative 
 
 ## Release dependencies
 
-1. Finish the existing secure `OPENROUTER_API_KEY` setup in Railway project actforgoa-reports, production, service research. Do not put the key in chat, Git, screenshots or CLI arguments.
+1. The secure `OPENROUTER_API_KEY` setup is complete on the Railway research service. The key has not been printed or written into Git.
 2. Run the local backend with the real corpus and credential. Execute `scripts/evaluate_live_chat.py` (50 Goa questions; billable) and review the resulting claims against evidence. Mechanical citation identity is not proof of entailment. Fix and retest any failures before enabling public answers.
 3. Deploy code only to the dedicated research service, preserving `/data/research` and `.research-usage`. Verify provider status, live questions, citations, originals and exhausted-budget fallback.
 4. The ORCHESTRATOR chat owns combined frontend deployment. Merge/publish through the coordinated release path after live verification. No change to actforgoa.org or the reporting service.
 
-Default monthly cap is $10 of conservatively reserved inference, with 100 new paid attempts per UTC day. The cap excludes credit-purchase fees, tax, infrastructure and other account usage. Use a dedicated OpenRouter key limit too. Requests fail when the reviewed price or routing constraints cannot be met; they do not silently select another provider or model.
+Default monthly cap is $5 of conservatively reserved inference, with 100 new paid attempts per UTC day. The cap excludes credit-purchase fees, tax, infrastructure and other account usage. Use a dedicated OpenRouter key limit too. Requests fail when the reviewed price or routing constraints cannot be met; they do not silently select another provider or model.

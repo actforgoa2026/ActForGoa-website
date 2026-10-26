@@ -39,9 +39,12 @@ def test_real_hybrid_search_and_complete_document(collection):
     found=lib.search('khazan sluice gates salt water')
     assert found and found[0]['title']=='Khazan water management'
     assert set(found[0]['matches'])=={'keyword','semantic'}
+    assert found[0]['publisher_class']=='research'
+    assert {'legal_currency','source_date_metadata','topics'}<=found[0].keys()
     pages=lib.pages(found[0]['document_id'])
     assert len(pages)==2 and 'Final page' in pages[-1]['text']
     assert found[0]['text']==pages[0]['text'][found[0]['start']:found[0]['end']]
+    assert found[0]['page_context']==pages[0]['text'][:1400]
     assert lib.search('springs rainfall laterite')[0]['title']=='Laterite aquifer study'
     assert len(lib.search('gecko',doc_id=found[0]['document_id']))<=4
     assert manifest['stats']['documents']==3

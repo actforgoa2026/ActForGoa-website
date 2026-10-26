@@ -8,14 +8,14 @@ import httpx
 from openai import OpenAI
 import pytest
 from backend.chat import (AnswerCache, ChatRequest, Message, prepare_answer,
-                          answer_question, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE)
+                          answer_question, validate_answer, GroundedAnswer, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE)
 from backend.hosting import PublicLimits
 from backend.providers import chat_config
 
 @pytest.fixture
 def config(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
-    monkeypatch.delenv('OPENROUTER_CHAT_MODEL',raising=False)
+    monkeypatch.setenv('OPENROUTER_CHAT_MODEL','qwen/qwen3.7-flash')
     return chat_config()
 
 @pytest.fixture
@@ -137,3 +137,68 @@ def test_cache_expires_is_bounded_and_separates_model_generation_scope(config,ev
     assert cache.key(config,changed)!=key
     cache.put('2',{});cache.put('3',{});assert cache.get(key) is None
     cache.put(key,{'answer':'cached'});now[0]+=600;assert cache.get(key) is None
+
+def test_brief_answer_has_separate_cache_and_enforced_bound(config,evidence):
+    brief=prepare_answer(ChatRequest(question='Khazan water?',answer_style='brief'),evidence)
+    standard=prepare_answer(ChatRequest(question='Khazan water?'),evidence)
+    assert AnswerCache.key(config,brief)!=AnswerCache.key(config,standard)
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':'Gates regulate water.','citations':['passage-1']}]})
+    assert validate_answer(answer,evidence,brief.answer_style)['status']=='answered'
+    answer.paragraphs[0].text='word '*121
+    with pytest.raises(ValueError,match='length bound'):validate_answer(answer,evidence,brief.answer_style)
+    answer.paragraphs[0].text='Gates.';answer.paragraphs*=3
+    with pytest.raises(ValueError,match='length bound'):validate_answer(answer,evidence,brief.answer_style)
+    with pytest.raises(ValueError):ChatRequest(question='Khazan water?',answer_style='unbounded')
+
+def test_prompt_retains_legal_provenance_without_internal_metadata(evidence):
+    meta={'publisher_class':'government_or_court','legal_currency':'not_consolidated_or_legally_verified',
+          'source_date_metadata':[{'field':'citation_publication_date','value':'2025-01-01'}],'topics':['water'],
+          'page_context':'National report: Arunachal Pradesh. This section is not Goa.',
+          'document_kind_hint':'report','guide_verification':{'status':'source_verified'}}
+    prepared=prepare_answer(ChatRequest(question='What does the water policy require?'),[dict(evidence[0],**meta)])
+    sent=json.loads(prepared.messages[-1]['content'])['evidence'][0]
+    assert all(sent[k]==v for k,v in meta.items())
+    assert 'raw_path' not in sent
+
+def test_default_five_dollar_budget_is_enforced_across_instances(tmp_path):
+    assert PublicLimits(tmp_path).reserve_answer(5_000_000)
+    assert not PublicLimits(tmp_path).reserve_answer(1)
+
+def test_legal_authority_preference_preserves_relevance_and_nonlegal_order():
+    from backend.library import authority_score
+    official={'publisher_class':'government_or_court'}
+    commentary={'publisher_class':'civil_society_or_commentary'}
+    assert authority_score(.02,official,True)>authority_score(.021,commentary,True)
+    assert authority_score(.01,official,True)<authority_score(.03,commentary,True)
+    assert authority_score(.02,official,False)==authority_score(.02,commentary,False)
+
+def test_inline_internal_ids_are_removed_without_removing_facts(evidence):
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{
+        'text':'The policy (2025) proposes monitoring (passage-1). Read it [passage-1].',
+        'citations':['passage-1']}]})
+    result=validate_answer(answer,evidence)
+    assert result['paragraphs'][0]['text']=='The policy (2025) proposes monitoring. Read it.'
+    assert result['paragraphs'][0]['citations']==['passage-1']
+
+def test_selected_model_uses_strict_schema_correct_prices_and_disclosure(evidence,monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter');monkeypatch.delenv('OPENROUTER_CHAT_MODEL',raising=False)
+    config=chat_config();captured=[]
+    assert config.model=='openai/gpt-5-nano' and config.label=='OpenRouter and OpenAI'
+    def handle(request):
+        captured.append(json.loads(request.content))
+        return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[{'text':'Gates regulate water.','citations':['passage-1']}]})))
+    with OpenAI(api_key='fixture-only',base_url=config.base_url,max_retries=0,http_client=httpx.Client(transport=httpx.MockTransport(handle))) as client:
+        answer_question(client,config,prepare_answer(ChatRequest(question='Khazan water?',answer_style='brief'),evidence))
+    body=captured[0];assert body['response_format']['type']=='json_schema'
+    schema=body['response_format']['json_schema']['schema']
+    assert '$defs' not in schema and schema['properties']['paragraphs']['maxItems']==2
+    assert body['reasoning']=={'effort':'minimal'} and 'temperature' not in body
+    assert body['provider']['only']==['openai'] and body['provider']['allow_fallbacks'] is False
+    assert body['provider']['max_price']=={'prompt':.05,'completion':.4,'request':0}
+    assert config.maximum_cost_microusd(26048)==2023
+
+def test_legal_currency_limitation_is_returned_with_cited_legal_answer(evidence):
+    evidence[0]['document_kind_hint']='legislation_or_notification'
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':'The saved Act requires permission.','citations':['passage-1']}]})
+    result=validate_answer(answer,evidence,'brief')
+    assert 'current consolidated status is not verified' in result['notice']

@@ -28,10 +28,11 @@ def run(origin, output, cases):
         for index,case in enumerate(cases):
             started=time.monotonic();entry={**case,'human_review':'pending'}
             try:
-                response=client.post('/api/chat',json={k:case[k] for k in ('question','history') if k in case})
+                response=client.post('/api/chat',json={k:case[k] for k in ('question','history','answer_style') if k in case})
                 entry['http_status']=response.status_code
                 if response.status_code!=200:
                     entry['passed']=False;entry['error']='Chat request did not return an answer.'
+                    entry['validation_rejected']=response.status_code==502 and response.json().get('detail','').startswith('The answer could not be verified')
                 else:
                     answer=response.json();entry['answer']=answer
                     citations={c['id']:c for c in answer['citations']}
@@ -56,29 +57,36 @@ def run(origin, output, cases):
                                 for block in original.iter_bytes():digest.update(block)
                             assert digest.hexdigest()==doc['sha256'],'Original checksum mismatch'
                             checked_originals[version]=True
-                    entry['passed']=True
+                    entry['mechanical_passed']=True
                     entry['abstention_matches_expectation']=(answer['status']=='insufficient_evidence') if case.get('expect_abstention') else None
+                    entry['passed']=entry['abstention_matches_expectation'] is not False
             except (httpx.HTTPError,AssertionError,ValueError,KeyError) as error:
                 entry.update(passed=False,error=type(error).__name__)
             entry['seconds']=round(time.monotonic()-started,2);report['cases'].append(entry)
-            report['summary']={'completed':len(report['cases']),'mechanical_passes':sum(c['passed'] for c in report['cases']),
+            report['summary']={'completed':len(report['cases']),'mechanical_passes':sum(c.get('mechanical_passed',False) for c in report['cases']),
+                               'expected_abstention_failures':sum(c.get('abstention_matches_expectation') is False for c in report['cases']),
+                               'answered':sum(c.get('answer',{}).get('status')=='answered' for c in report['cases']),
                                'originals_verified':len(checked_originals),'human_review':'pending'}
             save();print(f"{index+1}/{len(cases)} {case['id']}: {'pass' if entry['passed'] else 'FAIL'} ({entry['seconds']}s)",flush=True)
-            if entry.get('http_status') in (401,402,429,502,503):break
+            if entry.get('http_status') in (401,402,429,502,503) and not entry.get('validation_rejected'):break
     return report
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--origin',default='http://127.0.0.1:8091')
     parser.add_argument('--output',type=Path,default=ROOT/'reports/research-live-chat.json')
-    parser.add_argument('--limit',type=int,default=50)
+    parser.add_argument('--cases',type=Path,default=ROOT/'tests/research/goa-chat-cases.json')
+    parser.add_argument('--limit',type=int)
     args=parser.parse_args()
     origin=args.origin.rstrip('/');url=urlsplit(origin)
     if url.username or url.password or url.query or url.fragment or url.path or url.scheme not in ('http','https'):
         parser.error('Use a plain research service origin without credentials or a path')
     if url.scheme=='http' and url.hostname not in ('127.0.0.1','localhost'):
         parser.error('Remote live evaluation requires HTTPS')
-    if not 1<=args.limit<=50:parser.error('--limit must be between 1 and 50')
-    cases=json.loads((ROOT/'tests/research/goa-chat-cases.json').read_text())[:args.limit]
+    cases=json.loads(args.cases.read_text())
+    if args.limit is not None:
+        if not 1<=args.limit<=100:parser.error('--limit must be between 1 and 100')
+        cases=cases[:args.limit]
+    if not 1<=len(cases)<=100:parser.error('Use between 1 and 100 cases per explicit run')
     result=run(origin,args.output,cases)
     raise SystemExit(0 if len(result['cases'])==len(cases) and all(c['passed'] for c in result['cases']) else 1)

@@ -9,11 +9,13 @@ from openai import OpenAI
 # USD per million tokens, standard uncached Singapore/International prices.
 # Keep prompts below 32K tokens; changing models requires reviewing these rates.
 # Verified 2026-10-26: https://openrouter.ai/qwen/qwen3.7-flash
+# https://openrouter.ai/openai/gpt-5-nano/pricing
 # and https://www.alibabacloud.com/help/en/model-studio/model-pricing
 # OpenRouter requests enforce these ceilings; credit-purchase fees are separate.
 PRICES = {
     ('openrouter', 'qwen/qwen3.7-flash'): ('0.030', '0.130'),
     ('openrouter', 'qwen/qwen3.8-flash'): ('0.15', '0.47'),
+    ('openrouter', 'openai/gpt-5-nano'): ('0.05', '0.40'),
     ('qwen', 'qwen3.7-flash-2026-07-15'): ('0.030', '0.130'),
     ('qwen', 'qwen3.8-flash'): ('0.15', '0.47'),
     ('openai', 'gpt-5-mini'): ('0.25', '2.00'),
@@ -29,6 +31,8 @@ class ChatConfig:
     key_name: str
     base_url: str
     max_output_tokens: int = 1800
+    route: str = 'alibaba'
+    structured: bool = False
 
     def maximum_cost_microusd(self, input_token_bound):
         input_rate, output_rate = map(Decimal, PRICES[(self.provider, self.model)])
@@ -45,9 +49,12 @@ class ChatConfig:
 def chat_config():
     provider = os.getenv('RESEARCH_CHAT_PROVIDER', 'openrouter')
     if provider == 'openrouter':
-        config = ChatConfig(provider, os.getenv('OPENROUTER_CHAT_MODEL', 'qwen/qwen3.7-flash'),
-                            'OpenRouter and Alibaba Cloud (Qwen)', 'OPENROUTER_API_KEY',
-                            'https://openrouter.ai/api/v1')
+        model=os.getenv('OPENROUTER_CHAT_MODEL', 'openai/gpt-5-nano')
+        is_openai=model.startswith('openai/')
+        config = ChatConfig(provider, model,
+                            'OpenRouter and OpenAI' if is_openai else 'OpenRouter and Alibaba Cloud (Qwen)', 'OPENROUTER_API_KEY',
+                            'https://openrouter.ai/api/v1',route='openai' if is_openai else 'alibaba',
+                            structured=is_openai or model=='qwen/qwen3.8-flash')
     elif provider == 'qwen':
         model = os.getenv('QWEN_CHAT_MODEL', 'qwen3.7-flash-2026-07-15')
         endpoint = os.getenv('QWEN_BASE_URL', 'https://dashscope-intl.aliyuncs.com/compatible-mode/v1').rstrip('/')
