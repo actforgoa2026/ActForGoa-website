@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-10-26T10:22:37.837458+00:00",
+  "application_commit": "a37c428bb2d272093580666c69d91541749b54e9",
+  "pull_request": "https://github.com/ZakKrevitt/ActForGoa/pull/8",
+  "backend_origin": "https://research-production-b579.up.railway.app",
+  "backend_deployment": "c903cf22-f5ec-4b4f-ade4-fbcdbbab1598",
+  "backend_status": "SUCCESS",
+  "service_id": "f3c5348d-3bfe-47b0-98a4-22428580937f",
+  "volume_id": "b37ebdc4-355e-41e3-99e9-32421241a1ec",
+  "generation": "20261022T155701-21661179",
+  "file_integrity": {
+    "verified": 1172,
+    "total": 1172,
+    "missing": []
+  },
+  "manifest_sha256": "afa9e3264dde6c1d496017770edf9c41ee0edabf709bd53a2aea5bba8576b64b",
+  "corpus_bytes": 2055701262,
+  "public_http_queries_passed": 6,
+  "passage_identities_verified": 30,
+  "original_pdf_checksum_verified": true,
+  "full_text_and_original_page_verified": true,
+  "chat_ready": false,
+  "chat_limit": "No API key saved; generated answers not tested.",
+  "frontend_status": "Awaiting integration coordinator promotion.",
+  "temporary_transfer_key_revoked_and_deleted": true,
+  "tests": {
+    "frontend_and_reporting": 39,
+    "research_backend": 18,
+    "production_build": "passed"
+  },
+  "visual_review": "ship; desktop and phone inspected"
+}

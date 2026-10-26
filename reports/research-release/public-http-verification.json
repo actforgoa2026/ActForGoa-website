@@ -1,0 +1,99 @@
+{
+  "origin": "https://research-production-b579.up.railway.app",
+  "generation": "20261022T155701-21661179",
+  "status": {
+    "search_ready": true,
+    "chat_ready": false,
+    "generation": "20261022T155701-21661179",
+    "stats": {
+      "pages": 21220,
+      "low_text_pages": 2343,
+      "ocr_pages": 110,
+      "chunks": 78432,
+      "documents": 1156,
+      "duplicate_urls": 25,
+      "corrupt_pages_excluded_from_search": 56
+    },
+    "model": "gpt-5-mini",
+    "embedding_model": "all-MiniLM-L6-v2",
+    "search_mode": "zvec+fts5+rrf"
+  },
+  "queries": [
+    {
+      "question": "How do khazans manage fresh and salt water?",
+      "passages_verified": 5,
+      "titles": [
+        "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+        "action-plan_250529_134919",
+        "Chorao khazan field account",
+        "Chorao khazan field account",
+        "State Water Policy 2021"
+      ]
+    },
+    {
+      "question": "How do laterite plateaus supply groundwater and springs?",
+      "passages_verified": 5,
+      "titles": [
+        "Goa groundwater and mining research report",
+        "Goa groundwater and mining research report",
+        "CGWB national assessment 2024, Goa chapter",
+        "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+        "action-plan_250529_134919"
+      ]
+    },
+    {
+      "question": "What is Goa State Water Policy 2021?",
+      "passages_verified": 5,
+      "titles": [
+        "State Water Policy 2021",
+        "State Water Policy 2021",
+        "State Water Policy",
+        "Goa Water Prevention and Control of Pollution Rules, 2021",
+        "Goa river profile and source compilation"
+      ]
+    },
+    {
+      "question": "What does the climate action plan say about rainfall and flooding?",
+      "passages_verified": 5,
+      "titles": [
+        "Goa climate action plan",
+        "Goa climate action plan",
+        "action-plan_250529_134919",
+        "state-action-plan-for-climate-change",
+        "action-plan_250529_134919"
+      ]
+    },
+    {
+      "question": "What is the Mhadei Mandovi river basin?",
+      "passages_verified": 5,
+      "titles": [
+        "Goa river profile and source compilation",
+        "Goa river profile and source compilation",
+        "State Water Policy 2021",
+        "Goa climate action plan",
+        "action-plan_250529_134919"
+      ]
+    },
+    {
+      "question": "What are the habitats of Cnemaspis goaensis?",
+      "passages_verified": 5,
+      "titles": [
+        "Cnemaspis taxonomic supplementary material",
+        "Cnemaspis taxonomic supplementary material",
+        "2. EIA and BMP for 400 KV transmission\n            Line Corridor Passing through Protected area of Goa State pdf",
+        "ZSI Goa bird report",
+        "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)"
+      ]
+    }
+  ],
+  "original_verified": {
+    "id": "b1dbb670fae77e1a19124aba-576384a2b333",
+    "sha256": "b1dbb670fae77e1a19124aba0bfbe0b1a2b26a2c2e19cc2a64eafb367ee3855b",
+    "bytes": 4626539,
+    "pages": 20
+  },
+  "full_text_pages_verified": 20,
+  "original_page_png_verified": true,
+  "chat": "Answers are not configured yet. You can still search and read the full sources.",
+  "limits": "Retrieval and citation identity checks, not a live generated-answer or factual-entailment evaluation."
+}

@@ -21,4 +21,14 @@ data/fetch-manifest.json
 reports/link-checks.jsonl
 *.tsbuildinfo
 *.log
+
+.research-index/
+.research-release/
+.pytest_cache/
+corpus/raw/
+corpus/extracted/
+corpus/metadata/
+corpus/pages/
+corpus/text/
+corpus/ocr/
 .reports/
