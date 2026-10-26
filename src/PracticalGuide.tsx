@@ -6,11 +6,13 @@ import {ArrowLeft, ArrowRight, Download} from 'lucide-react';
 import {guideDocuments, guideHeadingId, type GuideDocument} from './guides';
 import {Button} from './components/arc/button/button';
 import {templatePath} from './template-path';
+import {guideForReaders} from './guide-presentation';
 
 export function PracticalGuide({guide}: {guide: GuideDocument}) {
  const location = useLocation();
  const navigate = useNavigate();
- const headings = [...guide.markdown.matchAll(/^## (.+)$/gm)].map(m => m[1]);
+ const markdown = guide.listed ? guideForReaders(guide.markdown) : guide.markdown;
+ const headings = [...markdown.matchAll(/^## (.+)$/gm)].map(m => m[1]);
  useEffect(() => {
   const previous = document.title;
   document.title = guide.title + ' | ActForGoa';
@@ -40,7 +42,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
        ? <Link to={href}>{children}</Link>
        : <a href={href} download={href?.startsWith('/guides/') ? '' : undefined}>{children}</a>,
       table: ({children}) => <div className="guide-table" role="region" aria-label="Reference table" tabIndex={0}><table>{children}</table></div>,
-     }}>{guide.markdown.replace(/^\*\*Draft[^\n]+\n+/, '')}</Markdown>
+     }}>{markdown}</Markdown>
     </div>
    </article>
    <aside className="detail-aside guide-aside">

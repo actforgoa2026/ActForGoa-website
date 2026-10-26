@@ -23,6 +23,7 @@ export function RecordCard({
     "/search",
     "/library",
     "/directory",
+    "/directory/archive",
     "/stories",
     "/blog",
   ].includes(location.pathname) || location.pathname.startsWith("/topics/");

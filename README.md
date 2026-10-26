@@ -16,9 +16,7 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 ## What works
 
 - Eight guided topic menus with 95 topic, submenu and outcome routes.
-- A sourced community CRM at `/directory`, with 3,267 records, 28 participation routes and browser-local relationship notes; the original catalogue remains at `/directory/archive`.
 - Private incident reporting with photo/location intake and an authenticated review inbox.
-
 - The community CRM at `/directory` includes 3,267 sourced records, searchable public contacts, activity and verification filters, participation routes, and browser-local relationship notes with JSON backup/restore. [CRM usage and maintenance](docs/CRM.md).
 - Search across 600 imported entries plus five authored practical guides: reporting, building, farming, animal welfare and environmental protection.
 - Practical guides include official citations, 18 editable template downloads, section navigation and a visible verification register. They remain clearly labelled drafts pending legal and live-service review.

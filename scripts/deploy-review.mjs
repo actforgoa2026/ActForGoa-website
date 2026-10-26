@@ -49,6 +49,7 @@ try {
     const current = JSON.parse(run('vercel', ['inspect', 'https://actforgoa-field-guide.vercel.app', '--json']));
     if (current.id !== inspect.id) throw new Error('Another deployment landed during checks. Reconcile first.');
     execFileSync('vercel', ['deploy', '--yes', '--prod', '--project', 'actforgoa-field-guide',
+      '--build-env', 'VITE_REPORT_API_ORIGIN=https://reports-production-42c8.up.railway.app',
       '--meta', `releaseCommit=${commit}`, '--meta', `releaseTree=${tree}`], { stdio: 'inherit' });
     console.log('Deployment command completed. Verify the public alias and record its deployment ID before declaring it live.');
   }

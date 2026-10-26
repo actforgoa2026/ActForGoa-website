@@ -1,0 +1,32 @@
+{
+  "verified_at": "2026-10-26T09:25:50.855686+00:00",
+  "checks": {
+    "section_css_matches_release": true,
+    "feed_function_matches_release": true,
+    "guided_topic_links_preserved": true,
+    "counts_include_pages": true,
+    "obsolete_rank_not_reintroduced": true,
+    "all_four_typography_roles_present": true,
+    "sectioned_design_present": true,
+    "surface_brief_updated": true
+  },
+  "source_hashes": {
+    "src/App.tsx": "e86348d158e6b926bd0e021361ef036baadd2d260f9f50791af292dc515a2118",
+    "src/discovery.ts": "070754bfe94c0ca0054fa7c328323a60727fbb33a665e698fac25cf665e4cc88",
+    "src/DiscoveryLinks.tsx": "8dff55a3454dc226ccfb8032df2dfca6151b08306d5c781c3e8419d2850ff731",
+    "src/discovery.css": "7c2339127cd3fde1af62accb4903ab1918b3bec417be5390ced06e51e8247a4b",
+    "tests/discovery.test.ts": "1ea23e2b9c25924eed0a5047c441de5c386aa1ebee56d589392380c7e2f3fa90",
+    "DESIGN.md": "dd744c41bb6a1884044651514147d9a66c6abb8d4f0733b1cd1427f3c7e218d6",
+    ".impeccable/surfaces/src-app-tsx.md": "05eca9340abbd38e664b7edff40d0000b39ae32d15c5cde15901d9cbd785ffd3"
+  },
+  "detector": "No findings for DiscoveryLinks.tsx and discovery.css",
+  "runtime_source_modified_in_this_turn": false,
+  "design_docs_modified_in_this_turn": false,
+  "note": "The coordinator updated the design files while this verification was running. The guarded local edit aborted before writing, and the correct integrated documents were verified instead. No duplicate PR, merge, or deployment was created.",
+  "focused_tests": {
+    "command": "node --import tsx --test tests/discovery.test.ts tests/topic-flows.test.ts",
+    "passed": 11,
+    "failed": 0
+  },
+  "diff_whitespace_check": "passed for discovery and design files"
+}
