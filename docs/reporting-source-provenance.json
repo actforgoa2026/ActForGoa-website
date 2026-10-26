@@ -1,0 +1,123 @@
+{
+  "auditSource": "/Users/zakkrevitt/code/ActForGoa/.reports/frontend-release-2026-10-26",
+  "integrationFrontendSource": "/Users/zakkrevitt/code/ActForGoa/.reports/discovery-release-2026-10-26",
+  "matchingFiles": [
+    {
+      "path": "src/ReportIncident.tsx",
+      "auditSha256": "3437e616f27dd8b91a19fb29ce82606a7f730e25e6a3fe18b25cfe14a72cd5e2",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/ReportInbox.tsx",
+      "auditSha256": "abd8e71e9944fa3fd3dcf15dbbaebc594467798f52802f1793b68c620301bc49",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/reporting.css",
+      "auditSha256": "9aad30135f7103f96ad27b7908212934b8fadf8c2fc0102b222463c706d1b785",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/report-api.ts",
+      "auditSha256": "24f0890fc3eb615b72b2abeeaa6472b13dd3f8ab0ffab9542022d23197d65b63",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/use-report-draft-guard.tsx",
+      "auditSha256": "e4cb7f96b48f239ccc5f2a5db5a9b15521f6afca3a3942153613ae1003c692d0",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "server/reporting.ts",
+      "auditSha256": "b3b66d327e96104110b13e831d1447fbf9f3e9504a5dbc7e74d5f8fc516d1897",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "shared/reporting.ts",
+      "auditSha256": "d83e129b10440ce0021e6df8ef0aad779a13cf1b31a28d405d59d5ad718980d8",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "shared/submission-identity.ts",
+      "auditSha256": "60ddbcbf726f3035c5903fa5a8bad4c111cd4a54d44500714d2447ee9dc853eb",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/catalogue-loader.ts",
+      "auditSha256": "1a2a492d67a3b98775c6d2432ebc1eaec9972ba934239b65420579154a5b8b45",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/content-corrections.ts",
+      "auditSha256": "139644d150900b1283d4794165d3da45245b26537f2005716d26053b5d3c6827",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "src/search-navigation.ts",
+      "auditSha256": "c2f6c74b167de718728396d907654cdc0cbf3908f7130f6514064549be218e1a",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "tsconfig.server.json",
+      "auditSha256": "447926e93861c1760900511bf2cd00a18d53d759f9cf3dd4d6dac812647245f9",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "vite.config.ts",
+      "auditSha256": "b1c7a572c6b5ae5fdb516a8c0d7e62fffc0a7c997f642b23c6791260ef0c4555",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "vercel.json",
+      "auditSha256": "d63e1d7e0a84f758cae875952bc20e483a6656368696c604c7951531b8adfb6a",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "tests/reporting.test.ts",
+      "workspaceSha256": "5ff66967a90b93a4eae23c7149b0b768d9070cbc898772c041db8b989c433f2a",
+      "identicalInDiscovery": true
+    },
+    {
+      "path": "tests/audit-regressions.test.ts",
+      "workspaceSha256": "1c8f540e3a8b5a346cb52edceaa3616ab0db3d83c52819ac9629d755cc2d2a2d",
+      "identicalInDiscovery": true
+    }
+  ],
+  "missingFromDiscovery": [
+    {
+      "path": "scripts/dev-reporting.mjs",
+      "workspaceSha256": "7bdfc68dae3c98fe4c9b4b8e1d49efe78d41025011f9936a3a96ff00a706c420",
+      "packageSha256": "7bdfc68dae3c98fe4c9b4b8e1d49efe78d41025011f9936a3a96ff00a706c420"
+    },
+    {
+      "path": "scripts/package-reporting.mjs",
+      "workspaceSha256": "c597f8e85ee88f5c44d3ef662eea0deb8339d4ec18e28c35bd2f23e14f08228f",
+      "packageSha256": "2c9108930c6055405cba47d38ed867aced4fd1a3ac11200ca0f67d275a44d96a"
+    },
+    {
+      "path": "deploy/reporting/Dockerfile",
+      "workspaceSha256": "cded15d41a8559fd5adc9780683f59019a601e91497dfea8358080bcddc10e26",
+      "packageSha256": "cded15d41a8559fd5adc9780683f59019a601e91497dfea8358080bcddc10e26"
+    },
+    {
+      "path": "deploy/reporting/railway.json",
+      "workspaceSha256": "415eff2d99e80dc84bf0e4d4e91d1249606b8acc08a883692670cf62433cdbbb",
+      "packageSha256": "415eff2d99e80dc84bf0e4d4e91d1249606b8acc08a883692670cf62433cdbbb"
+    },
+    {
+      "path": "deploy/reporting/package.json",
+      "workspaceSha256": "59de7d26e01af84e3857be408ddeddb50e8f36ba552776b0c68e0c1dca7d7180",
+      "packageSha256": "59de7d26e01af84e3857be408ddeddb50e8f36ba552776b0c68e0c1dca7d7180"
+    },
+    {
+      "path": "deploy/reporting/package-lock.json",
+      "workspaceSha256": "a72f7e6c9a259be4251413eef99f0553e4138e6db825a1fd4434a65291e20caf",
+      "packageSha256": "a72f7e6c9a259be4251413eef99f0553e4138e6db825a1fd4434a65291e20caf"
+    },
+    {
+      "path": "docs/REPORTING.md",
+      "workspaceSha256": "5b4f90c895d7cef3cf4219147ea8d88c82fa575e21344fd86e86f4b2a9797467",
+      "packageSha256": "c3d93dada8cdeee6f6ebfb806f5f1808c97701b8d659f377a14d2d42f65f8842"
+    }
+  ]
+}
