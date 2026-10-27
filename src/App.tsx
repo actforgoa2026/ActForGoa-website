@@ -77,6 +77,7 @@ import { Textarea } from "./components/arc/textarea/textarea";
 import SegmentedControl from "./components/arc/segmented-control/segmented-control";
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 const CRM = lazy(() => import("./CRM"));
+const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
@@ -227,6 +228,7 @@ function Footer() {
           <a href="https://actforgoa.org/privacy-policy/">Privacy</a>
           <a href="https://actforgoa.org/terms-and-conditions/">Terms</a>
           <Link to="/about#sources">About this guide</Link>
+          <Link to="/mcp">MCP for AI assistants</Link>
         </div>
       </div>
     </footer>
@@ -1358,6 +1360,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
+            <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/" element={<Home records={records} />} />

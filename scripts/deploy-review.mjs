@@ -1,5 +1,6 @@
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { smokeMcp } from './smoke-mcp.mjs';
 import { resolve } from 'node:path';
 
 const run = (command, args) => execFileSync(command, args, { encoding: 'utf8' }).trim();
@@ -66,6 +67,7 @@ try {
     const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
       '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
     if (research.search_ready !== true) throw new Error('Staged research routing or service is unavailable. Nothing promoted.');
+    if (existsSync('api/mcp.ts')) smokeMcp(deploymentUrl);
     // Remote builds take time too. Check the release boundary again before promotion.
     git('fetch', 'origin', 'main');
     if (git('rev-parse', 'HEAD') !== commit || git('rev-parse', 'origin/main') !== commit
