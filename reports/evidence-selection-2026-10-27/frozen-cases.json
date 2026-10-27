@@ -1,0 +1,573 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "frozen_at": "2026-10-27T08:35:36.130037+00:00",
+  "purpose": "Separate source-reviewed questions frozen before candidate implementation or any evaluation of these questions. Prior original and previously held-out cases are known development/regression evidence. Do not tune or change expected support after this set is evaluated. Offline passage recall only; saved sources do not establish current legal applicability.",
+  "cases": [
+    {
+      "id": "frozen-fee-card",
+      "question": "According to the saved Goa RTI applicant manual, can an applicant outside the BPL category pay the initial fee using a RuPay card?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "e5d0e7777a79a19cf17cced54e173507",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 7,
+          "start": 0,
+          "end": 671,
+          "text_sha256": "7596e262d9dda33caa79ff06d2f5d225ba68260259ce6808600900f56ec8e34f",
+          "reviewed_text": "If a applicant belongs to Non BPL category, he/she will select the option NO in \u201cIs the\nApplicant Below Poverty Line?\u201d field and has to make a payment of Rs 10.\n\n\n\n      The applicant can pay the prescribed fee through the following modes.\n\n        (a) Internet Banking.\n\n        (b) Using credit/debit card of Master/Visa and RuPay Card.\n\n         (c) UPI.\n\n\n\n\n\n     After filling all the details in the form click on Proceed to Fee Payment button.\n\n   On clicking on Proceed to Fee Payment button \u201cEchallan Payment Details\u201d form will be\n    displayed\n\n\n\n\n\nClick on Initiate Payment button and it will redirect to Echallan portal for payment.\n\n                         7"
+        }
+      ]
+    },
+    {
+      "id": "frozen-fee-choice",
+      "question": "Before paying for a new Goa RTI request, which poverty-line choice and rupee amount does the applicant manual specify for a non-BPL applicant?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "e5d0e7777a79a19cf17cced54e173507",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 7,
+          "start": 0,
+          "end": 671,
+          "text_sha256": "7596e262d9dda33caa79ff06d2f5d225ba68260259ce6808600900f56ec8e34f",
+          "reviewed_text": "If a applicant belongs to Non BPL category, he/she will select the option NO in \u201cIs the\nApplicant Below Poverty Line?\u201d field and has to make a payment of Rs 10.\n\n\n\n      The applicant can pay the prescribed fee through the following modes.\n\n        (a) Internet Banking.\n\n        (b) Using credit/debit card of Master/Visa and RuPay Card.\n\n         (c) UPI.\n\n\n\n\n\n     After filling all the details in the form click on Proceed to Fee Payment button.\n\n   On clicking on Proceed to Fee Payment button \u201cEchallan Payment Details\u201d form will be\n    displayed\n\n\n\n\n\nClick on Initiate Payment button and it will redirect to Echallan portal for payment.\n\n                         7"
+        }
+      ]
+    },
+    {
+      "id": "frozen-department",
+      "question": "Which field selects the receiving department or public authority on the Goa RTI New Request form?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "af9c5bf8e4f529af7b04eb9ef034cb62"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "af9c5bf8e4f529af7b04eb9ef034cb62",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 5,
+          "start": 0,
+          "end": 313,
+          "text_sha256": "c247e5aed4286a211e9ee6d2f43bfa954c27d7b4af1f38576e57a728a7922d59",
+          "reviewed_text": "2. RTI New Request Form:\n\n   Then RTI New Request screen will be displayed. This form can be used to file an online\n   RTI.\n\n\n\n\n\n   Department or Public Authority for which the applicant wants to file an RTI has to be\n   selected from \u201cSelect Department/Public Authority\u201d dropdown field.\n\n                       5"
+        }
+      ]
+    },
+    {
+      "id": "frozen-registration",
+      "question": "What reference does the Goa RTI manual say is issued after a BPL application is submitted?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "55a7990613ad217c9d5b6b2a5f0f355c"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "55a7990613ad217c9d5b6b2a5f0f355c",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 6,
+          "start": 0,
+          "end": 518,
+          "text_sha256": "d2a8e9f74e8ded11c9b4f879308ea7778bfdcbda6c6fa0a7c194ba3aec98b3b6",
+          "reviewed_text": "Applicant will receive sms alerts in case he/she provides mobile number.\n\nIf a citizen belongs to BPL category he/she will select the option Yes in \u201cIs the Applicant\nBelow Poverty Line?\u201d field and he/she has to provide card details.\n\n\n\n\n\nIn case of BPL category the applicant has to click on submit button, to submit the RTI\napplication\n\n\n\nOn submission of the application, a unique registration number would be issued, which may\nbe referred by the applicant for any references in future.\n\n\n\n\n\n                       6"
+        }
+      ]
+    },
+    {
+      "id": "frozen-receipt",
+      "question": "What details does the Goa RTI payment gateway e-Receipt contain after payment?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "de9c757194d1d1d8ab543f77867e09b0",
+            "99b66be31be348b522957be7433534ca"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "de9c757194d1d1d8ab543f77867e09b0",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 8,
+          "start": 3,
+          "end": 387,
+          "text_sha256": "5aa0a2657c4de16434eb0d32c6929db0aab881aed4fe2c9901ca25400fcffdd3",
+          "reviewed_text": "3. Payment Gateway:\n\nAfter redirecting to the Echallan portal \u201cEchallan Payment Gateway\u201d form will be displayed\nalong with Applicants details.\n\n\n\n\n\nEnter the correct CAPTCHA and click Initiate Payment button. Also select appropriate bank.\n\nAfter completing the payment an e-Receipt will be generated with Echallan Number , Bank details\nand Amount paid.\n\n\n\n\n\n                         8"
+        },
+        {
+          "passage_id": "99b66be31be348b522957be7433534ca",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 14,
+          "start": 4,
+          "end": 173,
+          "text_sha256": "c91c81c230622faeb206e627fbeb11638731609c589426d6d6ec00b7b4b5024d",
+          "reviewed_text": "2. Payment Successful:\n\n\nAfter completing the payment an e-Receipt will be generated with Echallan Number , Bank details and Amount\npaid.\n\n\n\n\n\n                        14"
+        }
+      ]
+    },
+    {
+      "id": "frozen-appeal-status",
+      "question": "Where can an applicant view first-appeal applications in the saved Goa RTI user manual?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "9756d32ef8cedc114230ae1d35b81a2b"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "9756d32ef8cedc114230ae1d35b81a2b",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 11,
+          "start": 3,
+          "end": 222,
+          "text_sha256": "895d41a14d68963da820bc1817545726d4e617734ffc19e5964f3b51549a49cf",
+          "reviewed_text": "5. Application Status:\n\nThe Applicant can see the Application status in Application Status Field.\n\nFor example:\n\n\n\n\n\nThe applicant can also view the FirstAppeal Applications if submitted.\n\n\n\n\n\n                        11"
+        }
+      ]
+    },
+    {
+      "id": "frozen-extra-reasons",
+      "question": "Where does Goa RTI Online display the PIO reasons for requesting an additional payment?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "8cc4a696018cfcdd6e82c9ff7228af21"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "8cc4a696018cfcdd6e82c9ff7228af21",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 12,
+          "start": 3,
+          "end": 728,
+          "text_sha256": "fc13cf2c4059998a2a71dce6a1603211f2ac6d3153fb23e1b02503e227c0c88c",
+          "reviewed_text": "6. Additional Payment :\n\nOnce the Request is accepted by the PIO, the PIO user will either ask for Additional payment or will\ndispose it .\n\nIf PIO demands for Additional payment, the applicant will receive a inbox saying that your RTI\nApplication has been Charged with some additional amount.\n\n\n\n\n\nApplicant has to pay additional payment if the PIO has demanded for a particular RTI request.\nAdditional payment requested by the PIO will be listed in the Application Status menu.\n\n\n\n\n\nIn the Reply Text column reasons for the Additional Payment by the PIO is displayed.\n\nThe user will do the payment for the requested Additional Payment request by clicking on the blue\nbutton which says \u201cPay Rs. 25\u201d\n                        12"
+        }
+      ]
+    },
+    {
+      "id": "frozen-reply-download",
+      "question": "According to the Goa RTI manual, can the applicant download the reply after the PIO disposes the request?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "747aa3b9395e8b248f77b021bd46c07d"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "747aa3b9395e8b248f77b021bd46c07d",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 17,
+          "start": 0,
+          "end": 212,
+          "text_sha256": "782b6d9c477e2de3976cfff318635937701a29aded8539078f0ffbe17370e589",
+          "reviewed_text": "5.   RTI Request Complete:\n\nAs soon as PIO disposes the request after completion it will be reflected in the Application Status\n\n\n\n\n\nUser can download the reply attached by the PIO\n\n\n\n\n\n                        17"
+        }
+      ]
+    },
+    {
+      "id": "frozen-login",
+      "question": "What should I click to reach the RTI Applicant Login screen in the Goa portal manual?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "63fbdba60fa952544f71fb364e8126d0"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "63fbdba60fa952544f71fb364e8126d0",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 4,
+          "start": 0,
+          "end": 299,
+          "text_sha256": "3eb4d40a25225b2f57992698983275c7b6000deeef1652a28583c42ac1bead8a",
+          "reviewed_text": "Click on RTI New Request :\n\nFor submitting RTI application, RTI New Request option has to be clicked. On clicking on\nRTI New Request option \u201cRTI Applicant Login\u201d screen will be displayed.\n\n\n\n\n\n      The Applicant will enter the login details and will submit the form.\n\n\n\n\n\n                         4"
+        }
+      ]
+    },
+    {
+      "id": "frozen-verify-result",
+      "question": "After clicking Payment Verify in Goa RTI Online, what does the Payment Status form show?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "069bb1d530c25875ef185378c74f566b"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "069bb1d530c25875ef185378c74f566b",
+          "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+          "document_title": "Goa RTI Online applicant manual",
+          "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+          "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+          "page": 10,
+          "start": 0,
+          "end": 248,
+          "text_sha256": "c14dd6f0d9cd069d181fe3e0fe986135bc0dd045ba2aba9a0f838257a60021a8",
+          "reviewed_text": "On click of Payment Verify button Payment Status form will be displayed showing the status of\nthe payment made along with the Registration Number.\n\n\n\n\n\n The applicant will get an sms alert on submission of application.\n\n\n\n                        10"
+        }
+      ]
+    },
+    {
+      "id": "frozen-farm-card",
+      "question": "Which card is mandatory for assistance under the saved revised Shetkari Adhar Nidhi scheme?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "99c2ee2ddd7bd61f5cf6d726f4dc1e7a"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "99c2ee2ddd7bd61f5cf6d726f4dc1e7a",
+          "document_id": "eab6684228f51af392521554-683960076949",
+          "document_title": "Revised Shetkari Adhar Nidhi scheme",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2023/12/SAN.pdf",
+          "original_sha256": "eab6684228f51af392521554906a8b35a8745b9d47848f841a84dfa537ab861c",
+          "page": 4,
+          "start": 9523,
+          "end": 10487,
+          "text_sha256": "06ec76564f84fe7b0a687aa01bd8b42bdf12ca91e1c036465a127d2528abfcdd",
+          "reviewed_text": "calamity: giving details of estimated amount   of loss in prescribed proforma appended\n at   Annexure-I.along with photograph of damages  (representative one  or two photographs\n per damage)   with the applicant   or the representative of the applicant.\n    (b) Inspection shall be done by Zonal   Agricultural Officer or his representative immediately\n after receipt of application for assessment of actual losses and within 15 working days in the\n proforma appended at Annexure-II The compensation, case should be uploaded for sanction\n within 30 days. 10 working days  relaxation is permissible in genuine cases.\n    (c) Krishi Card  is mandatory for  all cases to  avail assistance under Shetkar1 Adhar Nidhi\n Scheme.\n   (d) Losses evaluated by Zonal Agriculture Officer shall be computed in terms of prescribed\n Standard Cost as at point No. 4 of this notification or as per actual whichever is less and shal!\n be settled at Zonal Level as per sanction orders"
+        }
+      ]
+    },
+    {
+      "id": "frozen-farm-report",
+      "question": "Under the revised Shetkari Adhar Nidhi notification, to which officer and within how many working days should a farmer apply after a calamity?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "49c4df829e149d7df512df066a379ae0"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "49c4df829e149d7df512df066a379ae0",
+          "document_id": "eab6684228f51af392521554-683960076949",
+          "document_title": "Revised Shetkari Adhar Nidhi scheme",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2023/12/SAN.pdf",
+          "original_sha256": "eab6684228f51af392521554906a8b35a8745b9d47848f841a84dfa537ab861c",
+          "page": 4,
+          "start": 7609,
+          "end": 9662,
+          "text_sha256": "119363e29aafea12fd04dd4116e8ed079313567b13018c3651a99997f58b6ef1",
+          "reviewed_text": "guidel1nesis less,                                           of Agriculture                                                        maximum upto Rs. 1.60 lakhs per\n  3    Collapse of Well,                                                tarmer                                      As per                                                                 25%                                                        actual                                                                                                 of the                         Bank/terraces/retai-|                                                                valuation                                                                                         losses      ning                                                                                                                       to Standard cost.            wall and silt/Debris,                                                               by                                Stone wall  .done                                                              Oficials       fence                                                               from Soil   as                                                                           per                                                              scheme                                                                                   guidelines                                             Conservation Division     evaluated cost whichever is less.or\n                             al:n6CD) of Dept. of Agricu   maximum upto Rs. 1.60 lakhs per\n                                                         Iture.                  famer\n    6.   Procedure.  for. assistance  under.Shetkari.Adhar.T.    Nidhi Scheme.-  (a) The farmer  shall\napply to taluka level Zonal Agricultural Officer as early as possible or within 15 working days\nof the calamity: giving details of estimated amount   of loss in prescribed proforma appended\n at   Annexure-I.along with photograph of damages  ("
+        }
+      ]
+    },
+    {
+      "id": "frozen-farm-disbursement",
+      "question": "After verification, where are Shetkari Adhar Nidhi claims submitted for disbursement according to the saved scheme?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "8ee604d096f421b9558a92179b6f24ca"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "8ee604d096f421b9558a92179b6f24ca",
+          "document_id": "eab6684228f51af392521554-683960076949",
+          "document_title": "Revised Shetkari Adhar Nidhi scheme",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2023/12/SAN.pdf",
+          "original_sha256": "eab6684228f51af392521554906a8b35a8745b9d47848f841a84dfa537ab861c",
+          "page": 4,
+          "start": 10357,
+          "end": 10971,
+          "text_sha256": "b2ac0a0cd37ff7b8dfb585626431d32724772e9886463f1bbcdab3f17c24ced8",
+          "reviewed_text": "at point No. 4 of this notification or as per actual whichever is less and shal!\n be settled at Zonal Level as per sanction orders issued by District  Agncultural Officer (North)\n and  (South).\n     (e) Claims will be verified within the guidelines    of Shetkari Adhar   Nidhi Scheme  ar Zohal\n Aaricultural Office and  will be submitted to the Directorate  of Accounts  for d1sbursement\n    (n The claims which requies Government approval  shall be submitted  to  Director  of\n Agiculture within 30 days of the  calamity.\n\n 350\n                                                                                   i"
+        }
+      ]
+    },
+    {
+      "id": "frozen-institution-boundary",
+      "question": "According to the AWBI institutional SOP, who is responsible for securing institutions with fencing, boundary walls or gates to prevent stray-dog entry?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "b3b769ce23640692efb7256d82d900c1"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "b3b769ce23640692efb7256d82d900c1",
+          "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+          "document_title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+          "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+          "page": 4,
+          "start": 0,
+          "end": 1058,
+          "text_sha256": "2bbce2d1a9ad2ad0a4692528561387c62f639c3b4380fda56e1035692166a43f",
+          "reviewed_text": "respective local / municipal authorities / District authority, identify all government\nand private educational institutions, hospitals (including district hospitals, primary\nhealth centres, and medical colleges), public sports complexes or stadia, bus stand/\ndepos and railway stations situated within their territorial limits. It is also advised\nto identify other public places such as religious places, children\u2019s parks, airports,\n\nhelipads, seaports, tourist sites and recreational spots.\n\nOnce the areas are identified by the respective municipal authorities, the concerned\nmanagement shall ensure that the stray dogs do not ingress in that area. The\nconcerned management is also responsible to secure the institution by adequate\nfencing, boundary wall, gates or any other infrastructure to avoid entry of the stray\n\ndogs within the area.\n\nIn cases of educational institutions, hospitals, sports complexes, tourist sites,\nreligious places, airports, helipads, seaports and recreational spots, the concerned\nmanagement shall identify a Nodal Officer, who\u2019"
+        }
+      ]
+    },
+    {
+      "id": "frozen-shelter-pack",
+      "question": "What does the AWBI institutional SOP say about keeping a dog family or pack together in shelter space?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "b67f07bca14e614821d265156fdca315"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "b67f07bca14e614821d265156fdca315",
+          "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+          "document_title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+          "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+          "page": 6,
+          "start": 854,
+          "end": 1557,
+          "text_sha256": "7d2d64ed39001c31aba82efb5eed9e9bd572896d3f36db5adaccf0de88f9adc3",
+          "reviewed_text": "services through toll free number 1962.\n\nc. The routine handling and management of Dogs in the shelter should strictly follow\nhumane practices as described in the Animal Birth Control Rules, 2023 and Revised\n\nAnimal Birth Control Module, 2025.\n\nd. Open area for dogs with demarcation so that entire family or pack of dog to be kept at\n\none place. A night shelter in each dog shelter may be established.\ne. Watering and feeding arrangement\n\nf. Each shelter house should be manned with the following category of personal:\n(i). Watchman for 24 hours\n\n(ii). Cleaner as per need.\n\n(iii). Caretaker for feed and other management activities round the clock depending on\n\now\n\nthe number of dogs in the shelters."
+        }
+      ]
+    },
+    {
+      "id": "frozen-food-waste",
+      "question": "What does the AWBI institutional SOP tell food vendors around public institutions to do with food waste?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "60e09fb9af430e60913d7ccaf393423d"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "60e09fb9af430e60913d7ccaf393423d",
+          "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+          "document_title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+          "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+          "page": 8,
+          "start": 0,
+          "end": 933,
+          "text_sha256": "b8a61e42edbfd84db1b16c47cb6f734773c20d9eee6b236df3cb262627bff57f",
+          "reviewed_text": "(vi). Separate kennels for diseased animals to be maintained.\n\nv. Feeding of stray dogs and Waste Management:\n\nThe Hon\u2019 ble Supreme Court has noted that the one of the underlying causes of the problem of stray\ndog is \u201cimproper disposal of food waste in an around of the public institutions\u201d. Since the dog is\na scavenging animal, any food item which is disposed in open areas shall attract the neighbouring\n\ndogs, even if the dogs are removed from such areas. These dogs will then find entry in the areas.\n\nTherefore, the concerned management and its Nodal Officer in coordination with the jurisdictional\n\nlocal/ municipal authority, shall ensure that:\n\na. Food operators/ vendors selling food in and around 100 meters of the areas shall establish\nclosed waste disposal pits/ bins to dispose of waste. The Food vendors must also ensure\n\nthat no dogs are fed near or around their food stall.\n\nb. The Local/ Municipal authorities shall"
+        }
+      ]
+    },
+    {
+      "id": "frozen-designated-shelter",
+      "question": "Who must ensure that dogs removed from institutional areas go only to designated shelters under the AWBI SOP?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "1a0e7e2717e3659c1a45962f4c1c7b89"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "1a0e7e2717e3659c1a45962f4c1c7b89",
+          "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+          "document_title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+          "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+          "page": 6,
+          "start": 0,
+          "end": 1029,
+          "text_sha256": "2175dc824654a9eeb5349a7f97cd86739b12eb2e37604dba63308fbfb9029b60",
+          "reviewed_text": "may volunteer for establishing a shelter within its premises on its own expenditure, which\nare having more than two acre of land and having a free space of at least 6000 sq ft. The\narea and number of dogs within the shelter shall be within the permissible limit as\n\nmentioned above.\n\ne. The Local/ Municipal Authorities shall ensure that the dogs removed from the areas to be\n\nsent to only the designated shelters.\n\niv. Infrastructure for Shelter and their management:\nFor sheltering of stray dogs, the Shelters shall be constructed keeping in mind of the following\nminimal infrastructure:\n\na. Fencing of at least six feet height.\n\nb. Veterinary care (may be built in consultation with the Animal Husbandry Department,\nifno veterinary hospital is available nearby). For treatment of sheltered dog, the shelter\n\nmanagement may also call mobile veterinary services through toll free number 1962.\n\nc. The routine handling and management of Dogs in the shelter should strictly follow\nhumane practices as described in the Animal Birth"
+        }
+      ]
+    },
+    {
+      "id": "frozen-licensing-bodies",
+      "question": "Which local bodies receive building-licence applications under Appendices A2 and A3 in the Goa technical-clearance procedure?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "6453618429d81ad36ea31f0be7ecfe06"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "6453618429d81ad36ea31f0be7ecfe06",
+          "document_id": "ef82dd83c82b9a960aa36195-fa20734e4d2c",
+          "document_title": "Procedure-for-Technical-Clearance.pdf",
+          "source_url": "https://tcp.goa.gov.in/wp-content/uploads/2020/10/Procedure-for-Technical-Clearance.pdf",
+          "original_sha256": "ef82dd83c82b9a960aa36195efe215bd5e72e85a54eb2b839e69b7dca6a4b233",
+          "page": 1,
+          "start": 897,
+          "end": 1681,
+          "text_sha256": "216f5280332243133700ee0354c732b5777f214d4eb2ac4faf7b0729e45aaf89",
+          "reviewed_text": "-TCP - to Town Planning Department for Technical Clearance. \nAPPENDIX A2 - to Municipal Council for Building License/Permit. \nAPPENDIX A3 - to Village Panchayat for Building License/Permit. \n3.2B. Questionnaire. \u2014 A questionnaire prescribed under these Regulations at Appendix-B1. \n3.2C1. Drawings. \u2014 Following drawings shall be submitted alongwith the application: \nIn case of building operations.\u2014 (a) A Site Plan drawn to a scale of not less than 1.00 cm. to \n5.00 m. (1:500) for plots having an area upto 4000 square meters and to a scale not less than 1.00 \ncm. to 10.00 m. (1:1000) for plots having an area more than 4000 square meters, showing \ntherein: \n(i) the boundaries and dimensions of the plot, \n(ii) North direction, \n(iii) all proposed as well as existing buildings or"
+        }
+      ]
+    },
+    {
+      "id": "frozen-planning-forms",
+      "question": "Which forms distinguish PDA development permission from TCP technical clearance in the saved Goa building regulations?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "bb353e2814795a6bf9d081f5e87abc0d",
+            "e0ea390e4eae2675631cb10ef03d60bf"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "bb353e2814795a6bf9d081f5e87abc0d",
+          "document_id": "131acd08c5377f26fb1250c5-2c2f91a1026b",
+          "document_title": "The Goa (Regulation of Land Development and Building Construction) Act, 2008 and the Goa Land Development and Building Construction Regulations, 2010",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2026/09/Regulations.pdf",
+          "original_sha256": "131acd08c5377f26fb1250c506f4067b64416b8ec6b17830510a899ab538cf6b",
+          "page": 144,
+          "start": 1635,
+          "end": 2092,
+          "text_sha256": "dbfa593d57db9a3a03a2e8810f86bf8cfd09a28b4e94992611f0c05eeb82b71e",
+          "reviewed_text": "SCHEDULES \n    \n Appendix Title \n \n  \n A1-PDA Application for development Permission u/s 44 of the G oa Town Country \nPlanning Act, 1974 (Goa Act 21 of 1975) to PDA \n A1-TCP Application for Technical clearance to TCP \n A2 Application for Building Licence to Municipal Council \n A3 Application for Building Licence to Village Panchayat \n A4 Application for recommendation for Conversion sanad to PDA or TCP \n A5 Application for Completion Order to PDA or TCP"
+        },
+        {
+          "passage_id": "e0ea390e4eae2675631cb10ef03d60bf",
+          "document_id": "cb96f51a6b080e42df14faa3-7d22ed307f5b",
+          "document_title": "Goa Land Development and Building Construction Regulations, 2010",
+          "source_url": "https://tcp.goa.gov.in/wp-content/uploads/2017/GLDBCR_2010/regulations/1011-24-SI-OG.pdf",
+          "original_sha256": "cb96f51a6b080e42df14faa32bea2b1375f00ce8378aea05703b7c0420cfc66e",
+          "page": 109,
+          "start": 0,
+          "end": 941,
+          "text_sha256": "b6cf6775fbc53530e6e4bd3f50c2d486a9a5144ce15b9e70eae875c12c59927f",
+          "reviewed_text": "OFFICIAL GAZETTE \u2014 GOVT. OF GOA\nSERIES I No. 24 9TH SEPTEMBER, 2010\n1085\n26. FORMS/SCHEDULES\nAppendix Title\nA1-PDA Application for development Permission u/s 44 of the Goa Town Country Planning\nAct 1974 (Goa Act 21 of 1975) to PDA\nA1-TCP Application for Technical clearance to TCP\nA2 Application for Building Licence to Municipal Council\nA3 Application for Building Licence to Village Panchayat\nA4 Application for recommendation for Conversion sanad to PDA or TCP\nA5 Application for Completion Order to PDA or TCP\nA6 Application for Occupancy certificate to Municipal Council or Village Panchayat\nA7 Application for Registration/Renewal of Registration.\nA8 Form of Registration Certificate\nB1 Questionnaire\nB2 Certificate of Conformity with regulations by Architect/Engineer/Structural Engineer/\n/Town Planner/Landscape Architect/Urban Designer\nB3 Structural Liability Certificate by Engineer/Structural Engineer\nB4 Affidavit by the Owner\nB5"
+        }
+      ]
+    },
+    {
+      "id": "frozen-wetland-rights",
+      "question": "Does the final Parra Lake notification transfer existing property rights to the Goa State Wetland Authority?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "64eed0b3b39365cd0a949e93c0901765"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "64eed0b3b39365cd0a949e93c0901765",
+          "document_id": "08b4d993364631705e95af70-4d7dbdf14350",
+          "document_title": "Ten final Goa wetland notifications, Gazette 9 January 2025",
+          "source_url": "https://goaprintingpress.gov.in/downloads/2425/2425-41-SI-SUG-1.pdf",
+          "original_sha256": "08b4d993364631705e95af709551fc5663e8495cbcde5556d401de5c8ad643fb",
+          "page": 35,
+          "start": 25,
+          "end": 953,
+          "text_sha256": "11cf776a1b88d32c3b6ed246b560b2622e1d3b9c560db32b6614329c62238cc4",
+          "reviewed_text": "OFFICIAL GAZETTE \u2014 GOVT. OF GOA\nSERIES I No. 41                      (SUPPLEMENT)                 9TH JANUARY, 2025\n\n  13. All the pre-existing ownership rights and privileges pertaining to identified and notified\nwetlands will be maintained. Further, no pre-existing ownership rights or property will be\ntransferred to GSWA as a part of this notification. The status quo of the existing ownership\nof the notified property will be maintained.\n\n    By order and in the name of the Governor of Goa.\n\n  Johnson B. Fernandes, Director (Environment & Climate Change).\n\n   Panaji, 1st January, 2025.\n\n                         \u2014\u2014\u2014\n\n  Schedule I: Location and Extent of Wetland and its Zone of Influence\n\n   1.1. Wetland\n\n  The said Parra Lake admeasuring an area of 2000 sq. mts., surveyed under the following Survey Nos.\n\n    Taluka/Village                      Survey No./Sub-Div. No.          Approxiamte Area in sq. mts.\n   Bardez/"
+        }
+      ]
+    }
+  ]
+}
