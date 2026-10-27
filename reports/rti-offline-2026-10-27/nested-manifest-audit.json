@@ -1,0 +1,11 @@
+{
+  "accepted_snapshot_restored": true,
+  "historical_package_allowlist_mismatches": [
+    {
+      "path": ".research-index/generations/20261027T065155-law-5bc5619b/zvec/3/embedding.index.1.proxima",
+      "package_manifest_sha256": "8696f35db49d3ed73c0ab7c2650c5e22ca662945e1dd4853c2e314eb924af0ef",
+      "accepted_snapshot_sha256": "4c8c86b4cf9768ef21d237201218e6b05369d2f91b92729ce7553a6c7c973185"
+    }
+  ],
+  "action": "Do not rewrite the accepted manifests. Future packaging needs a new allowlist after native close, and validation must run on a disposable copy."
+}

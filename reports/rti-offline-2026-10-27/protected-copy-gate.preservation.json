@@ -1,0 +1,15 @@
+{
+  "source": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-restoration-candidate/legal-package/data",
+  "source_files": 1191,
+  "source_before_sha256": "a17c95eb18ce5fe20b4baccb83718e619b27931da42bbb96a8fcaf109e0f7c2c",
+  "provider_calls": 0,
+  "usage_database_created": false,
+  "method": "Copy index and originals only; run offline evidence gate in a subprocess; hash source after child exit. Do not open the preservation source through Library/Zvec.",
+  "child_exit_code": 1,
+  "working_copy_changed_files": [
+    ".research-index/generations/20261027T065155-law-5bc5619b/zvec/3/embedding.index.1.proxima"
+  ],
+  "source_after_sha256": "a17c95eb18ce5fe20b4baccb83718e619b27931da42bbb96a8fcaf109e0f7c2c",
+  "source_unchanged_after_child_exit": true,
+  "source_changed_files": []
+}

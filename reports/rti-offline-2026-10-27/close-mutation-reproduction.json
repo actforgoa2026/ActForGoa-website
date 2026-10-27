@@ -1,0 +1,26 @@
+{
+  "version": "zvec 0.8.0",
+  "reproduction": {
+    "source": "disposable scratch copy",
+    "read_only": true,
+    "before": "4a39df4854b045f73cd9bc78bcbbf03ad52f3ca671ee18f2b4f19286ae017a56",
+    "after_open": "4a39df4854b045f73cd9bc78bcbbf03ad52f3ca671ee18f2b4f19286ae017a56",
+    "after_search": "4a39df4854b045f73cd9bc78bcbbf03ad52f3ca671ee18f2b4f19286ae017a56",
+    "after_close": "3c32f5fbc7433a93af673c58d0b2d098a5d1dbb5d7336d385b460dfe8df12129"
+  },
+  "upstream_version_tag": "v0.8.0",
+  "upstream_version_commit": "7b7532784a781e20541b4e315919e6abc6ff0ecb",
+  "upstream_main_inspected": "aed80691a84ee31ebad1caa2efa6c693f879a3f4",
+  "cause": "The interface read_only check skips its explicit flush, but cleanup still calls HNSW close; v0.8.0 ChunkBroker::close unconditionally flushes, updating the chunk timestamp and storage footer timestamp/CRC32C.",
+  "source_paths": [
+    "src/core/interface/index.cc",
+    "src/core/algorithm/hnsw/hnsw_streamer.cc",
+    "src/core/algorithm/hnsw/hnsw_streamer_entity.cc",
+    "src/core/algorithm/hnsw/hnsw_chunk.cc",
+    "src/include/zvec/core/framework/index_format.h"
+  ],
+  "original_durable_copy_overwritten": false,
+  "manifests_rebaselined": false,
+  "dependency_upgraded": false,
+  "network_scope": "Read-only public upstream source inspection for the storage incident. No corpus downloads, provider requests or deployment."
+}
