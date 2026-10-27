@@ -44,6 +44,7 @@
       ],
       "supported_text": "The supplied rule permits small drainage structures in Water Office-designated areas, subject to the structure and design requirements in Appendix C. Those detailed requirements are not included in the supplied passages.",
       "unsupported_text": "The supplied rule permits small drainage structures in Water Office-designated areas. No other conditions are given.",
+      "unsupported_variants": ["The rule permits small drainage structures in designated areas and recommends checking Appendix C for design ideas."],
       "supports": [
         {"citation_id": "permission", "field": "text", "quote": "Small drainage structures may be installed in areas designated by the Water Office."},
         {"citation_id": "design-condition", "field": "text", "quote": "Their structure and design must comply with Appendix C."}
@@ -51,7 +52,62 @@
       "review_expectation": {
         "useful_part": "State the permission with its designated-area and mandatory-design conditions.",
         "required_limit": "Appendix C is referenced but its detailed requirements are not supplied.",
-        "forbidden_change": "Omit an adjacent mandatory condition, claim no conditions exist, or invent the appendix requirements."
+        "forbidden_change": "Omit a mandatory condition, weaken must into advice or a neutral reference, claim no conditions exist, or invent appendix requirements."
+      }
+    },
+    {
+      "id": "derivation-versus-validity",
+      "question": "What does this evidence establish about the coefficient and where it is valid?",
+      "evidence": [
+        {
+          "id": "coefficient-history",
+          "text": "A 2016 study derived a calibration coefficient from sensors at Station K. A later report used that coefficient for readings at Station L."
+        }
+      ],
+      "supported_text": "The coefficient was derived from Station K sensors in 2016 and later used at Station L. The excerpt reports derivation and reuse; it does not establish validity at either station or elsewhere.",
+      "unsupported_text": "The coefficient was derived at Station K and later used at Station L, so it is valid only at Station K and cannot be used elsewhere.",
+      "unsupported_variants": [
+        "Because the later report used the coefficient at Station L, its validity at Station L is established."
+      ],
+      "supports": [
+        {
+          "citation_id": "coefficient-history",
+          "field": "text",
+          "quote": "A 2016 study derived a calibration coefficient from sensors at Station K. A later report used that coefficient for readings at Station L."
+        }
+      ],
+      "review_expectation": {
+        "useful_part": "Keep derivation and application distinct with their stated locations and date.",
+        "required_limit": "Reported use is not proof of validity or invalidity.",
+        "forbidden_change": "Infer a positive or negative geographic validity boundary from provenance or reuse."
+      }
+    },
+    {
+      "id": "table-measure-and-missing-content",
+      "question": "What does this table establish about water storage volume?",
+      "evidence": [
+        {
+          "id": "survey-table",
+          "text": "Wetland survey, 2022. District | Surveyed wetland area (km2) | Share assessed (%)\nNorth | 21 | 100\nSouth | 34 | 100"
+        }
+      ],
+      "supported_text": "The table reports surveyed wetland area in square kilometres and the percentage assessed for each district. It does not provide water storage volume. A volume estimate would require evidence not supplied here.",
+      "unsupported_text": "The 2022 table shows water storage volumes of 21 and 34 km3 for North and South.",
+      "unsupported_variants": [
+        "This excerpt is incomplete, so check the original table for the missing water storage volumes.",
+        "Both districts have 100% of their water storage capacity available."
+      ],
+      "supports": [
+        {
+          "citation_id": "survey-table",
+          "field": "text",
+          "quote": "Wetland survey, 2022. District | Surveyed wetland area (km2) | Share assessed (%)\nNorth | 21 | 100\nSouth | 34 | 100"
+        }
+      ],
+      "review_expectation": {
+        "useful_part": "Identify area and assessment share from the visible headings and units without reproducing extracted numeric table cells.",
+        "required_limit": "Storage volume is absent from the supplied table; unseen original content is unknown.",
+        "forbidden_change": "Convert area or assessment share to volume, capacity or rate, or imply the unseen original necessarily supplies that quantity."
       }
     }
   ]
