@@ -1,6 +1,7 @@
-"""Explicitly gated, one-pass Anthropic acceptance; --check never dispatches."""
+"""Explicitly gated Anthropic acceptance; planning never dispatches."""
 import argparse
-from datetime import datetime, timezone
+import asyncio
+from datetime import datetime, timezone, timedelta
 import hashlib
 import json
 import os
@@ -9,6 +10,8 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
+import uuid
 from urllib.parse import urlsplit, parse_qs
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +23,10 @@ from backend.chat import ChatRequest, prepare_answer, answer_question, MAX_PROMP
 from backend.hosting import PublicLimits
 from backend.providers import PRICES, chat_config
 from backend.usage_reconciliation import inspect_ledger
+from backend.answer_trace import final_json_capture, outgoing_request_capture
+from backend.answer_pipeline import run_answer_pipeline, PipelineFailure, pair_maximum_cost
+from backend.reconstruction import PIPELINE_VERSION, PIPELINE_SPEC, PROVIDER_DEADLINE_SECONDS
+from backend.async_anthropic import AsyncAnthropicClient
 
 
 # Only messages owned by our validators may become diagnostics. Never persist
@@ -45,49 +52,6 @@ FAILURE_CODES = {
 def failure_code(error):
     return FAILURE_CODES.get(str(error), 'unclassified_local_failure') if type(error) is ValueError else 'non_validation_failure'
 
-
-def final_json_capture(payload):
-    """Keep only bounded final answer JSON, never thinking or response metadata.
-
-    Invalid JSON and unexpected fields are represented by fixed categories.
-    The output is diagnostic, not accepted or served answer content.
-    """
-    blocks = payload.get('content')
-    if not isinstance(blocks, list):return {'capture_status': 'missing_text'}
-    texts = [b['text'] for b in blocks if isinstance(b, dict) and b.get('type') == 'text' and isinstance(b.get('text'), str)]
-    text = ''.join(texts)
-    if not text:return {'capture_status': 'missing_text'}
-    if len(text.encode()) > 65536:return {'capture_status': 'oversize_text'}
-    try:answer=json.loads(text)
-    except ValueError:return {'capture_status': 'invalid_json'}
-    if not isinstance(answer,dict) or answer.get('status') not in ('answered','insufficient_evidence'):
-        return {'capture_status':'unexpected_shape'}
-    if set(answer) == {'status','paragraph'}:
-        paragraphs=[] if answer['paragraph'] is None else [answer['paragraph']]
-        representation='native_brief'
-    elif set(answer) == {'status','paragraphs'} and isinstance(answer['paragraphs'],list) and len(answer['paragraphs'])<=16:
-        paragraphs=answer['paragraphs'];representation='paragraph_array'
-    else:return {'capture_status':'unexpected_shape'}
-    for p in paragraphs:
-        if (not isinstance(p,dict) or not isinstance(p.get('text'),str) or len(p['text']) > 12000):
-            return {'capture_status':'unexpected_shape'}
-        if set(p) == {'text','citations'}:
-            if (not isinstance(p['citations'],list) or len(p['citations']) > 20
-                    or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
-                return {'capture_status':'unexpected_shape'}
-        elif set(p) in ({'text','supports'}, {'text','primary_support','supports'}):
-            if not isinstance(p['supports'],list) or len(p['supports']) > 20:
-                return {'capture_status':'unexpected_shape'}
-            supports=p['supports']
-            if 'primary_support' in p:supports=[p['primary_support'],*supports]
-            for support in supports:
-                if (not isinstance(support,dict) or set(support) != {'citation_id','field','quote'}
-                        or any(not isinstance(support[k],str) or len(support[k]) > bound
-                               for k,bound in [('citation_id',160),('field',160),('quote',1200)])):
-                    return {'capture_status':'unexpected_shape'}
-        else:return {'capture_status':'unexpected_shape'}
-    return {'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
-            'paragraph_count':len(paragraphs),'word_counts':[len(p['text'].split()) for p in paragraphs]}
 
 
 def sha(path):
@@ -159,6 +123,15 @@ def planned_output_tokens(plan):
     return tokens
 
 
+def planned_pipeline(plan):
+    pipeline = plan.get('pipeline', 'single_pass')
+    if pipeline not in ('single_pass', PIPELINE_VERSION):
+        raise ValueError('Unknown planned answer pipeline')
+    if pipeline == PIPELINE_VERSION and plan.get('pipeline_spec') != PIPELINE_SPEC:
+        raise ValueError('Frozen pipeline spec must match the actual runtime')
+    return pipeline
+
+
 def preflight(plan, stage_name, config, *, execute=False):
     if plan.get('source_commit') != source_identity():raise ValueError('Final integrated source identity is not approved')
     day = datetime.now(timezone.utc).date().isoformat()
@@ -169,10 +142,20 @@ def preflight(plan, stage_name, config, *, execute=False):
         raise ValueError('Configured effort must match the reviewed Anthropic plan effort')
     if config.max_output_tokens != planned_output_tokens(plan):
         raise ValueError('Configured max_output_tokens must match the reviewed plan bound')
+    if config.pipeline != planned_pipeline(plan):
+        raise ValueError('Configured pipeline must match the reviewed plan pipeline')
+    two_pass = config.pipeline == PIPELINE_VERSION
+    if two_pass and (config.model, config.effort, config.max_output_tokens) != ('claude-haiku-5-5', 'low', 12000):
+        raise ValueError('Two-pass plan requires the reviewed Haiku configuration')
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')
     count = sum(p['count'] for p in stage['packets'])
-    if not 1 <= count <= stage['max_attempts'] <= 99:raise ValueError('Stage exceeds its bounded attempt plan')
+    attempts = count * (2 if two_pass else 1)
+    if two_pass:
+        if (stage.get('max_cases') != count or type(stage.get('max_cases')) is not int
+                or type(stage.get('max_attempts')) is not int or not 1 <= attempts <= stage['max_attempts'] <= 100):
+            raise ValueError('Two-pass stage must bound cases and provider attempts separately')
+    elif not 1 <= count <= stage['max_attempts'] <= 99:raise ValueError('Stage exceeds its bounded attempt plan')
     verify_packets(stage)
     root = Path(plan['data_root']).resolve()
     if any('sealed' in p.lower() or 'restoration-candidate' in p.lower() for p in root.parts):
@@ -186,81 +169,14 @@ def preflight(plan, stage_name, config, *, execute=False):
     before = inspect_ledger(ledger)
     if not before['exists'] or before != stage['expected_ledger']:
         raise ValueError('Existing canonical ledger does not match the approved baseline')
-    worst = config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)
-    if before['days'].get(day, 0)+count > 100:raise ValueError('Not enough daily attempts for this stage')
+    worst = pair_maximum_cost(config) if two_pass else config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)
+    if before['days'].get(day, 0)+attempts > 100:raise ValueError('Not enough daily attempts for this stage')
     if before['months'].get(day[:7], 0)+worst*count > 5_000_000:
         raise ValueError('Not enough monthly allowance for this bounded stage')
     return {'stage': stage, 'count': count, 'before': before, 'ledger': ledger,
-            'worst_reservation_microusd': worst*count, 'day': day}
+            'worst_reservation_microusd': worst*count, 'day': day, 'provider_attempt_ceiling': attempts,
+            'pipeline': config.pipeline}
 
-
-def outgoing_request_capture(request):
-    """Capture exact safe request bytes, never headers or generated thinking.
-
-    This is diagnostic instrumentation, not a request builder. Unknown shapes
-    fail closed without storing their body or forwarding a modified request.
-    """
-    try:
-        raw = request.content
-    except httpx.RequestNotRead:
-        return {'capture_status': 'body_unavailable'}, None
-    if len(raw) > 131072:
-        return {'capture_status': 'oversize_body'}, None
-    def unique_object(pairs):
-        result = {}
-        for key, value in pairs:
-            if key in result:raise ValueError('Duplicate field')
-            result[key] = value
-        return result
-    try:
-        text = raw.decode('utf-8')
-        body = json.loads(text, object_pairs_hook=unique_object)
-    except (UnicodeDecodeError, ValueError):
-        return {'capture_status': 'invalid_json_body'}, None
-    expected = {'model', 'max_tokens', 'system', 'messages', 'stream',
-                'service_tier', 'thinking', 'output_config'}
-    if not isinstance(body, dict) or set(body) != expected:
-        return {'capture_status': 'unexpected_request_shape'}, None
-    output = body['output_config']
-    messages = body['messages']
-    if (not isinstance(body['system'], str) or not isinstance(body['model'], str)
-            or ('anthropic', body['model']) not in PRICES
-            or type(body['max_tokens']) is not int or body['max_tokens'] <= 0
-            or body['stream'] is not False or body['service_tier'] != 'standard_only'
-            or body['thinking'] != {'type': 'adaptive'}
-            or not isinstance(output, dict) or set(output) != {'effort', 'format'}
-            or not isinstance(output['format'], dict) or set(output['format']) != {'type', 'schema'}
-            or output['format']['type'] != 'json_schema' or not isinstance(output['format']['schema'], dict)
-            or not isinstance(messages, list) or not messages
-            or any(not isinstance(m, dict) or set(m) != {'role', 'content'}
-                   or m['role'] not in ('user', 'assistant') or not isinstance(m['content'], str)
-                   for m in messages)):
-        return {'capture_status': 'unexpected_request_shape'}, None
-    try:
-        reviewed_effort(body['model'], output['effort'])
-    except ValueError:
-        return {'capture_status': 'unexpected_request_shape'}, None
-    # Header values are used only to refuse accidental credential echoes. They
-    # are never persisted. Also refuse common key prefixes and credential fields.
-    secrets = [request.headers.get('x-api-key'),
-               request.headers.get('authorization', '').removeprefix('Bearer ')]
-    def strings(value):
-        if isinstance(value, str):yield value
-        elif isinstance(value, list):
-            for item in value:yield from strings(item)
-        elif isinstance(value, dict):
-            for key, item in value.items():
-                yield key
-                yield from strings(item)
-    decoded = '\n'.join(strings(body))
-    credential_field = re.compile(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:', re.I)
-    if (any(secret and secret in decoded for secret in secrets)
-            or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+', decoded)
-            or credential_field.search(decoded)
-            or credential_field.search(text.replace('\\"', '"'))):
-        return {'capture_status': 'credential_like_content'}, None
-    return {'capture_status': 'captured_request', 'body_utf8': text,
-            'body_sha256': hashlib.sha256(raw).hexdigest(), 'body_bytes': len(raw)}, body
 
 
 class UsageCapture(httpx.BaseTransport):
@@ -322,6 +238,47 @@ def accounting_matches(before, after, day, attempts, reservation):
     return after == expected
 
 
+def phase_accounting(before, after, trace, day):
+    """Reconcile exact transaction receipts, including reserved-but-unsent phases."""
+    expected=json.loads(json.dumps(before));ids=set()
+    for phase in trace.get('phases', []):
+        receipt = phase.get('reservation_receipt')
+        if receipt is None:
+            if phase.get('provider_attempts', 0):return False
+            continue
+        actual_day=receipt.get('day')
+        if not isinstance(actual_day,str) or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}',actual_day):return False
+        observed={'day_attempts':expected['days'].get(actual_day,0),
+                  'month_reserved_microusd':expected['months'].get(actual_day[:7],0)}
+        if (receipt.get('version') != 'afg-stage-reservation-v1'
+                or receipt.get('parent_id') != trace.get('parent_id') or receipt.get('phase') != phase.get('phase')
+                or receipt.get('expected_day') != day
+                or receipt.get('month') != actual_day[:7] or receipt.get('before') != observed):return False
+        if receipt.get('reserved') is True:
+            if actual_day != day or receipt.get('reason') != 'reserved':return False
+            charge = receipt.get('cost_microusd')
+            identifier = receipt.get('receipt_id')
+            if (type(charge) is not int or charge < 0 or not isinstance(identifier, str)
+                    or not re.fullmatch('[0-9a-f]{32}', identifier) or identifier in ids
+                    or phase.get('reservation_microusd') != charge):return False
+            ids.add(identifier)
+            observed = {'day_attempts': observed['day_attempts'] + 1,
+                        'month_reserved_microusd': observed['month_reserved_microusd'] + charge}
+            expected['days'][day]=observed['day_attempts']
+            expected['months'][day[:7]]=observed['month_reserved_microusd']
+        elif receipt.get('reserved') is not False or phase.get('provider_attempts', 0) or receipt.get('receipt_id') is not None:
+            return False
+        elif actual_day != day and receipt.get('reason') != 'day_mismatch':return False
+        if receipt.get('after') != observed:return False
+    return after == expected
+
+
+def enough_time_for_pair():
+    now = datetime.now(timezone.utc)
+    reset = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
+    return (reset - now).total_seconds() > PROVIDER_DEADLINE_SECONDS
+
+
 def verify_citations(library, answer, checked):
     for citation in answer['citations']:
         doc_id,generation=citation['document_id'],citation['generation']
@@ -367,9 +324,17 @@ def run_cases(library, client, capture, config, cases, context, output):
         'api_version':API_VERSION,'model':config.model,'effort':config.effort,
         'max_output_tokens':config.max_output_tokens,'before':context['before'],'cases':[],
         'originals_checked':{},'entailment_acceptance':'pending_human_review','complete':False}
+    two_pass = config.pipeline == PIPELINE_VERSION
+    if two_pass:
+        report.update(capture_version=2, pipeline=PIPELINE_VERSION, pipeline_spec=dict(PIPELINE_SPEC),
+                      provider_attempt_ceiling=context['provider_attempt_ceiling'], max_cases=context['count'])
     limits=PublicLimits(context['ledger'].parent,chats_per_day=100,monthly_usd='5')
     save(report,output)
     for case in cases:
+        started = time.monotonic()
+        if two_pass and (not enough_time_for_pair()
+                or sum(e['provider_attempts'] for e in report['cases']) + 2 > context['provider_attempt_ceiling']):
+            report['stop_reason']='No complete pair fits the remaining UTC window or frozen attempt ceiling';break
         before=inspect_ledger(context['ledger'])
         expected_previous=report['cases'][-1]['ledger_after'] if report['cases'] else context['before']
         if before != expected_previous or datetime.now(timezone.utc).date().isoformat()!=context['day']:
@@ -380,7 +345,12 @@ def run_cases(library, client, capture, config, cases, context, output):
                'provider_attempts':0,'reserved':False,'reservation_microusd':0,'ledger_before':before,
                'outgoing_request':{'capture_status':'not_dispatched'},
                'human_review':{'status':'pending','claims':[],'material_omissions':[],'reviewer':None}}
-        report['cases'].append(entry);capture.entry=entry;save(report,output)
+        report['cases'].append(entry)
+        if two_pass:
+            entry['parent_id']=uuid.uuid4().hex
+            entry['pipeline_trace']={'capture_version':2,'parent_id':entry['parent_id'],'status':'not_started','phases':[]}
+        else:capture.entry=entry
+        save(report,output)
         fatal=False
         try:
             request=ChatRequest(**{k:case[k] for k in ('question','history','answer_style','document_id','generation') if k in case})
@@ -406,12 +376,26 @@ def run_cases(library, client, capture, config, cases, context, output):
                 if not entry['required_evidence_retained']:
                     raise ValueError('Reviewed required evidence is missing before dispatch')
                 entry['prompt_sha256']=hashlib.sha256(json.dumps(prepared.messages,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
-                entry['reserved_input_tokens']=prepared.input_token_bound+INPUT_ALLOWANCE
-                entry['reserved_output_tokens']=config.max_output_tokens
-                cost=config.maximum_cost_microusd(prepared.input_token_bound)
-                if not limits.reserve_answer(cost):raise ValueError('Budget refused dispatch')
-                entry.update(reserved=True,reservation_microusd=cost);save(report,output)
-                entry['answer']=answer_question(client,config,prepared)
+                if two_pass:
+                    def observe(trace):
+                        entry['pipeline_trace']=trace
+                        entry['provider_attempts']=sum(p['provider_attempts'] for p in trace['phases'])
+                        entry['reserved_count']=sum(p.get('reservation_receipt',{}).get('reserved') is True for p in trace['phases'])
+                        entry['reserved']=entry['reserved_count']>0
+                        entry['reservation_microusd']=sum(p.get('reservation_microusd',0) for p in trace['phases'])
+                        save(report,output)
+                    # This is the exact HTTP orchestration; `client` is an owned
+                    # async-client factory, not a second acceptance implementation.
+                    result=asyncio.run(run_answer_pipeline(request,prepared,config,limits=limits,client_factory=client,
+                        observer=observe,request_started_at=started,request_id=entry['parent_id'],expected_day=context['day']))
+                    entry['answer']=result.answer
+                else:
+                    entry['reserved_input_tokens']=prepared.input_token_bound+INPUT_ALLOWANCE
+                    entry['reserved_output_tokens']=config.max_output_tokens
+                    cost=config.maximum_cost_microusd(prepared.input_token_bound)
+                    if not limits.reserve_answer(cost):raise ValueError('Budget refused dispatch')
+                    entry.update(reserved=True,reservation_microusd=cost);save(report,output)
+                    entry['answer']=answer_question(client,config,prepared)
             verify_citations(library,entry['answer'],report['originals_checked'])
             entry['mechanical_passed']=True
             entry['expected_behavior_passed']=(entry['answer']['status']=='insufficient_evidence') if entry['expected_abstention'] else entry['answer']['status']=='answered'
@@ -420,13 +404,18 @@ def run_cases(library, client, capture, config, cases, context, output):
                 for i,p in enumerate(entry['answer']['paragraphs'])]
         except BaseException as error:
             entry.update(mechanical_passed=False,error_type=type(error).__name__,error_status=getattr(error,'status_code',None),
-                         failure_code=failure_code(error))
+                         failure_code=error.code if isinstance(error,PipelineFailure) else failure_code(error))
             # No error body, raw output, key, raw thinking, or implicit retry.
             fatal=True
         finally:
             entry['ledger_after']=inspect_ledger(context['ledger'])
-            entry['accounting_matches']=accounting_matches(before,entry['ledger_after'],context['day'],int(entry['reserved']),entry['reservation_microusd'])
-            if entry['provider_attempts']:
+            entry['accounting_matches']=(phase_accounting(before,entry['ledger_after'],entry['pipeline_trace'],context['day']) if two_pass
+                else accounting_matches(before,entry['ledger_after'],context['day'],int(entry['reserved']),entry['reservation_microusd']))
+            if two_pass:
+                entry['usage_within_reservation']=all(p.get('usage_within_reservation',False)
+                    for p in entry['pipeline_trace']['phases'] if p['provider_attempts'])
+                if not entry['usage_within_reservation']:fatal=True
+            elif entry['provider_attempts']:
                 entry['usage_within_reservation']=usage_within_reservation(entry)
                 if not entry['usage_within_reservation']:fatal=True
             if not entry['accounting_matches'] or not entry.get('expected_behavior_passed',False):fatal=True
@@ -457,7 +446,8 @@ def main():
     context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
         print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'effort':config.effort,
-            'max_output_tokens':config.max_output_tokens,'max_attempts':context['count'],
+            'max_output_tokens':config.max_output_tokens,'pipeline':config.pipeline,'max_cases':context['count'],
+            'max_attempts':context['provider_attempt_ceiling'],
             'max_reservation_microusd':context['worst_reservation_microusd'],'provider_calls':0,
             'heldout_questions_parsed':False}));return
     if not args.output or args.output.exists():raise ValueError('A new output path is required')
@@ -468,9 +458,13 @@ def main():
     # Delayed until approved execution; never open any preserved index to plan.
     from backend.library import Library
     library=Library(Path(plan['data_root']))
-    capture=UsageCapture(httpx.HTTPTransport(retries=0))
-    with AnthropicClient(key,values.get('ANTHROPIC_WORKSPACE_ID'),transport=capture) as client:
-        report=run_cases(library,client,capture,config,cases,context,args.output)
+    if config.pipeline == PIPELINE_VERSION:
+        factory=lambda:AsyncAnthropicClient(key,values.get('ANTHROPIC_WORKSPACE_ID'))
+        report=run_cases(library,factory,None,config,cases,context,args.output)
+    else:
+        capture=UsageCapture(httpx.HTTPTransport(retries=0))
+        with AnthropicClient(key,values.get('ANTHROPIC_WORKSPACE_ID'),transport=capture) as client:
+            report=run_cases(library,client,capture,config,cases,context,args.output)
     if not report['complete']:raise SystemExit(1)
 
 

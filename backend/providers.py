@@ -42,6 +42,7 @@ class ChatConfig:
     route: str = 'alibaba'
     structured: bool = False
     effort: str = 'medium'
+    pipeline: str = 'single_pass'
 
     def maximum_cost_microusd(self, input_token_bound):
         if not isinstance(input_token_bound, int) or input_token_bound < 0:
@@ -61,6 +62,15 @@ class ChatConfig:
             return AnthropicClient(key, os.getenv('ANTHROPIC_WORKSPACE_ID')) if key else None
         # No SDK retries: each budget reservation covers exactly one provider attempt.
         return OpenAI(api_key=key, base_url=self.base_url, timeout=60, max_retries=0) if key else None
+
+    def async_client(self):
+        from .async_anthropic import AsyncAnthropicClient
+        if self.provider != 'anthropic' or self.pipeline != 'two_pass_v1':
+            raise ValueError('Async reconstruction requires an explicit reviewed pipeline')
+        key = os.getenv(self.key_name)
+        if not key:
+            raise ValueError('Answers are not configured')
+        return AsyncAnthropicClient(key, os.getenv('ANTHROPIC_WORKSPACE_ID'))
 
 
 def chat_config():
@@ -89,7 +99,8 @@ def chat_config():
         config = ChatConfig(provider, model,
                             'Anthropic', 'ANTHROPIC_API_KEY', 'https://api.anthropic.com/v1',
                             max_output_tokens=12000 if model == 'claude-haiku-5-5' else 9000,
-                            route='anthropic', structured=True, effort=effort)
+                            route='anthropic', structured=True, effort=effort,
+                            pipeline=os.getenv('ANTHROPIC_ANSWER_PIPELINE', 'single_pass'))
     elif provider == 'openai':
         config = ChatConfig(provider, os.getenv('OPENAI_CHAT_MODEL', 'gpt-5.6-luna'),
                             'OpenAI', 'OPENAI_API_KEY', 'https://api.openai.com/v1')
@@ -97,4 +108,9 @@ def chat_config():
         raise ValueError('RESEARCH_CHAT_PROVIDER must be openrouter, qwen, anthropic or openai')
     if (provider, config.model) not in PRICES:
         raise ValueError('This model needs a reviewed budget rate before it can be enabled')
+    if config.pipeline not in ('single_pass', 'two_pass_v1'):
+        raise ValueError('This answer pipeline needs a reviewed configuration')
+    if config.pipeline == 'two_pass_v1' and (provider, config.model, config.effort, config.max_output_tokens) != (
+            'anthropic', 'claude-haiku-5-5', 'low', 12000):
+        raise ValueError('Two-pass answers require explicit Haiku low with 12000 output tokens')
     return config

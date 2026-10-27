@@ -57,6 +57,7 @@ class PreparedAnswer:
     answer_style: str = 'standard'
     schema: dict | None = None
     base_instructions: str | None = None
+    request_scope: dict | None = None
 
 class AnswerCache:
     """Short-lived, bounded answer cache; no conversation history or disk storage."""
@@ -68,6 +69,9 @@ class AnswerCache:
         value=[config.provider,config.model,prepared.messages,
                [(e['id'],e.get('generation')) for e in prepared.evidence]]
         if config.provider == 'anthropic':value.extend([config.effort, config.max_output_tokens])
+        if config.pipeline != 'single_pass':
+            from .reconstruction import reconstruction_cache_identity
+            value.append(reconstruction_cache_identity(prepared, config.pipeline))
         return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 
     def get(self,key):
@@ -148,7 +152,8 @@ def prepare_answer(request, evidence, *, provider=None):
                   {'role':'user','content':json.dumps(payload,ensure_ascii=False,separators=(',',':'))}]
         size=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode('utf-8'))
         if size<=MAX_PROMPT_BYTES:
-            return PreparedAnswer(messages,selected,size+FRAMING_TOKEN_ALLOWANCE,request.answer_style,bounded_schema,base_instructions)
+            return PreparedAnswer(messages,selected,size+FRAMING_TOKEN_ALLOWANCE,request.answer_style,bounded_schema,base_instructions,
+                                  {'answer_style':request.answer_style,'document_id':request.document_id,'generation':request.generation})
         if history:
             history.pop(0)
             while history and history[0]['role']=='assistant':history.pop(0)

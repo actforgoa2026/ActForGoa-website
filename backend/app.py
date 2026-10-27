@@ -5,6 +5,7 @@ import os
 import logging
 from pathlib import Path
 import threading
+import time
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, PlainTextResponse, JSONResponse, Response
 import pymupdf
@@ -18,10 +19,13 @@ from .hosting import public_config, PublicLimits, RequestSizeLimit
 from .chat import ChatRequest, answer_question, prepare_answer, AnswerCache
 from .providers import chat_config
 from .anthropic_provider import AnthropicAPIError
+from .answer_pipeline import run_answer_pipeline, PipelineFailure, joined_native_call
+from .reconstruction import PIPELINE_VERSION, PROVIDER_DEADLINE_SECONDS
+from .request_lifecycle import RequestLifecycle
 
 load_dotenv(ROOT/'.env.local')
 
-def create_app(root=None, index_root=None, client=None):
+def create_app(root=None, index_root=None, client=None, *, async_client_factory=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
     limits=PublicLimits(Path(os.getenv('RESEARCH_USAGE_ROOT') or root/'.research-usage'),chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100')),
@@ -32,28 +36,19 @@ def create_app(root=None, index_root=None, client=None):
     async def lifespan(app):
         try:app.state.library=Library(root,index_root)
         except (FileNotFoundError, KeyError, ValueError):app.state.library=None
-        app.state.client=client or config.client()
+        if config.pipeline == PIPELINE_VERSION:
+            app.state.client = async_client_factory or (config.async_client if os.getenv(config.key_name) else None)
+        else:
+            app.state.client=client or config.client()
         yield
-        if app.state.client and client is None:app.state.client.close()
+        if config.pipeline != PIPELINE_VERSION and app.state.client and client is None:app.state.client.close()
         app.state.library=None
     app=FastAPI(title='ActForGoa research',lifespan=lifespan)
     app.add_middleware(TrustedHostMiddleware,allowed_hosts=hosts)
     app.add_middleware(RequestSizeLimit)
+    app.add_middleware(RequestLifecycle, public_origin=public_origin)
     search_slots=threading.BoundedSemaphore(4)
     chat_slots=threading.BoundedSemaphore(2)
-
-    @app.middleware('http')
-    async def local_security(request:Request,call_next):
-        origin=request.headers.get('origin')
-        if request.method not in ['GET','HEAD','OPTIONS'] and origin:
-            from urllib.parse import urlsplit
-            if (public_origin and origin!=public_origin) or (not public_origin and urlsplit(origin).hostname not in ['localhost','127.0.0.1']):
-                return JSONResponse({'detail':'This origin is not allowed to use the research service.'},status_code=403)
-        response=await call_next(request)
-        response.headers['X-Content-Type-Options']='nosniff'
-        response.headers['Referrer-Policy']='no-referrer'
-        response.headers['Cache-Control']='private, no-store'
-        return response
 
     @app.exception_handler(KeyError)
     async def missing(request,error):return JSONResponse({'detail':'Document or index version not found.'},status_code=404)
@@ -78,7 +73,7 @@ def create_app(root=None, index_root=None, client=None):
         lib=app.state.library
         return {'search_ready':lib is not None,'chat_ready':bool(lib and app.state.client),'generation':lib.generation if lib else None,
                 'stats':lib.manifest['stats'] if lib else {},'model':config.model,
-                'provider':config.provider,'provider_label':config.label,
+                'provider':config.provider,'provider_label':config.label,'answer_pipeline':config.pipeline,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 
     @app.get('/api/search')
@@ -132,7 +127,6 @@ def create_app(root=None, index_root=None, client=None):
         body='\n\n'.join(f'=== {p["label"]} ===\n'+(f'[Extraction note: {p["warning"]}]\n' if p['warning'] else '')+p['text'] for p in rows)
         return PlainTextResponse(doc['title']+'\n'+doc['url']+'\n\n'+body,headers={'Content-Disposition':f'attachment; filename="{doc_id}.txt"'})
 
-    @app.post('/api/chat')
     def chat(request:ChatRequest):
         lib=library()
         if not app.state.client:raise HTTPException(503,'Answers are not configured yet. You can still search and read the full sources.')
@@ -166,6 +160,53 @@ def create_app(root=None, index_root=None, client=None):
             logging.getLogger(__name__).warning('Answer validation failed: %s',reason)
             raise HTTPException(502,'The answer could not be verified against its citations. Try again or read the sources.') from None
         finally:chat_slots.release()
+
+    async def reconstructed_chat(request:ChatRequest, http_request:Request):
+        library()
+        if not app.state.client:raise HTTPException(503,'Answers are not configured yet. You can still search and read the full sources.')
+        if not request.question.strip():raise HTTPException(422,'Enter a question.')
+        if not chat_slots.acquire(blocking=False):raise HTTPException(429,'Two answers are already being prepared. Please try again shortly.')
+        started = http_request.state.request_started_at
+
+        async def active():
+            if await http_request.is_disconnected():
+                raise PipelineFailure('client_disconnected', {})
+            if time.monotonic() - started >= PROVIDER_DEADLINE_SECONDS:
+                raise PipelineFailure('provider_deadline', {})
+
+        try:
+            await active()
+            previous=next((m.content for m in reversed(request.history) if m.role=='user'),'')
+            query=request.question+(' '+previous[:500] if len(request.question.split())<8 else '')
+            # A cancelled request must retain ownership until native work ends.
+            evidence=await joined_native_call(lambda:retrieve(query,10,request.document_id,request.generation))
+            await active()
+            if not evidence:return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'notice':'No evidence was found. Try different terms.'}
+            prepared=prepare_answer(request,evidence,provider=config.provider)
+            cache_key=answers.key(config,prepared) if not request.history else None
+            cached=answers.get(cache_key) if cache_key else None
+            await active()
+            if cached is not None:return cached
+            result=await run_answer_pipeline(request,prepared,config,limits=limits,
+                client_factory=app.state.client,request_started_at=started,disconnected=http_request.is_disconnected)
+            await active()
+            if cache_key:answers.put(cache_key,result.answer)
+            return result.answer
+        except PipelineFailure as error:
+            logging.getLogger(__name__).warning('Answer pipeline stopped: %s',error.code)
+            if error.code in ('pair_allowance_refused','reservation_refused'):
+                raise HTTPException(429,'The answer allowance has been reached. You can still search and read the full sources.') from None
+            if error.code=='client_disconnected':
+                raise HTTPException(499,'The answer request was cancelled.') from None
+            if error.code in ('provider_deadline','provider_stage_timeout'):
+                raise HTTPException(504,'The answer took too long. Search and full documents still work.') from None
+            raise HTTPException(502,'The answer could not be verified against its citations. Try again or read the sources.') from None
+        except ValueError:
+            logging.getLogger(__name__).warning('Answer preparation failed validation')
+            raise HTTPException(502,'The answer could not be verified against its citations. Try again or read the sources.') from None
+        finally:chat_slots.release()
+
+    app.add_api_route('/api/chat', reconstructed_chat if config.pipeline == PIPELINE_VERSION else chat, methods=['POST'])
     return app
 
 app=create_app()

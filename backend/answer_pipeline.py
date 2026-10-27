@@ -1,0 +1,295 @@
+"""Shared two-phase execution for HTTP and acceptance, with no implicit retries."""
+import asyncio
+from copy import deepcopy
+from dataclasses import dataclass
+from datetime import datetime, timezone
+import hashlib
+import json
+import time
+import uuid
+
+from .anthropic_provider import API_VERSION, INPUT_ALLOWANCE, AnthropicAPIError, message_request, normalize_native_answer
+from .answer_trace import outgoing_request_capture, final_json_capture
+from .chat import GroundedAnswer, validate_answer, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
+from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_BYTES,
+    PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
+    reconstruction_message_request, normalize_reconstruction, encoded, digest)
+
+
+class PipelineFailure(Exception):
+    """Only a fixed local category is public/loggable; trace is separately owned."""
+    def __init__(self, code, trace, status_code=None):
+        self.code, self.trace, self.status_code = code, trace, status_code
+        super().__init__(code)
+
+
+@dataclass
+class PipelineResult:
+    answer: dict
+    trace: dict
+
+
+def utc_day():
+    return datetime.now(timezone.utc).date().isoformat()
+
+
+def pair_maximum_cost(config):
+    return sum(pair_maximum_costs(config))
+
+
+def pair_maximum_costs(config):
+    return [config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE),
+            config.maximum_cost_microusd(CORRECTION_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)]
+
+
+def usage_within_bound(stage):
+    usage = stage.get('reported_usage', {})
+    keys = ('input_tokens', 'output_tokens', 'cache_creation_input_tokens', 'cache_read_input_tokens')
+    if not all(type(usage.get(k)) is int and usage[k] >= 0 for k in keys):
+        return False
+    return (usage['input_tokens'] + usage['cache_creation_input_tokens'] + usage['cache_read_input_tokens']
+            <= stage['reserved_input_tokens'] and usage['output_tokens'] <= stage['reserved_output_tokens']
+            and usage['cache_creation_input_tokens'] == 0)
+
+
+async def joined_native_call(function):
+    """Do not abandon an owned non-cancellable native call on task cancellation.
+
+    This deliberately can outlive a client/deadline. It starts no provider work;
+    callers recheck disconnection and elapsed time after the worker is quiescent.
+    """
+    task = asyncio.create_task(asyncio.to_thread(function))
+    cancelled = False
+    while not task.done():
+        try:
+            await asyncio.shield(task)
+        except asyncio.CancelledError:
+            cancelled = True
+    if cancelled:
+        # Retrieve any worker exception without exposing it during cancellation.
+        if not task.cancelled():
+            task.exception()
+        raise asyncio.CancelledError()
+    return task.result()
+
+
+async def run_answer_pipeline(request, prepared, config, *, limits, client_factory,
+                              observer=None, request_started_at=None, request_id=None,
+                              expected_day=None, disconnected=None):
+    """Return only a corrected final answer; preserve every committed reservation.
+
+    Retrieval happens in its original owner before this entry point. Its elapsed
+    time counts against the provider/no-new-dispatch deadline, not a hard native
+    or total-HTTP completion promise. Observer receives safe snapshots, never
+    credentials, response reasoning or arbitrary exception text.
+    """
+    started = time.monotonic() if request_started_at is None else request_started_at
+    deadline = started + PROVIDER_DEADLINE_SECONDS
+    expected_day = expected_day or utc_day()
+    parent_id = request_id or uuid.uuid4().hex
+    original = deepcopy(prepared)
+    trace = {'capture_version': 2, 'pipeline_spec': deepcopy(PIPELINE_SPEC), 'parent_id': parent_id,
+             'expected_day': expected_day, 'status': 'not_started', 'phases': [
+                 {'phase': name, 'state': 'not_started', 'provider_attempts': 0,
+                  'outgoing_request': {'capture_status': 'not_dispatched'}}
+                 for name in ('draft', 'reconstruction')]}
+    disconnect_seen = asyncio.Event()
+    disconnect_reason = 'client_disconnected'
+    current = None
+
+    def notify():
+        trace['elapsed_seconds'] = max(0, time.monotonic() - started)
+        if observer is not None:
+            observer(deepcopy(trace))
+
+    def fail(code, status_code=None):
+        return PipelineFailure(code, deepcopy(trace), status_code)
+
+    async def available():
+        if disconnect_seen.is_set():
+            raise fail(disconnect_reason)
+        if disconnected is not None:
+            try:
+                gone = await disconnected()
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                raise fail('disconnect_check_failed') from None
+            if gone:
+                disconnect_seen.set()
+                raise fail('client_disconnected')
+        if time.monotonic() >= deadline:
+            raise fail('provider_deadline')
+        if utc_day() != expected_day:
+            raise fail('utc_day_changed')
+
+    async def run_stage(client, stage, body, input_bound, normalize):
+        nonlocal current
+        current = stage
+        stage.update(state='prepared', prepared_elapsed_seconds=time.monotonic()-started,
+                     prepared_request_sha256=digest(body),
+                     reserved_input_tokens=input_bound + INPUT_ALLOWANCE,
+                     reserved_output_tokens=config.max_output_tokens)
+        notify()
+        await available()
+        cost = config.maximum_cost_microusd(input_bound)
+        receipt = limits.reserve_stage(cost, expected_day, parent_id, stage['phase'])
+        stage['reservation_receipt'] = deepcopy(receipt)
+        if receipt.get('reserved') is not True:
+            stage['state'] = 'failed'
+            stage['failure_code'] = 'reservation_refused'
+            notify()
+            raise fail('reservation_refused')
+        stage.update(state='reserved', reservation_microusd=cost,
+                     reserved_elapsed_seconds=time.monotonic()-started)
+        notify()
+        await available()
+
+        async def on_request(actual):
+            await available()
+            if (stage['state'] != 'reserved' or stage['provider_attempts'] != 0
+                    or str(actual.url) != 'https://api.anthropic.com/v1/messages'):
+                raise fail('duplicate_or_unreserved_dispatch')
+            capture, actual_body = outgoing_request_capture(actual)
+            stage['outgoing_request'] = capture
+            if actual_body is None or actual_body != body:
+                raise fail('request_capture_mismatch')
+            stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
+                         dispatched_elapsed_seconds=time.monotonic() - started,
+                         request_shape={'model':body['model'], 'version':API_VERSION,
+                            'max_tokens':body['max_tokens'], 'service_tier':body['service_tier'],
+                            'effort':body['output_config']['effort'], 'thinking':body['thinking']['type'],
+                            'format':body['output_config']['format']['type']})
+            # Persistence is synchronous and can consume the remaining deadline
+            # or cross midnight. The request hook has not entered transport yet.
+            try:
+                notify()
+                await available()
+            except BaseException:
+                stage.update(provider_attempts=0, dispatch_status='blocked_before_transport')
+                raise
+
+        def on_response(metadata, payload=None):
+            stage.update(deepcopy(metadata))
+            stage['dispatch_status'] = 'http_response_received'
+            if payload is not None:
+                stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'])
+            notify()
+
+        phase_started = time.monotonic()
+        phase_deadline = min(deadline, phase_started + PROVIDER_STAGE_SECONDS)
+        try:
+            async with asyncio.timeout(max(0, phase_deadline - phase_started)):
+                content = await client.send(body, on_request=on_request, on_response=on_response)
+        except TimeoutError:
+            raise fail('provider_deadline' if time.monotonic() >= deadline else 'provider_stage_timeout') from None
+        await available()
+        if time.monotonic() >= phase_deadline:
+            # A misbehaving transport can suppress task cancellation and return
+            # late. It must not turn an expired stage into a successful final.
+            raise fail('provider_stage_timeout')
+        if stage['provider_attempts'] != 1 or stage.get('provider_http_status') != 200:
+            raise fail('missing_dispatch_or_response')
+        stage['usage_within_reservation'] = usage_within_bound(stage)
+        if not stage['usage_within_reservation']:
+            raise fail('usage_unverified')
+        result = normalize(content)
+        await available()
+        stage.update(state='completed', mechanical_passed=True,
+                     phase_seconds=time.monotonic() - phase_started,
+                     completed_elapsed_seconds=time.monotonic() - started)
+        notify()
+        return result
+
+    async def execute():
+        nonlocal current
+        try:
+            if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
+                    PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'low', 12000):
+                raise fail('pipeline_configuration')
+            await available()
+            trace['status'] = 'prepared'
+            trace['pair_preflight'] = limits.preflight_pair(pair_maximum_costs(config), expected_day)
+            notify()
+            if not trace['pair_preflight'].get('allowed'):
+                raise fail('pair_allowance_refused')
+            await available()
+            draft_body = message_request(config, original)
+            async with client_factory() as client:
+                def normalize_draft(content):
+                    native = normalize_native_answer(content, original)
+                    return validate_answer(GroundedAnswer.model_validate_json(native, strict=True),
+                                           original.evidence, original.answer_style)
+                draft = await run_stage(client, trace['phases'][0], draft_body, original.input_token_bound, normalize_draft)
+                trace['phases'][0]['normalized_draft'] = deepcopy(draft)
+                # Preparation cannot discard any source or retained history.
+                current = trace['phases'][1]
+                correction = prepare_reconstruction(request, original, draft)
+                correction_body = reconstruction_message_request(config, correction)
+                first_payload = json.loads(original.messages[-1]['content'])
+                next_payload = json.loads(correction.messages[-1]['content'])
+                preserved = {k:next_payload[k] for k in ('question','sources','evidence')}
+                if preserved != first_payload or correction.messages[1:-1] != original.messages[1:-1]:
+                    raise fail('evidence_identity_changed')
+                current.update(compact_draft=deepcopy(correction.compact_draft),
+                    source_equality={'draft_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
+                                     'retained_history_equal':True, 'complete_evidence_equal':True},
+                    request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256)
+                final, assembly = await run_stage(client, current, correction_body, correction.input_token_bound,
+                                                 lambda content: normalize_reconstruction(content, correction))
+                trace['assembly_offsets'] = assembly
+                await available()
+            await available()
+            trace.update(status='completed', final_answer=deepcopy(final))
+            notify()
+            return PipelineResult(final, deepcopy(trace))
+        except asyncio.CancelledError:
+            trace.pop('final_answer', None)
+            trace.update(status='cancelled', failure_code=disconnect_reason if disconnect_seen.is_set() else 'request_cancelled')
+            if current is not None and current['state'] != 'completed':
+                current.update(state='cancelled', failure_code=trace['failure_code'])
+            for stage in trace['phases']:
+                if stage['state'] == 'not_started':stage['state'] = 'skipped'
+            notify()
+            raise
+        except Exception as error:
+            trace.pop('final_answer', None)
+            code = error.code if isinstance(error, PipelineFailure) else (
+                'provider_error' if isinstance(error, AnthropicAPIError) else 'local_validation_failure')
+            trace.update(status='failed', failure_code=code)
+            if current is not None and current['state'] != 'completed':
+                current.update(state='failed', failure_code=code)
+            for stage in trace['phases']:
+                if stage['state'] == 'not_started':stage['state'] = 'skipped'
+            notify()
+            raise PipelineFailure(code, deepcopy(trace), getattr(error, 'status_code', None)) from None
+
+    worker = asyncio.create_task(execute())
+    async def watch_disconnect():
+        nonlocal disconnect_reason
+        while not worker.done():
+            try:
+                if await disconnected():
+                    disconnect_seen.set()
+                    worker.cancel()
+                    return
+            except asyncio.CancelledError:
+                raise
+            except Exception:
+                disconnect_reason = 'disconnect_check_failed'
+                disconnect_seen.set()
+                worker.cancel()
+                return
+            await asyncio.sleep(0.025)
+    watcher = asyncio.create_task(watch_disconnect()) if disconnected is not None else None
+    try:
+        return await worker
+    except asyncio.CancelledError:
+        if disconnect_seen.is_set():
+            raise PipelineFailure(disconnect_reason, deepcopy(trace)) from None
+        raise
+    finally:
+        if watcher is not None:
+            watcher.cancel()
+            try:await watcher
+            except asyncio.CancelledError:pass
