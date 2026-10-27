@@ -12,11 +12,11 @@
 .crm-context a, .crm-sources a, .crm-back, .crm-contact-links a, .crm-evidence > a, .crm-detail section > a { text-decoration: underline; }
 .crm-feedback { min-height: 24px; font-size: 14px; margin: 8px 0; }
 .crm-feedback-empty { margin: 0; }
-.crm-count { margin-left: 8px; font-size: 12px; }
+.crm-count { margin-left: 4px; font-size: 14px; font-variant-numeric: tabular-nums; }
 .crm-notice, .crm-import { padding: 20px 0; margin: 12px 0; border-block: 1px solid var(--line); }
 .crm-import h2 { font-size: 24px; }.crm-import label { display: flex; align-items: center; gap: 12px; margin: 16px 0; }
 .crm-file { display: none; }
-.crm-search { background: var(--pale); border-radius: 4px; padding: 8px; margin-bottom: 20px; }
+.crm-search { background: var(--pale); border-radius: 4px; padding: 8px; margin-bottom: 8px; }
 .crm-search:focus-within { background: var(--search-focus, #dae3cf); }
 .crm-search [data-slot="input"] { min-height: 48px; }
 .crm details > summary { cursor: pointer; min-height: 48px; padding: 12px 0; font-weight: 650; }
@@ -26,7 +26,6 @@
 .crm select { width: 100%; min-height: 48px; border: 1px solid var(--line); border-radius: 4px; background: var(--white); color: var(--green); padding: 8px 28px 8px 12px; font-size: 16px; font-weight: 400; }
 .crm select:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
 .crm input[type="checkbox"] { width: 20px; height: 20px; accent-color: var(--green); flex-shrink: 0; }
-.crm-checkbox { display: flex; gap: 10px; align-items: center; font-size: 14px; min-height: 48px; }
 .crm-result-tools { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 24px 0; font-size: 14px; }
 .crm-result-start { scroll-margin-top: 120px; }
 .crm-result-tools .crm-select { flex-direction: row; align-items: center; white-space: nowrap; font-weight: 400; }
@@ -72,3 +71,37 @@
 .crm-detail header .directory-tags { margin-top: 20px; }
 .crm-detail header .directory-photo { max-width: 680px; }
 .crm .directory-actions { margin-top: 8px; }
+
+/* CRM discovery uses the shared Arc buttons, with visible criteria and reversible choices. */
+.crm-jump { display: none; }
+.crm-search-hint { color: var(--muted); font-size: 14px; margin: 0 0 20px; }
+.crm-collections { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+.crm-collections button { width: 100%; }
+.crm-primary-filters { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin: 24px 0 16px; }
+.crm-quick-filters, .crm-active-filters { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.crm-quick-filters button[aria-pressed="true"] { background: var(--pale); border-color: var(--green); }
+.crm-active-filters { padding-top: 16px; }
+.crm-active-filters button { max-width: 100%; height: auto; min-height: 48px; padding-block: 10px; text-align: left; }
+.crm-active-filters button span { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }
+.crm-query-context { display: block; overflow-wrap: anywhere; margin-top: 4px; color: var(--muted); }
+.crm-result-tools select { font-size: 16px; }
+@media (max-width: 850px) {
+  .crm-jump { display: inline-flex; margin-top: 8px; }
+  .crm-collections { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .crm-primary-filters { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .crm-primary-filters > :first-child { grid-column: 1 / -1; }
+}
+@media (max-width: 620px) {
+  .crm-collections button { padding-inline: 10px; }
+  .crm-quick-filters button { flex: 1 1 auto; }
+  .crm-quick-filters button:last-child { flex-basis: 100%; }
+  .crm-result-tools > .crm-actions { align-items: end; flex-wrap: nowrap; gap: 12px; }
+  .crm-result-tools .crm-select { flex: 1; flex-direction: column; align-items: start; }
+  .crm-result-tools select { max-width: none; }
+}
+
+@media (max-width: 360px) {
+  .crm-collections button { padding-inline: 4px; }
+  .crm-collections .crm-count { margin-left: 0; font-size: 12px; }
+  .crm-collections button span { gap: 4px; }
+}

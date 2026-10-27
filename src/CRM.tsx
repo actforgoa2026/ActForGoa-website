@@ -1,12 +1,11 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Download, Upload } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, Upload, X, Check, ArrowDown } from 'lucide-react';
 import { Button } from './components/arc/button/button';
 import { SearchField } from './components/arc/search-field/search-field';
 import { Input } from './components/arc/input/input';
 import { Textarea } from './components/arc/textarea/textarea';
-import SegmentedControl from './components/arc/segmented-control/segmented-control';
-import { activityLabel, activityLabels, backupJSON, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, split, stages, storageKey, verification, verificationLabels, words, type CRMNote, type CRMRecord, type CRMSnapshot, type Stage, type Workspace } from './crm-model';
+import { activityLabel, activityLabels, backupJSON, collections, contactLabels, directoryFacets, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, split, stages, storageKey, verification, verificationLabels, words, type CRMNote, type CRMRecord, type CRMSnapshot, type Stage, type Workspace } from './crm-model';
 import { CRMDirectoryActions, CRMDirectoryPhoto, CRMDirectoryTags } from './CRMDirectoryInfo';
 import { crmDirectoryDetails } from './crm-directory';
 import { ListingLink } from './ListingLink';
@@ -45,8 +44,13 @@ export default function CRM() {
   const [replace, setReplace] = useState(false);
   const [importError, setImportError] = useState('');
   const [params, setParams] = useSearchParams();
+  // Router navigations can be deferred. Keep rapid control changes from reading
+  // a previous render's query and overwriting each other.
+  const latestParams = useRef(params);
+  useLayoutEffect(() => { latestParams.current = params; }, [params]);
   const { recordId } = useParams();
   useEffect(() => setFeedback(''), [recordId]);
+  const searchInput = useRef<HTMLInputElement>(null);
   const chooser = useRef<HTMLInputElement>(null);
   const resultStart = useRef<HTMLParagraphElement>(null);
   const focusNextPage = useRef(false);
@@ -67,6 +71,7 @@ export default function CRM() {
   const opportunityIds = useMemo(() => new Set(data?.opportunities.flatMap(r => split(r.related_record_ids)) || []), [data]);
   const byId = useMemo(() => new Map(data?.records.map(r => [r.record_id, r]) || []), [data]);
   const results = useMemo(() => filterRecords(data?.records || [], opportunityIds, filters, workspace), [data, opportunityIds, params, workspace]);
+  const facets = useMemo(() => directoryFacets(data?.records || [], opportunityIds, filters, workspace), [data, opportunityIds, params, workspace]);
   const selected = recordId ? byId.get(recordId) : undefined;
   const page = Math.min(Math.max(1, Math.floor(Number(params.get('page'))) || 1), Math.max(1, Math.ceil(results.length / 25)));
   useLayoutEffect(() => {
@@ -81,10 +86,30 @@ export default function CRM() {
   const query = params.toString() ? '?' + params.toString() : '';
   const recordLink = (id: string) => '/directory/' + encodeURIComponent(id) + query;
   function change(key: string, value: string, replaceHistory = false) {
-    const next = new URLSearchParams(params); value ? next.set(key, value) : next.delete(key);
+    const next = new URLSearchParams(latestParams.current); value ? next.set(key, value) : next.delete(key);
     if (key === 'page') focusNextPage.current = true;
-    if (key !== 'page') next.delete('page'); setParams(next, { replace: replaceHistory, preventScrollReset: true });
+    if (key !== 'page') next.delete('page'); latestParams.current = next; setParams(next, { replace: replaceHistory, preventScrollReset: true });
   }
+  function toggle(key: string, value: string) {
+    change(key, latestParams.current.get(key) === value ? '' : value);
+  }
+  const criteria = [
+    ['type', 'Type', Object.hasOwn(types, filters.type) ? types[filters.type] : words(filters.type)],
+    ['focus', 'Focus', Object.hasOwn(topics, filters.focus) ? topics[filters.focus] : words(filters.focus)],
+    ['location', 'Area', filters.location],
+    ['activity', 'Activity', activityLabels[filters.activity]],
+    ['verification', 'Source', verificationLabels[filters.verification as keyof typeof verificationLabels]],
+    ['contact', 'Contact', contactLabels[filters.contact as keyof typeof contactLabels]],
+    ['stage', 'Outreach', stages[filters.stage as Stage]],
+    ['due', 'Follow-up', filters.due ? 'Due in Goa time' : ''],
+  ].filter(([, , value]) => value);
+  function clearFilters() {
+    const next = new URLSearchParams(latestParams.current);
+    for (const key of ['type', 'focus', 'location', 'activity', 'verification', 'contact', 'stage', 'due']) next.delete(key);
+    next.delete('page'); latestParams.current = next; setParams(next, { preventScrollReset: true });
+    searchInput.current?.focus({ preventScroll: true });
+  }
+  const counted = (options: Record<string, string>, counts: Record<string, number>) => Object.fromEntries(Object.entries(options).map(([value, label]) => [value, `${label} (${(counts[value] || 0).toLocaleString('en-IN')})`]));
   function save(id: string, update: Partial<CRMNote>) {
     setFeedback('');
     try {
@@ -129,27 +154,40 @@ export default function CRM() {
       <Link className="crm-back" to={'/directory' + query}><ArrowLeft size={17} aria-hidden="true" />Back to results</Link>
       {selected ? <RecordDetail key={selected.record_id} record={selected} note={workspace[selected.record_id] || emptyNote(selected)} save={save} byId={byId} recordLink={recordLink} opportunities={data.opportunities.filter(o => split(o.related_record_ids).includes(selected.record_id))} /> : <section className="crm-empty"><h2>Record not found</h2><p>This record isn’t in the current research snapshot. Return to the directory to search again.</p></section>}
     </> : <>
-      <div className="crm-search"><SearchField label="Search CRM" placeholder="Search names, work, villages or contacts" value={filters.q} onValueChange={value => change('q', value, true)} /></div>
-      <SegmentedControl label="Directory collection" value={filters.collection} onValueChange={value => { const next = new URLSearchParams(); if (filters.q) next.set('q', filters.q); next.set('collection', value); setParams(next, { preventScrollReset: true }); }} options={[{ value: 'community', label: 'Community', accessory: <span className="crm-count">{data.records.filter(r => r.collection === 'community').length.toLocaleString('en-IN')}</span> }, { value: 'government', label: 'Government', accessory: <span className="crm-count">{data.records.filter(r => r.collection === 'government').length.toLocaleString('en-IN')}</span> }, { value: 'opportunities', label: 'Participation', accessory: <span className="crm-count">{opportunityIds.size}</span> }, { value: 'all', label: 'All records', accessory: <span className="crm-count">{data.records.length.toLocaleString('en-IN')}</span> }]} />
-      {filters.collection === 'opportunities' && <p className="crm-context">Participation routes include enquiries, courses and past intakes. Check each record’s dates and availability.</p>}
-      <details className="crm-filters"><summary>Filters{Object.entries(filters).filter(([k,v]) => !['q','collection','sort'].includes(k) && v).length > 0 ? ' · Active' : ''}</summary><div className="crm-filter-grid">
-        <Select label="Record type" value={filters.type} onChange={v => change('type', v)} options={types} all="All types" />
-        <Select label="Focus area" value={filters.focus} onChange={v => change('focus', v)} options={topics} all="All focus areas" />
+      <div className="crm-search"><SearchField ref={searchInput} label="Search CRM" value={filters.q} onValueChange={value => change('q', value, true)} placeholder="Search a name, place, area of work or contact" aria-describedby="crm-search-hint" /></div>
+      <p id="crm-search-hint" className="crm-search-hint">Use a few words, such as “waste Panaji”. Counts update as you filter.</p>
+      <div className="crm-collections" role="group" aria-label="Directory collection">
+        {Object.entries(collections).map(([value, label]) => <Button key={value} variant={filters.collection === value ? 'primary' : 'secondary'} size="lg" aria-pressed={filters.collection === value} onClick={() => change('collection', value)}>{label}<span className="crm-count">{(facets.collection[value] || 0).toLocaleString('en-IN')}</span></Button>)}
+      </div>
+      <Button className="crm-jump" variant="ghost" onClick={() => { resultStart.current?.focus({ preventScroll: true }); resultStart.current?.scrollIntoView({ block: 'start' }); }}>View {results.length.toLocaleString('en-IN')} {results.length === 1 ? 'record' : 'records'}<ArrowDown size={16} aria-hidden="true" /></Button>
+      {filters.collection === 'opportunities'  && <p className="crm-context">Participation routes include enquiries, courses and past intakes. Check each record’s dates and availability.</p>}
+      <div className="crm-primary-filters">
+        <Select label="Area of work" value={filters.focus} onChange={v => change('focus', v)} options={counted(topics, facets.focus)} all={`All areas of work (${facets.focus[''] || 0})`} />
         <Input label="Village or area" value={filters.location} placeholder="e.g. Canacona" onInput={e => change('location', e.currentTarget.value, true)} />
+        <Select label="Record type" value={filters.type} onChange={v => change('type', v)} options={counted(types, facets.type)} all={`All types (${facets.type[''] || 0})`} />
+      </div>
+      <div className="crm-quick-filters" role="group" aria-label="Quick filters">
+        {(['phone', 'email'] as const).map(value => <Button key={value} variant="secondary" size="lg" aria-pressed={filters.contact === value} onClick={() => toggle('contact', value)}>{filters.contact === value && <Check size={16} aria-hidden="true" />}{contactLabels[value]}<span className="crm-count">{(facets.contact[value] || 0).toLocaleString('en-IN')}</span></Button>)}
+        <Button variant="secondary" size="lg" aria-pressed={filters.due} onClick={() => toggle('due', '1')}>{filters.due && <Check size={16} aria-hidden="true" />}Follow-up due<span className="crm-count">{(facets.due['1'] || 0).toLocaleString('en-IN')}</span></Button>
+      </div>
+      <details className="crm-filters"><summary>More filters{[filters.activity, filters.verification, filters.contact === 'missing', filters.stage].filter(Boolean).length ? ' · Active' : ''}</summary><div className="crm-filter-grid">
         <Select label="Activity evidence" value={filters.activity} onChange={v => change('activity', v)} options={activityLabels} all="Any activity status" />
         <Select label="Source verification" value={filters.verification} onChange={v => change('verification', v)} options={verificationLabels} all="Any verification status" />
-        <Select label="Contact availability" value={filters.contact} onChange={v => change('contact', v)} options={{ phone: 'Has a phone', email: 'Has an email', missing: 'No phone or email' }} all="Any contact availability" />
+        <Select label="Contact availability" value={filters.contact} onChange={v => change('contact', v)} options={contactLabels} all="Any contact availability" />
         <Select label="Outreach stage" value={filters.stage} onChange={v => change('stage', v)} options={stages} all="All stages" />
-        <label className="crm-checkbox"><input type="checkbox" checked={filters.due} onChange={e => change('due', e.target.checked ? '1' : '')} />Follow-up due (Goa time)</label>
-      </div><Button variant="ghost" onClick={() => setParams(filters.collection === 'community' ? {} : { collection: filters.collection }, { preventScrollReset: true })}>Clear search and filters</Button></details>
-      <div className="crm-result-tools"><p ref={resultStart} tabIndex={-1} className="crm-result-start" role="status"><strong>{results.length.toLocaleString('en-IN')} records</strong>{results.length > 0 && <span> · Showing {(page - 1) * 25 + 1}–{Math.min(page * 25, results.length)}</span>}</p><div className="crm-actions"><Select label="Sort by" value={filters.sort} onChange={v => change('sort', v)} options={{ name: 'Name', activity: 'Latest evidence date', followup: 'Follow-up date' }} /><Button variant="ghost" disabled={!results.length} onClick={() => download('actforgoa-filtered-contacts.csv', exportCSV(results, workspace), 'text/csv;charset=utf-8')}>Export results</Button></div></div>
+      </div></details>
+      {criteria.length > 0 && <div className="crm-active-filters" role="group" aria-label="Active filters">
+        {criteria.map(([key, label, value]) => <Button key={key} variant="secondary" aria-label={`Remove ${label.toLowerCase()} filter: ${value}`} onClick={() => { change(key, ''); searchInput.current?.focus({ preventScroll: true }); }}>{label}: {value}<X size={16} aria-hidden="true" /></Button>)}
+        <Button variant="ghost" onClick={clearFilters}>Clear filters</Button>
+      </div>}
+      <div className="crm-result-tools"><p ref={resultStart} tabIndex={-1} className="crm-result-start" role="status"><strong>{results.length.toLocaleString('en-IN')} {results.length === 1 ? 'record' : 'records'}</strong>{results.length > 0 && <span> · Showing {(page - 1) * 25 + 1}–{Math.min(page * 25, results.length)}</span>}{filters.q.trim() && <span className="crm-query-context">Matching “{filters.q.trim()}” in {collections[filters.collection as keyof typeof collections].toLowerCase()}</span>}</p><div className="crm-actions"><Select label="Sort by" value={filters.sort} onChange={v => change('sort', v)} options={{ relevance: 'Best match', name: 'Name', activity: 'Latest evidence date', followup: 'Follow-up date' }} /><Button variant="ghost" disabled={!results.length} onClick={() => download('actforgoa-filtered-contacts.csv', exportCSV(results, workspace), 'text/csv;charset=utf-8')}>Export results</Button></div></div>
       {shown.length ? <table className="crm-table"><thead><tr><th>People & organisations</th><th>Activity & verification</th><th>Public contact</th><th>Your next step</th></tr></thead><tbody>{shown.map(r => {
         const note = workspace[r.record_id] || emptyNote(r);
         return <tr key={r.record_id}><td><CRMDirectoryPhoto record={r} href={recordLink(r.record_id)} /><CRMDirectoryTags record={r} /><span className="crm-meta">{words(r.record_type)}{r.goa_location && ' · ' + r.goa_location}</span><Link className="crm-name" to={recordLink(r.record_id)}>{r.name}<ArrowRight size={18} aria-hidden="true" /></Link><p className="crm-summary">{r.summary}</p>{crmDirectoryDetails(r)?.address && <p className="crm-context">{crmDirectoryDetails(r)!.address}</p>}<CRMDirectoryActions record={r} /></td>
           <td><span className="crm-mobile-label">Activity & verification</span><strong>{activityLabel(r)}</strong>{r.activity_evidence_date && <span className="crm-meta">Evidence: {r.activity_evidence_date}</span>}<span className="crm-verification">{verificationLabels[verification(r)]}</span></td>
           <td><span className="crm-mobile-label">Public contact</span>{r.activity_status === 'deceased_historical_record' ? <span>Historical record</span> : <><span>{r.public_phone ? 'Phone listed' : 'No phone listed'}</span><span>{r.public_email ? 'Email listed' : 'No email listed'}</span></>}<span className="crm-meta">{r.public_phone || r.public_email ? 'Contact delivery untested' : 'See referral routes'}</span></td>
           <td><span className="crm-mobile-label">Your next step</span><span>{stages[note.stage]}</span>{note.followUp && <span className={isDue(note) ? 'crm-due' : 'crm-meta'}>{isDue(note) ? 'Due' : 'Follow up'} {note.followUp}</span>}</td></tr>;
-      })}</tbody></table> : <section className="crm-empty"><h2>No matching records</h2><p>Try a different name or village, or clear your filters.</p><Button variant="secondary" onClick={() => setParams({})}>Reset directory</Button></section>}
+      })}</tbody></table> : <section className="crm-empty"><h2>No matching records</h2><p>Try a shorter name or a different place. You can remove filters without losing your search.</p><div className="crm-actions">{criteria.length > 0 && <Button variant="secondary" size="lg" onClick={clearFilters}>Clear filters</Button>}{filters.collection !== 'all' && (facets.collection.all || 0) > 0 && <Button variant="secondary" size="lg" onClick={() => change('collection', 'all')}>Search all records ({facets.collection.all})</Button>}{filters.q && <Button variant="secondary" size="lg" onClick={() => { change('q', ''); searchInput.current?.focus({ preventScroll: true }); }}>Clear search</Button>}</div></section>}
       <nav className="crm-pagination" aria-label="CRM result pages"><Button variant="secondary" disabled={page <= 1} onClick={() => change('page', String(page - 1))}>Previous</Button><span>Page {page} of {Math.max(1, Math.ceil(results.length / 25))}</span><Button variant="secondary" disabled={page * 25 >= results.length} onClick={() => change('page', String(page + 1))}>Next</Button></nav>
       <p className="crm-context">A listing is not proof of current service or willingness to collaborate. <Link to="/directory/archive">Browse the original site directory</Link>.</p>
     </>}
