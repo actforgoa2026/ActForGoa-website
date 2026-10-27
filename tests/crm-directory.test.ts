@@ -127,7 +127,21 @@ test('recovered links distinguish official sites from related references', async
   assert.equal(websiteEvidence(election, 'goa-f8c3a402e1c0').kind, 'reference');
   assert.equal(directoryWebsite('https://sec.goa.gov.in/new-results/', 'goa-f8c3a402e1c0'), 'https://sec.goa.gov.in/new-results/');
   assert.equal(directoryWebsite('https://www.asigoacircle.gov.in', 'goa-bab2a38177ae'), 'https://ccari.res.in/');
-  assert.equal(directoryWebsite('https://www.asigoacircle.gov.in', 'goa-2e90623e662e'), 'https://www.asigoacircle.gov.in');
+  assert.equal(directoryWebsite('https://www.asigoacircle.gov.in', 'goa-2e90623e662e'), 'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI=');
   assert.equal(directoryWebsite('http://goasacs.nic.in', 'goa-bb1b92ba4e69'), 'https://goasacs.goa.gov.in/');
   assert.equal(websiteEvidence('https://goaspcb.gov.in/').status, 'intermittent');
+});
+
+
+test('remaining link recovery preserves source identity and offers a fallback for intermittent access', async () => {
+  const {directoryWebsite, websiteEvidence} = await import('../src/directory-quality');
+  const board = websiteEvidence('https://goaspcb.gov.in/', 'goa-1e80169ac63c');
+  assert.equal(board.status, 'intermittent');
+  assert.equal(board.reference_url, 'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE3');
+  assert.equal(websiteEvidence('https://another.example/', 'goa-1e80169ac63c').reference_url, undefined);
+  assert.equal(directoryWebsite('https://www.gpb.nic.in', 'goa-64e8456a16a7'), 'https://gpb.goa.gov.in/');
+  assert.equal(websiteEvidence('https://www.ghrssidc.org', 'goa-171da1ccbbde').kind, 'reference');
+  assert.equal(directoryWebsite('https://www.ghrssidc.org', 'goa-171da1ccbbde'), 'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/OTg=');
+  assert.equal(websiteEvidence('https://www.scobc.goa.gov.in', 'goa-81c6560cb173').kind, 'reference');
+  assert.equal(directoryWebsite('https://www.scobc.goa.gov.in', 'goa-81c6560cb173'), 'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE4');
 });

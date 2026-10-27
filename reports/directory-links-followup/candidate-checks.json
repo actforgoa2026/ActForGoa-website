@@ -1,0 +1,136 @@
+[
+  {
+    "url": "https://www.goa.gov.in/department/goa-state-pollution-control-board/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://goaspcb.gov.in/",
+    "status": 200,
+    "final": "https://goaspcb.gov.in/",
+    "bytes": 200000
+  },
+  {
+    "url": "https://www.goaspcb.gov.in/",
+    "error": "The read operation timed out"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/department-of-archaeology/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://censusindia.gov.in/census.website/en/about/directorates",
+    "status": 200,
+    "final": "https://censusindia.gov.in/census.website/en/about/directorates",
+    "bytes": 146065
+  },
+  {
+    "url": "https://dhe.goa.gov.in/institute/getinstitut/",
+    "status": 200,
+    "final": "https://dhe.goa.gov.in/institute/getinstitut/",
+    "bytes": 167677
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-handicrafts-rural-and-small-scale-industries/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.ghrssidc.com/",
+    "status": 200,
+    "final": "https://www.ghrssidc.com/",
+    "bytes": 200000
+  },
+  {
+    "url": "https://gipard.goa.gov.in/",
+    "error": "HTTP Error 406: Not Acceptable"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-institute-of-public-administration-rural-development/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://dol.goa.gov.in/goa-konkani-akademi/",
+    "status": 200,
+    "final": "https://dol.goa.gov.in/goa-konkani-akademi/",
+    "bytes": 200000
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-rehabilitation-board/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-samagra-shiksha/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-state-sc-obc-finance-development-corporation-ltd/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://khandolacollege.edu.in/",
+    "error": "HTTP Error 406: Not Acceptable"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/government-college-khandola/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://gpb.goa.gov.in/",
+    "status": 200,
+    "final": "https://gpb.goa.gov.in/",
+    "bytes": 63458
+  },
+  {
+    "url": "https://www.goa.gov.in/department/government-polytechnic-bicholim/",
+    "status": 200,
+    "final": "https://www.goa.gov.in/department/government-polytechnic-bicholim/",
+    "bytes": 121245
+  },
+  {
+    "url": "https://konkanrailway.com/",
+    "error": "<urlopen error [SSL: UNSAFE_LEGACY_RENEGOTIATION_DISABLED] unsafe legacy renegotiation disabled (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/inspector-general-of-prisons/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://mptgoa.gov.in/",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://registration.goa.gov.in/",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://goatransport.gov.in/",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://vigilance.goa.gov.in/",
+    "error": "<urlopen error [SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI=",
+    "status": 200,
+    "final": "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI=",
+    "bytes": 35728
+  },
+  {
+    "url": "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzE0",
+    "status": 200,
+    "final": "https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzE0",
+    "bytes": 34133
+  },
+  {
+    "url": "https://www.khazansocietyofgoa.org/blank-1",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/goa-college-of-home-science/",
+    "error": "HTTP Error 503: Service Unavailable"
+  },
+  {
+    "url": "https://www.goa.gov.in/department/transport/",
+    "error": "HTTP Error 503: Service Unavailable"
+  }
+]

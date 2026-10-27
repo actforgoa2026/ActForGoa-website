@@ -31,7 +31,7 @@ function createServer() {
       return output({results});
     } catch { return {content:[{type:'text',text:'Site catalogue is temporarily unavailable. Please try again.'}],isError:true}; }
   });
-  server.registerTool('search_directory', { description:'Find public community organisations, businesses and government contacts. Extract concise subject and place keywords, omitting question filler (for example, use waste instead of Who can help with waste in Goa). Results retain source and verification details; a website_check kind of reference identifies a related reference page, not the organisation website. Contact delivery and current activity are not guaranteed.', inputSchema: querySchema, annotations }, async ({query,limit}) => {
+  server.registerTool('search_directory', { description:'Find public community organisations, businesses and government contacts. Extract concise subject and place keywords, omitting question filler (for example, use waste instead of Who can help with waste in Goa). Results retain source and verification details; a website_check kind of reference identifies a related reference page, not the organisation website; reference_url is an additional official reference when available. Contact delivery and current activity are not guaranteed.', inputSchema: querySchema, annotations }, async ({query,limit}) => {
     try {
       const data = await getJson('/data/crm.json') as CRMSnapshot;
       const filters = filtersFrom(new URLSearchParams({q:searchTerms(query),collection:'all'}));
