@@ -1,4 +1,5 @@
 import type { Language } from './language';
+import topicTranslations from './content/priority-topic-translations.json';
 
 // Draft UI copy. A local speaker should review both languages before publication.
 const translations: Record<string, { hi: string; 'gom-Deva': string }> = {
@@ -46,5 +47,7 @@ const translations: Record<string, { hi: string; 'gom-Deva': string }> = {
   'Health & wellbeing': { hi: 'स्वास्थ्य और देखभाल', 'gom-Deva': 'भलायकी आनी देखभाल' },
 };
 export function translatePriority(text: string, language: Language): string {
-  return language === 'en' ? text : translations[text]?.[language] ?? text;
+  if (language === 'en') return text;
+  const machine = topicTranslations[language === 'hi' ? 'hi' : 'gom'] as Record<string, string>;
+  return translations[text]?.[language] ?? machine[text] ?? text;
 }
