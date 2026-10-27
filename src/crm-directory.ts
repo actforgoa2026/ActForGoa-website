@@ -1,7 +1,7 @@
-import details from './content/directory-details.json';
-import mapping from './content/crm-directory-map.json';
-import type { CRMRecord } from './crm-model';
-import type { DirectoryDetails } from './types';
+import details from './content/directory-details.json' with { type: 'json' };
+import mapping from './content/crm-directory-map.json' with { type: 'json' };
+import type { CRMRecord } from './crm-model.js';
+import type { DirectoryDetails } from './types.js';
 
 const curated: Record<string, DirectoryDetails> = details;
 const sourceMap: Record<string, { catalogueId: string; source: string }> = mapping;
