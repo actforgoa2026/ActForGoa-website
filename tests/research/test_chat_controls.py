@@ -156,8 +156,10 @@ def test_prompt_retains_legal_provenance_without_internal_metadata(evidence):
           'page_heading':'7.2 ARUNACHAL PRADESH',
           'document_kind_hint':'report','guide_verification':{'status':'source_verified'}}
     prepared=prepare_answer(ChatRequest(question='What does the water policy require?'),[dict(evidence[0],**meta,page_context='Uncited rainfall was 1093 mm in July.')])
-    sent=json.loads(prepared.messages[-1]['content'])['evidence'][0]
-    assert all(sent[k]==v for k,v in meta.items())
+    payload=json.loads(prepared.messages[-1]['content'])
+    sent=payload['evidence'][0]
+    joined={**payload['sources'][sent['source']],**sent}
+    assert all(joined[k]==v for k,v in meta.items())
     assert 'raw_path' not in sent
     assert 'page_context' not in sent
     assert '1093' not in json.dumps(prepared.messages)
