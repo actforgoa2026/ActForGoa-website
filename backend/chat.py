@@ -68,6 +68,9 @@ class AnswerCache:
         value=[config.provider,config.model,prepared.messages,
                [(e['id'],e.get('generation')) for e in prepared.evidence]]
         if config.provider == 'anthropic':value.extend([config.effort, config.max_output_tokens])
+        if config.pipeline != 'single_pass':
+            from .reconstruction import reconstruction_cache_identity
+            value.append(reconstruction_cache_identity(prepared, config.pipeline))
         return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 
     def get(self,key):
