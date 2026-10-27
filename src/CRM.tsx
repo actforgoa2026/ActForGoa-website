@@ -1,3 +1,4 @@
+import { reviewPolytechnicSnapshot } from './polytechnic-directory';
 import { duplicateGroup } from './directory-quality';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
@@ -61,7 +62,7 @@ export default function CRM() {
     const controller = new AbortController(); setLoadError(false);
     fetch('/data/crm.json', { signal: controller.signal }).then(r => { if (!r.ok) throw Error(); return r.json(); }).then(value => {
       if (!Array.isArray(value.records) || !Array.isArray(value.opportunities) || !value.version) throw Error();
-      setData(value);
+      setData(reviewPolytechnicSnapshot(value));
     }).catch(e => { if (e.name !== 'AbortError') setLoadError(true); });
     return () => controller.abort();
   }, [retry]);
