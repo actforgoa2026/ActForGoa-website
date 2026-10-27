@@ -55,16 +55,16 @@ export function TopicPage({records}: {records:RecordItem[]}) {
      ? <Link className="choice-link" key={link.href} to={link.href} state={{fromCatalogue:true}}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span><ArrowRight size={24}/></Link>
      : <a className="choice-link" key={link.href} href={link.href} download={link.download || undefined}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span>{link.download ? <Download size={24}/> : <ArrowUpRight size={24}/>}</a>)}
    </div></section>}
-   {!!action.steps?.length && <section className="action-steps"><h2>How to get started</h2><ol>{action.steps.map(step=><li key={step} lang={translatePriority(step, language) === step ? "en" : language}>{translatePriority(step, language)}</li>)}</ol></section>}
+   {!!action.steps?.length && <section className="action-steps"><h2 lang={language}>{translatePriority('How to get started', language)}</h2><ol>{action.steps.map(step=><li key={step} lang={translatePriority(step, language) === step ? "en" : language}>{translatePriority(step, language)}</li>)}</ol></section>}
   </>}
   {(rankedPeople.length > 0 || !action) && <section className="topic-directory" aria-labelledby="topic-people">
-   <div className="section-heading"><h2 id="topic-people">People & organisations</h2><Link className="text-link" to={'/directory/archive?'+searchParams}>See all <ArrowRight size={18}/></Link></div>
-   {rankedPeople.length ? <div className="card-grid">{rankedPeople.slice(0,6).map(r=><RecordCard key={r.id} record={r}/>)}</div> : <p>No matching organisations yet. <Link className="text-link" to={'/directory/archive?topic='+encodeURIComponent(flow.topic)}>Browse the wider directory <ArrowRight size={18}/></Link></p>}
+   <div className="section-heading"><h2 id="topic-people" lang={language}>{translatePriority("People & organisations", language)}</h2><Link className="text-link" to={'/directory/archive?'+searchParams}><span lang={language}>{translatePriority("See all", language)}</span> <ArrowRight size={18}/></Link></div>
+   {rankedPeople.length ? <div className="card-grid">{rankedPeople.slice(0,6).map(r=><RecordCard key={r.id} record={r}/>)}</div> : <p>No matching organisations yet. <Link className="text-link" to={'/directory/archive?topic='+encodeURIComponent(flow.topic)}><span lang={language}>{translatePriority("Browse the wider directory", language)}</span> <ArrowRight size={18}/></Link></p>}
   </section>}
   {!!readingEntries.length && <section className="topic-reading" aria-labelledby="topic-reading">
-   <div className="section-heading"><h2 id="topic-reading">Guides & useful reading</h2><Link className="text-link" to={'/library?'+searchParams}>See all guides <ArrowRight size={18}/></Link></div>
+   <div className="section-heading"><h2 id="topic-reading" lang={language}>{translatePriority("Guides & useful reading", language)}</h2><Link className="text-link" to={'/library?'+searchParams}><span lang={language}>{translatePriority("See all guides", language)}</span> <ArrowRight size={18}/></Link></div>
    <div className="card-grid">{readingEntries.map(r=><RecordCard key={r.id} record={r}/>)}</div>
   </section>}
-  <Link className="back-link" to={choiceId && parent ? '/topics/'+flow.slug+'/'+parent.id : action ? '/topics/'+flow.slug : '/'}><ArrowLeft size={18}/>{choiceId ? 'Choose a different option' : action ? 'Choose a different need' : 'Choose a different topic'}</Link>
+  <Link className="back-link" to={choiceId && parent ? '/topics/'+flow.slug+'/'+parent.id : action ? '/topics/'+flow.slug : '/'}><ArrowLeft size={18}/><span lang={language}>{translatePriority(choiceId ? 'Choose a different option' : action ? 'Choose a different need' : 'Choose a different topic', language)}</span></Link>
  </main>;
 }

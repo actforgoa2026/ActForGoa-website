@@ -94,7 +94,7 @@ const physical = (visualDuration: number, bounce: number): Transition => {
 const GROW = physical(.44, 0), SHRINK = physical(.34, 0), GLIDE = physical(.3, 0), SLIDE = physical(.4, 0);
 const HOVER_INTENT = 70, LEAVE_GRACE = 180, TRAVEL = 36;
 /** Matches the container query in site-header.module.css. */
-const COLLAPSE_BELOW = 1280;
+const COLLAPSE_BELOW = 1400;
 
 /** Panel content slides in from the side of the newly opened item; opening from closed drops in from the bar. */
 const faceVariants: Variants = {

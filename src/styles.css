@@ -1567,3 +1567,6 @@ a.button.green {
 .language-switcher { max-width: 190px; min-height: 44px; border: 1px solid var(--choice-border); border-radius: 4px; background: var(--paper); color: var(--green); padding: 0 8px; font: inherit; font-size: 14px; cursor: pointer; }
 .language-switcher:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .translation-notice { padding: 12px max(24px, calc((100% - 1200px) / 2)); background: #edf3e9; color: #203b2c; font-size: 14px; line-height: 1.5; }
+
+.language-control { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.language-control-label { font-size: 12px; line-height: 1.4; white-space: nowrap; }

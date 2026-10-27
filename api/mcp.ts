@@ -6,6 +6,7 @@ import { publicCatalogue } from '../src/public-record.js';
 import { directoryMatches, directoryWebsite, searchTerms, siteMatches } from '../src/mcp-search.js';
 import { filterRecords, filtersFrom, type CRMRecord, type CRMSnapshot } from '../src/crm-model.js';
 import type { RecordItem } from '../src/types.js';
+import { websiteEvidence } from '../src/directory-quality.js';
 import guideRecords from '../src/content/guide-records.json' with { type: 'json' };
 
 // Public endpoints only. Never proxy arbitrary URLs supplied by a client.
@@ -34,7 +35,7 @@ function createServer() {
     try {
       const data = await getJson('/data/crm.json') as CRMSnapshot;
       const filters = filtersFrom(new URLSearchParams({q:searchTerms(query),collection:'all'}));
-      const listing = (r:CRMRecord) => ({id:r.record_id,name:r.name,type:r.record_type,summary:r.summary,location:r.goa_location,focus:r.focus_areas,phone:r.activity_status === 'deceased_historical_record' ? '' : r.public_phone,email:r.activity_status === 'deceased_historical_record' ? '' : r.public_email,website:directoryWebsite(r.website_url),source_urls:r.source_urls,contact_source_urls:r.contact_source_urls,checked_on:r.checked_on,verification:r.verification_status,activity:r.activity_status,url:`${SITE}/directory/${encodeURIComponent(r.record_id)}`});
+      const listing = (r:CRMRecord) => ({id:r.record_id,name:r.name,type:r.record_type,summary:r.summary,location:r.goa_location,focus:r.focus_areas,phone:r.activity_status === 'deceased_historical_record' ? '' : r.public_phone,email:r.activity_status === 'deceased_historical_record' ? '' : r.public_email,website:directoryWebsite(r.website_url,r.record_id),website_check:websiteEvidence(r.website_url,r.record_id),source_urls:r.source_urls,contact_source_urls:r.contact_source_urls,checked_on:r.checked_on,verification:r.verification_status,activity:r.activity_status,url:`${SITE}/directory/${encodeURIComponent(r.record_id)}`});
       const results = directoryMatches(filterRecords(data.records, new Set(), filters, {}),limit).map(({record,additional}) => ({...listing(record), ...(additional.length ? {additional_listings:additional.map(listing)} : {})}));
       return output({version:data.version,results});
     } catch { return {content:[{type:'text',text:'Directory is temporarily unavailable. Please try again.'}],isError:true}; }
