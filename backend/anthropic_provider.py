@@ -181,6 +181,37 @@ def _represented_publications(prepared):
     return publications
 
 
+def validated_unit_supports(unit, fields, contexts, publications):
+    """Shared span/context guard; publication acknowledgement remains paragraph-local."""
+    if (not isinstance(unit, dict) or set(unit) != {'text', 'primary_support', 'supports'}
+            or not isinstance(unit['primary_support'], dict) or unit['primary_support'].get('field') != 'text'
+            or not isinstance(unit['supports'], list) or not 0 <= len(unit['supports']) < MAX_SUPPORTS):
+        raise ValueError()
+    citations = []
+    text_supports = set()
+    publication_supports = set()
+    for support in [unit['primary_support'], *unit['supports']]:
+        if not isinstance(support, dict) or set(support) != {'citation_id', 'field', 'quote'}:
+            raise ValueError()
+        identifier, field, quote = (support[k] for k in ('citation_id', 'field', 'quote'))
+        if (not all(isinstance(v, str) for v in (identifier, field, quote))
+                or not 1 <= len(quote) <= MAX_QUOTE_CHARS or not quote.strip()
+                or field not in fields.get(identifier, {})
+                or ' '.join(quote.split()) not in ' '.join(fields[identifier][field].split())):
+            raise ValueError()
+        if identifier not in citations:
+            citations.append(identifier)
+        if field == 'text':
+            text_supports.add(identifier)
+        if field == 'source_publication':
+            if quote != publications.get(identifier, {}).get('label'):
+                raise ValueError()
+            publication_supports.add(publications[identifier]['source'])
+    if any(context not in text_supports for identifier in citations for context in contexts[identifier]):
+        raise ValueError()
+    return citations, publication_supports
+
+
 def normalize_native_answer(content, prepared):
     from .chat import Paragraph, citation_text
     from pydantic import ValidationError
@@ -202,32 +233,7 @@ def normalize_native_answer(content, prepared):
         publications = _represented_publications(prepared)
         paragraphs = []
         for unit in units:
-            if (not isinstance(unit, dict) or set(unit) != {'text', 'primary_support', 'supports'}
-                    or not isinstance(unit['primary_support'], dict) or unit['primary_support'].get('field') != 'text'
-                    or not isinstance(unit['supports'], list) or not 0 <= len(unit['supports']) < MAX_SUPPORTS):
-                raise ValueError()
-            citations = []
-            text_supports = set()
-            publication_supports = set()
-            for support in [unit['primary_support'], *unit['supports']]:
-                if not isinstance(support, dict) or set(support) != {'citation_id', 'field', 'quote'}:
-                    raise ValueError()
-                identifier, field, quote = (support[k] for k in ('citation_id', 'field', 'quote'))
-                if (not all(isinstance(v, str) for v in (identifier, field, quote))
-                        or not 1 <= len(quote) <= MAX_QUOTE_CHARS or not quote.strip()
-                        or field not in fields.get(identifier, {})
-                        or ' '.join(quote.split()) not in ' '.join(fields[identifier][field].split())):
-                    raise ValueError()
-                if identifier not in citations:
-                    citations.append(identifier)
-                if field == 'text':
-                    text_supports.add(identifier)
-                if field == 'source_publication':
-                    if quote != publications.get(identifier, {}).get('label'):
-                        raise ValueError()
-                    publication_supports.add(publications[identifier]['source'])
-            if any(context not in text_supports for identifier in citations for context in contexts[identifier]):
-                raise ValueError()
+            citations, publication_supports = validated_unit_supports(unit, fields, contexts, publications)
             paragraph = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
             # This checks acknowledgement of visible publication metadata only.
             # It cannot prove correct attribution, observation dates or entailment.
@@ -289,6 +295,31 @@ def message_request(config, prepared):
 
 
 
+def native_content(message, model):
+    """Validate the provider envelope and discard reasoning blocks."""
+    if (not isinstance(message, dict) or message.get('type') != 'message'
+            or message.get('role') != 'assistant' or message.get('model') != model):
+        raise ValueError('The answer service returned an unexpected response')
+    if message.get('stop_reason') != 'end_turn' or message.get('stop_details'):
+        raise ValueError('The answer was incomplete or declined')
+    blocks = message.get('content')
+    if not isinstance(blocks, list):
+        raise ValueError('No structured answer was returned')
+    texts = []
+    for block in blocks:
+        if not isinstance(block, dict):
+            raise ValueError('The answer service returned invalid content')
+        kind = block.get('type')
+        if kind == 'text' and isinstance(block.get('text'), str):
+            texts.append(block['text'])
+        elif kind not in ('thinking', 'redacted_thinking'):
+            raise ValueError('The answer service returned unsupported content')
+    if not texts or not ''.join(texts).strip():
+        raise ValueError('No structured answer was returned')
+    content = ''.join(texts)
+    return content
+
+
 class AnthropicClient:
     def __init__(self, api_key, workspace_id=None, *, transport=None):
         headers = {'Authorization': 'Bearer ' + api_key, 'anthropic-version': API_VERSION}
@@ -312,26 +343,7 @@ class AnthropicClient:
             message = response.json()
         except ValueError:
             raise ValueError('The answer service returned an invalid response') from None
-        if (not isinstance(message, dict) or message.get('type') != 'message'
-                or message.get('role') != 'assistant' or message.get('model') != config.model):
-            raise ValueError('The answer service returned an unexpected response')
-        if message.get('stop_reason') != 'end_turn' or message.get('stop_details'):
-            raise ValueError('The answer was incomplete or declined')
-        blocks = message.get('content')
-        if not isinstance(blocks, list):
-            raise ValueError('No structured answer was returned')
-        texts = []
-        for block in blocks:
-            if not isinstance(block, dict):
-                raise ValueError('The answer service returned invalid content')
-            kind = block.get('type')
-            if kind == 'text' and isinstance(block.get('text'), str):
-                texts.append(block['text'])
-            elif kind not in ('thinking', 'redacted_thinking'):
-                raise ValueError('The answer service returned unsupported content')
-        if not texts or not ''.join(texts).strip():
-            raise ValueError('No structured answer was returned')
-        content = ''.join(texts)
+        content = native_content(message, config.model)
         return normalize_native_answer(content, prepared)
 
     def close(self):
