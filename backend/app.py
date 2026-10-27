@@ -9,23 +9,27 @@ from fastapi.responses import FileResponse, PlainTextResponse, JSONResponse, Res
 import pymupdf
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from dotenv import load_dotenv
-from openai import OpenAI, APIError
+from openai import APIError
 from .embeddings import ROOT
 from .library import Library
 from .hosting import public_config, PublicLimits, RequestSizeLimit
-from .chat import ChatRequest, answer_question
+from .chat import ChatRequest, answer_question, prepare_answer, AnswerCache
+from .providers import chat_config
 
 load_dotenv(ROOT/'.env.local')
 
 def create_app(root=None, index_root=None, client=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
-    limits=PublicLimits(root/'.research-usage',chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))) if public_origin else None
+    limits=PublicLimits(root/'.research-usage',chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100')),
+                        monthly_usd=os.getenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','10'))
+    config=chat_config()
+    answers=AnswerCache()
     @asynccontextmanager
     async def lifespan(app):
         try:app.state.library=Library(root,index_root)
         except (FileNotFoundError, KeyError, ValueError):app.state.library=None
-        app.state.client=client or (OpenAI(timeout=60,max_retries=1) if os.getenv('OPENAI_API_KEY') else None)
+        app.state.client=client or config.client()
         yield
         if app.state.client and client is None:app.state.client.close()
         app.state.library=None
@@ -70,7 +74,8 @@ def create_app(root=None, index_root=None, client=None):
     def status():
         lib=app.state.library
         return {'search_ready':lib is not None,'chat_ready':bool(lib and app.state.client),'generation':lib.generation if lib else None,
-                'stats':lib.manifest['stats'] if lib else {},'model':os.getenv('OPENAI_CHAT_MODEL','gpt-5-mini'),
+                'stats':lib.manifest['stats'] if lib else {},'model':config.model,
+                'provider':config.provider,'provider_label':config.label,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 
     @app.get('/api/search')
@@ -135,12 +140,20 @@ def create_app(root=None, index_root=None, client=None):
             retrieval=request.question+(' '+previous[:500] if len(request.question.split())<8 else '')
             evidence=retrieve(retrieval,10,request.document_id,request.generation)
             if not evidence:return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'notice':'No evidence was found. Try different terms.'}
-            if limits and not limits.reserve_answer():raise HTTPException(429,'Today’s answer limit has been reached. Search and full documents are still available.')
-            return answer_question(app.state.client,os.getenv('OPENAI_CHAT_MODEL','gpt-5-mini'),request,evidence)
+            prepared=prepare_answer(request,evidence)
+            cache_key=answers.key(config,prepared) if not request.history else None
+            cached=answers.get(cache_key) if cache_key else None
+            if cached is not None:return cached
+            if not limits.reserve_answer(config.maximum_cost_microusd(prepared.input_token_bound)):
+                raise HTTPException(429,'The answer allowance has been reached. You can still search and read the full sources.')
+            answer=answer_question(app.state.client,config,prepared)
+            if cache_key:answers.put(cache_key,answer)
+            return answer
         except APIError as error:
             status=getattr(error,'status_code',None)
             detail='The answer service is unavailable. Search and full documents still work.'
             if status==401:detail='The answer service rejected its configured credential. Ask the maintainer to check it.'
+            if status==402:detail='The answer service has no available credit. Search and full documents still work.'
             if status==429:detail='The answer service has reached its usage limit. Try again later or read the sources.'
             raise HTTPException(502,detail) from None
         except ValueError:
