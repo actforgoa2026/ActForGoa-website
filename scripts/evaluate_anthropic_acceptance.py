@@ -145,7 +145,7 @@ def preflight(plan, stage_name, config, *, execute=False):
     if config.pipeline != planned_pipeline(plan):
         raise ValueError('Configured pipeline must match the reviewed plan pipeline')
     two_pass = config.pipeline == PIPELINE_VERSION
-    if two_pass and (config.model, config.effort, config.max_output_tokens) != ('claude-haiku-5-5', 'low', 12000):
+    if two_pass and (config.model, config.effort, config.max_output_tokens) != ('claude-haiku-5-5', 'medium', 12000):
         raise ValueError('Two-pass plan requires the reviewed Haiku configuration')
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')

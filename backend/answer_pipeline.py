@@ -213,7 +213,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
         nonlocal current, frozen_baseline_utf8
         try:
             if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
-                    PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'low', 12000):
+                    PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'medium', 12000):
                 raise fail('pipeline_configuration')
             await available()
             trace['status'] = 'prepared'

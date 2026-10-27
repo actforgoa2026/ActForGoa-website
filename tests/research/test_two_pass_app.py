@@ -19,8 +19,8 @@ from tests.research.span_fixtures import select_response
 def setup(tmp_path, monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
-    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','low')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v3')
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v4')
     monkeypatch.delenv('RESEARCH_PUBLIC_ORIGIN',raising=False)
     monkeypatch.setenv('RESEARCH_USAGE_ROOT',str(tmp_path/'usage'))
     monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5')
@@ -50,7 +50,7 @@ def setup(tmp_path, monkeypatch):
 def test_http_final_only_cache_styles_history_and_source_search(setup):
     app,evidence,transports,_,ledger=setup
     with TestClient(app) as client:
-        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v3'
+        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v4'
         question={'question':'What do the sources say about these gates?'}
         answer=client.post('/api/chat',json=question)
         assert answer.status_code==200 and answer.json()['paragraphs'][0]['text']=='Design must follow Appendix C.'
