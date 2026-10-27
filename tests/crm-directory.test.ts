@@ -2,12 +2,28 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { crmDirectoryDetails, crmDirectoryLinks, crmDirectoryMapUrl, crmDirectoryTags } from '../src/crm-directory';
-import { filterRecords, filtersFrom, type CRMSnapshot } from '../src/crm-model';
+import { directoryFacets, filterRecords, filtersFrom, type CRMSnapshot } from '../src/crm-model';
+import { directoryMatches } from '../src/mcp-search';
 import mapping from '../src/content/crm-directory-map.json';
 
 const snapshot: CRMSnapshot = JSON.parse(readFileSync(new URL('../public/data/crm.json', import.meta.url), 'utf8'));
 const records = snapshot.records;
 const wag = records.find(r => r.record_id === 'goa-b4193b3b40c7')!;
+
+test('website search consolidates corporation listings and repairs malformed website links', () => {
+  const search = (collection: string) => filterRecords(records, new Set(), filtersFrom(new URLSearchParams({ q: 'waste', collection })), {});
+  const all = directoryMatches(search('all'), Number.MAX_SAFE_INTEGER);
+  const corp = all.filter(({record}) => /^goa waste management corporation$/i.test(record.name));
+  assert.equal(corp.length, 1);
+  assert.equal(corp[0].additional[0].record_id, 'goa-b3f711f6b7f3');
+  const facets = directoryFacets(records, new Set(), filtersFrom(new URLSearchParams({ q: 'waste', collection: 'all' })), {}, undefined, true);
+  assert.equal(facets.collection.all, all.length);
+  assert.equal(facets.type[''], all.length);
+  assert.ok(directoryMatches(search('government'), Number.MAX_SAFE_INTEGER).some(({record}) => record.record_id === 'goa-b3f711f6b7f3'));
+  const office = records.find(r => r.record_id === 'goa-80732e1537a8')!;
+  assert.equal(crmDirectoryLinks(office).find(link => link.label === 'Website')?.url, 'https://www.dstegoa.goa.gov.in');
+  assert.ok(!crmDirectoryLinks({ ...office, website_url: 'javascript:alert(1)' }).some(link => link.label === 'Website'));
+});
 
 test('CRM enrichments join exact source identities and preserve the research snapshot', () => {
   const before = JSON.stringify(snapshot);
