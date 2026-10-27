@@ -40,7 +40,7 @@ def setup(tmp_path,monkeypatch):
         {'id':'fixture-2','question':'What structures regulate tidal water?'}]))
     stage={'approval_reference':None,'expected_ledger':acceptance.inspect_ledger(ledger/'answer-usage.sqlite'),
         'max_attempts':2,'packets':[{'path':str(packet),'sha256':acceptance.sha(packet),'count':2,'partition':'regression'}]}
-    plan={'source_commit':'reviewed-head','date_utc':'2026-10-27','generation':'fixture-generation',
+    plan={'source_commit':'reviewed-head','date_utc':'2026-10-27','generation':'fixture-generation','max_output_tokens':9000,
           'data_root':str(data),'usage_root':str(ledger),'stages':{'test':stage}}
     original=tmp_path/'original.txt';original.write_text('Gates regulate tidal water.')
     evidence={'id':'passage-1','document_id':'document-1','generation':'fixture-generation','page':1,
@@ -52,7 +52,7 @@ def setup(tmp_path,monkeypatch):
         def pages(self,*args,**kwargs):return [{'text':original.read_text()}]
         def document(self,*args):return {'page_count':1}
         def original(self,*args):return original,{'sha256':acceptance.sha(original)}
-    return plan,chat_config(),Library(),tmp_path
+    return plan,replace(chat_config(),max_output_tokens=9000),Library(),tmp_path
 
 
 def test_check_does_not_parse_independent_questions_or_initialize_ledger(setup,monkeypatch):
@@ -64,6 +64,53 @@ def test_check_does_not_parse_independent_questions_or_initialize_ledger(setup,m
     path=Path(plan['usage_root'])/'answer-usage.sqlite';path.unlink()
     with pytest.raises(ValueError,match='baseline'):acceptance.preflight(plan,'test',config)
     assert not path.exists()
+
+
+@pytest.mark.parametrize('tokens', [None, True, 9000.0, '12000', 0, 12001])
+def test_plan_output_bound_requires_explicit_reviewed_integer_before_packet_reads(setup, monkeypatch, tokens):
+    plan, config, _, _ = setup
+    plan['max_output_tokens'] = tokens
+    monkeypatch.setattr(acceptance, 'verify_packets', lambda _: pytest.fail('No artifact reads for invalid output bound'))
+    with pytest.raises(ValueError, match='explicitly select'):
+        acceptance.preflight(plan, 'test', config)
+
+
+def test_missing_output_bound_has_no_historical_default(setup):
+    plan, config, _, _ = setup
+    plan.pop('max_output_tokens')
+    with pytest.raises(ValueError, match='explicitly select'):
+        acceptance.preflight(plan, 'test', config)
+
+
+@pytest.mark.parametrize('planned, configured', [(9000, 12000), (12000, 9000)])
+def test_preflight_rejects_any_plan_config_output_mismatch(setup, planned, configured):
+    plan, config, _, _ = setup
+    plan['max_output_tokens'] = planned
+    with pytest.raises(ValueError, match='must match'):
+        acceptance.preflight(plan, 'test', replace(config, max_output_tokens=configured))
+
+
+def test_sonnet_cannot_inherit_haiku_output_increase(setup):
+    plan, config, _, _ = setup
+    plan.update(model='claude-sonnet-5-5', max_output_tokens=12000)
+    with pytest.raises(ValueError, match='explicitly select'):
+        acceptance.preflight(plan, 'test', replace(config, model=plan['model'], max_output_tokens=12000))
+
+
+@pytest.mark.parametrize('tokens, reservation', [(9000, 15848), (12000, 18848)])
+def test_check_cli_honors_explicit_legacy_and_new_bounds_without_rewriting_plan(setup, monkeypatch, capsys, tokens, reservation):
+    plan, _, _, tmp = setup
+    plan['max_output_tokens'] = tokens
+    path = tmp / 'plan.json'
+    original = json.dumps(plan).encode()
+    path.write_bytes(original)
+    monkeypatch.setattr(acceptance.sys, 'argv', ['evaluate', '--plan', str(path), '--stage', 'test'])
+    acceptance.main()
+    checked = json.loads(capsys.readouterr().out)
+    assert checked['max_output_tokens'] == tokens
+    assert checked['max_reservation_microusd'] == reservation
+    assert checked['provider_calls'] == 0 and checked['heldout_questions_parsed'] is False
+    assert path.read_bytes() == original
 
 
 @pytest.mark.parametrize('mutation,match',[
@@ -190,6 +237,15 @@ def test_high_effort_report_and_wire_identity_are_explicit(setup):
     assert report['complete'] and report['effort']=='high' and report['model']==selected.model
     assert all(c['request_shape']['effort']=='high' and c['request_shape']['thinking']=='adaptive'
                and c['request_shape']['max_tokens']==9000 and c['accounting_matches'] for c in report['cases'])
+
+
+def test_new_capacity_is_explicit_in_report_wire_and_reservation(setup):
+    plan, config, library, tmp = setup
+    plan['max_output_tokens'] = 12000
+    report, _ = execute_fixture((plan, replace(config, max_output_tokens=12000), library, tmp), response())
+    assert report['complete'] and report['max_output_tokens'] == 12000
+    assert all(entry['reserved_output_tokens'] == entry['request_shape']['max_tokens'] == 12000
+               and entry['accounting_matches'] for entry in report['cases'])
 
 
 def test_mismatched_reviewed_model_is_recorded_and_stops_without_retry(setup):

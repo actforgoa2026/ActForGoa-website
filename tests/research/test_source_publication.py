@@ -90,7 +90,7 @@ def test_dated_paraphrase_preserves_observation_year_and_maps_losslessly(style, 
     assert result['paragraphs'] == [{'text': unit['text'], 'citations': ['survey']}]
     assert prepared.evidence == evidence
     wire = message_request(chat_config(), prepared)
-    assert wire['model'] == model and wire['max_tokens'] == 9000
+    assert wire['model'] == model and wire['max_tokens'] == (12000 if model == 'claude-haiku-5-5' else 9000)
     assert wire['thinking'] == {'type': 'adaptive'}
     assert wire['output_config']['effort'] == 'medium'
     assert len(json.dumps(wire['output_config']['format']['schema'], separators=(',', ':')).encode()) <= 4096

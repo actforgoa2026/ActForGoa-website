@@ -81,7 +81,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert request.headers['anthropic-version'] == API_VERSION == '2026-10-21'
     assert request.headers['anthropic-workspace-id'] == 'wrkspc_fixture'
     assert request.extensions['timeout'] == {'connect': 10, 'read': 60, 'write': 10, 'pool': 10}
-    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 9000
+    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 12000
     assert body['system'].startswith('You answer questions about Goa')
     assert 'Every paragraphs entry' not in body['system']
     assert 'Each object has text, primary_support and supports only' in body['system']
@@ -104,7 +104,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert prepared.schema['properties']['paragraphs']['maxItems'] == 1
     assert b'private/path' not in request.content and b'fixture-only' not in request.content
     assert 'private diagnostic' not in json.dumps(result)
-    assert config.maximum_cost_microusd(26048) == 7924
+    assert config.maximum_cost_microusd(26048) == 9424
 
 
 def test_anthropic_is_opt_in_fixed_host_and_requires_reviewed_model(config, monkeypatch):
@@ -126,7 +126,7 @@ def test_sonnet_requires_explicit_selection_with_reviewed_cost_and_same_contract
     assert sonnet.maximum_cost_microusd(PRICE_TIER_INPUT_LIMIT - INPUT_ALLOWANCE) == 290000
     with pytest.raises(ValueError, match='price tier'):
         sonnet.maximum_cost_microusd(PRICE_TIER_INPUT_LIMIT - INPUT_ALLOWANCE + 1)
-    assert message_request(sonnet, prepared) == {**haiku_request, 'model': 'claude-sonnet-5-5'}
+    assert message_request(sonnet, prepared) == {**haiku_request, 'model': 'claude-sonnet-5-5', 'max_tokens': 9000}
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
             lambda _: httpx.Response(200, json=brief_message(model=sonnet.model)))) as client:
         assert answer_question(client, sonnet, prepared)['status'] == 'answered'
@@ -134,6 +134,19 @@ def test_sonnet_requires_explicit_selection_with_reviewed_cost_and_same_contract
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
             lambda _: httpx.Response(200, json=brief_message()))) as client:
         with pytest.raises(ValueError):answer_question(client, sonnet, prepared)
+
+
+def test_haiku_capacity_changes_only_wire_limit_cost_reservation_and_cache_identity(config, prepared):
+    from backend.anthropic_provider import message_request
+    historical = replace(config, max_output_tokens=9000)
+    assert config.max_output_tokens == 12000 and historical.effort == config.effort == 'medium'
+    before, after = message_request(historical, prepared), message_request(config, prepared)
+    assert after == {**before, 'max_tokens': 12000}
+    assert config.maximum_cost_microusd(prepared.input_token_bound) - historical.maximum_cost_microusd(prepared.input_token_bound) == 1500
+    assert config.maximum_cost_microusd(26048) == 9424
+    assert historical.maximum_cost_microusd(26048) == 7924
+    assert config.maximum_cost_microusd(26048) * 71 == 669104
+    assert AnswerCache.key(config, prepared) != AnswerCache.key(historical, prepared)
 
 
 def test_explicit_sonnet_high_changes_only_effort_and_separates_cached_answers(config, monkeypatch, prepared):
@@ -240,7 +253,7 @@ def test_split_text_blocks_and_abstention(config, prepared):
 
 def test_bound_covers_native_schema_and_rejects_unreviewed_tier_before_dispatch(config, prepared):
     assert 26048 + INPUT_ALLOWANCE < 100_000
-    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 14500
+    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 16000
     with pytest.raises(ValueError, match='price tier'):config.maximum_cost_microusd(100_001 - INPUT_ALLOWANCE)
     with pytest.raises(ValueError, match='schema exceeds'):native_schema({'description': 'x'*4097})
     def handle(_):raise AssertionError('Invalid bounds must prevent dispatch')
@@ -315,7 +328,7 @@ def test_native_brief_actual_prompt_and_schema_fit_reserved_allowances(config,pr
     actual=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode())
     assert actual<=24000 and actual+2048==bounded.input_token_bound
     assert len(json.dumps(body['output_config']['format']['schema'],ensure_ascii=False,separators=(',',':')).encode())<=MAX_SCHEMA_BYTES
-    assert config.maximum_cost_microusd(bounded.input_token_bound)<=7924
+    assert config.maximum_cost_microusd(bounded.input_token_bound)<=9424
     with pytest.raises(ValueError,match='Missing native answer instructions'):
         message_request(config,replace(prepared,base_instructions=None))
 
@@ -487,7 +500,7 @@ def test_standard_scope_policy_is_generic_and_keeps_provider_style_boundaries(co
         assert 'Retain entity, habitat, taxonomic, geographic and time qualifiers' in body['system']
         assert 'at most four paragraphs and 350 words; omit unrelated background' not in body['system']
         assert json.loads(body['messages'][-1]['content'])['question']==question
-        assert body['max_tokens']==9000 and body['thinking']=={'type':'adaptive'}
+        assert body['max_tokens']==12000 and body['thinking']=={'type':'adaptive'}
         assert 'without unrequested numerical examples' not in prepare_answer(request,prepared.evidence).messages[0]['content']
     assert systems[0]==systems[1]  # No question-specific branch or baked-in answer.
     assert 'without unrequested numerical examples' not in message_request(config,prepared)['system']

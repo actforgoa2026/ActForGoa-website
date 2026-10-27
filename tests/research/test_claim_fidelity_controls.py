@@ -27,7 +27,7 @@ def test_all_needed_control_evidence_reaches_both_models_unchanged(case, style, 
     assert visible['question'] == case['question']
     assert [(p['id'], p['text']) for p in visible['evidence']] == [(p['id'], p['text']) for p in evidence]
     assert prepared.evidence == evidence == case['evidence']
-    assert wire['model'] == model and wire['max_tokens'] == 9000
+    assert wire['model'] == model and wire['max_tokens'] == (12000 if model == 'claude-haiku-5-5' else 9000)
     assert wire['thinking'] == {'type': 'adaptive'} and wire['output_config']['effort'] == 'medium'
     assert len(json.dumps(wire['output_config']['format']['schema'], separators=(',', ':')).encode()) <= 4096
     assert len(json.dumps(prepared.messages, ensure_ascii=False, separators=(',', ':')).encode()) <= 24000
