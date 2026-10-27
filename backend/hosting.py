@@ -74,5 +74,6 @@ class PublicLimits:
             if (spend[0] if spend else 0)+cost_microusd>self.monthly_limit:return False
             db.execute('INSERT INTO usage VALUES (?,1) ON CONFLICT(day) DO UPDATE SET attempts=attempts+1',(today,))
             db.execute('INSERT INTO spend VALUES (?,?) ON CONFLICT(month) DO UPDATE SET reserved_microusd=reserved_microusd+excluded.reserved_microusd',(month,cost_microusd))
-            db.execute('DELETE FROM usage WHERE day<?',(today,))
+            # Preserve historical attempts for reconciliation across provider changes.
+            # Only today's row contributes to the daily allowance.
         return True

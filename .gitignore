@@ -24,6 +24,7 @@ reports/link-checks.jsonl
 
 # Private incident reports, photographs and local reviewer credentials
 .research-index/
+.research-usage/
 .research-release/
 .pytest_cache/
 corpus/raw/

@@ -24,7 +24,7 @@ load_dotenv(ROOT/'.env.local')
 def create_app(root=None, index_root=None, client=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
-    limits=PublicLimits(root/'.research-usage',chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100')),
+    limits=PublicLimits(Path(os.getenv('RESEARCH_USAGE_ROOT') or root/'.research-usage'),chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100')),
                         monthly_usd=os.getenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5'))
     config=chat_config()
     answers=AnswerCache()
