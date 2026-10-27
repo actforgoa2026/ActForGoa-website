@@ -85,13 +85,13 @@
 .sheetActions .action { height: var(--control-height-md); }
 .sheetActions .secondary { border-color: var(--border); }
 
-@container site-header (max-width: 1279px) {
+@container site-header (max-width: 1399px) {
   .inner { padding: 0 var(--space-4); }
   .nav, .wideOnly, .panel { display: none; }
   .menuButton { display: grid; }
   .header[data-variant="centered"] .bar { display: flex; }
 }
-@container site-header (min-width: 1280px) {
+@container site-header (min-width: 1400px) {
   .sheet, .scrim { display: none; }
 }
 
@@ -129,7 +129,7 @@
 .sheetInner { max-height: calc(100dvh - 81px); }
 .sheetRow { font-weight: 750; }
 .sheetLink { font-weight: 650; }
-@container site-header (max-width: 1279px) {
+@container site-header (max-width: 1399px) {
   .inner { width: calc(100% - 64px); padding: 0; }
   .actions { margin-left: auto; }
   .bar { height: 80px; }
