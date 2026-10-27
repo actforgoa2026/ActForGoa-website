@@ -1,5 +1,5 @@
-import { lexicalSearch, tokens } from '../src/search.js';
-import type { RecordItem } from '../src/types.js';
+import { lexicalSearch, tokens } from './search.js';
+import type { RecordItem } from './types.js';
 
 // Only strip conversational filler from questions; leave ordinary names and
 // keyword searches unchanged. The directory still requires all remaining terms.

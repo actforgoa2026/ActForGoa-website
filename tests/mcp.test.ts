@@ -31,7 +31,7 @@ test('remote MCP exposes public sources and returns source evidence', async () =
 });
 
 test('MCP search keeps meaningful directory terms and ranks actual RTI evidence', async () => {
- const {searchTerms, siteMatches}=await import('../api/search.ts');
+ const {searchTerms, siteMatches}=await import('../src/mcp-search.ts');
  const {publicCatalogue}=await import('../src/public-record.ts');
  const {filterRecords,filtersFrom}=await import('../src/crm-model.ts');
  const {readFileSync}=await import('node:fs');

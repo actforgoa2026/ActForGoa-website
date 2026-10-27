@@ -3,7 +3,7 @@ import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/
 import { z } from 'zod';
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import { publicCatalogue } from '../src/public-record.js';
-import { searchTerms, siteMatches } from './search.js';
+import { searchTerms, siteMatches } from '../src/mcp-search.js';
 import { filterRecords, filtersFrom, type CRMRecord, type CRMSnapshot } from '../src/crm-model.js';
 import type { RecordItem } from '../src/types.js';
 import guideRecords from '../src/content/guide-records.json' with { type: 'json' };
