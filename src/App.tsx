@@ -39,6 +39,8 @@ import {
   ExternalLink,
   ArrowLeft,
   Check,
+  Copy,
+  MessageSquare,
   X,
   FileText,
   SlidersHorizontal,
@@ -55,8 +57,9 @@ import "./topic-navigation.css";
 import "./home-hero.css";
 import { communityDescription } from "./public-record";
 import { storyContent } from "./story-content";
-import { directoryTags } from "./directory";
+import { directoryLinks, directoryTags } from "./directory";
 import { DirectoryActions, DirectoryPhoto, DirectoryTags } from "./DirectoryInfo";
+import { ListingLink } from "./ListingLink";
 import type { RecordItem } from "./types";
 import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
@@ -75,6 +78,7 @@ import { Textarea } from "./components/arc/textarea/textarea";
 import SegmentedControl from "./components/arc/segmented-control/segmented-control";
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 const CRM = lazy(() => import("./CRM"));
+const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
@@ -225,6 +229,7 @@ function Footer() {
           <a href="https://actforgoa.org/privacy-policy/">Privacy</a>
           <a href="https://actforgoa.org/terms-and-conditions/">Terms</a>
           <Link to="/about#sources">About this guide</Link>
+          <Link to="/mcp">MCP for AI assistants</Link>
         </div>
       </div>
     </footer>
@@ -814,6 +819,7 @@ function Detail({ records }: { records: RecordItem[] }) {
   const [copied, setCopied] = useState(false);
   if (id?.startsWith("guide-")) return <GuideRoute />;
   if (!r) return <NotFound />;
+  const listing = r.kind === "organisation" || r.kind === "contact";
   const related = records
     .filter(
       (x) =>
@@ -827,7 +833,7 @@ function Detail({ records }: { records: RecordItem[] }) {
     (l) => !l.url.startsWith("mailto:") && !l.url.startsWith("tel:"),
   );
   return (
-    <main className="detail shell">
+    <main className={`detail shell${listing ? " listing-detail" : ""}`}>
       {location.state?.fromCatalogue ? (
         <Button
           variant="ghost"
@@ -948,8 +954,8 @@ function Detail({ records }: { records: RecordItem[] }) {
           )}
         </article>
         <aside className="detail-aside">
-          {r.directory && <section><h2>Explore & connect</h2><DirectoryActions record={r} full /></section>}
-          {(r.emails.length > 0 ||
+          {listing && (r.emails.length > 0 || r.locations.length > 0 || directoryLinks(r).length > 0) && <section><h2>Contact & location</h2><DirectoryActions record={r} full /><small>Published contact information, not a confirmation of current availability. See the original entry for full context.</small></section>}
+          {!listing && (r.emails.length > 0 ||
             r.locations.length > 0) && (
             <section>
               <h2>Get in touch</h2>
@@ -975,16 +981,16 @@ function Detail({ records }: { records: RecordItem[] }) {
             <h2>Keep the source close.</h2>
             <p>Read this entry in its original context.</p>
             {r.sourceStatus !== null && r.sourceStatus >= 400 && <p>The original page returned an error when archived. Use the public directory record below where available.</p>}
-            <a
+            {listing ? <ListingLink href={r.source} kind="source">Original ActForGoa page</ListingLink> : <a
               className="text-link"
               href={r.source}
               target="_blank"
               rel="noreferrer"
             >
               Original ActForGoa page <ArrowUpRight size={16} />
-            </a>
+            </a>}
             {r.sourceApi && (
-              <a
+              listing ? <ListingLink href={r.sourceApi} kind="source">Public directory record</ListingLink> : <a
                 className="subtle-link"
                 href={r.sourceApi}
                 target="_blank"
@@ -993,10 +999,10 @@ function Detail({ records }: { records: RecordItem[] }) {
                 Public directory record <ExternalLink size={14} />
               </a>
             )}
-            {r.directory?.sources.filter(source => source !== r.source).map(source => <a className="subtle-link" key={source} href={source} target="_blank" rel="noreferrer">{new URL(source).hostname.replace(/^www\./, "")}<ExternalLink size={14} /></a>)}
+            {r.directory?.sources.filter(source => source !== r.source && source !== r.sourceApi).map(source => <ListingLink key={source} href={source} kind="source">{new URL(source).hostname.replace(/^www\./, "")}</ListingLink>)}
             <Button
               variant="ghost"
-              className="subtle-link"
+              className={`subtle-link${listing ? " listing-copy-link" : ""}`}
               onClick={async () => {
                 try {
                   await navigator.clipboard.writeText(window.location.href);
@@ -1006,7 +1012,7 @@ function Detail({ records }: { records: RecordItem[] }) {
                 }
               }}
             >
-              {copied ? <Check size={15} /> : <ExternalLink size={15} />}{" "}
+              {copied ? <Check size={18} strokeWidth={1.7} aria-hidden="true" /> : <Copy size={18} strokeWidth={1.7} aria-hidden="true" />}{" "}
               {copied ? "Link copied" : "Copy a link to this entry"}
             </Button>
           </section>
@@ -1014,10 +1020,10 @@ function Detail({ records }: { records: RecordItem[] }) {
             <h2>Know something we should?</h2>
             <p>Help keep this knowledge useful.</p>
             <Link
-              className="text-link"
+              className={listing ? "listing-link" : "text-link"}
               to={"/contact?entry=" + encodeURIComponent(r.title)}
             >
-              Suggest a correction <ArrowRight size={16} />
+              {listing && <MessageSquare size={18} strokeWidth={1.7} aria-hidden="true" />}Suggest a correction {!listing && <ArrowRight size={16} />}
             </Link>
           </section>
         </aside>
@@ -1356,6 +1362,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
+            <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/" element={<Home records={records} />} />
