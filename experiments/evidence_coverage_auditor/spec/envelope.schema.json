@@ -1,0 +1,1213 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ActForGoa offline evidence coverage v2 envelope",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "afg-evidence-coverage-v2"
+    },
+    "request": {
+      "$ref": "#/$defs/Request"
+    },
+    "evidence_package": {
+      "$ref": "#/$defs/EvidencePackage"
+    },
+    "candidate": {
+      "$ref": "#/$defs/Candidate"
+    }
+  },
+  "required": [
+    "contract_version",
+    "request",
+    "evidence_package",
+    "candidate"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "TurnId": {
+      "type": "string",
+      "pattern": "^turn:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "SourceId": {
+      "type": "string",
+      "pattern": "^src:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "DocumentId": {
+      "type": "string",
+      "pattern": "^doc:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "GenerationId": {
+      "type": "string",
+      "pattern": "^gen:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "SegmentId": {
+      "type": "string",
+      "pattern": "^seg:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "BlockId": {
+      "type": "string",
+      "pattern": "^blk:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "UnitId": {
+      "type": "string",
+      "pattern": "^unit:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "AnnotationId": {
+      "type": "string",
+      "pattern": "^ann:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "DependencyId": {
+      "type": "string",
+      "pattern": "^dep:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "OmissionId": {
+      "type": "string",
+      "pattern": "^omit:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "EventId": {
+      "type": "string",
+      "pattern": "^evt:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "FacetId": {
+      "type": "string",
+      "pattern": "^fac:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "ClaimId": {
+      "type": "string",
+      "pattern": "^clm:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "AnchorId": {
+      "type": "string",
+      "pattern": "^anc:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "GapId": {
+      "type": "string",
+      "pattern": "^gap:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "ParagraphId": {
+      "type": "string",
+      "pattern": "^par:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "Index": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "Digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "SourceScope": {
+      "type": "object",
+      "properties": {
+        "document_id": {
+          "$ref": "#/$defs/DocumentId"
+        },
+        "generation_id": {
+          "$ref": "#/$defs/GenerationId"
+        }
+      },
+      "required": [
+        "document_id",
+        "generation_id"
+      ],
+      "additionalProperties": false
+    },
+    "Question": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "const": "turn:current"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "HistoryTurn": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^turn:[a-z0-9][a-z0-9-]{0,47}$",
+          "not": {
+            "const": "turn:current"
+          }
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "user",
+            "assistant"
+          ]
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "role",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "Request": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "$ref": "#/$defs/Question"
+        },
+        "history": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/HistoryTurn"
+          },
+          "minItems": 0
+        },
+        "answer_style": {
+          "type": "string",
+          "enum": [
+            "brief",
+            "standard"
+          ]
+        },
+        "document_scope": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/SourceScope"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "question",
+        "history",
+        "answer_style",
+        "document_scope"
+      ],
+      "additionalProperties": false
+    },
+    "PublicationInput": {
+      "type": "object",
+      "properties": {
+        "field": {
+          "type": "string",
+          "enum": [
+            "prism.publicationDate",
+            "citation_online_date",
+            "citation_publication_date",
+            "datePublished"
+          ]
+        },
+        "value": {
+          "type": "string",
+          "minLength": 0
+        }
+      },
+      "required": [
+        "field",
+        "value"
+      ],
+      "additionalProperties": false
+    },
+    "Source": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/SourceId"
+        },
+        "document_id": {
+          "$ref": "#/$defs/DocumentId"
+        },
+        "generation_id": {
+          "$ref": "#/$defs/GenerationId"
+        },
+        "publication_inputs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PublicationInput"
+          },
+          "minItems": 0
+        },
+        "retrieved_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_authentication": {
+          "const": "unverified"
+        }
+      },
+      "required": [
+        "id",
+        "document_id",
+        "generation_id",
+        "publication_inputs",
+        "retrieved_at",
+        "original_authentication"
+      ],
+      "additionalProperties": false
+    },
+    "Range": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "$ref": "#/$defs/Index"
+        },
+        "end": {
+          "$ref": "#/$defs/Index"
+        }
+      },
+      "required": [
+        "start",
+        "end"
+      ],
+      "additionalProperties": false
+    },
+    "Unit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "range": {
+          "$ref": "#/$defs/Range"
+        }
+      },
+      "required": [
+        "id",
+        "range"
+      ],
+      "additionalProperties": false
+    },
+    "DefaultPartition": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "const": "whole_block_default"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Unit"
+          },
+          "minItems": 1,
+          "maxItems": 1
+        }
+      },
+      "required": [
+        "basis",
+        "units"
+      ],
+      "additionalProperties": false
+    },
+    "ScopedPartition": {
+      "type": "object",
+      "properties": {
+        "basis": {
+          "const": "synthetic_author_partition"
+        },
+        "annotation_id": {
+          "$ref": "#/$defs/AnnotationId"
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Unit"
+          },
+          "minItems": 2
+        }
+      },
+      "required": [
+        "basis",
+        "annotation_id",
+        "units"
+      ],
+      "additionalProperties": false
+    },
+    "Partition": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/DefaultPartition"
+        },
+        {
+          "$ref": "#/$defs/ScopedPartition"
+        }
+      ]
+    },
+    "Locator": {
+      "type": "object",
+      "properties": {
+        "kind": {
+          "type": "string",
+          "enum": [
+            "synthetic_section",
+            "pdf_page",
+            "html_section",
+            "docx_part",
+            "plain_text_segment",
+            "unknown"
+          ]
+        },
+        "segment_id": {
+          "$ref": "#/$defs/SegmentId"
+        },
+        "label": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "original_reference": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "access_verification": {
+          "const": "unverified"
+        }
+      },
+      "required": [
+        "kind",
+        "segment_id",
+        "label",
+        "original_reference",
+        "access_verification"
+      ],
+      "additionalProperties": false
+    },
+    "SectionHint": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "null"
+            },
+            "basis": {
+              "const": "none"
+            }
+          },
+          "required": [
+            "text",
+            "basis"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "text": {
+              "type": "string"
+            },
+            "basis": {
+              "type": "string",
+              "enum": [
+                "heuristic",
+                "synthetic_author_annotation"
+              ]
+            }
+          },
+          "required": [
+            "text",
+            "basis"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Block": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/BlockId"
+        },
+        "source_id": {
+          "$ref": "#/$defs/SourceId"
+        },
+        "segment_id": {
+          "$ref": "#/$defs/SegmentId"
+        },
+        "source_range": {
+          "$ref": "#/$defs/Range"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_digest": {
+          "$ref": "#/$defs/Digest"
+        },
+        "section_hint": {
+          "$ref": "#/$defs/SectionHint"
+        },
+        "locator": {
+          "$ref": "#/$defs/Locator"
+        },
+        "partition": {
+          "$ref": "#/$defs/Partition"
+        }
+      },
+      "required": [
+        "id",
+        "source_id",
+        "segment_id",
+        "source_range",
+        "text",
+        "text_digest",
+        "section_hint",
+        "locator",
+        "partition"
+      ],
+      "additionalProperties": false
+    },
+    "Annotation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/AnnotationId"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "partition",
+            "dependency"
+          ]
+        },
+        "basis": {
+          "const": "synthetic_author"
+        },
+        "note": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "basis",
+        "note"
+      ],
+      "additionalProperties": false
+    },
+    "Dependency": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/DependencyId"
+        },
+        "from_unit_id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "to_unit_id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "scope",
+            "exception",
+            "antecedent",
+            "continuation",
+            "heading",
+            "table_header",
+            "footnote",
+            "withdrawal"
+          ]
+        },
+        "annotation_id": {
+          "$ref": "#/$defs/AnnotationId"
+        }
+      },
+      "required": [
+        "id",
+        "from_unit_id",
+        "to_unit_id",
+        "role",
+        "annotation_id"
+      ],
+      "additionalProperties": false
+    },
+    "Omission": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/OmissionId"
+        },
+        "target_unit_id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "source_id": {
+          "$ref": "#/$defs/SourceId"
+        },
+        "segment_id": {
+          "$ref": "#/$defs/SegmentId"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "context_not_retained",
+            "context_budget_excluded",
+            "extraction_failed"
+          ]
+        }
+      },
+      "required": [
+        "id",
+        "target_unit_id",
+        "source_id",
+        "segment_id",
+        "reason"
+      ],
+      "additionalProperties": false
+    },
+    "ContextEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/EventId"
+        },
+        "kind": {
+          "const": "context_omission"
+        },
+        "omission_id": {
+          "$ref": "#/$defs/OmissionId"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "omission_id"
+      ],
+      "additionalProperties": false
+    },
+    "PublicationEvent": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/EventId"
+        },
+        "kind": {
+          "const": "publication_unresolved"
+        },
+        "source_id": {
+          "$ref": "#/$defs/SourceId"
+        }
+      },
+      "required": [
+        "id",
+        "kind",
+        "source_id"
+      ],
+      "additionalProperties": false
+    },
+    "Event": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/ContextEvent"
+        },
+        {
+          "$ref": "#/$defs/PublicationEvent"
+        }
+      ]
+    },
+    "EvidencePackage": {
+      "type": "object",
+      "properties": {
+        "input_kind": {
+          "const": "synthetic"
+        },
+        "scope": {
+          "const": "supplied_only"
+        },
+        "sources": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Source"
+          },
+          "minItems": 0
+        },
+        "blocks": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Block"
+          },
+          "minItems": 0
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Annotation"
+          },
+          "minItems": 0
+        },
+        "context_edges": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Dependency"
+          },
+          "minItems": 0
+        },
+        "omissions": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Omission"
+          },
+          "minItems": 0
+        },
+        "technical_events": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Event"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "input_kind",
+        "scope",
+        "sources",
+        "blocks",
+        "annotations",
+        "context_edges",
+        "omissions",
+        "technical_events"
+      ],
+      "additionalProperties": false
+    },
+    "TurnSpan": {
+      "type": "object",
+      "properties": {
+        "turn_id": {
+          "$ref": "#/$defs/TurnId"
+        },
+        "start": {
+          "$ref": "#/$defs/Index"
+        },
+        "end": {
+          "$ref": "#/$defs/Index"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "turn_id",
+        "start",
+        "end",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "Facet": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/FacetId"
+        },
+        "operation": {
+          "type": "string",
+          "enum": [
+            "identify",
+            "explain",
+            "quantify",
+            "compare",
+            "current_status",
+            "source_publication",
+            "resolve_referent"
+          ]
+        },
+        "request_spans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TurnSpan"
+          },
+          "minItems": 1
+        },
+        "history_spans": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TurnSpan"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "id",
+        "operation",
+        "request_spans",
+        "history_spans"
+      ],
+      "additionalProperties": false
+    },
+    "Anchor": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/AnchorId"
+        },
+        "start": {
+          "$ref": "#/$defs/Index"
+        },
+        "end": {
+          "$ref": "#/$defs/Index"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "start",
+        "end",
+        "text"
+      ],
+      "additionalProperties": false
+    },
+    "Support": {
+      "type": "object",
+      "properties": {
+        "unit_id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "primary",
+            "constraint",
+            "contrary"
+          ]
+        },
+        "anchors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Anchor"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "unit_id",
+        "role",
+        "anchors"
+      ],
+      "additionalProperties": false
+    },
+    "AssertedWitness": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "asserted"
+        },
+        "interpretation": {
+          "type": "string",
+          "minLength": 1
+        },
+        "anchor_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnchorId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "state",
+        "interpretation",
+        "anchor_ids"
+      ],
+      "additionalProperties": false
+    },
+    "EmptyWitness": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "type": "string",
+          "enum": [
+            "not_stated",
+            "not_applicable"
+          ]
+        },
+        "interpretation": {
+          "type": "null"
+        },
+        "anchor_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnchorId"
+          },
+          "minItems": 0,
+          "maxItems": 0
+        }
+      },
+      "required": [
+        "state",
+        "interpretation",
+        "anchor_ids"
+      ],
+      "additionalProperties": false
+    },
+    "UnresolvedWitness": {
+      "type": "object",
+      "properties": {
+        "state": {
+          "const": "unresolved"
+        },
+        "interpretation": {
+          "type": "null"
+        },
+        "anchor_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/AnchorId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "state",
+        "interpretation",
+        "anchor_ids"
+      ],
+      "additionalProperties": false
+    },
+    "WitnessSlot": {
+      "oneOf": [
+        {
+          "$ref": "#/$defs/AssertedWitness"
+        },
+        {
+          "$ref": "#/$defs/EmptyWitness"
+        },
+        {
+          "$ref": "#/$defs/UnresolvedWitness"
+        }
+      ]
+    },
+    "Witness": {
+      "type": "object",
+      "properties": {
+        "population": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "predicate": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "quantification": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "polarity": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "modality": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "quantity_unit_and_denominator": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "geography_habitat": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "time_basis": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "conditions_exceptions": {
+          "$ref": "#/$defs/WitnessSlot"
+        },
+        "method": {
+          "$ref": "#/$defs/WitnessSlot"
+        }
+      },
+      "required": [
+        "population",
+        "predicate",
+        "quantification",
+        "polarity",
+        "modality",
+        "quantity_unit_and_denominator",
+        "geography_habitat",
+        "time_basis",
+        "conditions_exceptions",
+        "method"
+      ],
+      "additionalProperties": false
+    },
+    "Claim": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ClaimId"
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "facet_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/FacetId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "relation_kind": {
+          "type": "string",
+          "enum": [
+            "attributed_paraphrase",
+            "explicit_relation",
+            "side_by_side_synthesis",
+            "bounded_inference"
+          ]
+        },
+        "supports": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Support"
+          },
+          "minItems": 1
+        },
+        "semantic_witness": {
+          "$ref": "#/$defs/Witness"
+        },
+        "depends_on_claim_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaimId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "text",
+        "facet_ids",
+        "relation_kind",
+        "supports",
+        "semantic_witness",
+        "depends_on_claim_ids"
+      ],
+      "additionalProperties": false
+    },
+    "Gap": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/GapId"
+        },
+        "facet_id": {
+          "$ref": "#/$defs/FacetId"
+        },
+        "reason": {
+          "type": "string",
+          "enum": [
+            "requested_detail_not_established",
+            "requested_relation_not_established",
+            "requested_current_applicability_not_established",
+            "conflicting_supplied_accounts",
+            "required_context_unavailable",
+            "context_budget_excluded",
+            "extraction_unavailable",
+            "publication_metadata_unresolved",
+            "ambiguous_referent",
+            "missing_referent"
+          ]
+        },
+        "related_unit_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UnitId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "event_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EventId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "clarification_options": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/TurnSpan"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "id",
+        "facet_id",
+        "reason",
+        "related_unit_ids",
+        "event_ids",
+        "clarification_options"
+      ],
+      "additionalProperties": false
+    },
+    "Paragraph": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ParagraphId"
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaimId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "claim_ids"
+      ],
+      "additionalProperties": false
+    },
+    "Coverage": {
+      "type": "object",
+      "properties": {
+        "facet_id": {
+          "$ref": "#/$defs/FacetId"
+        },
+        "disposition": {
+          "type": "string",
+          "enum": [
+            "claims",
+            "claims_and_gap",
+            "gap",
+            "needs_clarification"
+          ]
+        },
+        "claim_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ClaimId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "gap_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/GapId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "facet_id",
+        "disposition",
+        "claim_ids",
+        "gap_ids"
+      ],
+      "additionalProperties": false
+    },
+    "Binding": {
+      "type": "object",
+      "properties": {
+        "request_digest": {
+          "$ref": "#/$defs/Digest"
+        },
+        "evidence_digest": {
+          "$ref": "#/$defs/Digest"
+        }
+      },
+      "required": [
+        "request_digest",
+        "evidence_digest"
+      ],
+      "additionalProperties": false
+    },
+    "Candidate": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/Binding"
+        },
+        "facets": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Facet"
+          },
+          "minItems": 1
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Claim"
+          },
+          "minItems": 0
+        },
+        "paragraphs": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Paragraph"
+          },
+          "minItems": 0
+        },
+        "gaps": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Gap"
+          },
+          "minItems": 0
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coverage"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "binding",
+        "facets",
+        "claims",
+        "paragraphs",
+        "gaps",
+        "coverage"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$comment": "Normative strict JSON profile and relational rules in contract.md are additionally required. This schema is not an auditor implementation or semantic validator."
+}
