@@ -251,6 +251,22 @@ def test_utc_crossing_during_dispatch_capture_stops_before_transport(setup,monke
     assert phase['provider_attempts']==0 and phase['dispatch_status']=='blocked_before_transport'
 
 
+@pytest.mark.parametrize('phase',[1,2])
+def test_failed_pretransport_capture_records_zero_calls_for_reserved_phase(setup,phase):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    raised=False
+    def observer(trace):
+        nonlocal raised
+        if trace['phases'][phase-1]['state']=='dispatched' and not raised:
+            raised=True;raise OSError('private synthetic storage detail')
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,observer=observer))
+    record=caught.value.trace['phases'][phase-1]
+    assert record['provider_attempts']==0 and record['dispatch_status']=='blocked_before_transport'
+    assert len(transport.requests)==phase-1 and len(limits.receipts)==phase and transport.closed
+    assert record['reservation_receipt']['reserved'] and 'final_answer' not in caught.value.trace
+
+
 def test_correction_late_response_after_disconnect_never_succeeds(setup):
     config,request,prepared,transport,limits,_,_,factory=setup;good=transport.handler
     async def scenario():

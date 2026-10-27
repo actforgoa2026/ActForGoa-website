@@ -160,10 +160,10 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                             'max_tokens':body['max_tokens'], 'service_tier':body['service_tier'],
                             'effort':body['output_config']['effort'], 'thinking':body['thinking']['type'],
                             'format':body['output_config']['format']['type']})
-            notify()
             # Persistence is synchronous and can consume the remaining deadline
             # or cross midnight. The request hook has not entered transport yet.
             try:
+                notify()
                 await available()
             except BaseException:
                 stage.update(provider_attempts=0, dispatch_status='blocked_before_transport')
