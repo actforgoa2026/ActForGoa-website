@@ -130,4 +130,3 @@ def outgoing_request_capture(request):
         return {'capture_status': 'credential_like_content'}, None
     return {'capture_status': 'captured_request', 'body_utf8': text,
             'body_sha256': hashlib.sha256(raw).hexdigest(), 'body_bytes': len(raw)}, body
-
