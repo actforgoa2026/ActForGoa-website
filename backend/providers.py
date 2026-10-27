@@ -17,6 +17,9 @@ from .anthropic_provider import AnthropicClient, INPUT_ALLOWANCE, PRICE_TIER_INP
 PRICES = {
     # https://platform.claude.com/docs/en/models/haiku-5-5/overview (2026-10-27)
     ('anthropic', 'claude-haiku-5-5'): ('0.10', '0.50'),
+    # Explicit opt-in comparison; the Anthropic default remains Haiku.
+    # https://platform.claude.com/docs/en/models/sonnet-5-5/overview (2026-10-27)
+    ('anthropic', 'claude-sonnet-5-5'): ('2.00', '10.00'),
     ('openrouter', 'qwen/qwen3.7-flash'): ('0.030', '0.130'),
     ('openrouter', 'qwen/qwen3.8-flash'): ('0.15', '0.47'),
     ('openrouter', 'openai/gpt-5-nano'): ('0.05', '0.40'),

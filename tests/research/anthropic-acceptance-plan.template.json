@@ -1,5 +1,6 @@
 {
   "source_commit": null,
+  "model": "claude-haiku-5-5",
   "generation": "20261027T065155-law-5bc5619b",
   "date_utc": "2026-10-27",
   "data_root": null,

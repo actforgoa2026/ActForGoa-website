@@ -17,7 +17,7 @@ from dotenv import dotenv_values
 from backend.anthropic_provider import AnthropicClient, API_VERSION, INPUT_ALLOWANCE
 from backend.chat import ChatRequest, prepare_answer, answer_question, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
 from backend.hosting import PublicLimits
-from backend.providers import chat_config
+from backend.providers import PRICES, chat_config
 from backend.usage_reconciliation import inspect_ledger
 
 
@@ -134,12 +134,21 @@ def load_cases(stage, expected_generation=None):
     return cases
 
 
+def planned_model(plan):
+    # Historical plans implied Haiku. Any comparison model must be explicit,
+    # reviewed in the shared price allowlist, and pinned in the frozen plan.
+    model = plan.get('model', 'claude-haiku-5-5')
+    if not isinstance(model, str) or ('anthropic', model) not in PRICES:
+        raise ValueError('Only a reviewed Anthropic plan model is allowed')
+    return model
+
+
 def preflight(plan, stage_name, config, *, execute=False):
     if plan.get('source_commit') != source_identity():raise ValueError('Final integrated source identity is not approved')
     day = datetime.now(timezone.utc).date().isoformat()
     if plan.get('date_utc') != day:raise ValueError('This plan requires a new UTC-day approval')
-    if config.provider != 'anthropic' or config.model != 'claude-haiku-5-5':
-        raise ValueError('Only the reviewed Anthropic model is allowed')
+    if config.provider != 'anthropic' or config.model != planned_model(plan):
+        raise ValueError('Configured model must match the reviewed Anthropic plan model')
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')
     count = sum(p['count'] for p in stage['packets'])
@@ -189,6 +198,9 @@ class UsageCapture(httpx.BaseTransport):
             if isinstance(payload, dict):
                 entry['final_output_diagnostic'] = final_json_capture(payload)
                 entry['response_model_matches'] = payload.get('model') == body['model']
+                response_model = payload.get('model')
+                entry['response_model'] = (response_model if isinstance(response_model, str)
+                    and ('anthropic', response_model) in PRICES else 'unexpected_model')
                 stop = payload.get('stop_reason')
                 entry['stop_reason'] = stop if stop in ('end_turn','refusal','max_tokens','model_context_window_exceeded','tool_use','pause_turn') else 'unexpected'
                 usage=payload.get('usage',{})
@@ -340,10 +352,10 @@ def main():
     parser.add_argument('--output',type=Path);parser.add_argument('--key-env-file',type=Path)
     args=parser.parse_args()
     plan=json.loads(args.plan.read_text())
-    os.environ['RESEARCH_CHAT_PROVIDER']='anthropic';os.environ['ANTHROPIC_CHAT_MODEL']='claude-haiku-5-5'
+    os.environ['RESEARCH_CHAT_PROVIDER']='anthropic';os.environ['ANTHROPIC_CHAT_MODEL']=planned_model(plan)
     config=chat_config();context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
-        print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'max_attempts':context['count'],
+        print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'max_attempts':context['count'],
             'max_reservation_microusd':context['worst_reservation_microusd'],'provider_calls':0,
             'heldout_questions_parsed':False}));return
     if not args.output or args.output.exists():raise ValueError('A new output path is required')
