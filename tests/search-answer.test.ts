@@ -17,18 +17,21 @@ test('short search answers require cited paragraphs and local source-reader link
 
 test('submitted searches use the corpus chat API in brief mode and reuse successful answers', async t => {
   const calls: { url: string; body?: string }[] = [];
+  const providers: string[] = [];
   t.mock.method(globalThis, 'fetch', async (url: string, options?: RequestInit) => {
     calls.push({ url, body: options?.body as string | undefined });
-    return Response.json(url === '/api/status' ? { search_ready: true, chat_ready: true } : supported);
+    if (url === '/api/chat') assert.equal(providers.at(-1), 'Anthropic', 'Identify the configured provider before sending the question');
+    return Response.json(url === '/api/status' ? { search_ready: true, chat_ready: true, provider_label: 'Anthropic' } : supported);
   });
   const question = 'test cached corpus answer';
   const signal = new AbortController().signal;
-  assert.equal((await fetchSearchAnswer(question, signal)).status, 'answered');
+  assert.equal((await fetchSearchAnswer(question, signal, label => providers.push(label))).status, 'answered');
   assert.deepEqual(JSON.parse(calls[1].body!), { question, answer_style: 'brief' });
   assert.deepEqual(calls.map(c => c.url), ['/api/status', '/api/chat']);
-  await fetchSearchAnswer('  ' + question + '  ', signal);
+  await fetchSearchAnswer('  ' + question + '  ', signal, label => providers.push(label));
   assert.equal(calls.length, 2, 'Opening a source and returning should not pay again');
   assert(cachedSearchAnswer(question));
+  assert.deepEqual(providers, ['Anthropic', 'Anthropic']);
 });
 
 test('unconfigured AI makes no paid request; budget failure remains retryable', async t => {

@@ -12,10 +12,11 @@ export function SearchAnswer({ question }: { question: string }) {
   const [error, setError] = useState('');
   const [attempt, setAttempt] = useState(0);
   const [busy, setBusy] = useState(!answer);
+  const [providerLabel, setProviderLabel] = useState(answer?.providerLabel || 'the configured AI provider');
   useEffect(() => {
     const controller = new AbortController();
     setBusy(true); setError('');
-    fetchSearchAnswer(question, controller.signal).then(value => {
+    fetchSearchAnswer(question, controller.signal, label => { if (!controller.signal.aborted) setProviderLabel(label); }).then(value => {
       if (!controller.signal.aborted) setAnswer(value);
     }).catch((cause: Error) => {
       if (!controller.signal.aborted) setError(cause.message || 'The answer could not load. The results below are still available.');
@@ -44,7 +45,7 @@ export function SearchAnswer({ question }: { question: string }) {
     </details>}
     <div className="search-answer-footer">
       <Link className="text-link" to={'/ask?' + new URLSearchParams({ q: question })}>Explore the research <ArrowRight size={16} aria-hidden="true" /></Link>
-      <p>Your search and relevant saved passages are sent to OpenRouter to prepare this answer. No live web search is used.</p>
+      <p>Your search and relevant saved passages are sent to {providerLabel} to prepare this answer. No live web search is used.</p>
     </div>
   </section>;
 }

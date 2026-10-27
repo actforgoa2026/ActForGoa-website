@@ -9,6 +9,7 @@ export type SearchAnswer = {
   paragraphs: { text: string; citations: string[] }[];
   citations: SearchCitation[];
   notice?: string;
+  providerLabel?: string;
 };
 
 const cache = new Map<string, { expires: number; answer: SearchAnswer }>();
@@ -41,11 +42,11 @@ export function checkedSearchAnswer(value: unknown): SearchAnswer {
   return answer;
 }
 
-export async function fetchSearchAnswer(question: string, signal: AbortSignal): Promise<SearchAnswer> {
+export async function fetchSearchAnswer(question: string, signal: AbortSignal, onProvider?: (label: string) => void): Promise<SearchAnswer> {
   const clean = question.trim();
   if (clean.length < 2 || clean.length > 2000) throw Error('Use a question between 2 and 2,000 characters for an AI answer. You can still browse the results below.');
   const cached = cachedSearchAnswer(clean);
-  if (cached) return cached;
+  if (cached) { onProvider?.(cached.providerLabel || 'the configured AI provider'); return cached; }
   const controller = new AbortController();
   const cancel = () => controller.abort();
   signal.addEventListener('abort', cancel, { once: true });
@@ -54,6 +55,8 @@ export async function fetchSearchAnswer(question: string, signal: AbortSignal): 
   try {
     const statusResponse = await fetch('/api/status', { signal: controller.signal });
     const status = await statusResponse.json().catch(() => null);
+    const providerLabel = typeof status?.provider_label === 'string' && status.provider_label.trim() ? status.provider_label.trim() : 'the configured AI provider';
+    onProvider?.(providerLabel);
     if (!statusResponse.ok || !status?.search_ready || !status?.chat_ready) throw Error('AI answers are temporarily unavailable. You can still use the guides and other results below.');
     // Only the submitted question goes to our own backend. It retrieves evidence
     // from the saved corpus before calling the model; there is no web-search path.
@@ -63,7 +66,7 @@ export async function fetchSearchAnswer(question: string, signal: AbortSignal): 
     });
     const data = await response.json().catch(() => null);
     if (!response.ok) throw Error(typeof data?.detail === 'string' ? data.detail : 'The answer could not load. You can still use the results below.');
-    const answer = checkedSearchAnswer(data);
+    const answer = { ...checkedSearchAnswer(data), providerLabel };
     if (signal.aborted) throw new DOMException('Search changed', 'AbortError');
     if (cache.size >= 32) cache.delete(cache.keys().next().value!);
     cache.set(clean, { answer, expires: Date.now() + ttl });
