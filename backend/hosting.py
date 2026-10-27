@@ -1,14 +1,84 @@
 """Explicit public-host configuration and bounded public-service operations."""
 from collections import deque
-from datetime import datetime, timezone
+from contextlib import closing
+from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
+import json
 import os
+import re
 import sqlite3
 import threading
 import time
 from urllib.parse import urlsplit
+from uuid import uuid4
 from starlette.responses import JSONResponse
+
+STAGE_RESERVATION_VERSION = 'afg-stage-reservation-v1'
+STAGE_PREFLIGHT_VERSION = 'afg-stage-preflight-v1'
+STAGE_LOCK_TIMEOUT_SECONDS = 0.25
+SQLITE_MAX_INTEGER = (1 << 63) - 1
+
+
+def _stage_tables(db):
+    # The first read establishes the read snapshot used by preflight before its
+    # clock check. Existing reconciliation tables are allowed alongside these.
+    tables = {row[0] for row in db.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'")}
+    if not tables:
+        return tables  # New, completely empty database; no historical counters.
+    if not {'usage', 'spend'} <= tables:
+        raise ValueError('Invalid stage reservation schema')
+    for table, key, value in [('usage', 'day', 'attempts'), ('spend', 'month', 'reserved_microusd')]:
+        columns = db.execute('SELECT name, type, "notnull", pk FROM pragma_table_info(?)', (table,)).fetchall()
+        if (len(columns) != 2 or columns[0][0:2] != (key, 'TEXT') or columns[0][3] != 1
+                or columns[1] != (value, 'INTEGER', 1, 0)):
+            raise ValueError('Invalid stage reservation schema')
+    if 'stage_reservations' in tables:
+        columns = db.execute('SELECT name, type, "notnull", pk FROM pragma_table_info(?)', ('stage_reservations',)).fetchall()
+        expected = [('parent_id', 'TEXT', 1, 1), ('phase', 'TEXT', 1, 2),
+                    ('receipt_id', 'TEXT', 1, 0), ('receipt_json', 'TEXT', 1, 0)]
+        unique_columns = [tuple(row[0] for row in db.execute(
+            'SELECT name FROM pragma_index_info(?) ORDER BY seqno', (index[1],)))
+            for index in db.execute('PRAGMA index_list(stage_reservations)').fetchall()
+            if index[2] and not index[4]]
+        if columns != expected or ('receipt_id',) not in unique_columns:
+            raise ValueError('Invalid stage reservation receipt schema')
+    return tables
+
+
+def _stage_snapshot(db, day, month, tables):
+    day_row = db.execute('SELECT attempts FROM usage WHERE day=?', (day,)).fetchone() if 'usage' in tables else None
+    month_row = db.execute('SELECT reserved_microusd FROM spend WHERE month=?', (month,)).fetchone() if 'spend' in tables else None
+    snapshot = {'day_attempts': day_row[0] if day_row else 0,
+                'month_reserved_microusd': month_row[0] if month_row else 0}
+    if any(type(value) is not int or not 0 <= value <= SQLITE_MAX_INTEGER for value in snapshot.values()):
+        raise ValueError('Invalid stage reservation counters')
+    return snapshot
+
+
+def _validate_stage_cost(cost_microusd):
+    if type(cost_microusd) is not int or not 0 <= cost_microusd <= SQLITE_MAX_INTEGER:
+        raise ValueError('Invalid stage reservation cost')
+
+
+def _validate_stage_day(expected_day):
+    if type(expected_day) is not str or not re.fullmatch(r'[0-9]{4}-[0-9]{2}-[0-9]{2}', expected_day):
+        raise ValueError('Invalid expected UTC day')
+    try:
+        date.fromisoformat(expected_day)
+    except ValueError:
+        raise ValueError('Invalid expected UTC day') from None
+
+
+def _validate_stage_request(cost_microusd, expected_day, parent_id, phase):
+    _validate_stage_cost(cost_microusd)
+    _validate_stage_day(expected_day)
+    if type(parent_id) is not str or not re.fullmatch(r'[0-9a-f]{32}', parent_id):
+        raise ValueError('Stage parent identity must be opaque lowercase hexadecimal')
+    if type(phase) is not str or phase not in ('draft', 'reconstruction'):
+        raise ValueError('Invalid reservation phase')
+
 
 class RequestSizeLimit:
     def __init__(self, app, maximum=65536):self.app=app;self.maximum=maximum
@@ -77,3 +147,124 @@ class PublicLimits:
             # Preserve historical attempts for reconciliation across provider changes.
             # Only today's row contributes to the daily allowance.
         return True
+
+    def reserve_stage(self, cost_microusd, expected_day, parent_id, phase):
+        """Commit a phase receipt and its charge together, or authorize nothing.
+
+        Only opaque request IDs and fixed phase names are accepted. Refused
+        results carry no receipt ID and do not update counters or receipt rows.
+        A duplicate never returns the earlier success as permission to dispatch.
+        This method performs no network work and has no retry or refund path.
+        """
+        _validate_stage_request(cost_microusd, expected_day, parent_id, phase)
+        self.root.mkdir(parents=True, exist_ok=True)
+        # SQLite, rather than the instance lock, serializes this operation with
+        # legacy reservations and other processes. Bound waiting for its lock.
+        with closing(sqlite3.connect(self.root / 'answer-usage.sqlite',
+                                     timeout=STAGE_LOCK_TIMEOUT_SECONDS,
+                                     isolation_level=None)) as db:
+            db.execute('BEGIN IMMEDIATE')
+            try:
+                # Read the clock only after acquiring the write transaction: a
+                # reservation waiting across UTC midnight must not charge yesterday.
+                day = datetime.now(timezone.utc).date().isoformat()
+                month = day[:7]
+                tables = _stage_tables(db)
+                before = _stage_snapshot(db, day, month, tables)
+                result = {
+                    'version': STAGE_RESERVATION_VERSION,
+                    'reserved': False, 'reason': 'day_mismatch',
+                    'parent_id': parent_id, 'phase': phase,
+                    'expected_day': expected_day, 'day': day, 'month': month,
+                    'cost_microusd': cost_microusd,
+                    'before': before, 'after': dict(before), 'receipt_id': None,
+                }
+                if day != expected_day:
+                    db.rollback()
+                    return result
+                if 'stage_reservations' in tables and db.execute(
+                    'SELECT 1 FROM stage_reservations WHERE parent_id=? AND phase=?',
+                    (parent_id, phase),
+                ).fetchone():
+                    result['reason'] = 'duplicate'
+                elif before['day_attempts'] >= self.chat_limit:
+                    result['reason'] = 'daily_limit'
+                elif before['month_reserved_microusd'] + cost_microusd > self.monthly_limit:
+                    result['reason'] = 'monthly_limit'
+                else:
+                    after = {'day_attempts': before['day_attempts'] + 1,
+                             'month_reserved_microusd': before['month_reserved_microusd'] + cost_microusd}
+                    if any(value > SQLITE_MAX_INTEGER for value in after.values()):
+                        raise ValueError('Stage reservation counters exceed the storage range')
+                    db.execute('CREATE TABLE IF NOT EXISTS usage(day TEXT PRIMARY KEY, attempts INTEGER NOT NULL)')
+                    db.execute('CREATE TABLE IF NOT EXISTS spend(month TEXT PRIMARY KEY, reserved_microusd INTEGER NOT NULL)')
+                    db.execute('''CREATE TABLE IF NOT EXISTS stage_reservations(
+                        parent_id TEXT NOT NULL,
+                        phase TEXT NOT NULL CHECK(phase IN ('draft','reconstruction')),
+                        receipt_id TEXT NOT NULL UNIQUE,
+                        receipt_json TEXT NOT NULL,
+                        PRIMARY KEY(parent_id, phase)
+                    )''')
+                    result.update(reserved=True, reason='reserved', after=after, receipt_id=uuid4().hex)
+                    db.execute('INSERT INTO usage VALUES (?,1) ON CONFLICT(day) DO UPDATE SET attempts=attempts+1', (day,))
+                    db.execute('INSERT INTO spend VALUES (?,?) ON CONFLICT(month) DO UPDATE SET reserved_microusd=reserved_microusd+excluded.reserved_microusd', (month, cost_microusd))
+                    db.execute('INSERT INTO stage_reservations VALUES (?,?,?,?)',
+                               (parent_id, phase, result['receipt_id'],
+                                json.dumps(result, sort_keys=True, separators=(',', ':'), allow_nan=False)))
+                    db.commit()
+                    return result
+                db.rollback()
+                return result
+            except BaseException:
+                # If commit was uncertain, never return a receipt or authorize
+                # dispatch. Rollback cannot undo an already committed charge.
+                if db.in_transaction:
+                    db.rollback()
+                raise
+
+    def preflight_pair(self, costs_microusd, expected_day):
+        """Read-only advisory capacity for two phases, never dispatch authority.
+
+        Absence is observed without creating directories or a database. For an
+        existing database, read its schema to acquire the snapshot before reading
+        UTC. Another process can consume capacity immediately after this returns;
+        reserve_stage remains the sole authority for each subsequent dispatch.
+        """
+        if type(costs_microusd) not in (list, tuple) or len(costs_microusd) != 2:
+            raise ValueError('Pair preflight requires exactly two costs')
+        for cost in costs_microusd:
+            _validate_stage_cost(cost)
+        total = sum(costs_microusd)
+        _validate_stage_cost(total)
+        _validate_stage_day(expected_day)
+        path = self.root / 'answer-usage.sqlite'
+        try:
+            path.lstat()
+        except FileNotFoundError:
+            day = datetime.now(timezone.utc).date().isoformat()
+            observed = {'day_attempts': 0, 'month_reserved_microusd': 0}
+        else:
+            # mode=ro cannot initialize or change the ledger, including if it
+            # disappears between lstat and connect. Never use immutable mode:
+            # committed WAL reservations must remain visible to this read.
+            with closing(sqlite3.connect(path.resolve().as_uri() + '?mode=ro', uri=True,
+                                         timeout=STAGE_LOCK_TIMEOUT_SECONDS,
+                                         isolation_level=None)) as db:
+                db.execute('BEGIN')
+                try:
+                    tables = _stage_tables(db)
+                    day = datetime.now(timezone.utc).date().isoformat()
+                    observed = _stage_snapshot(db, day, day[:7], tables)
+                finally:
+                    db.rollback()
+        reason = 'allowed'
+        if day != expected_day:
+            reason = 'day_mismatch'
+        elif observed['day_attempts'] + 2 > self.chat_limit:
+            reason = 'daily_limit'
+        elif observed['month_reserved_microusd'] + total > self.monthly_limit:
+            reason = 'monthly_limit'
+        return {'version': STAGE_PREFLIGHT_VERSION,
+                'allowed': reason == 'allowed', 'reason': reason,
+                'expected_day': expected_day, 'day': day, 'month': day[:7],
+                'observed': observed, 'required_attempts': 2, 'required_cost_microusd': total}
