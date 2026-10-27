@@ -155,7 +155,7 @@ def validate_answer(answer, evidence, answer_style='standard'):
     for paragraph in paragraphs:
         if not paragraph['text'].strip() or not paragraph['citations'] or any(c not in allowed for c in paragraph['citations']):
             raise ValueError('Answer contains missing or unknown citations')
-        if not re.search(r'[.!?。！？][\)\]"\u2019\u201d]*$',paragraph['text']):
+        if not re.search(r'[.!?。！？।॥][\)\]"\u2019\u201d]*$',paragraph['text']):
             raise ValueError('Answer paragraph appears incomplete')
         for citation in paragraph['citations']:
             if citation not in used:used.append(citation)

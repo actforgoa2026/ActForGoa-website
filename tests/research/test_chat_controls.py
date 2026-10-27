@@ -209,8 +209,16 @@ def test_inline_internal_ids_are_removed_without_removing_facts(evidence):
     assert result['paragraphs'][0]['text']=='The policy (2025) proposes monitoring. Read it.'
     assert result['paragraphs'][0]['citations']==['passage-1']
 
-def test_schema_bounded_partial_sentence_is_not_a_complete_answer(evidence):
-    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':'The application fee is the','citations':['passage-1']}]})
+@pytest.mark.parametrize('text', ['यह वाक्य पूरा है।', 'हें वाक्य पुराय आसा।', '“यह वाक्य पूरा है।”', 'यह वाक्य पूरा है॥'])
+def test_devanagari_sentence_endings_preserve_citation_validation(evidence,text):
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':text,'citations':['passage-1']}]})
+    assert validate_answer(answer,evidence,'brief')['paragraphs'][0]['text']==text
+    answer.paragraphs[0].citations=['unknown-passage']
+    with pytest.raises(ValueError,match='unknown citations'):validate_answer(answer,evidence,'brief')
+
+@pytest.mark.parametrize('text', ['The application fee is the', 'यह वाक्य अभी', 'हें वाक्य अजून'])
+def test_schema_bounded_partial_sentence_is_not_a_complete_answer(evidence,text):
+    answer=GroundedAnswer.model_validate({'status':'answered','paragraphs':[{'text':text,'citations':['passage-1']}]})
     with pytest.raises(ValueError,match='incomplete'):validate_answer(answer,evidence,'brief')
 
 def test_selected_model_uses_strict_schema_correct_prices_and_disclosure(evidence,monkeypatch):
