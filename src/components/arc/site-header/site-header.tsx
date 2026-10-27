@@ -94,7 +94,7 @@ const physical = (visualDuration: number, bounce: number): Transition => {
 const GROW = physical(.44, 0), SHRINK = physical(.34, 0), GLIDE = physical(.3, 0), SLIDE = physical(.4, 0);
 const HOVER_INTENT = 70, LEAVE_GRACE = 180, TRAVEL = 36;
 /** Matches the container query in site-header.module.css. */
-const COLLAPSE_BELOW = 1200;
+const COLLAPSE_BELOW = 1280;
 
 /** Panel content slides in from the side of the newly opened item; opening from closed drops in from the bar. */
 const faceVariants: Variants = {
@@ -429,7 +429,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
           </nav>
         </LayoutGroup>
         <div className={styles.actions}>
-          {extraAction}
+          {extraAction && <div className={styles.extraAction}>{extraAction}</div>}
           {secondaryAction && actionNode(secondaryAction, "secondary", styles.wideOnly)}
           {primaryAction && actionNode(primaryAction, "primary")}
           <button ref={menuButtonRef} type="button" className={styles.menuButton} aria-expanded={menuOpen} aria-controls={`${id}-sheet`} aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => { if (menuOpen) closeMenu(); else setMenuOpen(true); }}>
@@ -492,6 +492,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
           transition={reduced ? { duration: 0 } : GROW}
         >
           <nav className={styles.sheetInner} aria-label={label}>
+            {extraAction && <div className={styles.compactExtraAction}>{extraAction}</div>}
             <ul className={styles.sheetList}>
               {items.map((item, index) => {
                 const isCurrent = current === item.value;

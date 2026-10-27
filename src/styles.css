@@ -1564,7 +1564,6 @@ a.button.green {
 .catalogue-heading, .results-bar, .record-card, .detail, .contact-page { overflow-wrap: anywhere; }
 #content:focus { outline: none; }
 
-.language-switcher { max-width: 150px; min-height: 40px; border: 1px solid #b5c4b9; border-radius: 6px; background: var(--paper, #fff); color: #173c31; padding: 0 8px; font: inherit; font-size: 14px; cursor: pointer; }
-.language-switcher:focus-visible { outline: 3px solid #397d62; outline-offset: 2px; }
+.language-switcher { max-width: 190px; min-height: 44px; border: 1px solid var(--choice-border); border-radius: 4px; background: var(--paper); color: var(--green); padding: 0 8px; font: inherit; font-size: 14px; cursor: pointer; }
+.language-switcher:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
 .translation-notice { padding: 12px max(24px, calc((100% - 1200px) / 2)); background: #edf3e9; color: #203b2c; font-size: 14px; line-height: 1.5; }
-@media (max-width: 600px) { .language-switcher { max-width: 112px; font-size: 12px; } }
