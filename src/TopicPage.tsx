@@ -11,12 +11,13 @@ import {actionsInBranch, topicPeople} from './topic-records';
 import type {RecordItem} from './types';
 
 export function TopicChoices({flow, parent}: {flow:TopicFlow; parent?:TopicAction}) {
+ const { language }=useLanguage();
  const choices=parent?.choices ?? flow.actions;
  return <section className="topic-choices" aria-labelledby={'choices-'+flow.slug}>
   <h2 id={'choices-'+flow.slug}>{parent?.question || 'What would you like to do?'}</h2>
   <nav className={"choice-grid"+(choices.length===2 || choices.length===4 ? " choice-grid-pairs" : "")} aria-label={parent?.question || 'Choose what you need'}>
    {choices.map(action => <Link className="choice-link" key={action.id} to={actionHref(flow,action,parent)}>
-    <TopicIcon name={action.icon}/><span>{action.label}</span><ArrowRight size={22}/>
+    <TopicIcon name={action.icon}/><span lang={translatePriority(action.label, language) === action.label ? "en" : language}>{translatePriority(action.label, language)}</span><ArrowRight size={22}/>
    </Link>)}
   </nav>
  </section>;
@@ -47,7 +48,7 @@ export function TopicPage({records}: {records:RecordItem[]}) {
    {choiceId && parent && <><Link to={'/topics/'+flow.slug+'/'+parent.id}>{parent.label}</Link><span aria-hidden="true">/</span></>}
    {action && <span aria-current="page">{action.label}</span>}
   </nav>
-  <header className="topic-page-heading"><TopicIcon name={action?.icon || flow.icon}/><h1 lang={action ? "en" : language}>{action?.label || translatePriority(flow.label, language)}</h1></header>
+  <header className="topic-page-heading"><TopicIcon name={action?.icon || flow.icon}/><h1 lang={language}>{translatePriority(action?.label || flow.label, language)}</h1></header>
   {!action ? <TopicChoices flow={flow}/> : action.choices ? <TopicChoices flow={flow} parent={action}/> : <>
    {!!action.links?.length && <section className="action-destinations" aria-label="Take your next step"><div className="choice-grid">
     {action.links.map(link => link.href.startsWith('#') || link.href.startsWith('/read/') || (link.href.startsWith('/') && !link.download)
