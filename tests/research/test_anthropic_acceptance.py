@@ -24,6 +24,7 @@ def setup(tmp_path,monkeypatch):
     monkeypatch.setattr(acceptance,'datetime',Today);monkeypatch.setattr(hosting,'datetime',Today)
     monkeypatch.setattr(acceptance,'source_identity',lambda:'reviewed-head')
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic');monkeypatch.delenv('ANTHROPIC_CHAT_MODEL',raising=False)
+    monkeypatch.delenv('ANTHROPIC_CHAT_EFFORT',raising=False)
     data=tmp_path/'disposable';data.mkdir();(data/'.research-index').mkdir()
     (data/'.research-index/CURRENT.json').write_text(json.dumps({'generation':'fixture-generation'}))
     (data/'.acceptance-disposable.json').write_text(json.dumps({'disposable_for_acceptance':True,'generation':'fixture-generation'}))
@@ -101,6 +102,21 @@ def test_comparison_model_requires_explicit_matching_plan(setup):
         with pytest.raises(ValueError,match='reviewed'):acceptance.preflight(plan,'test',sonnet)
 
 
+def test_high_effort_requires_explicit_matching_plan_without_cost_change(setup):
+    plan,config,_,_=setup;plan['model']='claude-sonnet-5-5'
+    medium=replace(config,model=plan['model']);high=replace(medium,effort='high')
+    assert acceptance.planned_effort(plan)=='medium'
+    before=acceptance.preflight(plan,'test',medium)
+    with pytest.raises(ValueError,match='effort'):acceptance.preflight(plan,'test',high)
+    plan['effort']='high'
+    with pytest.raises(ValueError,match='effort'):acceptance.preflight(plan,'test',medium)
+    after=acceptance.preflight(plan,'test',high)
+    assert before['worst_reservation_microusd']==after['worst_reservation_microusd']==316960
+    for invalid in ('low','xhigh',None,[]):
+        plan['effort']=invalid
+        with pytest.raises(ValueError,match='effort'):acceptance.preflight(plan,'test',high)
+
+
 def test_sonnet_full_suite_cannot_bypass_existing_monthly_allowance(setup):
     plan,config,_,_=setup;plan['model']='claude-sonnet-5-5'
     stage=plan['stages']['test'];stage['max_attempts']=71;stage['packets'][0]['count']=71
@@ -149,6 +165,15 @@ def test_sonnet_run_preserves_actual_identity_and_historical_accounting(setup):
     for entry in report['cases']:
         assert entry['request_shape']['model']==entry['response_model']==selected.model
         assert entry['response_model_matches'] and entry['accounting_matches'] and entry['usage_within_reservation']
+
+
+def test_high_effort_report_and_wire_identity_are_explicit(setup):
+    plan,config,library,tmp=setup;plan.update(model='claude-sonnet-5-5',effort='high')
+    selected=replace(config,model=plan['model'],effort=plan['effort'])
+    report,_=execute_fixture((plan,selected,library,tmp),response(model=selected.model))
+    assert report['complete'] and report['effort']=='high' and report['model']==selected.model
+    assert all(c['request_shape']['effort']=='high' and c['request_shape']['thinking']=='adaptive'
+               and c['request_shape']['max_tokens']==9000 and c['accounting_matches'] for c in report['cases'])
 
 
 def test_mismatched_reviewed_model_is_recorded_and_stops_without_retry(setup):

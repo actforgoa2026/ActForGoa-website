@@ -205,6 +205,13 @@ def normalize_native_answer(content, prepared):
     return json.dumps({'status': payload['status'], 'paragraphs': paragraphs}, ensure_ascii=False)
 
 
+def reviewed_effort(model, effort):
+    allowed = {'claude-haiku-5-5': ('medium',), 'claude-sonnet-5-5': ('medium', 'high')}
+    if not isinstance(effort, str) or effort not in allowed.get(model, ()):
+        raise ValueError('This Anthropic model and effort combination needs a reviewed configuration')
+    return effort
+
+
 def message_request(config, prepared):
     # Recheck the same reviewed rate tier before dispatch, even for direct callers.
     from .chat import MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
@@ -230,7 +237,7 @@ def message_request(config, prepared):
         'service_tier': 'standard_only',
         'thinking': {'type': 'adaptive'},
         'output_config': {
-            'effort': 'medium',
+            'effort': reviewed_effort(config.model, config.effort),
             'format': {'type': 'json_schema', 'schema': schema},
         },
     }
