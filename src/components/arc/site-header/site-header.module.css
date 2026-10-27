@@ -85,13 +85,13 @@
 .sheetActions .action { height: var(--control-height-md); }
 .sheetActions .secondary { border-color: var(--border); }
 
-@container site-header (max-width: 1199px) {
+@container site-header (max-width: 1279px) {
   .inner { padding: 0 var(--space-4); }
   .nav, .wideOnly, .panel { display: none; }
   .menuButton { display: grid; }
   .header[data-variant="centered"] .bar { display: flex; }
 }
-@container site-header (min-width: 1200px) {
+@container site-header (min-width: 1280px) {
   .sheet, .scrim { display: none; }
 }
 
@@ -111,6 +111,9 @@
 .navItem { height: 44px; padding: 0 8px; font-size: 13px; font-weight: 750; border-radius: 4px; }
 .action { height: 44px; font-weight: 750; }
 .actions { margin-left: 0; }
+.brandSlot, .actions { flex-shrink: 0; }
+.extraAction { display: flex; }
+.compactExtraAction { display: none; }
 .menuButton { width: 44px; height: 44px; border-radius: 4px; }
 .panel { left: 0; right: auto; width: min(336px, 100%); overflow-y: auto; overscroll-behavior: contain; border-radius: 4px; box-shadow: 0 16px 32px #193e3214; transform-origin: 0 0; }
 .face { padding: var(--space-2); }
@@ -126,7 +129,7 @@
 .sheetInner { max-height: calc(100dvh - 81px); }
 .sheetRow { font-weight: 750; }
 .sheetLink { font-weight: 650; }
-@container site-header (max-width: 1199px) {
+@container site-header (max-width: 1279px) {
   .inner { width: calc(100% - 64px); padding: 0; }
   .actions { margin-left: auto; }
   .bar { height: 80px; }
@@ -134,4 +137,6 @@
 @container site-header (max-width: 620px) {
   .inner { width: calc(100% - 40px); }
   .brand { font-size: 26px; }
+  .extraAction { display: none; }
+  .compactExtraAction { display: flex; padding-block: 8px 16px; }
 }
