@@ -9,6 +9,7 @@ import time
 from typing import Literal
 from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from .providers import PRICES
+from .source_context import with_source_context
 
 class Paragraph(BaseModel):
     model_config = ConfigDict(extra='forbid')
@@ -95,7 +96,7 @@ source dates get separate entries even when document IDs happen to match.
         # Keep them in local/public citations, never as native answer evidence.
         hidden = {'title', 'url', 'publisher_class', 'document_kind_hint', 'topics'}
         source_keys = tuple(key for key in source_keys if key not in hidden)
-    passage_keys = ('id', 'page', 'label', 'start', 'end', 'text', 'page_heading', 'warning')
+    passage_keys = ('id', 'page', 'label', 'start', 'end', 'text', 'page_heading', 'warning', 'context_ids')
     sources, source_ids, passages = {}, {}, []
     for item in evidence:
         source = {key: item[key] for key in source_keys if key in item}
@@ -113,19 +114,22 @@ source dates get separate entries even when document IDs happen to match.
 
 def prepare_answer(request, evidence, *, provider=None):
     history=[{'role':m.role,'content':m.content} for m in request.history]
-    selected=list(evidence[:10])
+    primary=list(evidence[:10])
     schema=GroundedAnswer.model_json_schema()
     schema['properties']['paragraphs']['items']=schema.pop('$defs')['Paragraph']
     schema['properties']['paragraphs']['maxItems']=1 if request.answer_style=='brief' else 4
     instruction=INSTRUCTIONS
     instruction+='\nEach evidence passage has a source reference into the sources object. Read that source metadata, including its dates, jurisdiction and verification/currentness limitations, together with the passage. Source references are not citation IDs: cite only the exact passage id. Source metadata and page headings are context, not additional quoted passage text.'
+    if any(item.get('supporting_context') for item in primary):
+        instruction+='\nA passage with context_ids depends on the separately supplied original header excerpt. Any paragraph citing that passage must also cite each of its context_ids, using their actual text to interpret column meanings. A header does not make incomplete table rows safe for numerical claims; the restriction on table-fragment values still applies. If the supplied excerpts do not establish a column meaning, omit that interpretation.'
     if request.answer_style=='brief':
         instruction+='\nIf answering, address only the requested points in one paragraph of at most three short sentences. Target 50 words; use no more than 80 words. Omit unrequested adjacent procedures, charges and background. Retain conditions and source-specific limits needed for the requested answer; the application displays the generic legal-currency warning separately. Keep each authority-to-approval mapping exact; never slash-combine distinct issuers or approvals. Before returning, check requested details against all passages, cite each supported action, state specific missing details, and shorten without losing qualifications.'
     else:
         instruction+='\nIf answering, address the actual question in at most four paragraphs and 350 words; omit unrelated background.'
     base_instructions=instruction
     instruction+='\nThe only top-level fields are status and paragraphs. Every paragraphs entry must be an object with text and citations, never a string. For insufficient_evidence, paragraphs must be an empty list. Do not place citations at the top level. Return JSON conforming to this inline schema: '+json.dumps(schema,ensure_ascii=False,separators=(',',':'))
-    while selected:
+    while primary:
+        selected=with_source_context(primary)
         bounded_schema=deepcopy(schema)
         bounded_schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']=[e['id'] for e in selected]
         final_instruction=instruction
@@ -142,7 +146,7 @@ def prepare_answer(request, evidence, *, provider=None):
         if history:
             history.pop(0)
             while history and history[0]['role']=='assistant':history.pop(0)
-        else:selected.pop()
+        else:primary.pop()
     raise ValueError('The question and evidence exceed the bounded answer context')
 
 def citation_text(text, identifiers):
@@ -168,6 +172,9 @@ def validate_answer(answer, evidence, answer_style='standard'):
     for paragraph in paragraphs:
         if not paragraph['text'].strip() or not paragraph['citations'] or any(c not in allowed for c in paragraph['citations']):
             raise ValueError('Answer contains missing or unknown citations')
+        if any(context not in paragraph['citations'] for citation in paragraph['citations']
+               for context in allowed[citation].get('context_ids', [])):
+            raise ValueError('Answer omitted required source context citations')
         if not re.search(r'[.!?。！？।॥][\)\]"\u2019\u201d]*$',paragraph['text']):
             raise ValueError('Answer paragraph appears incomplete')
         for citation in paragraph['citations']:

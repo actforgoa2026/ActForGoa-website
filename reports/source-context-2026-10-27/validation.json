@@ -1,0 +1,126 @@
+{
+  "baseline": "3f18ffa064b1729a5a65bcd3b350509a9c351193",
+  "generation": "20261027T065155-law-5bc5619b",
+  "source_sha256": {
+    "backend/library.py": "37a18c1ed7e5cbbcb837d4d4d7b88607959f72191fab5f2ce25786295361c9ed",
+    "backend/source_context.py": "a3622d21d26d7a780939bf88d10ae4e8ee546a3876216b297dd6709141f4bf9f",
+    "backend/chat.py": "b69e9f9054c01eb97e0fd140f77a37d384141c54268d7aa5969e25ed832faa63",
+    "backend/anthropic_provider.py": "c98ff519b454034ec145ea2ec804ba966056ee8b4f1b3e4db8b0265297cdd8e5"
+  },
+  "packet_sha256": {
+    "reports/recovery-2026-10-27/retrieval-evidence-cases.json": "a6d76d98c7cf815ef12ee9612ac22d8aef6552b6df939cfe882a0efa64190a9b",
+    "reports/rti-offline-2026-10-27/held-out-cases.json": "b9a137599f7eb3971e3bb7a9b8d8a75c80c8fdec5ea5223c1b00314a955d9757",
+    "reports/evidence-selection-2026-10-27/frozen-cases.json": "86863c2ec6b8888d4a1bd41304b6e6fc079119cdb8904348090dcb475e9f2b88",
+    "reports/passage-selection-2026-10-27/assessment-cases.json": "7420098b89731896c4689f1b16bfb5003f41b98a0e302756b0d6de9d96c26d9f"
+  },
+  "summary": {
+    "brief": {
+      "original": {
+        "total": 9,
+        "before": 9,
+        "after": 9
+      },
+      "prior": {
+        "total": 15,
+        "before": 12,
+        "after": 12
+      },
+      "previous_frozen": {
+        "total": 20,
+        "before": 19,
+        "after": 19
+      },
+      "consumed_assessment": {
+        "total": 12,
+        "before": 12,
+        "after": 12
+      },
+      "smoke": {
+        "total": 16,
+        "before": 16,
+        "after": 16
+      }
+    },
+    "standard": {
+      "original": {
+        "total": 9,
+        "before": 9,
+        "after": 9
+      },
+      "prior": {
+        "total": 15,
+        "before": 12,
+        "after": 12
+      },
+      "previous_frozen": {
+        "total": 20,
+        "before": 19,
+        "after": 19
+      },
+      "consumed_assessment": {
+        "total": 12,
+        "before": 12,
+        "after": 12
+      },
+      "smoke": {
+        "total": 16,
+        "before": 16,
+        "after": 16
+      }
+    }
+  },
+  "regressions": {
+    "brief": [],
+    "standard": []
+  },
+  "all_safeguards_passed": true,
+  "known_failures": {
+    "brief": [
+      "held-fee-1",
+      "held-fee-2",
+      "held-dogs",
+      "frozen-licensing-bodies"
+    ],
+    "standard": [
+      "held-fee-1",
+      "held-fee-2",
+      "held-dogs",
+      "frozen-licensing-bodies"
+    ]
+  },
+  "research_tests_passed": 251,
+  "existing_warnings": 5,
+  "provider_calls": 0,
+  "genuine_usage_operations": 0,
+  "evidence_sha256": {
+    ".reports/source-context/offline-boundary-reviewed.json": "67a17fcf92bee8d33d9b130c02f1638be34af8c05ca87c59f26cb2990207edf5",
+    ".reports/source-context/previous-output-replay.json": "aae27b4eff17c7dfc67f5da4838604f040e88bf9dae634371a3fcbb7f858d62e",
+    ".reports/source-context/sealed-final-post-exit-audit.json": "b65f394ad8ef26f5ee4be8f1122cfdb60d900fe184ab8494c900f02fa8931a56"
+  },
+  "evaluator_sha256": "8dd61318327ab887f52ed2b7026a5b54317c9ab3c0c2c8504fa0da13f0131d8b",
+  "focused_tests_sha256": "ae9ee017d62f41cf7ff246511803bc608ae8683257660f2df5200c75a0823737",
+  "source_context_diagnostics": [
+    {
+      "id": "water-04",
+      "actual_native_prompt_bytes": 21365,
+      "schema_bytes": 1686,
+      "context_dependencies": {},
+      "passed": true
+    },
+    {
+      "id": "scope-01",
+      "actual_native_prompt_bytes": 22495,
+      "schema_bytes": 1756,
+      "context_dependencies": {
+        "10f181b6edf33c78ba0d3cf81e0d319f": [
+          "36cafd12f2047cf99de8fcfaee546460"
+        ]
+      },
+      "passed": true
+    }
+  ],
+  "sealed_source_files": 1258,
+  "sealed_source_unchanged": true,
+  "source_seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "limits": "Offline evidence only; not fresh answer entailment, current legal verification or public activation."
+}

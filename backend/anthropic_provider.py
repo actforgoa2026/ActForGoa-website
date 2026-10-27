@@ -139,6 +139,21 @@ def _represented_fields(prepared):
     return fields
 
 
+def _represented_contexts(prepared):
+    """Use the visible dependency contract and reject local/wire disagreement."""
+    payload = json.loads(prepared.messages[-1]['content'])
+    expected = {item['id']: item.get('context_ids', []) for item in prepared.evidence}
+    visible = {item['id']: item.get('context_ids', []) for item in payload['evidence']}
+    if visible != expected or any(
+        not isinstance(contexts, list)
+        or any(not isinstance(context, str) or context not in visible or context == identifier
+               for context in contexts)
+        for identifier, contexts in visible.items()
+    ):
+        raise ValueError('Source context differs from the model-visible evidence contract')
+    return visible
+
+
 def normalize_native_answer(content, prepared):
     from .chat import Paragraph, citation_text
     from pydantic import ValidationError
@@ -156,6 +171,7 @@ def normalize_native_answer(content, prepared):
         elif not isinstance(units, list) or not 1 <= len(units) <= (1 if key == 'paragraph' else 4):
             raise ValueError()
         fields = _represented_fields(prepared)
+        contexts = _represented_contexts(prepared)
         paragraphs = []
         for unit in units:
             if (not isinstance(unit, dict) or set(unit) != {'text', 'primary_support', 'supports'}
@@ -163,6 +179,7 @@ def normalize_native_answer(content, prepared):
                     or not isinstance(unit['supports'], list) or not 0 <= len(unit['supports']) < MAX_SUPPORTS):
                 raise ValueError()
             citations = []
+            text_supports = set()
             for support in [unit['primary_support'], *unit['supports']]:
                 if not isinstance(support, dict) or set(support) != {'citation_id', 'field', 'quote'}:
                     raise ValueError()
@@ -174,6 +191,10 @@ def normalize_native_answer(content, prepared):
                     raise ValueError()
                 if identifier not in citations:
                     citations.append(identifier)
+                if field == 'text':
+                    text_supports.add(identifier)
+            if any(context not in text_supports for identifier in citations for context in contexts[identifier]):
+                raise ValueError()
             paragraph = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
             # Shared display cleanup must not silently rewrite a native claim.
             if citation_text(paragraph.text, fields) != paragraph.text:
@@ -199,6 +220,7 @@ def message_request(config, prepared):
     size = len(json.dumps(messages, ensure_ascii=False, separators=(',', ':')).encode())
     if size > MAX_PROMPT_BYTES or size + FRAMING_TOKEN_ALLOWANCE > prepared.input_token_bound:
         raise ValueError('The native prompt exceeds its reserved allowance')
+    _represented_contexts(prepared)
     return {
         'model': config.model,
         'max_tokens': config.max_output_tokens,
