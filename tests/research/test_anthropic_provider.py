@@ -429,3 +429,21 @@ def test_valid_primary_cannot_mask_invalid_additional_support(prepared,support):
     payload=native_payload(answer_payload());payload['paragraphs'][0]['supports']=[support]
     with pytest.raises(ValueError,match='evidence contract'):
         normalize_native_answer(json.dumps(payload),replace(prepared,answer_style='standard'))
+
+
+
+def test_standard_scope_policy_is_generic_and_keeps_provider_style_boundaries(config,prepared):
+    from backend.anthropic_provider import message_request
+    systems=[]
+    for question in ('How does occurrence differ from endemism?', 'How does rainfall reach the aquifer?'):
+        request=ChatRequest(question=question)
+        native=prepare_answer(request,prepared.evidence,provider='anthropic')
+        body=message_request(config,native);systems.append(body['system'])
+        assert 'without unrequested numerical examples' in body['system']
+        assert 'Retain entity, habitat, taxonomic, geographic and time qualifiers' in body['system']
+        assert 'at most four paragraphs and 350 words; omit unrelated background' not in body['system']
+        assert json.loads(body['messages'][-1]['content'])['question']==question
+        assert body['max_tokens']==9000 and body['thinking']=={'type':'adaptive'}
+        assert 'without unrequested numerical examples' not in prepare_answer(request,prepared.evidence).messages[0]['content']
+    assert systems[0]==systems[1]  # No question-specific branch or baked-in answer.
+    assert 'without unrequested numerical examples' not in message_request(config,prepared)['system']

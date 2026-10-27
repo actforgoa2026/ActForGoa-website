@@ -86,13 +86,19 @@ def native_answer_instructions(instructions, answer_style):
     instructions = instructions.replace(
         'Put evidence IDs only in the citations array, never in paragraph text.',
         'Put evidence IDs only in primary_support.citation_id or supports.citation_id, never in paragraph text.')
+    if answer_style == 'standard':
+        instructions = instructions.replace(
+            'If answering, address the actual question in at most four paragraphs and 350 words; omit unrelated background.',
+            'If answering, address only the requested points in the fewest sufficient paragraphs, '
+            'within four paragraphs and 350 words. For conceptual distinctions, explain the distinction '
+            'directly without unrequested numerical examples. Omit unrelated procedures and background.')
     shape = ('Return only status and paragraph. For answered, paragraph is one object; '
              'for insufficient_evidence, paragraph is null. Never return a paragraphs array.'
              if answer_style == 'brief' else
              'Return only status and paragraphs. For answered, paragraphs contains one to four objects; '
              'for insufficient_evidence, paragraphs is an empty array.')
     return instructions + '\n' + shape + (
-        ' Each object has text, primary_support and supports only. Use the fewest sufficient claim units. '
+        ' Each object has text, primary_support and supports only. '
         'primary_support is one object with citation_id, field set to text, and quote. '
         'supports is an array of zero to nine additional objects with citation_id, field and quote. '
         'Use an exact selected passage ID. field is one of: ' + ', '.join(SUPPORT_FIELDS) + '. '
