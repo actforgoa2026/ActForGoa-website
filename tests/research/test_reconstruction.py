@@ -9,6 +9,8 @@ from backend.chat import ChatRequest, Message, prepare_answer
 from backend.providers import chat_config
 from backend.reconstruction import (prepare_reconstruction, reconstruction_message_request,
     normalize_reconstruction, encoded, CORRECTION_PROMPT_BYTES)
+from backend.source_spans import verify_annotated_payload
+from tests.research.span_fixtures import select_response,payload_from_prepared
 
 
 @pytest.fixture
@@ -30,9 +32,11 @@ def claim(text='Gates regulate tidal water.', citation='a', quote='Gates regulat
             'supports':list(extras),'text':text}
 
 
-def response(*units, style='standard'):
+def response(*units, style='standard', prepared=None):
     paragraph = {'claims': list(units)}
-    return json.dumps({'status':'answered', **({'paragraph':paragraph} if style=='brief' else {'paragraphs':[paragraph]})})
+    native={'status':'answered', **({'paragraph':paragraph} if style=='brief' else {'paragraphs':[paragraph]})}
+    if prepared is not None:native=select_response(native,payload_from_prepared(prepared))
+    return json.dumps(native)
 
 
 @pytest.mark.parametrize('style',['standard','brief'])
@@ -44,7 +48,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
     prepared=prepare_reconstruction(request,original,draft)
     wire=reconstruction_message_request(config,prepared)
     source=json.loads(original.messages[-1]['content']);actual=json.loads(wire['messages'][-1]['content'])
-    assert {k:actual[k] for k in ('question','sources','evidence')}==source
+    assert verify_annotated_payload({k:actual[k] for k in ('question','sources','evidence')},source)[0]==source
     assert wire['messages'][:-1]==original.messages[1:-1]
     assert actual['draft_answer']=={k:draft[k] for k in ('status','paragraphs')}
     assert actual['request_scope']=={'answer_style':style,'document_id':None,'generation':None}
@@ -54,7 +58,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
     assert wire['output_config']['effort']=='low' and wire['max_tokens']==12000
     assert 'direct the reader to the original table' not in wire['system']
     units=[claim(),claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')]
-    answer,offsets=normalize_reconstruction(response(*units,style=style),prepared)
+    answer,offsets=normalize_reconstruction(response(*units,style=style,prepared=prepared),prepared)
     assert answer['paragraphs']==[{'text':'Gates regulate tidal water. Design must follow Appendix C.','citations':['a']}]
     for m,u in zip(offsets,units):
         assert answer['paragraphs'][0]['text'][m['start']:m['end']]==u['text']
@@ -64,7 +68,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
 def test_insufficient_draft_is_reconstructed_and_final_abstention_is_empty(setup):
     _,request,original,_=setup
     prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
-    assert normalize_reconstruction(response(claim()),prepared)[0]['status']=='answered'
+    assert normalize_reconstruction(response(claim(),prepared=prepared),prepared)[0]['status']=='answered'
     answer,mapping=normalize_reconstruction(json.dumps({'status':'insufficient_evidence','paragraphs':[]}),prepared)
     assert answer['paragraphs']==[] and mapping==[]
 
@@ -120,9 +124,9 @@ def test_claim_local_context_cannot_be_borrowed_from_sibling(setup):
     prepared=prepare_reconstruction(request,original,draft)
     row_claim=claim('Species P occurs here.',quote='Species P occurs here.')
     header_claim=claim('The header labels regional endemism.',citation='ctx-header',quote=context['text'])
-    with pytest.raises(ValueError):normalize_reconstruction(response(row_claim,header_claim),prepared)
+    with pytest.raises(ValueError):normalize_reconstruction(response(row_claim,header_claim,prepared=prepared),prepared)
     row_claim['supports']=[header_claim['primary_support']]
-    assert normalize_reconstruction(response(row_claim,header_claim),prepared)[0]['status']=='answered'
+    assert normalize_reconstruction(response(row_claim,header_claim,prepared=prepared),prepared)[0]['status']=='answered'
 
 
 def test_publication_acknowledgement_is_shared_within_paragraph_only(setup):
@@ -133,18 +137,18 @@ def test_publication_acknowledgement_is_shared_within_paragraph_only(setup):
     publication={'citation_id':'a','field':'source_publication','quote':'Source publication year: 2022 (source metadata).'}
     first=claim('The source published in 2022 states that gates regulate tidal water.',extras=[publication])
     second=claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')
-    assert normalize_reconstruction(response(first,second),prepared)[0]['status']=='answered'
-    with pytest.raises(ValueError):normalize_reconstruction(json.dumps({'status':'answered','paragraphs':[
-        {'claims':[first]},{'claims':[second]}]}),prepared)
+    assert normalize_reconstruction(response(first,second,prepared=prepared),prepared)[0]['status']=='answered'
+    native={'status':'answered','paragraphs':[{'claims':[first]},{'claims':[second]}]}
+    with pytest.raises(ValueError):normalize_reconstruction(json.dumps(select_response(native,payload_from_prepared(prepared))),prepared)
 
 
 def test_deduplicated_paragraph_support_limit_does_not_add_claim_count_cap(setup):
     _,request,original,draft=setup;prepared=prepare_reconstruction(request,original,draft)
-    assert normalize_reconstruction(response(*[claim() for _ in range(15)]),prepared)[0]['status']=='answered'
+    assert normalize_reconstruction(response(*[claim() for _ in range(15)],prepared=prepared),prepared)[0]['status']=='answered'
     # Distinct exact quotes still retain the existing ten-support paragraph cap.
-    text=' '.join(f'Fact {i}.' for i in range(11));original.evidence[0]['text']=text
+    text=''.join((f'Fact {i}. ').ljust(600,'x') for i in range(11));original.evidence[0]['text']=text
     original=prepare_answer(request,original.evidence,provider='anthropic');prepared=prepare_reconstruction(request,original,draft)
-    with pytest.raises(ValueError):normalize_reconstruction(response(*[claim(f'Fact {i}.',quote=f'Fact {i}.') for i in range(11)]),prepared)
+    with pytest.raises(ValueError):normalize_reconstruction(response(*[claim(f'Fact {i}.',quote=f'Fact {i}.') for i in range(11)],prepared=prepared),prepared)
 
 
 def test_quote_valid_wrong_claim_is_not_mistaken_for_semantic_acceptance(setup):
@@ -152,5 +156,5 @@ def test_quote_valid_wrong_claim_is_not_mistaken_for_semantic_acceptance(setup):
     wrong='Gates regulate all water everywhere and need no design conditions.'
     # This must remain an explicit semantic negative even though the local
     # mechanics accept its genuine quote. No automatic accuracy score exists.
-    answer,_=normalize_reconstruction(response(claim(wrong)),prepared)
+    answer,_=normalize_reconstruction(response(claim(wrong),prepared=prepared),prepared)
     assert answer['paragraphs'][0]['text']==wrong

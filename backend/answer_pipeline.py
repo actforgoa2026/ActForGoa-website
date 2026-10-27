@@ -14,6 +14,7 @@ from .chat import GroundedAnswer, validate_answer, MAX_PROMPT_BYTES, FRAMING_TOK
 from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_BYTES,
     PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
+from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, registry_hash
 
 
 class PipelineFailure(Exception):
@@ -88,7 +89,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
     expected_day = expected_day or utc_day()
     parent_id = request_id or uuid.uuid4().hex
     original = deepcopy(prepared)
-    trace = {'capture_version': 2, 'pipeline_spec': deepcopy(PIPELINE_SPEC), 'parent_id': parent_id,
+    trace = {'capture_version': PIPELINE_SPEC['capture_version'], 'pipeline_spec': deepcopy(PIPELINE_SPEC), 'parent_id': parent_id,
              'expected_day': expected_day, 'status': 'not_started', 'phases': [
                  {'phase': name, 'state': 'not_started', 'provider_attempts': 0,
                   'outgoing_request': {'capture_status': 'not_dispatched'}}
@@ -154,6 +155,16 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             stage['outgoing_request'] = capture
             if actual_body is None or actual_body != body:
                 raise fail('request_capture_mismatch')
+            if stage['phase']=='reconstruction':
+                actual_payload=json.loads(actual_body['messages'][-1]['content'])
+                restored,registry=verify_annotated_payload(
+                    {k:actual_payload[k] for k in ('question','sources','evidence')},
+                    json.loads(original.messages[-1]['content']))
+                if registry_hash(registry)!=stage['span_registry_sha256']:
+                    raise fail('source_span_registry_identity')
+                stage['source_equality'].update(actual_wire_verified=True,
+                    actual_wire_original_payload_sha256=digest(restored),
+                    actual_request_body_sha256=capture['body_sha256'])
             stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
                          dispatched_elapsed_seconds=time.monotonic() - started,
                          request_shape={'model':body['model'], 'version':API_VERSION,
@@ -173,7 +184,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             stage.update(deepcopy(metadata))
             stage['dispatch_status'] = 'http_response_received'
             if payload is not None:
-                stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'])
+                stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'],
+                    anchor_protocol=ANCHOR_PROTOCOL if stage['phase']=='reconstruction' else None)
             notify()
 
         phase_started = time.monotonic()
@@ -228,15 +240,22 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                 correction_body = reconstruction_message_request(config, correction)
                 first_payload = json.loads(original.messages[-1]['content'])
                 next_payload = json.loads(correction.messages[-1]['content'])
-                preserved = {k:next_payload[k] for k in ('question','sources','evidence')}
+                preserved,actual_registry = verify_annotated_payload(
+                    {k:next_payload[k] for k in ('question','sources','evidence')},first_payload)
                 if preserved != first_payload or correction.messages[1:-1] != original.messages[1:-1]:
                     raise fail('evidence_identity_changed')
                 current.update(compact_draft=deepcopy(correction.compact_draft),
                     source_equality={'draft_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
                                      'retained_history_equal':True, 'complete_evidence_equal':True},
-                    request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256)
+                    request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256,
+                    anchor_protocol=ANCHOR_PROTOCOL,span_registry_sha256=correction.span_registry_sha256,
+                    span_registry={key:{k:v for k,v in span.items() if k!='text'} for key,span in actual_registry.items()},
+                    annotated_payload_sha256=correction.annotated_payload_sha256)
+                def observe_resolution(value):
+                    current['deterministic_support_resolution']=value
+                    notify()
                 final, assembly = await run_stage(client, current, correction_body, correction.input_token_bound,
-                                                 lambda content: normalize_reconstruction(content, correction))
+                    lambda content: normalize_reconstruction(content, correction,resolved_observer=observe_resolution))
                 trace['assembly_offsets'] = assembly
                 await available()
             await available()

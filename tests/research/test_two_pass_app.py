@@ -12,6 +12,7 @@ from backend.async_anthropic import AsyncAnthropicClient
 from backend.usage_reconciliation import inspect_ledger
 from tests.research.test_answer_pipeline import Transport, model_response
 from tests.research.test_reconstruction import claim
+from tests.research.span_fixtures import select_response
 
 
 @pytest.fixture
@@ -19,7 +20,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','low')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v1')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v2')
     monkeypatch.delenv('RESEARCH_PUBLIC_ORIGIN',raising=False)
     monkeypatch.setenv('RESEARCH_USAGE_ROOT',str(tmp_path/'usage'))
     monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5')
@@ -35,7 +36,9 @@ def setup(tmp_path, monkeypatch):
     async def handler(request,n):
         body=json.loads(request.content);brief='paragraph' in body['output_config']['format']['schema']['properties']
         unit=claim() if n==1 else {'claims':[claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')]}
-        return model_response({'status':'answered',**({'paragraph':unit} if brief else {'paragraphs':[unit]})})
+        native={'status':'answered',**({'paragraph':unit} if brief else {'paragraphs':[unit]})}
+        if n==2:native=select_response(native,json.loads(body['messages'][-1]['content']))
+        return model_response(native)
     handlers=[handler]
     def factory():
         transport=Transport(handlers[0]);transports.append(transport)
@@ -47,7 +50,7 @@ def setup(tmp_path, monkeypatch):
 def test_http_final_only_cache_styles_history_and_source_search(setup):
     app,evidence,transports,_,ledger=setup
     with TestClient(app) as client:
-        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v1'
+        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v2'
         question={'question':'What do the sources say about these gates?'}
         answer=client.post('/api/chat',json=question)
         assert answer.status_code==200 and answer.json()['paragraphs'][0]['text']=='Design must follow Appendix C.'

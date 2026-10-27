@@ -326,7 +326,7 @@ def run_cases(library, client, capture, config, cases, context, output):
         'originals_checked':{},'entailment_acceptance':'pending_human_review','complete':False}
     two_pass = config.pipeline == PIPELINE_VERSION
     if two_pass:
-        report.update(capture_version=2, pipeline=PIPELINE_VERSION, pipeline_spec=dict(PIPELINE_SPEC),
+        report.update(capture_version=PIPELINE_SPEC['capture_version'], pipeline=PIPELINE_VERSION, pipeline_spec=dict(PIPELINE_SPEC),
                       provider_attempt_ceiling=context['provider_attempt_ceiling'], max_cases=context['count'])
     limits=PublicLimits(context['ledger'].parent,chats_per_day=100,monthly_usd='5')
     save(report,output)
@@ -348,7 +348,7 @@ def run_cases(library, client, capture, config, cases, context, output):
         report['cases'].append(entry)
         if two_pass:
             entry['parent_id']=uuid.uuid4().hex
-            entry['pipeline_trace']={'capture_version':2,'parent_id':entry['parent_id'],'status':'not_started','phases':[]}
+            entry['pipeline_trace']={'capture_version':PIPELINE_SPEC['capture_version'],'parent_id':entry['parent_id'],'status':'not_started','phases':[]}
         else:capture.entry=entry
         save(report,output)
         fatal=False
