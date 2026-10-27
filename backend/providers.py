@@ -88,7 +88,8 @@ def chat_config():
         effort = reviewed_effort(model, os.getenv('ANTHROPIC_CHAT_EFFORT', 'medium'))
         config = ChatConfig(provider, model,
                             'Anthropic', 'ANTHROPIC_API_KEY', 'https://api.anthropic.com/v1',
-                            max_output_tokens=9000, route='anthropic', structured=True, effort=effort)
+                            max_output_tokens=12000 if model == 'claude-haiku-5-5' else 9000,
+                            route='anthropic', structured=True, effort=effort)
     elif provider == 'openai':
         config = ChatConfig(provider, os.getenv('OPENAI_CHAT_MODEL', 'gpt-5.6-luna'),
                             'OpenAI', 'OPENAI_API_KEY', 'https://api.openai.com/v1')
