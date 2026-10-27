@@ -1,6 +1,7 @@
 """Small native Messages adapter: one fixed-host request, no retries or tools."""
 from copy import deepcopy
 import json
+import re
 
 import httpx
 
@@ -45,7 +46,7 @@ def native_schema(schema):
 
 # These are fields actually represented in the request, never hidden library
 # metadata. Provenance can qualify a claim but cannot replace passage support.
-SUPPORT_FIELDS = ('text', 'warning', 'legal_currency',
+SUPPORT_FIELDS = ('text', 'warning', 'legal_currency', 'source_publication',
                   'source_date_metadata.reviewed_locator_and_dates',
                   'source_date_metadata.date_caution', 'guide_verification.limitations')
 MAX_SUPPORTS = 10
@@ -104,17 +105,24 @@ def native_answer_instructions(instructions, answer_style):
         'Use an exact selected passage ID. field is one of: ' + ', '.join(SUPPORT_FIELDS) + '. '
         'For each support, copy a contiguous quote of 1 to 600 characters from that passage field '
         'or its referenced source field. Whitespace may be normalized; spelling, case and punctuation must stay exact. '
-        'Attach caveats and source limitations to the associated text-supported claim unit; never add a metadata-only conclusion. '
-        'The other allowed fields support only explicit dates, '
-        'source limitations and provenance qualifications, never substantive ecological claims. '
-        'catalogue_scope_hint is a catalogue title for document identity, jurisdiction and version context only. '
-        'It does not prove authorship, publication dates, advocacy or official status, or current law. '
-        'Do not quote the hint, hidden metadata or other page text as support. '
-        'Before returning, check every clause, opening statement and definition against its own paragraph supports. '
+        'Build each paragraph around one supported point. Choose its local evidence before wording the answer; '
+        'the quotes must retain the population, predicate and necessary qualifiers, not just matching keywords. '
         'Retain entity, habitat, taxonomic, geographic and time qualifiers, including annual measurement periods. '
-        'Do not infer authorship, advocacy or official status from a host or catalogue label, or add definitions absent from the evidence. '
-        'Do not label extraction OCR unless the supplied warning explicitly says so. '
-        'Rewrite or omit unsupported claims; do not borrow support from another paragraph. '
+        'Preserve the direction of quantified relations: most A satisfy B does not establish most B are A, '
+        'or that A forms most of a larger population. Do not turn subgroup habitat frequency into group composition. '
+        'Every clause, definition, inference and concluding summary needs its own paragraph supports; '
+        'a citation elsewhere in the answer cannot supply a missing premise. Split differently supported points. '
+        'Answer independently supported requested parts; attach the exact remaining limitation to the relevant claim. '
+        'Do not resolve missing antecedents or qualifications from a catalogue title. '
+        'For each distinct cited source record with source_publication, add a paragraph-local support quoting its entire label. '
+        'Passages referencing the same source record may share this support; distinct source records need separate supports. '
+        'If the label gives a year, explicitly attribute the source as published in that year in this paragraph. '
+        'A publication year is not an observation year, proof of current conditions or verified legal force. '
+        'Other metadata supports only dates and limitations, never substantive claims. '
+        'catalogue_scope_hint gives identity/jurisdiction/version context only, not quote support, authorship or status. '
+        'Keep warnings and specific gaps with their text-supported point; no metadata-only conclusion. '
+        'Only call extraction OCR when the supplied warning explicitly does. '
+        'Rewrite or omit unsupported claims without discarding useful supported parts. '
         'Quotes anchor evidence but do not establish entailment by themselves.'
     )
 
@@ -154,6 +162,21 @@ def _represented_contexts(prepared):
     return visible
 
 
+def _represented_publications(prepared):
+    from .source_publication import publication_context
+    payload = json.loads(prepared.messages[-1]['content'])
+    publications = {}
+    for passage in payload['evidence']:
+        source = payload['sources'][passage['source']]
+        publication = publication_context(source.get('source_date_metadata'))
+        expected = publication['label'] if publication else None
+        if source.get('source_publication') != expected:
+            raise ValueError('Source publication differs from supplied metadata')
+        if publication is not None:
+            publications[passage['id']] = {**publication, 'source': passage['source']}
+    return publications
+
+
 def normalize_native_answer(content, prepared):
     from .chat import Paragraph, citation_text
     from pydantic import ValidationError
@@ -172,6 +195,7 @@ def normalize_native_answer(content, prepared):
             raise ValueError()
         fields = _represented_fields(prepared)
         contexts = _represented_contexts(prepared)
+        publications = _represented_publications(prepared)
         paragraphs = []
         for unit in units:
             if (not isinstance(unit, dict) or set(unit) != {'text', 'primary_support', 'supports'}
@@ -180,6 +204,7 @@ def normalize_native_answer(content, prepared):
                 raise ValueError()
             citations = []
             text_supports = set()
+            publication_supports = set()
             for support in [unit['primary_support'], *unit['supports']]:
                 if not isinstance(support, dict) or set(support) != {'citation_id', 'field', 'quote'}:
                     raise ValueError()
@@ -193,9 +218,24 @@ def normalize_native_answer(content, prepared):
                     citations.append(identifier)
                 if field == 'text':
                     text_supports.add(identifier)
+                if field == 'source_publication':
+                    if quote != publications.get(identifier, {}).get('label'):
+                        raise ValueError()
+                    publication_supports.add(publications[identifier]['source'])
             if any(context not in text_supports for identifier in citations for context in contexts[identifier]):
                 raise ValueError()
             paragraph = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
+            # This checks acknowledgement of visible publication metadata only.
+            # It cannot prove correct attribution, observation dates or entailment.
+            for identifier in citations:
+                publication = publications.get(identifier)
+                if publication is None:
+                    continue
+                if publication['source'] not in publication_supports:
+                    raise ValueError()
+                year = publication['year']
+                if year is not None and not re.search(r'(?<![0-9])' + f'{year:04d}' + r'(?![0-9])', paragraph.text):
+                    raise ValueError()
             # Shared display cleanup must not silently rewrite a native claim.
             if citation_text(paragraph.text, fields) != paragraph.text:
                 raise ValueError()
@@ -228,6 +268,7 @@ def message_request(config, prepared):
     if size > MAX_PROMPT_BYTES or size + FRAMING_TOKEN_ALLOWANCE > prepared.input_token_bound:
         raise ValueError('The native prompt exceeds its reserved allowance')
     _represented_contexts(prepared)
+    _represented_publications(prepared)
     return {
         'model': config.model,
         'max_tokens': config.max_output_tokens,

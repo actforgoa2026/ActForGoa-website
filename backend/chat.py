@@ -103,6 +103,11 @@ source dates get separate entries even when document IDs happen to match.
         source = {key: item[key] for key in source_keys if key in item}
         if provider == 'anthropic' and 'title' in item:
             source['catalogue_scope_hint'] = item['title']
+        if provider == 'anthropic':
+            from .source_publication import publication_context
+            publication = publication_context(source.get('source_date_metadata'))
+            if publication is not None:
+                source['source_publication'] = publication['label']
         identity = json.dumps(source, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
         if identity not in source_ids:
             identifier = 'source-' + str(len(sources) + 1)

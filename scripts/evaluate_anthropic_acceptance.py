@@ -5,6 +5,7 @@ import hashlib
 import json
 import os
 from pathlib import Path
+import re
 import subprocess
 import sys
 import tempfile
@@ -37,6 +38,7 @@ FAILURE_CODES = {
     'The answer was incomplete or declined': 'incomplete_or_declined',
     'Reviewed required evidence is missing before dispatch': 'missing_required_evidence',
     'Budget refused dispatch': 'budget_refused',
+    'Outgoing request could not be captured safely': 'request_capture_unavailable',
 }
 
 
@@ -181,8 +183,74 @@ def preflight(plan, stage_name, config, *, execute=False):
             'worst_reservation_microusd': worst*count, 'day': day}
 
 
+def outgoing_request_capture(request):
+    """Capture exact safe request bytes, never headers or generated thinking.
+
+    This is diagnostic instrumentation, not a request builder. Unknown shapes
+    fail closed without storing their body or forwarding a modified request.
+    """
+    try:
+        raw = request.content
+    except httpx.RequestNotRead:
+        return {'capture_status': 'body_unavailable'}, None
+    if len(raw) > 131072:
+        return {'capture_status': 'oversize_body'}, None
+    def unique_object(pairs):
+        result = {}
+        for key, value in pairs:
+            if key in result:raise ValueError('Duplicate field')
+            result[key] = value
+        return result
+    try:
+        text = raw.decode('utf-8')
+        body = json.loads(text, object_pairs_hook=unique_object)
+    except (UnicodeDecodeError, ValueError):
+        return {'capture_status': 'invalid_json_body'}, None
+    expected = {'model', 'max_tokens', 'system', 'messages', 'stream',
+                'service_tier', 'thinking', 'output_config'}
+    if not isinstance(body, dict) or set(body) != expected:
+        return {'capture_status': 'unexpected_request_shape'}, None
+    output = body['output_config']
+    messages = body['messages']
+    if (not isinstance(body['system'], str) or not isinstance(body['model'], str)
+            or ('anthropic', body['model']) not in PRICES
+            or type(body['max_tokens']) is not int or body['max_tokens'] <= 0
+            or body['stream'] is not False or body['service_tier'] != 'standard_only'
+            or body['thinking'] != {'type': 'adaptive'}
+            or not isinstance(output, dict) or set(output) != {'effort', 'format'}
+            or output['effort'] not in ('medium', 'high')
+            or not isinstance(output['format'], dict) or set(output['format']) != {'type', 'schema'}
+            or output['format']['type'] != 'json_schema' or not isinstance(output['format']['schema'], dict)
+            or not isinstance(messages, list) or not messages
+            or any(not isinstance(m, dict) or set(m) != {'role', 'content'}
+                   or m['role'] not in ('user', 'assistant') or not isinstance(m['content'], str)
+                   for m in messages)):
+        return {'capture_status': 'unexpected_request_shape'}, None
+    # Header values are used only to refuse accidental credential echoes. They
+    # are never persisted. Also refuse common key prefixes and credential fields.
+    secrets = [request.headers.get('x-api-key'),
+               request.headers.get('authorization', '').removeprefix('Bearer ')]
+    def strings(value):
+        if isinstance(value, str):yield value
+        elif isinstance(value, list):
+            for item in value:yield from strings(item)
+        elif isinstance(value, dict):
+            for key, item in value.items():
+                yield key
+                yield from strings(item)
+    decoded = '\n'.join(strings(body))
+    credential_field = re.compile(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:', re.I)
+    if (any(secret and secret in decoded for secret in secrets)
+            or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+', decoded)
+            or credential_field.search(decoded)
+            or credential_field.search(text.replace('\\"', '"'))):
+        return {'capture_status': 'credential_like_content'}, None
+    return {'capture_status': 'captured_request', 'body_utf8': text,
+            'body_sha256': hashlib.sha256(raw).hexdigest(), 'body_bytes': len(raw)}, body
+
+
 class UsageCapture(httpx.BaseTransport):
-    """Capture only numeric usage and protocol facts, never raw thinking/headers."""
+    """Capture the safe outgoing body and numeric usage, never response thinking."""
     def __init__(self, inner):self.inner=inner;self.entry=None
 
     def handle_request(self, request):
@@ -190,12 +258,14 @@ class UsageCapture(httpx.BaseTransport):
         if entry is None or not entry.get('reserved') or entry['provider_attempts']:
             raise ValueError('An unreserved or duplicate provider dispatch was blocked')
         if str(request.url) != 'https://api.anthropic.com/v1/messages':raise ValueError('Unexpected provider host')
-        entry['provider_attempts'] += 1
-        body = json.loads(request.content)
+        entry['outgoing_request'], body = outgoing_request_capture(request)
+        if body is None:
+            raise ValueError('Outgoing request could not be captured safely')
         entry['request_shape'] = {'model': body['model'], 'version': request.headers['anthropic-version'],
             'max_tokens': body['max_tokens'], 'service_tier': body['service_tier'],
             'effort': body['output_config']['effort'], 'thinking': body['thinking']['type'],
             'format': body['output_config']['format']['type']}
+        entry['provider_attempts'] += 1
         response = self.inner.handle_request(request)
         response.read()
         entry['provider_http_status'] = response.status_code
@@ -293,11 +363,16 @@ def run_cases(library, client, capture, config, cases, context, output):
                'review_focus':case.get('review_focus'),'expected_abstention':case.get('expect_abstention',False),
                'required_evidence':case.get('required_evidence',[]),'source_review':case.get('source_review',[]),
                'provider_attempts':0,'reserved':False,'reservation_microusd':0,'ledger_before':before,
+               'outgoing_request':{'capture_status':'not_dispatched'},
                'human_review':{'status':'pending','claims':[],'material_omissions':[],'reviewer':None}}
         report['cases'].append(entry);capture.entry=entry;save(report,output)
         fatal=False
         try:
             request=ChatRequest(**{k:case[k] for k in ('question','history','answer_style','document_id','generation') if k in case})
+            # These are the actual validated request values, including Pydantic
+            # defaults. fields_set preserves which fields the case supplied.
+            entry['chat_request']=request.model_dump()
+            entry['chat_request_supplied_fields']=sorted(request.model_fields_set)
             # Match /api/chat follow-up retrieval. This harness does not replace
             # final HTTP/frontend acceptance or use the application's answer cache.
             previous=next((m.content for m in reversed(request.history) if m.role=='user'),'')
@@ -309,6 +384,7 @@ def run_cases(library, client, capture, config, cases, context, output):
                 entry['no_evidence_before_dispatch']=True
             else:
                 prepared=prepare_answer(request,evidence,provider=config.provider)
+                entry['retained_history']=prepared.messages[1:-1]
                 entry['prepared_evidence']=prepared.evidence
                 selected={e['id'] for e in prepared.evidence}
                 entry['required_evidence_retained']=all(set(item['any_of']) & selected for item in entry['required_evidence'])

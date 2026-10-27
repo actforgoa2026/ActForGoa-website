@@ -9,7 +9,8 @@ from dataclasses import replace
 import httpx
 import pytest
 
-from backend.anthropic_provider import AnthropicClient
+from backend.anthropic_provider import AnthropicClient, message_request, API_VERSION
+from backend.chat import ChatRequest, prepare_answer
 from backend.providers import chat_config
 from scripts import evaluate_anthropic_acceptance as acceptance
 from tests.research.test_anthropic_provider import anthropic_message, native_payload
@@ -151,6 +152,21 @@ def test_success_records_complete_sources_and_pending_claim_review(setup):
     assert all(e['request_shape']['thinking']=='adaptive' and e['request_shape']['effort']=='medium'
                and e['request_shape']['max_tokens']==9000 for e in report['cases'])
     assert all(e['human_review']['status']=='pending' and e['human_review']['claims'][0]['entailment'] is None for e in report['cases'])
+    for entry in report['cases']:
+        assert entry['chat_request'] == {'question': entry['question'], 'history': [],
+            'answer_style': 'standard', 'document_id': None, 'generation': None}
+        assert entry['chat_request_supplied_fields'] == ['question']
+        assert entry['retained_history'] == []
+        captured = entry['outgoing_request']
+        raw = captured['body_utf8'].encode('utf-8')
+        assert captured['capture_status'] == 'captured_request'
+        assert captured['body_sha256'] == hashlib.sha256(raw).hexdigest()
+        assert captured['body_bytes'] == len(raw)
+        body = json.loads(raw)
+        prompt = [{'role': 'system', 'content': body['system']}, *body['messages']]
+        assert hashlib.sha256(json.dumps(prompt, ensure_ascii=False, separators=(',', ':')).encode()).hexdigest() == entry['prompt_sha256']
+        assert json.loads(body['messages'][-1]['content'])['evidence'][0]['id'] == entry['prepared_evidence'][0]['id']
+        assert body['output_config']['format']['schema']['properties']['status']
     setup[0]['stages']['test']['expected_ledger']=report['after']
     with pytest.raises(FileExistsError):execute_fixture(setup,response())
 
@@ -204,6 +220,7 @@ def test_missing_source_reviewed_passage_prevents_paid_dispatch(setup):
     with AnthropicClient('fixture-only',transport=capture) as client:
         report=acceptance.run_cases(library,client,capture,config,cases,context,tmp/'missing.json')
     assert report['attempts']==0 and report['after']==report['before'] and not report['complete']
+    assert report['cases'][0]['outgoing_request'] == {'capture_status': 'not_dispatched'}
 
 
 def test_reported_usage_over_reservation_stops_stage(setup):
@@ -268,3 +285,102 @@ def test_diagnostic_capture_never_persists_malformed_text_or_unexpected_fields(t
     assert captured=={'capture_status':status}
     assert acceptance.failure_code(ValueError('private diagnostic fixture-only'))=='unclassified_local_failure'
     assert acceptance.failure_code(httpx.ReadTimeout('private diagnostic fixture-only'))=='non_validation_failure'
+
+
+@pytest.mark.parametrize('model', ['claude-haiku-5-5', 'claude-sonnet-5-5'])
+@pytest.mark.parametrize('style', ['brief', 'standard'])
+def test_outgoing_capture_preserves_exact_bytes_object_and_visible_context(setup, model, style):
+    _, config, library, _ = setup
+    request = ChatRequest(question='Where is the café?', answer_style=style,
+                          history=[{'role': 'user', 'content': 'Keep the source year.'}])
+    prepared = prepare_answer(request, library.search('fixture'), provider='anthropic')
+    wire = message_request(replace(config, model=model), prepared)
+    # Noncanonical whitespace and UTF-8 prove the capture hashes transport bytes,
+    # not a freshly serialized approximation of the payload.
+    raw = json.dumps(wire, ensure_ascii=False, indent=2).encode('utf-8')
+    outgoing = httpx.Request('POST', 'https://api.anthropic.com/v1/messages', content=raw,
+        headers={'Authorization': 'Bearer fixture-only', 'anthropic-version': API_VERSION,
+                 'anthropic-workspace-id': 'private-workspace'})
+    calls = []
+    def inner(actual):
+        assert actual is outgoing and actual.content == raw
+        assert actual.headers == outgoing.headers
+        calls.append(actual)
+        return response(model=model)
+    capture = acceptance.UsageCapture(httpx.MockTransport(inner))
+    capture.entry = {'reserved': True, 'provider_attempts': 0}
+    capture.handle_request(outgoing)
+    saved = capture.entry['outgoing_request']
+    assert saved == {'capture_status': 'captured_request', 'body_utf8': raw.decode('utf-8'),
+                     'body_sha256': hashlib.sha256(raw).hexdigest(), 'body_bytes': len(raw)}
+    body = json.loads(saved['body_utf8'])
+    assert body == wire and body['messages'] == prepared.messages[1:]
+    assert body['system'] == prepared.messages[0]['content']
+    assert len(calls) == capture.entry['provider_attempts'] == 1
+    serialized = json.dumps(capture.entry)
+    assert all(secret not in serialized for secret in ('fixture-only', 'private-workspace', 'private diagnostic'))
+
+
+@pytest.mark.parametrize('mutation,status', [
+    ('unexpected-field', 'unexpected_request_shape'),
+    ('thinking-content', 'unexpected_request_shape'),
+    ('message-block', 'unexpected_request_shape'),
+    ('credential-echo', 'credential_like_content'),
+    ('escaped-credential', 'credential_like_content'),
+    ('other-key', 'credential_like_content'),
+    ('credential-field', 'credential_like_content'),
+    ('invalid-json', 'invalid_json_body'),
+    ('duplicate-field', 'invalid_json_body'),
+    ('invalid-utf8', 'invalid_json_body'),
+    ('oversize', 'oversize_body'),
+])
+def test_unsafe_outgoing_capture_records_unavailability_without_body_or_dispatch(setup, mutation, status):
+    _, config, library, _ = setup
+    prepared = prepare_answer(ChatRequest(question='Where are gates?'), library.search('fixture'), provider='anthropic')
+    wire = message_request(config, prepared)
+    if mutation == 'unexpected-field': wire['api_key'] = 'private diagnostic'
+    elif mutation == 'thinking-content': wire['thinking']['text'] = 'private diagnostic'
+    elif mutation == 'message-block': wire['messages'][0]['content'] = [{'type': 'thinking', 'thinking': 'private diagnostic'}]
+    elif mutation in ('credential-echo', 'escaped-credential'): wire['system'] = 'fixture-only'
+    elif mutation == 'other-key': wire['system'] = 'sk-ant-private-diagnostic'
+    elif mutation == 'credential-field': wire['messages'][0]['content'] = '{"api_key":"private diagnostic"}'
+    raw = json.dumps(wire).encode()
+    if mutation == 'escaped-credential': raw = raw.replace(b'fixture-only', b'fixture-\\u006fnly')
+    elif mutation == 'duplicate-field': raw = b'{"system":"private diagnostic",' + raw[1:]
+    elif mutation == 'invalid-json': raw = b'private diagnostic'
+    elif mutation == 'invalid-utf8': raw = b'\xff'
+    elif mutation == 'oversize': raw = b'x' * 131073
+    outgoing = httpx.Request('POST', 'https://api.anthropic.com/v1/messages', content=raw,
+                            headers={'Authorization': 'Bearer fixture-only', 'anthropic-version': API_VERSION})
+    capture = acceptance.UsageCapture(httpx.MockTransport(lambda _: pytest.fail('Unsafe body must not dispatch')))
+    capture.entry = {'reserved': True, 'provider_attempts': 0}
+    with pytest.raises(ValueError, match='captured safely'):
+        capture.handle_request(outgoing)
+    assert capture.entry['outgoing_request'] == {'capture_status': status}
+    assert capture.entry['provider_attempts'] == 0
+    assert 'private diagnostic' not in json.dumps(capture.entry)
+
+
+def test_streaming_request_body_is_explicitly_unavailable():
+    outgoing = httpx.Request('POST', 'https://api.anthropic.com/v1/messages', content=iter([b'{}']))
+    assert acceptance.outgoing_request_capture(outgoing) == ({'capture_status': 'body_unavailable'}, None)
+
+
+def test_capture_distinguishes_original_request_history_from_retained_history(setup):
+    plan, config, library, tmp = setup
+    context = acceptance.preflight(plan, 'test', config)
+    case = acceptance.load_cases(context['stage'])[0]
+    case.update(history=[{'role': 'user' if i % 2 == 0 else 'assistant', 'content': 'Context ' * 500}
+                         for i in range(8)], answer_style='standard',
+                document_id='a' * 24 + '-' + 'b' * 12, generation='fixture-generation')
+    capture = acceptance.UsageCapture(httpx.MockTransport(lambda _: response()))
+    with AnthropicClient('fixture-only', transport=capture) as client:
+        report = acceptance.run_cases(library, client, capture, config, [case], context, tmp / 'history.json')
+    entry = report['cases'][0]
+    assert report['complete'] and entry['chat_request'] == {k: case[k] for k in
+        ('question', 'history', 'answer_style', 'document_id', 'generation')}
+    assert entry['chat_request_supplied_fields'] == sorted(entry['chat_request'])
+    wire = json.loads(entry['outgoing_request']['body_utf8'])
+    assert entry['retained_history'] == wire['messages'][:-1]
+    assert len(entry['retained_history']) < len(case['history'])
+    assert entry['retained_history'] == case['history'][-len(entry['retained_history']):]
