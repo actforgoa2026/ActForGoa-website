@@ -65,3 +65,43 @@ test('CRM maps require a reviewed organisation address; historical records never
   const unsafe = { ...wag, website_url: 'javascript:alert(1)', volunteer_url: 'tel:12345', instagram_url: 'data:text/html,unsafe' };
   assert.ok(crmDirectoryLinks(unsafe).every(l => /^https?:/.test(l.url)));
 });
+
+test('reviewed duplicate groups preserve source records, separate roles and facet counts', async () => {
+  const { duplicateGroups } = await import('../src/directory-quality');
+  const { directoryMatches } = await import('../src/mcp-search');
+  for (const group of duplicateGroups) {
+    const originals = group.map(id => records.find(r => r.record_id === id)!);
+    assert.ok(originals.every(Boolean), group.join(','));
+    const result = directoryMatches(originals, 20);
+    assert.equal(result.length, 1);
+    assert.deepEqual([result[0].record.record_id, ...result[0].additional.map(r => r.record_id)].sort(), [...group].sort());
+  }
+  const distinct = records.filter(r => ['goa-e018231c8b9a', 'goa-d6da3f0e0f38'].includes(r.record_id));
+  assert.equal(directoryMatches(distinct, 20).length, 2);
+  const filters = filtersFrom(new URLSearchParams({collection:'all', q:'Shri Abhir Hede'}));
+  const found = directoryMatches(filterRecords(records, new Set(), filters, {}), 100);
+  const facets = directoryFacets(records, new Set(), filters, {}, undefined, true);
+  assert.equal(facets.collection.all, found.length);
+});
+
+test('website audit repairs known transcription errors and suppresses non-website values', async () => {
+  const { directoryWebsite } = await import('../src/directory-quality');
+  const expected: Record<string,string> = {
+    'goa-6d8e5298ec90':'https://www.cpwd.gov.in',
+    'goa-fe7e9c7a7d57':'https://egov.goa.nic.in/dslr',
+    'goa-bb1b92ba4e69':'http://goasacs.nic.in',
+    'goa-bcecb799534c':'https://clm.goa.gov.in',
+    'goa-1df5248b2938':'https://passportindia.gov.in',
+    'goa-80732e1537a8':'https://www.dstegoa.goa.gov.in',
+  };
+  for (const [id, url] of Object.entries(expected)) {
+    const record = records.find(r => r.record_id === id)!;
+    assert.equal(directoryWebsite(record.website_url), url);
+    assert.equal(crmDirectoryLinks(record).find(link => link.label === 'Website')?.url, url);
+  }
+  const bad = records.find(r => r.name.startsWith('MINISTRY OF SHIPPING DIRECTORATE GENERAL'))!;
+  assert.equal(directoryWebsite(bad.website_url), '');
+  assert.equal(crmDirectoryLinks(bad).find(link => link.label === 'Website'), undefined);
+  assert.equal(directoryWebsite('javascript:alert(1)'), '');
+  assert.equal(directoryWebsite('https://example.org/path'), 'https://example.org/path');
+});

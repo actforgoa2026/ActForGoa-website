@@ -1,0 +1,9 @@
+# Directory quality audit, 27 October 2026
+
+Scope: the 3,267 public CRM records in `public/data/crm.json` from the published 22–23 October snapshot. The source snapshot and browser-local notes are not rewritten.
+
+All 2,948 populated website fields were checked for URL syntax and transcription patterns. Sixteen fields have duplicated schemes, misplaced whitespace or a malformed scheme; the presentation corrects these mechanically. One further field is an email address prefixed as a URL and is suppressed as a website. These checks do not establish destination availability, ownership or current content. The old source values remain in the snapshot and exports.
+
+Exact normalized-name matching found 147 groups involving 328 records. A repeated name alone is not evidence of a duplicate: government records can describe different offices, locations and roles or different people. A reviewed, explicit list groups 25 pairs including the previously corrected Goa Waste Management Corporation pair. The additional pairs share matching person and role and consistent department or secretariat context in the recorded government sources; conflicting contact details remain in their respective source listings. Search results consolidate each pair while retaining cross-links, original source records, IDs and separately stored notes. Different assignments and unresolved matches stay separate. This is not proof that all semantic, spelling-variant or cross-source duplicates have been found.
+
+The grouped identity map and URL correction are shared by the website and MCP. Facet counts count grouped matches once per facet. Validation covers group preservation, distinct office roles, count agreement, malformed URLs and non-website rejection. Confirm live result and responsive layout during coordinated release.
