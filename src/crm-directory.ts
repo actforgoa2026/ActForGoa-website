@@ -39,7 +39,7 @@ export function crmDirectoryLinks(record: CRMRecord): { label: string; url: stri
     ...extra.filter(l => !['Website', 'Instagram', 'Facebook'].includes(l.label)),
   ];
   const seen = new Set<string>();
-  return candidates.filter(link => {
+  return candidates.map(link => ({ ...link, url: (link.url || '').trim().replace(/^(https?:\/\/)(?=https?:\/\/)/i, '') })).filter(link => {
     try {
       const url = new URL(link.url);
       if (!['https:', 'http:'].includes(url.protocol) || seen.has(url.href)) return false;

@@ -8,6 +8,7 @@ import { Textarea } from './components/arc/textarea/textarea';
 import { activityLabel, activityLabels, backupJSON, collections, contactLabels, directoryFacets, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, split, stages, storageKey, verification, verificationLabels, words, type CRMNote, type CRMRecord, type CRMSnapshot, type Stage, type Workspace } from './crm-model';
 import { CRMDirectoryActions, CRMDirectoryPhoto, CRMDirectoryTags } from './CRMDirectoryInfo';
 import { crmDirectoryDetails } from './crm-directory';
+import { directoryMatches } from './mcp-search';
 import { ListingLink } from './ListingLink';
 import './crm.css';
 
@@ -70,8 +71,8 @@ export default function CRM() {
   }, []);
   const opportunityIds = useMemo(() => new Set(data?.opportunities.flatMap(r => split(r.related_record_ids)) || []), [data]);
   const byId = useMemo(() => new Map(data?.records.map(r => [r.record_id, r]) || []), [data]);
-  const results = useMemo(() => filterRecords(data?.records || [], opportunityIds, filters, workspace), [data, opportunityIds, params, workspace]);
-  const facets = useMemo(() => directoryFacets(data?.records || [], opportunityIds, filters, workspace), [data, opportunityIds, params, workspace]);
+  const results = useMemo(() => directoryMatches(filterRecords(data?.records || [], opportunityIds, filters, workspace), Number.MAX_SAFE_INTEGER).map(({record}) => record), [data, opportunityIds, params, workspace]);
+  const facets = useMemo(() => directoryFacets(data?.records || [], opportunityIds, filters, workspace, undefined, true), [data, opportunityIds, params, workspace]);
   const selected = recordId ? byId.get(recordId) : undefined;
   const page = Math.min(Math.max(1, Math.floor(Number(params.get('page'))) || 1), Math.max(1, Math.ceil(results.length / 25)));
   useLayoutEffect(() => {
@@ -201,6 +202,8 @@ function RecordDetail({ record: r, note, save, byId, recordLink, opportunities }
     <header><span className="crm-meta">{words(r.record_type)} · {r.goa_location || r.jurisdiction || 'Goa'}</span><h2>{r.name}</h2>{(r.role || r.organization) && <p className="crm-affiliation">{[r.role, r.organization].filter(Boolean).join(' · ')}</p>}<p className="crm-description">{r.summary}</p><CRMDirectoryTags record={r} full /><CRMDirectoryPhoto record={r} detail /></header>
     <section className="crm-contacts"><h3>Public contact details</h3>{deceased ? <p>This is a historical record of a deceased contributor. It is excluded from outreach.</p> : <><p className="crm-context">{words(r.contact_kind) || 'No direct route verified'}. Shared office and referral routes may serve multiple people.</p><CRMDirectoryActions record={r} full />{!r.public_phone && !r.public_email && <p className="crm-context">No public phone or email was verified.</p>}{r.referral_route && <p className="crm-description">{r.referral_route}</p>}</>}
       {r.contact_source_urls && <details><summary>Sources for these contacts</summary><Sources value={r.contact_source_urls} /></details>}
+      {r.record_id === 'goa-3be8492c5821' && byId.has('goa-b3f711f6b7f3') && <p><Link to={recordLink('goa-b3f711f6b7f3')}>View the separately sourced government office contact and its notes <ArrowRight size={16} aria-hidden="true" /></Link></p>}
+      {r.record_id === 'goa-b3f711f6b7f3' && byId.has('goa-3be8492c5821') && <p><Link to={recordLink('goa-3be8492c5821')}>View the corporation’s main listing and its notes <ArrowRight size={16} aria-hidden="true" /></Link></p>}
     </section>
     <section className="crm-evidence"><h3>Activity & verification</h3><dl><div><dt>Activity</dt><dd>{activityLabel(r)}{r.activity_evidence_date && <span> · Evidence dated {r.activity_evidence_date}</span>}</dd></div><div><dt>Source review</dt><dd>{verificationLabels[verification(r)]}</dd></div><div><dt>Research checked</dt><dd>{r.checked_on || 'Not recorded'}</dd></div><div><dt>Contact verification</dt><dd>{r.public_phone || r.public_email ? 'Publicly listed. Phone and email delivery have not been tested.' : 'No direct public phone or email established.'}</dd></div></dl><p>{r.activity_verification_notes || 'Recent environmental activity was not assessed for this government record. An official listing does not independently confirm current tenure.'}</p>{r.activity_evidence_url && <External href={r.activity_evidence_url}>Read activity evidence</External>}
       <details><summary>Full verification notes</summary><p>{r.verification_status.split(';').map(words).join('. ')}.</p>{r.notes && <p>{r.notes}</p>}<p>Record ID: {r.record_id}</p></details>

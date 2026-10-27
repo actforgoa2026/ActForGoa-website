@@ -107,26 +107,32 @@ export function filterRecords(records: CRMRecord[], opportunities: Set<string>, 
     }).map(({ record }) => record);
 }
 // Each facet counts alternatives while respecting every other active filter and the query.
-export function directoryFacets(records: CRMRecord[], opportunities: Set<string>, filters: Filters, workspace: Workspace, date = today()) {
+export function directoryFacets(records: CRMRecord[], opportunities: Set<string>, filters: Filters, workspace: Workspace, date = today(), groupCorporation = false) {
   const facets: Record<FacetKey, Record<string, number>> = { collection: {}, type: {}, focus: {}, contact: {}, due: {} };
   const match = queryMatch(filters.q);
-  const add = (key: FacetKey, value: string) => { facets[key][value] = (facets[key][value] || 0) + 1; };
+  const counted = new Set<string>();
+  const add = (key: FacetKey, value: string, r: CRMRecord) => {
+    const id = groupCorporation && ['goa-3be8492c5821', 'goa-b3f711f6b7f3'].includes(r.record_id) ? 'waste-corporation' : r.record_id;
+    const identity = JSON.stringify([key, value, id]);
+    if (counted.has(identity)) return;
+    counted.add(identity); facets[key][value] = (facets[key][value] || 0) + 1;
+  };
   for (const r of records) {
     if (match(r) < 0) continue;
     if (matchesFilters(r, opportunities, filters, workspace, date, 'collection')) {
-      add('collection', r.collection); add('collection', 'all');
-      if (opportunities.has(r.record_id)) add('collection', 'opportunities');
+      add('collection', r.collection, r); add('collection', 'all', r);
+      if (opportunities.has(r.record_id)) add('collection', 'opportunities', r);
     }
-    if (matchesFilters(r, opportunities, filters, workspace, date, 'type')) { add('type', ''); add('type', r.record_type); }
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'type')) { add('type', '', r); add('type', r.record_type, r); }
     if (matchesFilters(r, opportunities, filters, workspace, date, 'focus')) {
-      add('focus', ''); for (const value of new Set(indexed(r).focus)) add('focus', value);
+      add('focus', '', r); for (const value of new Set(indexed(r).focus)) add('focus', value, r);
     }
     if (matchesFilters(r, opportunities, filters, workspace, date, 'contact')) {
-      if (r.public_phone) add('contact', 'phone');
-      if (r.public_email) add('contact', 'email');
-      if (!r.public_phone && !r.public_email) add('contact', 'missing');
+      if (r.public_phone) add('contact', 'phone', r);
+      if (r.public_email) add('contact', 'email', r);
+      if (!r.public_phone && !r.public_email) add('contact', 'missing', r);
     }
-    if (matchesFilters(r, opportunities, filters, workspace, date, 'due') && isDue(workspace[r.record_id] || emptyNote(r), date)) add('due', '1');
+    if (matchesFilters(r, opportunities, filters, workspace, date, 'due') && isDue(workspace[r.record_id] || emptyNote(r), date)) add('due', '1', r);
   }
   return facets;
 }
