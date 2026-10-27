@@ -5,6 +5,7 @@ import "@fontsource-variable/manrope";
 import "./components/arc/foundation.css";
 import "./styles.css";
 import App from "./App";
+import { LanguageProvider } from "./language";
 import { createCatalogueLoader } from "./catalogue-loader";
 
 const loadCatalogue = createCatalogueLoader();
@@ -28,6 +29,6 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <LanguageProvider><RouterProvider router={router} /></LanguageProvider>
   </React.StrictMode>,
 );
