@@ -19,14 +19,16 @@ configuration. Other providers' cache identities are unchanged.
 
 Every evaluation plan must explicitly specify `max_output_tokens`, and preflight
 rejects disagreement with the configured value. Allowed plan bounds are 9,000 or
-12,000 for Haiku and 9,000 for Sonnet. The CLI respects an explicitly selected
-historical 9,000-token plan without rewriting it. An absent bound now fails closed;
-it is never inferred from an old artifact. The tracked historical plan template
-now states its existing 9,000-token bound explicitly. New 12,000-token runs need
-their own reviewed plan. Reports and check results record the effective bound.
+12,000 for Haiku and 9,000 for Sonnet. The CLI uses the genuine application config;
+it cannot override that config with the plan. A historical 9,000-token Haiku plan
+is rejected on this 12,000-token runtime before key, library or client access.
+Historical artifacts remain unchanged and belong to their historical runtime.
+An absent bound fails closed. The tracked historical plan template now states
+its existing 9,000-token bound explicitly; a current run needs a new reviewed
+12,000-token plan. Reports and check results record the effective bound.
 
 249 focused tests pass. New checks cover plan/config mismatch, missing and
-unreviewed bounds, historical and new CLI plans, native wire identity, cache
+unreviewed bounds, early refusal of mismatched historical plans, native wire identity, cache
 separation, explicit report identity and conservative reservations. The existing
 provider timeout assertions still pass.
 

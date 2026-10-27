@@ -97,20 +97,41 @@ def test_sonnet_cannot_inherit_haiku_output_increase(setup):
         acceptance.preflight(plan, 'test', replace(config, model=plan['model'], max_output_tokens=12000))
 
 
-@pytest.mark.parametrize('tokens, reservation', [(9000, 15848), (12000, 18848)])
-def test_check_cli_honors_explicit_legacy_and_new_bounds_without_rewriting_plan(setup, monkeypatch, capsys, tokens, reservation):
+def test_check_cli_uses_actual_runtime_bound_without_rewriting_plan(setup, monkeypatch, capsys):
     plan, _, _, tmp = setup
-    plan['max_output_tokens'] = tokens
+    plan['max_output_tokens'] = 12000
     path = tmp / 'plan.json'
     original = json.dumps(plan).encode()
     path.write_bytes(original)
     monkeypatch.setattr(acceptance.sys, 'argv', ['evaluate', '--plan', str(path), '--stage', 'test'])
     acceptance.main()
     checked = json.loads(capsys.readouterr().out)
-    assert checked['max_output_tokens'] == tokens
-    assert checked['max_reservation_microusd'] == reservation
+    assert checked['max_output_tokens'] == 12000
+    assert checked['max_reservation_microusd'] == 18848
     assert checked['provider_calls'] == 0 and checked['heldout_questions_parsed'] is False
     assert path.read_bytes() == original
+
+
+def test_main_refuses_historical_bound_before_key_library_client_or_dispatch(setup, monkeypatch):
+    import builtins
+    plan, _, _, tmp = setup
+    plan['stages']['test']['approval_reference'] = 'synthetic-reviewed-plan'
+    assert plan['max_output_tokens'] == 9000 and chat_config().max_output_tokens == 12000
+    path = tmp / 'historical-plan.json'
+    original = json.dumps(plan).encode()
+    path.write_bytes(original)
+    monkeypatch.setattr(acceptance.sys, 'argv', ['evaluate', '--plan', str(path), '--stage', 'test',
+        '--execute', '--output', str(tmp / 'must-not-exist.json'), '--key-env-file', str(tmp / 'no-key')])
+    for name in ('dotenv_values', 'AnthropicClient', 'run_cases', 'verify_packets'):
+        monkeypatch.setattr(acceptance, name, lambda *a, **k: pytest.fail('Mismatched plan must stop before access or dispatch'))
+    original_import = builtins.__import__
+    def guarded_import(name, *args, **kwargs):
+        if name == 'backend.library':pytest.fail('No native library access for mismatched plan')
+        return original_import(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, '__import__', guarded_import)
+    with pytest.raises(ValueError, match='max_output_tokens must match'):
+        acceptance.main()
+    assert path.read_bytes() == original and not (tmp / 'must-not-exist.json').exists()
 
 
 @pytest.mark.parametrize('mutation,match',[

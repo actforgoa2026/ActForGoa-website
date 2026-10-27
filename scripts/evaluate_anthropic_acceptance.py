@@ -1,6 +1,5 @@
 """Explicitly gated, one-pass Anthropic acceptance; --check never dispatches."""
 import argparse
-from dataclasses import replace
 from datetime import datetime, timezone
 import hashlib
 import json
@@ -450,7 +449,7 @@ def main():
     plan=json.loads(args.plan.read_text())
     os.environ['RESEARCH_CHAT_PROVIDER']='anthropic';os.environ['ANTHROPIC_CHAT_MODEL']=planned_model(plan)
     os.environ['ANTHROPIC_CHAT_EFFORT']=planned_effort(plan)
-    config=replace(chat_config(),max_output_tokens=planned_output_tokens(plan))
+    config=chat_config()
     context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
         print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'effort':config.effort,
