@@ -1,0 +1,18 @@
+{
+  "contract_version": "afg-capture-review-v1",
+  "approved_packet_version": "capture-semantic-bridge-v2",
+  "approved_packet_manifest_sha256": "c80de075574077335fabb4ed05c2e59786354eab63fd570437e484e9ee101202",
+  "qa_review_manifest_sha256": "bb6596b31580cc95db4f51dfce20db2e5e84060875474f26c150f0f45cc4ef55",
+  "base_commit": "d410d1caf67e6a917e490db9409699a0946cdec0",
+  "spec_files": [
+    {
+      "path": "spec/contract.txt",
+      "sha256": "67f931f31d2853861da60ba7189a9d720485b3f9f4025c0235f1ec6def13d388"
+    },
+    {
+      "path": "spec/shapes.schema.json",
+      "sha256": "545292d36d61792802934f7b222bd6664a04201760536db1203f9ee7e228d754"
+    }
+  ],
+  "scope": "Fixed-artifact offline linkage and fidelity only; no semantic acceptance or runtime effect. Original captures and local review packets remain outside Git."
+}
