@@ -4,6 +4,7 @@ import { mkdtempSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { randomUUID } from 'node:crypto';
+import { backup, DatabaseSync } from 'node:sqlite';
 import sharp from 'sharp';
 import { createReportingServer } from '../server/reporting.ts';
 import { validateReport, type ReportDraft } from '../shared/reporting.ts';
@@ -141,4 +142,56 @@ test('invalid calendar dates are rejected and forwarding headers are untrusted b
       assert.equal(r.status, expected);
     }
   } finally { await app.stop(); }
+});
+
+test('a live SQLite backup restores reports, photos, review history and retry identity at the captured revision', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'actforgoa-report-restore-test-'));
+  const path = join(dir, 'live.sqlite');
+  const restoredPath = join(dir, 'restored.sqlite');
+  let app = await start(path);
+  try {
+    const image = await sharp({ create: { width: 32, height: 24, channels: 3, background: '#193e32' } }).png().toBuffer();
+    const images = [{ bytes: image, type: 'image/png' }];
+    const key = randomUUID();
+    const receipt = await (await submit(app.url, draft, key, images)).json();
+    const report = (await (await fetch(app.url + '/api/reports/review', { headers: auth })).json()).reports[0];
+    const photoPath = `/api/reports/${receipt.id}/photos/${report.photos[0]}`;
+    const photo = Buffer.from(await (await fetch(app.url + photoPath, { headers: auth })).arrayBuffer());
+    const update = await fetch(app.url + '/api/reports/' + receipt.id, {
+      method: 'PATCH', headers: { ...auth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'in_review', note: 'Synthetic review before backup.', updatedAt: report.updatedAt }),
+    });
+    assert.equal(update.status, 200);
+    const saved = await update.json();
+
+    // Capture while the service is open in WAL mode, without copying live database files.
+    const source = new DatabaseSync(path);
+    try { await backup(source, restoredPath); } finally { source.close(); }
+    const changed = await fetch(app.url + '/api/reports/' + receipt.id, {
+      method: 'PATCH', headers: { ...auth, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: 'closed', note: 'Synthetic change after backup.', updatedAt: saved.updatedAt }),
+    });
+    assert.equal(changed.status, 200);
+    await app.stop();
+    app = await start(restoredPath);
+
+    const restored = (await (await fetch(app.url + '/api/reports/review', { headers: auth })).json()).reports;
+    assert.equal(restored.length, 1);
+    assert.equal(restored[0].id, receipt.id);
+    assert.deepEqual(restored[0].data, draft);
+    assert.equal(restored[0].status, 'in_review');
+    assert.equal(restored[0].note, 'Synthetic review before backup.');
+    assert.equal(restored[0].updatedAt, saved.updatedAt);
+    assert.equal((await fetch(app.url + photoPath)).status, 401);
+    assert.deepEqual(Buffer.from(await (await fetch(app.url + photoPath, { headers: auth })).arrayBuffer()), photo);
+    const retry = await submit(app.url, draft, key, images);
+    assert.equal(retry.status, 200);
+    assert.equal((await retry.json()).id, receipt.id);
+    const restoredDb = new DatabaseSync(restoredPath, { readOnly: true });
+    try {
+      assert.equal(restoredDb.prepare('PRAGMA integrity_check').get()!.integrity_check, 'ok');
+      assert.equal(restoredDb.prepare('SELECT count(*) AS n FROM review_events').get()!.n, 1);
+      assert.equal(restoredDb.prepare('SELECT note FROM review_events').get()!.note, 'Synthetic review before backup.');
+    } finally { restoredDb.close(); }
+  } finally { await app.stop(); rmSync(dir, { recursive: true, force: true }); }
 });
