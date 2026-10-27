@@ -2,6 +2,27 @@ import type { Language } from './language';
 
 // Draft UI copy. A local speaker should review both languages before publication.
 const translations: Record<string, { hi: string; 'gom-Deva': string }> = {
+  "Report illegal dumping": { hi: "अवैध डंपिंग की रिपोर्ट करें", "gom-Deva": "बेकायदेशीर डंपिंगाची म्हायती दिवप" },
+  "Get extra rubbish collected": { hi: "अतिरिक्त कूड़ा एकत्र करें", "gom-Deva": "अतिरिक्त कचरो एकठांय करचो" },
+  "Find a recycler": { hi: "एक पुनर्चक्रणकर्ता खोजें", "gom-Deva": "रिसायकल करपी सोदून काडात" },
+  "Start composting": { hi: "खाद बनाना शुरू करें", "gom-Deva": "कंपोस्ट करपाक सुरवात करची" },
+  "Report a missed collection": { hi: "छूटे हुए संग्रह की रिपोर्ट करें", "gom-Deva": "चुकून गेल्ल्या संग्रहाची म्हायती दिवची" },
+  "Report a water problem": { hi: "पानी की समस्या की रिपोर्ट करें", "gom-Deva": "उदकाची समस्या कळोवची" },
+  "Report pollution or sewage": { hi: "प्रदूषण या सीवेज की रिपोर्ट करें", "gom-Deva": "प्रदुशण वा सांडपाणीची म्हायती दिवची" },
+  "Report a local problem": { hi: "किसी स्थानीय समस्या की रिपोर्ट करें", "gom-Deva": "थळाव्या समस्याची म्हायती दिवची" },
+  "Make a new complaint": { hi: "नई शिकायत करें", "gom-Deva": "नवी कागाळ करात" },
+  "Follow up a complaint": { hi: "किसी शिकायत पर आगे की जानकारी लें", "gom-Deva": "कागाळीचो फाटोफाट करचो" },
+  "Request official records": { hi: "आधिकारिक रिकॉर्ड का अनुरोध करें", "gom-Deva": "अधिकृत नोंदी मागप" },
+  "Find community support": { hi: "सामुदायिक समर्थन प्राप्त करें", "gom-Deva": "समुदाय आदार सोदून काडात" },
+  "Help an injured animal": { hi: "किसी घायल जानवर की मदद करें", "gom-Deva": "जखमी जाल्ल्या जनावराक आदार करचो" },
+  "Report tree cutting": { hi: "पेड़ काटने की रिपोर्ट करें", "gom-Deva": "झाड कापपाची म्हायती दिवची" },
+  "Get help with wildlife": { hi: "वन्यजीवों के लिए सहायता प्राप्त करें", "gom-Deva": "रानवटी जनावरांक मदत मेळोवची" },
+  "Get crop or soil advice": { hi: "फसल या मिट्टी संबंधी सलाह लें", "gom-Deva": "पिकाचो वा मातयेचो सल्लो घेवचो" },
+  "Report crop damage": { hi: "फसल क्षति की रिपोर्ट करें", "gom-Deva": "पिकाचें लुकसाण कळोवचें" },
+  "Report a construction concern": { hi: "किसी निर्माण संबंधी चिंता की रिपोर्ट करें", "gom-Deva": "बांदकामाचो हुस्को कळोवचो" },
+  "Find health services": { hi: "स्वास्थ्य सेवाएँ खोजें", "gom-Deva": "भलायकी सेवा सोदून काडात" },
+  "Find mental health support": { hi: "मानसिक स्वास्थ्य सहायता प्राप्त करें", "gom-Deva": "मानसीक भलायकेचो आदार सोदून काडात" },
+
   'Emergency services': { hi: 'आपातकालीन सेवाएँ', 'gom-Deva': 'आणीबाणी सेवा' },
   'Back': { hi: 'वापस', 'gom-Deva': 'फाटीं' },
   'Goa helplines. Tap a number to call.': { hi: 'गोवा हेल्पलाइन। फ़ोन करने के लिए नंबर दबाएँ।', 'gom-Deva': 'गोंयच्या मदत क्रमांकां. फोन करपाक क्रमांकाचेर दाबात.' },
