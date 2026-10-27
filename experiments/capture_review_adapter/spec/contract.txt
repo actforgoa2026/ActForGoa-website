@@ -1,0 +1,240 @@
+Capture review linkage contract: afg-capture-review-v1
+Planning correction packet v2, 28 October 2026 (Asia/Kolkata)
+
+Scope
+
+This is a proposed contract and authored fixtures, not an adapter implementation.
+It covers only fidelity and explicit review linkage for the two allowlisted,
+already-consumed captures. No semantic judgment, source authentication, runtime
+context acquisition or public activation is established. The synthetic v2 auditor
+is unchanged and must not receive these real captures relabelled as synthetic.
+V1 and all original outcomes remain immutable.
+
+contract.txt and shapes.schema.json together are normative. The schema defines
+closed record shapes; the ordered rules below define relational behavior. The
+fixture manifest supplies exact existing artifact paths and hashes. Original
+capture objects are opaque preserved JSON values, not extensible sidecar fields.
+No implementation should infer omitted requirements or choose between a conflict.
+
+Inputs and exact identities
+
+An invocation supplies an input document with version, artifacts and sidecar.
+The sidecar also carries the same fixed version; it cannot be reinterpreted under
+a different contract when detached from the invocation.
+artifacts contains explicit file paths and expected raw-file SHA256 identities;
+it is an execution-harness list, never source URLs from answer text. Only the two
+capture hashes, the two review hashes and this packet's illustration hash listed
+in artifact-catalog.json are allowed. Do not scan directories or follow locators.
+Each referenced artifact must be supplied once, and every supplied artifact must
+match its declared hash. Artifacts may be listed even when an individual fixture
+uses only a subset. The sidecar never supplies replacement capture contents.
+
+Decode strict UTF-8 JSON: no BOM, decoded duplicate keys, non-finite numeric values
+or unpaired surrogates. Do not trim or normalize strings. Shape integer fields
+require true nonnegative integers, never Boolean/string/float coercion. Offsets
+count Unicode scalar code points with exclusive end. Metadata time strings must
+be real RFC3339 instants; timestamps identify asserted authorship, not trust.
+
+File hashes cover original complete file bytes. Value hashes cover UTF-8 of
+json.dumps(value, ensure_ascii=False, sort_keys=True, separators=(',', ':'),
+allow_nan=False). Text hashes cover exact UTF-8 string bytes, without JSON quotes.
+These are bookkeeping hashes, not the synthetic auditor's domain hashes. All
+selected source/projection values in these fixed fixtures have exact string,
+integer, Boolean, null, array or object values; no float conversion is required.
+
+JSON pointers use RFC6901 escaping (~0 and ~1), canonical decimal array indices
+without leading zeroes, and no '-' append token. A pointer must resolve within the
+specified artifact and case, not merely to an identical value somewhere else.
+An absent final object member is permitted only for an explicit presence probe.
+Missing parents, array indices or text targets are dangling pointers, not absence.
+
+Sidecar records
+
+All properties defined by a shape are required; no aliases/defaults/extra fields.
+Arrays retain authored order. IDs are namespaced and unique within their arrays.
+
+- cases: key, capture_sha256, pointer and case_id. pointer is exactly /cases/N;
+  the captured id must equal case_id. A key cannot bind two captures. Duplicate
+  capture-hash/case-pointer selections are rejected even under different keys.
+- observations: id, case_key, pointer and expected presence. They assert a value
+  already in the capture, not a new value. A presence record is either
+  {state:not_captured} with NO value/hash members, or
+  {state:captured,value:<exact JSON value>,value_sha256:<value hash>}.
+  Thus omitted, explicit null, empty array and empty string remain distinct.
+- annotations: id, case_key, author, source_review, target, evidence, finding and
+  rationale. These are current planning-review annotations, never edits to captured
+  human_review. author records name, role and time; identity remains unauthenticated.
+  rationale is the annotator's prose, separate from captured values.
+- source_review is null for a new analysis without an imported review reference,
+  or a reference to an allowlisted review artifact's exact finding and its value
+  hash, author pointer/value and time pointer/value. All four references must match
+  that review. They must not be reconstructed from the runtime pending status.
+  A reference does not impersonate the cited reviewer: annotation.author remains
+  the person/assistant who authored this sidecar. Its rationale is new analysis.
+- target: representation, artifact_sha256, pointer and span. representation is
+  raw_diagnostic, normalized or illustrative. A span is start,end,text,text_sha256.
+  It must be nonempty, within the chosen string, and match every code point/hash.
+- evidence: role, block_pointer, block_id, block_value_sha256 and selection.
+  block_pointer is within the annotation's bound case prepared_evidence array.
+  The entire original block id and value hash must match, including all metadata.
+  selection is a text_span over the block's /text, or a field_value with a relative
+  pointer and expected presence. It cannot rewrite or authenticate that metadata.
+- coverage: id, case_key, question_pointer, question_span, annotation_ids, state
+  and rationale. The question span must match that selected case's question.
+  Every annotation is referenced at least once, only in its own case. Each selected
+  case has at least one coverage row. IDs within a row cannot repeat or dangle.
+  reviewed_part needs at least one annotation; unresolved permits none. Neither
+  state certifies full question coverage, semantic support or correctness of a gap.
+
+Representation and case binding
+
+For raw_diagnostic, the target artifact is the case's capture and the pointer is
+/cases/N/final_output_diagnostic/answer/paragraphs/M/text. For normalized, it is
+/cases/N/answer/paragraphs/M/text in that same capture. They are different records
+even when their text is equal; switching representation without switching pointer
+rejects. A paragraph index cannot select a support quote or metadata string.
+
+For illustrative, the target is the allowlisted illustrations.json and pointer
+/cases/K/claims/M/text. Its case record must bind the SAME capture SHA, capture case
+pointer and case_id as the selected case. Its question must equal the captured
+question. Its format and unaccepted status are fixed. This explicit mapping is
+required; equal questions or text do not authorize crossing cases or captures.
+
+Evidence block pointers must be /cases/N/prepared_evidence/M for that case, even
+when another run has the same block ID and text. Source selections cannot borrow
+from another case. A field_value may inspect /warning, /page_heading, /origin,
+/format, /legal_currency, /source_date_metadata or /context_ids only. This narrow
+list permits captured limitations without an arbitrary-source resolver.
+
+Observations may inspect /effort at capture root or members under the selected
+case's preserved fields listed below. They cannot inspect unrelated cases or
+accounting fields. An absent context_ids field is not evidence of no dependencies.
+The medium capture has no /effort; /cases/0/request_shape/effort and
+/cases/1/request_shape/effort contain medium. Preserve all three pointers distinctly.
+The one captured nonempty context_ids list remains a historical application value,
+not an authenticated context relationship. Neither capture contains explicit null
+or empty context_ids; null and empty fixtures use real source_date_metadata:null
+and human_review.material_omissions:[] values instead of inventing source data.
+
+Successful output
+
+status is linked_for_review, not accepted. The complete sidecar is copied into a
+separate review_annotations field without becoming source authority. selected_cases
+follow sidecar.cases order. Each contains its binding, capture_observations and a
+captured_fields array of named source pointers and presence records. Preserve these
+case fields in this fixed order:
+id, question, prepared_evidence, request_shape, final_output_diagnostic, answer,
+human_review, mechanical_passed, expected_behavior_passed, prompt_sha256.
+
+Every present value is copied whole. In particular all prepared block members and
+the COMPLETE human_review object (status, claims, atomic_claims, material_omissions,
+reviewer and any original members) remain exactly as captured. Absent fields are
+not synthesized. No case data is moved from one capture to another just because
+the inputs or questions are equal. The original raw diagnostic and normalized
+answer stay separate. Original expected keys/accounting values not in this fixed
+projection are not copied into review or future generator input.
+
+capture_observations retain pointers and presence for root source_commit, model,
+generation and effort. block_context_observations follows prepared block order;
+each record contains block_id, its absolute context_ids pointer and exact presence.
+It describes whether that member was captured, never context completeness.
+Observations requested in the sidecar are verified and
+retained there; do not silently replace them with normalized summaries. Illustrative
+text remains in its separately hashed artifact, not overlaid on the old answer.
+
+Success and failure always retain:
+semantic_judgment:not_assessed, original_authentication:not_performed,
+runtime_context_acquisition:unresolved, public_activation:hold,
+author_authentication:not_performed, question_completeness:not_assessed.
+Finding labels are attributed opinions for review. Linking unsupported_claim or
+illustration_support_proposed does not execute a semantic judge or grant acceptance.
+
+Ordered rejection and error-only output
+
+1. Validate input/sidecar closed shapes and strict JSON profile. Failure is INPUT_SHAPE
+   at the first failing member path (compare canonical encodings of path components;
+   union failure uses the common parent). No coercion or source traversal.
+   A raw JSON profile failure has the root path [].
+2. Verify artifact identity. Unknown hash -> UNKNOWN_ARTIFACT at artifacts[i].sha256;
+   missing referenced delivery -> MISSING_ARTIFACT at that reference's hash member;
+   bytes mismatch -> ARTIFACT_HASH at artifacts[i].sha256; unreadable -> IO_FAILURE
+   at artifacts[i].path. Duplicate declared hashes -> DUPLICATE_ID at the later
+   artifacts[i].sha256 member. Artifact content parsing failures reject here as
+   ARTIFACT_PARSE at artifacts[i].path. Within
+   stage 2 check declared identities/duplicates, then bytes/parse, then referenced
+   deliveries; stop after the first failing subcheck to avoid invented missing-file
+   cascades from an invalid artifact table.
+3. Resolve case pointers and IDs -> CASE_BINDING at sidecar.cases[i]. Duplicate keys
+   or repeated capture/case pairs -> DUPLICATE_ID at the later case record. Duplicate
+   observation, annotation or coverage IDs -> DUPLICATE_ID at each later id member.
+4. Target checks: unknown case_key -> CASE_BINDING at the annotation; wrong required
+   target artifact/case -> TARGET_CASE at target; representation/pointer-family
+   disagreement -> TARGET_REPRESENTATION at target; absent paragraph/claim/string
+   -> TARGET_POINTER at target.pointer; bad range/text/hash -> TARGET_SPAN at
+   target.span. Check in that order for each annotation; no cascaded span error.
+5. Evidence checks: wrong source case -> SOURCE_CASE at evidence[j]; unresolved
+   block/id or whole-block hash -> SOURCE_BINDING there; disallowed field, dangling
+   selection, range/text/hash/presence mismatch -> SOURCE_SELECTION at selection.
+6. Review provenance checks -> REVIEW_PROVENANCE at source_review. The referenced
+   artifact must have catalog kind review; a capture or illustration is invalid.
+   Do not infer a
+   reviewer, role, finding or timestamp from pending human_review or filenames.
+7. Observations: unresolved/wrong-scope pointer -> OBSERVATION_POINTER at the
+   observation; resolved presence/value/hash disagreement -> OBSERVATION_MISMATCH
+   at expected. Explicit [] for an absent member therefore rejects.
+8. Coverage: unknown/wrong-case/duplicate annotation references, bad question
+   binding/span, state/cardinality mismatch -> COVERAGE_LINK at that row. An
+   unlinked annotation uses its annotation record path; an uncovered selected
+   case uses its case record path. No automatic coverage repair or implicit links.
+
+Stop at the first failing numbered stage. Collect independent faults in that stage;
+within a record use the stated precedence, without cascading into failed children.
+Deduplicate identical code/path errors; sort by code then canonical JSON of path.
+Paths start at the input document (for example sidecar,annotations,0,target).
+Failure is exactly version,status:rejected,errors:[{code,path}] and the six fixed
+sentinels. No selected_cases, review_annotations, original text, partial-success
+packet, corrected values or successful annotations are emitted on failure.
+
+Publication and filesystem behavior
+
+Without an output path emit the one complete result JSON to stdout. Exit 0 for
+linked_for_review and 1 for a completed rejection. Operational failures exit 2
+with the same error-only shape on stderr, stdout empty. An existing output path,
+including a dangling symlink or input path, yields OUTPUT_EXISTS at [output].
+Never overwrite it, follow its symlink, create its target or change an old packet.
+An unreadable artifact is an operational IO_FAILURE: exit 2, error-only stderr,
+stdout empty and no output file publication. Other validation rejections exit 1.
+
+With a new output path, validate fully in memory first. Publish only the complete
+serialized result through an exclusively created same-directory temporary file,
+flush/fsync/close, then atomic no-replace publication (for example a hard link).
+No-replace must hold under a race; rename-with-replacement is not sufficient.
+Remove only that invocation's temporary file. A validation failure may publish its
+complete error-only result to a new path, never partial accepted content. I/O or
+publication failure emits IO_FAILURE and leaves no newly published incomplete
+destination. If the process dies after complete publication, the completed file
+may remain; it is not overwritten on retry. No unrelated files are cleaned up.
+Output preparation/publication IO_FAILURE uses path [output].
+
+Fixtures and limit of the next gate
+
+fixtures.json contains complete input documents and complete authored expected
+result objects, not patch descriptions or an executed test report. The positive
+result references expected-linked.json to avoid repeating its full capture values.
+The filesystem fixture also specifies pre-existing bytes and expected preservation.
+All referenced files are in this packet or the explicit artifact catalog. Exact
+path bindings are for the local offline harness, not public/source URLs.
+
+The positive links F1/F2 and the available-2025 omission to their original capture
+representations, and W3 to the newly authored illustration with Chachadi et al.
+(2004). 2004 remains the cited method study's year, not the report publication year.
+2025 annotations concern the old 7% paragraphs; the new species illustration does
+not add that tangential statistic. LAW's real reviewer label/time/finding references
+are preserved separately from ECO's new rationale and from runtime pending.
+
+The next implementation gate, after QA and coordinator review, is exact
+capture fidelity, complete historical preservation and deterministic review
+linkage/failure behavior on these consumed cases. It cannot establish semantic
+accuracy, source authentication, complete context, fresh held-out success or
+release readiness. No runtime adapter, native store, provider, key, ledger, cap,
+preview, UI, merge or deployment action is authorized by this planning packet.
