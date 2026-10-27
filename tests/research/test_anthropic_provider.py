@@ -80,13 +80,13 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert request.headers['anthropic-version'] == API_VERSION == '2026-10-21'
     assert request.headers['anthropic-workspace-id'] == 'wrkspc_fixture'
     assert request.extensions['timeout'] == {'connect': 10, 'read': 60, 'write': 10, 'pool': 10}
-    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 6000
+    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 9000
     assert body['system'].startswith('You answer questions about Goa')
     assert 'Every paragraphs entry' not in body['system']
     assert 'Each object has text, primary_support and supports only' in body['system']
     assert 'inline schema' not in body['system']
     assert body['messages'] == prepared.messages[1:]
-    assert body['thinking'] == {'type': 'disabled'}
+    assert body['thinking'] == {'type': 'adaptive'}
     assert body['service_tier'] == 'standard_only' and body['stream'] is False
     assert set(body) == {'model', 'max_tokens', 'system', 'messages', 'thinking', 'stream', 'output_config', 'service_tier'}
     assert body['output_config']['effort'] == 'medium'
@@ -103,7 +103,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert prepared.schema['properties']['paragraphs']['maxItems'] == 1
     assert b'private/path' not in request.content and b'fixture-only' not in request.content
     assert 'private diagnostic' not in json.dumps(result)
-    assert config.maximum_cost_microusd(26048) == 6424
+    assert config.maximum_cost_microusd(26048) == 7924
 
 
 def test_anthropic_is_opt_in_fixed_host_and_requires_reviewed_model(config, monkeypatch):
@@ -196,7 +196,7 @@ def test_split_text_blocks_and_abstention(config, prepared):
 
 def test_bound_covers_native_schema_and_rejects_unreviewed_tier_before_dispatch(config, prepared):
     assert 26048 + INPUT_ALLOWANCE < 100_000
-    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 13000
+    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 14500
     with pytest.raises(ValueError, match='price tier'):config.maximum_cost_microusd(100_001 - INPUT_ALLOWANCE)
     with pytest.raises(ValueError, match='schema exceeds'):native_schema({'description': 'x'*4097})
     def handle(_):raise AssertionError('Invalid bounds must prevent dispatch')
@@ -271,7 +271,7 @@ def test_native_brief_actual_prompt_and_schema_fit_reserved_allowances(config,pr
     actual=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode())
     assert actual<=24000 and actual+2048==bounded.input_token_bound
     assert len(json.dumps(body['output_config']['format']['schema'],ensure_ascii=False,separators=(',',':')).encode())<=MAX_SCHEMA_BYTES
-    assert config.maximum_cost_microusd(bounded.input_token_bound)<=6424
+    assert config.maximum_cost_microusd(bounded.input_token_bound)<=7924
     with pytest.raises(ValueError,match='Missing native answer instructions'):
         message_request(config,replace(prepared,base_instructions=None))
 

@@ -200,7 +200,7 @@ def message_request(config, prepared):
         'messages': prepared.messages[1:],
         'stream': False,
         'service_tier': 'standard_only',
-        'thinking': {'type': 'disabled'},
+        'thinking': {'type': 'adaptive'},
         'output_config': {
             'effort': 'medium',
             'format': {'type': 'json_schema', 'schema': schema},
