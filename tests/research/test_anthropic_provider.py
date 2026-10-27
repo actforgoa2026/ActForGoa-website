@@ -86,7 +86,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert 'Each object has text, primary_support and supports only' in body['system']
     assert 'inline schema' not in body['system']
     assert body['messages'] == prepared.messages[1:]
-    assert body['thinking'] == {'type': 'adaptive'}
+    assert body['thinking'] == {'type': 'disabled'}
     assert body['service_tier'] == 'standard_only' and body['stream'] is False
     assert set(body) == {'model', 'max_tokens', 'system', 'messages', 'thinking', 'stream', 'output_config', 'service_tier'}
     assert body['output_config']['effort'] == 'medium'
