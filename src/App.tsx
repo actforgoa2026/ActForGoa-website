@@ -48,6 +48,8 @@ import {
   Siren,
 } from "lucide-react";
 import SiteHeader from "./components/arc/site-header/site-header";
+import { LanguageSwitcher, useLanguage } from "./language";
+import { translatePriority } from "./priority-translations";
 import HomeCarousel from "./HomeCarousel";
 import { RecordCard } from "./components/RecordCard";
 import { TopicIcon } from "./components/TopicIcon";
@@ -197,10 +199,13 @@ const navigation = [
 ];
 function Header() {
   const { pathname } = useLocation();
+  const { language } = useLanguage();
+  const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "हमारे साथ काम करें", "स्वयंसेवा", "समुदाय"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "आमचे वांगडा काम करात", "स्वयंसेवा", "समुदाय"] : [];
+  const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
   const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname === "/ask" || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
-    items={navigation} current={current} label="Main navigation"
+    items={items} current={current} label="Main navigation" extraAction={<LanguageSwitcher />}
     secondaryAction={null} primaryAction={{ label: "Search", href: "/search" }}
   />;
 }
@@ -237,15 +242,16 @@ function Footer() {
 }
 
 function Home({ records }: { records: RecordItem[] }) {
+  const { language } = useLanguage();
   return (
     <main>
       <HomeCarousel><SearchBox large /></HomeCarousel>
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
-          <h2 id="home-actions-heading">What do you care about?</h2>
+          <h2 id="home-actions-heading" lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
           <Link to="/emergency" className="button green emergency-entry">
             <Siren size={20} aria-hidden="true" />
-            <span><strong>Emergency services</strong></span>
+            <span lang={language}><strong>{translatePriority("Emergency services", language)}</strong></span>
             <ArrowRight size={18} aria-hidden="true" />
           </Link>
         </div>
@@ -253,7 +259,7 @@ function Home({ records }: { records: RecordItem[] }) {
           {topicFlows.map(flow => (
             <Link key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
               <TopicIcon name={flow.icon} />
-              <span><strong>{flow.label}</strong><small>{topicDescriptions[flow.slug]}</small></span>
+              <span><strong lang={translatePriority(flow.label, language) === flow.label ? "en" : language}>{translatePriority(flow.label, language)}</strong><small>{topicDescriptions[flow.slug]}</small></span>
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
           ))}
@@ -1305,6 +1311,7 @@ function NotFound() {
   );
 }
 export default function App() {
+  const { language } = useLanguage();
   const { pathname, search } = useLocation();
   const navigationType = useNavigationType();
   const previousPath = useRef(pathname);
@@ -1342,6 +1349,7 @@ export default function App() {
         Skip to content
       </a>
       <Header />
+      {language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
           <main className="empty-state shell">
