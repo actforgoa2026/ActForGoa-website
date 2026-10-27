@@ -10,6 +10,7 @@ sys.path.insert(0,str(ROOT))
 from backend.chat import ChatRequest, prepare_answer
 from backend.library import Library
 from scripts.evaluate_research import CASES
+from scripts.evaluate_research_copy import is_preserved
 
 
 def passage_integrity(library, hits):
@@ -46,6 +47,8 @@ def main():
     parser.add_argument('--cases',type=Path,default=ROOT/'tests/research/retrieval-evidence-cases.json')
     parser.add_argument('--output',type=Path,required=True)
     args=parser.parse_args()
+    if is_preserved(args.data_root) or is_preserved(args.output):
+        parser.error('Do not open or write inside preservation snapshots or sealed packages. Use scripts/evaluate_research_copy.py and write reports outside the preserved directory.')
     spec=json.loads(args.cases.read_text());library=Library(args.data_root)
     if library.generation!=spec['generation']:
         parser.error('Evidence cases belong to a different corpus generation; review the source locators before updating them.')
