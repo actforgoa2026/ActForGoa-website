@@ -66,7 +66,8 @@ def test_offline_evidence_gate_checks_prompt_budget_not_only_retrieval(collectio
     lib=Library(collection[0]);hits=lib.search('khazan sluice gates',10)
     # Metadata is model input too. Simulate lower-ranked evidence being dropped by
     # the real prompt budget while keeping all cited text/page slices intact.
-    padded=[dict(hits[0],legal_currency='Recorded limitation. '*300) for _ in range(9)]+[hits[-1]]
+    # Distinct caveats cannot be factored into one shared source entry.
+    padded=[dict(hits[0],legal_currency=f'Distinct limitation {i}. '*300) for i in range(9)]+[hits[-1]]
     monkeypatch.setattr(lib,'search',lambda *args:padded)
     case={'id':'fixture','question':'How do khazans manage water?','required_evidence':[{'name':'Last passage','any_of':[hits[-1]['id']]}]}
     result=evaluate_case(lib,case)

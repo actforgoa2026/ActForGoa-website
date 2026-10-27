@@ -7,6 +7,7 @@ from urllib.parse import urlencode
 import zvec
 from .embeddings import Encoder, ROOT
 from .extraction import safe_path
+from .passage_selection import select_passages
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
 STOP = set('a an the of in on at to from for is are was were be have has how why what which when where who does do can could would should explain tell me about and or with its it this that goa s sources source say says evidence research known'.split())
@@ -114,15 +115,31 @@ class Library:
                 concepts={w[:5] if len(w)>5 else w for w in words}
                 coverage=len(query_concepts & concepts)/max(len(query_concepts),1)
                 return authority_score(scores[identifier]+.05*coverage**2,meta,legal_query)
-            results=[];counts={};seen_passages=[]
-            for identifier in sorted(candidates,key=relevance,reverse=True):
+            ranked=sorted(candidates,key=relevance,reverse=True)
+
+            def distinct(identifiers):
+                selected=[];counts={};seen_passages=[]
+                for identifier in identifiers:
+                    row,_=candidates[identifier]
+                    if identifier in selected or counts.get(row['doc_id'],0)>=(4 if doc_id else 2):continue
+                    words=re.findall(r'\w+',row['text'].lower())
+                    shingles=set(zip(words,words[1:]))
+                    if shingles and any(len(shingles & prior)/max(len(shingles | prior),1)>.9 for prior in seen_passages):continue
+                    seen_passages.append(shingles)
+                    counts[row['doc_id']]=counts.get(row['doc_id'],0)+1
+                    selected.append(identifier)
+                    if len(selected)>=limit:break
+                return selected
+
+            selected=distinct(ranked)
+            if not doc_id:
+                revised=select_passages(query,candidates,selected,{i:relevance(i) for i in candidates},STOP)
+                # Recheck cross-document duplicates after joint selection and
+                # backfill only from the same bounded hybrid candidate pool.
+                selected=distinct(revised+ranked)
+            results=[]
+            for identifier in selected:
                 row,meta=candidates[identifier]
-                if counts.get(row['doc_id'],0)>= (4 if doc_id else 2):continue
-                words=re.findall(r'\w+',row['text'].lower())
-                shingles=set(zip(words,words[1:]))
-                if shingles and any(len(shingles & prior)/max(len(shingles | prior),1)>.9 for prior in seen_passages):continue
-                seen_passages.append(shingles)
-                counts[row['doc_id']]=counts.get(row['doc_id'],0)+1
                 qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
                 results.append({'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
                     'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],

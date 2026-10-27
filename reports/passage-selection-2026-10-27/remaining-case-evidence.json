@@ -1,0 +1,228 @@
+[
+  {
+    "case": {
+      "id": "held-fee-1",
+      "question": "For an online right-to-information request in Goa, what fee is payable by someone outside the BPL category?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ],
+      "group": "prior",
+      "fee_id": "e5d0e7777a79a19cf17cced54e173507",
+      "required_evidence": [
+        {
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    "surviving_source_evidence": [
+      {
+        "passage_id": "6beb1ebe2e03b602bc1184416cde6681",
+        "document_id": "e7d9e0f5963656a55bfceb12-6f3ed3658fd5",
+        "source_url": "https://www.rtionline.goa.gov.in/FAQ",
+        "original_sha256": "e7d9e0f5963656a55bfceb128643a4f4b0f0d23a460244eeb66cd4e251bde07d",
+        "page": 1,
+        "start": 908,
+        "end": 1862,
+        "text_sha256": "7b183663ddfd3bf60066cb18625852e6cd7fb3430257357b94e769c7968bed4e",
+        "text": "contains more than 3000 characters, it can be uploaded as a\n                            PDF attachment in the \"Supporting Document\" column of the form.\nQ3: How do I make the payment for RTI fee?\nA: After filling the first page of the RTI request form, a non-BPL applicant has to click on \"Make\n                            Payment\" button for payment of the prescribed RTI fee.\nThe applicant can pay the prescribed RTI fee through eChallan payment gateway through the\n                            following modes:\nInternet banking.\nATM-cum-Debit card.\nCredit/Debit card of Master/Visa.\nUPI\nIt may be noted that no RTI fee is required to be paid by a citizen who is below poverty line, as\n                            per RTI Rules, 2012. However, the BPL applicant must attach a copy of the certificate issued by\n                            the appropriate government in this regard, along with the application.\nQ4: Do I get any receipt for online filing of",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "9306790c5c53f27ea915c7cd1564a065",
+        "document_id": "5e82158f7ab23cf62b63170f-a0f8551c8ae0",
+        "source_url": "https://ccari.res.in/rti.html",
+        "original_sha256": "5e82158f7ab23cf62b63170ff47f571ccd6eba7113d5e0bfb774927d2535928b",
+        "page": 1,
+        "start": 9993,
+        "end": 10784,
+        "text_sha256": "7ffbd5ed5e48d748ded14a75a952411e0f1eb5740680c5930d33fb8fdbe0a72d",
+        "text": "Officer\nICAR-CCARI, Goa\nPh :\n0832-2993097\nEmail :\nvishwas.sharma@icar.org.in\nxvii)\nSuch other \n\t\t\t\t\t\tinformation as may be prescribed and thereafter update \n\t\t\t\t\t\tthese publications every year;\nPlease \n\t\tbrowse this\nwebsite\nReceipt & Disposal of RTI applications & appeals\n2017-2018\n2018-2019\n2019-2020\n2020-2021\n2021-2022\n2022-2023\n2023-2024\n2024-2025\n2025-2026\n2026-2027\nA FRAMEWORK FOR TRANSPARENCY AUDIT (in PDF format)\nForm for \n\t\tspecific information other than above:\nThe relevant \n\t\tprovisions of the Act towards charging fee are as under:\n1. A request \n\t\tfor obtaining information under Sub-section (1) of Section 6 shall be \n\t\taccompanied by an application fee of Rs.10.00 by way of cash against \n\t\tproper receipt or by demand draft in the name of the\n'\nICAR \n\t\tUnit\n,\nICAR-Central",
+        "in_prompt": true
+      }
+    ]
+  },
+  {
+    "case": {
+      "id": "held-fee-2",
+      "question": "Which payment methods and application charge does the Goa RTI user guide list?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ],
+      "group": "prior",
+      "fee_id": "e5d0e7777a79a19cf17cced54e173507",
+      "required_evidence": [
+        {
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    "surviving_source_evidence": [
+      {
+        "passage_id": "8cc4a696018cfcdd6e82c9ff7228af21",
+        "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+        "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+        "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+        "page": 12,
+        "start": 3,
+        "end": 728,
+        "text_sha256": "fc13cf2c4059998a2a71dce6a1603211f2ac6d3153fb23e1b02503e227c0c88c",
+        "text": "6. Additional Payment :\n\nOnce the Request is accepted by the PIO, the PIO user will either ask for Additional payment or will\ndispose it .\n\nIf PIO demands for Additional payment, the applicant will receive a inbox saying that your RTI\nApplication has been Charged with some additional amount.\n\n\n\n\n\nApplicant has to pay additional payment if the PIO has demanded for a particular RTI request.\nAdditional payment requested by the PIO will be listed in the Application Status menu.\n\n\n\n\n\nIn the Reply Text column reasons for the Additional Payment by the PIO is displayed.\n\nThe user will do the payment for the requested Additional Payment request by clicking on the blue\nbutton which says “Pay Rs. 25”\n                        12",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "6beb1ebe2e03b602bc1184416cde6681",
+        "document_id": "e7d9e0f5963656a55bfceb12-6f3ed3658fd5",
+        "source_url": "https://www.rtionline.goa.gov.in/FAQ",
+        "original_sha256": "e7d9e0f5963656a55bfceb128643a4f4b0f0d23a460244eeb66cd4e251bde07d",
+        "page": 1,
+        "start": 908,
+        "end": 1862,
+        "text_sha256": "7b183663ddfd3bf60066cb18625852e6cd7fb3430257357b94e769c7968bed4e",
+        "text": "contains more than 3000 characters, it can be uploaded as a\n                            PDF attachment in the \"Supporting Document\" column of the form.\nQ3: How do I make the payment for RTI fee?\nA: After filling the first page of the RTI request form, a non-BPL applicant has to click on \"Make\n                            Payment\" button for payment of the prescribed RTI fee.\nThe applicant can pay the prescribed RTI fee through eChallan payment gateway through the\n                            following modes:\nInternet banking.\nATM-cum-Debit card.\nCredit/Debit card of Master/Visa.\nUPI\nIt may be noted that no RTI fee is required to be paid by a citizen who is below poverty line, as\n                            per RTI Rules, 2012. However, the BPL applicant must attach a copy of the certificate issued by\n                            the appropriate government in this regard, along with the application.\nQ4: Do I get any receipt for online filing of",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "cd0e94264831653dd6c7927e997516dd",
+        "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+        "source_url": "https://rtionline.goa.gov.in/Applicant_Module_User_Manual.pdf",
+        "original_sha256": "2e0577bc1234b3edf3cd31d8178f88a23aedd80a94689d71a74ffeb11621478f",
+        "page": 18,
+        "start": 749,
+        "end": 1432,
+        "text_sha256": "8882342843877480eb054adb842d94e0313840c798c0ee3b1f444d8e696dd664",
+        "text": "Charged Rs. 25 Check Status;\n          registration number ACDRBM/NR/0724/00198 - Dept. of Information and Publicity\n\n6       Your   Additional  Payment  has  been   paid   for   registration  number\n        TRANNG/NR/0724/00226 - Dept. of Information and Publicity\n\n\n7       Dear Applicant, Your RTI Application has been Replied. Check Status; registration\n        number TADTPA/NR/0724/00192 - Dept. of Information and Publicity\n\n8       Dear  Applicant,  Your  RTI  Application  has been  Reverted. Check  Status;\n          registration number DGPGOA/NR/0724/00125 - Dept. of Information and Publicity\n\n\n\n\n\n                                 **********\n\n\n\n                        18",
+        "in_prompt": true
+      }
+    ]
+  },
+  {
+    "case": {
+      "id": "held-dogs",
+      "question": "Who is responsible for handling dogs found on school premises under the institutional SOP?",
+      "required_any_of": [
+        "7e2890b60d2eaff0d9e31cc713895154",
+        "d42390295a29bf9be2ff42e33d5a5630"
+      ],
+      "group": "prior",
+      "fee_id": "e5d0e7777a79a19cf17cced54e173507",
+      "required_evidence": [
+        {
+          "any_of": [
+            "7e2890b60d2eaff0d9e31cc713895154",
+            "d42390295a29bf9be2ff42e33d5a5630"
+          ]
+        }
+      ]
+    },
+    "surviving_source_evidence": [
+      {
+        "passage_id": "1a0e7e2717e3659c1a45962f4c1c7b89",
+        "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+        "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+        "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+        "page": 6,
+        "start": 0,
+        "end": 1029,
+        "text_sha256": "2175dc824654a9eeb5349a7f97cd86739b12eb2e37604dba63308fbfb9029b60",
+        "text": "may volunteer for establishing a shelter within its premises on its own expenditure, which\nare having more than two acre of land and having a free space of at least 6000 sq ft. The\narea and number of dogs within the shelter shall be within the permissible limit as\n\nmentioned above.\n\ne. The Local/ Municipal Authorities shall ensure that the dogs removed from the areas to be\n\nsent to only the designated shelters.\n\niv. Infrastructure for Shelter and their management:\nFor sheltering of stray dogs, the Shelters shall be constructed keeping in mind of the following\nminimal infrastructure:\n\na. Fencing of at least six feet height.\n\nb. Veterinary care (may be built in consultation with the Animal Husbandry Department,\nifno veterinary hospital is available nearby). For treatment of sheltered dog, the shelter\n\nmanagement may also call mobile veterinary services through toll free number 1962.\n\nc. The routine handling and management of Dogs in the shelter should strictly follow\nhumane practices as described in the Animal Birth",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "0f01b1b3c2b6afaa88fabaeae87ab6c5",
+        "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+        "source_url": "https://awbi.gov.in/uploads/regulations/176431409245SOP-11282025001522.pdf",
+        "original_sha256": "493ffb4c35a00be1f1f28e9be649d2ac1b680bd4394e8bf89db8a2a43084c36c",
+        "page": 10,
+        "start": 671,
+        "end": 1591,
+        "text_sha256": "7ef35812acad70f0d7f435784eb503f2c7e6dfae5addbb9e2606f26575fcf16f",
+        "text": "veterinarian or trainer.\n\n(viii). Responsible Environment: Keep stray dogs away from children, secure garbage\nand food waste to avoid attracting strays, Report aggressive stray dogs to local\nauthorities.\n\n(ix). Vaccination: Ensure dogs receive regular rabies vaccination, helping protect\n\nboth the dog and public health.\n\nMeasures to be taken in case dog bite happen: Ministry of Health and Family Welfare\nhas issued detailed guidelines for management of various degree of dog bite. The\n\ninformation is available at www. rabiesfreeindia.mohfw.gov.in. They have also established\n\nHelpline No. 15400 for information.\n\nMonitoring and evaluation:\nThe entire SOP should be implemented by the concemed authorities which will be\n\nmonitored by the District Magistrate.\n\nReporting:\nThe status of the implementation of SOP shall be reported to the Animal Welfare Board of\n\nIndia through respective State Government Departments.\n\ny",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "a026590f7dedcdd7b3d2ea97676ffc49",
+        "document_id": "296ca06eb669fb252844cc74-933dda6cdde0",
+        "source_url": "https://awbi.gov.in/uploads/regulations/167956418266ABC Rule 2023.pdf",
+        "original_sha256": "296ca06eb669fb252844cc74e18082203867ddda013718728669ecac7bd403f4",
+        "page": 27,
+        "start": 1539,
+        "end": 2490,
+        "text_sha256": "8a501ba49e2ca1629a5f2aa0adaa95f01ca7d0bbef65ac7af862f7e55304585f",
+        "text": "Monitoring Committee or the Board.  \n(5) The local authority may conduct the Animal Birth Control program through it's own staff by creating a \nSpecial Purpose Vehicle and intimate the Board in accordance with sub-rule (6) of rule 3.  \n(6) The Special Purpose Vehicle shall hire contractual or full time veterinarians, handlers, drivers and \nparaveterinarians who shall implement the program and such shall not sub -let any part of the Animal Birth \nControl Project to any other agency. \n(7) The local authority shall be responsible for ensuring that the staff hired by the Special Purpose Vehicle have \nbeen suitably trained and are adhering  to all conditions in these rules and t he Module and the Project In -\ncharge appointed by the local authority shall not be a part of the Special Purpose Vehicle.   \n11. Capturing or sterilisation or immunisation or release: - (1) Capturing of street dogs shall be conducted for \nthe following reasons namely",
+        "in_prompt": true
+      }
+    ]
+  },
+  {
+    "case": {
+      "id": "frozen-licensing-bodies",
+      "question": "Which local bodies receive building-licence applications under Appendices A2 and A3 in the Goa technical-clearance procedure?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Source-reviewed support",
+          "any_of": [
+            "6453618429d81ad36ea31f0be7ecfe06"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "6453618429d81ad36ea31f0be7ecfe06",
+          "document_id": "ef82dd83c82b9a960aa36195-fa20734e4d2c",
+          "document_title": "Procedure-for-Technical-Clearance.pdf",
+          "source_url": "https://tcp.goa.gov.in/wp-content/uploads/2020/10/Procedure-for-Technical-Clearance.pdf",
+          "original_sha256": "ef82dd83c82b9a960aa36195efe215bd5e72e85a54eb2b839e69b7dca6a4b233",
+          "page": 1,
+          "start": 897,
+          "end": 1681,
+          "text_sha256": "216f5280332243133700ee0354c732b5777f214d4eb2ac4faf7b0729e45aaf89",
+          "reviewed_text": "-TCP - to Town Planning Department for Technical Clearance. \nAPPENDIX A2 - to Municipal Council for Building License/Permit. \nAPPENDIX A3 - to Village Panchayat for Building License/Permit. \n3.2B. Questionnaire. — A questionnaire prescribed under these Regulations at Appendix-B1. \n3.2C1. Drawings. — Following drawings shall be submitted alongwith the application: \nIn case of building operations.— (a) A Site Plan drawn to a scale of not less than 1.00 cm. to \n5.00 m. (1:500) for plots having an area upto 4000 square meters and to a scale not less than 1.00 \ncm. to 10.00 m. (1:1000) for plots having an area more than 4000 square meters, showing \ntherein: \n(i) the boundaries and dimensions of the plot, \n(ii) North direction, \n(iii) all proposed as well as existing buildings or"
+        }
+      ],
+      "group": "previous_frozen"
+    },
+    "surviving_source_evidence": [
+      {
+        "passage_id": "e0ea390e4eae2675631cb10ef03d60bf",
+        "document_id": "cb96f51a6b080e42df14faa3-7d22ed307f5b",
+        "source_url": "https://tcp.goa.gov.in/wp-content/uploads/2017/GLDBCR_2010/regulations/1011-24-SI-OG.pdf",
+        "original_sha256": "cb96f51a6b080e42df14faa32bea2b1375f00ce8378aea05703b7c0420cfc66e",
+        "page": 109,
+        "start": 0,
+        "end": 941,
+        "text_sha256": "b6cf6775fbc53530e6e4bd3f50c2d486a9a5144ce15b9e70eae875c12c59927f",
+        "text": "OFFICIAL GAZETTE — GOVT. OF GOA\nSERIES I No. 24 9TH SEPTEMBER, 2010\n1085\n26. FORMS/SCHEDULES\nAppendix Title\nA1-PDA Application for development Permission u/s 44 of the Goa Town Country Planning\nAct 1974 (Goa Act 21 of 1975) to PDA\nA1-TCP Application for Technical clearance to TCP\nA2 Application for Building Licence to Municipal Council\nA3 Application for Building Licence to Village Panchayat\nA4 Application for recommendation for Conversion sanad to PDA or TCP\nA5 Application for Completion Order to PDA or TCP\nA6 Application for Occupancy certificate to Municipal Council or Village Panchayat\nA7 Application for Registration/Renewal of Registration.\nA8 Form of Registration Certificate\nB1 Questionnaire\nB2 Certificate of Conformity with regulations by Architect/Engineer/Structural Engineer/\n/Town Planner/Landscape Architect/Urban Designer\nB3 Structural Liability Certificate by Engineer/Structural Engineer\nB4 Affidavit by the Owner\nB5",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "7c18f9fd0c845da268745e0e91ef1c88",
+        "document_id": "1e264c7fa3ab47e62ebd08ce-a83ccba30e7b",
+        "source_url": "https://tcp.goa.gov.in/wp-content/uploads/2018/12/Gldbcr_2010_original-_Amm2018sept-with_appeal-fee.pdf",
+        "original_sha256": "1e264c7fa3ab47e62ebd08ce207a85153a386c69a5edced68d5a58a8b252ceae",
+        "page": 152,
+        "start": 2,
+        "end": 986,
+        "text_sha256": "b216cda8512d51ae737b1ccde9965c2b602dc6ab69d46cd3d45b16b18d747263",
+        "text": "138 \n \n26. FORMS/SCHEDULES  \nAppendix   Title \nA1-PDA Application for development Permission u/s 44 of th e Goa Town Country Planning Act 1974 \n(Goa Act 21 of 1975) to PDA \nA1-TCP Application for Technical clearance to TCP \nA2 Application for Building Licence to Municipal Council \nA3 Application for Building Licence to Village Panchayat \nA4 Application for recommendation for Conversion sanad to P DA or TCP \nA5 Application for Completion Order to PDA or TCP \nA6 Application for Occupancy certificate to Municipal Council or Village Panchayat \nA7 Application for Registration/Renewal of Registration. \nA8 Form of Registration Certificate \nB1 Questionnaire \nB2 Certificate of Conformity with regulations by Architect/Engi neer/Structural Engineer/ Town \nPlanner/Landscape Architect/Urban Designer \nB3 Structural Liability Certificate by Engineer/Structural Eng ineer \nB4 Affidavit by the Owner \nB5 Structural Stability Certificate by Engineer \nB6 Completion Certificate by Architect/",
+        "in_prompt": true
+      },
+      {
+        "passage_id": "f60143b3aa99a916174be95136c59e5d",
+        "document_id": "2cf0d810c7909e1bfd93f28f-909018a079c1",
+        "source_url": "https://tcp.goa.gov.in/procedure-to-obtain-the-permission/",
+        "original_sha256": "2cf0d810c7909e1bfd93f28f5fdbd131740d88b9f475d3837aea18574b839c37",
+        "page": 1,
+        "start": 0,
+        "end": 979,
+        "text_sha256": "ce3cf768f5af6daf51ac33d5a987d9f99a95d7dda605e7185835e0b2d1545a6e",
+        "text": "Procedure and Requirements for Securing Development Permission, sub-division Permission Lower, Building Permission & Completion Certificate/Occupancy Certificate.\nRequirements for obtaining permission.\nEvery applicant seeking development permission/sub-division permission/building permission shall be required to submit the following:—\nApplication\n.\nAn application in the format prescribed under the provisions of these Regulations.\nAPPENDIX A1-PDA – to PDA for Development Permission.\nAPPENDIX A1-TCP – to Town Planning Department for Technical Clearance.\nAPPENDIX A2 – to Municipal Council for Building License/Permit.\nAPPENDIX A3 – to Village Panchayat for Building License/Permit.\nQuestionnaire\n.— A questionnaire prescribed under these Regulations at Appendix-B1.\nDrawings\n. — Following drawings shall be submitted alongwith the application:\n(a)\nIn case of building operations\n.—\nA Site Plan drawn to a scale of not less than 1.00 cm. to 5.00 m. (1:500) for plots having an",
+        "in_prompt": true
+      }
+    ]
+  }
+]

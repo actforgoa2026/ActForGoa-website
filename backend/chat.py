@@ -80,6 +80,29 @@ class AnswerCache:
             self.entries.move_to_end(key)
             while len(self.entries)>self.maximum:self.entries.popitem(last=False)
 
+def evidence_payload(evidence):
+    """Factor identical provenance without changing any cited passage bytes.
+
+Version and document identity are part of the key. Different caveats, URLs or
+source dates get separate entries even when document IDs happen to match.
+"""
+    source_keys = ('document_id', 'generation', 'title', 'url', 'retrieved_at',
+                   'publisher_class', 'legal_currency', 'source_date_metadata',
+                   'topics', 'document_kind_hint', 'guide_verification')
+    passage_keys = ('id', 'page', 'label', 'start', 'end', 'text', 'page_heading', 'warning')
+    sources, source_ids, passages = {}, {}, []
+    for item in evidence:
+        source = {key: item[key] for key in source_keys if key in item}
+        identity = json.dumps(source, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
+        if identity not in source_ids:
+            identifier = 'source-' + str(len(sources) + 1)
+            source_ids[identity] = identifier
+            sources[identifier] = source
+        passages.append({**{key: item[key] for key in passage_keys if key in item},
+                         'source': source_ids[identity]})
+    return {'sources': sources, 'evidence': passages}
+
+
 def prepare_answer(request, evidence):
     history=[{'role':m.role,'content':m.content} for m in request.history]
     selected=list(evidence[:10])
@@ -87,14 +110,15 @@ def prepare_answer(request, evidence):
     schema['properties']['paragraphs']['items']=schema.pop('$defs')['Paragraph']
     schema['properties']['paragraphs']['maxItems']=1 if request.answer_style=='brief' else 4
     instruction=INSTRUCTIONS
+    instruction+='\nEach evidence passage has a source reference into the sources object. Read that source metadata, including its dates, jurisdiction and verification/currentness limitations, together with the passage. Source references are not citation IDs: cite only the exact passage id. Source metadata and page headings are context, not additional quoted passage text.'
     if request.answer_style=='brief':
         instruction+='\nGive only the direct practical answer in one paragraph of at most three short sentences, aiming for 50 words and never exceeding 120 words. Preserve source-specific limitations, but omit background and repeated generic legal-currency warnings: the application displays that warning separately. Preserve each authority-to-approval mapping exactly. Do not slash-combine authorities or approvals: for example, an authority issuing one approval is not thereby the issuer of another approval. Cite the exact provision for each required action.'
     instruction+='\nThe only top-level fields are status and paragraphs. Every paragraphs entry must be an object with text and citations, never a string. Do not place citations at the top level. Return JSON conforming to this inline schema: '+json.dumps(schema,ensure_ascii=False,separators=(',',':'))
     while selected:
         # Send evidence and provenance only, not internal paths or unrelated library metadata.
-        passages=[{k:e[k] for k in ('id','title','label','text','page_heading','url','warning','retrieved_at','publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification') if k in e} for e in selected]
+        payload={'question':request.question, **evidence_payload(selected)}
         messages=[{'role':'system','content':instruction},*history,
-                  {'role':'user','content':json.dumps({'question':request.question,'evidence':passages},ensure_ascii=False,separators=(',',':'))}]
+                  {'role':'user','content':json.dumps(payload,ensure_ascii=False,separators=(',',':'))}]
         size=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode('utf-8'))
         if size<=MAX_PROMPT_BYTES:
             bounded_schema=deepcopy(schema)

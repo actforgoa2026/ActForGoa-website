@@ -1,0 +1,24 @@
+{
+  "frozen_at": "2026-10-27T11:27:36.085864+00:00",
+  "code_sha256": {
+    "backend/library.py": "4b113d7fa04c93f5e1a7e8946978069fe0ffc0e4480423ea821adfe9290193a0",
+    "backend/passage_selection.py": "a8d713b2b36b42c5b61f7ec16eb24e2a50c86d12562bdc5f6744faae63d4eb4a",
+    "backend/chat.py": "23f3db3362e1749655c288fd6f194f1639d7af72e137291a91697bea31897b09",
+    "requirements-research.txt": "f2557f16f7ea454e7da14d0555409a581334008965048b48e15e3798e175968f",
+    "deploy/research/requirements-runtime.txt": "cc8f9e377dd09a2e60599286e2ded438127071caca4da874f85b71297824b1a2"
+  },
+  "assessment_sha256": "7420098b89731896c4689f1b16bfb5003f41b98a0e302756b0d6de9d96c26d9f",
+  "generation": "20261027T065155-law-5bc5619b",
+  "assessment_count": 12,
+  "assessment_runs_before_freeze": 0,
+  "known_cases": 44,
+  "smoke_cases": 16,
+  "baseline_commit": "9d705d946cbdc55ad0d9bda4cfb9f243f76b177c",
+  "integrated_through": "05840d4ac794445971213bc09ccaa4438aed2328",
+  "gate": "All original 9 and 16 smoke pass; preserve every baseline pass on known and frozen assessment cases; exact text, reader links, duplicate filtering, source identity and budget safeguards hold. No tuning on the frozen assessment. Report every remaining failure. Prefer combined candidate only if all gates pass; otherwise retain baseline retrieval and report separately the already frozen compaction-only result.",
+  "provider_calls": 0,
+  "dependency_changes": [
+    "snowballstemmer==3.0.1"
+  ],
+  "runtime_models_added": []
+}

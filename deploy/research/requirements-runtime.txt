@@ -9,3 +9,4 @@ tokenizers==0.23.3
 pymupdf==1.28.2
 python-docx==1.2.0
 beautifulsoup4==4.14.3
+snowballstemmer==3.0.1
