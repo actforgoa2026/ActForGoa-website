@@ -1,0 +1,41 @@
+{
+  "checks": [
+    {
+      "marker": "seal.json",
+      "argument": "--data-root",
+      "symlink_resolved": true,
+      "exit": 2
+    },
+    {
+      "marker": "seal.json",
+      "argument": "--service-root",
+      "symlink_resolved": true,
+      "exit": 2
+    },
+    {
+      "marker": "seal.json",
+      "argument": "--output",
+      "symlink_resolved": true,
+      "exit": 2
+    },
+    {
+      "marker": "snapshot-files.json",
+      "argument": "--data-root",
+      "symlink_resolved": true,
+      "exit": 2
+    },
+    {
+      "marker": "snapshot-files.json",
+      "argument": "--service-root",
+      "symlink_resolved": true,
+      "exit": 2
+    },
+    {
+      "marker": "snapshot-files.json",
+      "argument": "--output",
+      "symlink_resolved": true,
+      "exit": 2
+    }
+  ],
+  "native_library_imported": false
+}

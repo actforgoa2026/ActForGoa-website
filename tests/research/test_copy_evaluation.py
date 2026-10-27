@@ -73,3 +73,33 @@ def test_preservation_inventory_rejects_symlinks(preservation_source):
     (preservation_source/'corpus/raw/alias').symlink_to(preservation_source/'corpus/raw/public.txt')
     with pytest.raises(ValueError, match='symlinks'):
         evaluation.inventory(preservation_source)
+
+
+@pytest.mark.parametrize('marker', ['snapshot-files.json', 'seal.json'])
+def test_copy_reports_cannot_modify_another_preservation_directory(preservation_source, tmp_path, monkeypatch, marker):
+    protected = tmp_path/'sealed-package'
+    protected.mkdir()
+    (protected/marker).write_text('{}')
+    output = protected/'reports/evaluation.json'
+    monkeypatch.setattr(sys, 'argv', ['evaluate', '--data-root', str(preservation_source),
+                                    '--cases', '/unused.json', '--output', str(output)])
+    with pytest.raises(SystemExit) as error:
+        evaluation.main()
+    assert error.value.code == 2
+    assert not output.parent.exists()
+
+
+@pytest.mark.parametrize('marker', ['snapshot-files.json', 'seal.json'])
+def test_direct_gate_rejects_preservation_before_opening_native_index(preservation_source, tmp_path, monkeypatch, marker):
+    from scripts import evaluate_retrieval_evidence as direct
+    (preservation_source/marker).write_text('{}')
+
+    def forbidden_open(*args, **kwargs):
+        raise AssertionError('Native index must never open a preservation source')
+
+    monkeypatch.setattr(direct, 'Library', forbidden_open)
+    monkeypatch.setattr(sys, 'argv', ['evaluate', '--data-root', str(preservation_source),
+                                    '--cases', '/unused.json', '--output', str(tmp_path/'result.json')])
+    with pytest.raises(SystemExit) as error:
+        direct.main()
+    assert error.value.code == 2

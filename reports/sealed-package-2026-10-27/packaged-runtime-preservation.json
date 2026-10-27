@@ -1,0 +1,18 @@
+{
+  "package": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "package_files": 1259,
+  "before_sha256": "867e965baf16ce01603c889a1bf1203f1ead18d1127c798c27351f1d4e08a0a5",
+  "provider_calls": 0,
+  "source_opened_in_native_library": false,
+  "child_exit_code": 0,
+  "working_copy_changed_files": [
+    "data/.research-index/generations/20261022T153326-3e2e65fe/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261022T155317-11b07ef4/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261022T155701-21661179/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261027T065155-law-5bc5619b/zvec/3/embedding.index.1.proxima"
+  ],
+  "owned_temporary_copy_removed": true,
+  "after_sha256": "867e965baf16ce01603c889a1bf1203f1ead18d1127c798c27351f1d4e08a0a5",
+  "package_unchanged_after_child_exit": true
+}

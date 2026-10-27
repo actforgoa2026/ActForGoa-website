@@ -16,6 +16,13 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[1]
 PARTS = ('.research-index', 'corpus/raw')
+PRESERVATION_MARKERS = ('snapshot-files.json', 'seal.json')
+
+
+def is_preserved(path):
+    path = Path(path).resolve()
+    return any((parent/marker).is_file() for parent in (path, *path.parents)
+               for marker in PRESERVATION_MARKERS)
 
 
 def inventory(root):
@@ -44,7 +51,7 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     source, output = args.data_root.resolve(), args.output.resolve()
-    if output.is_relative_to(source) or any((parent/'snapshot-files.json').exists() for parent in output.parents):
+    if output.is_relative_to(source) or is_preserved(output):
         parser.error('Write evaluation reports outside the preserved data directory')
     before = inventory(source)
     output.parent.mkdir(parents=True, exist_ok=True)

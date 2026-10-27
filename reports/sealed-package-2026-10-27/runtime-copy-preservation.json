@@ -1,0 +1,18 @@
+{
+  "child_exit_code": 0,
+  "candidate_unchanged_after_child_exit": true,
+  "candidate_files_verified": 1254,
+  "before_sha256": "50e4e8150efc83d0ea057f2586e2ab0bc6c68c916f53c3e7500b63c9e006e375",
+  "after_sha256": "50e4e8150efc83d0ea057f2586e2ab0bc6c68c916f53c3e7500b63c9e006e375",
+  "working_copy_changed_files": [
+    "data/.research-index/generations/20261022T153326-3e2e65fe/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261022T155317-11b07ef4/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261022T155701-21661179/zvec/0/embedding.index.3.proxima",
+    "data/.research-index/generations/20261027T065155-law-5bc5619b/zvec/3/embedding.index.1.proxima",
+    "service/backend/__pycache__/__init__.cpython-312.pyc",
+    "service/backend/__pycache__/embeddings.cpython-312.pyc",
+    "service/backend/__pycache__/extraction.cpython-312.pyc",
+    "service/backend/__pycache__/library.cpython-312.pyc"
+  ],
+  "owned_temporary_copy_removed": true
+}

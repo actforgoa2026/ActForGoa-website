@@ -1,0 +1,76 @@
+{
+  "packaged_backend_imported": true,
+  "generation": "20261027T065155-law-5bc5619b",
+  "generations": [
+    {
+      "generation": "20261022T153326-3e2e65fe",
+      "documents": 1153,
+      "pages": 20473,
+      "chunks": 80344,
+      "sqlite_integrity": "ok",
+      "exact_slices_verified": 80344,
+      "vector_ids_and_document_fields_verified": 80344,
+      "hybrid_probe_passed": true,
+      "sqlite_sha256": "a40cef0a565fd1048143a02d813f447eafb5359d04917d708148e767f523927a"
+    },
+    {
+      "generation": "20261022T155317-11b07ef4",
+      "documents": 1156,
+      "pages": 21110,
+      "chunks": 82555,
+      "sqlite_integrity": "ok",
+      "exact_slices_verified": 82555,
+      "vector_ids_and_document_fields_verified": 82555,
+      "hybrid_probe_passed": true,
+      "sqlite_sha256": "5b4c6958bc3b8d511ad70bb3c47502e5c360d015fc35b73fed1dd857381d6a56"
+    },
+    {
+      "generation": "20261022T155701-21661179",
+      "documents": 1156,
+      "pages": 21220,
+      "chunks": 78432,
+      "sqlite_integrity": "ok",
+      "exact_slices_verified": 78432,
+      "vector_ids_and_document_fields_verified": 78432,
+      "hybrid_probe_passed": true,
+      "sqlite_sha256": "74b6798b056936cc4a972024a05efc6c8fc582537bbee07552c731bc01b8d49e"
+    },
+    {
+      "generation": "20261027T065155-law-5bc5619b",
+      "documents": 1174,
+      "pages": 21534,
+      "chunks": 79564,
+      "sqlite_integrity": "ok",
+      "exact_slices_verified": 79564,
+      "vector_ids_and_document_fields_verified": 79564,
+      "hybrid_probe_passed": true,
+      "sqlite_sha256": "c6d80208581f3776d2cfaa2cfe3ff08e026bd055be1c2a574461934fa52d870f"
+    }
+  ],
+  "unique_originals_verified": 1174,
+  "document_reader_checks": [
+    {
+      "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+      "generation": "20261027T065155-law-5bc5619b",
+      "pages_read": 18,
+      "original_and_last_page_accessible": true
+    },
+    {
+      "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+      "generation": "20261027T065155-law-5bc5619b",
+      "pages_read": 13,
+      "original_and_last_page_accessible": true
+    },
+    {
+      "document_id": "493ffb4c35a00be1f1f28e9b-91ac6cb7fd84",
+      "generation": "20261022T155701-21661179",
+      "pages_read": 13,
+      "original_and_last_page_accessible": true
+    }
+  ],
+  "encoder_sha256": "afdb6f1a0e45b715d0bb9b11772f032c399babd23bfc31fed1c170afc848bdb1",
+  "seconds": 14.666,
+  "provider_calls": 0,
+  "app_or_usage_initialized": false,
+  "scope": "All native access was confined to disposable data and service copies. Parent verifies preserved sources after this process exits."
+}
