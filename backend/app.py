@@ -86,6 +86,7 @@ def create_app(root=None, index_root=None, client=None):
 
     @app.get('/api/documents/{doc_id}/passages/{passage_id}')
     def passage(doc_id:str,passage_id:str,generation:str|None=None):
+        """start/end are zero-based Python Unicode code-point offsets; end is exclusive."""
         with library().connect(generation) as db:
             row=db.execute('SELECT page,start,end,text FROM chunks WHERE id=? AND doc_id=?',(passage_id,doc_id)).fetchone()
         if not row:raise KeyError('Passage not found')
