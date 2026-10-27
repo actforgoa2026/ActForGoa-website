@@ -24,6 +24,13 @@ test('remote MCP exposes public sources and returns source evidence', async () =
   }
   const natural=await client.callTool({name:'search_directory',arguments:{query:'Who can help with waste in Goa?',limit:3}});
   assert.ok(JSON.parse((natural.content as {text:string}[])[0].text).results.length > 0);
+  const waste=await client.callTool({name:'search_directory',arguments:{query:'waste',limit:20}});
+  const wasteResults=JSON.parse((waste.content as {text:string}[])[0].text).results;
+  const corporations=wasteResults.filter((r:{name:string})=>/^goa waste management corporation$/i.test(r.name));
+  assert.equal(corporations.length,1);
+  assert.ok(corporations[0].additional_listings.some((r:{id:string})=>r.id==='goa-b3f711f6b7f3'));
+  const science=wasteResults.find((r:{id:string})=>r.id==='goa-80732e1537a8');
+  assert.equal(science?.website,'https://www.dstegoa.goa.gov.in');
   const rti=await client.callTool({name:'search_site',arguments:{query:'How do I file an RTI?',limit:3}});
   const result=JSON.parse((rti.content as {text:string}[])[0].text).results[0];
   assert.equal(result.id,'guide-reporting'); assert.match(result.excerpt,/\bRTI\b/i); assert.match(result.source,/^https:\/\//);
@@ -31,7 +38,7 @@ test('remote MCP exposes public sources and returns source evidence', async () =
 });
 
 test('MCP search keeps meaningful directory terms and ranks actual RTI evidence', async () => {
- const {searchTerms, siteMatches}=await import('../src/mcp-search.ts');
+ const {directoryMatches, directoryWebsite, searchTerms, siteMatches}=await import('../src/mcp-search.ts');
  const {publicCatalogue}=await import('../src/public-record.ts');
  const {filterRecords,filtersFrom}=await import('../src/crm-model.ts');
  const {readFileSync}=await import('node:fs');
@@ -42,6 +49,14 @@ test('MCP search keeps meaningful directory terms and ranks actual RTI evidence'
  assert.equal(searchTerms('Who can help with waste in Goa?'),'waste');
  assert.deepEqual(directory('Who can help with waste in Goa?').slice(0,3).map(r=>r.record_id),directory('waste').slice(0,3).map(r=>r.record_id));
  assert.equal(searchTerms('waste collection'),'waste collection');
+ const matches = directoryMatches(directory('waste'), 20);
+ const corporation = matches.filter(({record}) => /goa waste management corporation/i.test(record.name));
+ assert.equal(corporation.length, 1);
+ assert.equal(corporation[0].record.record_id, 'goa-3be8492c5821');
+ assert.equal(corporation[0].additional[0].record_id, 'goa-b3f711f6b7f3');
+ assert.ok(corporation[0].additional[0].contact_source_urls);
+ const science = crm.records.find((r: {record_id:string}) => r.record_id === 'goa-80732e1537a8');
+ assert.equal(directoryWebsite(science.website_url), 'https://www.dstegoa.goa.gov.in');
  assert.deepEqual(directory('waste collection').map(r=>r.record_id),directory('Who can help with waste collection in Goa?').map(r=>r.record_id));
  const results=siteMatches(publicCatalogue([...guides,...raw]),'How do I file an RTI?',5);
  assert.equal(results[0].record.id,'guide-reporting');
