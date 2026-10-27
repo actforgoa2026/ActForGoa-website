@@ -82,6 +82,8 @@ def test_two_exact_captured_calls_and_final_only_result(setup):
     assert second['messages'][:-1]==first['messages'][:-1]
     assert trace['phases'][1]['source_equality']['complete_evidence_equal']
     assert trace['phases'][1]['source_equality']['actual_wire_verified']
+    assert trace['phases'][1]['source_equality']['byte_equality']
+    assert trace['phases'][1]['source_equality']['original_draft_payload_utf8_sha256']==trace['phases'][1]['source_equality']['reconstructed_payload_utf8_sha256']
     assert trace['phases'][1]['source_equality']['actual_request_body_sha256']==trace['phases'][1]['outgoing_request']['body_sha256']
     assert trace['phases'][1]['compact_draft']==b['draft_answer']
     assert result.answer['paragraphs']==[{'text':'Gates regulate tidal water.','citations':['a']}]
@@ -154,6 +156,31 @@ def test_failed_selector_preserves_original_raw_and_partial_deterministic_suppor
     resolved=phase['deterministic_support_resolution']
     assert not resolved['complete'] and resolved['claims'][0]['status']=='failed'
     assert len(resolved['claims'][0]['resolved_supports'])==1 and 'final_answer' not in caught.value.trace
+
+
+@pytest.mark.parametrize('mutation',['text','id','owner','field_type','inner_escape','inner_order'])
+def test_actual_correction_mutation_after_preparation_is_reserved_but_unsent(setup,mutation):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
+            if 'anchor_protocol' in payload:
+                if mutation=='text':payload['evidence'][0]['text'][0]['text']='Altered source.'
+                if mutation=='id':payload['evidence'][0]['text'][0]['span_id']='altered'
+                if mutation=='owner':payload['evidence'][0]['source']='another-source'
+                if mutation=='field_type':payload['evidence'][0]['text']='Gates regulate tidal water.'
+                if mutation=='inner_order':payload={key:payload[key] for key in reversed(payload)}
+                value=json.dumps(payload,ensure_ascii=False,separators=(',',':'))
+                if mutation=='inner_escape':value=value.replace('Gates','\\u0047ates')
+                selected['messages'][-1]['content']=value
+            return await super().send(selected,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    phase=caught.value.trace['phases'][1]
+    assert len(limits.receipts)==2 and len(transport.requests)==1 and transport.closed
+    assert phase['reservation_receipt']['reserved'] and phase['provider_attempts']==0
+    assert phase['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
 
 
 def test_compact_draft_overflow_stops_before_second_reservation(setup):

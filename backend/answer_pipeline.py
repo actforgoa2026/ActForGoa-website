@@ -14,7 +14,7 @@ from .chat import GroundedAnswer, validate_answer, MAX_PROMPT_BYTES, FRAMING_TOK
 from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_BYTES,
     PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
-from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, registry_hash
+from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
 
 
 class PipelineFailure(Exception):
@@ -147,37 +147,32 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
         await available()
 
         async def on_request(actual):
-            await available()
-            if (stage['state'] != 'reserved' or stage['provider_attempts'] != 0
-                    or str(actual.url) != 'https://api.anthropic.com/v1/messages'):
-                raise fail('duplicate_or_unreserved_dispatch')
-            capture, actual_body = outgoing_request_capture(actual)
-            stage['outgoing_request'] = capture
-            if actual_body is None or actual_body != body:
-                raise fail('request_capture_mismatch')
-            if stage['phase']=='reconstruction':
-                actual_payload=json.loads(actual_body['messages'][-1]['content'])
-                restored,registry=verify_annotated_payload(
-                    {k:actual_payload[k] for k in ('question','sources','evidence')},
-                    json.loads(original.messages[-1]['content']))
-                if registry_hash(registry)!=stage['span_registry_sha256']:
-                    raise fail('source_span_registry_identity')
-                stage['source_equality'].update(actual_wire_verified=True,
-                    actual_wire_original_payload_sha256=digest(restored),
-                    actual_request_body_sha256=capture['body_sha256'])
-            stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
+            first_hook=stage['state']=='reserved' and stage['provider_attempts']==0
+            try:
+                await available()
+                if not first_hook or str(actual.url)!='https://api.anthropic.com/v1/messages':
+                    raise fail('duplicate_or_unreserved_dispatch')
+                capture, actual_body = outgoing_request_capture(actual)
+                stage['outgoing_request'] = capture
+                if actual_body is None or actual_body != body:
+                    raise fail('request_capture_mismatch')
+                if stage['phase']=='reconstruction':
+                    proof=verify_wire_binding(capture['body_utf8'],
+                        trace['phases'][0]['outgoing_request']['body_utf8'],stage['span_registry_sha256'])
+                    if proof['original_draft_payload_utf8_sha256']!=stage['source_equality']['draft_sha256']:
+                        raise fail('source_span_original_byte_identity')
+                    stage['source_equality'].update(proof)
+                stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
                          dispatched_elapsed_seconds=time.monotonic() - started,
                          request_shape={'model':body['model'], 'version':API_VERSION,
                             'max_tokens':body['max_tokens'], 'service_tier':body['service_tier'],
                             'effort':body['output_config']['effort'], 'thinking':body['thinking']['type'],
                             'format':body['output_config']['format']['type']})
-            # Persistence is synchronous and can consume the remaining deadline
-            # or cross midnight. The request hook has not entered transport yet.
-            try:
+                # No transport has started; even persistence can cross a deadline.
                 notify()
                 await available()
             except BaseException:
-                stage.update(provider_attempts=0, dispatch_status='blocked_before_transport')
+                if first_hook:stage.update(provider_attempts=0, dispatch_status='blocked_before_transport')
                 raise
 
         def on_response(metadata, payload=None):

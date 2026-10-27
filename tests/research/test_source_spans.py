@@ -4,7 +4,8 @@ import json
 
 import pytest
 
-from backend.source_spans import (annotate_payload,verify_annotated_payload,resolve_selector,fragments,registry_hash)
+from backend.source_spans import (annotate_payload,verify_annotated_payload,resolve_selector,fragments,registry_hash,
+                                 verify_wire_binding,encoded,ANCHOR_PROTOCOL)
 from backend.reconstruction import prepare_reconstruction,normalize_reconstruction,reconstruction_schema
 from backend.chat import ChatRequest,prepare_answer
 from tests.research.test_reconstruction import claim,response
@@ -135,3 +136,42 @@ def test_date_omission_is_still_a_semantic_negative_even_with_valid_span():
     assert normalize_reconstruction(response(wrong,prepared=prepared),prepared)[0]['paragraphs'][0]['text']==wrong['text']
     # Authored negative: visible material chronology omitted. This mechanical
     # acceptance must never be counted as a source-reviewed semantic pass.
+
+
+def wire_fixture():
+    original=payload('Visible source text.\n😀 चाँद e\u0301')
+    annotated,registry=annotate_payload(original)
+    draft={'messages':[{'role':'user','content':'Prior context 😀'},
+                       {'role':'user','content':encoded(original).decode()}]}
+    wrapper={**annotated,'anchor_protocol':ANCHOR_PROTOCOL,'request_scope':{'answer_style':'standard','document_id':None,'generation':None},
+             'draft_answer':{'status':'insufficient_evidence','paragraphs':[]}}
+    correction={'messages':[draft['messages'][0],{'role':'user','content':encoded(wrapper).decode()}]}
+    return draft,correction,registry
+
+
+def test_actual_wire_byte_basis_allows_outer_escaping_but_preserves_exact_inner_payload():
+    draft,correction,registry=wire_fixture()
+    # HTTP JSON may encode the same inner string differently. The original byte
+    # basis is its decoded user content string, not the outer JSON quoting.
+    proof=verify_wire_binding(json.dumps(correction,ensure_ascii=True),json.dumps(draft,ensure_ascii=True),registry_hash(registry))
+    assert proof['byte_equality'] and proof['value_equality'] and proof['actual_wire_verified']
+    assert proof['original_draft_payload_utf8_sha256']==proof['reconstructed_payload_utf8_sha256']
+    assert proof['original_payload_utf8_bytes']==len(draft['messages'][-1]['content'].encode())
+
+
+@pytest.mark.parametrize('mutation',['inner_escape','inner_order','history','registry','span_order'])
+def test_semantic_equality_is_not_original_wire_byte_identity(mutation):
+    draft,correction,registry=wire_fixture();expected=registry_hash(registry)
+    if mutation=='inner_escape':
+        draft['messages'][-1]['content']=json.dumps(json.loads(draft['messages'][-1]['content']),ensure_ascii=True,separators=(',',':'))
+    elif mutation=='inner_order':
+        value=json.loads(draft['messages'][-1]['content'])
+        draft['messages'][-1]['content']=encoded({key:value[key] for key in reversed(value)}).decode()
+    elif mutation=='history':correction['messages'][0]={'role':'user','content':'Different context'}
+    elif mutation=='registry':expected='0'*64
+    else:
+        value=json.loads(correction['messages'][-1]['content'])
+        value['sources']={key:value['sources'][key] for key in reversed(value['sources'])}
+        correction['messages'][-1]['content']=encoded(value).decode()
+    with pytest.raises(ValueError,match='actual-wire'):
+        verify_wire_binding(encoded(correction).decode(),encoded(draft).decode(),expected)
