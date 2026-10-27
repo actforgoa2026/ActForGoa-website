@@ -94,7 +94,9 @@ def verify_annotated_payload(actual, original):
     array must never be interpreted as an invented string or support catalogue.
     """
     expected,registry=annotate_payload(original)
-    if actual!=expected:raise ValueError('Source span wire identity differs')
+    # Python equality equates True/1 and 1/1.0. The JSON contract must preserve
+    # their types and the documented key order, as well as semantic values.
+    if actual!=expected or encoded(actual)!=encoded(expected):raise ValueError('Source span wire identity differs')
     reconstructed=deepcopy(actual)
     original_fields=list(_fields(original));actual_fields=list(_fields(reconstructed))
     if len(original_fields)!=len(actual_fields):raise ValueError('Source span field identity differs')
@@ -114,7 +116,8 @@ def verify_annotated_payload(actual, original):
                     'start':position,'end':end,'text':text}
             position=end
         target[target_key]=''.join(part['text'] for part in parts)
-    if reconstructed!=original or rebuilt_registry!=registry:
+    if (reconstructed!=original or encoded(reconstructed)!=encoded(original)
+            or rebuilt_registry!=registry or encoded(rebuilt_registry)!=encoded(registry)):
         raise ValueError('Source spans do not reconstruct original evidence')
     return reconstructed,rebuilt_registry
 

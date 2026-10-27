@@ -93,6 +93,21 @@ def test_actual_wire_mutation_cannot_borrow_original_registry(mutate):
     with pytest.raises(ValueError):verify_annotated_payload(actual,original)
 
 
+@pytest.mark.parametrize('original_value,changed_value',[(True,1),(False,0),(1,1.0),(1.0,1)])
+def test_non_supportable_json_types_cannot_change_under_python_equality(original_value,changed_value):
+    original=payload();original['sources']['source-1']['extra']={'nested':[original_value]}
+    actual,_=annotate_payload(original);actual['sources']['source-1']['extra']['nested'][0]=changed_value
+    assert actual==annotate_payload(original)[0]  # Python equality is too loose.
+    with pytest.raises(ValueError,match='identity'):verify_annotated_payload(actual,original)
+
+
+def test_original_nested_key_order_is_preserved_by_pure_helper():
+    original=payload();original['sources']['source-1']['extra']={'first':True,'second':2}
+    actual,_=annotate_payload(original)
+    actual['sources']['source-1']['extra']={'second':2,'first':True}
+    with pytest.raises(ValueError,match='identity'):verify_annotated_payload(actual,original)
+
+
 def test_oversize_full_selector_schema_is_refused_without_pruning_ids():
     request=ChatRequest(question='What does the source say?')
     original=prepare_answer(request,[{'id':'a','text':'Visible source text.'}],provider='anthropic')

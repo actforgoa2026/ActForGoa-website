@@ -154,7 +154,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                     raise fail('duplicate_or_unreserved_dispatch')
                 capture, actual_body = outgoing_request_capture(actual)
                 stage['outgoing_request'] = capture
-                if actual_body is None or actual_body != body:
+                if (actual_body is None or actual_body != body
+                        or digest(actual_body)!=stage['prepared_request_sha256']):
                     raise fail('request_capture_mismatch')
                 if stage['phase']=='reconstruction':
                     proof=verify_wire_binding(capture['body_utf8'],

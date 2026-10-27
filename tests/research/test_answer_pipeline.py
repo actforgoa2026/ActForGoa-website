@@ -183,6 +183,24 @@ def test_actual_correction_mutation_after_preparation_is_reserved_but_unsent(set
     assert phase['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
 
 
+@pytest.mark.parametrize('phase',[1,2])
+def test_in_place_request_mutation_cannot_change_both_sides_of_identity_check(setup,phase):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            actual_phase=2 if 'anchor_protocol' in json.loads(body['messages'][-1]['content']) else 1
+            if actual_phase==phase:body['max_tokens']+=1
+            return await super().send(body,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    stopped=caught.value.trace['phases'][phase-1]
+    assert caught.value.code=='request_capture_mismatch'
+    assert len(limits.receipts)==phase and len(transport.requests)==phase-1 and transport.closed
+    assert stopped['reservation_receipt']['reserved'] and stopped['provider_attempts']==0
+    assert stopped['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
+
+
 def test_compact_draft_overflow_stops_before_second_reservation(setup):
     _,_,_,transport,limits,_,run,_=setup
     async def handle(_,n):return model_response({'status':'answered','paragraphs':[claim('界'*2800+'.')]})
