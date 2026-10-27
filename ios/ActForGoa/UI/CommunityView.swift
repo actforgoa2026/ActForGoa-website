@@ -5,29 +5,50 @@ struct CommunityView: View {
     @State private var contact = false
     @State private var volunteer = false
     var body: some View {
-        List {
-            Section {
-                Text("A better Goa starts with us.").font(.title2.weight(.semibold)).foregroundStyle(GuideTheme.ink)
-                Text("Your time, your knowledge, your little corner of Goa. It all matters.").foregroundStyle(GuideTheme.secondary)
-            }
-            GuideSection("Take your next step") {
-                Button { volunteer = true } label: { Label("Get involved", systemImage: "hands.sparkles") }
-                Link(destination: URL(string: "https://actforgoa.org/volunteer/")!) { Label("Give your time", systemImage: "heart") }
-                Link(destination: URL(string: "https://actforgoa.org/greenviksitgoa/")!) { Label("Shape Goa’s future", systemImage: "leaf") }
-                Button { contact = true } label: { Label("Contact ActForGoa", systemImage: "envelope") }
-            }
-            GuideSection("Small acts. A shared future.") {
-                if let story = store.record("wp-9352") { RecordRow(record: story, showImage: true) }
-                NavigationLink { CatalogueView(mode: .stories) } label: { Label("All community stories", systemImage: "text.book.closed") }
-            }
-            Section {
-                NavigationLink { AboutView() } label: { Label("About ActForGoa", systemImage: "info.circle") }
-                Link("Privacy policy", destination: URL(string: "https://actforgoa.org/privacy-policy/")!)
-                Link("Terms & conditions", destination: URL(string: "https://actforgoa.org/terms-and-conditions/")!)
-            } footer: { Text("Kokum Trust is the legal managing entity for Act for Goa.") }
-        }.guideList().textCase(nil).navigationTitle("Community")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 28) {
+                VStack(alignment: .leading, spacing: 0) {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("A better Goa starts with us.").font(GuideTheme.display).fixedSize(horizontal: false, vertical: true)
+                        Text("Your time, your knowledge, your little corner of Goa. It all matters.").font(.body)
+                    }.padding(22).frame(maxWidth: .infinity, alignment: .leading).background(GuideTheme.coral)
+                    LocalPhoto(path: "/assets/candolim-cleanup.webp", label: "Volunteers at the Candolim beach cleanup")
+                        .frame(height: 200).clipped()
+                }.clipShape(RoundedRectangle(cornerRadius: 26))
+                VStack(alignment: .leading, spacing: 16) {
+                    SectionHeading(title: "Take your next step")
+                    Button { volunteer = true } label: {
+                        HStack { Text("Get involved"); Spacer(); Image(systemName: "arrow.right") }.font(.headline).frame(minHeight: 44)
+                    }.buttonStyle(.borderedProminent).foregroundStyle(GuideTheme.onTint).controlSize(.large)
+                    communityAction("Contact ActForGoa", symbol: "envelope") { contact = true }
+                    Link(destination: URL(string: "https://actforgoa.org/volunteer/")!) { actionLabel("Give your time", symbol: "heart") }
+                    Link(destination: URL(string: "https://actforgoa.org/greenviksitgoa/")!) { actionLabel("Shape Goa’s future", symbol: "leaf") }
+                }
+                VStack(alignment: .leading, spacing: 16) {
+                    SectionHeading(title: "Small acts. A shared future.")
+                    if let story = store.record("wp-9352") { RecordRow(record: story, showImage: true) }
+                    NavigationLink { CatalogueView(mode: .stories) } label: { actionLabel("All community stories", symbol: "text.book.closed") }
+                }
+                VStack(alignment: .leading, spacing: 12) {
+                    NavigationLink { AboutView() } label: { actionLabel("About ActForGoa", symbol: "info.circle") }
+                    Link("Privacy policy", destination: URL(string: "https://actforgoa.org/privacy-policy/")!).frame(minHeight: 44)
+                    Link("Terms & conditions", destination: URL(string: "https://actforgoa.org/terms-and-conditions/")!).frame(minHeight: 44)
+                    Text("Kokum Trust is the legal managing entity for Act for Goa.").font(.footnote).foregroundStyle(GuideTheme.secondary)
+                }
+            }.padding(20).readingWidth()
+        }.background(GuideTheme.paper).foregroundStyle(GuideTheme.ink).navigationTitle("Community").navigationBarTitleDisplayMode(.inline)
             .sheet(isPresented: $contact) { ContactView() }
             .sheet(isPresented: $volunteer) { ContactView(involve: true) }
+    }
+    private func communityAction(_ title: String, symbol: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) { actionLabel(title, symbol: symbol) }
+    }
+    private func actionLabel(_ title: String, symbol: String) -> some View {
+        HStack(spacing: 12) {
+            Label(title, systemImage: symbol).multilineTextAlignment(.leading)
+            Spacer(minLength: 4)
+            Image(systemName: "arrow.up.right").font(.caption.weight(.semibold)).accessibilityHidden(true)
+        }.font(.headline).foregroundStyle(GuideTheme.tint).frame(minHeight: 44).padding(.vertical, 2).contentShape(Rectangle())
     }
 }
 
@@ -36,7 +57,7 @@ struct AboutView: View {
     var body: some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 22) {
-                Text("A platform for everyone who loves Goa.").font(.largeTitle.weight(.semibold)).accessibilityAddTraits(.isHeader)
+                Text("A platform for everyone who loves Goa.").font(GuideTheme.display).accessibilityAddTraits(.isHeader)
                 Text("Enabling people to care for Goa.").font(.title3)
                 Text("Why ActForGoa exists").font(.title2.weight(.semibold)).accessibilityAddTraits(.isHeader)
                 Text("ACTforGOA is a new platform to help sustainable development take root in Goa.")

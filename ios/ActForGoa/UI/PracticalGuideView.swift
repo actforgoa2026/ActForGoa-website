@@ -12,13 +12,16 @@ struct PracticalGuideView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 24) {
-                    Text(guide.heading).font(.largeTitle.weight(.semibold)).accessibilityAddTraits(.isHeader)
+                    Text(guide.heading).font(GuideTheme.display).accessibilityAddTraits(.isHeader)
+                    if let topic = guide.record.topics.first { TopicLabel(topic: topic) }
                     if !guide.summary.isEmpty { Text(guide.summary).font(.title3).foregroundStyle(GuideTheme.secondary) }
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Draft for review").font(.headline)
-                        Text("Sources checked 22 October 2026. Legal review and live service checks remain open.").foregroundStyle(GuideTheme.secondary)
-                        NavigationLink("See what needs verification", value: GuideRoute.record("guide-verification"))
-                    }
+                        Label("Draft for review", systemImage: "doc.text.magnifyingglass").font(.headline)
+                        Text("Sources checked 22 October 2026. Legal review and live service checks remain open.").font(.subheadline).foregroundStyle(GuideTheme.secondary)
+                        if guide.id != "guide-verification" {
+                            NavigationLink("See what needs verification", value: GuideRoute.record("guide-verification")).font(.subheadline.weight(.semibold)).foregroundStyle(GuideTheme.tint).frame(minHeight: 44)
+                        }
+                    }.frame(maxWidth: .infinity, alignment: .leading).padding(20).background(GuideTheme.surface, in: RoundedRectangle(cornerRadius: 20))
                     DisclosureGroup("On this page") {
                         VStack(alignment: .leading, spacing: 8) {
                             ForEach(parsed.blocks) { block in
@@ -26,8 +29,8 @@ struct PracticalGuideView: View {
                                     Button { proxy.scrollTo(block.id, anchor: .top) } label: { Text(block.text).multilineTextAlignment(.leading).frame(minHeight: 44) }
                                 }
                             }
-                        }.padding(.top, 8)
-                    }
+                        }.font(.body).foregroundStyle(GuideTheme.tint).padding(.top, 8)
+                    }.font(.headline).padding(.vertical, 8)
                     if !guide.templates.isEmpty {
                         DisclosureGroup("Templates to use (\(guide.templates.count))") {
                             VStack(alignment: .leading, spacing: 12) {
@@ -35,8 +38,8 @@ struct PracticalGuideView: View {
                                 ForEach(guide.templates, id: \.url) { item in
                                     Button { document = .init(path: item.url, title: item.label) } label: { Label(item.label, systemImage: "doc.text").multilineTextAlignment(.leading).frame(minHeight: 44) }
                                 }
-                            }.padding(.top, 12)
-                        }.accessibilityIdentifier("guide-templates")
+                            }.font(.body).foregroundStyle(GuideTheme.tint).padding(.top, 12)
+                        }.font(.headline).padding(.vertical, 8).accessibilityIdentifier("guide-templates")
                     }
                     ForEach(parsed.blocks) { block in
                         MarkdownBlockView(block: block).id(block.id)
@@ -81,7 +84,7 @@ struct MarkdownBlockView: View {
     var body: some View {
         switch block.kind {
         case .heading(let level):
-            InlineGuideText(block.text).font(level <= 2 ? .title2.weight(.semibold) : .title3.weight(.semibold)).padding(.top, 12).accessibilityAddTraits(.isHeader)
+            InlineGuideText(block.text).font(level <= 2 ? GuideTheme.heading : .title3.weight(.semibold)).padding(.top, 12).accessibilityAddTraits(.isHeader)
         case .paragraph:
             InlineGuideText(block.text).lineSpacing(5)
         case .listItem(let prefix):
@@ -145,7 +148,7 @@ struct LocalGuideFileView: View {
                         VStack(alignment: .leading, spacing: 20) {
                             Text("Save a copy to edit").font(.title2.weight(.semibold))
                             Text("Use the required official form where one applies. Sharing opens a review sheet; nothing is sent automatically.").foregroundStyle(GuideTheme.secondary)
-                            ShareLink(item: url) { Label("Save or share file", systemImage: "square.and.arrow.up").frame(minHeight: 44) }.accessibilityIdentifier("share-guide-file")
+                            ShareLink(item: url) { Label("Save or share file", systemImage: "square.and.arrow.up").frame(minHeight: 44) }.foregroundStyle(GuideTheme.tint).accessibilityIdentifier("share-guide-file")
                             Divider()
                             Text(text).font(.body).textSelection(.enabled)
                         }.padding(20).readingWidth()

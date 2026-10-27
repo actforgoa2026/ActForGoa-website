@@ -36,7 +36,7 @@ sources=add('sources','PBXSourcesBuildPhase',buildActionMask=2147483647,files=ap
 frameworks=add('frameworks','PBXFrameworksBuildPhase',buildActionMask=2147483647,files=[ref(framework)],runOnlyForDeploymentPostprocessing=0)
 resources=add('resources','PBXResourcesBuildPhase',buildActionMask=2147483647,files=[ref(build('Content',content)),ref(build('Assets',assets)),ref(build('Privacy',privacy))],runOnlyForDeploymentPostprocessing=0)
 testSources=add('testSources','PBXSourcesBuildPhase',buildActionMask=2147483647,files=[ref(build('test',testfile))],runOnlyForDeploymentPostprocessing=0)
-common={'CLANG_ENABLE_MODULES':'YES','SWIFT_VERSION':'5.0','IPHONEOS_DEPLOYMENT_TARGET':'18.0','SDKROOT':'iphoneos','SUPPORTED_PLATFORMS':'iphoneos iphonesimulator','TARGETED_DEVICE_FAMILY':'1','ENABLE_USER_SCRIPT_SANDBOXING':'NO','CODE_SIGN_STYLE':'Automatic','SWIFT_EMIT_LOC_STRINGS':'YES','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'1','GENERATE_INFOPLIST_FILE':'NO'}
+common={'CLANG_ENABLE_MODULES':'YES','SWIFT_VERSION':'5.0','IPHONEOS_DEPLOYMENT_TARGET':'18.0','SDKROOT':'iphoneos','SUPPORTED_PLATFORMS':'iphoneos iphonesimulator','TARGETED_DEVICE_FAMILY':'1','ENABLE_USER_SCRIPT_SANDBOXING':'NO','CODE_SIGN_STYLE':'Automatic','SWIFT_EMIT_LOC_STRINGS':'YES','MARKETING_VERSION':'0.1.0','CURRENT_PROJECT_VERSION':'2','GENERATE_INFOPLIST_FILE':'NO'}
 def configs(name, settings):
     ids=[]
     for config in ['Debug','Release']:

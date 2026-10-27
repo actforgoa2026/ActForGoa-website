@@ -2,11 +2,61 @@ import SwiftUI
 import UIKit
 
 enum GuideTheme {
-    static let paper = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.065, green: 0.105, blue: 0.09, alpha: 1) : UIColor(red: 0.969, green: 0.969, blue: 0.933, alpha: 1) })
-    static let ink = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.92, green: 0.95, blue: 0.90, alpha: 1) : UIColor(red: 0.125, green: 0.239, blue: 0.204, alpha: 1) })
-    static let tint = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.66, green: 0.85, blue: 0.71, alpha: 1) : UIColor(red: 0.086, green: 0.247, blue: 0.212, alpha: 1) })
-    static let secondary = Color(UIColor { $0.userInterfaceStyle == .dark ? UIColor(red: 0.67, green: 0.75, blue: 0.70, alpha: 1) : UIColor(red: 0.36, green: 0.42, blue: 0.39, alpha: 1) })
-    static let surface = Color(UIColor.secondarySystemGroupedBackground)
+    static let paper = adaptive(0xF7F8FC, 0x121622)
+    static let ink = adaptive(0x212747, 0xF1F3FF, highLight: 0x11162B, highDark: 0xFFFFFF)
+    static let tint = adaptive(0x314BC7, 0xB3C0FF, highLight: 0x2037A2, highDark: 0xD6DEFF)
+    static let onTint = adaptive(0xFFFFFF, 0x212747)
+    static let secondary = adaptive(0x566079, 0xB7C0D8, highLight: 0x39435A, highDark: 0xD9E0F2)
+    static let surface = adaptive(0xFFFFFF, 0x1E2536)
+    static let citrus = adaptive(0xE6F28C, 0x303B21)
+    static let lilac = adaptive(0xE5DEFF, 0x342E4B)
+    static let coral = adaptive(0xFFDBC9, 0x4B302A)
+    static let aqua = adaptive(0xC9EDE7, 0x203E3C)
+    static let sky = adaptive(0xD5E8FF, 0x26364D)
+    static let rose = adaptive(0xF7DCEE, 0x442D40)
+
+    private static func adaptive(_ light: UInt32, _ dark: UInt32, highLight: UInt32? = nil, highDark: UInt32? = nil) -> Color {
+        Color(UIColor { traits in
+            let high = traits.accessibilityContrast == .high
+            let value = traits.userInterfaceStyle == .dark ? (high ? highDark ?? dark : dark) : (high ? highLight ?? light : light)
+            return UIColor(red: CGFloat((value >> 16) & 255) / 255, green: CGFloat((value >> 8) & 255) / 255, blue: CGFloat(value & 255) / 255, alpha: 1)
+        })
+    }
+    static func topicColor(_ topic: String?) -> Color {
+        switch topic {
+        case "Waste & recycling", "Food & farming": citrus
+        case "Nature & wildlife", "Water & environment": aqua
+        case "Community & rights": lilac
+        case "Culture & heritage": coral
+        case "Health & wellbeing": rose
+        default: sky
+        }
+    }
+    static func topicSymbol(_ topic: String?) -> String {
+        guard let topic, let index = GuideTopics.all.firstIndex(of: topic) else { return "book.closed" }
+        return GuideTopics.symbols[index]
+    }
+    static let display = Font.system(.largeTitle, design: .rounded, weight: .bold)
+    static let heading = Font.system(.title2, design: .rounded, weight: .bold)
+}
+
+struct TopicLabel: View {
+    let topic: String
+    var body: some View {
+        Label(topic, systemImage: GuideTheme.topicSymbol(topic))
+            .font(.subheadline.weight(.semibold)).foregroundStyle(GuideTheme.ink)
+            .padding(.horizontal, 12).padding(.vertical, 8)
+            .background(GuideTheme.topicColor(topic), in: RoundedRectangle(cornerRadius: 12))
+            .fixedSize(horizontal: false, vertical: true)
+    }
+}
+
+struct SectionHeading: View {
+    let title: String
+    var body: some View {
+        Text(title).font(GuideTheme.heading).foregroundStyle(GuideTheme.ink)
+            .accessibilityAddTraits(.isHeader).frame(maxWidth: .infinity, alignment: .leading)
+    }
 }
 
 struct LocalPhoto: View {
@@ -24,9 +74,10 @@ struct LocalPhoto: View {
 struct SourceNotice: View {
     let text: String
     var body: some View {
-        Text(text).font(.subheadline).foregroundStyle(GuideTheme.secondary)
-            .frame(maxWidth: .infinity, alignment: .leading).padding(16)
-            .background(GuideTheme.surface, in: RoundedRectangle(cornerRadius: 12))
+        Label { Text(text).fixedSize(horizontal: false, vertical: true) } icon: { Image(systemName: "info.circle") }
+            .font(.subheadline).foregroundStyle(GuideTheme.secondary)
+            .frame(maxWidth: .infinity, alignment: .leading).padding(18)
+            .background(GuideTheme.surface, in: RoundedRectangle(cornerRadius: 18))
     }
 }
 
@@ -36,6 +87,10 @@ extension View {
             .listStyle(.insetGrouped).tint(GuideTheme.tint)
     }
     func readingWidth() -> some View { self.frame(maxWidth: 680, alignment: .leading).frame(maxWidth: .infinity) }
+    func catalogueRow() -> some View {
+        self.listRowBackground(Color.clear).listRowSeparator(.hidden)
+            .listRowInsets(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
+    }
 }
 
 struct GuideSection<Content: View>: View {

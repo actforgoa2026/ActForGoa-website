@@ -20,8 +20,10 @@ final class ActForGoaUITests: XCTestCase {
         capture("phone-directory", app)
         app.tabBars.buttons["Library"].tap()
         XCTAssertTrue(app.staticTexts["242 results"].waitForExistence(timeout: 5))
+        capture("phone-library", app)
         app.tabBars.buttons["Community"].tap()
-        app.buttons["Contact ActForGoa"].tap()
+        capture("phone-community", app)
+        reveal(app.buttons["Contact ActForGoa"], in: app).tap()
         XCTAssertTrue(app.textFields["contact-name"].waitForExistence(timeout: 5))
         let prepare = app.buttons["prepare-email"]
         XCTAssertFalse(prepare.isEnabled)
@@ -46,11 +48,9 @@ final class ActForGoaUITests: XCTestCase {
         XCTAssertTrue(app.staticTexts["Start or sustain farming in Goa"].waitForExistence(timeout: 5))
         capture("phone-practical-guide", app)
         let templates = app.buttons["guide-templates"]
-        if !templates.isHittable { app.swipeUp() }
-        templates.tap()
+        reveal(templates, in: app).tap()
         let item = app.buttons["Farming registration enquiry"]
-        if !item.isHittable { app.swipeUp() }
-        XCTAssertTrue(item.waitForExistence(timeout: 5)); item.tap()
+        reveal(item, in: app).tap()
         XCTAssertTrue(app.buttons["share-guide-file"].waitForExistence(timeout: 5))
         capture("phone-template", app)
         app.buttons["Done"].tap()
@@ -63,13 +63,13 @@ final class ActForGoaUITests: XCTestCase {
         app.searchFields.firstMatch.tap(); app.searchFields.firstMatch.typeText("Krishi Card")
         let guide = app.buttons["record-guide-farming"]
         XCTAssertTrue(guide.waitForExistence(timeout: 20)); guide.tap()
-        app.buttons["See what needs verification"].tap()
+        reveal(app.buttons["See what needs verification"], in: app).tap()
         XCTAssertTrue(app.staticTexts["What still needs verification"].waitForExistence(timeout: 5))
         capture("phone-verification-register", app)
         app.navigationBars.buttons.element(boundBy: 0).tap()
-        app.buttons["On this page"].tap()
+        reveal(app.buttons["On this page"], in: app).tap()
         let section = app.buttons["Choose your first step"]
-        XCTAssertTrue(section.waitForExistence(timeout: 5)); section.tap()
+        reveal(section, in: app).tap()
         capture("phone-guide-section", app)
         XCUIDevice.shared.orientation = .landscapeLeft
         let landscape = NSPredicate { _, _ in app.windows.firstMatch.frame.width > app.windows.firstMatch.frame.height }
@@ -81,13 +81,13 @@ final class ActForGoaUITests: XCTestCase {
         app.terminate(); app.launch()
         app.searchFields.firstMatch.tap(); app.searchFields.firstMatch.typeText("Krishi Card")
         XCTAssertTrue(guide.waitForExistence(timeout: 20)); guide.tap()
-        app.buttons["guide-templates"].tap()
+        reveal(app.buttons["guide-templates"], in: app).tap()
         let item = app.buttons["Farming registration enquiry"]
-        if !item.isHittable { app.swipeUp() }
-        item.tap()
+        reveal(item, in: app).tap()
         XCTAssertTrue(app.buttons["share-guide-file"].waitForExistence(timeout: 5))
         app.buttons["share-guide-file"].tap()
-        Thread.sleep(forTimeInterval: 2)
+        XCTAssertTrue(app.buttons["Copy"].waitForExistence(timeout: 15))
+        Thread.sleep(forTimeInterval: 1)
         capture("phone-file-share", app)
     }
     func testEmptySearch() throws {
@@ -105,6 +105,41 @@ final class ActForGoaUITests: XCTestCase {
         capture("phone-large-text", app)
         if !app.buttons["Snake rescue"].exists { app.swipeUp() }
         XCTAssertTrue(app.buttons["Snake rescue"].waitForExistence(timeout: 5))
+    }
+    func testCommunityAndTopicBrowsing() throws {
+        let app = XCUIApplication(); app.launch()
+        XCTAssertTrue(app.buttons["Snake rescue"].waitForExistence(timeout: 20))
+        capture("phone-home", app)
+        let topic = app.buttons["topic-Waste & recycling"]
+        app.swipeUp()
+        reveal(topic, in: app)
+        capture("phone-topics", app)
+        topic.tap()
+        XCTAssertTrue(app.buttons["Clear filters"].waitForExistence(timeout: 5))
+        capture("phone-topic-results", app)
+        app.buttons["Clear filters"].tap()
+        XCTAssertTrue(app.buttons["Snake rescue"].waitForExistence(timeout: 5))
+        app.tabBars.buttons["Community"].tap()
+        XCTAssertTrue(app.staticTexts["A better Goa starts with us."].waitForExistence(timeout: 5))
+        capture("phone-community", app)
+        reveal(app.buttons["Contact ActForGoa"], in: app)
+        app.swipeUp()
+        capture("phone-community-actions", app)
+        XCUIDevice.shared.orientation = .landscapeLeft
+        let landscape = NSPredicate { _, _ in app.windows.firstMatch.frame.width > app.windows.firstMatch.frame.height }
+        expectation(for: landscape, evaluatedWith: nil)
+        waitForExpectations(timeout: 8)
+        Thread.sleep(forTimeInterval: 2)
+        capture("phone-community-landscape", app)
+        XCUIDevice.shared.orientation = .portrait
+    }
+    @discardableResult private func reveal(_ element: XCUIElement, in app: XCUIApplication) -> XCUIElement {
+        for _ in 0..<6 {
+            if element.exists && element.isHittable { return element }
+            app.swipeUp()
+        }
+        XCTAssertTrue(element.exists && element.isHittable)
+        return element
     }
     private func capture(_ name: String, _ app: XCUIApplication) {
         let attachment = XCTAttachment(screenshot: XCUIScreen.main.screenshot()); attachment.name = name; attachment.lifetime = .keepAlways; add(attachment)

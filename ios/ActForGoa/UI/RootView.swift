@@ -59,6 +59,7 @@ struct CatalogueView: View {
     let mode: CatalogueMode
     @Environment(GuideStore.self) private var store
     @Environment(\.dynamicTypeSize) private var typeSize
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var query = ""
     @State private var topic = ""
     @State private var kind = "all"
@@ -82,33 +83,31 @@ struct CatalogueView: View {
         List {
             if !browsing { introduction }
             else {
+                if query.isEmpty && topic.isEmpty && kind == "all" { catalogueIntroduction }
                 if !topic.isEmpty || kind != "all" {
-                    Section {
-                        if !topic.isEmpty { Text(topic).font(.headline) }
-                        Button("Clear filters") { topic = ""; kind = "all" }
-                    }
+                    ViewThatFits(in: .horizontal) {
+                        HStack { activeFilter; Spacer(); clearFilters }
+                        VStack(alignment: .leading) { activeFilter; clearFilters }
+                    }.catalogueRow()
                 }
-                Section {
-                    Text("\(filtered.count) \(filtered.count == 1 ? "result" : "results")").font(.headline).accessibilityIdentifier("result-count")
-                    if !status.isEmpty { Text(status).font(.subheadline).foregroundStyle(GuideTheme.secondary).accessibilityIdentifier("search-status") }
-                }
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("\(filtered.count) \(filtered.count == 1 ? "result" : "results")").font(GuideTheme.heading).accessibilityIdentifier("result-count")
+                    if !status.isEmpty { Text(status).font(.caption).foregroundStyle(GuideTheme.secondary).accessibilityIdentifier("search-status") }
+                }.catalogueRow()
                 if query.range(of: "snake|cobra", options: [.regularExpression, .caseInsensitive]) != nil {
-                    Section {
-                        Text("These volunteer and wildlife contacts come from the original site. Confirm availability directly; the numbers have not been independently reverified.")
-                            .font(.subheadline).foregroundStyle(GuideTheme.secondary)
-                    } header: { Text("Looking for snake rescue?").foregroundStyle(GuideTheme.secondary) }
+                    SourceNotice(text: "These volunteer and wildlife contacts come from the original site. Confirm availability directly; the numbers have not been independently reverified.").catalogueRow()
                 }
                 if filtered.isEmpty {
-                    Section {
+                    VStack(alignment: .leading, spacing: 16) {
                         ContentUnavailableView.search(text: query)
                         Text("Try “waste”, “wildlife” or “panchayat”, or remove a filter.").foregroundStyle(GuideTheme.secondary)
-                        Button("Browse all entries") { query = ""; topic = ""; kind = "all"; showAll = true }
-                    }
+                        Button("Browse all entries") { query = ""; topic = ""; kind = "all"; showAll = true }.buttonStyle(.borderedProminent).foregroundStyle(GuideTheme.onTint).controlSize(.large)
+                    }.catalogueRow()
                 } else if grouped {
                     ForEach(groups, id: \.0) { group in
                         Section {
                             rows(Array(group.1.prefix(max(6, limit / 4))))
-                        } header: { Text("\(group.0) · \(group.1.count)").foregroundStyle(GuideTheme.secondary) }
+                        } header: { Text("\(group.0) · \(group.1.count)").font(.headline).foregroundStyle(GuideTheme.ink) }
                     }
                     if groups.contains(where: { $0.1.count > max(6, limit / 4) }) { moreButton }
                 } else {
@@ -117,8 +116,10 @@ struct CatalogueView: View {
                 }
             }
         }
-        .guideList().textCase(nil)
+        .listStyle(.plain).scrollContentBackground(.hidden).background(GuideTheme.paper).textCase(nil)
+        .foregroundStyle(GuideTheme.ink).tint(GuideTheme.tint)
         .navigationTitle(mode.title)
+        .navigationBarTitleDisplayMode(.inline)
         .searchable(text: $query, placement: .navigationBarDrawer(displayMode: .always), prompt: "What would you like help with?")
         .autocorrectionDisabled().textInputAutocapitalization(.never)
         .toolbar {
@@ -148,48 +149,81 @@ struct CatalogueView: View {
     }
     private var introduction: some View {
         Group {
-            Section {
-                VStack(alignment: .leading, spacing: 10) {
-                    Text("Enabling people to care for Goa.").font(.title2.weight(.semibold)).foregroundStyle(GuideTheme.ink)
-                    Text("Good people. Local knowledge. Practical ways to help.").foregroundStyle(GuideTheme.secondary)
-                }.padding(.vertical, 6)
-            }
-            GuideSection("Find practical help") {
-                ForEach(["Snake rescue", "Waste & recycling", "Composting at home"], id: \.self) { starter in
-                    Button { query = starter } label: {
-                        HStack { Text(starter); Spacer(); Image(systemName: "arrow.up.left").foregroundStyle(GuideTheme.secondary).accessibilityHidden(true) }.frame(minHeight: 32)
+            VStack(alignment: .leading, spacing: 14) {
+                HStack(alignment: .center, spacing: 16) {
+                    Text("Enabling people to care for Goa.").font(GuideTheme.display).tracking(-0.7)
+                        .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading)
+                    if !typeSize.isAccessibilitySize {
+                        LocalPhoto(path: "/assets/goa-river.webp", label: "Palms reflected in a Goan waterway")
+                            .frame(width: 100, height: 142).clipped().clipShape(RoundedRectangle(cornerRadius: 24))
                     }
                 }
-            }
-            GuideSection("What do you care about?") {
-                ForEach(Array(GuideTopics.all.enumerated()), id: \.element) { i, name in
-                    Button { topic = name } label: { Label(name, systemImage: GuideTopics.symbols[i]).frame(minHeight: 32) }
+                Text("Good people. Local knowledge. Practical ways to help.").font(.subheadline).foregroundStyle(GuideTheme.secondary)
+            }.padding(.vertical, 6).catalogueRow()
+            VStack(alignment: .leading, spacing: 6) {
+                Text("Find practical help").font(.subheadline.weight(.semibold)).padding(.bottom, 4)
+                ForEach(Array(["Snake rescue", "Waste & recycling", "Composting at home"].enumerated()), id: \.element) { index, starter in
+                    if index > 0 { Divider().overlay(GuideTheme.ink.opacity(0.1)) }
+                    Button { query = starter } label: {
+                        HStack(spacing: 12) {
+                            Text(starter).font(.headline).multilineTextAlignment(.leading)
+                            Spacer(minLength: 4)
+                            Image(systemName: "arrow.up.right").font(.body.weight(.medium)).accessibilityHidden(true)
+                        }.frame(minHeight: 44).contentShape(Rectangle())
+                    }.buttonStyle(.plain).accessibilityLabel(starter)
                 }
-                Button("Browse all \(store.records.count) entries") { showAll = true }
-            }
-            GuideSection("Useful guides") {
-                ForEach(["guide-farming", "guide-animal-welfare", "guide-environmental-protection"], id: \.self) { id in
-                    if let record = store.record(id) { RecordRow(record: record, showImage: false) }
+            }.padding(20).background(GuideTheme.citrus, in: RoundedRectangle(cornerRadius: 24)).catalogueRow()
+            VStack(alignment: .leading, spacing: 16) {
+                SectionHeading(title: "What do you care about?")
+                LazyVGrid(columns: topicColumns, spacing: 12) {
+                    ForEach(GuideTopics.all, id: \.self) { name in
+                        Button { topic = name } label: {
+                            VStack(alignment: .leading, spacing: 20) {
+                                Image(systemName: GuideTheme.topicSymbol(name)).font(.title2.weight(.medium)).accessibilityHidden(true)
+                                Text(name).font(.headline).multilineTextAlignment(.leading).fixedSize(horizontal: false, vertical: true)
+                            }.frame(maxWidth: .infinity, minHeight: 100, alignment: .leading).padding(16)
+                                .background(GuideTheme.topicColor(name), in: RoundedRectangle(cornerRadius: 20))
+                        }.buttonStyle(.plain).accessibilityIdentifier("topic-\(name)")
+                    }
                 }
-            }
+                Button { showAll = true } label: {
+                    HStack { Text("Browse all \(store.records.count) entries"); Spacer(); Image(systemName: "arrow.right") }.frame(minHeight: 44)
+                }.font(.headline)
+            }.padding(.top, 12).catalogueRow()
             Section {
-                LocalPhoto(path: "/assets/goa-river.webp", label: "Palms reflected in a quiet Goan waterway")
-                    .frame(height: 190).clipped().listRowInsets(EdgeInsets())
-                Text("For the Goa we love.").font(.headline)
+                ForEach(["guide-farming", "guide-animal-welfare", "guide-environmental-protection"], id: \.self) { id in
+                    if let record = store.record(id) { RecordRow(record: record, showImage: false).catalogueRow() }
+                }
+            } header: { SectionHeading(title: "Useful guides").padding(.vertical, 8) }
+            VStack(alignment: .leading, spacing: 12) {
+                Text("For the Goa we love.").font(GuideTheme.heading)
                 Text("Saved on your phone. Every entry links to its original source.").font(.subheadline).foregroundStyle(GuideTheme.secondary)
-            }
+            }.padding(.vertical, 12).catalogueRow()
         }
+    }
+    private var topicColumns: [GridItem] { Array(repeating: GridItem(.flexible(), spacing: 12, alignment: .top), count: typeSize.isAccessibilitySize ? 1 : 2) }
+    private var activeFilter: some View { TopicLabel(topic: topic.isEmpty ? (RecordKind(rawValue: kind)?.label ?? "All entries") : topic) }
+    private var clearFilters: some View { Button("Clear filters") { topic = ""; kind = "all" }.foregroundStyle(GuideTheme.tint).frame(minHeight: 44) }
+    private var catalogueIntroduction: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text(mode == .directory ? "Good people.\nLocal connections." : mode == .library ? "Local knowledge.\nPractical next steps." : "Small acts.\nA shared future.")
+                .font(GuideTheme.display).fixedSize(horizontal: false, vertical: true)
+            Text(mode == .directory ? "Find organisations and volunteer contacts. Confirm listed details before you go." : mode == .library ? "Guides, resources and reading from the ActForGoa collection." : "Meet the people and projects caring for Goa.")
+                .font(.subheadline).foregroundStyle(GuideTheme.secondary)
+        }.frame(maxWidth: .infinity, alignment: .leading).padding(22)
+            .background(mode == .directory ? GuideTheme.lilac : mode == .library ? GuideTheme.aqua : GuideTheme.coral, in: RoundedRectangle(cornerRadius: 24))
+            .catalogueRow()
     }
     @ViewBuilder private func rows(_ records: [GuideRecord]) -> some View {
         if grid && !typeSize.isAccessibilitySize {
             LazyVGrid(columns: [GridItem(.adaptive(minimum: 280), spacing: 20)], spacing: 24) {
                 ForEach(records) { record in RecordRow(record: record, showImage: true) }
-            }.padding(.vertical, 8)
+            }.padding(.vertical, 8).catalogueRow()
         } else {
-            ForEach(records) { record in RecordRow(record: record, showImage: false) }
+            ForEach(records) { record in RecordRow(record: record, showImage: false).catalogueRow() }
         }
     }
-    private var moreButton: some View { Button("Show more results") { limit += 24 }.frame(maxWidth: .infinity, minHeight: 44) }
+    private var moreButton: some View { Button("Show more results") { limit += 24 }.buttonStyle(.bordered).controlSize(.large).frame(maxWidth: .infinity, minHeight: 44).catalogueRow() }
     private func search() async {
         guard let engine = store.engine else { return }
         limit = 24
@@ -200,7 +234,7 @@ struct CatalogueView: View {
             try await Task.sleep(for: .milliseconds(250))
             let scores = try await store.semantic.scores(for: query)
             try Task.checkCancellation()
-            matches = engine.search(query, semantic: scores)
+            withAnimation(reduceMotion ? nil : .easeOut(duration: 0.2)) { matches = engine.search(query, semantic: scores) }
             status = "Matched by meaning and keywords, on your phone."
         } catch is CancellationError { return }
         catch { if !Task.isCancelled { status = "Keyword search is available. Meaning search couldn’t load." } }
@@ -213,22 +247,25 @@ struct RecordRow: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             NavigationLink(value: GuideRoute.record(record.id)) {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 10) {
                     if showImage && !record.image.isEmpty {
-                        LocalPhoto(path: record.image).frame(height: 170).clipped().clipShape(RoundedRectangle(cornerRadius: 8))
+                        LocalPhoto(path: record.image).frame(height: 190).clipped().clipShape(RoundedRectangle(cornerRadius: 18))
                     }
-                    Text(record.title).font(.headline).foregroundStyle(GuideTheme.ink).fixedSize(horizontal: false, vertical: true)
-                    Label((record.editorialStatus == "authored-practical-guide" ? "Practical guide · Draft" : record.kind.label) + (record.locality.map { " · \($0)" } ?? ""), systemImage: record.kind.symbol).font(.caption).foregroundStyle(GuideTheme.secondary)
+                    Text(record.title).font(.system(.title3, design: .rounded, weight: .bold)).foregroundStyle(GuideTheme.ink)
+                        .fixedSize(horizontal: false, vertical: true).frame(maxWidth: .infinity, alignment: .leading)
+                    Label((record.editorialStatus == "authored-practical-guide" ? "Practical guide · Draft" : record.kind.label) + (record.locality.map { " · \($0)" } ?? ""), systemImage: record.kind.symbol)
+                        .font(.caption.weight(.medium)).foregroundStyle(GuideTheme.secondary)
                     Text(record.displaySummary).font(.subheadline).foregroundStyle(GuideTheme.secondary).lineLimit(3)
                 }
-            }.accessibilityIdentifier("record-\(record.id)")
+            }.buttonStyle(.plain).accessibilityIdentifier("record-\(record.id)")
             if record.kind == .contact || record.kind == .organisation, let phone = record.phones.first(where: { $0.url != nil }) ?? record.phones.first {
                 VStack(alignment: .leading, spacing: 2) {
-                    if let url = phone.url { Link(destination: url) { Label(phone.display, systemImage: "phone").frame(minHeight: 44) }.buttonStyle(.borderless) }
+                    if let url = phone.url { Link(destination: url) { Label(phone.display, systemImage: "phone").frame(minHeight: 44) }.foregroundStyle(GuideTheme.tint).buttonStyle(.borderless) }
                     else { Text(phone.display).font(.subheadline) }
                     Text(record.kind == .contact ? "Source list: 2018 · please confirm details" : "Listed contact · please confirm details").font(.caption).foregroundStyle(GuideTheme.secondary)
                 }
             }
-        }.padding(.vertical, 8)
+            Divider().padding(.top, 8)
+        }.padding(.top, 8)
     }
 }

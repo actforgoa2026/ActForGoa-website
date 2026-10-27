@@ -20,13 +20,14 @@ struct RecordDetail: View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 24) {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(record.title).font(.largeTitle.weight(.semibold)).foregroundStyle(GuideTheme.ink)
+                    Text(record.title).font(GuideTheme.display).foregroundStyle(GuideTheme.ink)
                         .accessibilityAddTraits(.isHeader)
-                    Text(record.kind.label + (record.topics.first.map { " · \($0)" } ?? "")).font(.subheadline).foregroundStyle(GuideTheme.secondary)
+                    if let topic = record.topics.first { TopicLabel(topic: topic) }
+                    Text(record.kind.label).font(.subheadline.weight(.medium)).foregroundStyle(GuideTheme.secondary)
                     Text("From ActForGoa" + (record.publishedAt.isEmpty ? "" : " · Published \(GuideRecord.dateLabel(record.publishedAt))")).font(.subheadline).foregroundStyle(GuideTheme.secondary)
                 }
                 if !record.image.isEmpty {
-                    LocalPhoto(path: record.image, label: record.title).frame(height: 230).clipped().clipShape(RoundedRectangle(cornerRadius: 12))
+                    LocalPhoto(path: record.image, label: record.title).frame(height: 230).clipped().clipShape(RoundedRectangle(cornerRadius: 22))
                 }
                 if !record.phones.isEmpty || record.kind == .organisation {
                     SourceNotice(text: "This is an archived source listing. Contact details and service availability need confirmation. Retrieved \(GuideRecord.dateLabel(record.retrievedAt)).")
@@ -36,7 +37,7 @@ struct RecordDetail: View {
                 }
                 ForEach(Array(record.blocks.enumerated()), id: \.offset) { _, block in
                     if block.type == "heading" {
-                        Text(block.text).font(.title2.weight(.semibold)).padding(.top, 12).accessibilityAddTraits(.isHeader)
+                        Text(block.text).font(GuideTheme.heading).padding(.top, 12).accessibilityAddTraits(.isHeader)
                     } else {
                         Text(block.text).font(.body).lineSpacing(5).textSelection(.enabled)
                     }
@@ -114,7 +115,7 @@ struct RecordDetail: View {
             Text("Published contact information, not a confirmation of current availability. Read the original entry for full context.").font(.subheadline).foregroundStyle(GuideTheme.secondary)
         }
     }
-    private func sectionTitle(_ title: String) -> some View { Text(title).font(.title2.weight(.semibold)).accessibilityAddTraits(.isHeader) }
+    private func sectionTitle(_ title: String) -> some View { SectionHeading(title: title) }
     @ViewBuilder private func webButton(_ label: String, url: String, symbol: String = "arrow.up.right") -> some View {
         if let url = SafeLink.web(url) {
             Button { browser = .init(url: url) } label: {
