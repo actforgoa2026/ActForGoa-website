@@ -1,3 +1,4 @@
+import { directoryIdentity } from './directory-quality.js';
 import { crmDirectoryTags } from './crm-directory.js';
 
 export type CRMRecord = Record<string, string> & { record_id: string; name: string; collection: 'community' | 'government' };
@@ -112,7 +113,7 @@ export function directoryFacets(records: CRMRecord[], opportunities: Set<string>
   const match = queryMatch(filters.q);
   const counted = new Set<string>();
   const add = (key: FacetKey, value: string, r: CRMRecord) => {
-    const id = groupCorporation && ['goa-3be8492c5821', 'goa-b3f711f6b7f3'].includes(r.record_id) ? 'waste-corporation' : r.record_id;
+    const id = groupCorporation ? directoryIdentity(r.record_id) : r.record_id;
     const identity = JSON.stringify([key, value, id]);
     if (counted.has(identity)) return;
     counted.add(identity); facets[key][value] = (facets[key][value] || 0) + 1;
