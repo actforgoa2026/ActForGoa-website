@@ -1,4 +1,6 @@
 import {useEffect} from 'react';
+import {useLanguage} from './language';
+import {translatePriority} from './priority-translations';
 import {Link, useParams} from 'react-router-dom';
 import {ArrowLeft, ArrowRight, ArrowUpRight, Download} from 'lucide-react';
 import {topicFlows, actionHref, type TopicFlow, type TopicAction} from './topic-flows';
@@ -21,6 +23,7 @@ export function TopicChoices({flow, parent}: {flow:TopicFlow; parent?:TopicActio
 }
 
 export function TopicPage({records}: {records:RecordItem[]}) {
+ const { language }=useLanguage();
  const {slug,actionId,choiceId}=useParams();
  const flow=topicFlows.find(f=>f.slug===slug);
  const parent=flow?.actions.find(a=>a.id===actionId);
@@ -44,7 +47,7 @@ export function TopicPage({records}: {records:RecordItem[]}) {
    {choiceId && parent && <><Link to={'/topics/'+flow.slug+'/'+parent.id}>{parent.label}</Link><span aria-hidden="true">/</span></>}
    {action && <span aria-current="page">{action.label}</span>}
   </nav>
-  <header className="topic-page-heading"><TopicIcon name={action?.icon || flow.icon}/><h1>{action?.label || flow.label}</h1></header>
+  <header className="topic-page-heading"><TopicIcon name={action?.icon || flow.icon}/><h1 lang={action ? "en" : language}>{action?.label || translatePriority(flow.label, language)}</h1></header>
   {!action ? <TopicChoices flow={flow}/> : action.choices ? <TopicChoices flow={flow} parent={action}/> : <>
    {!!action.links?.length && <section className="action-destinations" aria-label="Take your next step"><div className="choice-grid">
     {action.links.map(link => link.href.startsWith('#') || link.href.startsWith('/read/') || (link.href.startsWith('/') && !link.download)

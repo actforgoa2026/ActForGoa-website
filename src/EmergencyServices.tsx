@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { Ambulance, ArrowLeft, ArrowUpRight, Baby, Flame, HeartHandshake, Phone, Shield, Siren, Users, Zap } from "lucide-react";
 import "./emergency-services.css";
+import { useLanguage } from "./language";
+import { translatePriority } from "./priority-translations";
 
 const services = [
   { name: "Ambulance", number: "108", icon: Ambulance },
@@ -13,14 +15,16 @@ const services = [
 ];
 
 export default function EmergencyServices() {
+  const { language } = useLanguage();
+  const t = (text: string) => translatePriority(text, language);
   return (
     <main className="emergency-page shell">
-      <Link className="text-link" to="/"><ArrowLeft size={17} aria-hidden="true" /> Back</Link>
-      <h1>Emergency services</h1>
-      <p className="emergency-intro">Goa helplines. Tap a number to call.</p>
+      <Link className="text-link" to="/"><ArrowLeft size={17} aria-hidden="true" /> <span lang={language}>{t("Back")}</span></Link>
+      <h1 lang={language}>{t("Emergency services")}</h1>
+      <p className="emergency-intro"><span lang={language}>{t("Goa helplines. Tap a number to call.")}</span></p>
       <a className="emergency-number emergency-primary" href="tel:112" aria-label="Call all emergencies on 112">
         <Siren size={24} aria-hidden="true" />
-        <span>All emergencies</span>
+        <span lang={language}>{t("All emergencies")}</span>
         <strong>112</strong>
         <Phone size={20} aria-hidden="true" />
       </a>
@@ -29,7 +33,7 @@ export default function EmergencyServices() {
           <li key={name}>
             <a className="emergency-number" href={`tel:${number}`} aria-label={`Call ${name.toLowerCase()} on ${number}`}>
               <Icon size={23} aria-hidden="true" />
-              <span>{name}</span>
+              <span lang={language}>{t(name)}</span>
               <strong>{number}</strong>
               <Phone size={18} aria-hidden="true" />
             </a>
