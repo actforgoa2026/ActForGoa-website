@@ -74,6 +74,25 @@ def test_multilingual_prompt_bound_preserves_question_and_recent_context(evidenc
     assert json.loads(prepared.messages[-1]['content'])['question'].startswith('How does monsoon')
     assert [e['id'] for e in json.loads(prepared.messages[-1]['content'])['evidence']]==[e['id'] for e in prepared.evidence]
 
+def test_style_contracts_are_exclusive_without_relaxing_brief_validation(evidence):
+    brief=prepare_answer(ChatRequest(question='How do gates work?',answer_style='brief'),evidence)
+    standard=prepare_answer(ChatRequest(question='How do gates work?',answer_style='standard'),evidence)
+    brief_instruction=brief.messages[0]['content'];standard_instruction=standard.messages[0]['content']
+    assert 'no more than 80 words' in brief_instruction and '350 words' not in brief_instruction
+    assert 'four paragraphs' not in brief_instruction
+    assert 'four paragraphs and 350 words' in standard_instruction and '80 words' not in standard_instruction
+    assert brief.schema['properties']['paragraphs']['maxItems']==1
+    assert standard.schema['properties']['paragraphs']['maxItems']==4
+    for count in (120,121):
+        payload={'status':'answered','paragraphs':[{'text':'word '*(count-1)+'end.','citations':['passage-1']}]}
+        parsed=GroundedAnswer.model_validate(payload)
+        if count==120:
+            assert validate_answer(parsed,evidence,'brief')['status']=='answered'
+        else:
+            with pytest.raises(ValueError,match='length bound'):validate_answer(parsed,evidence,'brief')
+    empty=GroundedAnswer(status='insufficient_evidence',paragraphs=[])
+    assert validate_answer(empty,evidence,'brief')['status']=='insufficient_evidence'
+
 def test_config_only_uses_reviewed_models_and_fixed_gateway(config,monkeypatch):
     monkeypatch.setenv('OPENROUTER_BASE_URL','https://untrusted.example/v1')
     assert chat_config().base_url=='https://openrouter.ai/api/v1'
