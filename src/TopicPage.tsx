@@ -58,8 +58,8 @@ export function TopicPage({records}: {records:RecordItem[]}) {
    {!!action.steps?.length && <section className="action-steps"><h2>How to get started</h2><ol>{action.steps.map(step=><li key={step} lang={translatePriority(step, language) === step ? "en" : language}>{translatePriority(step, language)}</li>)}</ol></section>}
   </>}
   {(rankedPeople.length > 0 || !action) && <section className="topic-directory" aria-labelledby="topic-people">
-   <div className="section-heading"><h2 id="topic-people">People & organisations</h2><Link className="text-link" to={'/directory?'+searchParams}>See all <ArrowRight size={18}/></Link></div>
-   {rankedPeople.length ? <div className="card-grid">{rankedPeople.slice(0,6).map(r=><RecordCard key={r.id} record={r}/>)}</div> : <p>No matching organisations yet. <Link className="text-link" to={'/directory?topic='+encodeURIComponent(flow.topic)}>Browse the wider directory <ArrowRight size={18}/></Link></p>}
+   <div className="section-heading"><h2 id="topic-people">People & organisations</h2><Link className="text-link" to={'/directory/archive?'+searchParams}>See all <ArrowRight size={18}/></Link></div>
+   {rankedPeople.length ? <div className="card-grid">{rankedPeople.slice(0,6).map(r=><RecordCard key={r.id} record={r}/>)}</div> : <p>No matching organisations yet. <Link className="text-link" to={'/directory/archive?topic='+encodeURIComponent(flow.topic)}>Browse the wider directory <ArrowRight size={18}/></Link></p>}
   </section>}
   {!!readingEntries.length && <section className="topic-reading" aria-labelledby="topic-reading">
    <div className="section-heading"><h2 id="topic-reading">Guides & useful reading</h2><Link className="text-link" to={'/library?'+searchParams}>See all guides <ArrowRight size={18}/></Link></div>
