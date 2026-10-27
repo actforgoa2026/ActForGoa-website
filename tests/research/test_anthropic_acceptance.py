@@ -134,6 +134,54 @@ def test_main_refuses_historical_bound_before_key_library_client_or_dispatch(set
     assert path.read_bytes() == original and not (tmp / 'must-not-exist.json').exists()
 
 
+def test_low_plan_requires_explicit_matching_runtime_and_preserves_medium_default(setup):
+    plan, _, _, _ = setup
+    plan.update(effort='low', max_output_tokens=12000)
+    medium = chat_config()
+    assert medium.effort == 'medium' and acceptance.planned_effort(plan) == 'low'
+    with pytest.raises(ValueError, match='effort must match'):
+        acceptance.preflight(plan, 'test', medium)
+    low = replace(medium, effort='low')
+    assert acceptance.preflight(plan, 'test', low)['worst_reservation_microusd'] == 18848
+    plan.pop('effort')
+    with pytest.raises(ValueError, match='effort must match'):
+        acceptance.preflight(plan, 'test', low)
+
+
+def test_main_cannot_override_medium_runtime_with_low_plan(setup, monkeypatch):
+    import builtins
+    plan, _, _, tmp = setup
+    plan.update(effort='low', max_output_tokens=12000)
+    plan['stages']['test']['approval_reference'] = 'synthetic-review'
+    path = tmp / 'low-plan.json';original = json.dumps(plan).encode();path.write_bytes(original)
+    monkeypatch.setattr(acceptance.sys, 'argv', ['evaluate', '--plan', str(path), '--stage', 'test',
+        '--execute', '--output', str(tmp / 'must-not-exist.json'), '--key-env-file', str(tmp / 'no-key')])
+    for name in ('dotenv_values', 'AnthropicClient', 'run_cases', 'verify_packets'):
+        monkeypatch.setattr(acceptance, name, lambda *a, **k: pytest.fail('Mismatched effort must stop before access or dispatch'))
+    original_import = builtins.__import__
+    def guarded_import(name, *args, **kwargs):
+        if name == 'backend.library':pytest.fail('No native library access for mismatched effort')
+        return original_import(name, *args, **kwargs)
+    monkeypatch.setattr(builtins, '__import__', guarded_import)
+    with pytest.raises(ValueError, match='effort must match'):
+        acceptance.main()
+    assert chat_config().effort == 'medium' and path.read_bytes() == original
+    assert not (tmp / 'must-not-exist.json').exists()
+
+
+def test_low_check_cli_requires_explicit_environment_and_plan(setup, monkeypatch, capsys):
+    plan, _, _, tmp = setup
+    plan.update(effort='low', max_output_tokens=12000)
+    path = tmp / 'explicit-low-plan.json';original = json.dumps(plan).encode();path.write_bytes(original)
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'low')
+    monkeypatch.setattr(acceptance.sys, 'argv', ['evaluate', '--plan', str(path), '--stage', 'test'])
+    acceptance.main()
+    result = json.loads(capsys.readouterr().out)
+    assert result['effort'] == 'low' and result['max_output_tokens'] == 12000
+    assert result['provider_calls'] == 0 and result['max_reservation_microusd'] == 18848
+    assert path.read_bytes() == original
+
+
 @pytest.mark.parametrize('mutation,match',[
     ('head','identity'),('day','UTC-day'),('generation','disposable'),('hash','freeze'),('cap','bounded'),('baseline','baseline')])
 def test_preflight_rejects_changed_inputs(setup,mutation,match):
@@ -267,6 +315,28 @@ def test_new_capacity_is_explicit_in_report_wire_and_reservation(setup):
     assert report['complete'] and report['max_output_tokens'] == 12000
     assert all(entry['reserved_output_tokens'] == entry['request_shape']['max_tokens'] == 12000
                and entry['accounting_matches'] for entry in report['cases'])
+
+
+def test_low_effort_survives_full_wire_capture_and_report(setup):
+    plan, config, library, tmp = setup
+    plan.update(effort='low', max_output_tokens=12000)
+    report, _ = execute_fixture((plan, replace(config, effort='low', max_output_tokens=12000), library, tmp), response())
+    assert report['complete'] and report['effort'] == 'low'
+    for case in report['cases']:
+        assert case['request_shape']['effort'] == 'low' and case['request_shape']['thinking'] == 'adaptive'
+        body = json.loads(case['outgoing_request']['body_utf8'])
+        assert body['output_config']['effort'] == 'low' and body['max_tokens'] == 12000
+        assert case['accounting_matches'] and case['usage_within_reservation']
+
+
+@pytest.mark.parametrize('model,effort', [('claude-sonnet-5-5', 'low'), ('claude-haiku-5-5', 'high')])
+def test_wire_capture_refuses_unreviewed_model_effort_pair(setup, model, effort):
+    _, config, library, _ = setup
+    prepared = prepare_answer(ChatRequest(question='Where are gates?'), library.search('fixture'), provider='anthropic')
+    wire = message_request(config, prepared)
+    wire['model'] = model;wire['output_config']['effort'] = effort
+    request = httpx.Request('POST', 'https://api.anthropic.com/v1/messages', json=wire)
+    assert acceptance.outgoing_request_capture(request) == ({'capture_status': 'unexpected_request_shape'}, None)
 
 
 def test_mismatched_reviewed_model_is_recorded_and_stops_without_retry(setup):

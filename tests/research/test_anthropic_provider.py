@@ -165,6 +165,31 @@ def test_explicit_sonnet_high_changes_only_effort_and_separates_cached_answers(c
     with pytest.raises(ValueError,match='effort'):chat_config()
 
 
+def test_haiku_low_is_explicit_and_changes_only_effort(config, monkeypatch, prepared):
+    from backend.anthropic_provider import message_request
+    assert config.model == 'claude-haiku-5-5' and config.effort == 'medium'
+    before = message_request(config, prepared)
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'low')
+    low = chat_config()
+    after = message_request(low, prepared)
+    assert after == {**before, 'output_config': {**before['output_config'], 'effort': 'low'}}
+    assert after['thinking'] == {'type': 'adaptive'} and after['max_tokens'] == 12000
+    assert low.maximum_cost_microusd(26048) == config.maximum_cost_microusd(26048) == 9424
+    assert AnswerCache.key(low, prepared) != AnswerCache.key(config, prepared)
+    monkeypatch.delenv('ANTHROPIC_CHAT_EFFORT')
+    assert chat_config().effort == 'medium'
+
+
+@pytest.mark.parametrize('model,effort', [('claude-haiku-5-5', 'high'),
+    ('claude-haiku-5-5', 'max'), ('claude-sonnet-5-5', 'low'), ('claude-unreviewed', 'low')])
+def test_unreviewed_model_effort_pairs_cannot_be_selected(model, effort, monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
+    monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', model)
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', effort)
+    with pytest.raises(ValueError, match='reviewed'):
+        chat_config()
+
+
 @pytest.mark.parametrize('effort',['low','xhigh','max','unknown',None])
 def test_unreviewed_effort_never_dispatches(config,prepared,effort):
     selected=replace(config,model='claude-sonnet-5-5',effort=effort)

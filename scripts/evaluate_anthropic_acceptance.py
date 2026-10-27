@@ -229,13 +229,16 @@ def outgoing_request_capture(request):
             or body['stream'] is not False or body['service_tier'] != 'standard_only'
             or body['thinking'] != {'type': 'adaptive'}
             or not isinstance(output, dict) or set(output) != {'effort', 'format'}
-            or output['effort'] not in ('medium', 'high')
             or not isinstance(output['format'], dict) or set(output['format']) != {'type', 'schema'}
             or output['format']['type'] != 'json_schema' or not isinstance(output['format']['schema'], dict)
             or not isinstance(messages, list) or not messages
             or any(not isinstance(m, dict) or set(m) != {'role', 'content'}
                    or m['role'] not in ('user', 'assistant') or not isinstance(m['content'], str)
                    for m in messages)):
+        return {'capture_status': 'unexpected_request_shape'}, None
+    try:
+        reviewed_effort(body['model'], output['effort'])
+    except ValueError:
         return {'capture_status': 'unexpected_request_shape'}, None
     # Header values are used only to refuse accidental credential echoes. They
     # are never persisted. Also refuse common key prefixes and credential fields.
@@ -448,7 +451,8 @@ def main():
     args=parser.parse_args()
     plan=json.loads(args.plan.read_text())
     os.environ['RESEARCH_CHAT_PROVIDER']='anthropic';os.environ['ANTHROPIC_CHAT_MODEL']=planned_model(plan)
-    os.environ['ANTHROPIC_CHAT_EFFORT']=planned_effort(plan)
+    # Effort must be selected explicitly in the runtime environment, just as in
+    # deployment. A plan cannot silently replace the actual runtime setting.
     config=chat_config()
     context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
