@@ -1,5 +1,5 @@
-import details from './content/directory-details.json';
-import type { DirectoryDetails, RecordItem } from './types';
+import details from './content/directory-details.json' with { type: 'json' };
+import type { DirectoryDetails, RecordItem } from './types.js';
 
 const curated: Record<string, DirectoryDetails> = details;
 

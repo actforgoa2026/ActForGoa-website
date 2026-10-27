@@ -1,4 +1,4 @@
-import type {RecordItem} from './types';
+import type {RecordItem} from './types.js';
 const stop=new Set('a an the i me my we our you your to for of in on at and or is are do does can who how what where when with need get help find goa oh there theres s it its this that have has please want would could should about'.split(' '));
 export const tokens=(value:string)=>value.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>t.length>1&&!stop.has(t));
 const intents=[
@@ -19,10 +19,10 @@ export function lexicalSearch(records:RecordItem[],query:string){
   const title=record.title.toLowerCase(), body=(record.text+' '+(record.documentText||'')+' '+(record.directory?.description||'')+' '+(record.locality||'')+' '+record.locations.join(' ')+' '+(record.directory?.tags||[]).join(' ')).toLowerCase(),topic=record.topics.join(' ').toLowerCase();
   const tset=new Set(tokens(title)),bset=new Set(tokens(body));
   let score=0,hit=0;
-  for(const t of terms){if(tset.has(t)||title.includes(t)){score+=8;hit++}else if(bset.has(t)){score+=2;hit++}else if(topic.includes(t)){score+=.3}}
+  for(const t of terms){if(tset.has(t)||(t.length>=4&&title.includes(t))){score+=8;hit++}else if(bset.has(t)){score+=2;hit++}else if(topic.includes(t)){score+=.3}}
   for(const t of expanded){if(title.includes(t))score+=3;else if(body.includes(t))score+=.7}
   if(terms.length&&hit===terms.length)score+=4;
-  if(title.includes(query.toLowerCase()))score+=10;
+  if(title.includes(query.toLowerCase())&&(query.trim().length>=4||tset.has(query.toLowerCase().trim())))score+=10;
   if(intent.some(x=>x.boost.includes(record.id)))score+=15;
   return {record,score};
  }).filter(x=>x.score>=1);
