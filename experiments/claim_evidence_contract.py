@@ -7,13 +7,14 @@ Mechanical validity is never a semantic verdict or release approval.
 from __future__ import annotations
 
 import argparse
+from copy import deepcopy
 from datetime import date
 import hashlib
 import json
 from pathlib import Path
 import re
 
-MAX_CLAIM_WORDS = 35  # Proposal for review, not an atomicity proof.
+MAX_CLAIM_WORDS = 35  # Superseded short-claim experiment, not an atomicity proof.
 PUBLICATION_FIELDS = frozenset({
     'prism.publicationDate', 'citation_online_date',
     'citation_publication_date', 'datePublished',
@@ -56,7 +57,7 @@ def locate_excerpt(passage, quote):
 
 
 def publication_year(source):
-    """Derive only a publisher metadata year, never a measurement/legal date.
+    """Derive only a source metadata year, never a measurement/legal date.
 
     Catalogue titles, URLs, retrieval dates and generic dc.date are intentionally
     ignored. Malformed or conflicting recognized fields produce an explicit
@@ -84,7 +85,7 @@ def publication_year(source):
         state, year, label = 'conflict', None, 'Source publication year unresolved'
     elif years:
         year = next(iter(years))
-        state, label = 'metadata', f'Source publication year: {year} (publisher metadata)'
+        state, label = 'metadata', f'Source publication year: {year} (source metadata)'
     else:
         state, year, label = 'unknown', None, 'Source publication year not established'
     return {'state': state, 'year': year, 'label': label, 'basis': origins}
@@ -131,6 +132,103 @@ def audit_unit(text, supports, evidence, *, excerpt_only=False):
     return {'mechanical': 'reject' if issues else 'valid',
             'issues': sorted(set(issues)), 'resolved': resolved,
             'semantic': 'not_assessed', 'release': 'hold'}
+
+
+def audit_selection(payload, evidence):
+    """Smaller candidate: the model selects IDs, the server supplies whole text.
+
+    Full transitive required context accompanies each selected passage. Text is
+    neither normalized nor truncated. Mechanical identity does not establish
+    relevance, context completeness across chunks, or semantic correctness.
+    """
+    result = {'mechanical': 'reject', 'issues': [], 'units': [],
+              'semantic': 'not_assessed', 'release': 'hold'}
+    if not isinstance(payload, dict) or set(payload) != {'status', 'passage_ids'}:
+        result['issues'] = ['selection_shape']
+        return result
+    status, selected = payload['status'], payload['passage_ids']
+    if (status not in ('selected', 'insufficient_evidence') or not isinstance(selected, list)
+            or any(not isinstance(identifier, str) for identifier in selected)):
+        result['issues'] = ['selection_shape']
+        return result
+    if bool(selected) != (status == 'selected'):
+        result['issues'] = ['selection_status_mismatch']
+        return result
+    if len(selected) != len(set(selected)) or any(identifier not in evidence for identifier in selected):
+        result['issues'] = ['duplicate_or_unknown_selection']
+        return result
+
+    def context_closure(identifier, trail):
+        if identifier in trail:
+            raise ValueError('context_cycle')
+        if identifier not in evidence:
+            raise ValueError('unknown_context')
+        item = evidence[identifier]
+        if not isinstance(item.get('text'), str) or not item['text'].strip():
+            raise ValueError('missing_source_text')
+        if (not isinstance(item.get('document_id'), str) or not item['document_id']
+                or not isinstance(item.get('generation'), str) or not item['generation']
+                or type(item.get('page')) is not int or item['page'] < 1):
+            raise ValueError('invalid_source_provenance')
+        dependencies = item.get('context_ids', [])
+        if not isinstance(dependencies, list) or any(not isinstance(dep, str) for dep in dependencies):
+            raise ValueError('invalid_context_ids')
+        ordered = []
+        for dependency in dependencies:
+            if dependency not in evidence:
+                raise ValueError('unknown_context')
+            if any(evidence[dependency].get(field) != item[field]
+                   for field in ('document_id', 'generation', 'page')):
+                raise ValueError('context_provenance_mismatch')
+            for context in [*context_closure(dependency, trail | {identifier}), dependency]:
+                if context not in ordered:
+                    ordered.append(context)
+        return ordered
+
+    def present(identifier):
+        source = evidence[identifier]
+        return {'passage_id': identifier, 'text': source['text'],
+                'provenance': {field: deepcopy(source[field]) for field in (
+                    'document_id', 'generation', 'page', 'label', 'start', 'end',
+                    'reader_url', 'url', 'title', 'retrieved_at', 'source_date_metadata') if field in source},
+                'publication': publication_year(source),
+                'limitations': {field: deepcopy(source[field]) for field in (
+                    'warning', 'legal_currency', 'guide_verification') if field in source}}
+
+    try:
+        for identifier in selected:
+            context_ids = context_closure(identifier, set())
+            result['units'].append({'passage': present(identifier),
+                                    'required_context': [present(context) for context in context_ids]})
+    except ValueError as error:
+        result['issues'] = [str(error)]
+        result['units'] = []  # No partial acceptance or quiet salvage.
+        return result
+    result['mechanical'] = 'valid'
+    return result
+
+
+def reviewer_counterexamples():
+    """Preserve LAW's two falsifications of arbitrary substring copying."""
+    common = {'document_id': 'synthetic-document', 'generation': 'synthetic-generation', 'page': 1}
+    eligibility = {'eligibility': {**common, 'text': 'The applicant is ineligible for support.'}}
+    quote = 'eligible for support'
+    prefix = audit_unit(quote, [{'citation_id': 'eligibility', 'quote': quote}],
+                        eligibility, excerpt_only=True)
+    table = {'row': {**common, 'text': 'Bird A   Region A', 'context_ids': ['header']},
+             'header': {**common, 'text': 'Species   Endemic to'}}
+    partial_header = audit_unit('Bird A   Region A', [
+        {'citation_id': 'row', 'quote': 'Bird A   Region A'},
+        {'citation_id': 'header', 'quote': 'Species'},
+    ], table, excerpt_only=True)
+    if prefix['mechanical'] != 'valid' or partial_header['mechanical'] != 'valid':
+        raise ValueError('Reviewer falsification no longer reproduced')
+    return [
+        {'review_label': 'word_prefix_removed', 'synthetic': True, 'excerpt_only': prefix,
+         'selection_only': audit_selection({'status': 'selected', 'passage_ids': ['eligibility']}, eligibility)},
+        {'review_label': 'header_meaning_omitted', 'synthetic': True, 'excerpt_only': partial_header,
+         'selection_only': audit_selection({'status': 'selected', 'passage_ids': ['row']}, table)},
+    ]
 
 
 def read_capture(path, expected_hash):
@@ -184,11 +282,16 @@ def replay(directory):
                             'candidate': paired, 'excerpt_only': copied})
             cases.append({'id': case['id'],
                           'historical_mechanical_passed': case['mechanical_passed'],
-                          'units': output})
+                          'units': output,
+                          'selection_assembly_fixture': {
+                              'selection_origin': 'deduplicated_historical_primary_support_ids_not_new_model_output',
+                              'result': audit_selection({'status': 'selected', 'passage_ids': list(dict.fromkeys(
+                                  unit['primary_support']['citation_id'] for unit in units))}, evidence)}})
         packets.append({'capture': name, 'sha256': sha, 'cases': cases})
     return {'proposal_only': True, 'provider_calls': 0,
             'semantic_acceptance': 'not_assessed', 'release': 'hold',
-            'counterexamples': counterexamples, 'packets': packets}
+            'counterexamples': counterexamples, 'reviewer_counterexamples': reviewer_counterexamples(),
+            'packets': packets}
 
 
 def main():

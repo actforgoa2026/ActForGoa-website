@@ -3,11 +3,12 @@ from pathlib import Path
 import tempfile
 import unittest
 
-from claim_evidence_contract import audit_unit, locate_excerpt, publication_year, read_capture
+from claim_evidence_contract import audit_selection, audit_unit, locate_excerpt, publication_year, read_capture
 
 
 def source(text, **extra):
-    return {'text': text, **extra}
+    return {'text': text, 'document_id': 'synthetic-document', 'generation': 'synthetic-generation',
+            'page': 1, **extra}
 
 
 def support(identifier, quote):
@@ -65,6 +66,23 @@ class MechanicalDoesNotMeanEntailed(unittest.TestCase):
         self.assertEqual(result['semantic'], 'not_assessed')
         self.assertEqual(result['release'], 'hold')
 
+    def test_copy_only_can_cut_a_word_prefix_and_reverse_eligibility(self):
+        evidence = {'a': source('The applicant is ineligible for support.')}
+        quote = 'eligible for support'
+        result = audit_unit(quote, [support('a', quote)], evidence, excerpt_only=True)
+        self.assertEqual(result['mechanical'], 'valid')  # LAW's falsification.
+        self.assertEqual(result['semantic'], 'not_assessed')
+        self.assertEqual(result['release'], 'hold')
+
+    def test_copy_only_header_identity_can_omit_the_column_meaning(self):
+        evidence = {'row': source('Bird A   Region A', context_ids=['header']),
+                    'header': source('Species   Endemic to')}
+        result = audit_unit('Bird A   Region A', [support('row', 'Bird A   Region A'),
+            support('header', 'Species')], evidence, excerpt_only=True)
+        self.assertEqual(result['mechanical'], 'valid')  # LAW's falsification.
+        self.assertNotIn('Endemic to', result['resolved'][1]['quote'])
+        self.assertEqual(result['release'], 'hold')
+
 
 class ExactSupportChecks(unittest.TestCase):
     def test_offsets_preserve_original_whitespace(self):
@@ -110,7 +128,7 @@ class AppOwnedSourceDates(unittest.TestCase):
             {'field': 'prism.publicationDate', 'value': '2025-05-04'},
             {'field': 'citation_online_date', 'value': '2025/05/04'}]))
         self.assertEqual(result['year'], 2025)
-        self.assertEqual(result['label'], 'Source publication year: 2025 (publisher metadata)')
+        self.assertEqual(result['label'], 'Source publication year: 2025 (source metadata)')
 
     def test_catalogue_upload_retrieval_and_generic_dates_cannot_supply_year(self):
         result = publication_year(source('A fact.', title='2025 report', url='/2025/05/report.pdf',
@@ -132,6 +150,92 @@ class AppOwnedSourceDates(unittest.TestCase):
                     'undated': source('Undated fact.')}
         result = audit_unit('Undated fact.', [support('undated', 'Undated fact.')], evidence)
         self.assertEqual(result['resolved'][0]['publication']['state'], 'unknown')
+
+
+class SelectionOnlyCandidate(unittest.TestCase):
+    def test_whole_text_preserves_ineligible_prefix_and_more_than_35_words(self):
+        text = 'The applicant is ineligible for support.\n' + 'Additional source context. ' * 20
+        result = audit_selection({'status': 'selected', 'passage_ids': ['a']}, {'a': source(text)})
+        self.assertEqual(result['mechanical'], 'valid')
+        self.assertEqual(result['units'][0]['passage']['text'], text)
+        self.assertEqual(result['semantic'], 'not_assessed')
+        self.assertEqual(result['release'], 'hold')
+
+    def test_full_transitive_headers_are_attached_without_model_selecting_them(self):
+        evidence = {'row': source('Bird A   Region A', context_ids=['header']),
+                    'header': source('Species   Endemic to', context_ids=['caption']),
+                    'caption': source('Table: regional endemism')}
+        result = audit_selection({'status': 'selected', 'passage_ids': ['row']}, evidence)
+        self.assertEqual(result['mechanical'], 'valid')
+        contexts = result['units'][0]['required_context']
+        self.assertEqual([c['passage_id'] for c in contexts], ['caption', 'header'])
+        self.assertEqual([c['text'] for c in contexts], [evidence[i]['text'] for i in ['caption', 'header']])
+
+    def test_selection_order_and_per_source_provenance_are_preserved(self):
+        evidence = {'a': source('A fact.', warning='Extraction incomplete.', legal_currency='Unverified.'),
+                    'b': source('B fact.', source_date_metadata=[{'field': 'datePublished', 'value': '2025'}])}
+        result = audit_selection({'status': 'selected', 'passage_ids': ['b', 'a']}, evidence)
+        self.assertEqual([u['passage']['passage_id'] for u in result['units']], ['b', 'a'])
+        self.assertEqual(result['units'][0]['passage']['publication']['year'], 2025)
+        self.assertEqual(result['units'][1]['passage']['publication']['state'], 'unknown')
+        self.assertEqual(result['units'][1]['passage']['limitations'],
+                         {'warning': 'Extraction incomplete.', 'legal_currency': 'Unverified.'})
+        result['units'][0]['passage']['provenance']['source_date_metadata'][0]['value'] = '2000'
+        self.assertEqual(evidence['b']['source_date_metadata'][0]['value'], '2025')
+
+    def test_model_cannot_supply_text_ranges_dates_or_review_results(self):
+        for field, value in [('text', 'eligible for support'), ('quote', 'eligible for support'),
+                             ('start', 20), ('end', 30), ('publication', {'year': 2025}),
+                             ('semantic', 'passed')]:
+            with self.subTest(field=field):
+                payload = {'status': 'selected', 'passage_ids': ['a'], field: value}
+                self.assertEqual(audit_selection(payload, {'a': source('A fact.')})['issues'], ['selection_shape'])
+
+    def test_unknown_duplicate_and_status_mismatches_reject_without_salvage(self):
+        for payload in [
+            {'status': 'selected', 'passage_ids': ['a', 'missing']},
+            {'status': 'selected', 'passage_ids': ['a', 'a']},
+            {'status': 'selected', 'passage_ids': []},
+            {'status': 'insufficient_evidence', 'passage_ids': ['a']},
+            {'status': 'selected', 'passage_ids': [{'id': 'a', 'quote': 'A'}]},
+        ]:
+            with self.subTest(payload=payload):
+                result = audit_selection(payload, {'a': source('A fact.')})
+                self.assertEqual(result['mechanical'], 'reject')
+                self.assertEqual(result['units'], [])
+        result = audit_selection({'status': 'insufficient_evidence', 'passage_ids': []}, {})
+        self.assertEqual(result['mechanical'], 'valid')
+        self.assertEqual(result['semantic'], 'not_assessed')
+
+    def test_missing_cyclic_or_cross_source_headers_reject_without_salvage(self):
+        candidates = [
+            {'row': source('A row.', context_ids=['absent'])},
+            {'row': source('A row.', context_ids=['row'])},
+            {'row': source('A row.', context_ids=['header']), 'header': source('A header.', context_ids=['row'])},
+            *[{'row': source('A row.', context_ids=['header']), 'header': source('A header.', **change)}
+              for change in [{'document_id': 'other'}, {'generation': 'other'}, {'page': 2}]],
+        ]
+        for evidence in candidates:
+            with self.subTest(evidence=evidence):
+                result = audit_selection({'status': 'selected', 'passage_ids': ['row']}, evidence)
+                self.assertEqual(result['mechanical'], 'reject')
+                self.assertEqual(result['units'], [])
+
+    def test_whole_passage_identity_still_allows_missing_qualification_in_another_chunk(self):
+        evidence = {'first': source('The fee is 25 units.'),
+                    'next': source('The preceding fee applies only to certified copies, not applications.')}
+        result = audit_selection({'status': 'selected', 'passage_ids': ['first']}, evidence)
+        self.assertEqual(result['mechanical'], 'valid')  # Known relevance/context gap.
+        self.assertEqual(len(result['units']), 1)
+        self.assertEqual(result['semantic'], 'not_assessed')
+        self.assertEqual(result['release'], 'hold')
+
+    def test_irrelevant_exact_passage_is_not_treated_as_a_useful_answer(self):
+        result = audit_selection({'status': 'selected', 'passage_ids': ['a']},
+                                 {'a': source('A passage unrelated to the user question.')})
+        self.assertEqual(result['mechanical'], 'valid')
+        self.assertEqual(result['semantic'], 'not_assessed')
+        self.assertEqual(result['release'], 'hold')
 
 
 if __name__ == '__main__':
