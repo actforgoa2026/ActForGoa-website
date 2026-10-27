@@ -41,7 +41,7 @@ If source figures, percentages or scopes contradict each other, identify the dis
 Read chronology before alleging a contradiction: a passage describing a prior evidence gap followed by new analysis is not internally inconsistent for that reason. Keep habitat scales distinct: evidence about an entire plateau does not establish the same claim for its seasonal pools, and evidence about one animal group does not establish it for another.
 For procedural answers, include only steps, officers, documents and deadlines explicitly supported by the cited passages. Omit missing details instead of completing a procedure from memory. If a detail comes from another supplied passage, cite that passage too. Every clause in a paragraph must be supported by that paragraph's own citations.
 Mention relevant extraction/OCR limitations. Never reproduce or calculate values from table fragments; direct the reader to the original table. Use numbers only when complete prose explicitly supports the quantity, unit and relevant conditions. Source provenance may establish jurisdiction and version; these need not be repeated in the same sentence. Preserve unknown dates and uncertain current applicability. Before saying a requested detail is absent, check every supplied passage: a stated value with uncertain applicability is not a missing value. Do not claim a webpage abstract is the complete article. Each citation must support its paragraph.
-If the passages cannot answer, return insufficient_evidence with an empty paragraphs list. Prior conversation is context, not evidence. For partial evidence, answer only the supported part and state the specific limitation in the same cited paragraph.'''
+If the passages cannot answer, return insufficient_evidence with no answer content. Prior conversation is context, not evidence. For partial evidence, answer only the supported part and state the specific limitation in the same cited paragraph.'''
 
 # UTF-8 byte count bounds text tokens conservatively, including non-English text.
 # Leave ample framing/schema headroom below Qwen's 32K price boundary.
@@ -55,6 +55,7 @@ class PreparedAnswer:
     input_token_bound: int
     answer_style: str = 'standard'
     schema: dict | None = None
+    base_instructions: str | None = None
 
 class AnswerCache:
     """Short-lived, bounded answer cache; no conversation history or disk storage."""
@@ -103,7 +104,7 @@ source dates get separate entries even when document IDs happen to match.
     return {'sources': sources, 'evidence': passages}
 
 
-def prepare_answer(request, evidence):
+def prepare_answer(request, evidence, *, provider=None):
     history=[{'role':m.role,'content':m.content} for m in request.history]
     selected=list(evidence[:10])
     schema=GroundedAnswer.model_json_schema()
@@ -115,17 +116,22 @@ def prepare_answer(request, evidence):
         instruction+='\nIf answering, address only the requested points in one paragraph of at most three short sentences. Target 50 words; use no more than 80 words. Omit unrequested adjacent procedures, charges and background. Retain conditions and source-specific limits needed for the requested answer; the application displays the generic legal-currency warning separately. Keep each authority-to-approval mapping exact; never slash-combine distinct issuers or approvals. Before returning, check requested details against all passages, cite each supported action, state specific missing details, and shorten without losing qualifications.'
     else:
         instruction+='\nIf answering, address the actual question in at most four paragraphs and 350 words; omit unrelated background.'
-    instruction+='\nThe only top-level fields are status and paragraphs. Every paragraphs entry must be an object with text and citations, never a string. Do not place citations at the top level. Return JSON conforming to this inline schema: '+json.dumps(schema,ensure_ascii=False,separators=(',',':'))
+    base_instructions=instruction
+    instruction+='\nThe only top-level fields are status and paragraphs. Every paragraphs entry must be an object with text and citations, never a string. For insufficient_evidence, paragraphs must be an empty list. Do not place citations at the top level. Return JSON conforming to this inline schema: '+json.dumps(schema,ensure_ascii=False,separators=(',',':'))
     while selected:
+        bounded_schema=deepcopy(schema)
+        bounded_schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']=[e['id'] for e in selected]
+        final_instruction=instruction
+        if provider=='anthropic' and request.answer_style=='brief':
+            from .anthropic_provider import native_brief_schema, native_brief_instructions
+            final_instruction=native_brief_instructions(base_instructions,native_brief_schema(bounded_schema))
         # Send evidence and provenance only, not internal paths or unrelated library metadata.
         payload={'question':request.question, **evidence_payload(selected)}
-        messages=[{'role':'system','content':instruction},*history,
+        messages=[{'role':'system','content':final_instruction},*history,
                   {'role':'user','content':json.dumps(payload,ensure_ascii=False,separators=(',',':'))}]
         size=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode('utf-8'))
         if size<=MAX_PROMPT_BYTES:
-            bounded_schema=deepcopy(schema)
-            bounded_schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']=[e['id'] for e in selected]
-            return PreparedAnswer(messages,selected,size+FRAMING_TOKEN_ALLOWANCE,request.answer_style,bounded_schema)
+            return PreparedAnswer(messages,selected,size+FRAMING_TOKEN_ALLOWANCE,request.answer_style,bounded_schema,base_instructions)
         if history:
             history.pop(0)
             while history and history[0]['role']=='assistant':history.pop(0)

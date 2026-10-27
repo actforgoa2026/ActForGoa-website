@@ -25,6 +25,7 @@ from backend.usage_reconciliation import inspect_ledger
 # arbitrary exception text, provider error bodies or Pydantic input echoes.
 FAILURE_CODES = {
     'The answer did not match the required schema': 'answer_schema',
+    'The native brief answer did not match the required schema': 'native_brief_schema',
     'Answer exceeds its paragraph bound': 'paragraph_bound',
     'Brief answer exceeds its length bound': 'brief_length',
     'Answer contains missing or unknown citations': 'citation_identity',
@@ -56,18 +57,21 @@ def final_json_capture(payload):
     if len(text.encode()) > 65536:return {'capture_status': 'oversize_text'}
     try:answer=json.loads(text)
     except ValueError:return {'capture_status': 'invalid_json'}
-    if (not isinstance(answer,dict) or set(answer) != {'status','paragraphs'}
-            or answer['status'] not in ('answered','insufficient_evidence')
-            or not isinstance(answer['paragraphs'],list) or len(answer['paragraphs']) > 16):
+    if not isinstance(answer,dict) or answer.get('status') not in ('answered','insufficient_evidence'):
         return {'capture_status':'unexpected_shape'}
-    for p in answer['paragraphs']:
+    if set(answer) == {'status','paragraph'}:
+        paragraphs=[] if answer['paragraph'] is None else [answer['paragraph']]
+        representation='native_brief'
+    elif set(answer) == {'status','paragraphs'} and isinstance(answer['paragraphs'],list) and len(answer['paragraphs'])<=16:
+        paragraphs=answer['paragraphs'];representation='paragraph_array'
+    else:return {'capture_status':'unexpected_shape'}
+    for p in paragraphs:
         if (not isinstance(p,dict) or set(p) != {'text','citations'} or not isinstance(p['text'],str)
                 or len(p['text']) > 12000 or not isinstance(p['citations'],list) or len(p['citations']) > 20
                 or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
             return {'capture_status':'unexpected_shape'}
-    return {'capture_status':'captured_unvalidated_json','answer':answer,
-            'paragraph_count':len(answer['paragraphs']),
-            'word_counts':[len(p['text'].split()) for p in answer['paragraphs']]}
+    return {'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
+            'paragraph_count':len(paragraphs),'word_counts':[len(p['text'].split()) for p in paragraphs]}
 
 
 def sha(path):
@@ -270,7 +274,7 @@ def run_cases(library, client, capture, config, cases, context, output):
                 entry['answer']={'status':'insufficient_evidence','paragraphs':[],'citations':[]}
                 entry['no_evidence_before_dispatch']=True
             else:
-                prepared=prepare_answer(request,evidence)
+                prepared=prepare_answer(request,evidence,provider=config.provider)
                 entry['prepared_evidence']=prepared.evidence
                 selected={e['id'] for e in prepared.evidence}
                 entry['required_evidence_retained']=all(set(item['any_of']) & selected for item in entry['required_evidence'])

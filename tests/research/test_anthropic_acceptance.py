@@ -163,8 +163,8 @@ def test_source_review_packet_generation_must_match_final_data(setup):
 
 @pytest.mark.parametrize('paragraphs,code',[
     ([{'text':'word '*120+'end.','citations':['passage-1']}], 'brief_length'),
-    ([{'text':'Gates regulate tides.','citations':['passage-1']}]*2, 'paragraph_bound'),
-    ([{'text':'Gates regulate tides.','citations':['unknown']}], 'citation_identity'),
+    ([{'text':'Gates regulate tides.','citations':['passage-1']}]*2, 'native_brief_schema'),
+    ([{'text':'Gates regulate tides.','citations':['unknown']}], 'native_brief_schema'),
     ([{'text':'Incomplete sentence','citations':['passage-1']}], 'paragraph_incomplete'),
 ])
 def test_failed_final_answer_diagnostics_preserve_cause_without_accepting_or_retrying(setup,paragraphs,code):
@@ -172,7 +172,7 @@ def test_failed_final_answer_diagnostics_preserve_cause_without_accepting_or_ret
     rows=json.loads(path.read_text())
     for row in rows:row['answer_style']='brief'
     path.write_text(json.dumps(rows));packet['sha256']=acceptance.sha(path)
-    payload={'status':'answered','paragraphs':paragraphs}
+    payload={'status':'answered','paragraph':paragraphs[0]} if len(paragraphs)==1 else {'status':'answered','paragraphs':paragraphs}
     report,output=execute_fixture(setup,response(payload))
     entry=report['cases'][0]
     assert entry['failure_code']==code and not entry['mechanical_passed']

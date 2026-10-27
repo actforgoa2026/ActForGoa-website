@@ -28,7 +28,7 @@ def prepared():
                  'raw_path': 'private/path/not-for-model'}]
     return prepare_answer(ChatRequest(question='How do khazans work?', answer_style='brief',
         history=[Message(role='user', content='Tell me about khazans.'),
-                 Message(role='assistant', content='Earlier context is not evidence.')]), evidence)
+                 Message(role='assistant', content='Earlier context is not evidence.')]), evidence,provider='anthropic')
 
 
 def answer_payload(citation='passage-1'):
@@ -45,11 +45,18 @@ def anthropic_message(payload=None, *, stop='end_turn', content=None):
             'usage': {'input_tokens': 1000, 'output_tokens': 250}}
 
 
+def brief_message(payload=None, **kwargs):
+    payload=answer_payload() if payload is None else payload
+    if isinstance(payload,dict) and set(payload)=={'status','paragraphs'} and len(payload['paragraphs'])<=1:
+        payload={'status':payload['status'],'paragraph':payload['paragraphs'][0] if payload['paragraphs'] else None}
+    return anthropic_message(payload,**kwargs)
+
+
 def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepared):
     requests = []
     def handle(request):
         requests.append(request)
-        return httpx.Response(200, json=anthropic_message())
+        return httpx.Response(200, json=brief_message())
     with AnthropicClient('fixture-only', 'wrkspc_fixture', transport=httpx.MockTransport(handle)) as client:
         result = answer_question(client, config, prepared)
     assert result['citations'] == prepared.evidence
@@ -61,7 +68,9 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert request.headers['anthropic-workspace-id'] == 'wrkspc_fixture'
     assert request.extensions['timeout'] == {'connect': 10, 'read': 60, 'write': 10, 'pool': 10}
     assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 3500
-    assert body['system'] == prepared.messages[0]['content']
+    assert body['system'].startswith(prepared.base_instructions)
+    assert 'Every paragraphs entry' not in body['system']
+    assert json.loads(body['system'].split('Return JSON conforming to this inline schema: ',1)[1])==body['output_config']['format']['schema']
     assert body['messages'] == prepared.messages[1:]
     assert body['thinking'] == {'type': 'adaptive'}
     assert body['service_tier'] == 'standard_only' and body['stream'] is False
@@ -69,7 +78,9 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert body['output_config']['effort'] == 'medium'
     assert body['output_config']['format']['type'] == 'json_schema'
     schema = body['output_config']['format']['schema']
-    paragraph = schema['properties']['paragraphs']['items']
+    assert set(schema['properties'])=={'status','paragraph'}
+    assert schema['properties']['paragraph']['anyOf'][1]=={'type':'null'}
+    paragraph = schema['properties']['paragraph']['anyOf'][0]
     assert paragraph['properties']['citations']['items']['enum'] == ['passage-1']
     assert paragraph['additionalProperties'] is False and schema['additionalProperties'] is False
     assert paragraph['properties']['citations']['minItems'] == 1
@@ -99,7 +110,7 @@ def test_missing_key_and_optional_workspace(config, monkeypatch, prepared):
         assert client._http.follow_redirects is False
     def handle(request):
         assert 'anthropic-workspace-id' not in request.headers
-        return httpx.Response(200, json=anthropic_message())
+        return httpx.Response(200, json=brief_message())
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(handle)) as client:
         answer_question(client, config, prepared)
 
@@ -131,25 +142,25 @@ def test_transport_errors_are_sanitized_and_not_retried(config, prepared, error_
 @pytest.mark.parametrize('stop', ['refusal', 'max_tokens', 'model_context_window_exceeded', 'tool_use', 'pause_turn', None])
 def test_only_completed_end_turn_answers_are_accepted(config, prepared, stop):
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
-            lambda _: httpx.Response(200, json=anthropic_message(stop=stop)))) as client:
+            lambda _: httpx.Response(200, json=brief_message(stop=stop)))) as client:
         with pytest.raises(ValueError, match='incomplete or declined'):answer_question(client, config, prepared)
 
 
 @pytest.mark.parametrize('message', [
     [], {}, {'type': 'message', 'model': 'other-model', 'role': 'assistant'},
-    {**anthropic_message(), 'stop_details': {'type': 'refusal', 'explanation': 'private diagnostic'}},
-    anthropic_message(content=[]), anthropic_message(content=[{'type': 'thinking'}]),
-    anthropic_message(content=[{'type': 'text', 'text': 123}]),
-    anthropic_message(content=[{'type': 'tool_use', 'name': 'private diagnostic'}]),
-    anthropic_message(content=[{'type': 'text', 'text': 'not JSON'}]),
-    anthropic_message(answer_payload('invented')),
-    anthropic_message({'status': 'answered', 'paragraphs': [{'text': 'No citation.', 'citations': []}]}),
-    anthropic_message({'status': 'answered', 'paragraphs': [{'text': 'Incomplete sentence', 'citations': ['passage-1']}]}),
-    anthropic_message({'status': 'answered', 'paragraphs': [{'text': 'x'*6001+'.', 'citations': ['passage-1']}]}),
-    anthropic_message({'status': 'answered', 'paragraphs': [{'text': 'Too many citations.', 'citations': ['passage-1']*11}]}),
-    anthropic_message({'status': 'answered', 'paragraphs': [], 'private diagnostic': 'fixture-only'}),
-    anthropic_message({'status': 'answered', 'paragraphs': answer_payload()['paragraphs']*2}),
-    anthropic_message({'status': 'insufficient_evidence', 'paragraphs': answer_payload()['paragraphs']}),
+    {**brief_message(), 'stop_details': {'type': 'refusal', 'explanation': 'private diagnostic'}},
+    brief_message(content=[]), brief_message(content=[{'type': 'thinking'}]),
+    brief_message(content=[{'type': 'text', 'text': 123}]),
+    brief_message(content=[{'type': 'tool_use', 'name': 'private diagnostic'}]),
+    brief_message(content=[{'type': 'text', 'text': 'not JSON'}]),
+    brief_message(answer_payload('invented')),
+    brief_message({'status': 'answered', 'paragraphs': [{'text': 'No citation.', 'citations': []}]}),
+    brief_message({'status': 'answered', 'paragraphs': [{'text': 'Incomplete sentence', 'citations': ['passage-1']}]}),
+    brief_message({'status': 'answered', 'paragraphs': [{'text': 'x'*6001+'.', 'citations': ['passage-1']}]}),
+    brief_message({'status': 'answered', 'paragraphs': [{'text': 'Too many citations.', 'citations': ['passage-1']*11}]}),
+    brief_message({'status': 'answered', 'paragraphs': [], 'private diagnostic': 'fixture-only'}),
+    brief_message({'status': 'answered', 'paragraphs': answer_payload()['paragraphs']*2}),
+    brief_message({'status': 'insufficient_evidence', 'paragraphs': answer_payload()['paragraphs']}),
 ])
 def test_malformed_unverified_and_overlong_answers_fail_closed(config, prepared, message):
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
@@ -159,8 +170,8 @@ def test_malformed_unverified_and_overlong_answers_fail_closed(config, prepared,
 
 
 def test_split_text_blocks_and_abstention(config, prepared):
-    payload = json.dumps({'status': 'insufficient_evidence', 'paragraphs': []})
-    message = anthropic_message(content=[{'type': 'redacted_thinking', 'data': 'private diagnostic'},
+    payload = json.dumps({'status': 'insufficient_evidence', 'paragraph': None})
+    message = brief_message(content=[{'type': 'redacted_thinking', 'data': 'private diagnostic'},
         {'type': 'text', 'text': payload[:20]}, {'type': 'text', 'text': payload[20:]}])
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
             lambda _: httpx.Response(200, json=message))) as client:
@@ -194,3 +205,77 @@ def test_budget_and_cache_separate_provider_but_not_allowance(config, prepared, 
         assert db.execute('SELECT SUM(attempts) FROM usage').fetchone()[0] == 2
     assert PublicLimits(tmp_path).reserve_answer(5_000_000 - other_cost - anthropic_cost)
     assert not PublicLimits(tmp_path).reserve_answer(anthropic_cost)
+
+
+def test_native_brief_roundtrip_preserves_exact_text_citations_and_word_bound(config,prepared):
+    for count in (120,121):
+        paragraph={'text':'word '*(count-1)+'end.','citations':['passage-1']}
+        with AnthropicClient('fixture-only',transport=httpx.MockTransport(
+                lambda _:httpx.Response(200,json=anthropic_message({'status':'answered','paragraph':paragraph})))) as client:
+            if count==120:
+                result=answer_question(client,config,prepared)
+                assert result['paragraphs']==[paragraph] and result['citations']==prepared.evidence
+            else:
+                with pytest.raises(ValueError,match='length bound'):answer_question(client,config,prepared)
+
+
+@pytest.mark.parametrize('payload',[
+    {'status':'answered','paragraph':None},
+    {'status':'insufficient_evidence','paragraph':answer_payload()['paragraphs'][0]},
+    {'status':'answered','paragraph':answer_payload()['paragraphs']},
+    {'status':'answered','paragraphs':answer_payload()['paragraphs']},
+    {'status':'answered','paragraph':answer_payload()['paragraphs'][0],'extra':'private diagnostic'},
+    {'status':'answered','paragraph':{'text':'Supported.','citations':['passage-1'],'extra':'private diagnostic'}},
+])
+def test_native_brief_rejects_wrong_shape_before_mapping(config,prepared,payload):
+    with AnthropicClient('fixture-only',transport=httpx.MockTransport(
+            lambda _:httpx.Response(200,json=anthropic_message(payload)))) as client:
+        with pytest.raises(ValueError,match='native brief answer did not match'):
+            answer_question(client,config,prepared)
+
+
+def test_standard_native_array_and_prompt_are_unchanged(config,prepared):
+    standard=prepare_answer(ChatRequest(question='How do gates regulate tides?'),prepared.evidence,provider='anthropic')
+    payload={'status':'answered','paragraphs':answer_payload()['paragraphs']*2}
+    def handle(request):
+        body=json.loads(request.content)
+        assert body['system']==standard.messages[0]['content']
+        assert set(body['output_config']['format']['schema']['properties'])=={'status','paragraphs'}
+        return httpx.Response(200,json=anthropic_message(payload))
+    with AnthropicClient('fixture-only',transport=httpx.MockTransport(handle)) as client:
+        assert answer_question(client,config,standard)['paragraphs']==payload['paragraphs']
+
+
+def test_native_brief_actual_prompt_and_schema_fit_reserved_allowances(config,prepared):
+    from backend.anthropic_provider import message_request,MAX_SCHEMA_BYTES
+    from backend.chat import Message
+    evidence=[dict(prepared.evidence[0],id=f'p-{i}',text='नदी '*300) for i in range(10)]
+    request=ChatRequest(question='नदी '*400,answer_style='brief',history=[Message(role='user',content='पाणी '*700)])
+    bounded=prepare_answer(request,evidence,provider='anthropic');body=message_request(config,bounded)
+    messages=[{'role':'system','content':body['system']},*body['messages']]
+    actual=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode())
+    assert actual<=24000 and actual+2048==bounded.input_token_bound
+    assert len(json.dumps(body['output_config']['format']['schema'],ensure_ascii=False,separators=(',',':')).encode())<=MAX_SCHEMA_BYTES
+    assert config.maximum_cost_microusd(bounded.input_token_bound)<=5174
+    with pytest.raises(ValueError,match='Missing native brief instructions'):
+        message_request(config,replace(prepared,base_instructions=None))
+
+
+def test_native_brief_budgets_final_contract_before_selecting_evidence(config):
+    from backend.anthropic_provider import message_request
+    evidence=[{'id':f'{i:029d}','text':'x'*(17030 if i==0 else 1),'title':'Saved source',
+               'document_id':str(i),'url':'https://example.org/source'} for i in range(10)]
+    request=ChatRequest(question='What does this saved source say?',answer_style='brief')
+    prepared=prepare_answer(request,evidence,provider='anthropic');body=message_request(config,prepared)
+    messages=[{'role':'system','content':body['system']},*body['messages']]
+    actual=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode())
+    assert actual<=24000 and prepared.input_token_bound==actual+2048
+    ids=[e['id'] for e in prepared.evidence]
+    wire=body['output_config']['format']['schema']
+    assert wire['properties']['paragraph']['anyOf'][0]['properties']['citations']['items']['enum']==ids
+    assert [e['id'] for e in json.loads(body['messages'][-1]['content'])['evidence']]==ids
+    assert json.loads(body['system'].split('Return JSON conforming to this inline schema: ')[1])==wire
+    # A caller cannot spend the framing reserve as extra prompt space.
+    oversized=[*prepared.messages[:-1],{'role':'user','content':'x'*24000}]
+    with pytest.raises(ValueError,match='reserved allowance'):
+        message_request(config,replace(prepared,messages=oversized,input_token_bound=26048))
