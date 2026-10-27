@@ -1,4 +1,4 @@
-import type {RecordItem} from './types';
+import type {RecordItem} from './types.js';
 const stop=new Set('a an the i me my we our you your to for of in on at and or is are do does can who how what where when with need get help find goa oh there theres s it its this that have has please want would could should about'.split(' '));
 export const tokens=(value:string)=>value.toLowerCase().normalize('NFKD').replace(/[^a-z0-9\s]/g,' ').split(/\s+/).filter(t=>t.length>1&&!stop.has(t));
 const intents=[

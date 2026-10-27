@@ -1,6 +1,6 @@
-import type { RecordItem } from './types';
-import { contentCorrections } from './content-corrections';
-import { enrichDirectory } from './directory';
+import type { RecordItem } from './types.js';
+import { contentCorrections } from './content-corrections.js';
+import { enrichDirectory } from './directory.js';
 
 // Presentation only: the source catalogue and archived records retain every field.
 // Apply to prose too, since the source repeats numbers inside biographies and lists.
