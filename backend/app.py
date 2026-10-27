@@ -17,6 +17,7 @@ from .library import Library
 from .hosting import public_config, PublicLimits, RequestSizeLimit
 from .chat import ChatRequest, answer_question, prepare_answer, AnswerCache
 from .providers import chat_config
+from .anthropic_provider import AnthropicAPIError
 
 load_dotenv(ROOT/'.env.local')
 
@@ -151,7 +152,7 @@ def create_app(root=None, index_root=None, client=None):
             answer=answer_question(app.state.client,config,prepared)
             if cache_key:answers.put(cache_key,answer)
             return answer
-        except APIError as error:
+        except (APIError, AnthropicAPIError) as error:
             status=getattr(error,'status_code',None)
             detail='The answer service is unavailable. Search and full documents still work.'
             if status==401:detail='The answer service rejected its configured credential. Ask the maintainer to check it.'
