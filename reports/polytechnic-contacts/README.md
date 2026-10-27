@@ -1,0 +1,7 @@
+# Polytechnic Mayem/Bicholim review, 28 October 2026
+
+The [Polytechnic principal page](https://gpb.goa.gov.in/principal/) names Dr. Pramodini S. Naik as principal and shows it was reviewed and updated on 27 October 2026. It lists office phones 0832 2361235 and 0832 2360240 and gpbicholim.goa@gov.in. The [Goa government department page](https://www.goa.gov.in/department/government-polytechnic-bicholim/) also identifies Naik and lists 0832 2361235 and principalgpbicholim@gmail.com. These published listings do not establish future tenure or successful contact delivery.
+
+The [iGOOD page](https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI1) names Subhash P. Borkar and the gov.in email without an appointment date. The sources conflict; this review presents the newer evidence with an explicit caveat and preserves the older listing as historical rather than asserting when the role changed. An earlier search-engine snapshot of the Polytechnic contact page named Borkar and was dated 2022, but that page now returns 404 and is not used as a live source.
+
+The archived `public/data/crm.json` remains unchanged. The shared review layer supplies updated office contacts and source links, adds Naik with a dated public reference, and clears individual phone numbers from Borkar's older appointment record. Both email addresses remain visibly untested. The MCP exposes the same review and activity notes as the website.
