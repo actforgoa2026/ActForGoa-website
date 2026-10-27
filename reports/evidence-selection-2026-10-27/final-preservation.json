@@ -1,0 +1,15 @@
+{
+  "checked_at": "2026-10-27T08:46:52.228438+00:00",
+  "sealed_package": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "sealed_entries_verified": 1258,
+  "exact_file_and_directory_coverage": true,
+  "restoration_entries_verified": 2623,
+  "original_entries_verified": 2623,
+  "original_retains_only_preexisting_recorded_altered_vector": true,
+  "historical_manifests_unchanged": true,
+  "native_preservation_opens": 0,
+  "after_all_native_child_exit": true,
+  "provider_calls": 0,
+  "genuine_usage_operations": 0
+}
