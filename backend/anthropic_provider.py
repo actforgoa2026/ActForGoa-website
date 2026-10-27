@@ -248,7 +248,7 @@ def normalize_native_answer(content, prepared):
 
 
 def reviewed_effort(model, effort):
-    allowed = {'claude-haiku-5-5': ('medium',), 'claude-sonnet-5-5': ('medium', 'high')}
+    allowed = {'claude-haiku-5-5': ('low', 'medium'), 'claude-sonnet-5-5': ('medium', 'high')}
     if not isinstance(effort, str) or effort not in allowed.get(model, ()):
         raise ValueError('This Anthropic model and effort combination needs a reviewed configuration')
     return effort
