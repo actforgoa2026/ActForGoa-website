@@ -7,7 +7,7 @@ import re
 import threading
 import time
 from typing import Literal
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, ValidationError
 from .providers import PRICES
 
 class Paragraph(BaseModel):
@@ -139,7 +139,17 @@ def validate_answer(answer, evidence, answer_style='standard'):
     return result
 
 def answer_question(client, config, prepared):
-    if config.provider in ('qwen','openrouter'):
+    if config.provider == 'anthropic':
+        content=client.answer(config,prepared)
+        try:answer=GroundedAnswer.model_validate_json(content,strict=True)
+        except ValidationError:
+            # Extra-field names and invalid input can contain provider text.
+            raise ValueError('The answer did not match the required schema') from None
+        # Native JSON outputs omit unsupported maxItems. Enforce the original
+        # request-specific cap as well as the Pydantic text/citation constraints.
+        if len(answer.paragraphs)>prepared.schema['properties']['paragraphs']['maxItems']:
+            raise ValueError('Answer exceeds its paragraph bound')
+    elif config.provider in ('qwen','openrouter'):
         extra={'enable_thinking':False}
         options={'temperature':0.2}
         response_format={'type':'json_object'}

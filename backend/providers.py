@@ -5,14 +5,18 @@ import os
 import re
 from urllib.parse import urlsplit
 from openai import OpenAI
+from .anthropic_provider import AnthropicClient, INPUT_ALLOWANCE, PRICE_TIER_INPUT_LIMIT
 
-# USD per million tokens, standard uncached Singapore/International prices.
-# Keep prompts below 32K tokens; changing models requires reviewing these rates.
+# USD per million tokens, standard uncached rates (Singapore for direct Qwen).
+# Anthropic includes an extra native-schema allowance and a 100K tier guard;
+# other providers keep their existing prompt bounds. Review rates before changes.
 # Verified 2026-10-26: https://openrouter.ai/qwen/qwen3.7-flash
 # https://openrouter.ai/openai/gpt-5-nano/pricing
 # and https://www.alibabacloud.com/help/en/model-studio/model-pricing
 # OpenRouter requests enforce these ceilings; credit-purchase fees are separate.
 PRICES = {
+    # https://platform.claude.com/docs/en/models/haiku-5-5/overview (2026-10-27)
+    ('anthropic', 'claude-haiku-5-5'): ('0.10', '0.50'),
     ('openrouter', 'qwen/qwen3.7-flash'): ('0.030', '0.130'),
     ('openrouter', 'qwen/qwen3.8-flash'): ('0.15', '0.47'),
     ('openrouter', 'openai/gpt-5-nano'): ('0.05', '0.40'),
@@ -36,6 +40,12 @@ class ChatConfig:
     structured: bool = False
 
     def maximum_cost_microusd(self, input_token_bound):
+        if not isinstance(input_token_bound, int) or input_token_bound < 0:
+            raise ValueError('Invalid input token bound')
+        if self.provider == 'anthropic':
+            input_token_bound += INPUT_ALLOWANCE
+            if input_token_bound > PRICE_TIER_INPUT_LIMIT:
+                raise ValueError('Anthropic input exceeds the reviewed price tier')
         input_rate, output_rate = map(Decimal, PRICES[(self.provider, self.model)])
         # USD/million tokens multiplied by token count is micro-USD. Round up.
         return int((input_token_bound * input_rate + self.max_output_tokens * output_rate)
@@ -43,6 +53,8 @@ class ChatConfig:
 
     def client(self):
         key = os.getenv(self.key_name)
+        if self.provider == 'anthropic':
+            return AnthropicClient(key, os.getenv('ANTHROPIC_WORKSPACE_ID')) if key else None
         # No SDK retries: each budget reservation covers exactly one provider attempt.
         return OpenAI(api_key=key, base_url=self.base_url, timeout=60, max_retries=0) if key else None
 
@@ -67,11 +79,15 @@ def chat_config():
                         or re.fullmatch(r'[a-z0-9-]+\.ap-southeast-1\.maas\.aliyuncs\.com', url.hostname or ''))):
             raise ValueError('QWEN_BASE_URL must be an Alibaba Singapore OpenAI-compatible endpoint')
         config = ChatConfig(provider, model, 'Alibaba Cloud (Qwen)', 'DASHSCOPE_API_KEY', endpoint)
+    elif provider == 'anthropic':
+        config = ChatConfig(provider, os.getenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5'),
+                            'Anthropic', 'ANTHROPIC_API_KEY', 'https://api.anthropic.com/v1',
+                            max_output_tokens=3500, route='anthropic', structured=True)
     elif provider == 'openai':
         config = ChatConfig(provider, os.getenv('OPENAI_CHAT_MODEL', 'gpt-5.6-luna'),
                             'OpenAI', 'OPENAI_API_KEY', 'https://api.openai.com/v1')
     else:
-        raise ValueError('RESEARCH_CHAT_PROVIDER must be openrouter, qwen or openai')
+        raise ValueError('RESEARCH_CHAT_PROVIDER must be openrouter, qwen, anthropic or openai')
     if (provider, config.model) not in PRICES:
         raise ValueError('This model needs a reviewed budget rate before it can be enabled')
     return config

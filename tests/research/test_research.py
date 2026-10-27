@@ -305,5 +305,112 @@ def test_service_only_package_does_not_require_or_replace_corpus(tmp_path):
     report=json.loads(subprocess.check_output([sys.executable,str(script),'--service-only',
         '--data-root',str(tmp_path/'not-present'),'--output',str(output)],text=True))
     assert (Path(report['service'])/'backend/providers.py').exists()
+    assert (service/'backend/anthropic_provider.py').exists()
+    assert 'httpx==0.28.1' in (service/'requirements-runtime.txt').read_text()
+    assert not (service/'.env.local').exists() and not (service/'.research-usage').exists()
     assert not (service/'stale-secret.env').exists()
     assert (data/'keep.txt').read_text()=='existing volume package'
+
+
+def test_anthropic_hybrid_chat_citations_full_documents_and_cache(collection, monkeypatch):
+    from backend.anthropic_provider import AnthropicClient
+    from tests.research.test_anthropic_provider import anthropic_message
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
+    calls = []
+    def provider(request):
+        body = json.loads(request.content); calls.append(body)
+        evidence = json.loads(body['messages'][-1]['content'])['evidence'][0]
+        return httpx.Response(200, json=anthropic_message({'status': 'answered', 'paragraphs': [
+            {'text': evidence['text'], 'citations': [evidence['id']]}]}))
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:
+        with TestClient(create_app(collection[0], client=model)) as client:
+            status = client.get('/api/status').json()
+            assert status['chat_ready'] and status['provider'] == 'anthropic'
+            question = {'question': 'How do khazan gates regulate saline water?'}
+            first = client.post('/api/chat', json=question)
+            assert first.status_code == 200, first.text
+            answer = first.json()
+            assert client.post('/api/chat', json=question).json() == answer and len(calls) == 1
+            cite = answer['citations'][0]
+            doc = client.get('/api/documents/'+cite['document_id'], params={'generation': cite['generation']}).json()
+            assert hashlib.sha256(client.get(doc['original_url']).content).hexdigest() == doc['sha256']
+            assert 'Final page' in client.get(doc['text_url']).text
+            params = {'start': cite['page'], 'generation': cite['generation']}
+            pages = client.get('/api/documents/'+cite['document_id']+'/pages', params=params).json()['pages']
+            assert pages[0]['text'][cite['start']:cite['end']] == cite['text']
+            image = client.get('/api/documents/'+cite['document_id']+'/pages/'+str(cite['page'])+'/image', params=params)
+            assert image.status_code == 200 and image.content.startswith(b'\x89PNG')
+            followup = {'question': 'And during the monsoon?', 'history': [
+                {'role': 'user', 'content': question['question']},
+                {'role': 'assistant', 'content': answer['paragraphs'][0]['text']}]}
+            assert client.post('/api/chat', json=followup).status_code == 200
+            assert client.post('/api/chat', json=followup).status_code == 200
+            assert len(calls) == 3 and calls[-1]['messages'][:2] == followup['history']
+            scoped = client.post('/api/chat', json={**question, 'document_id': cite['document_id'], 'generation': cite['generation']})
+            assert scoped.status_code == 200
+            assert all(c['document_id'] == cite['document_id'] for c in scoped.json()['citations'])
+
+
+@pytest.mark.parametrize('failure', ['401', '402', '429', '529', 'timeout', 'invalid-json', 'bad-citation', 'refusal', 'truncated'])
+def test_anthropic_api_failure_keeps_one_reservation_per_attempt(collection, monkeypatch, caplog, failure):
+    import sqlite3
+    from backend.anthropic_provider import AnthropicClient
+    from tests.research.test_anthropic_provider import anthropic_message, answer_payload
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
+    calls = []
+    def provider(request):
+        calls.append(request)
+        if failure == 'timeout':raise httpx.ReadTimeout('private diagnostic fixture-only', request=request)
+        if failure == 'invalid-json':return httpx.Response(200, text='private diagnostic fixture-only')
+        if failure == 'bad-citation':return httpx.Response(200, json=anthropic_message(answer_payload('invented')))
+        if failure in ('refusal', 'truncated'):
+            return httpx.Response(200, json=anthropic_message(stop='refusal' if failure == 'refusal' else 'max_tokens'))
+        return httpx.Response(int(failure), json={'error': {'message': 'private diagnostic fixture-only'}})
+    def spend():
+        with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+            return db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]
+    before = spend()
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:
+        with TestClient(create_app(collection[0], client=model)) as client:
+            for _ in range(2):
+                response = client.post('/api/chat', json={'question': 'What controls khazan tidal water?'})
+                assert response.status_code == 502
+                assert 'private diagnostic' not in response.text and 'fixture-only' not in response.text
+            assert len(calls) == 2
+            assert client.get('/api/search', params={'q': 'khazan'}).status_code == 200
+    assert spend() > before
+    assert 'private diagnostic' not in caplog.text and 'fixture-only' not in caplog.text
+
+
+def test_anthropic_cancelled_attempt_is_not_refunded_or_retried(collection, monkeypatch):
+    import asyncio
+    import sqlite3
+    from backend.anthropic_provider import AnthropicClient
+    from backend.chat import ChatRequest
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
+    calls = []
+    def provider(request):
+        calls.append(request)
+        raise asyncio.CancelledError()
+    def spend():
+        with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+            return db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]
+    before = spend()
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:
+        app = create_app(collection[0], client=model)
+        with TestClient(app):
+            endpoint = next(route.endpoint for route in app.routes if route.path == '/api/chat')
+            with pytest.raises(asyncio.CancelledError):
+                endpoint(ChatRequest(question='How do khazans regulate tidal water?'))
+    assert len(calls) == 1 and spend() > before
+
+
+def test_anthropic_exhausted_allowance_prevents_dispatch(collection, monkeypatch):
+    from backend.anthropic_provider import AnthropicClient
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
+    monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD', '0')
+    def provider(_):raise AssertionError('No dispatch when allowance is exhausted')
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:
+        with TestClient(create_app(collection[0], client=model)) as client:
+            assert client.post('/api/chat', json={'question': 'How do khazan gates work?'}).status_code == 429
+            assert client.get('/api/search', params={'q': 'khazan'}).json()['results']
