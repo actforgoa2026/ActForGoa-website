@@ -1,4 +1,4 @@
-"""Capture v2 on source-neutral fixtures and disposable SQLite ledgers only."""
+"""Capture v3 on source-neutral fixtures and disposable SQLite ledgers only."""
 from copy import deepcopy
 from dataclasses import replace
 from datetime import datetime,timezone
@@ -14,21 +14,24 @@ from backend.reconstruction import PIPELINE_SPEC
 from scripts import evaluate_anthropic_acceptance as acceptance
 from tests.research.test_anthropic_acceptance import setup as legacy_setup
 from tests.research.test_answer_pipeline import Transport,model_response
+from tests.research.span_fixtures import select_response
 
 
 @pytest.fixture
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
-    plan.update(pipeline='two_pass_v1',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='low',max_output_tokens=12000)
+    plan.update(pipeline='two_pass_v2',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='low',max_output_tokens=12000)
     plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='low',max_output_tokens=12000,pipeline='two_pass_v1')
+    config=replace(config,effort='low',max_output_tokens=12000,pipeline='two_pass_v2')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
         payload=json.loads(json.loads(request.content)['messages'][-1]['content']);evidence=payload['evidence'][0]
-        unit={'primary_support':{'citation_id':evidence['id'],'field':'text','quote':evidence['text']},'supports':[],
+        unit={'primary_support':{'citation_id':evidence['id'],'field':'text','quote':'Gates regulate tidal water.'},'supports':[],
               'text':'Gates regulate tidal water.'}
-        return model_response({'status':'answered','paragraphs':[unit if n==1 else {'claims':[unit]}]})
+        native={'status':'answered','paragraphs':[unit if n==1 else {'claims':[unit]}]}
+        if n==2:native=select_response(native,payload)
+        return model_response(native)
     handlers=[handler]
     def factory():
         transport=Transport(handlers[0]);transports.append(transport)
@@ -49,7 +52,7 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     assert context['provider_attempt_ceiling']==4 and context['worst_reservation_microusd']==40096
     report=run(setup)
     assert report==json.loads((tmp/'capture-v2.json').read_text())
-    assert report['capture_version']==2 and report['pipeline_spec']==PIPELINE_SPEC
+    assert report['capture_version']==3 and report['pipeline_spec']==PIPELINE_SPEC
     assert report['complete'] and report['attempts']==4 and report['entailment_acceptance']=='pending_human_review'
     assert len(transports)==2 and all(t.closed for t in transports)
     for entry,transport in zip(report['cases'],transports):
@@ -72,6 +75,9 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
 @pytest.mark.parametrize('change',[
     lambda p:p.pop('pipeline'),lambda p:p['pipeline_spec'].update(correction_prompt_bytes=32000),
     lambda p:p['stages']['test'].pop('max_cases'),lambda p:p['stages']['test'].update(max_attempts=2),
+    lambda p:p.update(pipeline='two_pass_v1'),
+    lambda p:p['pipeline_spec'].update(capture_version=2),
+    lambda p:p['pipeline_spec'].update(anchor_protocol='unknown'),
 ])
 def test_version_and_attempt_plan_mismatch_before_any_packet_or_key_read(setup,monkeypatch,change):
     plan,config,*_=setup;change(plan)

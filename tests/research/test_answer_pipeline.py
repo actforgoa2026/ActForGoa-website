@@ -14,6 +14,8 @@ from backend.chat import ChatRequest, prepare_answer, AnswerCache
 from backend.providers import chat_config
 from tests.research.test_reconstruction import claim, response
 from tests.research.test_anthropic_provider import anthropic_message
+from tests.research.span_fixtures import select_response
+from backend.source_spans import verify_annotated_payload
 
 
 class Limits:
@@ -50,11 +52,12 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','low')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v1')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v2')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
-    async def handler(_,n):
-        return model_response({'status':'answered','paragraphs':[claim()]}) if n==1 else model_response(json.loads(response(claim())))
+    async def handler(actual,n):
+        payload=json.loads(json.loads(actual.content)['messages'][-1]['content'])
+        return model_response({'status':'answered','paragraphs':[claim()]}) if n==1 else model_response(select_response(json.loads(response(claim())),payload))
     transport=Transport(handler);limits=Limits();observed=[]
     def factory():return AsyncAnthropicClient('fixture-only',transport=transport)
     def run(**kwargs):
@@ -66,7 +69,7 @@ def setup(monkeypatch):
 def test_two_exact_captured_calls_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==2 and trace['status']=='completed'
+    assert trace['capture_version']==3 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==2 and transport.closed
     assert [p['state'] for p in trace['phases']]==['completed','completed']
     assert [p['provider_attempts'] for p in trace['phases']]==[1,1]
@@ -75,16 +78,23 @@ def test_two_exact_captured_calls_and_final_only_result(setup):
         assert record['outgoing_request']['body_utf8'].encode()==request.content
     first=json.loads(transport.requests[0].content);second=json.loads(transport.requests[1].content)
     a=json.loads(first['messages'][-1]['content']);b=json.loads(second['messages'][-1]['content'])
-    assert {k:b[k] for k in ('question','sources','evidence')}==a
+    assert verify_annotated_payload({k:b[k] for k in ('question','sources','evidence')},a)[0]==a
     assert second['messages'][:-1]==first['messages'][:-1]
     assert trace['phases'][1]['source_equality']['complete_evidence_equal']
+    assert trace['phases'][1]['source_equality']['actual_wire_verified']
+    assert trace['phases'][1]['source_equality']['byte_equality']
+    assert trace['phases'][1]['source_equality']['original_draft_payload_utf8_sha256']==trace['phases'][1]['source_equality']['reconstructed_payload_utf8_sha256']
+    assert trace['phases'][1]['source_equality']['actual_request_body_sha256']==trace['phases'][1]['outgoing_request']['body_sha256']
     assert trace['phases'][1]['compact_draft']==b['draft_answer']
     assert result.answer['paragraphs']==[{'text':'Gates regulate tidal water.','citations':['a']}]
     assert trace['assembly_offsets'][0]['start']==0
     saved=json.dumps(observed)
     assert 'fixture-only' not in saved and 'private diagnostic' not in saved and 'authorization' not in saved
     assert all('final_answer' not in item for item in observed if item['status']!='completed')
-    assert trace['phases'][1]['final_output_diagnostic']['representation']=='reconstruction_paragraph_array'
+    assert trace['phases'][1]['final_output_diagnostic']['representation']=='source_spans_reconstruction_paragraph_array'
+    resolved=trace['phases'][1]['deterministic_support_resolution']
+    assert resolved['kind']=='deterministic_source_span_lookup' and resolved['complete']
+    assert resolved['claims'][0]['resolved_supports'][0]=={'citation_id':'a','field':'text','quote':prepared.evidence[0]['text']}
 
 
 @pytest.mark.parametrize('which',['draft','reconstruction'])
@@ -128,6 +138,67 @@ def test_insufficient_draft_still_gets_source_coverage_reconstruction(setup):
         return await good(req,n)
     transport.handler=handle
     result=run();assert len(transport.requests)==2 and result.answer['status']=='answered'
+
+
+def test_failed_selector_preserves_original_raw_and_partial_deterministic_supports(setup):
+    _,_,_,transport,_,_,run,_=setup;good=transport.handler
+    async def wrong(req,n):
+        result=await good(req,n)
+        if n==2:
+            payload=result.json();native=json.loads(payload['content'][-1]['text'])
+            native['paragraphs'][0]['claims'][0]['supports']=[{'citation_id':'a','span_id':'not-supplied'}]
+            return model_response(native)
+        return result
+    transport.handler=wrong
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    phase=caught.value.trace['phases'][1]
+    assert phase['final_output_diagnostic']['answer']['paragraphs'][0]['claims'][0]['supports'][0]['span_id']=='not-supplied'
+    resolved=phase['deterministic_support_resolution']
+    assert not resolved['complete'] and resolved['claims'][0]['status']=='failed'
+    assert len(resolved['claims'][0]['resolved_supports'])==1 and 'final_answer' not in caught.value.trace
+
+
+@pytest.mark.parametrize('mutation',['text','id','owner','field_type','inner_escape','inner_order'])
+def test_actual_correction_mutation_after_preparation_is_reserved_but_unsent(setup,mutation):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
+            if 'anchor_protocol' in payload:
+                if mutation=='text':payload['evidence'][0]['text'][0]['text']='Altered source.'
+                if mutation=='id':payload['evidence'][0]['text'][0]['span_id']='altered'
+                if mutation=='owner':payload['evidence'][0]['source']='another-source'
+                if mutation=='field_type':payload['evidence'][0]['text']='Gates regulate tidal water.'
+                if mutation=='inner_order':payload={key:payload[key] for key in reversed(payload)}
+                value=json.dumps(payload,ensure_ascii=False,separators=(',',':'))
+                if mutation=='inner_escape':value=value.replace('Gates','\\u0047ates')
+                selected['messages'][-1]['content']=value
+            return await super().send(selected,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    phase=caught.value.trace['phases'][1]
+    assert len(limits.receipts)==2 and len(transport.requests)==1 and transport.closed
+    assert phase['reservation_receipt']['reserved'] and phase['provider_attempts']==0
+    assert phase['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
+
+
+@pytest.mark.parametrize('phase',[1,2])
+def test_in_place_request_mutation_cannot_change_both_sides_of_identity_check(setup,phase):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            actual_phase=2 if 'anchor_protocol' in json.loads(body['messages'][-1]['content']) else 1
+            if actual_phase==phase:body['max_tokens']+=1
+            return await super().send(body,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    stopped=caught.value.trace['phases'][phase-1]
+    assert caught.value.code=='request_capture_mismatch'
+    assert len(limits.receipts)==phase and len(transport.requests)==phase-1 and transport.closed
+    assert stopped['reservation_receipt']['reserved'] and stopped['provider_attempts']==0
+    assert stopped['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
 
 
 def test_compact_draft_overflow_stops_before_second_reservation(setup):

@@ -6,9 +6,10 @@ import re
 import httpx
 from .anthropic_provider import reviewed_effort
 from .providers import PRICES
+from .source_spans import ANCHOR_PROTOCOL
 
 
-def final_json_capture(payload, *, phase='draft'):
+def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
     """Keep only bounded final answer JSON, never thinking or response metadata.
 
     Invalid JSON and unexpected fields are represented by fixed categories.
@@ -32,11 +33,13 @@ def final_json_capture(payload, *, phase='draft'):
     else:return {'capture_status':'unexpected_shape'}
     captured_paragraphs = paragraphs
     if phase == 'reconstruction':
+        if anchor_protocol not in (None,ANCHOR_PROTOCOL):return {'capture_status':'unexpected_anchor_protocol'}
         if any(not isinstance(p, dict) or set(p) != {'claims'} or not isinstance(p['claims'], list)
                for p in paragraphs):
             return {'capture_status': 'unexpected_shape'}
         paragraphs = [unit for p in paragraphs for unit in p['claims']]
         representation = 'reconstruction_' + representation
+        if anchor_protocol==ANCHOR_PROTOCOL:representation='source_spans_'+representation
     elif phase != 'draft':
         return {'capture_status': 'unexpected_phase'}
     for p in paragraphs:
@@ -52,9 +55,10 @@ def final_json_capture(payload, *, phase='draft'):
             supports=p['supports']
             if 'primary_support' in p:supports=[p['primary_support'],*supports]
             for support in supports:
-                if (not isinstance(support,dict) or set(support) != {'citation_id','field','quote'}
-                        or any(not isinstance(support[k],str) or len(support[k]) > bound
-                               for k,bound in [('citation_id',160),('field',160),('quote',1200)])):
+                bounds=([('citation_id',160),('span_id',160)] if phase=='reconstruction' and anchor_protocol==ANCHOR_PROTOCOL
+                        else [('citation_id',160),('field',160),('quote',1200)])
+                if (not isinstance(support,dict) or set(support) != {key for key,_ in bounds}
+                        or any(not isinstance(support[k],str) or len(support[k]) > bound for k,bound in bounds)):
                     return {'capture_status':'unexpected_shape'}
         else:return {'capture_status':'unexpected_shape'}
     word_counts = ([sum(len(u['text'].split()) for u in p['claims']) for p in captured_paragraphs]
