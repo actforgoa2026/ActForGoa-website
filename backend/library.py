@@ -8,6 +8,7 @@ import zvec
 from .embeddings import Encoder, ROOT
 from .extraction import safe_path
 from .passage_selection import select_passages
+from .source_context import preceding_table_chunk, tabular_lines
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
 STOP = set('a an the of in on at to from for is are was were be have has how why what which when where who does do can could would should explain tell me about and or with its it this that goa s sources source say says evidence research known'.split())
@@ -137,15 +138,26 @@ class Library:
                 # Recheck cross-document duplicates after joint selection and
                 # backfill only from the same bounded hybrid candidate pool.
                 selected=distinct(revised+ranked)
+            def citation(row, meta, matches):
+                identifier=row['id']
+                qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
+                return {'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
+                    'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],
+                    'page_heading':page_heading(row['page_context']),
+                    'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':matches,
+                    **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification')},
+                    'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation}
+
             results=[]
             for identifier in selected:
                 row,meta=candidates[identifier]
-                qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
-                results.append({'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
-                    'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],
-                    'page_heading':page_heading(row['page_context']),
-                    'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':channels[identifier],
-                    **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification')},
-                    'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation})
+                result=citation(row,meta,channels[identifier])
+                if len(tabular_lines(row['text']))>=2:
+                    page=db.execute('SELECT text FROM pages WHERE doc_id=? AND page=?',(row['doc_id'],row['page'])).fetchone()
+                    siblings=db.execute('SELECT c.*,p.warning,p.label,substr(p.text,1,1400) AS page_context FROM chunks c JOIN pages p ON p.doc_id=c.doc_id AND p.page=c.page WHERE c.doc_id=? AND c.page=? ORDER BY c.start',(row['doc_id'],row['page'])).fetchall()
+                    context=preceding_table_chunk(page['text'],row['start'],row['end'],siblings)
+                    if context is not None and context['id']!=identifier:
+                        result['supporting_context']=[citation(context,meta,['source_context'])]
+                results.append(result)
                 if len(results)>=limit:break
         return results
