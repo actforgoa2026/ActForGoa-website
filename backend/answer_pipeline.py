@@ -3,18 +3,18 @@ import asyncio
 from copy import deepcopy
 from dataclasses import dataclass
 from datetime import datetime, timezone
-import hashlib
 import json
 import time
 import uuid
 
-from .anthropic_provider import API_VERSION, INPUT_ALLOWANCE, AnthropicAPIError, message_request, normalize_native_answer
+from .anthropic_provider import API_VERSION, INPUT_ALLOWANCE, AnthropicAPIError, message_request
 from .answer_trace import outgoing_request_capture, final_json_capture
-from .chat import GroundedAnswer, validate_answer, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
+from .chat import MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
 from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_BYTES,
     PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
 from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
+from .span_draft import prepare_span_draft, span_draft_message_request, normalize_span_draft
 
 
 class PipelineFailure(Exception):
@@ -97,6 +97,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
     disconnect_seen = asyncio.Event()
     disconnect_reason = 'client_disconnected'
     current = None
+    frozen_baseline_utf8 = None
 
     def notify():
         trace['elapsed_seconds'] = max(0, time.monotonic() - started)
@@ -157,12 +158,11 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                 if (actual_body is None or actual_body != body
                         or digest(actual_body)!=stage['prepared_request_sha256']):
                     raise fail('request_capture_mismatch')
-                if stage['phase']=='reconstruction':
-                    proof=verify_wire_binding(capture['body_utf8'],
-                        trace['phases'][0]['outgoing_request']['body_utf8'],stage['span_registry_sha256'])
-                    if proof['original_draft_payload_utf8_sha256']!=stage['source_equality']['draft_sha256']:
-                        raise fail('source_span_original_byte_identity')
-                    stage['source_equality'].update(proof)
+                proof=verify_wire_binding(capture['body_utf8'],json.loads(frozen_baseline_utf8),
+                    stage['span_registry_sha256'],phase=stage['phase'],
+                    draft_body_utf8=(trace['phases'][0]['outgoing_request']['body_utf8']
+                                     if stage['phase']=='reconstruction' else None))
+                stage['source_equality'].update(proof)
                 stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
                          dispatched_elapsed_seconds=time.monotonic() - started,
                          request_shape={'model':body['model'], 'version':API_VERSION,
@@ -181,7 +181,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             stage['dispatch_status'] = 'http_response_received'
             if payload is not None:
                 stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'],
-                    anchor_protocol=ANCHOR_PROTOCOL if stage['phase']=='reconstruction' else None)
+                    anchor_protocol=ANCHOR_PROTOCOL)
             notify()
 
         phase_started = time.monotonic()
@@ -210,7 +210,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
         return result
 
     async def execute():
-        nonlocal current
+        nonlocal current, frozen_baseline_utf8
         try:
             if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
                     PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'low', 12000):
@@ -222,13 +222,33 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             if not trace['pair_preflight'].get('allowed'):
                 raise fail('pair_allowance_refused')
             await available()
-            draft_body = message_request(config, original)
+            # Preserve the legacy preparation/selection exactly. The new wire
+            # prompt is applied only after it has selected the complete input.
+            original_body = message_request(config, original)
+            selected_draft = prepare_span_draft(request,original)
+            draft_body = span_draft_message_request(config,selected_draft)
+            frozen_baseline_utf8=encoded(selected_draft.baseline).decode()
             async with client_factory() as client:
-                def normalize_draft(content):
-                    native = normalize_native_answer(content, original)
-                    return validate_answer(GroundedAnswer.model_validate_json(native, strict=True),
-                                           original.evidence, original.answer_style)
-                draft = await run_stage(client, trace['phases'][0], draft_body, original.input_token_bound, normalize_draft)
+                # The real transport checks its actual credential/workspace
+                # values locally. No unchecked baseline reaches an observer,
+                # reservation or HTTP dispatch, even if annotation splits it.
+                safety,safe_baseline=client.capture_prepared_original(original_body,selected_draft.baseline)
+                if safe_baseline is None or encoded(safe_baseline).decode()!=frozen_baseline_utf8:
+                    raise fail('unsafe_prepared_original')
+                trace['prepared_original']=deepcopy(safe_baseline)
+                trace['prepared_original_safety']=deepcopy(safety)
+                current=trace['phases'][0]
+                current.update(source_equality={'complete_evidence_equal':True},
+                    request_scope=deepcopy(safe_baseline['request_scope']),
+                    input_binding_sha256=selected_draft.binding_sha256,anchor_protocol=ANCHOR_PROTOCOL,
+                    span_registry_sha256=selected_draft.span_registry_sha256,
+                    span_registry={key:{k:v for k,v in span.items() if k!='text'} for key,span in selected_draft.span_registry.items()},
+                    annotated_payload_sha256=selected_draft.annotated_payload_sha256)
+                def observe_resolution(value):
+                    current['deterministic_support_resolution']=value
+                    notify()
+                draft = await run_stage(client,current,draft_body,selected_draft.input_token_bound,
+                    lambda content:normalize_span_draft(content,selected_draft,resolved_observer=observe_resolution))
                 trace['phases'][0]['normalized_draft'] = deepcopy(draft)
                 # Preparation cannot discard any source or retained history.
                 current = trace['phases'][1]
@@ -241,15 +261,12 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                 if preserved != first_payload or correction.messages[1:-1] != original.messages[1:-1]:
                     raise fail('evidence_identity_changed')
                 current.update(compact_draft=deepcopy(correction.compact_draft),
-                    source_equality={'draft_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
+                    source_equality={'prepared_original_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
                                      'retained_history_equal':True, 'complete_evidence_equal':True},
                     request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256,
                     anchor_protocol=ANCHOR_PROTOCOL,span_registry_sha256=correction.span_registry_sha256,
                     span_registry={key:{k:v for k,v in span.items() if k!='text'} for key,span in actual_registry.items()},
                     annotated_payload_sha256=correction.annotated_payload_sha256)
-                def observe_resolution(value):
-                    current['deterministic_support_resolution']=value
-                    notify()
                 final, assembly = await run_stage(client, current, correction_body, correction.input_token_bound,
                     lambda content: normalize_reconstruction(content, correction,resolved_observer=observe_resolution))
                 trace['assembly_offsets'] = assembly

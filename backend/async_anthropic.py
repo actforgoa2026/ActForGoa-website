@@ -1,7 +1,6 @@
 """One request-owned async transport; cancellation closes active provider I/O."""
 import inspect
 import json
-import re
 import httpx
 
 from .anthropic_provider import ENDPOINT, API_VERSION, AnthropicAPIError, native_content
@@ -24,6 +23,30 @@ class AsyncAnthropicClient:
         result = self._request_observer(request)
         if inspect.isawaitable(result):
             await result
+
+    def capture_prepared_original(self, original_body, baseline):
+        """Local synthetic safety checks, never dispatch or invoke request hooks.
+
+        Scan original unfragmented text with this client's real credentials and
+        also scan the exact baseline including history/scope. Only approved
+        decoded baseline data is returned; headers never leave the transport.
+        """
+        from .answer_trace import outgoing_request_capture
+        from copy import deepcopy
+        original_request=self._http.build_request('POST',ENDPOINT,json=original_body)
+        capture,decoded=outgoing_request_capture(original_request)
+        if decoded is None:
+            return {'capture_status':'withheld_unsafe_prepared_original'},None
+        synthetic=deepcopy(original_body)
+        synthetic['messages']=[{'role':'user','content':json.dumps(baseline,ensure_ascii=False,separators=(',',':'))}]
+        baseline_request=self._http.build_request('POST',ENDPOINT,json=synthetic)
+        baseline_capture,baseline_body=outgoing_request_capture(baseline_request)
+        if baseline_body is None:
+            return {'capture_status':'withheld_unsafe_prepared_original'},None
+        return {'capture_status':'safe_prepared_original',
+                'check':'provider_owned_synthetic_request_no_dispatch',
+                'synthetic_original_body_sha256':capture['body_sha256'],
+                'synthetic_baseline_body_sha256':baseline_capture['body_sha256']},json.loads(baseline_body['messages'][-1]['content'])
 
     async def send(self, body, *, on_request, on_response):
         if self._request_observer is not None:
@@ -61,12 +84,12 @@ class AsyncAnthropicClient:
                 blocks=payload.get('content',[])
                 final=''.join(b.get('text','') for b in blocks if isinstance(b,dict)
                               and b.get('type')=='text' and isinstance(b.get('text'),str)) if isinstance(blocks,list) else ''
-                secret=self._http.headers.get('authorization','').removeprefix('Bearer ')
+                from .answer_trace import credential_like_content
+                secrets=[self._http.headers.get('authorization','').removeprefix('Bearer '),
+                         self._http.headers.get('x-api-key'),self._http.headers.get('anthropic-workspace-id')]
                 try:decoded_final=json.dumps(json.loads(final),ensure_ascii=False)
                 except ValueError:decoded_final=final
-                if ((secret and secret in decoded_final)
-                        or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+',decoded_final)
-                        or re.search(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:',decoded_final,re.I)):
+                if credential_like_content(decoded_final,secrets):
                     on_response(metadata)
                     raise ValueError('The answer service returned unsafe final content')
                 # Phase is carried by the local callback, not sent to the model.
