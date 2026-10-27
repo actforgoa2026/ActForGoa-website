@@ -36,12 +36,24 @@ def answer_payload(citation='passage-1'):
         {'text': 'Gates regulate tidal water.', 'citations': [citation]}]}
 
 
+def native_payload(payload):
+    """Explicit synthetic wire fixture; never used by runtime normalization."""
+    from copy import deepcopy
+    result=deepcopy(payload)
+    units=result.get('paragraphs', [result.get('paragraph')])
+    for unit in units:
+        if isinstance(unit,dict) and 'citations' in unit:
+            unit['supports']=[{'citation_id':c,'field':'text','quote':'regulate tidal water'}
+                              for c in unit.pop('citations')]
+    return result
+
+
 def anthropic_message(payload=None, *, stop='end_turn', content=None):
     return {'id': 'fixture-only', 'type': 'message', 'role': 'assistant',
             'model': 'claude-haiku-5-5', 'stop_reason': stop, 'stop_details': None,
             'content': content if content is not None else [
                 {'type': 'thinking', 'thinking': 'private diagnostic', 'signature': 'fixture'},
-                {'type': 'text', 'text': json.dumps(payload if payload is not None else answer_payload())}],
+                {'type': 'text', 'text': json.dumps(payload if payload is not None else native_payload(answer_payload()))}],
             'usage': {'input_tokens': 1000, 'output_tokens': 250}}
 
 
@@ -49,7 +61,7 @@ def brief_message(payload=None, **kwargs):
     payload=answer_payload() if payload is None else payload
     if isinstance(payload,dict) and set(payload)=={'status','paragraphs'} and len(payload['paragraphs'])<=1:
         payload={'status':payload['status'],'paragraph':payload['paragraphs'][0] if payload['paragraphs'] else None}
-    return anthropic_message(payload,**kwargs)
+    return anthropic_message(native_payload(payload),**kwargs)
 
 
 def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepared):
@@ -67,28 +79,29 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert request.headers['anthropic-version'] == API_VERSION == '2026-10-21'
     assert request.headers['anthropic-workspace-id'] == 'wrkspc_fixture'
     assert request.extensions['timeout'] == {'connect': 10, 'read': 60, 'write': 10, 'pool': 10}
-    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 3500
-    assert body['system'].startswith(prepared.base_instructions)
+    assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 6000
+    assert body['system'].startswith('You answer questions about Goa')
     assert 'Every paragraphs entry' not in body['system']
-    assert json.loads(body['system'].split('Return JSON conforming to this inline schema: ',1)[1])==body['output_config']['format']['schema']
+    assert 'Each object has text and supports only' in body['system']
+    assert 'inline schema' not in body['system']
     assert body['messages'] == prepared.messages[1:]
     assert body['thinking'] == {'type': 'adaptive'}
     assert body['service_tier'] == 'standard_only' and body['stream'] is False
     assert set(body) == {'model', 'max_tokens', 'system', 'messages', 'thinking', 'stream', 'output_config', 'service_tier'}
-    assert body['output_config']['effort'] == 'medium'
+    assert body['output_config']['effort'] == 'high'
     assert body['output_config']['format']['type'] == 'json_schema'
     schema = body['output_config']['format']['schema']
     assert set(schema['properties'])=={'status','paragraph'}
     assert schema['properties']['paragraph']['anyOf'][1]=={'type':'null'}
     paragraph = schema['properties']['paragraph']['anyOf'][0]
-    assert paragraph['properties']['citations']['items']['enum'] == ['passage-1']
+    assert paragraph['properties']['supports']['items']['properties']['citation_id']['enum'] == ['passage-1']
     assert paragraph['additionalProperties'] is False and schema['additionalProperties'] is False
-    assert paragraph['properties']['citations']['minItems'] == 1
+    assert paragraph['properties']['supports']['minItems'] == 1
     assert all(key not in json.dumps(schema) for key in ('maxItems', 'maxLength', 'minLength'))
     assert prepared.schema['properties']['paragraphs']['maxItems'] == 1
     assert b'private/path' not in request.content and b'fixture-only' not in request.content
     assert 'private diagnostic' not in json.dumps(result)
-    assert config.maximum_cost_microusd(26048) == 5174
+    assert config.maximum_cost_microusd(26048) == 6424
 
 
 def test_anthropic_is_opt_in_fixed_host_and_requires_reviewed_model(config, monkeypatch):
@@ -181,7 +194,7 @@ def test_split_text_blocks_and_abstention(config, prepared):
 
 def test_bound_covers_native_schema_and_rejects_unreviewed_tier_before_dispatch(config, prepared):
     assert 26048 + INPUT_ALLOWANCE < 100_000
-    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 11750
+    assert config.maximum_cost_microusd(100_000 - INPUT_ALLOWANCE) == 13000
     with pytest.raises(ValueError, match='price tier'):config.maximum_cost_microusd(100_001 - INPUT_ALLOWANCE)
     with pytest.raises(ValueError, match='schema exceeds'):native_schema({'description': 'x'*4097})
     def handle(_):raise AssertionError('Invalid bounds must prevent dispatch')
@@ -211,7 +224,7 @@ def test_native_brief_roundtrip_preserves_exact_text_citations_and_word_bound(co
     for count in (120,121):
         paragraph={'text':'word '*(count-1)+'end.','citations':['passage-1']}
         with AnthropicClient('fixture-only',transport=httpx.MockTransport(
-                lambda _:httpx.Response(200,json=anthropic_message({'status':'answered','paragraph':paragraph})))) as client:
+                lambda _:httpx.Response(200,json=anthropic_message(native_payload({'status':'answered','paragraph':paragraph}))))) as client:
             if count==120:
                 result=answer_question(client,config,prepared)
                 assert result['paragraphs']==[paragraph] and result['citations']==prepared.evidence
@@ -230,18 +243,18 @@ def test_native_brief_roundtrip_preserves_exact_text_citations_and_word_bound(co
 def test_native_brief_rejects_wrong_shape_before_mapping(config,prepared,payload):
     with AnthropicClient('fixture-only',transport=httpx.MockTransport(
             lambda _:httpx.Response(200,json=anthropic_message(payload)))) as client:
-        with pytest.raises(ValueError,match='native brief answer did not match'):
+        with pytest.raises(ValueError,match='native answer did not match'):
             answer_question(client,config,prepared)
 
 
-def test_standard_native_array_and_prompt_are_unchanged(config,prepared):
+def test_standard_native_array_maps_claim_units_losslessly(config,prepared):
     standard=prepare_answer(ChatRequest(question='How do gates regulate tides?'),prepared.evidence,provider='anthropic')
     payload={'status':'answered','paragraphs':answer_payload()['paragraphs']*2}
     def handle(request):
         body=json.loads(request.content)
         assert body['system']==standard.messages[0]['content']
         assert set(body['output_config']['format']['schema']['properties'])=={'status','paragraphs'}
-        return httpx.Response(200,json=anthropic_message(payload))
+        return httpx.Response(200,json=anthropic_message(native_payload(payload)))
     with AnthropicClient('fixture-only',transport=httpx.MockTransport(handle)) as client:
         assert answer_question(client,config,standard)['paragraphs']==payload['paragraphs']
 
@@ -256,14 +269,14 @@ def test_native_brief_actual_prompt_and_schema_fit_reserved_allowances(config,pr
     actual=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode())
     assert actual<=24000 and actual+2048==bounded.input_token_bound
     assert len(json.dumps(body['output_config']['format']['schema'],ensure_ascii=False,separators=(',',':')).encode())<=MAX_SCHEMA_BYTES
-    assert config.maximum_cost_microusd(bounded.input_token_bound)<=5174
-    with pytest.raises(ValueError,match='Missing native brief instructions'):
+    assert config.maximum_cost_microusd(bounded.input_token_bound)<=6424
+    with pytest.raises(ValueError,match='Missing native answer instructions'):
         message_request(config,replace(prepared,base_instructions=None))
 
 
 def test_native_brief_budgets_final_contract_before_selecting_evidence(config):
     from backend.anthropic_provider import message_request
-    evidence=[{'id':f'{i:029d}','text':'x'*(17030 if i==0 else 1),'title':'Saved source',
+    evidence=[{'id':f'{i:029d}','text':'x'*(15500 if i==0 else 1),'title':'Saved source',
                'document_id':str(i),'url':'https://example.org/source'} for i in range(10)]
     request=ChatRequest(question='What does this saved source say?',answer_style='brief')
     prepared=prepare_answer(request,evidence,provider='anthropic');body=message_request(config,prepared)
@@ -272,10 +285,99 @@ def test_native_brief_budgets_final_contract_before_selecting_evidence(config):
     assert actual<=24000 and prepared.input_token_bound==actual+2048
     ids=[e['id'] for e in prepared.evidence]
     wire=body['output_config']['format']['schema']
-    assert wire['properties']['paragraph']['anyOf'][0]['properties']['citations']['items']['enum']==ids
+    assert wire['properties']['paragraph']['anyOf'][0]['properties']['supports']['items']['properties']['citation_id']['enum']==ids
     assert [e['id'] for e in json.loads(body['messages'][-1]['content'])['evidence']]==ids
-    assert json.loads(body['system'].split('Return JSON conforming to this inline schema: ')[1])==wire
+    assert 'Each object has text and supports only' in body['system']
     # A caller cannot spend the framing reserve as extra prompt space.
     oversized=[*prepared.messages[:-1],{'role':'user','content':'x'*24000}]
     with pytest.raises(ValueError,match='reserved allowance'):
         message_request(config,replace(prepared,messages=oversized,input_token_bound=26048))
+
+
+def test_quote_contract_preserves_units_and_only_their_support_ids(config):
+    from backend.anthropic_provider import normalize_native_answer
+    evidence=[{'id':'water','text':'Annual recharge is 20 units.\nA local study.',
+               'warning':'Machine OCR not manually verified.'},
+              {'id':'forest','text':'The plateau supports reptiles.'}]
+    prepared=prepare_answer(ChatRequest(question='What do these studies report?'),evidence,provider='anthropic')
+    units=[{'text':'The study reports annual recharge of 20 units; the OCR is unverified.',
+            'supports':[{'citation_id':'water','field':'text','quote':'Annual recharge is 20 units. A local study.'},
+                        {'citation_id':'water','field':'warning','quote':'Machine OCR not manually verified.'}]},
+           {'text':'The plateau supports reptiles.',
+            'supports':[{'citation_id':'forest','field':'text','quote':'The plateau supports reptiles.'}]}]
+    result=json.loads(normalize_native_answer(json.dumps({'status':'answered','paragraphs':units}),prepared))
+    assert result['paragraphs']==[{'text':units[0]['text'],'citations':['water']},
+                                  {'text':units[1]['text'],'citations':['forest']}]
+    assert not any('supports' in p for p in result['paragraphs'])
+
+
+@pytest.mark.parametrize('mutation',[
+    'unknown-id','cross-source','case-change','punctuation-change','ellipsis','empty','too-long',
+    'unknown-field','hidden-origin','hidden-date','title','url','wrong-type','extra','metadata-only',
+    'too-many-supports','too-many-units','no-units','mixed-invalid-unit','inline-id','rewritten-spacing',
+])
+def test_quote_contract_rejects_invented_or_unrepresented_support_without_salvage(prepared,mutation):
+    from copy import deepcopy
+    from backend.anthropic_provider import normalize_native_answer
+    evidence=[dict(prepared.evidence[0],origin='pymupdf_reading_order',
+                   source_date_metadata={'hidden_field':'Historical 2021 version'},
+                   legal_currency='Current applicability unverified.'),
+              {'id':'other','text':'Only a plateau study.'}]
+    prepared=prepare_answer(ChatRequest(question='What do gates regulate?'),evidence,provider='anthropic')
+    unit={'text':'Gates regulate tides.','supports':[
+        {'citation_id':'passage-1','field':'text','quote':'regulate tidal water'}]}
+    payload={'status':'answered','paragraphs':[unit]};support=unit['supports'][0]
+    if mutation=='unknown-id':support['citation_id']='invented'
+    elif mutation=='cross-source':support['citation_id']='other'
+    elif mutation=='case-change':support['quote']='Regulate tidal water'
+    elif mutation=='punctuation-change':support['quote']='regulate tidal water!'
+    elif mutation=='ellipsis':support['quote']='Sluice gates ... in khazans.'
+    elif mutation=='empty':support['quote']=' \n\t'
+    elif mutation=='too-long':support['quote']='x'*601
+    elif mutation=='unknown-field':support['field']='untrusted'
+    elif mutation=='hidden-origin':support.update(field='origin',quote='pymupdf_reading_order')
+    elif mutation=='hidden-date':support.update(field='source_date_metadata.hidden_field',quote='Historical 2021 version')
+    elif mutation=='title':support.update(field='title',quote='Khazan study')
+    elif mutation=='url':support.update(field='url',quote='example.org')
+    elif mutation=='wrong-type':support['quote']=['regulate tidal water']
+    elif mutation=='extra':support['private diagnostic']='fixture-only'
+    elif mutation=='metadata-only':support.update(field='legal_currency',quote='Current applicability unverified.')
+    elif mutation=='too-many-supports':unit['supports']*=11
+    elif mutation=='too-many-units':payload['paragraphs']*=5
+    elif mutation=='no-units':payload['paragraphs']=[]
+    elif mutation=='inline-id':unit['text']='Gates regulate tides [passage-1].'
+    elif mutation=='rewritten-spacing':unit['text']='  Gates regulate tides.'
+    elif mutation=='mixed-invalid-unit':
+        invalid=deepcopy(unit);invalid['supports'][0]['quote']='Invented.';payload['paragraphs'].append(invalid)
+    with pytest.raises(ValueError,match='native answer did not match the evidence contract') as error:
+        normalize_native_answer(json.dumps(payload),prepared)
+    assert 'private diagnostic' not in str(error.value)
+
+
+def test_support_metadata_must_be_in_serialized_request(prepared):
+    from backend.anthropic_provider import normalize_native_answer
+    prepared.evidence[0]['warning']='OCR is unverified.'
+    payload=native_payload(answer_payload());payload['paragraphs'][0]['supports'].append(
+        {'citation_id':'passage-1','field':'warning','quote':'OCR is unverified.'})
+    # Adding metadata after preparation must not make it evidence seen by the model.
+    standard=replace(prepared,answer_style='standard')
+    with pytest.raises(ValueError,match='evidence contract'):
+        normalize_native_answer(json.dumps(payload),standard)
+
+
+def test_explicit_source_provenance_quote_resolves_own_represented_source(prepared):
+    from backend.anthropic_provider import normalize_native_answer
+    evidence=[dict(prepared.evidence[0],source_date_metadata={'reviewed_locator_and_dates':'Saved version from 2021.'})]
+    bounded=prepare_answer(ChatRequest(question='What does the saved source say?'),evidence,provider='anthropic')
+    payload=native_payload(answer_payload());payload['paragraphs'][0]['supports'].append(
+        {'citation_id':'passage-1','field':'source_date_metadata.reviewed_locator_and_dates','quote':'Saved version from 2021.'})
+    assert json.loads(normalize_native_answer(json.dumps(payload),bounded))==answer_payload()
+
+
+def test_native_contract_is_not_applied_to_other_providers(prepared):
+    request=ChatRequest(question='How do khazans work?',answer_style='brief')
+    regular=prepare_answer(request,prepared.evidence)
+    for provider in ('openai','openrouter','qwen'):
+        other=prepare_answer(request,prepared.evidence,provider=provider)
+        assert other.messages==regular.messages and other.schema==regular.schema
+        assert 'supports.citation_id' not in other.messages[0]['content']

@@ -82,7 +82,7 @@ def chat_config():
     elif provider == 'anthropic':
         config = ChatConfig(provider, os.getenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5'),
                             'Anthropic', 'ANTHROPIC_API_KEY', 'https://api.anthropic.com/v1',
-                            max_output_tokens=3500, route='anthropic', structured=True)
+                            max_output_tokens=6000, route='anthropic', structured=True)
     elif provider == 'openai':
         config = ChatConfig(provider, os.getenv('OPENAI_CHAT_MODEL', 'gpt-5.6-luna'),
                             'OpenAI', 'OPENAI_API_KEY', 'https://api.openai.com/v1')

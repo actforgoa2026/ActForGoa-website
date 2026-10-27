@@ -11,7 +11,7 @@ import pytest
 from backend.anthropic_provider import AnthropicClient
 from backend.providers import chat_config
 from scripts import evaluate_anthropic_acceptance as acceptance
-from tests.research.test_anthropic_provider import anthropic_message
+from tests.research.test_anthropic_provider import anthropic_message, native_payload
 
 
 @pytest.fixture
@@ -98,7 +98,7 @@ def execute_fixture(setup,response):
 
 
 def response(payload=None,**kwargs):
-    message=anthropic_message(payload,**kwargs)
+    message=anthropic_message(native_payload(payload) if payload is not None else None,**kwargs)
     message['usage']={'input_tokens':1500,'output_tokens':150,'cache_creation_input_tokens':0,'cache_read_input_tokens':0}
     return httpx.Response(200,json=message)
 
@@ -163,8 +163,8 @@ def test_source_review_packet_generation_must_match_final_data(setup):
 
 @pytest.mark.parametrize('paragraphs,code',[
     ([{'text':'word '*120+'end.','citations':['passage-1']}], 'brief_length'),
-    ([{'text':'Gates regulate tides.','citations':['passage-1']}]*2, 'native_brief_schema'),
-    ([{'text':'Gates regulate tides.','citations':['unknown']}], 'native_brief_schema'),
+    ([{'text':'Gates regulate tides.','citations':['passage-1']}]*2, 'native_evidence_contract'),
+    ([{'text':'Gates regulate tides.','citations':['unknown']}], 'native_evidence_contract'),
     ([{'text':'Incomplete sentence','citations':['passage-1']}], 'paragraph_incomplete'),
 ])
 def test_failed_final_answer_diagnostics_preserve_cause_without_accepting_or_retrying(setup,paragraphs,code):
@@ -176,7 +176,7 @@ def test_failed_final_answer_diagnostics_preserve_cause_without_accepting_or_ret
     report,output=execute_fixture(setup,response(payload))
     entry=report['cases'][0]
     assert entry['failure_code']==code and not entry['mechanical_passed']
-    assert entry['final_output_diagnostic']['answer']==payload
+    assert entry['final_output_diagnostic']['answer']==native_payload(payload)
     assert entry['final_output_diagnostic']['paragraph_count']==len(paragraphs)
     assert entry['final_output_diagnostic']['word_counts']==[len(p['text'].split()) for p in paragraphs]
     assert report['attempts']==1 and not report['complete'] and 'answer' not in entry
