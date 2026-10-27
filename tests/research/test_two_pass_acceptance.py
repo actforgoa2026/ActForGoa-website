@@ -20,9 +20,9 @@ from tests.research.span_fixtures import select_response
 @pytest.fixture
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
-    plan.update(pipeline='two_pass_v3',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='low',max_output_tokens=12000)
+    plan.update(pipeline='two_pass_v4',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='medium',max_output_tokens=12000)
     plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='low',max_output_tokens=12000,pipeline='two_pass_v3')
+    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v4')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
@@ -77,6 +77,8 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     lambda p:p['stages']['test'].pop('max_cases'),lambda p:p['stages']['test'].update(max_attempts=2),
     lambda p:p.update(pipeline='two_pass_v1'),
     lambda p:p.update(pipeline='two_pass_v2'),
+    lambda p:p.update(pipeline='two_pass_v3'),
+    lambda p:p.update(effort='low'),
     lambda p:p['pipeline_spec'].update(capture_version=3),
     lambda p:p['pipeline_spec'].update(anchor_protocol='lossless_source_spans_v1'),
     lambda p:p['pipeline_spec'].update(capture_version=2),

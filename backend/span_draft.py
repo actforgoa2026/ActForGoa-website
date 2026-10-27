@@ -13,7 +13,7 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
                           original_baseline, registry_hash, resolve_selector, encoded)
 from .span_instructions import span_answer_instructions
 
-PIPELINE_VERSION = 'two_pass_v3'
+PIPELINE_VERSION = 'two_pass_v4'
 
 
 def digest(value):
@@ -103,7 +103,7 @@ def validate_span_draft_identity(prepared):
 
 def span_draft_message_request(config,prepared):
     if (config.pipeline,config.provider,config.model,config.effort,config.max_output_tokens)!=(
-            PIPELINE_VERSION,'anthropic','claude-haiku-5-5','low',12000):
+            PIPELINE_VERSION,'anthropic','claude-haiku-5-5','medium',12000):
         raise ValueError('Span draft requires the reviewed configuration')
     validate_span_draft_identity(prepared)
     _represented_contexts(prepared.original);_represented_publications(prepared.original)

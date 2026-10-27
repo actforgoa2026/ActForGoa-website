@@ -1,0 +1,72 @@
+"""Explicit v4/medium identity; no provider, keys, corpus or live ledgers."""
+import asyncio
+from copy import deepcopy
+from dataclasses import replace
+
+import pytest
+
+from backend import answer_pipeline,providers,reconstruction
+from backend.chat import AnswerCache
+from backend.span_draft import prepare_span_draft,span_draft_message_request
+from backend.reconstruction import prepare_reconstruction,reconstruction_message_request
+from tests.research.test_answer_pipeline import setup
+
+
+@pytest.mark.parametrize('pipeline,effort',[
+    ('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('two_pass_v2','medium'),('two_pass_v1','medium')])
+def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT',effort)
+    with pytest.raises(ValueError):providers.chat_config()
+
+
+@pytest.mark.parametrize('change',[
+    {'effort':'low'},{'pipeline':'two_pass_v3'},
+    {'model':'claude-sonnet-5-5'},{'max_output_tokens':11999}])
+def test_every_two_phase_entry_rejects_mismatched_configuration_before_keys_or_sends(setup,monkeypatch,change):
+    config,request,original,transport,limits,_,_,_=setup
+    bad=replace(config,**change)
+    old_getenv=providers.os.getenv
+    def no_keys(name,*args):
+        if name in ('ANTHROPIC_API_KEY','ANTHROPIC_WORKSPACE_ID'):
+            pytest.fail('Configuration must fail before key/workspace access')
+        return old_getenv(name,*args)
+    monkeypatch.setattr(providers.os,'getenv',no_keys)
+    with pytest.raises(ValueError):bad.async_client()
+    draft=prepare_span_draft(request,original)
+    correction=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    with pytest.raises(ValueError):span_draft_message_request(bad,draft)
+    with pytest.raises(ValueError):reconstruction_message_request(bad,correction)
+    def no_client():pytest.fail('Invalid configuration must not open transport')
+    with pytest.raises(answer_pipeline.PipelineFailure,match='pipeline_configuration'):
+        asyncio.run(answer_pipeline.run_answer_pipeline(request,original,bad,limits=limits,client_factory=no_client))
+    assert not limits.receipts and not transport.requests
+
+
+def test_v4_cache_cannot_reuse_prior_v3_low_identity(setup,monkeypatch):
+    config,_,original,*_=setup
+    cache=AnswerCache()
+    # Source-neutral replay of the prior version's otherwise identical cache
+    # identity, not transfer or acceptance of any historical model response.
+    with monkeypatch.context() as m:
+        m.setattr(reconstruction,'PIPELINE_VERSION','two_pass_v3')
+        m.setattr(reconstruction,'PIPELINE_SPEC',{**deepcopy(reconstruction.PIPELINE_SPEC),'version':'two_pass_v3'})
+        previous=AnswerCache.key(replace(config,pipeline='two_pass_v3',effort='low'),original)
+    current=AnswerCache.key(config,original)
+    cache.put(previous,{'fixture':'old result'})
+    assert previous!=current and cache.get(current) is None
+    with pytest.raises(ValueError):AnswerCache.key(replace(config,pipeline='two_pass_v3'),original)
+
+
+def test_medium_changes_only_effort_in_actual_configuration_and_preserves_caps(setup):
+    config,request,original,transport,limits,_,run,_=setup
+    draft=span_draft_message_request(config,prepare_span_draft(request,original))
+    correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]}))
+    assert draft['output_config']['effort']==correction['output_config']['effort']=='medium'
+    assert draft['max_tokens']==correction['max_tokens']==12000
+    assert answer_pipeline.pair_maximum_costs(config)==[9424,10624]
+    assert answer_pipeline.PROVIDER_STAGE_SECONDS==30 and answer_pipeline.PROVIDER_DEADLINE_SECONDS==65
+    result=run()
+    assert all(phase['request_shape']['effort']=='medium' for phase in result.trace['phases'])
+    assert len(transport.requests)==len(limits.receipts)==2

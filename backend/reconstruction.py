@@ -113,8 +113,8 @@ def validate_prepared_identity(prepared):
 
 
 def reconstruction_message_request(config, prepared):
-    if (config.provider, config.model, config.effort, config.max_output_tokens) != (
-            'anthropic', 'claude-haiku-5-5', 'low', 12000):
+    if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
+            PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'medium', 12000):
         raise ValueError('Reconstruction requires the reviewed Haiku configuration')
     validate_prepared_identity(prepared)
     _represented_contexts(prepared.original)
