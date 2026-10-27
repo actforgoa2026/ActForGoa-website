@@ -1,0 +1,851 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Offline capture review linkage grammar v1 (planning only)",
+  "oneOf": [
+    {
+      "$ref": "#/$defs/Input"
+    },
+    {
+      "$ref": "#/$defs/Linked"
+    },
+    {
+      "$ref": "#/$defs/Rejected"
+    },
+    {
+      "$ref": "#/$defs/Illustrations"
+    }
+  ],
+  "$defs": {
+    "Presence": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "not_captured"
+            }
+          },
+          "required": [
+            "state"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "state": {
+              "const": "captured"
+            },
+            "value": {},
+            "value_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          },
+          "required": [
+            "state",
+            "value",
+            "value_sha256"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Span": {
+      "type": "object",
+      "properties": {
+        "start": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "end": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 9007199254740991
+        },
+        "text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "text_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "start",
+        "end",
+        "text",
+        "text_sha256"
+      ],
+      "additionalProperties": false
+    },
+    "Author": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "enum": [
+            "assistant_analyst",
+            "assistant_independent_reviewer"
+          ]
+        },
+        "at": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "name",
+        "role",
+        "at"
+      ],
+      "additionalProperties": false
+    },
+    "Case": {
+      "type": "object",
+      "properties": {
+        "key": {
+          "type": "string",
+          "pattern": "^case:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "capture_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "key",
+        "capture_sha256",
+        "pointer",
+        "case_id"
+      ],
+      "additionalProperties": false
+    },
+    "Artifact": {
+      "type": "object",
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "path": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "sha256",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "Observation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^obs:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "case_key": {
+          "type": "string",
+          "pattern": "^case:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected": {
+          "$ref": "#/$defs/Presence"
+        }
+      },
+      "required": [
+        "id",
+        "case_key",
+        "pointer",
+        "expected"
+      ],
+      "additionalProperties": false
+    },
+    "ReviewRef": {
+      "type": "object",
+      "properties": {
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "finding_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "finding_value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "author_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "author_value": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "time_value": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "artifact_sha256",
+        "finding_pointer",
+        "finding_value_sha256",
+        "author_pointer",
+        "author_value",
+        "time_pointer",
+        "time_value"
+      ],
+      "additionalProperties": false
+    },
+    "Target": {
+      "type": "object",
+      "properties": {
+        "representation": {
+          "type": "string",
+          "enum": [
+            "raw_diagnostic",
+            "normalized",
+            "illustrative"
+          ]
+        },
+        "artifact_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "span": {
+          "$ref": "#/$defs/Span"
+        }
+      },
+      "required": [
+        "representation",
+        "artifact_sha256",
+        "pointer",
+        "span"
+      ],
+      "additionalProperties": false
+    },
+    "Selection": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "text_span"
+            },
+            "pointer": {
+              "const": "/text"
+            },
+            "span": {
+              "$ref": "#/$defs/Span"
+            }
+          },
+          "required": [
+            "kind",
+            "pointer",
+            "span"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "field_value"
+            },
+            "pointer": {
+              "type": "string",
+              "enum": [
+                "/warning",
+                "/page_heading",
+                "/origin",
+                "/format",
+                "/legal_currency",
+                "/source_date_metadata",
+                "/context_ids"
+              ]
+            },
+            "expected": {
+              "$ref": "#/$defs/Presence"
+            }
+          },
+          "required": [
+            "kind",
+            "pointer",
+            "expected"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "Evidence": {
+      "type": "object",
+      "properties": {
+        "role": {
+          "type": "string",
+          "enum": [
+            "local_cited_evidence",
+            "alternative_evidence",
+            "scope_context",
+            "metadata"
+          ]
+        },
+        "block_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "block_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "block_value_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "selection": {
+          "$ref": "#/$defs/Selection"
+        }
+      },
+      "required": [
+        "role",
+        "block_pointer",
+        "block_id",
+        "block_value_sha256",
+        "selection"
+      ],
+      "additionalProperties": false
+    },
+    "Annotation": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^ann:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "case_key": {
+          "type": "string",
+          "pattern": "^case:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "author": {
+          "$ref": "#/$defs/Author"
+        },
+        "source_review": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/ReviewRef"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "target": {
+          "$ref": "#/$defs/Target"
+        },
+        "evidence": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Evidence"
+          },
+          "minItems": 0
+        },
+        "finding": {
+          "type": "string",
+          "enum": [
+            "unsupported_claim",
+            "citation_mismatch",
+            "publication_label_omission",
+            "illustration_support_proposed",
+            "unresolved"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "case_key",
+        "author",
+        "source_review",
+        "target",
+        "evidence",
+        "finding",
+        "rationale"
+      ],
+      "additionalProperties": false
+    },
+    "Coverage": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^cov:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "case_key": {
+          "type": "string",
+          "pattern": "^case:[a-z0-9][a-z0-9-]{0,47}$"
+        },
+        "question_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question_span": {
+          "$ref": "#/$defs/Span"
+        },
+        "annotation_ids": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^ann:[a-z0-9][a-z0-9-]{0,47}$"
+          },
+          "minItems": 0
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "reviewed_part",
+            "unresolved"
+          ]
+        },
+        "rationale": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "id",
+        "case_key",
+        "question_pointer",
+        "question_span",
+        "annotation_ids",
+        "state",
+        "rationale"
+      ],
+      "additionalProperties": false
+    },
+    "Sidecar": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "afg-capture-review-v1"
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Case"
+          },
+          "minItems": 1
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Observation"
+          },
+          "minItems": 0
+        },
+        "annotations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Annotation"
+          },
+          "minItems": 0
+        },
+        "coverage": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Coverage"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "version",
+        "cases",
+        "observations",
+        "annotations",
+        "coverage"
+      ],
+      "additionalProperties": false
+    },
+    "Input": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "afg-capture-review-v1"
+        },
+        "artifacts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Artifact"
+          },
+          "minItems": 1
+        },
+        "sidecar": {
+          "$ref": "#/$defs/Sidecar"
+        }
+      },
+      "required": [
+        "version",
+        "artifacts",
+        "sidecar"
+      ],
+      "additionalProperties": false
+    },
+    "CapturedField": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "presence": {
+          "$ref": "#/$defs/Presence"
+        }
+      },
+      "required": [
+        "name",
+        "pointer",
+        "presence"
+      ],
+      "additionalProperties": false
+    },
+    "ContextObservation": {
+      "type": "object",
+      "properties": {
+        "block_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "presence": {
+          "$ref": "#/$defs/Presence"
+        }
+      },
+      "required": [
+        "block_id",
+        "pointer",
+        "presence"
+      ],
+      "additionalProperties": false
+    },
+    "SelectedCase": {
+      "type": "object",
+      "properties": {
+        "binding": {
+          "$ref": "#/$defs/Case"
+        },
+        "capture_observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CapturedField"
+          },
+          "minItems": 0
+        },
+        "captured_fields": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/CapturedField"
+          },
+          "minItems": 0
+        },
+        "block_context_observations": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ContextObservation"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "binding",
+        "capture_observations",
+        "captured_fields",
+        "block_context_observations"
+      ],
+      "additionalProperties": false
+    },
+    "Linked": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "afg-capture-review-v1"
+        },
+        "status": {
+          "const": "linked_for_review"
+        },
+        "selected_cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/SelectedCase"
+          },
+          "minItems": 1
+        },
+        "review_annotations": {
+          "$ref": "#/$defs/Sidecar"
+        },
+        "semantic_judgment": {
+          "const": "not_assessed"
+        },
+        "original_authentication": {
+          "const": "not_performed"
+        },
+        "runtime_context_acquisition": {
+          "const": "unresolved"
+        },
+        "public_activation": {
+          "const": "hold"
+        },
+        "author_authentication": {
+          "const": "not_performed"
+        },
+        "question_completeness": {
+          "const": "not_assessed"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "selected_cases",
+        "review_annotations",
+        "semantic_judgment",
+        "original_authentication",
+        "runtime_context_acquisition",
+        "public_activation",
+        "author_authentication",
+        "question_completeness"
+      ],
+      "additionalProperties": false
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "enum": [
+            "INPUT_SHAPE",
+            "UNKNOWN_ARTIFACT",
+            "MISSING_ARTIFACT",
+            "ARTIFACT_HASH",
+            "IO_FAILURE",
+            "DUPLICATE_ID",
+            "ARTIFACT_PARSE",
+            "CASE_BINDING",
+            "TARGET_CASE",
+            "TARGET_REPRESENTATION",
+            "TARGET_POINTER",
+            "TARGET_SPAN",
+            "SOURCE_CASE",
+            "SOURCE_BINDING",
+            "SOURCE_SELECTION",
+            "REVIEW_PROVENANCE",
+            "OBSERVATION_POINTER",
+            "OBSERVATION_MISMATCH",
+            "COVERAGE_LINK",
+            "OUTPUT_EXISTS"
+          ]
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            ]
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "code",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "Rejected": {
+      "type": "object",
+      "properties": {
+        "version": {
+          "const": "afg-capture-review-v1"
+        },
+        "status": {
+          "const": "rejected"
+        },
+        "errors": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/Error"
+          },
+          "minItems": 1
+        },
+        "semantic_judgment": {
+          "const": "not_assessed"
+        },
+        "original_authentication": {
+          "const": "not_performed"
+        },
+        "runtime_context_acquisition": {
+          "const": "unresolved"
+        },
+        "public_activation": {
+          "const": "hold"
+        },
+        "author_authentication": {
+          "const": "not_performed"
+        },
+        "question_completeness": {
+          "const": "not_assessed"
+        }
+      },
+      "required": [
+        "version",
+        "status",
+        "errors",
+        "semantic_judgment",
+        "original_authentication",
+        "runtime_context_acquisition",
+        "public_activation",
+        "author_authentication",
+        "question_completeness"
+      ],
+      "additionalProperties": false
+    },
+    "IllustrationCase": {
+      "type": "object",
+      "properties": {
+        "case_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "capture_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "capture_case_pointer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "claims": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "text": {
+                "type": "string",
+                "minLength": 1
+              }
+            },
+            "required": [
+              "id",
+              "text"
+            ],
+            "additionalProperties": false
+          },
+          "minItems": 1
+        },
+        "limitations": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "case_id",
+        "capture_sha256",
+        "capture_case_pointer",
+        "question",
+        "claims",
+        "limitations"
+      ],
+      "additionalProperties": false
+    },
+    "Illustrations": {
+      "type": "object",
+      "properties": {
+        "format_version": {
+          "const": "afg-bridge-illustrations-v2"
+        },
+        "author": {
+          "$ref": "#/$defs/Author"
+        },
+        "status": {
+          "const": "unaccepted_assistant_illustration"
+        },
+        "prior_file_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "cases": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/IllustrationCase"
+          },
+          "minItems": 1
+        }
+      },
+      "required": [
+        "format_version",
+        "author",
+        "status",
+        "prior_file_sha256",
+        "cases"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$comment": "Only the closed record grammar. Exact immutable artifacts, pointer ownership, hash comparisons, presence, provenance and ordered errors in contract.txt are additionally required. No semantic or release authority."
+}
