@@ -35,6 +35,7 @@ export function CRMDirectoryActions({ record, full = false }: { record: CRMRecor
     {record.website_url && check.status === 'intermittent' && <span>Website access was intermittent when checked on {check.checked_on}.</span>}
     {full && check.source && check.source !== primaryLinks[0]?.url && <ListingLink href={check.source} kind="source">Source for updated website</ListingLink>}
     {primaryLinks.map(link => <ListingLink key={link.url} href={link.url} kind={listingLinkKind(link.label)}>{link.label === 'Website' && check.kind === 'reference' ? 'Related reference page' : full && link.label === 'Website' ? 'Website or reference page' : link.label}</ListingLink>)}
+    {check.reference_url && <ListingLink href={check.reference_url} kind="source">Official directory reference</ListingLink>}
     {(full ? emails : emails.slice(0, 1)).map(email => <ListingLink key={email} href={`mailto:${email}`} label={full ? undefined : `Email ${record.name}`}>{full ? email : 'Email'}</ListingLink>)}
     {full && phones.map(phone => <ListingLink key={phone} href={`tel:${phone}`}>{phone}</ListingLink>)}
     {map && <ListingLink href={map} kind="map">{full && address ? `Map: ${address}` : 'Find on Maps'}</ListingLink>}

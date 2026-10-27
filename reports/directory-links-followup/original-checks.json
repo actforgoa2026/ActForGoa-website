@@ -1,0 +1,83 @@
+[
+  {
+    "url": "https://www.khazansocietyofgoa.org/blank-1",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://goaspcb.gov.in/",
+    "status": 200,
+    "final": "https://goaspcb.gov.in/"
+  },
+  {
+    "url": "https://www.asigoacircle.gov.in",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://archaeology.goa.gov.in",
+    "error": "<urlopen error timed out>"
+  },
+  {
+    "url": "https://www.censusindia.gov.in",
+    "error": "<urlopen error timed out>"
+  },
+  {
+    "url": "https://www.goahomescience.gov.in",
+    "error": "<urlopen error timed out>"
+  },
+  {
+    "url": "https://www.ghrssidc.org",
+    "error": "HTTP Error 526: <none>"
+  },
+  {
+    "url": "https://www.gipard.goa.gov.in",
+    "error": "HTTP Error 406: Not Acceptable"
+  },
+  {
+    "url": "https://www.Konkaniakademi.goa.gov.in",
+    "error": "<urlopen error [Errno 61] Connection refused>"
+  },
+  {
+    "url": "https://gsrb.goa.gov.in",
+    "error": "<urlopen error [Errno 61] Connection refused>"
+  },
+  {
+    "url": "https://www.gssa.goa.gov.in",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://www.scobc.goa.gov.in",
+    "error": "<urlopen error timed out>"
+  },
+  {
+    "url": "https://khandilacollege.edu.in",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://www.gpb.nic.in",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://www.konkanrailway.com",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://www.goaprisons.gov.in",
+    "error": "<urlopen error timed out>"
+  },
+  {
+    "url": "https://www.mptgoa.gov.in/",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  },
+  {
+    "url": "https://registration.goa.gov.in",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://www.goatransport.gov.in",
+    "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1010)>"
+  },
+  {
+    "url": "https://www.goavigilance.nic",
+    "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+  }
+]

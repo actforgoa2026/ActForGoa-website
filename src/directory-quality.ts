@@ -48,6 +48,26 @@ export function directoryIdentity(id: string): string { return duplicateGroup(id
 // Correct known transcription artifacts only; never infer a host or accept
 // non-HTTP links. Original source data stays available for provenance.
 const officialReplacements: Record<string, {url: string; source: string; oldHost: string; kind?: 'reference'}> = {
+  'goa-882f1625644e': {url:'https://goawaterstories.livingwatersmuseum.org/stories/khazan-clay-chronicles', oldHost:'www.khazansocietyofgoa.org', source:'https://goawaterstories.livingwatersmuseum.org/stories/khazan-clay-chronicles', kind:'reference'},
+  'goa-2e90623e662e': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI=', oldHost:'www.asigoacircle.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjI=', kind:'reference'},
+  'goa-78e01be21a74': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTky', oldHost:'archaeology.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTky', kind:'reference'},
+  'goa-fbe32ea13951': {url:'https://censusindia.gov.in/census.website/en/about/directorates', oldHost:'www.censusindia.gov.in', source:'https://censusindia.gov.in/census.website/en/about/directorates', kind:'reference'},
+  'goa-b6e6533e8f80': {url:'https://dhe.goa.gov.in/institute/getinstitut/', oldHost:'www.goahomescience.gov.in', source:'https://dhe.goa.gov.in/institute/getinstitut/', kind:'reference'},
+  'goa-171da1ccbbde': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/OTg=', oldHost:'www.ghrssidc.org', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/OTg=', kind:'reference'},
+  'goa-e1d5260d2b1a': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTAz', oldHost:'www.gipard.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTAz', kind:'reference'},
+  'goa-b68170be26b9': {url:'https://dol.goa.gov.in/goa-konkani-akademi/', oldHost:'www.konkaniakademi.goa.gov.in', source:'https://dol.goa.gov.in/goa-konkani-akademi/', kind:'reference'},
+  'goa-8af59504cb9f': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTA5', oldHost:'gsrb.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTA5', kind:'reference'},
+  'goa-a64f76a17df7': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjA2', oldHost:'www.gssa.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjA2', kind:'reference'},
+  'goa-81c6560cb173': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE4', oldHost:'www.scobc.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE4', kind:'reference'},
+  'goa-c6c5af2cad48': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/Mjg4', oldHost:'khandilacollege.edu.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/Mjg4', kind:'reference'},
+  'goa-64e8456a16a7': {url:'https://gpb.goa.gov.in/', oldHost:'www.gpb.nic.in', source:'https://www.goa.gov.in/department/government-polytechnic-bicholim/'},
+  'goa-597e3b159e0c': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTU1', oldHost:'www.konkanrailway.com', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTU1', kind:'reference'},
+  'goa-2c1f49d2c0be': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzE0', oldHost:'www.goaprisons.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MzE0', kind:'reference'},
+  'goa-d7b4709df347': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTgy', oldHost:'www.mptgoa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTgy', kind:'reference'},
+  'goa-6470d041dd67': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjQy', oldHost:'www.goaprisons.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjQy', kind:'reference'},
+  'goa-fc2a37401c8f': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjM3', oldHost:'registration.goa.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjM3', kind:'reference'},
+  'goa-3ba7fd9de188': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjY1', oldHost:'www.goatransport.gov.in', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjY1', kind:'reference'},
+  'goa-f4ead4591659': {url:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjY5', oldHost:'www.goavigilance.nic', source:'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MjY5', kind:'reference'},
   'goa-bb1b92ba4e69': {url:'https://goasacs.goa.gov.in/', oldHost:'goasacs.nic.in', source:'https://www.goa.gov.in/department/goa-state-aids-control-society/'},
   'goa-0d7dd8b631d2': {url:'https://www.goa.gov.in/department/indian-red-cross-society-goa-state-branch/', oldHost:'www.redcrossgoa.org', source:'https://www.goa.gov.in/department/indian-red-cross-society-goa-state-branch/', kind:'reference'},
   'goa-e888fee48910': {url:'https://www.goa.gov.in/department/women-and-child-development/', oldHost:'www.dwcd.goa.gov.in', source:'https://www.goa.gov.in/department/women-and-child-development/', kind:'reference'},
@@ -165,5 +185,6 @@ export function websiteEvidence(value = '', id = '') {
   const raw = value.trim().replace(/\s+/g, '').replace(/^https?:\/\/(?=https?:\/\/)/i, '').replace(/^https?:\/\/http\/\/:/i, 'https://');
   const checked = (checks as Record<string, {status: string; checked_on: string}>)[raw];
   const recovered = Boolean(source || (raw !== fixed && fixed && workingBareHosts.has(new URL(fixed).hostname)));
-  return { status: recovered ? 'responded' : checked?.status || 'not_checked', checked_on: recovered ? '2026-10-27' : checked?.checked_on || '', ...(source ? { source, kind: officialReplacements[id]?.kind || 'website' } : {}) };
+  const reference_url = id === 'goa-1e80169ac63c' && fixed === 'https://goaspcb.gov.in/' ? 'https://dip.goa.gov.in/igood/viewSubCategoryOneDetails/MTE3' : undefined;
+  return { ...(reference_url ? { reference_url } : {}), status: recovered ? 'responded' : checked?.status || 'not_checked', checked_on: recovered ? '2026-10-27' : checked?.checked_on || '', ...(source ? { source, kind: officialReplacements[id]?.kind || 'website' } : {}) };
 }
