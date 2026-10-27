@@ -3,6 +3,16 @@ import topicTranslations from './content/priority-topic-translations.json';
 
 // Draft UI copy. A local speaker should review both languages before publication.
 const translations: Record<string, { hi: string; 'gom-Deva': string }> = {
+  "What would you like to do?": { hi: "आप क्या करना चाहेंगे?", 'gom-Deva': "तुमकां कितें करपाक जाय?" },
+  "How to get started": { hi: "शुरुआत कैसे करें", 'gom-Deva': "सुरवात कशी करची" },
+  "People & organisations": { hi: "लोग और संगठन", 'gom-Deva': "लोक आनी संस्था" },
+  "See all": { hi: "सभी देखें", 'gom-Deva': "सगळें पळयात" },
+  "Browse the wider directory": { hi: "पूरी निर्देशिका देखें", 'gom-Deva': "पुराय निर्देशिका पळयात" },
+  "Guides & useful reading": { hi: "मार्गदर्शिकाएँ और उपयोगी सामग्री", 'gom-Deva': "मार्गदर्शिका आनी उपेगी वाचन" },
+  "See all guides": { hi: "सभी मार्गदर्शिकाएँ देखें", 'gom-Deva': "सगळ्यो मार्गदर्शिका पळयात" },
+  "Choose a different option": { hi: "दूसरा विकल्प चुनें", 'gom-Deva': "दुसरो पर्याय निवडात" },
+  "Choose a different need": { hi: "दूसरी ज़रूरत चुनें", 'gom-Deva': "दुसरी गरज निवडात" },
+  "Choose a different topic": { hi: "दूसरा विषय चुनें", 'gom-Deva': "दुसरो विशय निवडात" },
   "Report illegal dumping": { hi: "अवैध डंपिंग की रिपोर्ट करें", "gom-Deva": "बेकायदेशीर डंपिंगाची म्हायती दिवप" },
   "Get extra rubbish collected": { hi: "अतिरिक्त कूड़ा एकत्र करें", "gom-Deva": "अतिरिक्त कचरो एकठांय करचो" },
   "Find a recycler": { hi: "एक पुनर्चक्रणकर्ता खोजें", "gom-Deva": "रिसायकल करपी सोदून काडात" },
