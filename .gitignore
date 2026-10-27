@@ -21,3 +21,9 @@ data/fetch-manifest.json
 reports/link-checks.jsonl
 *.tsbuildinfo
 *.log
+.research-index/
+.pytest_cache/
+corpus/*
+!corpus/ecology-seeds.json
+!corpus/ecology-research-snapshot.json
+!corpus/seeds*.json

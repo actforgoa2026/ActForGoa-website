@@ -1,0 +1,470 @@
+[
+  {
+    "url": "https://geoportal.natmo.gov.in/sites/default/files/State_Atlas_of_Goa.pdf",
+    "title_hint": "State Atlas",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://dip.goa.gov.in/physiography/",
+    "title_hint": "Goa Department of Information and Publicity",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://dmg.goa.gov.in/",
+    "title_hint": "Directorate of Mines and Geology",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://ccari.res.in/rice.html",
+    "title_hint": "ICAR CCARI on rice environments",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://icar.gov.in/index.php/en/farmers-sensitized-soil-test-based-balanced-nutrient-management-icar-ccari-goa",
+    "title_hint": "ICAR CCARI soil management programme",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/view/796",
+    "title_hint": "IMD rainfall study",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://ds.data.jma.go.jp/gmd/tcc/tcc/products/climate/climatview/graph_mkhtml_nrm.php?e=6&k=0&m=12&n=43192&r=0&s=1&y=2020",
+    "title_hint": "JMA station-normal table for Panjim",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.jalshakti-dowr.gov.in/static/uploads/2024/12/ef14a888b8fda9609ebb2d776720b52a.pdf",
+    "title_hint": "CGWB national assessment 2024, Goa chapter",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://assets.publishing.service.gov.uk/media/57a08c3140f0b652dd001186/R8173a.pdf",
+    "title_hint": "Goa groundwater and mining research report",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.pib.gov.in/PressReleasePage.aspx?PRID=2206073&lang=1&reg=1",
+    "title_hint": "Ministry of Jal Shakti assessment reported in December 2025",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.cgwb.gov.in/cgwbpnm/public/uploads/documents/174823987024232641file.pdf",
+    "title_hint": "CGWB's Goa assessment",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0022169413004770",
+    "title_hint": "Krishnaswamy and colleagues 2013",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://sandrp.in/2016/11/25/goa-river-profile/",
+    "title_hint": "Goa river profile and source compilation",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://goawrd.gov.in/sites/default/files/State%20water%20policy%202021.pdf",
+    "title_hint": "State Water Policy 2021",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://doi.org/10.1016/S0302-3524(81)80058-8",
+    "title_hint": "Mandovi–Zuari estuary study",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://doi.org/10.1016/j.ecss.2010.10.007",
+    "title_hint": "Mandovi and Zuari sediment study",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://link.springer.com/article/10.1007/s12040-024-02389-x",
+    "title_hint": "Anilkumar, Shankar and Suprit 2024",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.sciencedirect.com/science/article/pii/S092479632030004X",
+    "title_hint": "Candolim marine study 2020",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+    "title_hint": "Goa climate action plan",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2023GL103975",
+    "title_hint": "Koul and colleagues 2023",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://v1.wii.gov.in/eia/wildlife_database/goa",
+    "title_hint": "Wildlife Institute of India database",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-2_2023.pdf",
+    "title_hint": "FSI Goa tables",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://fsi.nic.in/uploads/isfr2023/isfr_book_eng-vol-1_2023.pdf",
+    "title_hint": "FSI definitions",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.nature.com/articles/s41598-025-00167-3",
+    "title_hint": "2025 Goa landscape study",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.ncf-india.org/ceros/ecology-and-conservation-of-low-elevation-lateritic-plateaus",
+    "title_hint": "Nature Conservation Foundation plateau research",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://threatenedtaxa.org/index.php/JoTT/article/view/24",
+    "title_hint": "Desai and Shanbhag 2012",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://forest.goa.gov.in/sites/default/files/2024-04/Status%20and%20Distribution%20of%20Avifauna.pdf",
+    "title_hint": "ZSI Goa bird report",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://forest.goa.gov.in/sacred-groves",
+    "title_hint": "Goa Forest Department sacred groves",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.researchgate.net/publication/27667306_Restoration_of_sand_dunes_along_human-altered_coasts_a_scheme_for_Miramar_beach_Goa",
+    "title_hint": "Mascarenhas on Miramar dune restoration",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.goa.gov.in/places/galgibaga-turtle-beach/",
+    "title_hint": "Government of Goa on Galgibaga",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://link.springer.com/book/10.1007/978-94-007-7202-1",
+    "title_hint": "Sangeeta M Sonak, Khazan Ecosystems of Goa",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://goawaterstories.livingwatersmuseum.org/stories/khazans-of-chorao-island",
+    "title_hint": "Chorao khazan field account",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://goacollegeofagriculture.edu.in/wp-content/uploads/2025/02/Goa-State-Agriculture-Policy-2025-dated-12-02-25.pdf",
+    "title_hint": "Goa State Agriculture Policy 2025",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://amphibiansoftheworld.amnh.org/Amphibia/Gymnophiona/Grandisoniidae/Gegeneophis/Gegeneophis-pareshi",
+    "title_hint": "Gegeneophis pareshi",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://amphibiansoftheworld.amnh.org/Amphibia/Gymnophiona/Grandisoniidae/Gegeneophis/Gegeneophis-goaensis",
+    "title_hint": "Gegeneophis goaensis",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://amphibiansoftheworld.amnh.org/Amphibia/Anura/Dicroglossidae/Dicroglossinae/Minervarya/Minervarya-gomantaki",
+    "title_hint": "Minervarya gomantaki",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://amphibiansoftheworld.amnh.org/Amphibia/Anura/Dicroglossidae/Dicroglossinae/Minervarya/Minervarya-goemchi",
+    "title_hint": "Minervarya goemchi",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.zoores.ac.cn/fileDWXYJ/journal/article/file/6c484395-f6a6-4821-aa85-ab20fa7fa091.pdf",
+    "title_hint": "Cnemaspis taxonomic supplementary material",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://forest.goa.gov.in/sites/default/files/2025-09/Management-Plan-of-Bondla-Wildlife-Sanctuary.pdf",
+    "title_hint": "Bondla management plan",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://www.rufford.org/projects/isha-bopardikar/assessing-the-status-of-coastal-cetaceans-in-an-important-marine-mammal-area-imma-off-the-west-coast-of-india/",
+    "title_hint": "Coastal cetacean research programme",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://goaspcb.gov.in/wp-content/uploads/2026/07/FINAL-NWMP-APPROVED-MARCH-2026.pdf",
+    "title_hint": "GSPCB March 2026 monitoring results",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://doi.org/10.1016/j.marpolbul.2016.10.075",
+    "title_hint": "Sebastian and colleagues 2017",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://moes.gov.in/sites/default/files/LS-English-32-24-07-2024.pdf",
+    "title_hint": "Ministry of Earth Sciences parliamentary reply",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://eprints.cmfri.org.in/19094/",
+    "title_hint": "CMFRI marine fish landings report for 2024",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://link.springer.com/article/10.1007/s10661-025-13776-2",
+    "title_hint": "Goa shellfish microplastic study",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://forest.goa.gov.in/sites/default/files/2024-04/Identification%20and%20Managementof%20Forest%20Fire.pdf",
+    "title_hint": "Forest fire management report",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://ccari.res.in/agni/crop-science.html",
+    "title_hint": "ICAR CCARI crop science",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://goaspcb.gov.in/water-quality-monitoring/",
+    "title_hint": "GSPCB water-quality archive",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://gwdata.cgwb.gov.in/download/Bulletin/Goa-WL-Bulletin-Pre-monsoon2025.pdf",
+    "title_hint": "CGWB's pre-monsoon 2025 groundwater bulletin",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://iotn.org/iotn07-05-notes/",
+    "title_hint": "Dongre and Shambhu on community turtle conservation",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "https://chatgpt.com/space/page_bdd3d9c1b9c48191bbdfff7ba5d62cbd",
+    "depth": 0
+  },
+  {
+    "url": "https://mausamjournal.imd.gov.in/index.php/MAUSAM/article/download/796/680/2837",
+    "title_hint": "Goa rainfall variability research",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "full text linked by research source",
+    "depth": 0
+  },
+  {
+    "url": "https://www.nature.com/articles/s41598-025-00167-3.pdf",
+    "title_hint": "Goa landscape change research",
+    "topics": [
+      "ecology"
+    ],
+    "discovered_from": "full text linked by research source",
+    "depth": 0
+  }
+]

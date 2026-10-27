@@ -11,7 +11,12 @@
     "crawl": ".venv/bin/python scripts/crawl.py",
     "extract": ".venv/bin/python scripts/extract.py",
     "audit:links": ".venv/bin/python scripts/audit_links.py",
-    "index:semantic": "node scripts/embeddings.mjs"
+    "index:semantic": "node scripts/embeddings.mjs",
+    "research:ingest": ".venv/bin/python scripts/ingest_ecology.py",
+    "research:index": ".venv/bin/python scripts/build_research_index.py",
+    "research:api": ".venv/bin/python -m uvicorn backend.app:app --host 127.0.0.1 --port 8091",
+    "research:dev": ".venv/bin/python scripts/serve_research.py",
+    "research:test": ".venv/bin/python -m pytest tests/research -q"
   },
   "dependencies": {
     "@fontsource-variable/literata": "^5.3.0",
