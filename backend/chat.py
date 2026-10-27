@@ -99,6 +99,8 @@ source dates get separate entries even when document IDs happen to match.
     sources, source_ids, passages = {}, {}, []
     for item in evidence:
         source = {key: item[key] for key in source_keys if key in item}
+        if provider == 'anthropic' and 'title' in item:
+            source['catalogue_scope_hint'] = item['title']
         identity = json.dumps(source, ensure_ascii=False, sort_keys=True, separators=(',', ':'))
         if identity not in source_ids:
             identifier = 'source-' + str(len(sources) + 1)

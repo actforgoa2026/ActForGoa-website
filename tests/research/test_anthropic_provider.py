@@ -401,7 +401,8 @@ def test_native_payload_withholds_catalogue_cues_without_changing_public_citatio
     payload=json.loads(prepared.messages[-1]['content']);source=next(iter(payload['sources'].values()))
     hidden={'title','url','publisher_class','document_kind_hint','topics'}
     assert not hidden & source.keys()
-    assert source=={k:item[k] for k in ('document_id','generation','retrieved_at','legal_currency','source_date_metadata','guide_verification')}
+    assert source=={**{k:item[k] for k in ('document_id','generation','retrieved_at','legal_currency','source_date_metadata','guide_verification')},
+                    'catalogue_scope_hint':item['title']}
     assert payload['evidence'][0]['text']==item['text'] and payload['evidence'][0]['page_heading']=='Wetlands'
     assert prepared.evidence==[original] and item==original
     for provider in (None,'openrouter','qwen','openai'):
@@ -421,6 +422,7 @@ def test_primary_text_object_cannot_be_missing_or_replaced_by_metadata(prepared,
     {'citation_id':'passage-1','field':'text','quote':'Unseen source text.'},
     {'citation_id':'other','field':'text','quote':'regulate tidal water'},
     {'citation_id':'passage-1','field':'title','quote':'Khazan study'},
+    {'citation_id':'passage-1','field':'catalogue_scope_hint','quote':'Khazan study'},
 ])
 def test_valid_primary_cannot_mask_invalid_additional_support(prepared,support):
     from backend.anthropic_provider import normalize_native_answer
