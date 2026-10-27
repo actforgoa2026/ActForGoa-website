@@ -143,7 +143,7 @@ def create_app(root=None, index_root=None, client=None):
             retrieval=request.question+(' '+previous[:500] if len(request.question.split())<8 else '')
             evidence=retrieve(retrieval,10,request.document_id,request.generation)
             if not evidence:return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'notice':'No evidence was found. Try different terms.'}
-            prepared=prepare_answer(request,evidence)
+            prepared=prepare_answer(request,evidence,provider=config.provider)
             cache_key=answers.key(config,prepared) if not request.history else None
             cached=answers.get(cache_key) if cache_key else None
             if cached is not None:return cached

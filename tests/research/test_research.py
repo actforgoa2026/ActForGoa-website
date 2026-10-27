@@ -321,8 +321,9 @@ def test_anthropic_hybrid_chat_citations_full_documents_and_cache(collection, mo
     def provider(request):
         body = json.loads(request.content); calls.append(body)
         evidence = json.loads(body['messages'][-1]['content'])['evidence'][0]
-        return httpx.Response(200, json=anthropic_message({'status': 'answered', 'paragraphs': [
-            {'text': evidence['text'], 'citations': [evidence['id']]}]}))
+        paragraph={'text': evidence['text'], 'citations': [evidence['id']]}
+        key='paragraph' if 'paragraph' in body['output_config']['format']['schema']['properties'] else 'paragraphs'
+        return httpx.Response(200, json=anthropic_message({'status': 'answered',key:paragraph if key=='paragraph' else [paragraph]}))
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:
         with TestClient(create_app(collection[0], client=model)) as client:
             status = client.get('/api/status').json()
@@ -350,6 +351,9 @@ def test_anthropic_hybrid_chat_citations_full_documents_and_cache(collection, mo
             scoped = client.post('/api/chat', json={**question, 'document_id': cite['document_id'], 'generation': cite['generation']})
             assert scoped.status_code == 200
             assert all(c['document_id'] == cite['document_id'] for c in scoped.json()['citations'])
+            brief=client.post('/api/chat',json={**question,'answer_style':'brief'})
+            assert brief.status_code==200 and len(brief.json()['paragraphs'])==1
+            assert 'paragraph' in calls[-1]['output_config']['format']['schema']['properties']
 
 
 @pytest.mark.parametrize('failure', ['401', '402', '429', '529', 'timeout', 'invalid-json', 'bad-citation', 'refusal', 'truncated'])

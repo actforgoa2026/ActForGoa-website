@@ -43,25 +43,80 @@ def native_schema(schema):
     return result
 
 
+def native_brief_schema(schema):
+    # Native outputs cannot enforce maxItems. A nullable object represents
+    # exactly one paragraph, with no array to silently combine or truncate.
+    return native_schema({
+            'type': 'object', 'additionalProperties': False,
+            'properties': {
+                'status': schema['properties']['status'],
+                'paragraph': {'anyOf': [schema['properties']['paragraphs']['items'], {'type': 'null'}]},
+            },
+            'required': ['status', 'paragraph'],
+        })
+
+
+def native_brief_instructions(instructions, schema):
+    return instructions + (
+            '\nReturn only status and paragraph. For answered, paragraph is one object with text and citations; '
+            'for insufficient_evidence, paragraph is null. Never return a paragraphs array. '
+            'Return JSON conforming to this inline schema: '
+        ) + json.dumps(schema, ensure_ascii=False, separators=(',', ':'))
+
+
 def message_request(config, prepared):
     # Recheck the same reviewed rate tier before dispatch, even for direct callers.
+    from .chat import MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
     config.maximum_cost_microusd(prepared.input_token_bound)
-    size = len(json.dumps(prepared.messages, ensure_ascii=False, separators=(',', ':')).encode())
-    if size > prepared.input_token_bound:
+    schema = native_schema(prepared.schema)
+    system = prepared.messages[0]['content']
+    if prepared.answer_style == 'brief':
+        if not prepared.base_instructions:
+            raise ValueError('Missing native brief instructions')
+        schema = native_brief_schema(prepared.schema)
+        expected = native_brief_instructions(prepared.base_instructions, schema)
+        if system != expected:
+            raise ValueError('Native brief context was not prepared before budgeting')
+    messages = [{'role': 'system', 'content': system}, *prepared.messages[1:]]
+    size = len(json.dumps(messages, ensure_ascii=False, separators=(',', ':')).encode())
+    if size > MAX_PROMPT_BYTES or size + FRAMING_TOKEN_ALLOWANCE > prepared.input_token_bound:
         raise ValueError('The native prompt exceeds its reserved allowance')
     return {
         'model': config.model,
         'max_tokens': config.max_output_tokens,
-        'system': prepared.messages[0]['content'],
+        'system': system,
         'messages': prepared.messages[1:],
         'stream': False,
         'service_tier': 'standard_only',
         'thinking': {'type': 'adaptive'},
         'output_config': {
             'effort': 'medium',
-            'format': {'type': 'json_schema', 'schema': native_schema(prepared.schema)},
+            'format': {'type': 'json_schema', 'schema': schema},
         },
     }
+
+
+def normalize_brief_answer(content, prepared):
+    # Delayed import avoids the chat -> providers -> adapter import cycle.
+    from pydantic import ValidationError
+    from .chat import Paragraph
+    try:
+        payload = json.loads(content)
+        if (not isinstance(payload, dict) or set(payload) != {'status', 'paragraph'}
+                or payload['status'] not in ('answered', 'insufficient_evidence')):
+            raise ValueError()
+        if payload['status'] == 'insufficient_evidence':
+            if payload['paragraph'] is not None:raise ValueError()
+            paragraphs = []
+        else:
+            paragraph = Paragraph.model_validate(payload['paragraph'], strict=True)
+            allowed = prepared.schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']
+            if any(c not in allowed for c in paragraph.citations):
+                raise ValueError()
+            paragraphs = [paragraph.model_dump()]
+    except (ValueError, ValidationError):
+        raise ValueError('The native brief answer did not match the required schema') from None
+    return json.dumps({'status': payload['status'], 'paragraphs': paragraphs}, ensure_ascii=False)
 
 
 class AnthropicClient:
@@ -106,7 +161,8 @@ class AnthropicClient:
                 raise ValueError('The answer service returned unsupported content')
         if not texts or not ''.join(texts).strip():
             raise ValueError('No structured answer was returned')
-        return ''.join(texts)
+        content = ''.join(texts)
+        return normalize_brief_answer(content, prepared) if prepared.answer_style == 'brief' else content
 
     def close(self):
         self._http.close()
