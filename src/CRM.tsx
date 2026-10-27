@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Link, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowLeft, ArrowRight, Download, ExternalLink, Mail, Phone, Upload, X, Check, ArrowDown } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Download, Upload, X, Check, ArrowDown } from 'lucide-react';
 import { Button } from './components/arc/button/button';
 import { SearchField } from './components/arc/search-field/search-field';
 import { Input } from './components/arc/input/input';
@@ -8,6 +8,7 @@ import { Textarea } from './components/arc/textarea/textarea';
 import { activityLabel, activityLabels, backupJSON, collections, contactLabels, directoryFacets, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, split, stages, storageKey, verification, verificationLabels, words, type CRMNote, type CRMRecord, type CRMSnapshot, type Stage, type Workspace } from './crm-model';
 import { CRMDirectoryActions, CRMDirectoryPhoto, CRMDirectoryTags } from './CRMDirectoryInfo';
 import { crmDirectoryDetails } from './crm-directory';
+import { ListingLink } from './ListingLink';
 import './crm.css';
 
 function download(name: string, text: string, type = 'application/json') {
@@ -22,7 +23,7 @@ function Select({ label, value, onChange, options, all, disabled }: { label: str
   </select></label>;
 }
 function External({ href, children }: { href: string; children: ReactNode }) {
-  const url = safeUrl(href); return url ? <a href={url} target="_blank" rel="noopener noreferrer">{children}<ExternalLink size={14} aria-hidden="true" /></a> : null;
+  const url = safeUrl(href); return url ? <ListingLink href={url} kind="source">{children}</ListingLink> : null;
 }
 function Sources({ value }: { value: string }) {
   return <ul className="crm-sources">{Array.from(new Set(split(value))).filter(safeUrl).map((url, i) => <li key={url}><External href={url}>{i + 1}. {new URL(url).hostname.replace(/^www\./, '')}<span className="crm-source-path">{new URL(url).pathname.slice(0, 160)}</span></External></li>)}</ul>;
@@ -140,7 +141,7 @@ export default function CRM() {
       localStorage.setItem(storageKey, backupJSON(merged)); setWorkspace(merged); setPending(null); setStorageError(''); setFeedback('Backup imported. Notes are saved in this browser.');
     } catch (e) { setImportError(e instanceof Error ? e.message : 'Could not save the imported backup.'); }
   }
-  return <main className="crm shell">
+  return <main className={`crm shell${recordId ? " crm-record-page" : ""}`}>
     <header className="crm-heading"><div><h1>Goa community CRM</h1><p>Find the people, organisations and public offices working across Goa.</p></div>
       <div className="crm-actions"><Button variant="secondary" onClick={exportBackup}><Download size={16} aria-hidden="true" />Export backup</Button><Button variant="secondary" onClick={() => chooser.current?.click()}><Upload size={16} aria-hidden="true" />Import backup</Button><input className="crm-file" type="file" accept=".json,application/json" ref={chooser} aria-label="Import CRM backup file" onChange={e => { void importFile(e.target.files?.[0]); e.target.value = ''; }} /></div>
     </header>
@@ -195,18 +196,18 @@ export default function CRM() {
 
 function RecordDetail({ record: r, note, save, byId, recordLink, opportunities }: { record: CRMRecord; note: CRMNote; save: (id: string, update: Partial<CRMNote>) => void; byId: Map<string, CRMRecord>; recordLink: (id: string) => string; opportunities: CRMRecord[] }) {
   const deceased = r.activity_status === 'deceased_historical_record';
-  const socialFields = { instagram_url: 'Instagram', facebook_url: 'Facebook', linkedin_url: 'LinkedIn', x_url: 'X', youtube_url: 'YouTube' };
+  const place = crmDirectoryDetails(r);
   return <article className="crm-detail"><div className="crm-record-main">
     <header><span className="crm-meta">{words(r.record_type)} · {r.goa_location || r.jurisdiction || 'Goa'}</span><h2>{r.name}</h2>{(r.role || r.organization) && <p className="crm-affiliation">{[r.role, r.organization].filter(Boolean).join(' · ')}</p>}<p className="crm-description">{r.summary}</p><CRMDirectoryTags record={r} full /><CRMDirectoryPhoto record={r} detail /></header>
+    <section className="crm-contacts"><h3>Public contact details</h3>{deceased ? <p>This is a historical record of a deceased contributor. It is excluded from outreach.</p> : <><p className="crm-context">{words(r.contact_kind) || 'No direct route verified'}. Shared office and referral routes may serve multiple people.</p><CRMDirectoryActions record={r} full />{!r.public_phone && !r.public_email && <p className="crm-context">No public phone or email was verified.</p>}{r.referral_route && <p className="crm-description">{r.referral_route}</p>}</>}
+      {r.contact_source_urls && <details><summary>Sources for these contacts</summary><Sources value={r.contact_source_urls} /></details>}
+    </section>
     <section className="crm-evidence"><h3>Activity & verification</h3><dl><div><dt>Activity</dt><dd>{activityLabel(r)}{r.activity_evidence_date && <span> · Evidence dated {r.activity_evidence_date}</span>}</dd></div><div><dt>Source review</dt><dd>{verificationLabels[verification(r)]}</dd></div><div><dt>Research checked</dt><dd>{r.checked_on || 'Not recorded'}</dd></div><div><dt>Contact verification</dt><dd>{r.public_phone || r.public_email ? 'Publicly listed. Phone and email delivery have not been tested.' : 'No direct public phone or email established.'}</dd></div></dl><p>{r.activity_verification_notes || 'Recent environmental activity was not assessed for this government record. An official listing does not independently confirm current tenure.'}</p>{r.activity_evidence_url && <External href={r.activity_evidence_url}>Read activity evidence</External>}
       <details><summary>Full verification notes</summary><p>{r.verification_status.split(';').map(words).join('. ')}.</p>{r.notes && <p>{r.notes}</p>}<p>Record ID: {r.record_id}</p></details>
     </section>
-    <section className="crm-contacts"><h3>Public contact details</h3>{deceased ? <p>This is a historical record of a deceased contributor. It is excluded from outreach.</p> : <><p className="crm-context">{words(r.contact_kind) || 'No direct route verified'}. Shared office and referral routes may serve multiple people.</p><div className="crm-contact-links">{split(r.public_phone).filter(p => /^\+\d+$/.test(p)).map(phone => <a key={phone} href={'tel:' + phone}><Phone size={17} aria-hidden="true" />{phone}</a>)}{split(r.public_email).filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)).map(email => <a key={email} href={'mailto:' + email}><Mail size={17} aria-hidden="true" />{email}</a>)}{!r.public_phone && !r.public_email && <p>No public phone or email was verified.</p>}<External href={r.website_url}>Website or reference page</External>{Object.entries(socialFields).map(([field, label]) => <External key={field} href={r[field]}>{label}</External>)}</div>{r.referral_route && <p className="crm-description">{r.referral_route}</p>}</>}
-      {r.contact_source_urls && <details><summary>Sources for these contacts</summary><Sources value={r.contact_source_urls} /></details>}
-    </section>
-    {(opportunities.length > 0 || r.how_to_help || r.volunteer_url) && <section><h3>Ways to get involved</h3><p>{words(r.volunteer_status).replaceAll(';', '.')}</p>{r.how_to_help && <p>{r.how_to_help}</p>}<External href={r.volunteer_url}>Participation details</External><p className="crm-context">Confirm current dates, eligibility and availability with the organiser. A listed route may have a closed intake.</p></section>}
+    {(opportunities.length > 0 || r.how_to_help || r.volunteer_url) && <section><h3>Ways to get involved</h3><p>{words(r.volunteer_status).replaceAll(';', '.')}</p>{r.how_to_help && <p>{r.how_to_help}</p>}<p className="crm-context">Confirm current dates, eligibility and availability with the organiser. A listed route may have a closed intake.</p></section>}
     {split(r.related_record_ids).some(id => byId.has(id)) && <section><h3>Related people & organisations</h3><ul className="crm-related">{split(r.related_record_ids).filter(id => byId.has(id)).map(id => <li key={id}><Link to={recordLink(id)}>{byId.get(id)!.name}<ArrowRight size={16} aria-hidden="true" /></Link></li>)}</ul></section>}
-    {crmDirectoryDetails(r) && <section><h3>Place & work details</h3>{crmDirectoryDetails(r)!.address && <p>{crmDirectoryDetails(r)!.address}</p>}<CRMDirectoryActions record={r} /><Sources value={crmDirectoryDetails(r)!.sources.filter(url => !split(r.source_urls).includes(url)).join(" | ")} /><p className="crm-context">Additional details checked {crmDirectoryDetails(r)!.checkedAt || "against the original listing"}. Confirm the address and availability before visiting.</p></section>}
+    {place && <section><h3>Place & work sources</h3><Sources value={place.sources.filter(url => !split(r.source_urls).includes(url)).join(" | ")} /><p className="crm-context">Additional details checked {place.checkedAt || "against the original listing"}. Confirm the address and availability before visiting.</p></section>}
     <section><h3>Research sources</h3><Sources value={r.source_urls} /><Photo record={r} />{r.profile_photo_url && <p className="crm-context">Image reuse permission has not been established.</p>}</section>
   </div><aside className="crm-workspace" aria-label="Relationship notes"><h3>Your relationship</h3><p className="crm-context">Saved on this browser. These notes do not change the research or its verification status.</p>
     <Select label="Outreach stage" value={note.stage} disabled={deceased} onChange={stage => save(r.record_id, { stage: stage as Stage })} options={stages} />

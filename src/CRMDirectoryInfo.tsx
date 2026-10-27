@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom';
-import { ArrowUpRight, Mail, MapPin } from 'lucide-react';
+import { ListingLink, listingLinkKind } from './ListingLink';
 import { CreditedPhoto } from './DirectoryInfo';
 import { crmDirectoryDetails, crmDirectoryLinks, crmDirectoryMapUrl, crmDirectoryTags } from './crm-directory';
-import type { CRMRecord } from './crm-model';
+import { safeUrl, type CRMRecord } from './crm-model';
 
 export function CRMDirectoryTags({ record, full = false }: { record: CRMRecord; full?: boolean }) {
   const tags = crmDirectoryTags(record);
@@ -16,13 +16,23 @@ export function CRMDirectoryPhoto({ record, href, detail = false }: { record: CR
   return photo ? <CreditedPhoto key={record.record_id} photo={photo} href={href} detail={detail} /> : null;
 }
 
-export function CRMDirectoryActions({ record }: { record: CRMRecord }) {
+export function CRMDirectoryActions({ record, full = false }: { record: CRMRecord; full?: boolean }) {
   if (record.activity_status === 'deceased_historical_record') return null;
   const map = crmDirectoryMapUrl(record);
-  const email = (record.public_email || '').split(' | ').find(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e));
-  return <div className="directory-actions" aria-label={`Links for ${record.name}`}>
-    {crmDirectoryLinks(record).map(link => <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label}<ArrowUpRight size={15} aria-hidden="true" /></a>)}
-    {map && <a href={map} target="_blank" rel="noreferrer"><MapPin size={15} aria-hidden="true" />Find on Maps</a>}
-    {email && <a href={`mailto:${email}`} aria-label={`Email ${record.name}`}><Mail size={15} aria-hidden="true" />Email</a>}
+  const emails = [...new Set((record.public_email || '').split(' | ').filter(e => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e)))];
+  const phones = [...new Set((record.public_phone || '').split(' | ').filter(p => /^\+\d+$/.test(p)))];
+  const links = crmDirectoryLinks(record);
+  if (full) for (const [field, label] of Object.entries({ facebook_url: 'Facebook', linkedin_url: 'LinkedIn', x_url: 'X', youtube_url: 'YouTube' })) {
+    const url = safeUrl(record[field] || '');
+    if (url && !links.some(link => link.url === url)) links.push({ label, url });
+  }
+  const address = crmDirectoryDetails(record)?.address;
+  const primaryLinks = full ? links.filter(link => link.label === 'Website') : links;
+  return <div className={`directory-actions${full ? ' listing-contact-actions' : ''}`} aria-label={`Links for ${record.name}`}>
+    {primaryLinks.map(link => <ListingLink key={link.url} href={link.url} kind={listingLinkKind(link.label)}>{full && link.label === 'Website' ? 'Website or reference page' : link.label}</ListingLink>)}
+    {(full ? emails : emails.slice(0, 1)).map(email => <ListingLink key={email} href={`mailto:${email}`} label={full ? undefined : `Email ${record.name}`}>{full ? email : 'Email'}</ListingLink>)}
+    {full && phones.map(phone => <ListingLink key={phone} href={`tel:${phone}`}>{phone}</ListingLink>)}
+    {map && <ListingLink href={map} kind="map">{full && address ? `Map: ${address}` : 'Find on Maps'}</ListingLink>}
+    {full && links.filter(link => link.label !== 'Website').map(link => <ListingLink key={link.url} href={link.url} kind={listingLinkKind(link.label)}>{link.label}</ListingLink>)}
   </div>;
 }

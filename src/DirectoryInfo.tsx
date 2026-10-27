@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './directory.css';
 import { Link, useLocation } from 'react-router-dom';
-import { ArrowUpRight, Mail, MapPin } from 'lucide-react';
+import { ListingIcon, ListingLink, listingLinkKind } from './ListingLink';
 import { directoryLinks, directoryMapUrl, directoryTags } from './directory';
 import type { DirectoryDetails, RecordItem } from './types';
 
@@ -16,13 +16,15 @@ export function DirectoryActions({ record, full = false }: { record: RecordItem;
   const map = directoryMapUrl(record);
   const website = links.find(link => link.label === 'Website');
   const other = links.filter(link => link !== website);
-  const email = record.emails[0];
-  return <div className="directory-actions" aria-label={`Links for ${record.title}`}>
-    {website && <a href={website.url} target="_blank" rel="noreferrer">Website <ArrowUpRight size={15} /></a>}
-    {map && <a href={map} target="_blank" rel="noreferrer"><MapPin size={15} /> Find on Maps</a>}
-    {email && <a href={`mailto:${email}`} aria-label={`Email ${record.title}`}><Mail size={15} /> Email</a>}
-    {(full ? other : other.slice(0, 2)).map(link => <a key={link.url} href={link.url} target="_blank" rel="noreferrer">{link.label} <ArrowUpRight size={15} /></a>)}
-    {!links.length && !email && <a href={record.source} target="_blank" rel="noreferrer">Source listing <ArrowUpRight size={15} /></a>}
+  const emails = [...new Set(record.emails)];
+  const mapAddress = map ? record.locations.find(value => value.trim().length > 5 && !/^goa(?:,? india)?$/i.test(value.trim())) : undefined;
+  return <div className={`directory-actions${full ? ' listing-contact-actions' : ''}`} aria-label={`Links for ${record.title}`}>
+    {website && <ListingLink href={website.url} kind="website">Website</ListingLink>}
+    {(full ? emails : emails.slice(0, 1)).map(email => <ListingLink key={email} href={`mailto:${email}`} label={full ? undefined : `Email ${record.title}`}>{full ? email : 'Email'}</ListingLink>)}
+    {map && <ListingLink href={map} kind="map">{full && mapAddress ? `Map: ${mapAddress}` : 'Find on Maps'}</ListingLink>}
+    {full && [...new Set(record.locations)].filter(location => location !== mapAddress).map(location => <div className="listing-location" key={location}><ListingIcon kind="map" /><span>{location}</span></div>)}
+    {(full ? other : other.slice(0, 2)).map(link => <ListingLink key={link.url} href={link.url} kind={listingLinkKind(link.label)}>{link.label}</ListingLink>)}
+    {!full && !links.length && !emails.length && <ListingLink href={record.source} kind="source">Source listing</ListingLink>}
   </div>;
 }
 
