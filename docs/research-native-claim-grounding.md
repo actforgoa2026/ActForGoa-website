@@ -19,7 +19,10 @@ or authorization to enable public AI answers.
   year-only granularity.
 - Native model-visible sources include this label alongside unchanged raw
   metadata. A paragraph citing such a source must include an exact full-label
-  support. If resolved, its text must include the year as a separate number. The
+  support for that deduplicated model-visible source record. Multiple passages
+  referencing the same record may share this support within the paragraph;
+  distinct records each need support even when their year and label are identical.
+  If resolved, the paragraph text must include the year as a separate number. The
   model is instructed to attribute that year to publication, not observation or
   current legal force. The guard applies to every cited source with the label;
   it does not guess which claims are quantitative. Missing acknowledgments reject
@@ -35,10 +38,11 @@ not receive this new annotation. There is no dependency on the offline auditor.
 ## Verification
 
 The focused provider, publication, chat-control and acceptance suites passed:
-**199 tests**, with five existing PyMuPDF SWIG deprecation warnings. Tests cover
+**220 tests**, with five existing PyMuPDF SWIG deprecation warnings. Tests cover
 invalid/conflicting metadata, source immutability, brief/standard output, both
 model configurations, missing or borrowed date support, altered labels and
-lossless normalization. A deliberate counterexample demonstrates that genuine
+lossless normalization, shared-source acknowledgment and preserved context-text
+requirements. A deliberate counterexample demonstrates that genuine
 quotes and a correctly acknowledged year can still accompany a false assertion.
 
 Four saved-capture compaction fixtures compared this candidate with integration
@@ -49,13 +53,23 @@ and eleven species passages, including the supplied table header.
 
 | Fixture | Prompt bytes before | Prompt bytes after | Schema bytes after |
 | --- | ---: | ---: | ---: |
-| water, standard | 21365 | 21985 | 1707 |
-| water, brief | 21723 | 22343 | 1708 |
-| species, standard | 22495 | 23191 | 1777 |
-| species, brief | 22853 | 23549 | 1778 |
+| water, standard | 21365 | 22123 | 1707 |
+| water, brief | 21723 | 22481 | 1708 |
+| species, standard | 22495 | 23329 | 1777 |
+| species, brief | 22853 | 23687 | 1778 |
 
 These are below the existing 24000-byte prompt and 4096-byte schema limits.
 No native corpus access or provider calls were made for these checks.
+
+The acceptance harness also records the actual validated request and supplied
+field names, retained conversation history, and exact outgoing UTF-8 body with
+its byte length and SHA-256. The body contains the actual system instructions,
+messages, visible evidence and schema. Mock transport tests prove unchanged
+request objects, headers and body bytes for both models and answer styles.
+Unknown or credential-like payloads are refused with a fixed status only;
+headers, generated reasoning and upstream error bodies are not saved. No-dispatch
+and unavailable captures are explicit. These diagnostics do not change the
+application runtime or establish semantic correctness.
 
 ## Still required
 

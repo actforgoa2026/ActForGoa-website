@@ -137,3 +137,54 @@ def test_date_acknowledgement_does_not_certify_meaning():
     unit['text'] = 'A source published in 2025 proves all ponds everywhere hold water all year.'
     result = json.loads(normalize_native_answer(json.dumps(native_answer(unit)), prepared))
     assert result['paragraphs'][0]['text'] == unit['text']
+
+
+@pytest.mark.parametrize('distinct_source', [False, True])
+def test_each_source_has_its_own_local_label_while_same_source_passages_share_one(distinct_source):
+    evidence = dated_evidence()
+    second = deepcopy(evidence[0])
+    second.update(id='second', text='A separate observation concerns flowering plants.')
+    if distinct_source:second['document_id'] = 'different-document'
+    evidence.append(second)
+    prepared = prepare_answer(ChatRequest(question='What does the published survey describe?'), evidence, provider='anthropic')
+    payload = json.loads(prepared.messages[-1]['content'])
+    assert len(payload['sources']) == (2 if distinct_source else 1)
+    unit = dated_unit()
+    unit['text'] += ' The 2025 material also describes an observation of flowering plants.'
+    unit['supports'].append({'citation_id': 'second', 'field': 'text', 'quote': second['text']})
+    if distinct_source:
+        # Identical year/label does not make two distinct source records equal.
+        with pytest.raises(ValueError, match='evidence contract'):
+            normalize_native_answer(json.dumps(native_answer(unit)), prepared)
+        unit['supports'].append({'citation_id': 'second', 'field': 'source_publication',
+                                'quote': unit['supports'][0]['quote']})
+    result = json.loads(normalize_native_answer(json.dumps(native_answer(unit)), prepared))
+    assert result['paragraphs'] == [{'text': unit['text'], 'citations': ['survey', 'second']}]
+
+
+def test_shared_source_acknowledgement_cannot_be_borrowed_from_another_paragraph():
+    evidence = dated_evidence()
+    second = deepcopy(evidence[0])
+    second.update(id='second', text='A separate observation concerns flowering plants.')
+    evidence.append(second)
+    prepared = prepare_answer(ChatRequest(question='What does the published survey describe?'), evidence, provider='anthropic')
+    another = {'text': 'The source published in 2025 describes an observation of flowering plants.',
+               'primary_support': {'citation_id': 'second', 'field': 'text', 'quote': second['text']},
+               'supports': []}
+    answer = {'status': 'answered', 'paragraphs': [dated_unit(), another]}
+    with pytest.raises(ValueError, match='evidence contract'):
+        normalize_native_answer(json.dumps(answer), prepared)
+
+
+def test_shared_source_label_does_not_replace_required_context_text():
+    evidence = dated_evidence()
+    context = deepcopy(evidence[0])
+    context.update(id='header', text='Survey columns: year and seasonal pond count.')
+    evidence[0]['supporting_context'] = [context]
+    prepared = prepare_answer(ChatRequest(question='What did the survey observe?'), evidence, provider='anthropic')
+    unit = dated_unit()
+    with pytest.raises(ValueError, match='evidence contract'):
+        normalize_native_answer(json.dumps(native_answer(unit)), prepared)
+    unit['supports'].append({'citation_id': 'header', 'field': 'text', 'quote': context['text']})
+    result = json.loads(normalize_native_answer(json.dumps(native_answer(unit)), prepared))
+    assert result['paragraphs'][0]['citations'] == ['survey', 'header']

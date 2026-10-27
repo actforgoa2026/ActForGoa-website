@@ -114,7 +114,8 @@ def native_answer_instructions(instructions, answer_style):
         'a citation elsewhere in the answer cannot supply a missing premise. Split differently supported points. '
         'Answer independently supported requested parts; attach the exact remaining limitation to the relevant claim. '
         'Do not resolve missing antecedents or qualifications from a catalogue title. '
-        'When a cited source has source_publication, add an additional support quoting that entire label. '
+        'For each distinct cited source record with source_publication, add a paragraph-local support quoting its entire label. '
+        'Passages referencing the same source record may share this support; distinct source records need separate supports. '
         'If the label gives a year, explicitly attribute the source as published in that year in this paragraph. '
         'A publication year is not an observation year, proof of current conditions or verified legal force. '
         'Other metadata supports only dates and limitations, never substantive claims. '
@@ -172,7 +173,7 @@ def _represented_publications(prepared):
         if source.get('source_publication') != expected:
             raise ValueError('Source publication differs from supplied metadata')
         if publication is not None:
-            publications[passage['id']] = publication
+            publications[passage['id']] = {**publication, 'source': passage['source']}
     return publications
 
 
@@ -220,7 +221,7 @@ def normalize_native_answer(content, prepared):
                 if field == 'source_publication':
                     if quote != publications.get(identifier, {}).get('label'):
                         raise ValueError()
-                    publication_supports.add(identifier)
+                    publication_supports.add(publications[identifier]['source'])
             if any(context not in text_supports for identifier in citations for context in contexts[identifier]):
                 raise ValueError()
             paragraph = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
@@ -230,7 +231,7 @@ def normalize_native_answer(content, prepared):
                 publication = publications.get(identifier)
                 if publication is None:
                     continue
-                if identifier not in publication_supports:
+                if publication['source'] not in publication_supports:
                     raise ValueError()
                 year = publication['year']
                 if year is not None and not re.search(r'(?<![0-9])' + f'{year:04d}' + r'(?![0-9])', paragraph.text):
