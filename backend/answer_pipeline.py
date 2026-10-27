@@ -177,12 +177,17 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             notify()
 
         phase_started = time.monotonic()
+        phase_deadline = min(deadline, phase_started + PROVIDER_STAGE_SECONDS)
         try:
-            async with asyncio.timeout(min(PROVIDER_STAGE_SECONDS, max(0, deadline - phase_started))):
+            async with asyncio.timeout(max(0, phase_deadline - phase_started)):
                 content = await client.send(body, on_request=on_request, on_response=on_response)
         except TimeoutError:
             raise fail('provider_deadline' if time.monotonic() >= deadline else 'provider_stage_timeout') from None
         await available()
+        if time.monotonic() >= phase_deadline:
+            # A misbehaving transport can suppress task cancellation and return
+            # late. It must not turn an expired stage into a successful final.
+            raise fail('provider_stage_timeout')
         if stage['provider_attempts'] != 1 or stage.get('provider_http_status') != 200:
             raise fail('missing_dispatch_or_response')
         stage['usage_within_reservation'] = usage_within_bound(stage)

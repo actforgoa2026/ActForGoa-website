@@ -1,5 +1,6 @@
 """One request-owned async transport; cancellation closes active provider I/O."""
 import inspect
+import json
 import re
 import httpx
 
@@ -61,9 +62,11 @@ class AsyncAnthropicClient:
                 final=''.join(b.get('text','') for b in blocks if isinstance(b,dict)
                               and b.get('type')=='text' and isinstance(b.get('text'),str)) if isinstance(blocks,list) else ''
                 secret=self._http.headers.get('authorization','').removeprefix('Bearer ')
-                if ((secret and secret in final)
-                        or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+',final)
-                        or re.search(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:',final,re.I)):
+                try:decoded_final=json.dumps(json.loads(final),ensure_ascii=False)
+                except ValueError:decoded_final=final
+                if ((secret and secret in decoded_final)
+                        or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+',decoded_final)
+                        or re.search(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:',decoded_final,re.I)):
                     on_response(metadata)
                     raise ValueError('The answer service returned unsafe final content')
                 # Phase is carried by the local callback, not sent to the model.

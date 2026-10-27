@@ -148,6 +148,19 @@ def test_stage_deadline_really_cancels_and_closes_io(setup,monkeypatch):
     assert transport.cancelled and transport.closed and len(limits.receipts)==1 and len(transport.requests)==1
 
 
+def test_transport_suppressed_timeout_cannot_publish_late_response(setup,monkeypatch):
+    _,_,_,transport,limits,_,run,_=setup;good=transport.handler
+    monkeypatch.setattr(pipeline,'PROVIDER_STAGE_SECONDS',.02)
+    async def late(req,n):
+        try:await asyncio.sleep(10)
+        except asyncio.CancelledError:pass
+        return await good(req,n)
+    transport.handler=late
+    with pytest.raises(pipeline.PipelineFailure,match='provider_stage_timeout') as caught:run()
+    assert len(transport.requests)==len(limits.receipts)==1 and transport.closed
+    assert 'final_answer' not in caught.value.trace
+
+
 def test_already_expired_entry_time_never_reserves_or_dispatches(setup):
     _,_,_,transport,limits,_,run,_=setup
     with pytest.raises(pipeline.PipelineFailure,match='provider_deadline'):run(request_started_at=time.monotonic()-66)
@@ -282,9 +295,13 @@ def test_failed_final_capture_never_leaves_final_in_failure_trace(setup):
 
 
 @pytest.mark.parametrize('secret',['fixture-only','sk-ant-sensitive-fixture'])
-def test_credential_like_response_never_enters_diagnostic_or_public_answer(setup,secret):
+@pytest.mark.parametrize('escaped',[False,True])
+def test_credential_like_response_never_enters_diagnostic_or_public_answer(setup,secret,escaped):
     _,_,_,transport,_,observed,run,_=setup
-    async def leaked(*_):return model_response({'status':'answered','paragraphs':[claim(secret+'.')]})
+    async def leaked(*_):
+        output=json.dumps({'status':'answered','paragraphs':[claim(secret+'.')]})
+        if escaped:output=output.replace(secret,''.join('\\u%04x'%ord(c) for c in secret))
+        return model_response(output)
     transport.handler=leaked
     with pytest.raises(pipeline.PipelineFailure) as caught:run()
     assert secret not in json.dumps(caught.value.trace) and secret not in json.dumps(observed)
