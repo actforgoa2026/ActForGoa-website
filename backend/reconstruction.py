@@ -108,6 +108,8 @@ def prepare_reconstruction(request, original, draft):
         raise ValueError('Unexpected original evidence payload')
     scope = {'answer_style': request.answer_style, 'document_id': request.document_id,
              'generation': request.generation}
+    if original.request_scope != scope:
+        raise ValueError('Reconstruction scope differs from prepared request')
     correction_payload = {**deepcopy(payload), 'request_scope': scope, 'draft_answer': compact}
     history = deepcopy(original.messages[1:-1])
     messages = [{'role': 'system', 'content': reconstruction_instructions(original.base_instructions, original.answer_style)},
@@ -145,7 +147,8 @@ def reconstruction_message_request(config, prepared):
 def reconstruction_cache_identity(original, version):
     if version != PIPELINE_VERSION:
         raise ValueError('Unknown reconstruction pipeline version')
-    return {'spec': PIPELINE_SPEC, 'correction_instructions': reconstruction_instructions(original.base_instructions, original.answer_style),
+    return {'spec': PIPELINE_SPEC, 'request_scope': original.request_scope,
+            'correction_instructions': reconstruction_instructions(original.base_instructions, original.answer_style),
             'draft_schema': native_answer_schema(original.schema, original.answer_style),
             'correction_schema': reconstruction_schema(original.schema, original.answer_style),
             'correction_prompt_limit': CORRECTION_PROMPT_BYTES, 'draft_byte_limit': COMPACT_DRAFT_BYTES}

@@ -205,6 +205,13 @@ def test_cancelled_native_worker_is_joined_not_abandoned():
     asyncio.run(scenario())
 
 
+def test_cache_separates_request_document_scope_even_with_same_visible_evidence(setup):
+    config,request,prepared,*_=setup
+    scoped=prepare_answer(request.model_copy(update={'document_id':'doc-a','generation':'fixture'}),prepared.evidence,provider='anthropic')
+    assert scoped.messages==prepared.messages
+    assert AnswerCache.key(config,scoped)!=AnswerCache.key(config,prepared)
+
+
 @pytest.mark.parametrize('phase',[1,2])
 def test_disconnect_after_commit_before_send_keeps_receipt(setup,phase):
     config,request,prepared,transport,limits,_,_,factory=setup
@@ -272,3 +279,13 @@ def test_failed_final_capture_never_leaves_final_in_failure_trace(setup):
         asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,observer=observer))
     assert caught.value.trace['status']=='failed' and 'final_answer' not in caught.value.trace
     assert 'final_answer' not in observed[-1] and len(transport.requests)==2 and transport.closed
+
+
+@pytest.mark.parametrize('secret',['fixture-only','sk-ant-sensitive-fixture'])
+def test_credential_like_response_never_enters_diagnostic_or_public_answer(setup,secret):
+    _,_,_,transport,_,observed,run,_=setup
+    async def leaked(*_):return model_response({'status':'answered','paragraphs':[claim(secret+'.')]})
+    transport.handler=leaked
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert secret not in json.dumps(caught.value.trace) and secret not in json.dumps(observed)
+    assert len(transport.requests)==1 and transport.closed and 'final_answer' not in caught.value.trace
