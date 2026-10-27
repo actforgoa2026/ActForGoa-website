@@ -88,7 +88,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert body['thinking'] == {'type': 'adaptive'}
     assert body['service_tier'] == 'standard_only' and body['stream'] is False
     assert set(body) == {'model', 'max_tokens', 'system', 'messages', 'thinking', 'stream', 'output_config', 'service_tier'}
-    assert body['output_config']['effort'] == 'high'
+    assert body['output_config']['effort'] == 'medium'
     assert body['output_config']['format']['type'] == 'json_schema'
     schema = body['output_config']['format']['schema']
     assert set(schema['properties'])=={'status','paragraph'}
