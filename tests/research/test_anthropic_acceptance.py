@@ -159,3 +159,41 @@ def test_source_review_packet_generation_must_match_final_data(setup):
     path.write_text(json.dumps({'generation':'other-generation','cases':rows}))
     with pytest.raises(ValueError,match='packet generation'):
         acceptance.load_cases(stage,'fixture-generation')
+
+
+@pytest.mark.parametrize('paragraphs,code',[
+    ([{'text':'word '*120+'end.','citations':['passage-1']}], 'brief_length'),
+    ([{'text':'Gates regulate tides.','citations':['passage-1']}]*2, 'paragraph_bound'),
+    ([{'text':'Gates regulate tides.','citations':['unknown']}], 'citation_identity'),
+    ([{'text':'Incomplete sentence','citations':['passage-1']}], 'paragraph_incomplete'),
+])
+def test_failed_final_answer_diagnostics_preserve_cause_without_accepting_or_retrying(setup,paragraphs,code):
+    plan,_,_,_=setup;packet=plan['stages']['test']['packets'][0];path=Path(packet['path'])
+    rows=json.loads(path.read_text())
+    for row in rows:row['answer_style']='brief'
+    path.write_text(json.dumps(rows));packet['sha256']=acceptance.sha(path)
+    payload={'status':'answered','paragraphs':paragraphs}
+    report,output=execute_fixture(setup,response(payload))
+    entry=report['cases'][0]
+    assert entry['failure_code']==code and not entry['mechanical_passed']
+    assert entry['final_output_diagnostic']['answer']==payload
+    assert entry['final_output_diagnostic']['paragraph_count']==len(paragraphs)
+    assert entry['final_output_diagnostic']['word_counts']==[len(p['text'].split()) for p in paragraphs]
+    assert report['attempts']==1 and not report['complete'] and 'answer' not in entry
+    assert report['after']['days']['2026-10-27']==2 and entry['accounting_matches']
+    assert 'private diagnostic' not in output.read_text() and 'signature' not in output.read_text()
+
+
+@pytest.mark.parametrize('text,status',[
+    ('private diagnostic not JSON','invalid_json'),
+    (json.dumps({'status':'answered','paragraphs':[],'private diagnostic':'fixture-only'}),'unexpected_shape'),
+    ('x'*65537,'oversize_text'),
+])
+def test_diagnostic_capture_never_persists_malformed_text_or_unexpected_fields(text,status):
+    captured=acceptance.final_json_capture({'content':[
+        {'type':'thinking','thinking':'private diagnostic'},
+        {'type':'redacted_thinking','data':'private diagnostic'},
+        {'type':'text','text':text}]})
+    assert captured=={'capture_status':status}
+    assert acceptance.failure_code(ValueError('private diagnostic fixture-only'))=='unclassified_local_failure'
+    assert acceptance.failure_code(httpx.ReadTimeout('private diagnostic fixture-only'))=='non_validation_failure'
