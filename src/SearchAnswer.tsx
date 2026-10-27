@@ -30,7 +30,7 @@ export function SearchAnswer({ question }: { question: string }) {
     <div aria-live="polite" aria-atomic="false">
       {busy && !answer && <p className="search-answer-status" role="status">Looking through our saved sources… The articles and other results are ready below.</p>}
       {error && <div className="search-answer-fallback"><p role="status">{error}</p><Button variant="ghost" onClick={() => setAttempt(value => value + 1)}>Try answer again</Button></div>}
-      {answer?.status === 'insufficient_evidence' && <p className="search-answer-status">Our saved sources do not contain enough evidence for a reliable answer to this question. Try a more specific place or issue, or explore the results below.</p>}
+      {answer?.status === 'insufficient_evidence' && <p className="search-answer-status">The passages found for this question do not provide enough evidence for a reliable answer. Try a more specific place or issue, or explore the results below.</p>}
       {answer?.status === 'answered' && answer.paragraphs.map((paragraph, index) => <p className="search-answer-paragraph" key={index}>
         {paragraph.text}{paragraph.citations.map(id => {
           const number = answer.citations.findIndex(source => source.id === id);
