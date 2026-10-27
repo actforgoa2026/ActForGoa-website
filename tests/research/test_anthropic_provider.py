@@ -522,7 +522,7 @@ def test_standard_scope_policy_is_generic_and_keeps_provider_style_boundaries(co
         native=prepare_answer(request,prepared.evidence,provider='anthropic')
         body=message_request(config,native);systems.append(body['system'])
         assert 'without unrequested numerical examples' in body['system']
-        assert 'Retain entity, habitat, taxonomic, geographic and time qualifiers' in body['system']
+        assert 'retain population, predicate, entity, habitat, taxon, place and period' in body['system']
         assert 'at most four paragraphs and 350 words; omit unrelated background' not in body['system']
         assert json.loads(body['messages'][-1]['content'])['question']==question
         assert body['max_tokens']==12000 and body['thinking']=={'type':'adaptive'}
