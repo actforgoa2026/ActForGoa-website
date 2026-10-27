@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import sqlite3
+from dataclasses import replace
 
 import httpx
 import pytest
@@ -86,6 +87,27 @@ def test_remaining_allowance_cannot_be_bypassed(setup,table,value,match):
     with pytest.raises(ValueError,match=match):acceptance.preflight(plan,'test',config)
 
 
+def test_comparison_model_requires_explicit_matching_plan(setup):
+    plan,config,_,_=setup
+    sonnet=replace(config,model='claude-sonnet-5-5')
+    assert acceptance.planned_model(plan)=='claude-haiku-5-5'
+    with pytest.raises(ValueError,match='match'):acceptance.preflight(plan,'test',sonnet)
+    plan['model']=sonnet.model
+    with pytest.raises(ValueError,match='match'):acceptance.preflight(plan,'test',config)
+    context=acceptance.preflight(plan,'test',sonnet)
+    assert context['worst_reservation_microusd']==316960
+    for invalid in ('claude-unreviewed', 'openai/gpt-5.6-luna', None, []):
+        plan['model']=invalid
+        with pytest.raises(ValueError,match='reviewed'):acceptance.preflight(plan,'test',sonnet)
+
+
+def test_sonnet_full_suite_cannot_bypass_existing_monthly_allowance(setup):
+    plan,config,_,_=setup;plan['model']='claude-sonnet-5-5'
+    stage=plan['stages']['test'];stage['max_attempts']=71;stage['packets'][0]['count']=71
+    with pytest.raises(ValueError,match='monthly'):
+        acceptance.preflight(plan,'test',replace(config,model=plan['model']))
+
+
 def execute_fixture(setup,response):
     plan,config,library,tmp=setup
     context=acceptance.preflight(plan,'test',config)
@@ -115,6 +137,28 @@ def test_success_records_complete_sources_and_pending_claim_review(setup):
     assert all(e['human_review']['status']=='pending' and e['human_review']['claims'][0]['entailment'] is None for e in report['cases'])
     setup[0]['stages']['test']['expected_ledger']=report['after']
     with pytest.raises(FileExistsError):execute_fixture(setup,response())
+
+
+def test_sonnet_run_preserves_actual_identity_and_historical_accounting(setup):
+    plan,config,library,tmp=setup;plan['model']='claude-sonnet-5-5'
+    selected=replace(config,model=plan['model'])
+    report,_=execute_fixture((plan,selected,library,tmp),response(model=selected.model))
+    assert report['model']==selected.model and report['complete'] and report['attempts']==2
+    assert report['after']['days']=={'2026-10-26':182,'2026-10-27':3}
+    assert report['after']['months']['2026-10']==638065+report['reserved_microusd']
+    for entry in report['cases']:
+        assert entry['request_shape']['model']==entry['response_model']==selected.model
+        assert entry['response_model_matches'] and entry['accounting_matches'] and entry['usage_within_reservation']
+
+
+def test_mismatched_reviewed_model_is_recorded_and_stops_without_retry(setup):
+    plan,config,library,tmp=setup;plan['model']='claude-sonnet-5-5'
+    report,_=execute_fixture((plan,replace(config,model=plan['model']),library,tmp),response())
+    entry=report['cases'][0]
+    assert not report['complete'] and report['attempts']==1
+    assert entry['request_shape']['model']==plan['model']
+    assert entry['response_model']=='claude-haiku-5-5' and not entry['response_model_matches']
+    assert entry['accounting_matches'] and entry['reserved']
 
 
 @pytest.mark.parametrize('reply',[httpx.Response(429,json={'error':'private diagnostic'}),

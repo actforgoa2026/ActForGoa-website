@@ -49,9 +49,9 @@ def native_payload(payload):
     return result
 
 
-def anthropic_message(payload=None, *, stop='end_turn', content=None):
+def anthropic_message(payload=None, *, stop='end_turn', content=None, model='claude-haiku-5-5'):
     return {'id': 'fixture-only', 'type': 'message', 'role': 'assistant',
-            'model': 'claude-haiku-5-5', 'stop_reason': stop, 'stop_details': None,
+            'model': model, 'stop_reason': stop, 'stop_details': None,
             'content': content if content is not None else [
                 {'type': 'thinking', 'thinking': 'private diagnostic', 'signature': 'fixture'},
                 {'type': 'text', 'text': json.dumps(payload if payload is not None else native_payload(answer_payload()))}],
@@ -113,6 +113,26 @@ def test_anthropic_is_opt_in_fixed_host_and_requires_reviewed_model(config, monk
     with pytest.raises(ValueError, match='reviewed'):chat_config()
     monkeypatch.delenv('RESEARCH_CHAT_PROVIDER')
     assert chat_config().provider == 'openrouter'
+
+
+def test_sonnet_requires_explicit_selection_with_reviewed_cost_and_same_contract(config, monkeypatch, prepared):
+    from backend.anthropic_provider import message_request, PRICE_TIER_INPUT_LIMIT
+    assert config.model == 'claude-haiku-5-5'
+    haiku_request = message_request(config, prepared)
+    monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-sonnet-5-5')
+    sonnet = chat_config()
+    assert sonnet.maximum_cost_microusd(26048) == 158480
+    assert sonnet.maximum_cost_microusd(PRICE_TIER_INPUT_LIMIT - INPUT_ALLOWANCE) == 290000
+    with pytest.raises(ValueError, match='price tier'):
+        sonnet.maximum_cost_microusd(PRICE_TIER_INPUT_LIMIT - INPUT_ALLOWANCE + 1)
+    assert message_request(sonnet, prepared) == {**haiku_request, 'model': 'claude-sonnet-5-5'}
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json=brief_message(model=sonnet.model)))) as client:
+        assert answer_question(client, sonnet, prepared)['status'] == 'answered'
+    # Even another allowlisted model cannot silently satisfy this request.
+    with AnthropicClient('fixture-only', transport=httpx.MockTransport(
+            lambda _: httpx.Response(200, json=brief_message()))) as client:
+        with pytest.raises(ValueError):answer_question(client, sonnet, prepared)
 
 
 def test_missing_key_and_optional_workspace(config, monkeypatch, prepared):

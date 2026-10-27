@@ -2,6 +2,14 @@
 
 Prepared only; this document does not authorize provider calls or publication. The one-call connectivity/schema/accounting calibration is complete. It is not acceptance of the final retrieval candidate. LAW owns retrieval and `prepare_answer` compaction; this harness changes neither.
 
+## Current model comparison gate
+
+The latest Haiku water/scope diagnostic at `1466dbb34ba95a843b442e182138c5c40e814ca5` passed mechanical checks but failed claim review: the water answer omitted the 2021 source year next to a 2024 reference, and the scope answer omitted the avian qualification and inferred taxonomic revision. The immutable report SHA-256 is `d0e6b237f3bd12fd15ca5342f8251d4eec342d823e5e8256c4ce7c3df058a20c`. Its two attempts and 15,275 micro-USD remain charged. Canonical validation totals are October 26: 182 attempts; October 27: 31 attempts; October reserved: 808,420 micro-USD. Production is still at 20/734,406; any later reconciliation must import only the new delta with a new receipt.
+
+The next proposed comparison changes only the model to `claude-sonnet-5-5`, with reviewed $2/$10 per million input/output token rates. A plan must name `model` explicitly for Sonnet; omitted historical model fields still mean Haiku. The preflight requires the configured model to match the plan, prices reservations using that model, and preserves the same caps and ledger. Reports retain planned/configured model, actual request model, reviewed response model and exact response-model match. An unexpected response model fails without retry or refund. No prompt, schema, retrieval or public interface changes are part of this comparison.
+
+Two diagnostics reserve at most 316,960 micro-USD, for a maximum monthly total of 1,125,380 micro-USD from the current validation baseline. The full 71-case final-runtime plan would reserve up to 11,252,080 micro-USD before existing reservations and therefore cannot pass the unchanged $5 preflight. Only the two comparison cases may be considered after separate exact-head authorization; no calls are authorized by this document. Their actual claims and usage must be reviewed before a concrete user budget decision or any promotion. The original 55 cases, 12 now-consumed assessment cases, four boundary cases and live UI checks remain outstanding on an accepted final runtime; historical results cannot be silently reused across model changes.
+
 ## Frozen inputs and stages
 
 Use `tests/research/anthropic-acceptance-plan.template.json` as a local plan, outside Git. Root supplies the exact final integrated commit, approved disposable data-copy path, expected canonical-ledger snapshot and a separate authorization reference for each stage. The template deliberately has null values for these fields and cannot execute as checked in. Generation is expected to be `20261027T065155-law-5bc5619b`; a changed generation requires a revised reviewed plan.
