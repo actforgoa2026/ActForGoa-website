@@ -1,0 +1,36 @@
+{
+  "source_packet": "answer-evidence-coverage-design-v2",
+  "source_manifest_file_sha256": "517b2f88b6c5af395b2c4a10a9c674541805489cf5e1a9811b36873c5807f50d",
+  "artifacts": {
+    "spec/contract.md": {
+      "source_relative_path": "contract.md",
+      "file_sha256": "0e0088853192061d87804eb064139be5e5209831ca7b6c3cc80c3d587c545aa0",
+      "bytes": 33455
+    },
+    "spec/envelope.schema.json": {
+      "source_relative_path": "envelope.schema.json",
+      "file_sha256": "e278533c584384782f62a6a6590d312e5ab0bed2fb522657e13f159fb8c03543",
+      "bytes": 26273
+    },
+    "spec/audit.schema.json": {
+      "source_relative_path": "audit.schema.json",
+      "file_sha256": "8c3b1a0a33db4b3c486b3189f128965f6fe568011d5801c3b1c567e45ced32bd",
+      "bytes": 9332
+    },
+    "spec/registry.json": {
+      "source_relative_path": "registry.json",
+      "file_sha256": "aca80c3d11c05efd1c98132b801f4103ae69f361f0648c5f1f40cd231d8cce40",
+      "bytes": 3154
+    },
+    "tests/fixtures/examples.json": {
+      "source_relative_path": "examples.json",
+      "file_sha256": "7ee3cc41280e885d57bd387143a94d52949598961b2f4ace1a0f057ab66ff2e4",
+      "bytes": 195571
+    },
+    "tests/fixtures/canonical-vectors.json": {
+      "source_relative_path": "canonical-vectors.json",
+      "file_sha256": "ec78077f4dddc930626899df7e24dbb2f9ac50b7b40bd10ebb6c85aa25e5c1e1",
+      "bytes": 6977
+    }
+  }
+}

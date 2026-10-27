@@ -1,0 +1,174 @@
+{
+  "version": "afg-evidence-coverage-v2",
+  "status": "Authored serialization vectors; parser/auditor not implemented or executed. Valid digest arithmetic computed with the documented reference serializer.",
+  "domain_prefix_utf8_hex": "416374466f72476f610065766964656e63652d636f7665726167652d763200",
+  "valid": [
+    {
+      "id": "request_pretty_literal_unicode",
+      "domain": "request",
+      "raw_utf8_hex": "7b0a2020227175657374696f6e223a207b0a20202020226964223a20227475726e3a63757272656e74222c0a202020202274657874223a2022486f7720646964207765742d736561736f6e20776174657220726561636820746865206d6f6e69746f72656420737072696e677320696e2032303137e28093323031393f20f09f8c8a220a20207d2c0a202022686973746f7279223a205b5d2c0a202022616e737765725f7374796c65223a20227374616e64617264222c0a202022646f63756d656e745f73636f7065223a206e756c6c0a7d0a",
+      "parsed_value": {
+        "question": {
+          "id": "turn:current",
+          "text": "How did wet-season water reach the monitored springs in 2017–2019? 🌊"
+        },
+        "history": [],
+        "answer_style": "standard",
+        "document_scope": null
+      },
+      "canonical_utf8_hex": "7b22616e737765725f7374796c65223a227374616e64617264222c22646f63756d656e745f73636f7065223a6e756c6c2c22686973746f7279223a5b5d2c227175657374696f6e223a7b226964223a227475726e3a63757272656e74222c2274657874223a22486f7720646964207765742d736561736f6e20776174657220726561636820746865206d6f6e69746f72656420737072696e677320696e2032303137e28093323031393f20f09f8c8a227d7d",
+      "expected_digest": "82c6d0b5e6786548b3502b37880fb383fdd9888327b22250e9addabe0be3e7bd",
+      "note": "Different whitespace/escape spelling, same code points and canonical identity; this is a request fragment, not a complete envelope."
+    },
+    {
+      "id": "request_compact_escaped_unicode",
+      "domain": "request",
+      "raw_utf8_hex": "7b22616e737765725f7374796c65223a227374616e64617264222c22646f63756d656e745f73636f7065223a6e756c6c2c22686973746f7279223a5b5d2c227175657374696f6e223a7b226964223a227475726e3a63757272656e74222c2274657874223a22486f7720646964207765742d736561736f6e20776174657220726561636820746865206d6f6e69746f72656420737072696e677320696e20323031375c7532303133323031393f205c75643833635c7564663061227d7d",
+      "parsed_value": {
+        "question": {
+          "id": "turn:current",
+          "text": "How did wet-season water reach the monitored springs in 2017–2019? 🌊"
+        },
+        "history": [],
+        "answer_style": "standard",
+        "document_scope": null
+      },
+      "canonical_utf8_hex": "7b22616e737765725f7374796c65223a227374616e64617264222c22646f63756d656e745f73636f7065223a6e756c6c2c22686973746f7279223a5b5d2c227175657374696f6e223a7b226964223a227475726e3a63757272656e74222c2274657874223a22486f7720646964207765742d736561736f6e20776174657220726561636820746865206d6f6e69746f72656420737072696e677320696e2032303137e28093323031393f20f09f8c8a227d7d",
+      "expected_digest": "82c6d0b5e6786548b3502b37880fb383fdd9888327b22250e9addabe0be3e7bd",
+      "note": "Different whitespace/escape spelling, same code points and canonical identity; this is a request fragment, not a complete envelope."
+    },
+    {
+      "id": "combining_preserved",
+      "domain": "text",
+      "parsed_text": "é नदी 🌊\r\n",
+      "raw_utf8_hex": "65cc8120e0a4a8e0a4a6e0a58020f09f8c8a0d0a",
+      "expected_digest": "ae365d6ea468b5e9f30c4af6ebd3a487f624c1a286ec09d43bbc0bbc5a515f11",
+      "note": "Text domain hashes decoded text bytes directly, not JSON quotes; these two strings must not be normalized together."
+    },
+    {
+      "id": "precomposed_distinct",
+      "domain": "text",
+      "parsed_text": "é नदी 🌊\r\n",
+      "raw_utf8_hex": "c3a920e0a4a8e0a4a6e0a58020f09f8c8a0d0a",
+      "expected_digest": "97ec85a884568806f20131994e93951d432d47a1e9fbb16266f39d6783c29fac",
+      "note": "Text domain hashes decoded text bytes directly, not JSON quotes; these two strings must not be normalized together."
+    }
+  ],
+  "invalid": [
+    {
+      "id": "duplicate_literal_key",
+      "raw_utf8_hex": "7b2278223a312c2278223a327d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "duplicate_escaped_key",
+      "raw_utf8_hex": "7b2278223a312c225c7530303738223a327d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "nonfinite_nan",
+      "raw_utf8_hex": "7b226e223a4e614e7d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "nonfinite_infinity",
+      "raw_utf8_hex": "7b226e223a496e66696e6974797d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "decimal_token",
+      "raw_utf8_hex": "7b226e223a312e307d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "exponent_token",
+      "raw_utf8_hex": "7b226e223a3165307d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "negative_zero",
+      "raw_utf8_hex": "7b226e223a2d307d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "negative_integer",
+      "raw_utf8_hex": "7b226e223a2d317d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "oversized_integer",
+      "raw_utf8_hex": "7b226e223a393030373139393235343734303939327d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "unpaired_surrogate_escape",
+      "raw_utf8_hex": "7b2278223a225c7564383030227d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "invalid_utf8",
+      "raw_utf8_hex": "7b2278223a22ff227d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "bom",
+      "raw_utf8_hex": "efbbbf7b7d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    },
+    {
+      "id": "trailing_content",
+      "raw_utf8_hex": "7b7d7b7d",
+      "expected": "PARSE_PROFILE",
+      "canonical_digest": null,
+      "executed": false
+    }
+  ],
+  "expected_parse_failure_report": {
+    "contract_version": "afg-evidence-coverage-v2",
+    "envelope_digest": null,
+    "status": "global_reject",
+    "global_scope": "parse",
+    "errors": [
+      {
+        "id": "err:000001",
+        "code": "PARSE_PROFILE",
+        "scope": "parse",
+        "subject_id": null,
+        "path": []
+      }
+    ],
+    "claims": [],
+    "gaps": [],
+    "facets": [],
+    "source_dates": [],
+    "block_notices": [],
+    "semantic": "not_assessed",
+    "original_authentication": "unverified",
+    "release": "hold",
+    "salvage": "not_performed"
+  }
+}
