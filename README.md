@@ -2,7 +2,7 @@
 
 A public-site archive and searchable redesign of [ActForGoa](https://actforgoa.org/), prepared for client review. The existing live website has not been replaced.
 
-[Open the client-review site](https://actforgoa-field-guide.vercel.app/) · [Private GitHub repository](https://github.com/ZakKrevitt/ActForGoa)
+[Open the client-review site](https://actforgoa-field-guide.vercel.app/) · [Private GitHub repository](https://github.com/actforgoa2026/ActForGoa-website)
 
 ## Run locally
 
@@ -30,7 +30,7 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 
 ## Start with the evidence
 
-The [23 October 2026 directory release](https://github.com/ZakKrevitt/ActForGoa/releases/tag/directory-2026-10-23) contains CSVs with 499 community records, 2,768 government office/representative records and 28 linked participation routes. [Import instructions and research limitations](research/releases/2026-10-23/READ_ME.txt) explain the stable IDs, source links and activity labels. The CSVs include historical and unconfirmed leads; the participation routes are a subset, and contacts have not been delivery-tested. The CRM publishes this snapshot separately from the original website catalogue, which remains at `/directory/archive`.
+The [23 October 2026 directory release](https://github.com/actforgoa2026/ActForGoa-website/releases/tag/directory-2026-10-23) contains CSVs with 499 community records, 2,768 government office/representative records and 28 linked participation routes. [Import instructions and research limitations](research/releases/2026-10-23/READ_ME.txt) explain the stable IDs, source links and activity labels. The CSVs include historical and unconfirmed leads; the participation routes are a subset, and contacts have not been delivery-tested. The CRM publishes this snapshot separately from the original website catalogue, which remains at `/directory/archive`.
 
 - [Crawl and build plan](docs/PLAN.md)
 - [Crawl coverage and limitations](reports/CRAWL-REPORT.md)
