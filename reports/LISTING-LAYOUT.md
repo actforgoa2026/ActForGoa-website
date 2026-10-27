@@ -36,4 +36,3 @@ This is a scoped Read/Operate refinement within the existing warm-paper, forest-
 - Changed source: `src/App.tsx`, `src/CRM.tsx`, `src/CRMDirectoryInfo.tsx`, `src/DirectoryInfo.tsx`, `src/crm.css`, `src/directory.css`; new shared component: `src/ListingLink.tsx`.
 - No dependency, environment, schema or data changes. No migration or configuration step is required.
 - Status at documentation time: local work only; not pushed, merged or deployed. The release coordinator owns combined deployment under the repository's integration rules.
-
