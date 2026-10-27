@@ -1,4 +1,4 @@
-import { crmDirectoryTags } from './crm-directory';
+import { crmDirectoryTags } from './crm-directory.js';
 
 export type CRMRecord = Record<string, string> & { record_id: string; name: string; collection: 'community' | 'government' };
 export type CRMSnapshot = { version: string; records: CRMRecord[]; opportunities: CRMRecord[] };
