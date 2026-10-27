@@ -1,0 +1,17 @@
+{
+  "root": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-rti-followup",
+  "files": [
+    {
+      "path": "forensics/changed-index.proxima",
+      "sha256": "4a39df4854b045f73cd9bc78bcbbf03ad52f3ca671ee18f2b4f19286ae017a56",
+      "bytes": 157696000
+    },
+    {
+      "path": "forensics/recovered-accepted-index.proxima",
+      "sha256": "4c8c86b4cf9768ef21d237201218e6b05369d2f91b92729ce7553a6c7c973185",
+      "bytes": 157696000
+    }
+  ],
+  "restoration_candidate": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-restoration-candidate",
+  "purpose": "Preserve both changed bytes and exact recovered bytes outside managed worktrees. Never open these preservation files through Zvec."
+}

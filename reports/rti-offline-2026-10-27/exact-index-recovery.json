@@ -1,0 +1,13 @@
+{
+  "accepted_sha256": "4c8c86b4cf9768ef21d237201218e6b05369d2f91b92729ce7553a6c7c973185",
+  "recovered_sha256": "4c8c86b4cf9768ef21d237201218e6b05369d2f91b92729ce7553a6c7c973185",
+  "candidate_timestamp": 1793084588,
+  "modified_offsets": [
+    1064832,
+    1064880,
+    1081440
+  ],
+  "footer_bytes": 128,
+  "method": "Restore two update-time fields and recompute raw-seed-zero CRC32C of the 128-byte footer on a separate scratch copy. The whole-file SHA-256 matches the pre-existing accepted snapshot. Durable copy and manifests were not overwritten.",
+  "recovered_file": "/Users/zakkrevitt/.codex/worktrees/rti-retrieval-offline/ActForGoa/.research-release/rti-offline/recovered-accepted-index.proxima"
+}

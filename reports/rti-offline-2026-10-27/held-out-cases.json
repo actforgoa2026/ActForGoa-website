@@ -1,0 +1,121 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "purpose": "Frozen before selection experiments; reviewed source locators, six fee paraphrases, five contrasting RTI needs and four legal paraphrases.",
+  "cases": [
+    {
+      "id": "held-fee-1",
+      "question": "For an online right-to-information request in Goa, what fee is payable by someone outside the BPL category?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-fee-2",
+      "question": "Which payment methods and application charge does the Goa RTI user guide list?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-fee-3",
+      "question": "I do not have a BPL card. How much must I pay when submitting an RTI in Goa?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-fee-4",
+      "question": "Does Goa RTI Online accept UPI for the initial request fee?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-fee-5",
+      "question": "Where does the Goa RTI manual give the amount due before proceeding to the payment gateway?",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-fee-6",
+      "question": "RTI Goa: fee for applicants who are not below the poverty line.",
+      "required_any_of": [
+        "e5d0e7777a79a19cf17cced54e173507"
+      ]
+    },
+    {
+      "id": "held-additional-payment",
+      "question": "What are the extra information charges after the PIO requests an additional payment on Goa RTI Online?",
+      "required_any_of": [
+        "8cc4a696018cfcdd6e82c9ff7228af21"
+      ],
+      "fee_must_not_outrank_support": true
+    },
+    {
+      "id": "held-bpl-submission",
+      "question": "What should a BPL applicant select before submitting a Goa RTI request?",
+      "required_any_of": [
+        "55a7990613ad217c9d5b6b2a5f0f355c"
+      ],
+      "fee_must_not_outrank_support": true
+    },
+    {
+      "id": "held-payment-verification",
+      "question": "How is a completed payment verified on Goa RTI Online?",
+      "required_any_of": [
+        "bf460afb0529e67fbfb9689da552bdd6",
+        "069bb1d530c25875ef185378c74f566b"
+      ],
+      "fee_must_not_outrank_support": true
+    },
+    {
+      "id": "held-sms-alerts",
+      "question": "What kinds of SMS alerts does Goa RTI Online send to applicants?",
+      "required_any_of": [
+        "262d4ddf089ce3304fb165a8b5e4e779",
+        "cd0e94264831653dd6c7927e997516dd"
+      ],
+      "fee_must_not_outrank_support": true
+    },
+    {
+      "id": "held-request-complete",
+      "question": "How does Goa RTI Online show that a request has been disposed and a reply is available?",
+      "required_any_of": [
+        "747aa3b9395e8b248f77b021bd46c07d"
+      ],
+      "fee_must_not_outrank_support": true
+    },
+    {
+      "id": "held-tcp",
+      "question": "If I have TCP technical clearance in Goa, do I still need a building licence?",
+      "required_any_of": [
+        "6453618429d81ad36ea31f0be7ecfe06",
+        "bb353e2814795a6bf9d081f5e87abc0d",
+        "e0ea390e4eae2675631cb10ef03d60bf"
+      ]
+    },
+    {
+      "id": "held-farm",
+      "question": "Under Goa Shetkari Adhar Nidhi, whom must a farmer notify about crop damage and by when?",
+      "required_any_of": [
+        "49c4df829e149d7df512df066a379ae0"
+      ]
+    },
+    {
+      "id": "held-dogs",
+      "question": "Who is responsible for handling dogs found on school premises under the institutional SOP?",
+      "required_any_of": [
+        "7e2890b60d2eaff0d9e31cc713895154",
+        "d42390295a29bf9be2ff42e33d5a5630"
+      ]
+    },
+    {
+      "id": "held-parra",
+      "question": "Does the final January 2025 Gazette notification change ownership of Parra Lake?",
+      "required_any_of": [
+        "64eed0b3b39365cd0a949e93c0901765"
+      ]
+    }
+  ]
+}
