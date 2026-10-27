@@ -21,7 +21,7 @@ test('website search consolidates corporation listings and repairs malformed web
   assert.equal(facets.type[''], all.length);
   assert.ok(directoryMatches(search('government'), Number.MAX_SAFE_INTEGER).some(({record}) => record.record_id === 'goa-b3f711f6b7f3'));
   const office = records.find(r => r.record_id === 'goa-80732e1537a8')!;
-  assert.equal(crmDirectoryLinks(office).find(link => link.label === 'Website')?.url, 'https://www.dstegoa.goa.gov.in');
+  assert.equal(crmDirectoryLinks(office).find(link => link.label === 'Website')?.url, 'https://dstwm.goa.gov.in/');
   assert.ok(!crmDirectoryLinks({ ...office, website_url: 'javascript:alert(1)' }).some(link => link.label === 'Website'));
 });
 
@@ -97,11 +97,24 @@ test('website audit repairs known transcription errors and suppresses non-websit
   for (const [id, url] of Object.entries(expected)) {
     const record = records.find(r => r.record_id === id)!;
     assert.equal(directoryWebsite(record.website_url), url);
-    assert.equal(crmDirectoryLinks(record).find(link => link.label === 'Website')?.url, url);
+    assert.equal(crmDirectoryLinks(record).find(link => link.label === 'Website')?.url, id === 'goa-80732e1537a8' ? 'https://dstwm.goa.gov.in/' : url);
   }
   const bad = records.find(r => r.name.startsWith('MINISTRY OF SHIPPING DIRECTORATE GENERAL'))!;
   assert.equal(directoryWebsite(bad.website_url), '');
   assert.equal(crmDirectoryLinks(bad).find(link => link.label === 'Website'), undefined);
   assert.equal(directoryWebsite('javascript:alert(1)'), '');
   assert.equal(directoryWebsite('https://example.org/path'), 'https://example.org/path');
+});
+
+test('live check evidence and replacements preserve uncertainty and future source updates', async () => {
+  const {directoryWebsite, websiteEvidence, duplicateGroup} = await import('../src/directory-quality');
+  assert.equal(directoryWebsite('https://www.dstegoa.goa.gov.in','goa-80732e1537a8'), 'https://dstwm.goa.gov.in/');
+  assert.equal(websiteEvidence('https://www.dstegoa.goa.gov.in','goa-80732e1537a8').source, 'https://www.goa.gov.in/department/department-of-science-and-technology-and-waste-management/');
+  assert.equal(directoryWebsite('https://new.example.org/', 'goa-80732e1537a8'), 'https://new.example.org/');
+  assert.equal(directoryWebsite('https://www.ahvs.goa.gov.in'), 'https://ahvs.goa.gov.in');
+  assert.equal(websiteEvidence('https://www.ahvs.goa.gov.in').status, 'responded');
+  assert.equal(websiteEvidence('https://www.arcgoa.in/').status, 'unverified');
+  assert.equal(websiteEvidence('https://not-in-snapshot.example.org').status, 'not_checked');
+  assert.ok(duplicateGroup('goa-a1f1014604fa').includes('goa-b8b44e35e553'));
+  assert.ok(!duplicateGroup('goa-f80172c68298').includes('goa-d6da3f0e0f38'));
 });
