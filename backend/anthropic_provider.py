@@ -58,7 +58,7 @@ def message_request(config, prepared):
         'service_tier': 'standard_only',
         'thinking': {'type': 'adaptive'},
         'output_config': {
-            'effort': 'low',
+            'effort': 'medium',
             'format': {'type': 'json_schema', 'schema': native_schema(prepared.schema)},
         },
     }

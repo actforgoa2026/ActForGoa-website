@@ -21,6 +21,55 @@ from backend.providers import chat_config
 from backend.usage_reconciliation import inspect_ledger
 
 
+# Only messages owned by our validators may become diagnostics. Never persist
+# arbitrary exception text, provider error bodies or Pydantic input echoes.
+FAILURE_CODES = {
+    'The answer did not match the required schema': 'answer_schema',
+    'Answer exceeds its paragraph bound': 'paragraph_bound',
+    'Brief answer exceeds its length bound': 'brief_length',
+    'Answer contains missing or unknown citations': 'citation_identity',
+    'Answer paragraph appears incomplete': 'paragraph_incomplete',
+    'Insufficient evidence must not contain unsupported paragraphs': 'abstention_content',
+    'Answer has no cited paragraphs': 'empty_answer',
+    'No structured answer was returned': 'missing_answer',
+    'The answer was incomplete or declined': 'incomplete_or_declined',
+    'Reviewed required evidence is missing before dispatch': 'missing_required_evidence',
+    'Budget refused dispatch': 'budget_refused',
+}
+
+
+def failure_code(error):
+    return FAILURE_CODES.get(str(error), 'unclassified_local_failure') if type(error) is ValueError else 'non_validation_failure'
+
+
+def final_json_capture(payload):
+    """Keep only bounded final answer JSON, never thinking or response metadata.
+
+    Invalid JSON and unexpected fields are represented by fixed categories.
+    The output is diagnostic, not accepted or served answer content.
+    """
+    blocks = payload.get('content')
+    if not isinstance(blocks, list):return {'capture_status': 'missing_text'}
+    texts = [b['text'] for b in blocks if isinstance(b, dict) and b.get('type') == 'text' and isinstance(b.get('text'), str)]
+    text = ''.join(texts)
+    if not text:return {'capture_status': 'missing_text'}
+    if len(text.encode()) > 65536:return {'capture_status': 'oversize_text'}
+    try:answer=json.loads(text)
+    except ValueError:return {'capture_status': 'invalid_json'}
+    if (not isinstance(answer,dict) or set(answer) != {'status','paragraphs'}
+            or answer['status'] not in ('answered','insufficient_evidence')
+            or not isinstance(answer['paragraphs'],list) or len(answer['paragraphs']) > 16):
+        return {'capture_status':'unexpected_shape'}
+    for p in answer['paragraphs']:
+        if (not isinstance(p,dict) or set(p) != {'text','citations'} or not isinstance(p['text'],str)
+                or len(p['text']) > 12000 or not isinstance(p['citations'],list) or len(p['citations']) > 20
+                or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
+            return {'capture_status':'unexpected_shape'}
+    return {'capture_status':'captured_unvalidated_json','answer':answer,
+            'paragraph_count':len(answer['paragraphs']),
+            'word_counts':[len(p['text'].split()) for p in answer['paragraphs']]}
+
+
 def sha(path):
     with Path(path).open('rb') as file:return hashlib.file_digest(file, 'sha256').hexdigest()
 
@@ -119,6 +168,7 @@ class UsageCapture(httpx.BaseTransport):
             try:payload=response.json()
             except ValueError:payload={}
             if isinstance(payload, dict):
+                entry['final_output_diagnostic'] = final_json_capture(payload)
                 entry['response_model_matches'] = payload.get('model') == body['model']
                 stop = payload.get('stop_reason')
                 entry['stop_reason'] = stop if stop in ('end_turn','refusal','max_tokens','model_context_window_exceeded','tool_use','pause_turn') else 'unexpected'
@@ -240,7 +290,8 @@ def run_cases(library, client, capture, config, cases, context, output):
                 'atomic_claims':[],'entailment':None,'scope':None,'chronology':None,'currentness':None,'extraction_limits':None}
                 for i,p in enumerate(entry['answer']['paragraphs'])]
         except BaseException as error:
-            entry.update(mechanical_passed=False,error_type=type(error).__name__,error_status=getattr(error,'status_code',None))
+            entry.update(mechanical_passed=False,error_type=type(error).__name__,error_status=getattr(error,'status_code',None),
+                         failure_code=failure_code(error))
             # No error body, raw output, key, raw thinking, or implicit retry.
             fatal=True
         finally:
