@@ -178,7 +178,8 @@ class UsageCapture(httpx.BaseTransport):
         body = json.loads(request.content)
         entry['request_shape'] = {'model': body['model'], 'version': request.headers['anthropic-version'],
             'max_tokens': body['max_tokens'], 'service_tier': body['service_tier'],
-            'effort': body['output_config']['effort'], 'format': body['output_config']['format']['type']}
+            'effort': body['output_config']['effort'], 'thinking': body['thinking']['type'],
+            'format': body['output_config']['format']['type']}
         response = self.inner.handle_request(request)
         response.read()
         entry['provider_http_status'] = response.status_code

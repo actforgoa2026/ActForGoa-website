@@ -110,6 +110,8 @@ def test_success_records_complete_sources_and_pending_claim_review(setup):
     assert report['after']['months']['2026-10']==638065+report['reserved_microusd']
     assert report['entailment_acceptance']=='pending_human_review' and report['originals_checked']
     assert all(e['accounting_matches'] and e['usage_within_reservation'] for e in report['cases'])
+    assert all(e['request_shape']['thinking']=='disabled' and e['request_shape']['effort']=='medium'
+               and e['request_shape']['max_tokens']==6000 for e in report['cases'])
     assert all(e['human_review']['status']=='pending' and e['human_review']['claims'][0]['entailment'] is None for e in report['cases'])
     setup[0]['stages']['test']['expected_ledger']=report['after']
     with pytest.raises(FileExistsError):execute_fixture(setup,response())
