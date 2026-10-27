@@ -1,0 +1,58 @@
+{
+  "purpose": "Source-neutral authored controls for independent semantic review, not accepted model outputs or an automatic entailment judge.",
+  "cases": [
+    {
+      "id": "narrower-classification",
+      "question": "Does the regional record establish that Species P occurs only in District D?",
+      "evidence": [
+        {"id": "regional-record", "text": "The catalogue lists Species P as endemic to Region R and records its occurrence in District D."}
+      ],
+      "supported_text": "The catalogue records Species P in District D and labels it endemic to Region R. That record alone does not establish a District-D-only range; narrower range evidence is not supplied.",
+      "unsupported_text": "The catalogue records Species P in District D and labels it endemic to Region R, so it cannot be endemic to District D.",
+      "supports": [{"citation_id": "regional-record", "field": "text", "quote": "The catalogue lists Species P as endemic to Region R and records its occurrence in District D."}],
+      "review_expectation": {
+        "useful_part": "Report the regional classification and recorded occurrence.",
+        "required_limit": "Narrower range is not established by the supplied record.",
+        "forbidden_change": "Convert missing evidence for narrower membership into categorical exclusion."
+      }
+    },
+    {
+      "id": "transferred-method-scope",
+      "question": "Which locations do these estimates cover?",
+      "evidence": [
+        {"id": "original-method", "text": "The 2018 study derived runoff coefficients for Site A. The later assessment adopted those coefficients in its present study area."},
+        {"id": "receiving-estimates", "text": "The later assessment calculated runoff totals for each subarea using its measured land-cover areas and the adopted coefficients."}
+      ],
+      "supported_text": "The original 2018 study derived coefficients for Site A. The later assessment applied them to its own study area and calculated subarea totals; the supplied passages do not identify that receiving area's location.",
+      "unsupported_text": "The original 2018 study derived coefficients for Site A. The later assessment applied them and calculated subarea totals. These estimates therefore cover Site A.",
+      "supports": [
+        {"citation_id": "original-method", "field": "text", "quote": "The 2018 study derived runoff coefficients for Site A. The later assessment adopted those coefficients in its present study area."},
+        {"citation_id": "receiving-estimates", "field": "text", "quote": "The later assessment calculated runoff totals for each subarea using its measured land-cover areas and the adopted coefficients."}
+      ],
+      "review_expectation": {
+        "useful_part": "Identify the original coefficients and their later application separately.",
+        "required_limit": "Keep the receiving area's unspecified location unknown.",
+        "forbidden_change": "Transfer the earlier study's location or year to the later assessment through an ambiguous referent."
+      }
+    },
+    {
+      "id": "permission-and-condition",
+      "question": "What does this rule permit, and under what conditions?",
+      "evidence": [
+        {"id": "permission", "text": "Small drainage structures may be installed in areas designated by the Water Office."},
+        {"id": "design-condition", "text": "Their structure and design must comply with Appendix C."}
+      ],
+      "supported_text": "The supplied rule permits small drainage structures in Water Office-designated areas, subject to the structure and design requirements in Appendix C. Those detailed requirements are not included in the supplied passages.",
+      "unsupported_text": "The supplied rule permits small drainage structures in Water Office-designated areas. No other conditions are given.",
+      "supports": [
+        {"citation_id": "permission", "field": "text", "quote": "Small drainage structures may be installed in areas designated by the Water Office."},
+        {"citation_id": "design-condition", "field": "text", "quote": "Their structure and design must comply with Appendix C."}
+      ],
+      "review_expectation": {
+        "useful_part": "State the permission with its designated-area and mandatory-design conditions.",
+        "required_limit": "Appendix C is referenced but its detailed requirements are not supplied.",
+        "forbidden_change": "Omit an adjacent mandatory condition, claim no conditions exist, or invent the appendix requirements."
+      }
+    }
+  ]
+}
