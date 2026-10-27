@@ -5,6 +5,7 @@ import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
+import {researchApi as api} from './research-api';
 import './research.css';
 
 type Evidence={id:string;document_id:string;page:number;label:string;title:string;url:string;text:string;origin:string;warning:string;retrieved_at:string;format:string;matches:string[];reader_url:string;generation:string};
@@ -25,11 +26,6 @@ export function ResearchMemoryProvider({children}:{children:ReactNode}){
 }
 type Document={id:string;title:string;url:string;retrieved_at:string;format:string;page_count:number;generation:string;sha256:string;quality:{low_text_pages:number;ocr_pages:number};original_url:string;text_url:string};
 type Page={page:number;label:string;text:string;origin:string;warning:string};
-async function api<T>(url:string,init?:RequestInit):Promise<T>{
- const response=await fetch(url,init);const data=await response.json().catch(()=>null);
- if(!response.ok)throw new Error(typeof data?.detail==='string'?data.detail:'The research service could not respond. Please try again.');
- if(data===null)throw new Error('The research service could not respond. Please try again.');return data as T;
-}
 const date=(value:string)=>value?new Date(value).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'Date unavailable';
 function Source({source,number,returnTo}:{source:Evidence;number?:number;returnTo:string}){
  return <article className="research-source"><div className="research-source-meta">{number&&<span>Source {number}</span>}<span>{source.label}</span><span>{source.format==='pdf'?'PDF':source.format==='html'?'Webpage':source.format.toUpperCase()}</span></div>
@@ -63,7 +59,7 @@ function ResearchConversation({scope,docId,sourceGeneration}:{scope:string;docId
     try{turn.answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:t.answer!.paragraphs.map(p=>p.text).join('\n').slice(0,4000)}]).slice(-8)})});}
     catch(e){if((e as Error).name==='AbortError')throw e;turn.error=(e as Error).message;}
    }
-   setTurns(current=>[...current,turn]);setQuestion('');
+   setTurns(current=>[...current,turn]);if(!turn.error)setQuestion('');
   }catch(e){if((e as Error).name!=='AbortError')setTurns(current=>[...current,{question:clean,results:[],error:(e as Error).message,mode:action}]);}
   finally{if(!controller.signal.aborted){setBusy(false);}}
  }
@@ -74,7 +70,7 @@ function ResearchConversation({scope,docId,sourceGeneration}:{scope:string;docId
     {turn.error&&<p role="alert" className="research-message">{turn.error}</p>}
     {turn.answer?.notice&&<p role="status" className="research-message">{turn.answer.notice}</p>}
     {turn.answer?.paragraphs.map((p,i)=><p className="answer-paragraph" key={i}>{p.text}{p.citations.map(id=>{const n=turn.answer!.citations.findIndex(c=>c.id===id);const cite=turn.answer!.citations[n];return cite?<Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>:null;})}</p>)}
-    <h3 className="evidence-heading">{turn.answer?.status==='answered'?'Sources for this answer':turn.results.length?'Passages to explore':'No matching passages'}</h3>
+    <h3 className="evidence-heading">{turn.answer?.status==='answered'?'Sources for this answer':turn.results.length?'Passages to explore':turn.error?'Sources unavailable':'No matching passages'}</h3>
     {!turn.results.length&&!turn.error&&<p>Try a place, species name or a broader topic such as “groundwater” or “khazan”.</p>}
     {(turn.answer?.status==='answered'?turn.answer.citations:turn.results).map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}
    </section>)}
