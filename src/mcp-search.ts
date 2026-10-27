@@ -1,5 +1,28 @@
 import { lexicalSearch, tokens } from './search.js';
 import type { RecordItem } from './types.js';
+import type { CRMRecord } from './crm-model.js';
+
+// These are two independently sourced institutional listings for the same
+// corporation. Keep the second listing's contact and provenance in the result.
+const wasteCorporationIds = new Set(['goa-3be8492c5821', 'goa-b3f711f6b7f3']);
+export function directoryMatches(records: CRMRecord[], limit: number) {
+  const seen = new Set<string>();
+  const results: {record: CRMRecord; additional: CRMRecord[]}[] = [];
+  for (const record of records) {
+    if (wasteCorporationIds.has(record.record_id)) {
+      if (seen.has('waste-corporation')) continue;
+      seen.add('waste-corporation');
+      const listings = records.filter(item => wasteCorporationIds.has(item.record_id));
+      const primary = listings.find(item => item.record_id === 'goa-3be8492c5821') || record;
+      results.push({record: primary, additional: listings.filter(item => item !== primary)});
+    } else results.push({record, additional: []});
+  }
+  return results.slice(0, limit);
+}
+
+export function directoryWebsite(value: string) {
+  return value.trim().replace(/^(https?:\/\/)(?=https?:\/\/)/i, '');
+}
 
 // Only strip conversational filler from questions; leave ordinary names and
 // keyword searches unchanged. The directory still requires all remaining terms.
