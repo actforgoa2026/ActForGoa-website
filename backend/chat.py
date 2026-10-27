@@ -67,6 +67,7 @@ class AnswerCache:
     def key(config, prepared):
         value=[config.provider,config.model,prepared.messages,
                [(e['id'],e.get('generation')) for e in prepared.evidence]]
+        if config.provider == 'anthropic':value.append(config.effort)
         return hashlib.sha256(json.dumps(value,sort_keys=True,ensure_ascii=False).encode()).hexdigest()
 
     def get(self,key):

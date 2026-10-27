@@ -17,6 +17,7 @@ from backend.providers import chat_config
 def config(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.delenv('ANTHROPIC_CHAT_MODEL', raising=False)
+    monkeypatch.delenv('ANTHROPIC_CHAT_EFFORT', raising=False)
     return chat_config()
 
 
@@ -133,6 +134,29 @@ def test_sonnet_requires_explicit_selection_with_reviewed_cost_and_same_contract
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(
             lambda _: httpx.Response(200, json=brief_message()))) as client:
         with pytest.raises(ValueError):answer_question(client, sonnet, prepared)
+
+
+def test_explicit_sonnet_high_changes_only_effort_and_separates_cached_answers(config, monkeypatch, prepared):
+    from backend.anthropic_provider import message_request
+    monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-sonnet-5-5')
+    medium=chat_config()
+    assert medium.effort==config.effort=='medium'
+    before=message_request(medium,prepared)
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'high')
+    high=chat_config();after=message_request(high,prepared)
+    assert after=={**before,'output_config':{**before['output_config'],'effort':'high'}}
+    assert high.maximum_cost_microusd(26048)==medium.maximum_cost_microusd(26048)==158480
+    assert high.maximum_cost_microusd(100000-INPUT_ALLOWANCE)==290000
+    assert AnswerCache.key(high,prepared)!=AnswerCache.key(medium,prepared)
+    monkeypatch.delenv('ANTHROPIC_CHAT_MODEL')
+    with pytest.raises(ValueError,match='effort'):chat_config()
+
+
+@pytest.mark.parametrize('effort',['low','xhigh','max','unknown',None])
+def test_unreviewed_effort_never_dispatches(config,prepared,effort):
+    selected=replace(config,model='claude-sonnet-5-5',effort=effort)
+    with AnthropicClient('fixture-only',transport=httpx.MockTransport(lambda _:pytest.fail('No dispatch'))) as client:
+        with pytest.raises(ValueError,match='effort'):answer_question(client,selected,prepared)
 
 
 def test_missing_key_and_optional_workspace(config, monkeypatch, prepared):

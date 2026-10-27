@@ -5,7 +5,7 @@ import os
 import re
 from urllib.parse import urlsplit
 from openai import OpenAI
-from .anthropic_provider import AnthropicClient, INPUT_ALLOWANCE, PRICE_TIER_INPUT_LIMIT
+from .anthropic_provider import AnthropicClient, INPUT_ALLOWANCE, PRICE_TIER_INPUT_LIMIT, reviewed_effort
 
 # USD per million tokens, standard uncached rates (Singapore for direct Qwen).
 # Anthropic includes an extra native-schema allowance and a 100K tier guard;
@@ -41,6 +41,7 @@ class ChatConfig:
     max_output_tokens: int = 1800
     route: str = 'alibaba'
     structured: bool = False
+    effort: str = 'medium'
 
     def maximum_cost_microusd(self, input_token_bound):
         if not isinstance(input_token_bound, int) or input_token_bound < 0:
@@ -83,9 +84,11 @@ def chat_config():
             raise ValueError('QWEN_BASE_URL must be an Alibaba Singapore OpenAI-compatible endpoint')
         config = ChatConfig(provider, model, 'Alibaba Cloud (Qwen)', 'DASHSCOPE_API_KEY', endpoint)
     elif provider == 'anthropic':
-        config = ChatConfig(provider, os.getenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5'),
+        model = os.getenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
+        effort = reviewed_effort(model, os.getenv('ANTHROPIC_CHAT_EFFORT', 'medium'))
+        config = ChatConfig(provider, model,
                             'Anthropic', 'ANTHROPIC_API_KEY', 'https://api.anthropic.com/v1',
-                            max_output_tokens=9000, route='anthropic', structured=True)
+                            max_output_tokens=9000, route='anthropic', structured=True, effort=effort)
     elif provider == 'openai':
         config = ChatConfig(provider, os.getenv('OPENAI_CHAT_MODEL', 'gpt-5.6-luna'),
                             'OpenAI', 'OPENAI_API_KEY', 'https://api.openai.com/v1')

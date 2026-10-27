@@ -14,7 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 import httpx
 from dotenv import dotenv_values
-from backend.anthropic_provider import AnthropicClient, API_VERSION, INPUT_ALLOWANCE
+from backend.anthropic_provider import AnthropicClient, API_VERSION, INPUT_ALLOWANCE, reviewed_effort
 from backend.chat import ChatRequest, prepare_answer, answer_question, MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
 from backend.hosting import PublicLimits
 from backend.providers import PRICES, chat_config
@@ -143,12 +143,19 @@ def planned_model(plan):
     return model
 
 
+def planned_effort(plan):
+    # Omitted historical fields mean medium, never an implicit high comparison.
+    return reviewed_effort(planned_model(plan), plan.get('effort', 'medium'))
+
+
 def preflight(plan, stage_name, config, *, execute=False):
     if plan.get('source_commit') != source_identity():raise ValueError('Final integrated source identity is not approved')
     day = datetime.now(timezone.utc).date().isoformat()
     if plan.get('date_utc') != day:raise ValueError('This plan requires a new UTC-day approval')
     if config.provider != 'anthropic' or config.model != planned_model(plan):
         raise ValueError('Configured model must match the reviewed Anthropic plan model')
+    if config.effort != planned_effort(plan):
+        raise ValueError('Configured effort must match the reviewed Anthropic plan effort')
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')
     count = sum(p['count'] for p in stage['packets'])
@@ -273,7 +280,7 @@ def run_cases(library, client, capture, config, cases, context, output):
     with output.open('x'):pass
     output.chmod(0o600)
     report={'source_commit':source_identity(),'harness_sha256':sha(__file__),'generation':library.generation,
-        'api_version':API_VERSION,'model':config.model,'before':context['before'],'cases':[],
+        'api_version':API_VERSION,'model':config.model,'effort':config.effort,'before':context['before'],'cases':[],
         'originals_checked':{},'entailment_acceptance':'pending_human_review','complete':False}
     limits=PublicLimits(context['ledger'].parent,chats_per_day=100,monthly_usd='5')
     save(report,output)
@@ -353,9 +360,10 @@ def main():
     args=parser.parse_args()
     plan=json.loads(args.plan.read_text())
     os.environ['RESEARCH_CHAT_PROVIDER']='anthropic';os.environ['ANTHROPIC_CHAT_MODEL']=planned_model(plan)
+    os.environ['ANTHROPIC_CHAT_EFFORT']=planned_effort(plan)
     config=chat_config();context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
-        print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'max_attempts':context['count'],
+        print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'effort':config.effort,'max_attempts':context['count'],
             'max_reservation_microusd':context['worst_reservation_microusd'],'provider_calls':0,
             'heldout_questions_parsed':False}));return
     if not args.output or args.output.exists():raise ValueError('A new output path is required')
