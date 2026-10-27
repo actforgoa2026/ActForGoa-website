@@ -97,7 +97,7 @@ test('website audit repairs known transcription errors and suppresses non-websit
   for (const [id, url] of Object.entries(expected)) {
     const record = records.find(r => r.record_id === id)!;
     assert.equal(directoryWebsite(record.website_url), url);
-    assert.equal(crmDirectoryLinks(record).find(link => link.label === 'Website')?.url, id === 'goa-80732e1537a8' ? 'https://dstwm.goa.gov.in/' : url);
+    assert.equal(crmDirectoryLinks(record).find(link => link.label === 'Website')?.url, id === 'goa-80732e1537a8' ? 'https://dstwm.goa.gov.in/' : id === 'goa-fe7e9c7a7d57' ? 'https://dslr.goa.gov.in/' : id === 'goa-bb1b92ba4e69' ? 'https://goasacs.goa.gov.in/' : url);
   }
   const bad = records.find(r => r.name.startsWith('MINISTRY OF SHIPPING DIRECTORATE GENERAL'))!;
   assert.equal(directoryWebsite(bad.website_url), '');
@@ -117,4 +117,17 @@ test('live check evidence and replacements preserve uncertainty and future sourc
   assert.equal(websiteEvidence('https://not-in-snapshot.example.org').status, 'not_checked');
   assert.ok(duplicateGroup('goa-a1f1014604fa').includes('goa-b8b44e35e553'));
   assert.ok(!duplicateGroup('goa-f80172c68298').includes('goa-d6da3f0e0f38'));
+});
+
+
+test('recovered links distinguish official sites from related references', async () => {
+  const {directoryWebsite, websiteEvidence} = await import('../src/directory-quality');
+  const election = 'https://sec.goa.gov.in/general-election-to-zilla-panchayat-2025/';
+  assert.equal(directoryWebsite(election, 'goa-f8c3a402e1c0'), 'https://sec.goa.gov.in/');
+  assert.equal(websiteEvidence(election, 'goa-f8c3a402e1c0').kind, 'reference');
+  assert.equal(directoryWebsite('https://sec.goa.gov.in/new-results/', 'goa-f8c3a402e1c0'), 'https://sec.goa.gov.in/new-results/');
+  assert.equal(directoryWebsite('https://www.asigoacircle.gov.in', 'goa-bab2a38177ae'), 'https://ccari.res.in/');
+  assert.equal(directoryWebsite('https://www.asigoacircle.gov.in', 'goa-2e90623e662e'), 'https://www.asigoacircle.gov.in');
+  assert.equal(directoryWebsite('http://goasacs.nic.in', 'goa-bb1b92ba4e69'), 'https://goasacs.goa.gov.in/');
+  assert.equal(websiteEvidence('https://goaspcb.gov.in/').status, 'intermittent');
 });

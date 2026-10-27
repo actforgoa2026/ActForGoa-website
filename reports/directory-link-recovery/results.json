@@ -1,0 +1,1552 @@
+[
+  {
+    "original": "https://www.arcgoa.in/",
+    "check": {
+      "url": "https://www.arcgoa.in/",
+      "status": 404
+    },
+    "records": [
+      {
+        "id": "goa-ee25a03f7224",
+        "website": "https://rescuemania.co.uk/our-projects/arc-animal-rescue-centre-south-goa/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://rescuemania.co.uk/our-projects/arc-animal-rescue-centre-south-goa/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.khazansocietyofgoa.org/blank-1",
+    "check": {
+      "url": "https://www.khazansocietyofgoa.org/blank-1",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-882f1625644e",
+        "website": "https://www.khazansocietyofgoa.org/blank-1",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://goaspcb.gov.in/",
+    "check": {
+      "url": "https://goaspcb.gov.in/",
+      "status": 200,
+      "final": "https://goaspcb.gov.in/"
+    },
+    "records": [
+      {
+        "id": "goa-1e80169ac63c",
+        "website": "https://goaspcb.gov.in/",
+        "website_check": {
+          "status": "intermittent",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.accountsgoa",
+    "check": {
+      "url": "https://www.accountsgoa",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-41bf2a5c96ee",
+        "website": "https://www.goa.gov.in/department/directorate-of-accounts/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/directorate-of-accounts/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://sec.goa.gov.in/general-election-to-zilla-panchayat-2025/",
+    "check": {
+      "url": "https://sec.goa.gov.in/general-election-to-zilla-panchayat-2025/",
+      "status": 404
+    },
+    "records": [
+      {
+        "id": "goa-f8c3a402e1c0",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-e98ddb99b2f1",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-afbcb5bc75c5",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-50f024bd1760",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-df11c9c40e66",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-fe6b7590c467",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-54604a10a3d2",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-304c10de3340",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-65fa2d4bda16",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-1ea67880f02b",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-cb39df34047d",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-84c1c39dfcb0",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-09f5d250da6f",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-53af6f9efab5",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-9ac2277f71cd",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-71a2a4480b6e",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-328769ee03f8",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-988c87e1ba8b",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-6bc459ed0054",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-3eedbf2224dd",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-3b4ccf0e9b91",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-b70a59489cfe",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-b0de35a8b154",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-37f1f3620472",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-3557655e3fb7",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-0937ce1d323e",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-8844ea179ebb",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-d5f099b9c293",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-f9cf477389d9",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-923e701d8e2c",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-3de9af938ae8",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-aaedddac2bc3",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-d8b203fcc64f",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-0980101135ef",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-982d106dd519",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-a6941283c7d8",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-364199603c4f",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-18c0af7e6dca",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-b287844c1d25",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-caa8a135ae21",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-02fc8be86d2f",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-60936e8446fd",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-6df3d27e4014",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-33693ff1098e",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-994dfe115d4b",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-b61d7d9e0edb",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-3de14bf4cfde",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-a0f5f1155ec6",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-bf01813fe3c3",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-1b5461f21ac4",
+        "website": "https://sec.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sec.goa.gov.in/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.asigoacircle.gov.in",
+    "check": {
+      "url": "https://www.asigoacircle.gov.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-2e90623e662e",
+        "website": "https://www.asigoacircle.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      },
+      {
+        "id": "goa-bab2a38177ae",
+        "website": "https://ccari.res.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://ccari.res.in/contact.html",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://archaeology.goa.gov.in",
+    "check": {
+      "url": "https://archaeology.goa.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-78e01be21a74",
+        "website": "https://archaeology.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://daa.goa.gov",
+    "check": {
+      "url": "https://daa.goa.gov",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-85acc07f0404",
+        "website": "https://daa.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/citizen/useful-links/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goabalbhavan.org",
+    "check": {
+      "url": "https://www.goabalbhavan.org",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-a46eacd59d7f",
+        "website": "https://balbhavan.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://balbhavan.goa.gov.in/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://idc.goa.gov.in",
+    "check": {
+      "url": "https://idc.goa.gov.in",
+      "status": 404
+    },
+    "records": [
+      {
+        "id": "goa-2f899bd7603d",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-416cd7f68091",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-87b086f8a6fa",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-d51b731dc965",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-32a59e98ea43",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-7002e3e8001c",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-7ca3edac6163",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-2b4b1eea2511",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-8250caafc67a",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-a73e8f9910b7",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-8f90bc6ca390",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-f1164fca82ba",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-24242e1cbf92",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-c0663d2f1ff5",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-e31bb6ea07cb",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-d57837ea4d30",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-16c8928b2252",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      },
+      {
+        "id": "goa-10bc7522c797",
+        "website": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-industrial-development-corporation/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.itibicholim.goa.gov.in",
+    "check": {
+      "url": "https://www.itibicholim.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-c62adfed31da",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.iticacora.goa.gov.in",
+    "check": {
+      "url": "https://www.iticacora.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-b794088ac208",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.iticanacona.goa.gov.in",
+    "check": {
+      "url": "https://www.iticanacona.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-13d1d286bfbf",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.grievances.goa.gov.in",
+    "check": {
+      "url": "https://www.grievances.goa.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-072a2cc92381",
+        "website": "https://dpg.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/citizen/useful-links/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goapolice.gov.in",
+    "check": {
+      "url": "https://www.goapolice.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-a92188ca7c2a",
+        "website": "https://citizen.goapolice.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-police/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.censusindia.gov.in",
+    "check": {
+      "url": "https://www.censusindia.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-fbe32ea13951",
+        "website": "https://www.censusindia.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://dhsgoa.gov.in",
+    "check": {
+      "url": "https://dhsgoa.gov.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-e3976c5acad6",
+        "website": "https://www.goa.gov.in/department/health-services/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/health-services/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://egov.goa.nic.in/dslr",
+    "check": {
+      "url": "https://egov.goa.nic.in/dslr",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-fe7e9c7a7d57",
+        "website": "https://dslr.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/directorate-of-settlement-and-land-records/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.dwcd.goa.gov.in",
+    "check": {
+      "url": "https://www.dwcd.goa.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-e888fee48910",
+        "website": "https://www.goa.gov.in/department/women-and-child-development/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/women-and-child-development/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://goaexcies.gov.in",
+    "check": {
+      "url": "https://goaexcies.gov.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-8594c8748e6e",
+        "website": "https://excise.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/citizen/useful-links/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.itifarmagudi.goa.gov.in",
+    "check": {
+      "url": "https://www.itifarmagudi.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-e3620f4135fa",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goahomescience.gov.in",
+    "check": {
+      "url": "https://www.goahomescience.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-b6e6533e8f80",
+        "website": "https://www.goahomescience.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.gedc-goa.org",
+    "check": {
+      "url": "https://www.gedc-goa.org",
+      "status": 500
+    },
+    "records": [
+      {
+        "id": "goa-dd3a470b269f",
+        "website": "https://gedc.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dip.goa.gov.in/online-applications-invited-for-bursary-scheme-2025-26/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.ghrssidc.org",
+    "check": {
+      "url": "https://www.ghrssidc.org",
+      "status": 526
+    },
+    "records": [
+      {
+        "id": "goa-171da1ccbbde",
+        "website": "https://www.ghrssidc.org",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.gipard.goa.gov.in",
+    "check": {
+      "url": "https://www.gipard.goa.gov.in",
+      "status": 406
+    },
+    "records": [
+      {
+        "id": "goa-e1d5260d2b1a",
+        "website": "https://www.gipard.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goaipb.goa.gov.in",
+    "check": {
+      "url": "https://www.goaipb.goa.gov.in",
+      "status": 200,
+      "final": "https://www.goaipb.goa.gov.in"
+    },
+    "records": [
+      {
+        "id": "goa-e9efe1236ebc",
+        "website": "https://www.goaipb.goa.gov.in",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.Konkaniakademi.goa.gov.in",
+    "check": {
+      "url": "https://www.Konkaniakademi.goa.gov.in",
+      "error": "<urlopen error [Errno 61] Connection refused>"
+    },
+    "records": [
+      {
+        "id": "goa-b68170be26b9",
+        "website": "https://www.Konkaniakademi.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://gsrb.goa.gov.in",
+    "check": {
+      "url": "https://gsrb.goa.gov.in",
+      "error": "<urlopen error [Errno 61] Connection refused>"
+    },
+    "records": [
+      {
+        "id": "goa-8af59504cb9f",
+        "website": "https://gsrb.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.gssa.goa.gov.in",
+    "check": {
+      "url": "https://www.gssa.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-a64f76a17df7",
+        "website": "https://www.gssa.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "http://goasacs.nic.in",
+    "check": {
+      "url": "http://goasacs.nic.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-bb1b92ba4e69",
+        "website": "https://goasacs.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-state-aids-control-society/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.gscper.goa.gov.in",
+    "check": {
+      "url": "https://www.gscper.goa.gov.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-3a5105190961",
+        "website": "https://www.goa.gov.in/department/goa-state-commission-for-protection-of-child-rights/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/goa-state-commission-for-protection-of-child-rights/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.scobc.goa.gov.in",
+    "check": {
+      "url": "https://www.scobc.goa.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-81c6560cb173",
+        "website": "https://www.scobc.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://khandilacollege.edu.in",
+    "check": {
+      "url": "https://khandilacollege.edu.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-c6c5af2cad48",
+        "website": "https://khandilacollege.edu.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.gpb.nic.in",
+    "check": {
+      "url": "https://www.gpb.nic.in",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-64e8456a16a7",
+        "website": "https://www.gpb.nic.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.redcrossgoa.org",
+    "check": {
+      "url": "https://www.redcrossgoa.org",
+      "status": 500
+    },
+    "records": [
+      {
+        "id": "goa-0d7dd8b631d2",
+        "website": "https://www.goa.gov.in/department/indian-red-cross-society-goa-state-branch/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/indian-red-cross-society-goa-state-branch/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.ditc.goa.gov.in",
+    "check": {
+      "url": "https://www.ditc.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-b24f71199ae9",
+        "website": "https://www.goa.gov.in/department/industries-trade-and-commerce/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/industries-trade-and-commerce/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.imbgoa.com",
+    "check": {
+      "url": "https://www.imbgoa.com",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-b8e1df4327fd",
+        "website": "https://www.goa.gov.in/department/institute-menezes-braganza/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://www.goa.gov.in/department/institute-menezes-braganza/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.konkanrailway.com",
+    "check": {
+      "url": "https://www.konkanrailway.com",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-597e3b159e0c",
+        "website": "https://www.konkanrailway.com",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.itimargao.goa.gov.in",
+    "check": {
+      "url": "https://www.itimargao.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-d9d30aa36be0",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goaprisons.gov.in",
+    "check": {
+      "url": "https://www.goaprisons.gov.in",
+      "error": "<urlopen error timed out>"
+    },
+    "records": [
+      {
+        "id": "goa-2c1f49d2c0be",
+        "website": "https://www.goaprisons.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      },
+      {
+        "id": "goa-6470d041dd67",
+        "website": "https://www.goaprisons.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.mptgoa.gov.in/",
+    "check": {
+      "url": "https://www.mptgoa.gov.in/",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-d7b4709df347",
+        "website": "https://www.mptgoa.gov.in/",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.itipanaji.goa.gov.in",
+    "check": {
+      "url": "https://www.itipanaji.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-ed7f5c067d58",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.itisattari.goa.gov.in",
+    "check": {
+      "url": "https://www.itisattari.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-32006ec98cd7",
+        "website": "https://dsde.goa.gov.in/government-itis/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dsde.goa.gov.in/government-itis/",
+          "kind": "reference"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://sidcgl.com",
+    "check": {
+      "url": "https://sidcgl.com",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-a01aac1366c9",
+        "website": "https://sidcgl.goa.gov.in/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://sidcgl.goa.gov.in/about-sewerage-infrastructure-development-corporation-of-goa-ltd/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://registration.goa.gov.in",
+    "check": {
+      "url": "https://registration.goa.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: certificate has expired (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-fc2a37401c8f",
+        "website": "https://registration.goa.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.tiatracdemygoa.com",
+    "check": {
+      "url": "https://www.tiatracdemygoa.com",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-e6706bc446bb",
+        "website": "https://tiatracademyofgoa.com/",
+        "website_check": {
+          "status": "responded",
+          "checked_on": "2026-10-27",
+          "source": "https://dip.goa.gov.in/tiatr-academy-of-goa-organizes-orientation-course-in-tiatr/",
+          "kind": "website"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goatransport.gov.in",
+    "check": {
+      "url": "https://www.goatransport.gov.in",
+      "error": "<urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: self-signed certificate in certificate chain (_ssl.c:1010)>"
+    },
+    "records": [
+      {
+        "id": "goa-3ba7fd9de188",
+        "website": "https://www.goatransport.gov.in",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  },
+  {
+    "original": "https://www.goavigilance.nic",
+    "check": {
+      "url": "https://www.goavigilance.nic",
+      "error": "<urlopen error [Errno 8] nodename nor servname provided, or not known>"
+    },
+    "records": [
+      {
+        "id": "goa-f4ead4591659",
+        "website": "https://www.goavigilance.nic",
+        "website_check": {
+          "status": "unverified",
+          "checked_on": "2026-10-27"
+        }
+      }
+    ]
+  }
+]
