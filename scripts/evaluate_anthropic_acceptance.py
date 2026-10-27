@@ -73,10 +73,12 @@ def final_json_capture(payload):
             if (not isinstance(p['citations'],list) or len(p['citations']) > 20
                     or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
                 return {'capture_status':'unexpected_shape'}
-        elif set(p) == {'text','supports'}:
+        elif set(p) in ({'text','supports'}, {'text','primary_support','supports'}):
             if not isinstance(p['supports'],list) or len(p['supports']) > 20:
                 return {'capture_status':'unexpected_shape'}
-            for support in p['supports']:
+            supports=p['supports']
+            if 'primary_support' in p:supports=[p['primary_support'],*supports]
+            for support in supports:
                 if (not isinstance(support,dict) or set(support) != {'citation_id','field','quote'}
                         or any(not isinstance(support[k],str) or len(support[k]) > bound
                                for k,bound in [('citation_id',160),('field',160),('quote',1200)])):

@@ -81,7 +81,7 @@ class AnswerCache:
             self.entries.move_to_end(key)
             while len(self.entries)>self.maximum:self.entries.popitem(last=False)
 
-def evidence_payload(evidence):
+def evidence_payload(evidence, *, provider=None):
     """Factor identical provenance without changing any cited passage bytes.
 
 Version and document identity are part of the key. Different caveats, URLs or
@@ -90,6 +90,11 @@ source dates get separate entries even when document IDs happen to match.
     source_keys = ('document_id', 'generation', 'title', 'url', 'retrieved_at',
                    'publisher_class', 'legal_currency', 'source_date_metadata',
                    'topics', 'document_kind_hint', 'guide_verification')
+    if provider == 'anthropic':
+        # Host-derived catalogue labels do not establish authorship or status.
+        # Keep them in local/public citations, never as native answer evidence.
+        hidden = {'title', 'url', 'publisher_class', 'document_kind_hint', 'topics'}
+        source_keys = tuple(key for key in source_keys if key not in hidden)
     passage_keys = ('id', 'page', 'label', 'start', 'end', 'text', 'page_heading', 'warning')
     sources, source_ids, passages = {}, {}, []
     for item in evidence:
@@ -126,7 +131,7 @@ def prepare_answer(request, evidence, *, provider=None):
             from .anthropic_provider import native_answer_instructions
             final_instruction=native_answer_instructions(base_instructions,request.answer_style)
         # Send evidence and provenance only, not internal paths or unrelated library metadata.
-        payload={'question':request.question, **evidence_payload(selected)}
+        payload={'question':request.question, **evidence_payload(selected,provider=provider)}
         messages=[{'role':'system','content':final_instruction},*history,
                   {'role':'user','content':json.dumps(payload,ensure_ascii=False,separators=(',',':'))}]
         size=len(json.dumps(messages,ensure_ascii=False,separators=(',',':')).encode('utf-8'))

@@ -64,11 +64,13 @@ def native_answer_schema(schema, answer_style):
             'quote': {'type': 'string'},
         }, 'required': ['citation_id', 'field', 'quote'],
     }
+    primary = deepcopy(support)
+    primary['properties']['field']['enum'] = ['text']
     paragraph = {
         'type': 'object', 'additionalProperties': False,
-        'properties': {'text': {'type': 'string'},
-                       'supports': {'type': 'array', 'items': support, 'minItems': 1}},
-        'required': ['text', 'supports'],
+        'properties': {'text': {'type': 'string'}, 'primary_support': primary,
+                       'supports': {'type': 'array', 'items': support}},
+        'required': ['text', 'primary_support', 'supports'],
     }
     key = 'paragraph' if answer_style == 'brief' else 'paragraphs'
     value = {'anyOf': [paragraph, {'type': 'null'}]} if key == 'paragraph' else {'type': 'array', 'items': paragraph}
@@ -83,24 +85,27 @@ def native_answer_instructions(instructions, answer_style):
     # Native-only substitution: other providers retain their existing contracts.
     instructions = instructions.replace(
         'Put evidence IDs only in the citations array, never in paragraph text.',
-        'Put evidence IDs only in supports.citation_id, never in paragraph text.')
+        'Put evidence IDs only in primary_support.citation_id or supports.citation_id, never in paragraph text.')
     shape = ('Return only status and paragraph. For answered, paragraph is one object; '
              'for insufficient_evidence, paragraph is null. Never return a paragraphs array.'
              if answer_style == 'brief' else
              'Return only status and paragraphs. For answered, paragraphs contains one to four objects; '
              'for insufficient_evidence, paragraphs is an empty array.')
     return instructions + '\n' + shape + (
-        ' Each object has text and supports only. Treat each paragraph as one claim unit. '
-        'supports contains 1 to 10 objects with citation_id, field and quote only. '
+        ' Each object has text, primary_support and supports only. Use the fewest sufficient claim units. '
+        'primary_support is one object with citation_id, field set to text, and quote. '
+        'supports is an array of zero to nine additional objects with citation_id, field and quote. '
         'Use an exact selected passage ID. field is one of: ' + ', '.join(SUPPORT_FIELDS) + '. '
         'For each support, copy a contiguous quote of 1 to 600 characters from that passage field '
         'or its referenced source field. Whitespace may be normalized; spelling, case and punctuation must stay exact. '
-        'Include at least one text support per paragraph. The other allowed fields support only explicit dates, '
+        'Attach caveats and source limitations to the associated text-supported claim unit; never add a metadata-only conclusion. '
+        'The other allowed fields support only explicit dates, '
         'source limitations and provenance qualifications, never substantive ecological claims. '
         'Do not use titles, hosting URLs, hidden metadata or other page text as support. '
         'Before returning, check every clause, opening statement and definition against its own paragraph supports. '
         'Retain entity, habitat, taxonomic, geographic and time qualifiers, including annual measurement periods. '
-        'Do not infer authorship from a host, or label extraction OCR unless the supplied warning explicitly says so. '
+        'Do not infer authorship, advocacy or official status from a host or catalogue label, or add definitions absent from the evidence. '
+        'Do not label extraction OCR unless the supplied warning explicitly says so. '
         'Rewrite or omit unsupported claims; do not borrow support from another paragraph. '
         'Quotes anchor evidence but do not establish entailment by themselves.'
     )
@@ -145,12 +150,12 @@ def normalize_native_answer(content, prepared):
         fields = _represented_fields(prepared)
         paragraphs = []
         for unit in units:
-            if (not isinstance(unit, dict) or set(unit) != {'text', 'supports'}
-                    or not isinstance(unit['supports'], list) or not 1 <= len(unit['supports']) <= MAX_SUPPORTS):
+            if (not isinstance(unit, dict) or set(unit) != {'text', 'primary_support', 'supports'}
+                    or not isinstance(unit['primary_support'], dict) or unit['primary_support'].get('field') != 'text'
+                    or not isinstance(unit['supports'], list) or not 0 <= len(unit['supports']) < MAX_SUPPORTS):
                 raise ValueError()
             citations = []
-            has_text = False
-            for support in unit['supports']:
+            for support in [unit['primary_support'], *unit['supports']]:
                 if not isinstance(support, dict) or set(support) != {'citation_id', 'field', 'quote'}:
                     raise ValueError()
                 identifier, field, quote = (support[k] for k in ('citation_id', 'field', 'quote'))
@@ -159,11 +164,8 @@ def normalize_native_answer(content, prepared):
                         or field not in fields.get(identifier, {})
                         or ' '.join(quote.split()) not in ' '.join(fields[identifier][field].split())):
                     raise ValueError()
-                has_text |= field == 'text'
                 if identifier not in citations:
                     citations.append(identifier)
-            if not has_text:
-                raise ValueError()
             paragraph = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
             # Shared display cleanup must not silently rewrite a native claim.
             if citation_text(paragraph.text, fields) != paragraph.text:
