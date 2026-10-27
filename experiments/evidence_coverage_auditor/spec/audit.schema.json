@@ -1,0 +1,434 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Proposed offline audit report v2",
+  "type": "object",
+  "properties": {
+    "contract_version": {
+      "const": "afg-evidence-coverage-v2"
+    },
+    "envelope_digest": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/Digest"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "status": {
+      "type": "string",
+      "enum": [
+        "global_reject",
+        "component_issues",
+        "mechanically_valid"
+      ]
+    },
+    "global_scope": {
+      "anyOf": [
+        {
+          "type": "string",
+          "enum": [
+            "parse",
+            "input",
+            "candidate"
+          ]
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "errors": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/Error"
+      },
+      "minItems": 0
+    },
+    "claims": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/ClaimAudit"
+      },
+      "minItems": 0
+    },
+    "gaps": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/GapAudit"
+      },
+      "minItems": 0
+    },
+    "facets": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/FacetAudit"
+      },
+      "minItems": 0
+    },
+    "source_dates": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/SourceDate"
+      },
+      "minItems": 0
+    },
+    "block_notices": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/BlockNotice"
+      },
+      "minItems": 0
+    },
+    "semantic": {
+      "const": "not_assessed"
+    },
+    "original_authentication": {
+      "const": "unverified"
+    },
+    "release": {
+      "const": "hold"
+    },
+    "salvage": {
+      "const": "not_performed"
+    }
+  },
+  "required": [
+    "contract_version",
+    "envelope_digest",
+    "status",
+    "global_scope",
+    "errors",
+    "claims",
+    "gaps",
+    "facets",
+    "source_dates",
+    "block_notices",
+    "semantic",
+    "original_authentication",
+    "release",
+    "salvage"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "Index": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "Digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "SourceId": {
+      "type": "string",
+      "pattern": "^src:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "BlockId": {
+      "type": "string",
+      "pattern": "^blk:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "UnitId": {
+      "type": "string",
+      "pattern": "^unit:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "ClaimId": {
+      "type": "string",
+      "pattern": "^clm:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "GapId": {
+      "type": "string",
+      "pattern": "^gap:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "FacetId": {
+      "type": "string",
+      "pattern": "^fac:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "EventId": {
+      "type": "string",
+      "pattern": "^evt:[a-z0-9][a-z0-9-]{0,47}$"
+    },
+    "ErrorId": {
+      "type": "string",
+      "pattern": "^err:[0-9]{6,}$"
+    },
+    "PathPart": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "$ref": "#/$defs/Index"
+        }
+      ]
+    },
+    "Error": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ErrorId"
+        },
+        "code": {
+          "type": "string",
+          "enum": [
+            "PARSE_PROFILE",
+            "INPUT_SCHEMA",
+            "INPUT_ID",
+            "INPUT_RANGE",
+            "INPUT_TEXT_DIGEST",
+            "INPUT_REFERENCE",
+            "INPUT_PARTITION",
+            "INPUT_GRAPH",
+            "INPUT_ANNOTATION",
+            "INPUT_OMISSION",
+            "INPUT_EVENT",
+            "INPUT_SCOPE",
+            "CANDIDATE_SCHEMA",
+            "BINDING_MISMATCH",
+            "CANDIDATE_ID",
+            "REQUEST_SPAN",
+            "COVERAGE_LINK",
+            "PARAGRAPH_MEMBERSHIP",
+            "CLAIM_DEPENDENCY_GRAPH",
+            "CLAIM_SUPPORT_REFERENCE",
+            "CLAIM_ANCHOR",
+            "CLAIM_WITNESS_REFERENCE",
+            "CLAIM_SUPPORT_ROLE",
+            "CONTEXT_UNAVAILABLE",
+            "GAP_REFERENCE",
+            "GAP_EVENT_BINDING",
+            "GAP_CLARIFICATION"
+          ]
+        },
+        "scope": {
+          "type": "string",
+          "enum": [
+            "parse",
+            "input",
+            "candidate",
+            "claim",
+            "gap"
+          ]
+        },
+        "subject_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "pattern": "^(clm|gap):[a-z0-9][a-z0-9-]{0,47}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "path": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/PathPart"
+          },
+          "minItems": 0
+        }
+      },
+      "required": [
+        "id",
+        "code",
+        "scope",
+        "subject_id",
+        "path"
+      ],
+      "additionalProperties": false
+    },
+    "ClaimAudit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/ClaimId"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "eligible_for_review",
+            "invalid_claim",
+            "blocked_context",
+            "blocked_dependency"
+          ]
+        },
+        "origin_error_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ErrorId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "closure_unit_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UnitId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "missing_unit_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UnitId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        },
+        "attached_block_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/BlockId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "origin_error_ids",
+        "closure_unit_ids",
+        "missing_unit_ids",
+        "attached_block_ids"
+      ],
+      "additionalProperties": false
+    },
+    "GapAudit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/GapId"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "eligible_for_review",
+            "invalid_gap"
+          ]
+        },
+        "origin_error_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ErrorId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "origin_error_ids"
+      ],
+      "additionalProperties": false
+    },
+    "FacetAudit": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "#/$defs/FacetId"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "eligible_for_review",
+            "component_issue"
+          ]
+        },
+        "origin_error_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/ErrorId"
+          },
+          "minItems": 0,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "id",
+        "state",
+        "origin_error_ids"
+      ],
+      "additionalProperties": false
+    },
+    "SourceDate": {
+      "type": "object",
+      "properties": {
+        "source_id": {
+          "$ref": "#/$defs/SourceId"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "metadata_consistent",
+            "metadata_unknown",
+            "metadata_invalid",
+            "metadata_conflict"
+          ]
+        },
+        "year": {
+          "anyOf": [
+            {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9999
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "label": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "source_id",
+        "state",
+        "year",
+        "label"
+      ],
+      "additionalProperties": false
+    },
+    "BlockNotice": {
+      "type": "object",
+      "properties": {
+        "block_id": {
+          "$ref": "#/$defs/BlockId"
+        },
+        "unit_id": {
+          "$ref": "#/$defs/UnitId"
+        },
+        "missing_unit_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/UnitId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "event_ids": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/EventId"
+          },
+          "minItems": 1,
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "block_id",
+        "unit_id",
+        "missing_unit_ids",
+        "event_ids"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "$comment": "Design grammar only. Every status retains semantic not_assessed and release hold. Exact relational behavior is specified in contract.md."
+}

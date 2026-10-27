@@ -1,0 +1,124 @@
+{
+  "version": "afg-evidence-coverage-v2",
+  "context_roles": [
+    "scope",
+    "exception",
+    "antecedent",
+    "continuation",
+    "heading",
+    "table_header",
+    "footnote",
+    "withdrawal"
+  ],
+  "facet_operations": [
+    "identify",
+    "explain",
+    "quantify",
+    "compare",
+    "current_status",
+    "source_publication",
+    "resolve_referent"
+  ],
+  "witness_slots": [
+    "population",
+    "predicate",
+    "quantification",
+    "polarity",
+    "modality",
+    "quantity_unit_and_denominator",
+    "geography_habitat",
+    "time_basis",
+    "conditions_exceptions",
+    "method"
+  ],
+  "witness_states": [
+    "asserted",
+    "not_stated",
+    "not_applicable",
+    "unresolved"
+  ],
+  "semantic_gap_reasons": [
+    "requested_detail_not_established",
+    "requested_relation_not_established",
+    "requested_current_applicability_not_established",
+    "conflicting_supplied_accounts"
+  ],
+  "technical_gap_reason_to_event_target": {
+    "required_context_unavailable": "context_not_retained",
+    "context_budget_excluded": "context_budget_excluded",
+    "extraction_unavailable": "extraction_failed",
+    "publication_metadata_unresolved": "publication_unresolved"
+  },
+  "clarification_reasons": [
+    "ambiguous_referent",
+    "missing_referent"
+  ],
+  "publication_states": [
+    "metadata_consistent",
+    "metadata_unknown",
+    "metadata_invalid",
+    "metadata_conflict"
+  ],
+  "claim_audit_states": [
+    "eligible_for_review",
+    "invalid_claim",
+    "blocked_context",
+    "blocked_dependency"
+  ],
+  "gap_audit_states": [
+    "eligible_for_review",
+    "invalid_gap"
+  ],
+  "facet_audit_states": [
+    "eligible_for_review",
+    "component_issue"
+  ],
+  "source_capability_state": [
+    "unverified"
+  ],
+  "scope_bases": [
+    "whole_block_default",
+    "synthetic_author_partition"
+  ],
+  "retired_v1_fields_rejected": [
+    "context_ids",
+    "dispatched_block_ids",
+    "omitted_bundle_ids",
+    "same_document_version",
+    "same_page_required",
+    "context_state",
+    "depends_on_facets",
+    "source_authenticity",
+    "access_verified"
+  ],
+  "technical_gap_rules_note": "Exact event correspondence and root reachability are normative in contract.md; reason labels alone do not prove a gap.",
+  "error_code_scope": {
+    "PARSE_PROFILE": "parse",
+    "INPUT_SCHEMA": "input",
+    "INPUT_ID": "input",
+    "INPUT_RANGE": "input",
+    "INPUT_TEXT_DIGEST": "input",
+    "INPUT_REFERENCE": "input",
+    "INPUT_PARTITION": "input",
+    "INPUT_GRAPH": "input",
+    "INPUT_ANNOTATION": "input",
+    "INPUT_OMISSION": "input",
+    "INPUT_EVENT": "input",
+    "INPUT_SCOPE": "input",
+    "CANDIDATE_SCHEMA": "candidate",
+    "BINDING_MISMATCH": "candidate",
+    "CANDIDATE_ID": "candidate",
+    "REQUEST_SPAN": "candidate",
+    "COVERAGE_LINK": "candidate",
+    "PARAGRAPH_MEMBERSHIP": "candidate",
+    "CLAIM_DEPENDENCY_GRAPH": "candidate",
+    "CLAIM_SUPPORT_REFERENCE": "claim",
+    "CLAIM_ANCHOR": "claim",
+    "CLAIM_WITNESS_REFERENCE": "claim",
+    "CLAIM_SUPPORT_ROLE": "claim",
+    "CONTEXT_UNAVAILABLE": "claim",
+    "GAP_REFERENCE": "gap",
+    "GAP_EVENT_BINDING": "gap",
+    "GAP_CLARIFICATION": "gap"
+  }
+}
