@@ -22,7 +22,13 @@ if(tool==='git') {
  }
 }
 if(tool==='vercel') {
- if(args[0]==='curl') process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable'}));
+ if(args[0]==='curl') {
+  if(args.includes('/api/mcp')) {
+   const req=JSON.parse(args[args.indexOf('--data')+1]);
+   let result=req.method==='initialize'?{protocolVersion:'2025-03-26',serverInfo:{name:'actforgoa'}}:req.method==='tools/list'?{tools:['search_site','search_directory','search_research'].map(name=>({name}))}:{content:[{type:'text',text:JSON.stringify({results:scenario==='mcp-empty'?[]:[{id:'source'}]})}]};
+   process.stdout.write(JSON.stringify(scenario==='mcp-error'?{jsonrpc:'2.0',id:req.id,error:{code:-32603,message:'failed'}}:{jsonrpc:'2.0',id:req.id,result}));
+  } else process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable'}));
+ }
  if(args[0]==='deploy') {
   const deployment={id:scenario==='wrong-deployment'?'unexpected':'new',url:'https://actforgoa-field-guide-test.vercel.app'};
   process.stdout.write(JSON.stringify(scenario==='flat-json'?deployment:{status:'ok',deployment}));
@@ -38,7 +44,7 @@ if(tool==='vercel') {
 function runRelease(scenario:string, check=false) {
  const root=mkdtempSync(join(tmpdir(),'actforgoa-release-test-'));
  try {
-  mkdirSync(join(root,'bin')); mkdirSync(join(root,'.git'));
+  mkdirSync(join(root,'bin')); mkdirSync(join(root,'.git')); mkdirSync(join(root,'api')); writeFileSync(join(root,'api','mcp.ts'),'');
   const executable=join(root,'bin','mock.cjs');
   writeFileSync(executable,mock,{mode:0o755});
   for(const command of ['git','npm','vercel']) symlinkSync(executable,join(root,'bin',command));
@@ -56,7 +62,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable','wrong-deployment']) {
+for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);
@@ -76,5 +82,6 @@ for(const scenario of ['ok','flat-json']) test(`release stages ${scenario} outpu
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='git'&&x.args[0]==='fetch'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[1]==='https://actforgoa-field-guide.vercel.app'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[0]==='curl'&&x.args.includes('/api/status')&&x.args.includes('https://actforgoa-field-guide-test.vercel.app')));
+ assert.equal(result.calls.slice(deployment+1,promotion).filter(x=>x.tool==='vercel'&&x.args.includes('/api/mcp')).length,5);
  assert.equal(result.calls[promotion].args[1],'https://actforgoa-field-guide-test.vercel.app');
 });

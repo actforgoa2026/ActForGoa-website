@@ -13,6 +13,8 @@ test('remote MCP exposes public sources and returns source evidence', async () =
  try {
   await client.connect(new StreamableHTTPClientTransport(new URL(`http://127.0.0.1:${address.port}/api/mcp`)));
   const tools=await client.listTools(); assert.deepEqual(tools.tools.map(x=>x.name),['search_site','search_directory','search_research']);
+  assert.match(tools.tools.find(x => x.name === 'search_directory')!.description!, /concise subject and place keywords/);
+  for (const tool of tools.tools) assert.deepEqual(tool.annotations, {readOnlyHint:true, destructiveHint:false, idempotentHint:true, openWorldHint:true});
   for (const [name,query] of [['search_site','wildlife'],['search_directory','waste'],['search_research','khazan wetlands']]) {
    const result=await client.callTool({name,arguments:{query,limit:2}});
    assert.notEqual(result.isError,true,`${name}: ${JSON.stringify(result)}`);
