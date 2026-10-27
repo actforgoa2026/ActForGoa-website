@@ -89,12 +89,16 @@ Illustrative app-owned shape after mechanical assembly:
 
 ```json
 {
-  "contract_version": "passage-selection-proposal-v2",
+  "contract_version": "passage-selection-proposal-v3",
   "mode": "source_passages",
   "units": [{
     "passage": {
       "passage_id": "selected-passage-id",
       "text": "Entire retained source passage, unmodified and untruncated.",
+      "source_section": {
+        "label": "Source section / scope metadata",
+        "page_heading": "Unmodified supplied section heading"
+      },
       "provenance": {"reader_url": "server-resolved generation and passage URL"},
       "publication": {
         "state": "metadata",
@@ -114,6 +118,16 @@ document, generation, physical page, original passage offsets, label, source URL
 reader locator and date basis. Provenance and limitations belong to each passage,
 including each header. The model never owns these fields or the checks. No factual
 introduction, heading, summary, comparison, conclusion or transition is generated.
+
+Preserve the supplied `page_heading` without normalization on every selected
+passage and every dependency, under the explicitly labeled `source_section`
+metadata. It is distinct from verbatim evidence and the catalogue title. A source
+section may identify a different geography from the catalogue description; dropping
+it can remove available scope even when the passage body is unchanged. Do not
+infer a missing heading from a title, URL, another passage or the question. A missing
+heading remains null, and an explicitly empty supplied heading remains empty.
+Preservation does not establish that a heading was correctly extracted or that
+all necessary context is present; those remain independent review requirements.
 
 A whole retained chunk is not necessarily a complete sentence, paragraph, table
 or evidentiary context. The prototype does not reconstruct missing neighboring
@@ -165,7 +179,7 @@ experiment and adds whole-passage selection, full required-context closure and
 source-date presentation. None of those checks proves meaning.
 Every result explicitly retains `semantic: not_assessed` and `release: hold`.
 
-Run the 24 offline falsification tests:
+Run the 25 offline falsification tests:
 
 ```sh
 python3 -m unittest discover -s experiments -p 'test_*.py' -v
@@ -191,6 +205,9 @@ Preserved v1 replay SHA-256 (before reviewer counterexamples and label correctio
 
 Revised v2 replay SHA-256 (adds selection assembly and reviewer counterexamples):
 `12ddda15c4682aa33c76b1ad3e0cb73001473b80080681d590d77ea3e7e49aab`
+
+Revised v3 replay SHA-256 (preserves supplied source-section/scope metadata):
+`539ad5e58486401bf8e1b9c77b2d73511f6b1d78c613326ee676a78a67b56d0b`
 
 LAW's independent review of the original `3c8378103` proposal, including the
 counterexamples and rubric, has SHA-256:
@@ -255,7 +272,7 @@ synthetic across-chunk and irrelevant-selection controls intentionally remain
 mechanically valid with semantic status unassessed and release held.
 
 Before broader implementation, LAW and QA must review the revised exact head,
-24 tests, new immutable replay and unresolved limitations against the rubric above.
+25 tests, new immutable replay and unresolved limitations against the rubric above.
 Publication labels deliberately say "source metadata": the parser does not verify
 publisher identity. Context selection must be assessed separately from output
 structure; no word-count cap may silently remove a required qualification.

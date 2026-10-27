@@ -188,6 +188,10 @@ def audit_selection(payload, evidence):
     def present(identifier):
         source = evidence[identifier]
         return {'passage_id': identifier, 'text': source['text'],
+                # Preserve supplied scope context separately from verbatim text
+                # and catalogue titles; never infer or rewrite the heading.
+                'source_section': {'label': 'Source section / scope metadata',
+                                   'page_heading': deepcopy(source.get('page_heading'))},
                 'provenance': {field: deepcopy(source[field]) for field in (
                     'document_id', 'generation', 'page', 'label', 'start', 'end',
                     'reader_url', 'url', 'title', 'retrieved_at', 'source_date_metadata') if field in source},

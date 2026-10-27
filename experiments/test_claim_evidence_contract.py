@@ -183,10 +183,32 @@ class SelectionOnlyCandidate(unittest.TestCase):
         result['units'][0]['passage']['provenance']['source_date_metadata'][0]['value'] = '2000'
         self.assertEqual(evidence['b']['source_date_metadata'][0]['value'], '2025')
 
+    def test_source_section_is_preserved_separately_for_passages_and_dependencies(self):
+        evidence = {
+            'row': source('The state recorded the following values.', title='Catalogue for Region A',
+                          page_heading='7.2 REGION B\n  Scope details', context_ids=['header']),
+            'header': source('Year   Recorded amount', title='Catalogue for Region A',
+                             page_heading='  Regional table: B\n'),
+            'undated_section': source('Another passage.', title='Catalogue for Region A'),
+        }
+        result = audit_selection({'status': 'selected', 'passage_ids': ['row', 'undated_section']}, evidence)
+        self.assertEqual(result['mechanical'], 'valid')
+        presented = [result['units'][0]['passage'], *result['units'][0]['required_context'],
+                     result['units'][1]['passage']]
+        for item in presented:
+            original = evidence[item['passage_id']]
+            self.assertEqual(item['text'], original['text'])
+            self.assertEqual(item['provenance']['title'], original['title'])
+            self.assertEqual(item['source_section'], {'label': 'Source section / scope metadata',
+                                                     'page_heading': original.get('page_heading')})
+        self.assertIsNone(presented[-1]['source_section']['page_heading'])
+        self.assertEqual(result['semantic'], 'not_assessed')
+        self.assertEqual(result['release'], 'hold')
+
     def test_model_cannot_supply_text_ranges_dates_or_review_results(self):
         for field, value in [('text', 'eligible for support'), ('quote', 'eligible for support'),
                              ('start', 20), ('end', 30), ('publication', {'year': 2025}),
-                             ('semantic', 'passed')]:
+                             ('semantic', 'passed'), ('source_section', {'page_heading': 'Invented region'})]:
             with self.subTest(field=field):
                 payload = {'status': 'selected', 'passage_ids': ['a'], field: value}
                 self.assertEqual(audit_selection(payload, {'a': source('A fact.')})['issues'], ['selection_shape'])
