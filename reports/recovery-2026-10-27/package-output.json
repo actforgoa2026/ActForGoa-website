@@ -1,0 +1,15 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "documents": 1174,
+  "originals": 1174,
+  "directory": "/Users/zakkrevitt/.codex/worktrees/research-recovery-20261027/ActForGoa/.research-release/recovery/legal-package/data",
+  "files_manifest_sha256": "e5095ce040de7df04e37f6ab904d05592245e96d98c12ef3c1807000793b46dd",
+  "directories": [
+    ".research-index/generations/20261027T065155-law-5bc5619b/zvec",
+    ".research-index/generations/20261027T065155-law-5bc5619b/zvec/2",
+    ".research-index/generations/20261027T065155-law-5bc5619b/zvec/3",
+    ".research-index/generations/20261027T065155-law-5bc5619b/zvec/idmap.0"
+  ],
+  "service": "/Users/zakkrevitt/.codex/worktrees/research-recovery-20261027/ActForGoa/.research-release/recovery/legal-package/service",
+  "scope": "Only indexed original files, current immutable index, code and bundled model. No keys or private report/CRM data."
+}
