@@ -30,7 +30,7 @@ test('remote MCP exposes public sources and returns source evidence', async () =
   assert.equal(corporations.length,1);
   assert.ok(corporations[0].additional_listings.some((r:{id:string})=>r.id==='goa-b3f711f6b7f3'));
   const science=wasteResults.find((r:{id:string})=>r.id==='goa-80732e1537a8');
-  assert.equal(science?.website,'https://www.dstegoa.goa.gov.in');
+  assert.equal(science?.website,'https://dstwm.goa.gov.in/');
   const rti=await client.callTool({name:'search_site',arguments:{query:'How do I file an RTI?',limit:3}});
   const result=JSON.parse((rti.content as {text:string}[])[0].text).results[0];
   assert.equal(result.id,'guide-reporting'); assert.match(result.excerpt,/\bRTI\b/i); assert.match(result.source,/^https:\/\//);

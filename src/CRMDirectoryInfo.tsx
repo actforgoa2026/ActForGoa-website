@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { ListingLink, listingLinkKind } from './ListingLink';
 import { CreditedPhoto } from './DirectoryInfo';
 import { crmDirectoryDetails, crmDirectoryLinks, crmDirectoryMapUrl, crmDirectoryTags } from './crm-directory';
+import { websiteEvidence } from './directory-quality';
 import { safeUrl, type CRMRecord } from './crm-model';
 
 export function CRMDirectoryTags({ record, full = false }: { record: CRMRecord; full?: boolean }) {
@@ -26,9 +27,12 @@ export function CRMDirectoryActions({ record, full = false }: { record: CRMRecor
     const url = safeUrl(record[field] || '');
     if (url && !links.some(link => link.url === url)) links.push({ label, url });
   }
+  const check = websiteEvidence(record.website_url, record.record_id);
   const address = crmDirectoryDetails(record)?.address;
   const primaryLinks = full ? links.filter(link => link.label === 'Website') : links;
   return <div className={`directory-actions${full ? ' listing-contact-actions' : ''}`} aria-label={`Links for ${record.name}`}>
+    {record.website_url && check.status === 'unverified' && <span>Website could not be verified on {check.checked_on}.</span>}
+    {full && check.source && <ListingLink href={check.source} kind="source">Source for updated website</ListingLink>}
     {primaryLinks.map(link => <ListingLink key={link.url} href={link.url} kind={listingLinkKind(link.label)}>{full && link.label === 'Website' ? 'Website or reference page' : link.label}</ListingLink>)}
     {(full ? emails : emails.slice(0, 1)).map(email => <ListingLink key={email} href={`mailto:${email}`} label={full ? undefined : `Email ${record.name}`}>{full ? email : 'Email'}</ListingLink>)}
     {full && phones.map(phone => <ListingLink key={phone} href={`tel:${phone}`}>{phone}</ListingLink>)}
