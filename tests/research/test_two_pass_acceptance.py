@@ -20,9 +20,9 @@ from tests.research.span_fixtures import select_response
 @pytest.fixture
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
-    plan.update(pipeline='two_pass_v2',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='low',max_output_tokens=12000)
+    plan.update(pipeline='two_pass_v3',pipeline_spec=deepcopy(PIPELINE_SPEC),effort='low',max_output_tokens=12000)
     plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='low',max_output_tokens=12000,pipeline='two_pass_v2')
+    config=replace(config,effort='low',max_output_tokens=12000,pipeline='two_pass_v3')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
@@ -30,7 +30,7 @@ def setup(legacy_setup,monkeypatch):
         unit={'primary_support':{'citation_id':evidence['id'],'field':'text','quote':'Gates regulate tidal water.'},'supports':[],
               'text':'Gates regulate tidal water.'}
         native={'status':'answered','paragraphs':[unit if n==1 else {'claims':[unit]}]}
-        if n==2:native=select_response(native,payload)
+        native=select_response(native,payload)
         return model_response(native)
     handlers=[handler]
     def factory():
@@ -52,7 +52,7 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     assert context['provider_attempt_ceiling']==4 and context['worst_reservation_microusd']==40096
     report=run(setup)
     assert report==json.loads((tmp/'capture-v2.json').read_text())
-    assert report['capture_version']==3 and report['pipeline_spec']==PIPELINE_SPEC
+    assert report['capture_version']==4 and report['pipeline_spec']==PIPELINE_SPEC
     assert report['complete'] and report['attempts']==4 and report['entailment_acceptance']=='pending_human_review'
     assert len(transports)==2 and all(t.closed for t in transports)
     for entry,transport in zip(report['cases'],transports):
@@ -76,6 +76,9 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     lambda p:p.pop('pipeline'),lambda p:p['pipeline_spec'].update(correction_prompt_bytes=32000),
     lambda p:p['stages']['test'].pop('max_cases'),lambda p:p['stages']['test'].update(max_attempts=2),
     lambda p:p.update(pipeline='two_pass_v1'),
+    lambda p:p.update(pipeline='two_pass_v2'),
+    lambda p:p['pipeline_spec'].update(capture_version=3),
+    lambda p:p['pipeline_spec'].update(anchor_protocol='lossless_source_spans_v1'),
     lambda p:p['pipeline_spec'].update(capture_version=2),
     lambda p:p['pipeline_spec'].update(anchor_protocol='unknown'),
 ])

@@ -5,7 +5,7 @@ import json
 import pytest
 
 from backend.source_spans import (annotate_payload,verify_annotated_payload,resolve_selector,fragments,registry_hash,
-                                 verify_wire_binding,encoded,ANCHOR_PROTOCOL)
+                                 verify_wire_binding,encoded,ANCHOR_PROTOCOL,original_baseline)
 from backend.reconstruction import prepare_reconstruction,normalize_reconstruction,reconstruction_schema
 from backend.chat import ChatRequest,prepare_answer
 from tests.research.test_reconstruction import claim,response
@@ -34,7 +34,7 @@ def test_every_character_roundtrips_with_bounded_exact_offsets(text):
     assert all(0<len(span['text'])<=600 and span['text'].strip() for span in spans)
     for span in spans:assert text[span['start']:span['end']]==span['text']
     if not text.strip():assert actual['evidence'][0]['text']==text and not spans
-    else:assert ''.join(x['text'] for x in actual['evidence'][0]['text'])==text
+    else:assert ''.join(x[1] for x in actual['evidence'][0]['text'])==text
 
 
 def test_nested_nonstring_and_empty_metadata_are_preserved_without_support():
@@ -81,8 +81,8 @@ def test_publication_label_is_whole_and_never_truncated():
 
 
 @pytest.mark.parametrize('mutate',[
-    lambda p:p['evidence'][0]['text'][0].update(text='Changed text.'),
-    lambda p:p['evidence'][0]['text'][0].update(span_id='s999'),
+    lambda p:p['evidence'][0]['text'][0].__setitem__(1,'Changed text.'),
+    lambda p:p['evidence'][0]['text'][0].__setitem__(0,'s999'),
     lambda p:p['evidence'].pop(),
     lambda p:p['sources']['source-1'].update(legal_currency=[]),
     lambda p:p.update(question='Changed question?'),
@@ -108,6 +108,27 @@ def test_original_nested_key_order_is_preserved_by_pure_helper():
     with pytest.raises(ValueError,match='identity'):verify_annotated_payload(actual,original)
 
 
+@pytest.mark.parametrize('fragment',[[None,'Visible source text.'],['s3',True],['s3'],
+    ['s3','Visible source text.','extra'],['Visible source text.','s3'],['s3',' '],
+    {'span_id':'s3','text':'Visible source text.'},['null','Visible source text.']])
+def test_pair_shape_sentinel_and_types_cannot_redefine_eligibility(fragment):
+    original=payload();actual,_=annotate_payload(original)
+    actual['evidence'][0]['text'][0]=fragment
+    with pytest.raises(ValueError):verify_annotated_payload(actual,original)
+
+
+def test_only_internal_whitespace_fragments_use_null_sentinel():
+    original=payload('X'+' '*1300+'Y');actual,registry=annotate_payload(original)
+    parts=actual['evidence'][0]['text']
+    assert any(identifier is None for identifier,text in parts)
+    assert all(identifier is not None or (text and not text.strip()) for identifier,text in parts)
+    assert verify_annotated_payload(actual,original)[0]==original
+    original['evidence'][0]['text']=[['s1','Preexisting nested data.']]
+    actual,registry=annotate_payload(original)
+    assert actual['evidence'][0]['text']==original['evidence'][0]['text']
+    assert not any(span['owner_id']=='a' and span['field']=='text' for span in registry.values())
+
+
 def test_oversize_full_selector_schema_is_refused_without_pruning_ids():
     request=ChatRequest(question='What does the source say?')
     original=prepare_answer(request,[{'id':'a','text':'Visible source text.'}],provider='anthropic')
@@ -131,7 +152,7 @@ def test_split_conditions_stay_visible_and_can_be_supported_in_one_claim():
     request=ChatRequest(question='What conditions apply?');original=prepare_answer(request,[{'id':'a','text':text}],provider='anthropic')
     prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
     visible=json.loads(prepared.messages[-1]['content']);parts=visible['evidence'][0]['text']
-    assert ''.join(p['text'] for p in parts)==text
+    assert ''.join(p[1] for p in parts)==text
     unit=claim('Board consent is required and work must stop during nesting season.',quote='Permitted only with Board consent.',
         extras=[{'citation_id':'a','field':'text','quote':'Work must stop during nesting season.'}])
     answer,offsets=normalize_reconstruction(response(unit,prepared=prepared),prepared)
@@ -144,7 +165,7 @@ def test_date_omission_is_still_a_semantic_negative_even_with_valid_span():
     original=prepare_answer(request,[{'id':'a','text':text}],provider='anthropic')
     draft={'status':'answered','paragraphs':[{'text':'The 2024 report records 25 units in the 2017 survey.','citations':['a']}]}
     prepared=prepare_reconstruction(request,original,draft)
-    assert 'Preserve source-visible date attribution' in prepared.messages[0]['content']
+    assert 'Preserve visible source dates' in prepared.messages[0]['content']
     good=claim('The report published in 2024 records 25 units measured at Site V in 2017.',quote=text)
     assert normalize_reconstruction(response(good,prepared=prepared),prepared)[0]['status']=='answered'
     wrong=claim('The source reports 25 units at Site V.',quote=text)
@@ -156,37 +177,40 @@ def test_date_omission_is_still_a_semantic_negative_even_with_valid_span():
 def wire_fixture():
     original=payload('Visible source text.\n😀 चाँद e\u0301')
     annotated,registry=annotate_payload(original)
-    draft={'messages':[{'role':'user','content':'Prior context 😀'},
-                       {'role':'user','content':encoded(original).decode()}]}
-    wrapper={**annotated,'anchor_protocol':ANCHOR_PROTOCOL,'request_scope':{'answer_style':'standard','document_id':None,'generation':None},
-             'draft_answer':{'status':'insufficient_evidence','paragraphs':[]}}
-    correction={'messages':[draft['messages'][0],{'role':'user','content':encoded(wrapper).decode()}]}
-    return draft,correction,registry
+    history=[{'role':'user','content':'Prior context 😀'}]
+    scope={'answer_style':'standard','document_id':None,'generation':None}
+    baseline=original_baseline(encoded(original).decode(),history,scope)
+    wrapper={**annotated,'request_scope':scope,'anchor_protocol':ANCHOR_PROTOCOL}
+    draft={'messages':[*history,{'role':'user','content':encoded(wrapper).decode()}]}
+    correction={'messages':[*history,{'role':'user','content':encoded({**wrapper,'draft_answer':{'status':'insufficient_evidence','paragraphs':[]}}).decode()}]}
+    return draft,correction,registry,baseline
 
 
 def test_actual_wire_byte_basis_allows_outer_escaping_but_preserves_exact_inner_payload():
-    draft,correction,registry=wire_fixture()
-    # HTTP JSON may encode the same inner string differently. The original byte
-    # basis is its decoded user content string, not the outer JSON quoting.
-    proof=verify_wire_binding(json.dumps(correction,ensure_ascii=True),json.dumps(draft,ensure_ascii=True),registry_hash(registry))
+    draft,correction,registry,baseline=wire_fixture()
+    proof=verify_wire_binding(json.dumps(correction,ensure_ascii=True),baseline,registry_hash(registry),phase='reconstruction',draft_body_utf8=json.dumps(draft,ensure_ascii=True))
     assert proof['byte_equality'] and proof['value_equality'] and proof['actual_wire_verified']
-    assert proof['original_draft_payload_utf8_sha256']==proof['reconstructed_payload_utf8_sha256']
-    assert proof['original_payload_utf8_bytes']==len(draft['messages'][-1]['content'].encode())
+    assert proof['prepared_original_payload_utf8_sha256']==proof['reconstructed_payload_utf8_sha256']
+    assert proof['original_payload_utf8_bytes']==len(baseline['payload_utf8'].encode())
+    assert proof['both_actual_wires_match_baseline']
 
 
-@pytest.mark.parametrize('mutation',['inner_escape','inner_order','history','registry','span_order'])
-def test_semantic_equality_is_not_original_wire_byte_identity(mutation):
-    draft,correction,registry=wire_fixture();expected=registry_hash(registry)
-    if mutation=='inner_escape':
-        draft['messages'][-1]['content']=json.dumps(json.loads(draft['messages'][-1]['content']),ensure_ascii=True,separators=(',',':'))
-    elif mutation=='inner_order':
-        value=json.loads(draft['messages'][-1]['content'])
-        draft['messages'][-1]['content']=encoded({key:value[key] for key in reversed(value)}).decode()
-    elif mutation=='history':correction['messages'][0]={'role':'user','content':'Different context'}
+@pytest.mark.parametrize('mutation',['baseline_escape','baseline_order','history','registry','span_order','scope','protocol','draft_extra','correction_missing'])
+@pytest.mark.parametrize('phase',['draft','reconstruction'])
+def test_semantic_equality_is_not_original_wire_byte_identity(mutation,phase):
+    draft,correction,registry,baseline=wire_fixture();expected=registry_hash(registry)
+    target=draft if phase=='draft' else correction
+    value=json.loads(target['messages'][-1]['content'])
+    if mutation=='baseline_escape':baseline['payload_utf8']=json.dumps(json.loads(baseline['payload_utf8']),ensure_ascii=True,separators=(',',':'))
+    elif mutation=='baseline_order':
+        original=json.loads(baseline['payload_utf8']);baseline['payload_utf8']=encoded({key:original[key] for key in reversed(original)}).decode()
+    elif mutation=='history':target['messages'][0]={'role':'user','content':'Different context'}
     elif mutation=='registry':expected='0'*64
-    else:
-        value=json.loads(correction['messages'][-1]['content'])
-        value['sources']={key:value['sources'][key] for key in reversed(value['sources'])}
-        correction['messages'][-1]['content']=encoded(value).decode()
+    elif mutation=='span_order':value['sources']={key:value['sources'][key] for key in reversed(value['sources'])}
+    elif mutation=='scope':value['request_scope']['answer_style']='brief'
+    elif mutation=='protocol':value['anchor_protocol']='lossless_source_spans_v1'
+    elif mutation=='draft_extra':value['unexpected']=True
+    else:value.pop('anchor_protocol')
+    target['messages'][-1]['content']=encoded(value).decode()
     with pytest.raises(ValueError,match='actual-wire'):
-        verify_wire_binding(encoded(correction).decode(),encoded(draft).decode(),expected)
+        verify_wire_binding(encoded(target).decode(),baseline,expected,phase=phase,draft_body_utf8=encoded(draft).decode() if phase=='reconstruction' else None)

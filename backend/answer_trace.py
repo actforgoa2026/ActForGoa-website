@@ -9,6 +9,36 @@ from .providers import PRICES
 from .source_spans import ANCHOR_PROTOCOL
 
 
+def credential_like_content(value, secrets=()):
+    """Inspect decoded nested JSON and JSON Unicode escapes without logging it."""
+    def strings(item, depth=0):
+        if depth>32:raise ValueError('Nested content exceeds safety bound')
+        if isinstance(item,str):
+            yield item
+            unescaped=re.sub(r'\\u([0-9a-fA-F]{4})',lambda m:chr(int(m[1],16)),item)
+            if unescaped!=item:yield unescaped
+            # Decode the actual JSON layer first. Replacing escapes before
+            # parsing can corrupt a valid nested payload's doubled slashes.
+            try:inner=json.loads(item)
+            except (ValueError,TypeError):return
+            if inner!=item:yield from strings(inner,depth+1)
+        elif isinstance(item,list):
+            for child in item:yield from strings(child,depth+1)
+        elif isinstance(item,dict):
+            for key,child in item.items():
+                yield from strings(key,depth+1)
+                yield from strings(child,depth+1)
+    try:
+        raw=json.dumps(value,ensure_ascii=False,separators=(',',':'))
+        if len(raw.encode())>131072:return True
+        decoded='\n'.join(strings(value))
+    except (ValueError,TypeError,RecursionError,UnicodeError):return True
+    field=re.compile(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:',re.I)
+    return bool(any(secret and secret in decoded for secret in secrets)
+                or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+',decoded)
+                or field.search(decoded) or field.search(raw.replace('\\"','"')))
+
+
 def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
     """Keep only bounded final answer JSON, never thinking or response metadata.
 
@@ -32,16 +62,16 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
         paragraphs=answer['paragraphs'];representation='paragraph_array'
     else:return {'capture_status':'unexpected_shape'}
     captured_paragraphs = paragraphs
+    if anchor_protocol not in (None,ANCHOR_PROTOCOL):return {'capture_status':'unexpected_anchor_protocol'}
     if phase == 'reconstruction':
-        if anchor_protocol not in (None,ANCHOR_PROTOCOL):return {'capture_status':'unexpected_anchor_protocol'}
         if any(not isinstance(p, dict) or set(p) != {'claims'} or not isinstance(p['claims'], list)
                for p in paragraphs):
             return {'capture_status': 'unexpected_shape'}
         paragraphs = [unit for p in paragraphs for unit in p['claims']]
         representation = 'reconstruction_' + representation
-        if anchor_protocol==ANCHOR_PROTOCOL:representation='source_spans_'+representation
     elif phase != 'draft':
         return {'capture_status': 'unexpected_phase'}
+    if anchor_protocol==ANCHOR_PROTOCOL:representation='source_spans_'+representation
     for p in paragraphs:
         if (not isinstance(p,dict) or not isinstance(p.get('text'),str) or len(p['text']) > 12000):
             return {'capture_status':'unexpected_shape'}
@@ -55,7 +85,7 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
             supports=p['supports']
             if 'primary_support' in p:supports=[p['primary_support'],*supports]
             for support in supports:
-                bounds=([('citation_id',160),('span_id',160)] if phase=='reconstruction' and anchor_protocol==ANCHOR_PROTOCOL
+                bounds=([('citation_id',160),('span_id',160)] if anchor_protocol==ANCHOR_PROTOCOL
                         else [('citation_id',160),('field',160),('quote',1200)])
                 if (not isinstance(support,dict) or set(support) != {key for key,_ in bounds}
                         or any(not isinstance(support[k],str) or len(support[k]) > bound for k,bound in bounds)):
@@ -115,22 +145,9 @@ def outgoing_request_capture(request):
         return {'capture_status': 'unexpected_request_shape'}, None
     # Header values are used only to refuse accidental credential echoes. They
     # are never persisted. Also refuse common key prefixes and credential fields.
-    secrets = [request.headers.get('x-api-key'),
+    secrets = [request.headers.get('x-api-key'),request.headers.get('anthropic-workspace-id'),
                request.headers.get('authorization', '').removeprefix('Bearer ')]
-    def strings(value):
-        if isinstance(value, str):yield value
-        elif isinstance(value, list):
-            for item in value:yield from strings(item)
-        elif isinstance(value, dict):
-            for key, item in value.items():
-                yield key
-                yield from strings(item)
-    decoded = '\n'.join(strings(body))
-    credential_field = re.compile(r'"(?:authorization|x-api-key|api[_-]?key|access[_-]?token)"\s*:', re.I)
-    if (any(secret and secret in decoded for secret in secrets)
-            or re.search(r'\bsk-(?:ant|or|proj)-[A-Za-z0-9_-]+', decoded)
-            or credential_field.search(decoded)
-            or credential_field.search(text.replace('\\"', '"'))):
+    if credential_like_content(body,secrets):
         return {'capture_status': 'credential_like_content'}, None
     return {'capture_status': 'captured_request', 'body_utf8': text,
             'body_sha256': hashlib.sha256(raw).hexdigest(), 'body_bytes': len(raw)}, body
