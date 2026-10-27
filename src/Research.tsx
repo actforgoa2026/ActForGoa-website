@@ -66,7 +66,7 @@ function ResearchConversation({scope,docId,sourceGeneration,initialQuestion}:{sc
   finally{if(!controller.signal.aborted){setBusy(false);}}
  }
  const submit=(e:FormEvent)=>{e.preventDefault();void run();};
- return <main className="research shell"><header className="research-heading"><Link to="/library" className="back-link"><ArrowLeft size={16}/>Reading library</Link><h1>Goa’s research library.</h1><p>Explore its rivers, landscapes and living systems. Find the evidence, ask a question, then read the whole document.</p></header>
+ return <main className="research shell"><header className="research-heading"><Link to="/library" className="back-link"><ArrowLeft size={16}/>Reading library</Link><h1>Goa’s research library.</h1><p>Explore its rivers, landscapes and living systems. Find the evidence, ask a question, then read the whole document.</p>{import.meta.env.VITE_RESEARCH_TEST_PREVIEW==='1'&&<p><strong>AI testing preview.</strong> Some claims may overstate the source. Check the cited passages and dates.</p>}</header>
   <div className="research-layout"><div className="research-main">
    {turns.map((turn,index)=><section className="research-turn" ref={index===turns.length-1?latestTurn:undefined} tabIndex={-1} key={index} aria-label={'Question '+(index+1)}><h2>{turn.question}</h2>
     {turn.error&&<p role="alert" className="research-message">{turn.error}</p>}
