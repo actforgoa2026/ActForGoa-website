@@ -34,6 +34,7 @@ export interface SiteHeaderItem {
   /** Stable value, also used for `current`. */
   value: string;
   label: string;
+  lang?: string;
   href?: string;
   links?: SiteHeaderLink[];
   feature?: SiteHeaderFeature;
@@ -70,6 +71,7 @@ export interface SiteHeaderProps {
   secondaryAction?: SiteHeaderAction | null;
   /** The one primary action at the end of the bar. Pass null to hide it. */
   primaryAction?: SiteHeaderAction | null;
+  extraAction?: ReactNode;
   /** Sticks to the top of its scroll container. Defaults to true. */
   sticky?: boolean;
   /** The element that scrolls, when it is not the window. The header turns solid once it scrolls. */
@@ -172,6 +174,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   onNavigate,
   secondaryAction = { label: "Sign in" },
   primaryAction = { label: "Get Arc" },
+  extraAction,
   sticky = true,
   scrollContainer,
   scrollThreshold = 8,
@@ -408,7 +411,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
                         onKeyDown={event => onTriggerKeyDown(event, item.value)}
                       >
                         {decorations}
-                        <span className={styles.navLabel}>{item.label}</span>
+                        <span className={styles.navLabel} lang={item.lang}>{item.label}</span>
                         <ChevronDown className={styles.chevron} size={14} strokeWidth={2} aria-hidden="true" />
                       </button>
                     : <Destination
@@ -418,7 +421,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
                         onChoose={() => choose({ label: item.label, href: item.href, section: item.value }, item.value)}
                       >
                         {decorations}
-                        <span className={styles.navLabel}>{item.label}</span>
+                        <span className={styles.navLabel} lang={item.lang}>{item.label}</span>
                       </Destination>}
                 </li>;
               })}
@@ -426,6 +429,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
           </nav>
         </LayoutGroup>
         <div className={styles.actions}>
+          {extraAction}
           {secondaryAction && actionNode(secondaryAction, "secondary", styles.wideOnly)}
           {primaryAction && actionNode(primaryAction, "primary")}
           <button ref={menuButtonRef} type="button" className={styles.menuButton} aria-expanded={menuOpen} aria-controls={`${id}-sheet`} aria-label={menuOpen ? "Close menu" : "Open menu"} onClick={() => { if (menuOpen) closeMenu(); else setMenuOpen(true); }}>
@@ -497,7 +501,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
                 return <motion.li key={item.value} className={styles.sheetItem} {...rowMotion}>
                   {group ? <>
                     <button type="button" className={styles.sheetRow} data-current={isCurrent ? "" : undefined} aria-expanded={isExpanded} aria-controls={`${id}-group-${item.value}`} onClick={() => setExpanded(isExpanded ? null : item.value)}>
-                      <span>{item.label}</span><ChevronDown className={styles.sheetChevron} size={18} strokeWidth={1.75} aria-hidden="true" />
+                      <span lang={item.lang}>{item.label}</span><ChevronDown className={styles.sheetChevron} size={18} strokeWidth={1.75} aria-hidden="true" />
                     </button>
                     <AnimatePresence initial={false}>
                       {isExpanded && <motion.div key="group" id={`${id}-group-${item.value}`} className={styles.sheetGroup} initial={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }} animate={reduced ? { opacity: 1 } : { height: "auto", opacity: 1 }} exit={reduced ? { opacity: 0 } : { height: 0, opacity: 0 }} transition={reduced ? { duration: 0 } : { height: motionTokens.spring.smooth, opacity: { duration: motionTokens.duration.fast } }}>
