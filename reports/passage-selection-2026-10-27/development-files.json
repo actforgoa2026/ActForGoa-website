@@ -1,0 +1,290 @@
+{
+  "note": "Task-owned development evidence outside Git. No provider credentials or genuine usage data. Local model and embedding trials were rejected and are not runtime assets.",
+  "files": [
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/anchor_focus.json",
+      "bytes": 27624,
+      "sha256": "d92066617188c25b99dbaa88933b91d646d4cc0e1976e18112b9e488c9dc762d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/anchor_mixed.json",
+      "bytes": 27580,
+      "sha256": "8337e8d42138310a41ea0cb1188eb69a08a0dbf427561f7d437ae90da7787d70"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/anchor_trial.py",
+      "bytes": 3314,
+      "sha256": "01a2cc83a25ff98701246f1ca69975d5c16ca09387d1d6aa8ac7c12d745109e9"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/assessment-sources.json",
+      "bytes": 104740,
+      "sha256": "5031c4a49ea072d5c95cb6820ca285a6dd6faa31c174294591f4b3820f9ee6cd"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/assessment-sources.preservation.json",
+      "bytes": 610,
+      "sha256": "ccef95396b11bd39deac7ae01426b2b0d70cb959b63203e6651742ed96e11bfd"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/capture.json",
+      "bytes": 93110555,
+      "sha256": "853bbf87f4139151638e45783e08f1b13a12f5229bc3dddd6a2d9a4328d64e28"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/capture.preservation.json",
+      "bytes": 599,
+      "sha256": "0ab73e0fb12b3fc2f0a664c29d3499d7b04fb85e43900ec59b1a9aaf3d79ad3c"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/context.json",
+      "bytes": 26608,
+      "sha256": "d53ec2b5478b712127d1d428b77c3cad93887cfbc1ccc69146152ba22dff59d3"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/context_novelty.json",
+      "bytes": 26605,
+      "sha256": "4d0a3722937d7ef427a8dc2598310d9fa110b671a2c4b5ef88a57f448af97321"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-allmax.json",
+      "bytes": 26652,
+      "sha256": "65222fbea3ba1367829420826117681a2077ccff7adf56b1941c5a553e448c55"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-anchor_cross.json",
+      "bytes": 26736,
+      "sha256": "4713694aa6b11b89bce3605dac4c50e78756c068f2c5e899ef5b8c4799983bfb"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-fused.json",
+      "bytes": 26525,
+      "sha256": "3662bcab9380b1beb3282e4b38815a8db5aba81badeca367aedf544ebde17241"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-scored-candidates.json",
+      "bytes": 84847802,
+      "sha256": "46aab9d18c2221dfad8a1437f92c0de10aec7f517bbeeea994c385ee1844be9d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-shortmax.json",
+      "bytes": 26611,
+      "sha256": "e42ea81e6d94d2db46d9ea121ce05fcfa82d1c7c6a61d52fbd2f9729bdbfb64d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross-whole.json",
+      "bytes": 26861,
+      "sha256": "e115254d9ac8320591417250e9b9eab239716340cd123675ce60bf30d8a28921"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/cross_trial.py",
+      "bytes": 2329,
+      "sha256": "795ded8fd122fdbfc896d18e9ca43b0f15704c1840d75e40b7ffd298f42d635a"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/development-runtime-1.json",
+      "bytes": 763806,
+      "sha256": "091c5b456c86d83de4dcb55af60eff8d7abf7dba2745e8cb8d61a9b7c44b7224"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/development-runtime-1.preservation.json",
+      "bytes": 604,
+      "sha256": "7928e76435cdf353f22782fe6fb5055bb1d87d8e28b92280986307381727714c"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/doc_focus.json",
+      "bytes": 26952,
+      "sha256": "2e47cb25e9e1c7ca7565073396e97c21706526ea5602162e5e9ab433b35f6e0e"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/docfocus.json",
+      "bytes": 26692,
+      "sha256": "fef7a44f46251ccec8709cc9c1299a3e816c39d30221862214930393f538490c"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/docnov.json",
+      "bytes": 26776,
+      "sha256": "85be5e2e8fb9457455bacf70094f90a4c6545ccb1e42847942f62c0a55ff97b7"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/docpair.json",
+      "bytes": 26731,
+      "sha256": "325135ed361384c3d931a28adaca5e83e07ed668052469ff0b3908e4e65740cb"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/field_anchor_novelty.json",
+      "bytes": 26986,
+      "sha256": "0253a98bb45a273775a17d276a348b145e73c9459adb71b52f2777aef6dbbea6"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/field_focuslex.json",
+      "bytes": 26818,
+      "sha256": "b229a1384883045e0414d5a6d67e47684228b370dd338d14e875dc339964cbad"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/field_novelty.json",
+      "bytes": 26862,
+      "sha256": "029c0b152de954f279134b9720c21c8b92d7c9dbb57f9480a933d1feaf0c9bde"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/field_trial.py",
+      "bytes": 3552,
+      "sha256": "6aeddf89f65a4f9ffcde4de65fcb3d6004597d5fa3c30ba47d8f19f52076201e"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/final-assessment.json",
+      "bytes": 931688,
+      "sha256": "699e03c67f4b4394cf4b782b512cf2f8235bce479b00e81e002f307d3f0225bc"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/final-assessment.preservation.json",
+      "bytes": 592,
+      "sha256": "19b07b2aa270bc37b672f5e843ddc3e5bf12bec8df6e012bfabbd86953a2799d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/focus.json",
+      "bytes": 27880,
+      "sha256": "e6883266fc957a43addac6ff36f171cd650a318e01ca0b0755991eee7ca291dd"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/focuslex.json",
+      "bytes": 26693,
+      "sha256": "952fa7cf6a77aa5d7e639fcb23e2007c4339d50b84a6415c404083cd43a476a6"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/freeze_assessment.py",
+      "bytes": 4146,
+      "sha256": "da23d60604044133b86db0af9c16e3b7ff77ae788faa217ba557c979a3bcd9c7"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/full.json",
+      "bytes": 27212,
+      "sha256": "240affda6f2296e29a4b795525da60cfd92efec86bca428fe23b4b1758ef24e4"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/hierarchy_trial.py",
+      "bytes": 2824,
+      "sha256": "cd16f72a60a819080ec875456000e7bca10e639c88eb710e7f12a27dcd7fb36b"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/interleaved_pair.json",
+      "bytes": 27071,
+      "sha256": "384b72ef7ec1dc3a83374a2861134879d0de7716e9a8ffb777e42f3aaf21bd54"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/lex_trial.py",
+      "bytes": 3332,
+      "sha256": "59be3334fb40bca049ae3621c3ef21f3d2a1bc8e5d83eae9372f0ca98018cd62"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/mixed.json",
+      "bytes": 27626,
+      "sha256": "21d91a80d641d88cbec4266e89eb4e111b0d57ad66f1eed5145be56724133290"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/novelty.json",
+      "bytes": 26609,
+      "sha256": "686d06a8fc410afa81d4c96966cab3f109c1d0d86c19031009bed186f1a82c63"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/pair_slots_trial.py",
+      "bytes": 3597,
+      "sha256": "6b8deb1772b1ea9142cf4666c9c91d0c8a47be17e21eee58f2bb4983fd64e454"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/pair_trial.py",
+      "bytes": 3285,
+      "sha256": "1c7153f7d92bbca96b8fd9db8a8f8d80180e11af90b76f79b788af1c531ffb75"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/passage_pair.json",
+      "bytes": 26568,
+      "sha256": "d81a049e91c1430d02471675507cd580677bcbfeb54514908e5702a935dee363"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/prompt_size.py",
+      "bytes": 1400,
+      "sha256": "247d8b2063d51cefc24f3e3435daf579d5c5dcfbbf2f80da166f1240b1cbcb5a"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/regularized_baseline_slots.json",
+      "bytes": 26563,
+      "sha256": "9ad600340d395681defdecb212102731b3cd4b6ad97d56944e87f94e507f5ffa"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/regularized_field_slots.json",
+      "bytes": 26815,
+      "sha256": "3564c3e2ec4b5fc7527b5b4c58623a83ae76a82b33c6fa63939bbc430156b017"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/regularized_pair.json",
+      "bytes": 26772,
+      "sha256": "848e5811fe21b684a57e1ed2c4d2aa5ee321b312ed770df461b765edd6e7e30c"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/remaining-case-evidence.json",
+      "bytes": 419124,
+      "sha256": "ff3b4ad5960404d78f2f154cc21439927c980e234c85bbfe0dcd0dce9710f536"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/representation-map.json",
+      "bytes": 4824710,
+      "sha256": "7f045e9059bd5e409f8f3a75b816bd6c7c3b7ea24e951a1f4d3e95472a4d967d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/representations.npz",
+      "bytes": 23202826,
+      "sha256": "18aacfb31308ecbfae8e9c7e8b60f42878e3e90b46e96f51bfceed798bec95be"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/reranker/model_qint8_arm64.onnx",
+      "bytes": 23200716,
+      "sha256": "3573b6b9593cb2f75987a31815d409ca3dd8808629118fd20451bb1a5d90cec7"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/reranker/tokenizer.json",
+      "bytes": 711396,
+      "sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/scoped_anchor.json",
+      "bytes": 26486,
+      "sha256": "4035dfc3ce34deee42f43417047a7c31a0c33bac635d57f6e00d7fe8fdec6170"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/scoped_baseline_slots.json",
+      "bytes": 26524,
+      "sha256": "8f5d5b10fb6a5324b82944f7204ad18a3afb492f71fde0d82fd1b471726f6ce0"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/scoped_field_slots.json",
+      "bytes": 26858,
+      "sha256": "1386bba720bd9e98e6053b910dbee6ecc41194844e6341f577f740f78219c3a5"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/scored-candidates.json",
+      "bytes": 83914576,
+      "sha256": "e85b2fd1b9e143a39e66d7f126110c00f07c3775c5f6bafe614745d0c8bd12ba"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/snowball_baseline_slots.json",
+      "bytes": 26520,
+      "sha256": "83f23828a021f0f458ccb800d538e2a803ade2715d5b8ea1212f80f33f86944d"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/snowball_field_slots.json",
+      "bytes": 26773,
+      "sha256": "8747fe1db25cd089cbe40d4a2315f4734860cd1753d5743959947bbf692955a1"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/stem_trial.py",
+      "bytes": 3872,
+      "sha256": "5f87e8419bfec70d97f7272e1cf31c0689770b3f743dffbff6ce50d20ec557db"
+    },
+    {
+      "path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/.reports/passage-selection/trial.py",
+      "bytes": 3784,
+      "sha256": "4bd022fd2dcb036aaecb3a202eaae6c98ba917fc73b157f047c934850ae8c66d"
+    }
+  ]
+}
