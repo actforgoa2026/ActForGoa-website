@@ -321,7 +321,7 @@ def test_anthropic_hybrid_chat_citations_full_documents_and_cache(collection, mo
     def provider(request):
         body = json.loads(request.content); calls.append(body)
         evidence = json.loads(body['messages'][-1]['content'])['evidence'][0]
-        paragraph={'text': evidence['text'], 'citations': [evidence['id']]}
+        paragraph={'text': evidence['text'], 'supports': [{'citation_id':evidence['id'],'field':'text','quote':evidence['text'][:600]}]}
         key='paragraph' if 'paragraph' in body['output_config']['format']['schema']['properties'] else 'paragraphs'
         return httpx.Response(200, json=anthropic_message({'status': 'answered',key:paragraph if key=='paragraph' else [paragraph]}))
     with AnthropicClient('fixture-only', transport=httpx.MockTransport(provider)) as model:

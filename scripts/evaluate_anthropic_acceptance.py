@@ -26,6 +26,7 @@ from backend.usage_reconciliation import inspect_ledger
 FAILURE_CODES = {
     'The answer did not match the required schema': 'answer_schema',
     'The native brief answer did not match the required schema': 'native_brief_schema',
+    'The native answer did not match the evidence contract': 'native_evidence_contract',
     'Answer exceeds its paragraph bound': 'paragraph_bound',
     'Brief answer exceeds its length bound': 'brief_length',
     'Answer contains missing or unknown citations': 'citation_identity',
@@ -66,10 +67,21 @@ def final_json_capture(payload):
         paragraphs=answer['paragraphs'];representation='paragraph_array'
     else:return {'capture_status':'unexpected_shape'}
     for p in paragraphs:
-        if (not isinstance(p,dict) or set(p) != {'text','citations'} or not isinstance(p['text'],str)
-                or len(p['text']) > 12000 or not isinstance(p['citations'],list) or len(p['citations']) > 20
-                or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
+        if (not isinstance(p,dict) or not isinstance(p.get('text'),str) or len(p['text']) > 12000):
             return {'capture_status':'unexpected_shape'}
+        if set(p) == {'text','citations'}:
+            if (not isinstance(p['citations'],list) or len(p['citations']) > 20
+                    or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
+                return {'capture_status':'unexpected_shape'}
+        elif set(p) == {'text','supports'}:
+            if not isinstance(p['supports'],list) or len(p['supports']) > 20:
+                return {'capture_status':'unexpected_shape'}
+            for support in p['supports']:
+                if (not isinstance(support,dict) or set(support) != {'citation_id','field','quote'}
+                        or any(not isinstance(support[k],str) or len(support[k]) > bound
+                               for k,bound in [('citation_id',160),('field',160),('quote',1200)])):
+                    return {'capture_status':'unexpected_shape'}
+        else:return {'capture_status':'unexpected_shape'}
     return {'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
             'paragraph_count':len(paragraphs),'word_counts':[len(p['text'].split()) for p in paragraphs]}
 

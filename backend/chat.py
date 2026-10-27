@@ -122,9 +122,9 @@ def prepare_answer(request, evidence, *, provider=None):
         bounded_schema=deepcopy(schema)
         bounded_schema['properties']['paragraphs']['items']['properties']['citations']['items']['enum']=[e['id'] for e in selected]
         final_instruction=instruction
-        if provider=='anthropic' and request.answer_style=='brief':
-            from .anthropic_provider import native_brief_schema, native_brief_instructions
-            final_instruction=native_brief_instructions(base_instructions,native_brief_schema(bounded_schema))
+        if provider=='anthropic':
+            from .anthropic_provider import native_answer_instructions
+            final_instruction=native_answer_instructions(base_instructions,request.answer_style)
         # Send evidence and provenance only, not internal paths or unrelated library metadata.
         payload={'question':request.question, **evidence_payload(selected)}
         messages=[{'role':'system','content':final_instruction},*history,
