@@ -91,7 +91,7 @@
           "text": "Wetland survey, 2022. District | Surveyed wetland area (km2) | Share assessed (%)\nNorth | 21 | 100\nSouth | 34 | 100"
         }
       ],
-      "supported_text": "The 2022 table reports surveyed wetland area: 21 km2 in North and 34 km2 in South, with 100% assessed in each row. It does not provide water storage volume. A volume estimate would require evidence not supplied here.",
+      "supported_text": "The table reports surveyed wetland area in square kilometres and the percentage assessed for each district. It does not provide water storage volume. A volume estimate would require evidence not supplied here.",
       "unsupported_text": "The 2022 table shows water storage volumes of 21 and 34 km3 for North and South.",
       "unsupported_variants": [
         "This excerpt is incomplete, so check the original table for the missing water storage volumes.",
@@ -105,7 +105,7 @@
         }
       ],
       "review_expectation": {
-        "useful_part": "Report area and assessment share using the visible headings, units and survey year.",
+        "useful_part": "Identify area and assessment share from the visible headings and units without reproducing extracted numeric table cells.",
         "required_limit": "Storage volume is absent from the supplied table; unseen original content is unknown.",
         "forbidden_change": "Convert area or assessment share to volume, capacity or rate, or imply the unseen original necessarily supplies that quantity."
       }
