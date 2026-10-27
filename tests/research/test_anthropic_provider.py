@@ -45,6 +45,7 @@ def native_payload(payload):
         if isinstance(unit,dict) and 'citations' in unit:
             unit['supports']=[{'citation_id':c,'field':'text','quote':'regulate tidal water'}
                               for c in unit.pop('citations')]
+            unit['primary_support']=unit['supports'].pop(0) if unit['supports'] else None
     return result
 
 
@@ -82,7 +83,7 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     assert body['model'] == 'claude-haiku-5-5' and body['max_tokens'] == 6000
     assert body['system'].startswith('You answer questions about Goa')
     assert 'Every paragraphs entry' not in body['system']
-    assert 'Each object has text and supports only' in body['system']
+    assert 'Each object has text, primary_support and supports only' in body['system']
     assert 'inline schema' not in body['system']
     assert body['messages'] == prepared.messages[1:]
     assert body['thinking'] == {'type': 'adaptive'}
@@ -96,7 +97,8 @@ def test_native_request_keeps_schema_ids_history_and_cost_controls(config, prepa
     paragraph = schema['properties']['paragraph']['anyOf'][0]
     assert paragraph['properties']['supports']['items']['properties']['citation_id']['enum'] == ['passage-1']
     assert paragraph['additionalProperties'] is False and schema['additionalProperties'] is False
-    assert paragraph['properties']['supports']['minItems'] == 1
+    assert paragraph['properties']['primary_support']['properties']['field']['enum'] == ['text']
+    assert 'primary_support' in paragraph['required']
     assert all(key not in json.dumps(schema) for key in ('maxItems', 'maxLength', 'minLength'))
     assert prepared.schema['properties']['paragraphs']['maxItems'] == 1
     assert b'private/path' not in request.content and b'fixture-only' not in request.content
@@ -287,7 +289,7 @@ def test_native_brief_budgets_final_contract_before_selecting_evidence(config):
     wire=body['output_config']['format']['schema']
     assert wire['properties']['paragraph']['anyOf'][0]['properties']['supports']['items']['properties']['citation_id']['enum']==ids
     assert [e['id'] for e in json.loads(body['messages'][-1]['content'])['evidence']]==ids
-    assert 'Each object has text and supports only' in body['system']
+    assert 'Each object has text, primary_support and supports only' in body['system']
     # A caller cannot spend the framing reserve as extra prompt space.
     oversized=[*prepared.messages[:-1],{'role':'user','content':'x'*24000}]
     with pytest.raises(ValueError,match='reserved allowance'):
@@ -305,6 +307,7 @@ def test_quote_contract_preserves_units_and_only_their_support_ids(config):
                         {'citation_id':'water','field':'warning','quote':'Machine OCR not manually verified.'}]},
            {'text':'The plateau supports reptiles.',
             'supports':[{'citation_id':'forest','field':'text','quote':'The plateau supports reptiles.'}]}]
+    for unit in units:unit['primary_support']=unit['supports'].pop(0)
     result=json.loads(normalize_native_answer(json.dumps({'status':'answered','paragraphs':units}),prepared))
     assert result['paragraphs']==[{'text':units[0]['text'],'citations':['water']},
                                   {'text':units[1]['text'],'citations':['forest']}]
@@ -326,7 +329,8 @@ def test_quote_contract_rejects_invented_or_unrepresented_support_without_salvag
     prepared=prepare_answer(ChatRequest(question='What do gates regulate?'),evidence,provider='anthropic')
     unit={'text':'Gates regulate tides.','supports':[
         {'citation_id':'passage-1','field':'text','quote':'regulate tidal water'}]}
-    payload={'status':'answered','paragraphs':[unit]};support=unit['supports'][0]
+    unit['primary_support']=unit['supports'].pop(0)
+    payload={'status':'answered','paragraphs':[unit]};support=unit['primary_support']
     if mutation=='unknown-id':support['citation_id']='invented'
     elif mutation=='cross-source':support['citation_id']='other'
     elif mutation=='case-change':support['quote']='Regulate tidal water'
@@ -342,13 +346,13 @@ def test_quote_contract_rejects_invented_or_unrepresented_support_without_salvag
     elif mutation=='wrong-type':support['quote']=['regulate tidal water']
     elif mutation=='extra':support['private diagnostic']='fixture-only'
     elif mutation=='metadata-only':support.update(field='legal_currency',quote='Current applicability unverified.')
-    elif mutation=='too-many-supports':unit['supports']*=11
+    elif mutation=='too-many-supports':unit['supports']=[deepcopy(support)]*10
     elif mutation=='too-many-units':payload['paragraphs']*=5
     elif mutation=='no-units':payload['paragraphs']=[]
     elif mutation=='inline-id':unit['text']='Gates regulate tides [passage-1].'
     elif mutation=='rewritten-spacing':unit['text']='  Gates regulate tides.'
     elif mutation=='mixed-invalid-unit':
-        invalid=deepcopy(unit);invalid['supports'][0]['quote']='Invented.';payload['paragraphs'].append(invalid)
+        invalid=deepcopy(unit);invalid['primary_support']['quote']='Invented.';payload['paragraphs'].append(invalid)
     with pytest.raises(ValueError,match='native answer did not match the evidence contract') as error:
         normalize_native_answer(json.dumps(payload),prepared)
     assert 'private diagnostic' not in str(error.value)
@@ -381,3 +385,47 @@ def test_native_contract_is_not_applied_to_other_providers(prepared):
         other=prepare_answer(request,prepared.evidence,provider=provider)
         assert other.messages==regular.messages and other.schema==regular.schema
         assert 'supports.citation_id' not in other.messages[0]['content']
+
+
+def test_native_payload_withholds_catalogue_cues_without_changing_public_citations():
+    from copy import deepcopy
+    from backend.chat import evidence_payload
+    item={'id':'p','text':'A lake contributes to recharge.','page_heading':'Wetlands',
+          'warning':'Check the original.','title':'Hosted document', 'url':'https://example.org/report.pdf',
+          'publisher_class':'act_for_goa','document_kind_hint':'article_report_or_index','topics':['water'],
+          'document_id':'document','generation':'generation', 'retrieved_at':'2026-10-27',
+          'legal_currency':'Unverified.', 'source_date_metadata':{'date_caution':'Date unknown.'},
+          'guide_verification':{'limitations':'Saved source only.'}}
+    original=deepcopy(item)
+    prepared=prepare_answer(ChatRequest(question='What does the lake do?'),[item],provider='anthropic')
+    payload=json.loads(prepared.messages[-1]['content']);source=next(iter(payload['sources'].values()))
+    hidden={'title','url','publisher_class','document_kind_hint','topics'}
+    assert not hidden & source.keys()
+    assert source=={**{k:item[k] for k in ('document_id','generation','retrieved_at','legal_currency','source_date_metadata','guide_verification')},
+                    'catalogue_scope_hint':item['title']}
+    assert payload['evidence'][0]['text']==item['text'] and payload['evidence'][0]['page_heading']=='Wetlands'
+    assert prepared.evidence==[original] and item==original
+    for provider in (None,'openrouter','qwen','openai'):
+        assert hidden <= next(iter(evidence_payload([item],provider=provider)['sources'].values())).keys()
+
+
+@pytest.mark.parametrize('primary',[None,[],{}, {'citation_id':'passage-1','field':'warning','quote':'regulate tidal water'}])
+def test_primary_text_object_cannot_be_missing_or_replaced_by_metadata(prepared,primary):
+    from backend.anthropic_provider import normalize_native_answer
+    payload=native_payload(answer_payload());unit=payload['paragraphs'][0]
+    unit['supports']=[unit['primary_support']];unit['primary_support']=primary
+    with pytest.raises(ValueError,match='evidence contract'):
+        normalize_native_answer(json.dumps(payload),replace(prepared,answer_style='standard'))
+
+
+@pytest.mark.parametrize('support',[
+    {'citation_id':'passage-1','field':'text','quote':'Unseen source text.'},
+    {'citation_id':'other','field':'text','quote':'regulate tidal water'},
+    {'citation_id':'passage-1','field':'title','quote':'Khazan study'},
+    {'citation_id':'passage-1','field':'catalogue_scope_hint','quote':'Khazan study'},
+])
+def test_valid_primary_cannot_mask_invalid_additional_support(prepared,support):
+    from backend.anthropic_provider import normalize_native_answer
+    payload=native_payload(answer_payload());payload['paragraphs'][0]['supports']=[support]
+    with pytest.raises(ValueError,match='evidence contract'):
+        normalize_native_answer(json.dumps(payload),replace(prepared,answer_style='standard'))
