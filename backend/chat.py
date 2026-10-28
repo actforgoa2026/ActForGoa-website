@@ -150,7 +150,7 @@ def prepare_answer(request, evidence):
             'conversation_context_not_evidence': context, 'evidence': []}
     # Forced tool choice skips adaptive thinking. Let the model compare source
     # qualifications first; the adapter still requires exactly one strict call.
-    payload = {'system': INSTRUCTIONS, 'tool_choice': {'type': 'auto'},
+    payload = {'system': INSTRUCTIONS, 'tool_choice': {'type': 'auto', 'disable_parallel_tool_use': True},
                'thinking': {'type': 'adaptive', 'display': 'omitted'},
                'output_config': {'effort': 'medium'},
                'tools': [{'name': 'answer_library_question', 'strict': True, 'description': 'Answer with cited library information and separately labeled general context.', 'input_schema': provider_schema([])}],

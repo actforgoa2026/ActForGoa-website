@@ -107,7 +107,7 @@ def test_anthropic_citation_contract(collection):
         assert response.status_code==200,response.text
         answer=response.json();assert answer['status']=='answered'
         assert captured[0]['model']=='claude-haiku-5-5'
-        assert captured[0]['tool_choice']=={'type':'auto'}
+        assert captured[0]['tool_choice']=={'type':'auto','disable_parallel_tool_use':True}
         assert captured[0]['thinking']=={'type':'adaptive','display':'omitted'}
         assert captured[0]['output_config']['effort']=='medium'
         assert captured[0]['max_tokens']==4096
