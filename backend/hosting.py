@@ -138,13 +138,21 @@ def public_config():
 
 class PublicLimits:
     """Single-instance aggregate limits. No client identifiers are collected."""
-    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5', require_existing=False):
+    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5', require_existing=False, release_allowance=False):
         self.root=Path(root);self.search_limit=search_per_minute;self.chat_limit=chats_per_day
         self.require_existing=require_existing
         amount=Decimal(str(monthly_usd))
         if not amount.is_finite() or amount<0:raise ValueError('Monthly answer budget must be non-negative')
         self.monthly_limit=int(amount*1_000_000)
+        self.release_allowance=release_allowance
         self.searches=deque();self.lock=threading.Lock()
+
+    def effective_limits(self, day):
+        # Explicit user authorization for this launch only. Evaluate against the
+        # transaction's UTC date so an already-running service expires correctly.
+        daily = 160 if self.release_allowance and day == '2026-10-28' else self.chat_limit
+        monthly = 15_300_000 if self.release_allowance and day[:7] == '2026-10' else self.monthly_limit
+        return daily, monthly
 
     def _open_ledger(self, *, write):
         path=self.root/'answer-usage.sqlite'
@@ -195,14 +203,15 @@ class PublicLimits:
         self.root.mkdir(parents=True,exist_ok=True)
         today=datetime.now(timezone.utc).date().isoformat()
         month=today[:7]
+        daily_limit,monthly_limit=self.effective_limits(today)
         with self.lock,sqlite3.connect(self.root/'answer-usage.sqlite') as db:
             db.execute('CREATE TABLE IF NOT EXISTS usage(day TEXT PRIMARY KEY, attempts INTEGER NOT NULL)')
             db.execute('CREATE TABLE IF NOT EXISTS spend(month TEXT PRIMARY KEY, reserved_microusd INTEGER NOT NULL)')
             db.execute('BEGIN IMMEDIATE')
             count=db.execute('SELECT attempts FROM usage WHERE day=?',(today,)).fetchone()
-            if (count[0] if count else 0)>=self.chat_limit:return False
+            if (count[0] if count else 0)>=daily_limit:return False
             spend=db.execute('SELECT reserved_microusd FROM spend WHERE month=?',(month,)).fetchone()
-            if (spend[0] if spend else 0)+cost_microusd>self.monthly_limit:return False
+            if (spend[0] if spend else 0)+cost_microusd>monthly_limit:return False
             db.execute('INSERT INTO usage VALUES (?,1) ON CONFLICT(day) DO UPDATE SET attempts=attempts+1',(today,))
             db.execute('INSERT INTO spend VALUES (?,?) ON CONFLICT(month) DO UPDATE SET reserved_microusd=reserved_microusd+excluded.reserved_microusd',(month,cost_microusd))
             # Preserve historical attempts for reconciliation across provider changes.
@@ -227,6 +236,7 @@ class PublicLimits:
                 # reservation waiting across UTC midnight must not charge yesterday.
                 day = datetime.now(timezone.utc).date().isoformat()
                 month = day[:7]
+                daily_limit, monthly_limit = self.effective_limits(day)
                 tables = _preserved_tables(db) if self.require_existing else _stage_tables(db)
                 before = _stage_snapshot(db, day, month, tables)
                 result = {
@@ -245,9 +255,9 @@ class PublicLimits:
                     (parent_id, phase),
                 ).fetchone():
                     result['reason'] = 'duplicate'
-                elif before['day_attempts'] >= self.chat_limit:
+                elif before['day_attempts'] >= daily_limit:
                     result['reason'] = 'daily_limit'
-                elif before['month_reserved_microusd'] + cost_microusd > self.monthly_limit:
+                elif before['month_reserved_microusd'] + cost_microusd > monthly_limit:
                     result['reason'] = 'monthly_limit'
                 else:
                     after = {'day_attempts': before['day_attempts'] + 1,
@@ -333,11 +343,12 @@ class PublicLimits:
                 finally:
                     db.rollback()
         reason = 'allowed'
+        daily_limit, monthly_limit = self.effective_limits(day)
         if day != expected_day:
             reason = 'day_mismatch'
-        elif observed['day_attempts'] + required_attempts > self.chat_limit:
+        elif observed['day_attempts'] + required_attempts > daily_limit:
             reason = 'daily_limit'
-        elif observed['month_reserved_microusd'] + total > self.monthly_limit:
+        elif observed['month_reserved_microusd'] + total > monthly_limit:
             reason = 'monthly_limit'
         return {'version': STAGE_PREFLIGHT_VERSION if required_attempts == 2 else 'afg-single-preflight-v1',
                 'allowed': reason == 'allowed', 'reason': reason,

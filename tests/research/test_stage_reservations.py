@@ -61,6 +61,48 @@ def test_success_receipt_commits_with_exact_counters(tmp_path, clock):
     assert ledger(tmp_path)['receipts'][0]['before']['day_attempts'] == 0
 
 
+def test_dated_release_allowance_expires_in_running_process(tmp_path,clock):
+    limits=PublicLimits(tmp_path,release_allowance=True)
+    clock.day='2026-10-28'
+    assert limits.effective_limits(clock.day)==(160,15_300_000)
+    assert limits.reserve_stage(5_000_001,clock.day,'a'*32,'draft')['reserved']
+    clock.day='2026-10-29'
+    assert limits.effective_limits(clock.day)==(100,15_300_000)
+    # Seed only synthetic counters, including today's exhausted100attempts.
+    with CONNECT(tmp_path/'answer-usage.sqlite') as db:
+        db.execute('INSERT INTO usage VALUES (?,100)',(clock.day,))
+    assert not limits.preflight_single(1,clock.day)['allowed']
+    assert limits.reserve_stage(1,clock.day,'b'*32,'draft')['reason']=='daily_limit'
+    clock.day='2026-11-01'
+    assert limits.effective_limits(clock.day)==(100,5_000_000)
+    assert limits.reserve_stage(5_000_001,clock.day,'c'*32,'draft')['reason']=='monthly_limit'
+    assert limits.reserve_stage(5_000_000,clock.day,'d'*32,'draft')['reserved']
+    assert limits.reserve_stage(1,clock.day,'e'*32,'draft')['reason']=='monthly_limit'
+    assert ledger(tmp_path)['months']=={'2026-10':5_000_001,'2026-11':5_000_000}
+
+
+
+@pytest.mark.parametrize('bound', ['daily', 'monthly'])
+def test_approved_release_limit_remains_a_hard_atomic_boundary(tmp_path,clock,bound):
+    clock.day='2026-10-28'
+    limits=PublicLimits(tmp_path,release_allowance=True)
+    assert limits.reserve_stage(1,clock.day,'a'*32,'draft')['reserved']
+    with CONNECT(tmp_path/'answer-usage.sqlite') as db:
+        db.execute('UPDATE usage SET attempts=?',(159 if bound=='daily' else 1,))
+        db.execute('UPDATE spend SET reserved_microusd=?',(15_299_999 if bound=='monthly' else 1,))
+    assert limits.reserve_stage(1,clock.day,'b'*32,'draft')['reserved']
+    before=ledger(tmp_path)
+    assert limits.reserve_stage(1,clock.day,'c'*32,'draft')['reason']==bound+'_limit'
+    assert ledger(tmp_path)==before
+
+
+def test_release_allowance_requires_explicit_opt_in(tmp_path,clock):
+    clock.day='2026-10-28'
+    limits=PublicLimits(tmp_path)
+    assert limits.effective_limits(clock.day)==(100,5_000_000)
+    assert limits.reserve_stage(5_000_001,clock.day,'a'*32,'draft')['reason']=='monthly_limit'
+
+
 def test_duplicate_does_not_reauthorize_and_other_phase_is_independent(tmp_path, clock):
     limits = PublicLimits(tmp_path)
     first = limits.reserve_stage(10, DAY, PARENT, 'draft')

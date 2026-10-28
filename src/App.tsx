@@ -50,7 +50,6 @@ import {
 import SiteHeader from "./components/arc/site-header/site-header";
 import { LanguageSwitcher, useLanguage } from "./language";
 import { translatePriority } from "./priority-translations";
-import HomeCarousel from "./HomeCarousel";
 import { RecordCard } from "./components/RecordCard";
 import { TopicIcon } from "./components/TopicIcon";
 import { TopicPage, TopicChoices } from "./TopicPage";
@@ -82,6 +81,7 @@ import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 import { useStarredIds } from './CurationProvider';
 import { prioritizeStarred } from './curation';
 import {CurationStar, TeamBrowsingBar} from './TeamAccess';
+const OrbitLanding = lazy(() => import("./OrbitLanding"));
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
@@ -265,7 +265,7 @@ function Home({ records }: { records: RecordItem[] }) {
   const { language } = useLanguage();
   return (
     <main>
-      <HomeCarousel><SearchBox large /></HomeCarousel>
+      <OrbitLanding embedded />
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
           <h2 id="home-actions-heading" tabIndex={-1} lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
@@ -1131,15 +1131,17 @@ function About() {
           their publication date is shown where available.
         </p>
         <p>
-          Search starts with keywords. You can optionally download a language model to expand matches by meaning on
-          your device. It finds relevant entries; it does not generate advice or
-          verify contact details. No account is needed and search queries are
-          not sent to an AI provider.
+          Directory and library search find entries without generating answers.
+          Ask uses Anthropic to write answers from source passages: your question,
+          relevant excerpts and recent conversation are sent to that provider.
+          No account is needed. Check the cited passages and their dates; an AI
+          answer does not verify current contact details or replace professional advice.
         </p>
         <p>
-          Contact forms prepare an email for you to review and send. The preview
-          does not store submissions. The existing ActForGoa website remains the
-          original source.
+          Contact forms prepare an email for you to review and send without
+          storing that message here. Private incident reports use a separate
+          review inbox and are not published or automatically forwarded to authorities.
+          The existing ActForGoa website remains the original source.
         </p>
       </section>
     </main>
@@ -1322,6 +1324,7 @@ export default function App() {
   const { pathname, search } = useLocation();
   const navigationType = useNavigationType();
   const previousPath = useRef(pathname);
+  const orbitLanding = pathname.replace(/\/$/, "") === "/explore";
   const internal = pathname === "/admin" || pathname.startsWith("/admin/");
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
@@ -1337,7 +1340,7 @@ export default function App() {
       const heading = content.querySelector<HTMLHeadingElement>("h1");
       if (!heading) return;
       const query = new URLSearchParams(search).get("q");
-      const title = heading.innerText.replace(/\s+/g, " ").trim();
+      const title = (heading.getAttribute("aria-label") || heading.innerText).replace(/\s+/g, " ").trim();
       document.title = `${title}${query ? `: ${query}` : ""} | ActForGoa`;
       if (moved && navigationType === "PUSH" && !focused && !window.location.hash) {
         heading.tabIndex = -1;
@@ -1356,7 +1359,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <><Header /><TeamBrowsingBar /></>}
+      {!internal && <>{pathname === "/" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}<TeamBrowsingBar /></>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
@@ -1378,6 +1381,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
+            <Route path="/explore" element={<Home records={records} />} />
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />
@@ -1425,8 +1429,8 @@ export default function App() {
         )}
       </div>
       <ScrollRestoration />
-      {!internal && <Footer />}
-      {!internal && <div className="preview-note">
+      {!internal && !orbitLanding && <Footer />}
+      {!internal && !orbitLanding && <div className="preview-note">
         A new field guide, in progress.{" "}
         <a href="https://actforgoa.org/">
           Visit the original site <ArrowUpRight size={12} />

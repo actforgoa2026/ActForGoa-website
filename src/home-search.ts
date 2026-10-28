@@ -22,7 +22,7 @@ const signals: Record<string, readonly Signal[]> = {
     [/\b(volunteer\w*|donat\w*|complaint\w*|report\w*|participat\w*|neighbou?rhood|hungry)\b/, 2],
   ],
   nature: [
-    [/\b(nature|wildlife|animals?|dogs?|cats?|cows?|cattle|birds?|snakes?|cobras?|vipers?|pythons?|trees?|forest\w*|biodiversity|vets?|veterinar\w*)\b/, 4],
+    [/\b(nature|ecosystems?|wildlife|animals?|dogs?|cats?|cows?|cattle|birds?|snakes?|cobras?|vipers?|pythons?|trees?|forest\w*|biodiversity|vets?|veterinar\w*)\b/, 4],
     [/\b(animals?|dogs?|cats?|cows?|cattle|birds?|snakes?|cobras?|vipers?|pythons?|vets?|veterinar\w*)\b/, 3],
     [/\b(animal rescue|animal welfare|animal cruelty|injured (?:dog|cat|bird|animal)|tree cutting|cutting (?:down )?trees?|trees? (?:cut|being cut|chopped|felled)|wildlife rescue|snake rescue)\b/, 7],
     [/\b(conserv\w*|habitats?|pets?)\b/, 3],

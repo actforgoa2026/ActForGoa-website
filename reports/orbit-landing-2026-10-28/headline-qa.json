@@ -1,0 +1,131 @@
+[
+  {
+    "viewportWidth": 1440,
+    "text": "find local help.",
+    "visible": "1",
+    "width": 670,
+    "available": 670
+  },
+  {
+    "viewportWidth": 1440,
+    "text": "protect nature.",
+    "visible": "1",
+    "width": 670,
+    "available": 670
+  },
+  {
+    "viewportWidth": 1440,
+    "text": "know your rights.",
+    "visible": "1",
+    "width": 670,
+    "available": 670
+  },
+  {
+    "viewportWidth": 1440,
+    "text": "take local action.",
+    "visible": "1",
+    "width": 670,
+    "available": 670
+  },
+  {
+    "viewportWidth": 1440,
+    "text": "care for Goa.",
+    "visible": "1",
+    "width": 670,
+    "available": 670
+  },
+  {
+    "viewportWidth": 390,
+    "text": "find local help.",
+    "visible": "1",
+    "width": 350,
+    "available": 350
+  },
+  {
+    "viewportWidth": 390,
+    "text": "protect nature.",
+    "visible": "1",
+    "width": 350,
+    "available": 350
+  },
+  {
+    "viewportWidth": 390,
+    "text": "know your rights.",
+    "visible": "1",
+    "width": 350,
+    "available": 350
+  },
+  {
+    "viewportWidth": 390,
+    "text": "take local action.",
+    "visible": "1",
+    "width": 350,
+    "available": 350
+  },
+  {
+    "viewportWidth": 390,
+    "text": "care for Goa.",
+    "visible": "1",
+    "width": 350,
+    "available": 350
+  },
+  {
+    "viewportWidth": 320,
+    "text": "find local help.",
+    "visible": "1",
+    "width": 280,
+    "available": 280
+  },
+  {
+    "viewportWidth": 320,
+    "text": "protect nature.",
+    "visible": "1",
+    "width": 280,
+    "available": 280
+  },
+  {
+    "viewportWidth": 320,
+    "text": "know your rights.",
+    "visible": "1",
+    "width": 280,
+    "available": 280
+  },
+  {
+    "viewportWidth": 320,
+    "text": "take local action.",
+    "visible": "1",
+    "width": 280,
+    "available": 280
+  },
+  {
+    "viewportWidth": 320,
+    "text": "care for Goa.",
+    "visible": "1",
+    "width": 280,
+    "available": 280
+  },
+  {
+    "reducedMotion": [
+      {
+        "display": "flex",
+        "animation": "none"
+      },
+      {
+        "display": "none",
+        "animation": "none"
+      },
+      {
+        "display": "none",
+        "animation": "none"
+      },
+      {
+        "display": "none",
+        "animation": "none"
+      },
+      {
+        "display": "none",
+        "animation": "none"
+      }
+    ]
+  }
+]

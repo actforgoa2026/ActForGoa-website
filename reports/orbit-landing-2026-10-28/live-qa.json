@@ -1,0 +1,44 @@
+[
+  {
+    "width": 1440,
+    "overflow": false,
+    "images": true,
+    "durations": [
+      "90s",
+      "150s",
+      "240s"
+    ],
+    "paused": true,
+    "draft": "How can we protect our wetlands?",
+    "errors": []
+  },
+  {
+    "width": 390,
+    "overflow": false,
+    "images": true,
+    "durations": [
+      "90s",
+      "150s",
+      "240s"
+    ],
+    "paused": true,
+    "draft": "How can we protect our wetlands?",
+    "errors": []
+  },
+  {
+    "width": 320,
+    "overflow": false,
+    "images": true,
+    "durations": [
+      "90s",
+      "150s",
+      "240s"
+    ],
+    "paused": true,
+    "draft": "How can we protect our wetlands?",
+    "errors": []
+  },
+  {
+    "reducedMotion": "none"
+  }
+]

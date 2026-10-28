@@ -22,3 +22,10 @@ The release command rejects dirty or stale source, missing browser evidence and 
 After publishing, verify the public alias on desktop and phone, confirm new and retained routes, and record deployment ID plus commit in the release report. Report separately what is implemented, tested, merged and live. An unconfigured external service remains explicitly unavailable. Do not claim generated answers, dispatch, email delivery or current service availability without corresponding evidence.
 
 If a release process crashes, inspect the owner record in the shared Git `actforgoa-release.lock` directory and confirm that process has ended before removing the stale lock. Never remove an active owner's lock.
+
+
+## Homepage routing cutover
+
+The approved orbit homepage was published through project routing overrides while its source PR was separate. Preserve that source in the integrated release and verify both `/` and `/explore`. Record `vercel routes list --production --expand --project actforgoa-field-guide` and the production routing version alongside the deployment ID. Confirm no unexpected staged routing changes before editing. Alias identity alone cannot detect a rewrite serving another deployment.
+
+After the accepted integrated deployment has been published by `release:review`, verify its immutable URL serves the native homepage and assets correctly. Only then retire the exact review-host overrides for root and `/explore`, preserving unrelated routes. Retire the old `/orbit-assets` proxy after confirming no active page depends on it; preserve it temporarily for open old tabs if necessary. Review the staged routing diff before publishing, save the previous version for rollback, and verify the public alias's HTML/assets, topic routing and desktop/phone UI after cutover. Do not remove an override while the alias still depends on it, change the original domain, or call an old asset deployment the integrated release.

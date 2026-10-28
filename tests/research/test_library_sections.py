@@ -58,7 +58,7 @@ def test_section_api_echoes_scope_and_unsupported_domains_fail(section_library,m
 
 def example():
     evidence=[{'id':'source-1','text':'A permit may be required. Ask the responsible authority to confirm the current procedure.', 'legal_currency':'Historical draft; not consolidated current law.'}]
-    raw={'coverage':'partial','paragraphs':[{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'citations':['source-1'], 'supports':[{'citation_id':'source-1','quote':evidence[0]['text']}]}],
+    raw={'coverage':'partial','paragraph_1':{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'supports':['source-1']},'paragraph_2':None,'paragraph_3':None,'paragraph_4':None,'paragraph_5':None,
          'outside_context':'You can prepare a short description of your planned work before asking for guidance.', 'limitation':'The library does not establish which permit applies to your site.'}
     return evidence,raw
 
@@ -76,8 +76,8 @@ def test_library_and_outside_answers_have_distinct_provenance():
 @pytest.mark.parametrize('corruption',['unknown_citation','fabricated_quote','full_with_outside','no_evidence_with_claim','outside_disabled','invented_link'])
 def test_answer_contract_rejects_provenance_mixing(corruption):
     evidence,raw=example();request=ChatRequest(question='What permission applies?',domain='legal')
-    if corruption=='unknown_citation':raw['paragraphs'][0]['citations']=['fabricated']
-    if corruption=='fabricated_quote':raw['paragraphs'][0]['supports'][0]['quote']='The permit is always required.'
+    if corruption=='unknown_citation':raw['paragraph_1']['supports'][0]='fabricated'
+    if corruption=='fabricated_quote':raw['paragraph_1']['supports'][0]={'citation_id':'source-1','quote':'The permit is always required.'}
     if corruption=='full_with_outside':raw['coverage']='full'
     if corruption=='no_evidence_with_claim':raw['coverage']='none'
     if corruption=='outside_disabled':request.include_outside_context=False
@@ -95,32 +95,25 @@ def test_step_by_step_explanation_has_room_without_losing_citations():
     ]
     assert 180 < sum(len(step.split()) for step in steps) < 300
     evidence = [{'id': f'step-{i}', 'text': step} for i, step in enumerate(steps)]
-    raw = {'coverage': 'full', 'paragraphs': [
-        {'text': source['text'], 'citations': [source['id']],
-         'supports': [{'citation_id': source['id'], 'quote': source['text']}]}
-        for source in evidence
-    ]}
+    raw = {'coverage': 'full', **{f'paragraph_{i+1}': {'text': source['text'], 'supports': [source['id']]} for i,source in enumerate(evidence)}, 'paragraph_5': None}
     request = ChatRequest(question='Can you explain those steps in a little more detail?')
     result = normalize_answer(raw, request, evidence)
     assert [paragraph['text'] for paragraph in result['paragraphs']] == steps
     assert [citation['id'] for citation in result['citations']] == [source['id'] for source in evidence]
     assert result['outside_context'] is None
     invalid = deepcopy(raw)
-    invalid['paragraphs'][-1]['supports'][0]['quote'] = 'Permission is automatically granted.'
-    with pytest.raises(ValueError, match='supporting quote'):
+    invalid['paragraph_4']['supports'][0] = 'fabricated'
+    with pytest.raises(ValueError, match='supporting source'):
         normalize_answer(invalid, request, evidence)
     # Even fully quoted answers retain a finite size bound; they are not truncated.
     oversized = deepcopy(raw)
-    oversized['paragraphs'].append({
-        'text': ' '.join(steps[:3]), 'citations': ['extra'],
-        'supports': [{'citation_id': 'extra', 'quote': ' '.join(steps[:3])}],
-    })
+    oversized['paragraph_5'] = {'text': ' '.join(steps[:3]), 'supports': ['extra']}
     with pytest.raises(ValueError, match='too long'):
         normalize_answer(oversized, request, evidence + [{'id': 'extra', 'text': ' '.join(steps[:3])}])
 
 
 def test_no_library_match_is_labeled_and_never_has_fake_citations():
-    raw={'coverage':'none','paragraphs':[],'outside_context':'Start by describing the location and the activity you want help with.', 'limitation':'No matching information was found in our library.'}
+    raw={'coverage':'none','paragraph_1':None,'paragraph_2':None,'paragraph_3':None,'paragraph_4':None,'paragraph_5':None,'outside_context':'Start by describing the location and the activity you want help with.', 'limitation':'No matching information was found in our library.'}
     result=normalize_answer(raw,ChatRequest(question='An uncovered topic?',domain='legal'),[])
     assert result['status']=='insufficient_evidence' and result['citations']==[]
     assert result['outside_context']['text'] and result['library_notice']
@@ -136,6 +129,26 @@ def test_provider_failures_are_not_retried_or_credential_leaked():
     assert len(calls)==1 and error.value.status_code==429
     assert 'sensitive' not in str(error.value) and 'fixture-secret' not in str(error.value)
     client.close()
+
+
+@pytest.mark.parametrize('reason,content',[
+    ('max_tokens',[{'type':'tool_use','name':'answer_library_question','input':{}}]),
+    ('refusal',[{'type':'text','text':'Declined'}]),
+    ('end_turn',[{'type':'text','text':'Unstructured answer'}]),
+    ('tool_use',[]),
+    ('tool_use',[{'type':'tool_use','name':'unexpected','input':{}}]),
+    ('tool_use',[{'type':'tool_use','name':'answer_library_question','input':{}}]*2),
+])
+def test_successful_transport_does_not_bypass_answer_contract(reason,content):
+    calls=[]
+    def provider(request):
+        calls.append(request)
+        return httpx.Response(200,json={'stop_reason':reason,'content':content})
+    client=AnthropicAnswers('fixture',httpx.Client(transport=httpx.MockTransport(provider)))
+    try:
+        with pytest.raises(ValueError):client.answer('claude-haiku-5-5',{})
+        assert len(calls)==1
+    finally:client.close()
 
 
 def test_failed_provider_attempt_stays_reserved_and_daily_budget_survives_restart(section_library,monkeypatch):
