@@ -62,3 +62,15 @@ def test_context_budget_preserves_whole_excerpts_and_followup_is_not_evidence():
     assert selected == [small] and evidence == before
     assert context['conversation_context_not_evidence'][0]['content'] == 'Which permissions apply?'
     assert all('Earlier model output' not in item['text'] for item in context['evidence'])
+
+
+def test_reviewed_locator_claims_cannot_substitute_for_source_passages():
+    item={'id':'x','text':'The actual source excerpt.',
+          'source_date_metadata':{'publication_date':'2020-06-01','reviewed_locator_and_dates':'A factual claim absent from the excerpt.'},
+          'guide_verification':{'location':'Page4: unsupported procedural summary','limitations':'Check later amendments.'}}
+    payload,selected=prepare_answer(ChatRequest(question='What does this establish?'),[item])
+    wire=json.loads(payload['messages'][0]['content'])['evidence'][0]
+    assert wire['text']==item['text']
+    assert wire['source_date_metadata']=={'publication_date':'2020-06-01'}
+    assert wire['guide_verification']=={'limitations':'Check later amendments.'}
+    assert selected[0]['source_date_metadata']==item['source_date_metadata']

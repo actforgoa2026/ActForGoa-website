@@ -8,9 +8,26 @@ import zvec
 from .embeddings import Encoder, ROOT
 from .extraction import safe_path
 from .domains import document_domains, legal_authority_multiplier
+from .passage_selection import select_passages
+from .source_context import preceding_table_chunk, tabular_lines
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
-STOP = set('a an the of in on at to from for is are was were be have has how why what which when where who does do can could would should explain tell me about and or with its it this that goa'.split())
+STOP = set('a an the of in on at to from for is are was were be have has how why what which when where who does do can could would should explain tell me about and or with its it this that goa s sources source say says evidence research known'.split())
+LEGAL_TERMS = {'law','laws','legal','act','acts','rule','rules','regulation','regulations','notification','amendment','gazette','permit','permission','crz','court','tribunal','rti'}
+
+def authority_score(score, meta, legal_query):
+    # A small relevance-bounded preference; authority is not proof of legal currency.
+    return score * (1.15 if legal_query and meta.get('publisher_class')=='government_or_court' else 1)
+
+def page_heading(text):
+    """Scope hints only: prose outside a cited chunk must not become uncited evidence."""
+    headings=[]
+    for line in text.splitlines():
+        line=line.strip();letters=[c for c in line if c.isalpha()]
+        if not 3<=len(letters) or len(line)>140:continue
+        if sum(c.isupper() for c in letters)/len(letters)>=.65 or re.match(r'^\d+(?:\.\d+)+\.?\s+\D',line):
+            headings.append(line)
+    return '\n'.join(headings[:6])[:500]
 
 class Library:
     def __init__(self, root=ROOT, index_root=None):
@@ -88,6 +105,7 @@ class Library:
             vector_filter="document in ("+','.join("'"+identifier+"'" for identifier in domain_ids)+")"
         terms=list(dict.fromkeys(t.lower() for t in re.findall(r'[^\W_]+',query,re.UNICODE) if len(t)>1 and t.lower() not in STOP))[:24]
         if not terms:terms=re.findall(r'[^\W_]+',query)[:8]
+        query_concepts={t[:5] if len(t)>5 else t for t in terms}
         if any(t in terms for t in ['mhadei','mahadayi','mandovi']):terms.extend(['mhadei','mahadayi','mandovi'])
         expression=' OR '.join('"'+t+'"' for t in dict.fromkeys(terms))
         with self.connect(generation) as db:
@@ -111,26 +129,63 @@ class Library:
                 for rank,identifier in enumerate(ids,1):
                     scores[identifier]=scores.get(identifier,0)+1/(60+rank)
                     channels.setdefault(identifier,[]).append(channel)
-            # Primary official sources receive a small relevance-bounded preference.
+            candidates={}
             for identifier in scores:
-                row=db.execute('SELECT d.metadata FROM chunks c JOIN documents d ON d.id=c.doc_id WHERE c.id=?',(identifier,)).fetchone()
-                if row:scores[identifier]*=legal_authority_multiplier(json.loads(row['metadata']),domain)
-            results=[];counts={};seen_passages=[]
-            for identifier in sorted(scores,key=lambda i:scores[i],reverse=True):
-                row=db.execute('SELECT c.*,d.metadata,p.warning,p.label FROM chunks c JOIN documents d ON d.id=c.doc_id JOIN pages p ON p.doc_id=c.doc_id AND p.page=c.page WHERE c.id=?',(identifier,)).fetchone()
-                if not row:continue
-                if counts.get(row['doc_id'],0)>= (4 if doc_id else 2):continue
-                words=re.findall(r'\w+',row['text'].lower())
-                shingles=set(zip(words,words[1:]))
-                if shingles and any(len(shingles & prior)/max(len(shingles | prior),1)>.9 for prior in seen_passages):continue
-                seen_passages.append(shingles)
-                counts[row['doc_id']]=counts.get(row['doc_id'],0)+1
-                meta=json.loads(row['metadata']);qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
-                results.append({'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
+                row=db.execute('SELECT c.*,d.metadata,p.warning,p.label,substr(p.text,1,1400) AS page_context FROM chunks c JOIN documents d ON d.id=c.doc_id JOIN pages p ON p.doc_id=c.doc_id AND p.page=c.page WHERE c.id=?',(identifier,)).fetchone()
+                if row:candidates[identifier]=(row,json.loads(row['metadata']))
+            legal_query=bool(LEGAL_TERMS.intersection(terms))
+            # RRF alone can over-rank passages matching one generic term in both
+            # channels. Reward coverage of the question's distinct concepts too.
+            def relevance(identifier):
+                row,meta=candidates[identifier]
+                words=re.findall(r'[^\W_]+',row['text'].lower(),re.UNICODE)
+                # Light prefix matching joins variants such as estuary/estuarine.
+                concepts={w[:5] if len(w)>5 else w for w in words}
+                coverage=len(query_concepts & concepts)/max(len(query_concepts),1)
+                return (scores[identifier]+.05*coverage**2)*max(legal_authority_multiplier(meta,domain),1.15 if legal_query and meta.get('publisher_class')=='government_or_court' else 1)
+            ranked=sorted(candidates,key=relevance,reverse=True)
+
+            def distinct(identifiers):
+                selected=[];counts={};seen_passages=[]
+                for identifier in identifiers:
+                    row,_=candidates[identifier]
+                    if identifier in selected or counts.get(row['doc_id'],0)>=(4 if doc_id else 2):continue
+                    words=re.findall(r'\w+',row['text'].lower())
+                    shingles=set(zip(words,words[1:]))
+                    if shingles and any(len(shingles & prior)/max(len(shingles | prior),1)>.9 for prior in seen_passages):continue
+                    seen_passages.append(shingles)
+                    counts[row['doc_id']]=counts.get(row['doc_id'],0)+1
+                    selected.append(identifier)
+                    if len(selected)>=limit:break
+                return selected
+
+            selected=distinct(ranked)
+            if not doc_id:
+                revised=select_passages(query,candidates,selected,{i:relevance(i) for i in candidates},STOP)
+                # Recheck cross-document duplicates after joint selection and
+                # backfill only from the same bounded hybrid candidate pool.
+                selected=distinct(revised+ranked)
+            def citation(row, meta, matches):
+                identifier=row['id']
+                qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
+                return {'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
                     'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],
-                    'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':channels[identifier],
+                    'page_heading':page_heading(row['page_context']),
                     'domains':document_domains(meta),
-                    **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','guide_verification','document_kind_hint')},
-                    'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation})
+                    'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':matches,
+                    **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification')},
+                    'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation}
+
+            results=[]
+            for identifier in selected:
+                row,meta=candidates[identifier]
+                result=citation(row,meta,channels[identifier])
+                if len(tabular_lines(row['text']))>=2:
+                    page=db.execute('SELECT text FROM pages WHERE doc_id=? AND page=?',(row['doc_id'],row['page'])).fetchone()
+                    siblings=db.execute('SELECT c.*,p.warning,p.label,substr(p.text,1,1400) AS page_context FROM chunks c JOIN pages p ON p.doc_id=c.doc_id AND p.page=c.page WHERE c.doc_id=? AND c.page=? ORDER BY c.start',(row['doc_id'],row['page'])).fetchall()
+                    context=preceding_table_chunk(page['text'],row['start'],row['end'],siblings)
+                    if context is not None and context['id']!=identifier:
+                        result['supporting_context']=[citation(context,meta,['source_context'])]
+                results.append(result)
                 if len(results)>=limit:break
         return results

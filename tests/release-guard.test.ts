@@ -29,7 +29,7 @@ if(tool==='vercel') {
    process.stdout.write(JSON.stringify(scenario==='mcp-error'?{jsonrpc:'2.0',id:req.id,error:{code:-32603,message:'failed'}}:{jsonrpc:'2.0',id:req.id,result}));
   } else if(args.includes('/api/admin/config')) process.stdout.write(JSON.stringify({available:scenario!=='admin-unavailable'}));
   else if(args.includes('/api/blog')) process.stdout.write(JSON.stringify(scenario==='blog-unavailable'?{error:'unavailable'}:{posts:[]}));
-  else process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable',domains:scenario==='research-unscoped'?[]:['legal','ecology'],domain_counts:{legal:3,ecology:5}}));
+  else process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable',chat_ready:scenario!=='answers-unavailable',domains:scenario==='research-unscoped'?[]:['legal','ecology'],domain_counts:{legal:3,ecology:5}}));
  }
  if(args[0]==='deploy') {
   const deployment={id:scenario==='wrong-deployment'?'unexpected':'new',url:'https://actforgoa-field-guide-test.vercel.app'};
@@ -65,7 +65,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable','research-unscoped','admin-unavailable','blog-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
+for(const scenario of ['dirty','stale','wrong-tree','main-during-build','alias-during-build','failed-build','research-unavailable','answers-unavailable','research-unscoped','admin-unavailable','blog-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);

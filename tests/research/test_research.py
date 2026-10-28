@@ -120,7 +120,7 @@ def test_anthropic_citation_contract(collection,monkeypatch,model_id):
         assert captured[0]['model']==model_id
         assert captured[0]['tool_choice']=={'type':'auto','disable_parallel_tool_use':True}
         assert captured[0]['thinking']=={'type':'adaptive','display':'omitted'}
-        assert captured[0]['output_config']['effort']=='medium'
+        assert captured[0]['output_config']['effort']=='high'
         assert captured[0]['max_tokens']==4096
         assert answer['outside_context'] is None
         for cite in answer['citations']:
