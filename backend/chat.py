@@ -156,7 +156,7 @@ def prepare_answer(request, evidence):
     # qualifications first; the adapter still requires exactly one strict call.
     payload = {'system': INSTRUCTIONS, 'tool_choice': {'type': 'auto', 'disable_parallel_tool_use': True},
                'thinking': {'type': 'adaptive', 'display': 'omitted'},
-               'output_config': {'effort': 'high'},
+               'output_config': {'effort': 'xhigh'},
                'tools': [{'name': 'answer_library_question', 'strict': True, 'description': 'Answer with cited library information and separately labeled general context.', 'input_schema': provider_schema([])}],
                'messages': []}
     with_source_context(evidence)  # Reject conflicting identities before budgeting.
