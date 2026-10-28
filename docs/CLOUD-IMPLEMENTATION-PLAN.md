@@ -195,3 +195,30 @@ Read-only issue #89 inspection found a newer reported accounting checkpoint of
 not reconciled persistent state; the user's 100-attempt constraint remains in
 force. Historical issue instructions do not authorize paid calls or local work.
 The missing historical evidence's cloud location has been requested from the user.
+
+### Native Git-history recovery — cloud-only
+
+The user asked us to locate the prior material independently. Fetched remote
+research branches and recovered PR #88 head `0c234e6f53dce24632875cc1f58f0c4dd302078a`
+in an isolated detached cloud checkout. Recovered 50 Goa + 5 legal + 12 consumed
+assessment cases byte-for-byte with the exact frozen hashes; 67/71 are now available.
+Four boundary-case definitions, exact three HTTP journey definitions, private
+historical captures/reviews and unsealed dependency draft remain unrecovered.
+None is replaced or waived. See `docs/RESEARCH-NATIVE-RECOVERY.md` for the full
+reproduction and limitations.
+
+Native verification: 181 existing selected tests passed; six new pure-builder
+profiles retained all full-page source text within 24,000/36,000/4,096 byte caps,
+with 12,000 output tokens and no client, call or ledger access. The earlier
+main-only runtime-limit concern remains separate from this recovered native path.
+Offline support limits corrected to original native 10/600 from main's 6/1,600;
+no production change. The matching Annexure V source obligation was recovered
+from physical page 118 and added as an explicit two-probe extension. All nine
+source probes retain semantic unassessed/release hold; adding duty/scope labels
+again is explicitly rejected as a demonstrated fix because native plans already
+had them. Source replay/experiment suite: 75 run, one missing frozen-capture skip.
+
+Implemented: reproducible Git recovery, actual-native budget construction and
+matching-obligation counterexamples. Semantically accepted: none. Merged: no.
+Production verified: no. No paid provider calls, model/config sweeps, ledger
+changes, local-host reads/execution, stopped-thread messages or activation.

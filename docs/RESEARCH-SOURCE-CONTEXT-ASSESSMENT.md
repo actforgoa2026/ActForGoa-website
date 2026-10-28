@@ -180,3 +180,15 @@ reconciliation. The issue's historical temporary testing allowance and local
 promotion instructions do not override this user's current 100-attempt/cloud-only
 constraints or authorize paid continuation. No cloud location for the missing
 private assessment/acceptance artifacts was supplied in those comments.
+
+## Native-history recovery update
+
+The GitHub research branches subsequently supplied the original 50+5+12 case
+files with matching frozen hashes and PR #88's actual native implementation.
+See [RESEARCH-NATIVE-RECOVERY.md](RESEARCH-NATIVE-RECOVERY.md). The earlier blanket
+unavailability statement and 6/1,600 support assumptions describe the initial
+checkout/prototype and are superseded: 67 cases are recovered, and the offline
+prototype now follows native 10/600 support limits. The original reports remain
+unchanged. Nine-case v4 explicitly adds the recovered Annexure V obligation pair.
+Six new actual-native request constructions fit the existing byte limits without
+losing any supplied page. These results do not establish full-set sizing or meaning.

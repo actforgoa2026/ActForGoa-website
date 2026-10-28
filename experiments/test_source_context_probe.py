@@ -46,6 +46,13 @@ class InputPinningTests(unittest.TestCase):
         self.assertEqual(cases['lake-orphan']['candidate']['supports'], ['lake-functions'])
         self.assertIn('104', cases['bio-distorted']['candidate']['text'])
         self.assertIn('105 Oriolidae', cases['bio-preserving']['pack']['passages']['66'])
+        extended = probe.run(Path(os.environ['AFG_SOURCE_CONTEXT_INPUTS']), include_annexure=True)
+        self.assertEqual(len(extended['cases']), 9)
+        for case in extended['cases'][-2:]:
+            self.assertEqual(case['checks']['mechanical'], 'valid')
+            self.assertEqual(case['checks']['semantic'], 'not_assessed')
+            self.assertEqual(case['candidate']['supports'], ['recharge-permission', 'annexure-duty'])
+
 
 
 if __name__ == '__main__':

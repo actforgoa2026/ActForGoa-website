@@ -1,0 +1,77 @@
+{
+  "source_commit": "0c234e6f53dce24632875cc1f58f0c4dd302078a",
+  "method": "git show exact commit:path; raw bytes unchanged",
+  "provider_calls": 0,
+  "files": [
+    {
+      "path": "tests/research/goa-chat-cases.json",
+      "sha256": "5ad99abb3c643763bfdf0db356601c8d8cde3d6be17ea0ae32e8a304bf382939",
+      "bytes": 9490,
+      "cases": 50
+    },
+    {
+      "path": "tests/research/legal-chat-cases.json",
+      "sha256": "1ee50fd40b504962015cb9d6fa5a1fb8526fabcb53d845555265a5143070d0bc",
+      "bytes": 1484,
+      "cases": 5
+    },
+    {
+      "path": "tests/research/anthropic-acceptance-plan.template.json",
+      "sha256": "2848256554cc9011d8ea3569884ac9d036db3eb7100c52d609f5f5f6509bad7e",
+      "bytes": 2127
+    },
+    {
+      "path": "reports/passage-selection-2026-10-27/assessment-cases.json",
+      "sha256": "7420098b89731896c4689f1b16bfb5003f41b98a0e302756b0d6de9d96c26d9f",
+      "bytes": 24123,
+      "cases": 12
+    },
+    {
+      "path": "reports/passage-selection-2026-10-27/assessment-freeze.json",
+      "sha256": "eb3174ed6fbe03aca4a7a9331449bedd88b4745bb8addbdfe1c4a99057aff415",
+      "bytes": 416
+    },
+    {
+      "path": "tests/research/claim_fidelity_controls.json",
+      "sha256": "ee582827749776e43b4b0fd4461225f170db4c505bd875ad28409becaafb4d4d",
+      "bytes": 7919
+    },
+    {
+      "path": "docs/research-single-final-medium.md",
+      "sha256": "bf6ce6f94e9b332e2d93db2ff4882125ed8656edfe1e48515756a4b70fe85758",
+      "bytes": 6169
+    },
+    {
+      "path": "docs/research-single-final-answers.md",
+      "sha256": "8e5b219594eeaf727a04a9fb9c9e51e883ac284fd62b3dd2fc2a27915f5f0c89",
+      "bytes": 12743
+    },
+    {
+      "path": "docs/research-anthropic-acceptance.md",
+      "sha256": "39dd02971fff96f3a58aa9ae2485f357748c5ebf87e408fea55626fc8fb472e3",
+      "bytes": 31902
+    },
+    {
+      "path": "backend/anthropic_provider.py",
+      "sha256": "21c6df8b8fc8287645e5c9995252fcc7ac89c54e0f7bc4e0bd9ca52b90497200",
+      "bytes": 18655
+    },
+    {
+      "path": "backend/reconstruction.py",
+      "sha256": "5c219b0ce29df573408929a5eff42bae763588924fe0de8e2cedf62e3b20ddc0",
+      "bytes": 15516
+    },
+    {
+      "path": "backend/evidence_plan.py",
+      "sha256": "b51f0f12b19eccb6bac8f075b3c55050497eea44d16504a50ad817753432cb1a",
+      "bytes": 10800
+    }
+  ],
+  "recovered_semantic_cases": 67,
+  "required_semantic_cases": 71,
+  "missing_semantic_boundary_cases": 4,
+  "http_checks": "three required; exact historical definitions not recovered",
+  "historical_captures": "not recovered",
+  "dependency_draft": "not recovered",
+  "acceptance": "not_run"
+}

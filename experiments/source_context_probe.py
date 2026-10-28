@@ -55,12 +55,13 @@ def probes(manifest, inputs):
            'provenance': {'document_id': inputs['bio-meta.json']['id'],
                           'generation': manifest['generation'], 'original_sha256': inputs['bio-meta.json']['sha256']}}
     anchor(bio, 'report-date', '67', '7 March 2019', '7 March 2019')
-    anchor(bio, 'secondary-total', '61', 'Overall Species Richness', 'The details are presented in Table 3.19.')
+    anchor(bio, 'secondary-method', '61', 'Overall Species Richness', 'Zoological Survey of India archive1.')
+    anchor(bio, 'secondary-total', '61', 'Based on this secondary information', 'The details are presented in Table 3.19.', ('secondary-method',))
     anchor(bio, 'avian-heading', '67', 'Table 3.20 Endemic Avian', 'Study Area')
     anchor(bio, 'endemic-summary', '67', 'Endemism', 'provided below in Table 3.20',
-           ('report-date', 'secondary-total', 'avian-heading', 'last-row'))
+           ('report-date', 'secondary-method', 'secondary-total', 'avian-heading', 'last-row'))
     anchor(bio, 'last-row', '66', '105 Oriolidae', '1 IV LC')
-    bio_supports = ['report-date', 'secondary-total', 'avian-heading', 'endemic-summary', 'last-row']
+    bio_supports = ['report-date', 'secondary-method', 'secondary-total', 'avian-heading', 'endemic-summary', 'last-row']
 
     lake = {'question': 'What does the action plan say Bachbhatt Lake does?',
             'passages': {'23': inputs['lake-pages.json']['pages'][0]['text']}, 'spans': [],
@@ -99,10 +100,39 @@ def probes(manifest, inputs):
     ]
 
 
-def run(root):
+def annexure_probes(root):
+    pin = json.loads(Path(__file__).with_name('annexure_duty_input.json').read_text())
+    path = root / pin['file']
+    if path.is_symlink():
+        raise ValueError('symlink input refused')
+    raw = path.read_bytes()
+    if hashlib.sha256(raw).hexdigest() != pin['sha256']:
+        raise ValueError('annexure input hash mismatch')
+    page = json.loads(raw)['pages'][0]
+    if page['page'] != pin['physical_page']:
+        raise ValueError('annexure physical page differs')
+    pack = {'question': 'What does the supplied rule permit for groundwater recharge, and what design condition applies?',
+            'passages': {'118': page['text']}, 'spans': [], 'provenance': pin}
+    anchor(pack, 'recharge-permission', '118', 'However, Rain Water Harvesti ng', 'Water Resource Department, Government of Goa.')
+    anchor(pack, 'annexure-duty', '118', 'The details of the structures', 'in Annexure-V (27.V).', ('recharge-permission',))
+    ids = ['recharge-permission', 'annexure-duty']
+    return [
+        ('annexure-duty-preserving', pack, claim(
+            'The supplied regulation permits rainwater harvesting for groundwater recharge in areas designated by Goa’s Water Resource Department. The structures and design must follow Annexure V (27.V). This page does not give the annexure’s detailed specifications, and current applicability has not been verified.', ids),
+         'Author-proposed positive: permission and mandatory condition coexist; unavailable details do not remove the duty. The exact historical diagnostic identity is not established.'),
+        ('annexure-duty-lost', pack, claim(
+            'Groundwater recharge is permitted in designated areas. Design details are in an unavailable annexure.', ids),
+         'Reject semantically: mandatory compliance is replaced by an access gap, despite complete selected support.'),
+    ]
+
+
+def run(root, *, include_annexure=False):
     manifest, inputs = load_inputs(root)
     reports = []
-    for identifier, pack, candidate, annotation in probes(manifest, inputs):
+    cases = probes(manifest, inputs)
+    if include_annexure:
+        cases += annexure_probes(root)
+    for identifier, pack, candidate, annotation in cases:
         try:
             result = check(pack, [candidate])
         except ValueError as error:
@@ -119,8 +149,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--input-directory', type=Path, required=True)
     parser.add_argument('--output', type=Path, required=True)
+    parser.add_argument('--include-annexure-duty', action='store_true')
     args = parser.parse_args()
-    result = run(args.input_directory)
+    result = run(args.input_directory, include_annexure=args.include_annexure_duty)
     # Exclusive output prevents overwriting a historical report or input.
     import os
     fd = os.open(args.output, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o600)

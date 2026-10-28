@@ -86,13 +86,13 @@ class ClaimReviewTests(unittest.TestCase):
         self.assertNotEqual(original, check(pack, [claim])['sha256'])
 
     def test_support_limits_fail_without_truncation_or_bundling(self):
-        pack = self.pack(['a' * 1601])
+        pack = self.pack(['a' * 601])
         with self.assertRaisesRegex(ValueError, 'quote allowance'):
             check(pack, [self.claim('A long source.', ['0'])])
-        self.assertEqual(len(pack['passages']['0']), 1601)
-        pack = self.pack(['A'] * 7)
+        self.assertEqual(len(pack['passages']['0']), 601)
+        pack = self.pack(['A'] * 11)
         with self.assertRaisesRegex(ValueError, 'explicit supports'):
-            check(pack, [self.claim('Seven supports.', [str(i) for i in range(7)])])
+            check(pack, [self.claim('Eleven supports.', [str(i) for i in range(11)])])
 
     def test_cycles_and_invalid_offsets_fail(self):
         pack = self.pack(['A', 'B'])

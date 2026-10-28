@@ -47,7 +47,7 @@ def check(pack, claims):
         if set(claim) != {'text', 'supports', 'facets'} or not claim['text'].strip():
             raise ValueError('invalid claim')
         ids = claim['supports']
-        if not ids or len(ids) > 6 or len(set(ids)) != len(ids) or any(i not in lookup for i in ids):
+        if not ids or len(ids) > 10 or len(set(ids)) != len(ids) or any(i not in lookup for i in ids):
             raise ValueError('invalid explicit supports')
         if set(claim['facets']) != set(FACETS):
             raise ValueError('missing facet review entries')
@@ -56,7 +56,7 @@ def check(pack, claims):
                 raise ValueError('facet evidence must be explicitly selected')
         for identifier in ids:
             selected_span = lookup[identifier]
-            if selected_span.end - selected_span.start > 1600:
+            if selected_span.end - selected_span.start > 600:
                 raise ValueError('selected support exceeds existing quote allowance')
             if any(d not in ids for d in lookup[identifier].requires):
                 raise ValueError('incomplete explicit support selection')

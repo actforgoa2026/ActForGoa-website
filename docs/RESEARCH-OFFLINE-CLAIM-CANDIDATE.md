@@ -1,5 +1,10 @@
 # Offline source-to-claim candidate, 28 October 2026
 
+Latest evidence recovery: 67 original semantic cases are now recovered byte-for-byte,
+and the native PR #88 baseline has been inspected. See
+[RESEARCH-NATIVE-RECOVERY.md](RESEARCH-NATIVE-RECOVERY.md). Earlier unavailable-evidence
+statements below describe the initial checkout, not the recovered state.
+
 Status: reviewable experiment; production runtime unchanged; no semantic acceptance
 or paid-call authorization. This supersedes the recommendation to replace answers
 with passage selection in RESEARCH-CLAIM-EVIDENCE-PROPOSAL.md for this workstream.
