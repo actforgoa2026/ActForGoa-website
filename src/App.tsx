@@ -80,6 +80,7 @@ import SegmentedControl from "./components/arc/segmented-control/segmented-contr
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 import { useStarredIds } from './CurationProvider';
 import { prioritizeStarred } from './curation';
+const OrbitLanding = lazy(() => import("./OrbitLanding"));
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
@@ -1320,6 +1321,7 @@ export default function App() {
   const { pathname, search } = useLocation();
   const navigationType = useNavigationType();
   const previousPath = useRef(pathname);
+  const orbitLanding = pathname.replace(/\/$/, "") === "/explore";
   const internal = pathname === "/admin" || pathname.startsWith("/admin/");
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
@@ -1354,8 +1356,8 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <Header />}
-      {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
+      {!internal && !orbitLanding && <Header />}
+      {!internal && !orbitLanding && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
           <main className="empty-state shell">
@@ -1376,6 +1378,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
+            <Route path="/explore" element={<OrbitLanding />} />
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />
@@ -1423,8 +1426,8 @@ export default function App() {
         )}
       </div>
       <ScrollRestoration />
-      {!internal && <Footer />}
-      {!internal && <div className="preview-note">
+      {!internal && !orbitLanding && <Footer />}
+      {!internal && !orbitLanding && <div className="preview-note">
         A new field guide, in progress.{" "}
         <a href="https://actforgoa.org/">
           Visit the original site <ArrowUpRight size={12} />

@@ -133,3 +133,9 @@ Admin Curation Plan was approved, but its prior summary says only isolated relev
 ## Initial environment gaps
 
 Environment reports no bound secrets or cloud identities. HTTP access currently allows the review alias and package-manager hosts, but not Anthropic, Railway or Vercel control APIs. Secure runtime key/deployment access and permitted destination configuration must be restored for live provider testing and publication. Continue implementation and offline checks independently. Impeccable is referenced by AGENTS.md but its installed skill has not yet been found in the cloud; preserve existing design documents and record the verification limitation if unavailable.
+
+## Secondary orbit chat landing — 28 October 2026
+
+Branch `codex/goa-orbit-landing`, based on freshly fetched main `a786df5`, adds `/explore` as a separate above-the-fold chat landing inspired by the supplied Cosmos reference. Three concentric photo rings rotate at 90/150/240 seconds; existing local Goa/community images surround the central question bar. Pause/resume, reduced-motion, suggested questions and draft transfer to `/ask` are implemented. Existing home, header/footer and chat availability rules are preserved on other routes. No generated images or paid inference.
+
+Implemented + tested: 178 Node tests and production build pass; Chromium desktop 1440px and phone 390/320px validate image loading, no overflow/page errors, animation control and exact question transfer. Evidence: `reports/orbit-landing-2026-10-28/`. Impeccable is unavailable in this executor. Not merged or live. The release owner should integrate the feature commit and review `/explore` before including it in a coordinated release; no alias promotion was attempted.
