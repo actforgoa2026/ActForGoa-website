@@ -222,3 +222,9 @@ Implemented: reproducible Git recovery, actual-native budget construction and
 matching-obligation counterexamples. Semantically accepted: none. Merged: no.
 Production verified: no. No paid provider calls, model/config sweeps, ledger
 changes, local-host reads/execution, stopped-thread messages or activation.
+
+## Homepage search routing, 28 October 2026
+
+Feature commit `9cdac9c09e6da4f1734ed6f23daa7b1f844f1fa7` on `codex/home-search-routing` changes the homepage question composer to open the matching top-level topic menu, exactly like its large topic button. Emergency requests use the existing emergency destination; unclear or competing needs retain the input and offer the topic choices. Catalogue search retains its existing filters and retrieval behavior. The user explicitly requested shipping.
+
+Implemented and verified in an isolated checkout based on fresh main `9cea6e2`: 191 Node tests pass, production build passes, all eight topic destinations and emergency routing were exercised, and desktop/phone render and retained-route smoke checks pass. Impeccable reports no primary findings. Exact runtime hashes, screenshots, scope and limitations are in `reports/home-search-2026-10-28/`. Source landing and live deployment are pending at this handoff. The active ORCHESTRATOR retains combined promotion ownership; this feature chat has not changed the public alias. Next: review/land the branch and include it in the coordinator’s accepted release through `release:review`.
