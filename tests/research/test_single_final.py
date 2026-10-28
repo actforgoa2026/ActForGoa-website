@@ -73,7 +73,12 @@ def test_actual_single_wire_preserves_full_selected_input(setup,style,history,sc
     actual=transport.requests[0];body=json.loads(actual.content)
     pinned=json.loads(Path(__file__).with_name('single-final-v12-wire-parity.json').read_text())
     historical=next(item for item in pinned['cases'] if item['id']==f'{style}-{history}-{scoped}')
-    assert hashlib.sha256(actual.content).hexdigest()==historical['body_sha256']
+    assert body['output_config']['effort']=='medium'
+    high=deepcopy(body);high['output_config']['effort']='high'
+    historical_wire=httpx.Request('POST',str(actual.url),json=high).content
+    assert hashlib.sha256(historical_wire).hexdigest()==historical['body_sha256']
+    assert len(historical_wire)==historical['body_bytes']
+    assert body != high  # Sole reviewed wire delta; high baseline fixture is immutable.
     assert hashlib.sha256(body['system'].encode()).hexdigest()==historical['system_sha256']
     assert hashlib.sha256(encoded(body['output_config']['format']['schema'])).hexdigest()==historical['schema_sha256']
     assert hashlib.sha256(original.messages[-1]['content'].encode()).hexdigest()==historical['selected_payload_sha256']

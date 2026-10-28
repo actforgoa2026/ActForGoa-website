@@ -1,9 +1,9 @@
 """Fixed phase policy; exported metadata is never execution authority."""
 
-PIPELINE_VERSION = 'single_final_v1'
-EFFORT_POLICY = 'single_final_high_v1'
+PIPELINE_VERSION = 'single_final_v2'
+EFFORT_POLICY = 'single_final_medium_v1'
 BASE_CONFIG_EFFORT = 'medium'
-_PHASE_EFFORTS = (('reconstruction', 'high'),)
+_PHASE_EFFORTS = (('reconstruction', 'medium'),)
 _EMPTY_PLAN_UTF8 = '{"status":"insufficient_evidence","points":[],"units":[]}'
 
 

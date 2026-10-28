@@ -41,14 +41,14 @@ def test_exported_maps_cache_identity_and_observer_cannot_mutate_policy(setup, m
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config,
         limits=limits, client_factory=factory, observer=observer))
     assert before == AnswerCache.key(config, original)
-    assert [json.loads(r.content)['output_config']['effort'] for r in transport.requests] == ['high']
-    assert [p['expected_phase_effort'] for p in result.trace['phases']] == ['high']
+    assert [json.loads(r.content)['output_config']['effort'] for r in transport.requests] == ['medium']
+    assert [p['expected_phase_effort'] for p in result.trace['phases']] == ['medium']
     assert result.trace['pipeline_spec'] == reconstruction.pipeline_spec()
-    assert phase_policy_metadata()['phase_efforts'] == {'reconstruction': 'high'}
+    assert phase_policy_metadata()['phase_efforts'] == {'reconstruction': 'medium'}
     assert config.effort == 'medium'
 
 
-@pytest.mark.parametrize('phase,wrong', [('reconstruction', 'low'), ('reconstruction', 'medium'), ('reconstruction', 'xhigh'), ('reconstruction', 'max')])
+@pytest.mark.parametrize('phase,wrong', [('reconstruction', 'low'), ('reconstruction', 'high'), ('reconstruction', 'xhigh'), ('reconstruction', 'max')])
 @pytest.mark.parametrize('in_place', [False, True])
 def test_wrong_phase_effort_is_reserved_but_never_sent(setup, phase, wrong, in_place):
     config, request, original, transport, limits, _, _, _ = setup
@@ -181,7 +181,7 @@ def test_new_plan_policy_is_exact_before_packet_or_ledger_access(acceptance_setu
 def assert_policy(value):
     assert 'effort' not in value
     assert all(value[k] == v for k, v in phase_policy_metadata().items())
-    assert value['capture_version'] == 12 and value['pipeline_spec'] == reconstruction.pipeline_spec()
+    assert value['capture_version'] == 13 and value['pipeline_spec'] == reconstruction.pipeline_spec()
 
 
 def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acceptance_setup, monkeypatch, capsys):
@@ -211,7 +211,7 @@ def test_failure_before_dispatch_still_captures_expected_policy(acceptance_setup
     report = acceptance.run_cases(library, factory, None, config, cases, context, tmp / 'missing.json')
     assert_policy(report)
     trace = report['cases'][0]['pipeline_trace'];assert_policy(trace)
-    assert [p['expected_phase_effort'] for p in trace['phases']] == ['high']
+    assert [p['expected_phase_effort'] for p in trace['phases']] == ['medium']
     assert all('request_shape' not in p for p in trace['phases'])
     assert report['attempts'] == 0 and report['before'] == report['after'] and not transports
 

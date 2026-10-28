@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','single_final_v1')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','single_final_v2')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):
@@ -70,10 +70,10 @@ def setup(monkeypatch):
 def test_one_exact_captured_call_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==12 and trace['status']=='completed'
+    assert trace['capture_version']==13 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==1 and transport.closed
     assert trace['provider_call_count']==1
-    assert trace['phase_efforts']=={'reconstruction':'high'}
+    assert trace['phase_efforts']=={'reconstruction':'medium'}
     record=trace['phases'][0];request=transport.requests[0]
     assert record['state']=='completed' and record['provider_attempts']==1
     assert record['usage_within_reservation']
@@ -81,7 +81,7 @@ def test_one_exact_captured_call_and_final_only_result(setup):
     body=json.loads(request.content);wrapper=json.loads(body['messages'][-1]['content'])
     baseline=json.loads(trace['prepared_original']['payload_utf8'])
     assert verify_annotated_payload({k:wrapper[k] for k in ('question','sources','evidence')},baseline)[0]==baseline
-    assert body['output_config']['effort']=='high'
+    assert body['output_config']['effort']=='medium'
     assert wrapper['evidence_plan']==trace['local_adapter']['value']
     assert trace['local_adapter']['provenance']=={'plan_origin':'local_empty','generated_plan':False}
     assert record['source_equality']['actual_wire_verified'] and record['source_equality']['byte_equality']
@@ -169,7 +169,7 @@ def test_actual_either_phase_mutation_after_preparation_is_reserved_but_unsent(s
         async def send(self,body,**kwargs):
             selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
             if 1==target_phase:
-                if mutation=='effort':selected['output_config']['effort']='medium'
+                if mutation=='effort':selected['output_config']['effort']='high'
                 if mutation=='scope':payload['request_scope']['answer_style']='brief'
                 if mutation=='history':selected['messages'].insert(0,{'role':'user','content':'Altered history.'})
                 if mutation=='system':selected['system']='Altered instructions.'

@@ -1,5 +1,7 @@
 # Single-final corpus answers
 
+The current offline successor is [fixed-medium single-final v2](research-single-final-medium.md). The v1 high-effort configuration and observations below remain historical; its12-profile baseline fixture is preserved unchanged.
+
 This offline candidate replaces the generated planning call with one final request using the full selected corpus evidence. It is implemented and mechanically tested, but has no fresh model acceptance or release approval. The integration coordinator owns real-provider tests and deployment. Earlier two-pass diagnostics remain historical failures or incomplete runs; their acceptance does not transfer.
 
 The explicit configuration is `ANTHROPIC_ANSWER_PIPELINE=single_final_v1`, with `RESEARCH_CHAT_PROVIDER=anthropic`, `ANTHROPIC_CHAT_MODEL=claude-haiku-5-5`, `ANTHROPIC_CHAT_EFFORT=medium` and exactly 12,000 output tokens. The base medium setting authorizes only the fixed `single_final_high_v1` policy: one `reconstruction` request at high effort with adaptive thinking. The generic native `single_pass` allowlist remains unchanged. No retry, alternate model, repair call, web lookup or fallback is added.
