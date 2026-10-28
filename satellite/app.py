@@ -10,7 +10,7 @@ from fastapi.exceptions import RequestValidationError
 import httpx
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
-from .domain import CatalogRequest, CompareRequest, Query, DomainError
+from .domain import CatalogRequest, CompareRequest, Query, DomainError, HistoryRequest
 from .service import SatelliteService
 from .providers import ImageClassifier
 
@@ -128,6 +128,10 @@ def create_app(service=None):
     @app.get('/jobs/{job_id}')
     def job(job_id:str,request:Request):
         return service.store.get(job_id,request.state.actor)
+
+    @app.post('/history')
+    def history(query:HistoryRequest,request:Request):
+        return service.store.history(request.state.actor,query)
 
     app.mount('/',mcp.streamable_http_app())
     return app

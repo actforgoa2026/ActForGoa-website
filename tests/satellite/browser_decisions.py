@@ -26,10 +26,13 @@ def fixture_service():
     from satellite.domain import Interpretation
     from satellite.service import SatelliteService
     from test_service import transport
+    from test_monitoring import SOURCE
     calls = []
     base = transport(calls)
 
     def handler(request):
+        if request.url.host=='research.fixture.test':
+            return httpx.Response(200,json={'domain':'ecology','results':[SOURCE]})
         if str(request.url) == 'https://api.openai.com/v1/decisions':
             questions = json.loads(request.content)['questions']
             choices = {'before_canopy': 'yes', 'after_canopy': 'no', 'canopy_change': 'possible_loss'}
@@ -54,6 +57,7 @@ def main():
         'ADMIN_API_ORIGIN': 'http://127.0.0.1:4198', 'SATELLITE_API_ORIGIN': 'http://127.0.0.1:8094',
         'SATELLITE_DATA_DIR': str(work/'satellite'), 'SATELLITE_SERVICE_TOKEN': secrets.token_urlsafe(32),
         'SATELLITE_MCP_TOKEN': secrets.token_urlsafe(32), 'SATELLITE_CLASSIFIER': 'openai-decisions',
+        'SATELLITE_RESEARCH_ORIGIN':'https://research.fixture.test',
         'CDSE_CLIENT_ID': 'synthetic-only', 'CDSE_CLIENT_SECRET': 'synthetic-only',
         'OPENAI_API_KEY': 'synthetic-only', 'ANTHROPIC_API_KEY': 'synthetic-only'}
     subprocess.run(['node', '--import', 'tsx', 'server/admin-accounts.ts', 'add', 'satellite-ui@example.test', 'Satellite UI Test', 'editor'],
@@ -107,19 +111,37 @@ def main():
                 assert page.locator('.satellite-answer a').evaluate_all('(links)=>links.every(a=>document.querySelector(a.getAttribute("href")))')
                 assert page.locator('.satellite-results').inner_text().count('OpenAI Decisions') == 1
                 assert presence.bounding_box()['y'] < page.get_by_label('Evidence-based interpretation').bounding_box()['y']
+                library=page.get_by_label('Ecology library context')
+                assert 'Seasonal water levels' in library.inner_text()
+                assert library.get_by_role('link',name='[1] Goa river observations').get_attribute('href').startswith('/documents/river?')
+                assert 'Latest acquisition found' in page.locator('.satellite-results .satellite-freshness').inner_text()
                 overflow = page.evaluate('document.documentElement.scrollWidth>innerWidth')
                 assert not overflow
                 assert not page.locator('.satellite-results').evaluate('(root)=>[root,...root.querySelectorAll("*")].some(n=>getComputedStyle(n).fontStyle!=="normal")')
                 assert not errors
                 page.locator('.satellite-results').evaluate('''root=>{const label=document.createElement('p'); label.textContent='UI TEST — synthetic imagery and Decisions answers. Not a real finding.'; label.style.cssText='font-weight:750;padding:16px;background:#fff1cf;color:#193e32';root.prepend(label)}''')
-                page.locator('.nav').evaluate_all('(nodes)=>nodes.forEach(n=>n.style.visibility="hidden")')
+                page.add_style_tag(content='.site-header,.skip-link{visibility:hidden!important}html{scroll-behavior:auto!important}')
                 page.locator('.satellite-results').screenshot(path=str(output/f'{name}-synthetic-decisions.png'))
+                saved_search_start=page.get_by_label('Search from').input_value()
                 page.get_by_label('Search from').fill('2025-10-02')
                 assert page.locator('.satellite-results').count() == 0
+                page.get_by_label('Search saved questions and findings').fill('canopy')
+                page.get_by_label('Observation period from').fill('2025-10-15')
+                page.get_by_label('Observation period until').fill('2025-10-16')
+                page.get_by_role('button',name='Search investigations',exact=True).click()
+                page.get_by_role('button',name='Open saved result',exact=True).first.click()
+                presence.wait_for()
+                assert presence.locator('dd').all_text_contents()==['Yes','No']
+                assert page.get_by_label('Search from').input_value()==saved_search_start
+                assert not page.evaluate('document.documentElement.scrollWidth>innerWidth')
+                history=page.locator('.satellite-history')
+                history.evaluate('''root=>{const label=document.createElement('p');label.textContent='UI TEST — synthetic saved investigations and source passages.';label.style.cssText='font-weight:750;padding:16px;background:#fff1cf';root.prepend(label)}''')
+                history.screenshot(path=str(output/f'{name}-synthetic-history.png'))
                 results.append({'viewport': name, 'width': width, 'real_named_account_login': True,
                     'synthetic_provider_flow': True, 'yes_no_pair': True, 'grounded_interpretation': True,
                     'overlapping_window_caveat': True, 'working_evidence_links': True, 'decoded_images': True,
                     'result_cleared_on_date_change': True, 'horizontal_overflow': overflow, 'page_errors': errors})
+                results[-1].update(saved_history_search_and_reopen=True,ecology_citation=True,freshness=True)
                 context.close()
             browser.close()
     finally:

@@ -7,6 +7,7 @@ from .eve_cdse import CDSE
 from .evidence import read_observation, compare_pixels, public_observation, classification_image
 from .providers import AnthropicPlanner, ImageClassifier
 from .summary import summarize_comparison, canopy_presence
+from .context import EcologyContext
 from .store import Store
 
 
@@ -17,6 +18,7 @@ class SatelliteService:
         self.cdse = CDSE(self.http)
         self.planner = AnthropicPlanner(self.http)
         self.classifier = ImageClassifier(self.http)
+        self.context = EcologyContext(self.http)
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.capacity = threading.BoundedSemaphore(1)
 
@@ -33,7 +35,7 @@ class SatelliteService:
             raise DomainError('busy', 'Another comparison is running. Please try again shortly.', 429)
         try:
             self.store.reserve('comparisons', 10)
-            job = self.store.start(actor)
+            job = self.store.start(actor,request.model_dump(mode='json'))
             self.executor.submit(self._run, job, request)
             return {'id': job, 'status': 'running'}
         except Exception:
@@ -74,16 +76,26 @@ class SatelliteService:
                 classification = self.classifier.classify(classification_image(before, common), classification_image(after, common), {
                     'before':before_source, 'after':after_source, 'spectral_metrics':evidence['metrics'],
                     'common_usable_fraction':evidence['common_usable_fraction'], 'area_m2':grid['area_m2'],
+                    'intent':request.intent.value,'water_change':evidence['water_change'],
                     'numeric_vegetation_loss_candidates':len(evidence['candidates']['features'])})
             except (DomainError, httpx.HTTPError):
                 classification = {'state':'unavailable','answers':{},'message':'Image classification was unavailable. The measured imagery evidence is retained.'}
         interval = {'before':a['acquired_at'],'after':b['acquired_at'],'exact_event_date':None,'cause':'not_established'}
         if request.window_start:
             interval['query_window_relation'] = change_interval(a['acquired_at'], b['acquired_at'], request.window_start.isoformat(), request.window_end.isoformat())['relation']
+        latest=max(catalog['scenes'],key=lambda scene:datetime.fromisoformat(scene['acquired_at']))['acquired_at']
+        freshness={'catalog_searched_at':catalog.get('searched_at'),'latest_acquired_at_in_search':latest,
+            'selected_after_acquired_at':b['acquired_at'],
+            'newer_acquisitions_in_search':sum(datetime.fromisoformat(scene['acquired_at'])>datetime.fromisoformat(b['acquired_at']) for scene in catalog['scenes']),
+            'search_start':request.start_date.isoformat(),'search_end':request.end_date.isoformat(),'catalog_truncated':catalog['truncated'],
+            'note':'Acquisition availability is not clear-sky coverage. Newer scenes have not necessarily been checked for local visibility.'}
         # No exact event time or cause is generated from image differences.
         return {'intent':request.intent.value,'evidence':evidence,'classification':classification,
                 'summary':summarize_comparison(request.intent.value,evidence,classification,interval),
                 'canopy_presence':canopy_presence(evidence,classification),
+                'freshness':freshness,'library_context':self.context.search(request.question,request.intent.value),
+                'planning_context':{'state':'not_checked','legal_status':'not_established',
+                    'message':'No parcel permissions or planning records have been joined. Visible construction does not establish whether a building is lawful.'},
                 'before':public_observation(before,before_source),'after':public_observation(after,after_source),
                 'area':{'geometry':grid['wgs84_geometry'],'area_m2':round(grid['area_m2']),'clipped_to_goa':grid['clipped_to_goa']},
                 'observation_interval': interval,

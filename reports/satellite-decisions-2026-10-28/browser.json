@@ -11,7 +11,10 @@
     "decoded_images": true,
     "result_cleared_on_date_change": true,
     "horizontal_overflow": false,
-    "page_errors": []
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
   },
   {
     "viewport": "phone",
@@ -25,7 +28,10 @@
     "decoded_images": true,
     "result_cleared_on_date_change": true,
     "horizontal_overflow": false,
-    "page_errors": []
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
   },
   {
     "viewport": "small-phone",
@@ -39,6 +45,9 @@
     "decoded_images": true,
     "result_cleared_on_date_change": true,
     "horizontal_overflow": false,
-    "page_errors": []
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
   }
 ]

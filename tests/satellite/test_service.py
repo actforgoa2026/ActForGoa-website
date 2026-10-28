@@ -83,6 +83,7 @@ def transport(calls, cloud=False, stale=False):
 
 @pytest.fixture
 def credentials(monkeypatch):
+    monkeypatch.delenv('SATELLITE_RESEARCH_ORIGIN',raising=False)
     for name in ['CDSE_CLIENT_ID','CDSE_CLIENT_SECRET','OPENAI_API_KEY']:
         monkeypatch.setenv(name,'synthetic-test-only')
     monkeypatch.setenv('SATELLITE_SERVICE_TOKEN','a'*40)

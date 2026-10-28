@@ -50,9 +50,26 @@ def compare_pixels(before, after, grid):
     comparable = float(common.sum())/max(total, 1)
     result = {'common_usable_fraction': round(comparable, 4), 'state': 'observable' if comparable >= .8 else 'insufficient_clear_coverage',
               'metrics': {}, 'candidates': {'type': 'FeatureCollection', 'features': []},
+              'water_change':None,'water_candidates':{'type':'FeatureCollection','features':[]},
               'method': 'Exploratory reflectance changes; thresholds require Goa field validation. Vegetation is not necessarily tree canopy.'}
     if common.sum() < 9:
         return result
+    water_before=common & (before['bands'][6]==6)
+    water_after=common & (after['bands'][6]==6)
+    gained=water_after & ~water_before
+    lost=water_before & ~water_after
+    result['water_change']={'before_area_m2':int(water_before.sum())*100,'after_area_m2':int(water_after.sum())*100,
+        'gained_area_m2':int(gained.sum())*100,'lost_area_m2':int(lost.sum())*100,
+        'method':'Area classified as water by Sentinel-2 SCL on common usable pixels. Native 20 m classification; not river flow, water quality or a surveyed shoreline.'}
+    for mask,kind in [(gained,'possible_surface_water_gain'),(lost,'possible_surface_water_loss')]:
+        for geom,value in shapes(mask.astype('uint8'),mask=mask,transform=before['transform'],connectivity=4):
+            polygon=shape(geom)
+            if value==1 and polygon.area>=900:
+                result['water_candidates']['features'].append({'type':'Feature','geometry':mapping(transform(TO_WGS,polygon)),
+                    'properties':{'kind':kind,'area_m2':round(polygon.area),'cause':'not_established','review':'required'}})
+    result['water_candidates']['features'].sort(key=lambda f:-f['properties']['area_m2'])
+    result['water_candidates_truncated']=len(result['water_candidates']['features'])>100
+    result['water_candidates']['features']=result['water_candidates']['features'][:100]
     indices = []
     for observation in (before, after):
         red, green, blue, nir, swir1, swir2 = observation['bands'][:6]

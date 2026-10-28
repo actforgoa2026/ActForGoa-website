@@ -1,0 +1,42 @@
+{
+  "/api/status": {
+    "http_status": 200,
+    "domain": null,
+    "keys": [
+      "search_ready",
+      "chat_ready",
+      "generation",
+      "stats",
+      "model",
+      "embedding_model",
+      "search_mode"
+    ],
+    "result_count": 0,
+    "sources": []
+  },
+  "/api/search": {
+    "http_status": 200,
+    "domain": null,
+    "keys": [
+      "results",
+      "generation"
+    ],
+    "result_count": 2,
+    "sources": [
+      {
+        "id": "1fb031f236f65eff70d345e047e079ae",
+        "title": "Doubling of Farmers Income by 2022",
+        "generation": "20261022T155701-21661179",
+        "domains": null,
+        "has_reader_url": true
+      },
+      {
+        "id": "010cb46d29574e04fd5144dea981643a",
+        "title": "Goa river profile and source compilation",
+        "generation": "20261022T155701-21661179",
+        "domains": null,
+        "has_reader_url": true
+      }
+    ]
+  }
+}

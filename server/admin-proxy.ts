@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const MAX_BODY = 420000;
-const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
+const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|history|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
 
 export function configuredAdminOrigin(raw = process.env.ADMIN_API_ORIGIN): string | null {
   if (!raw) return null;

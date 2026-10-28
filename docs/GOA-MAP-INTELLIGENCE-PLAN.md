@@ -4,6 +4,8 @@ Working plan, 28 October 2026. Scope: Goa only. This document separates proposed
 
 ## The product we are building
 
+The user's clarified goal is a query and dashboard system for understanding Goa's changes over distinct periods, using the newest usable observations: trees, rivers, wetlands, waste accumulation and development. Ecological articles should inform explanations with citations. Acquisition time, usable coverage and search time must remain visible; "latest available" does not mean "clear today". Imagery may reveal development, while legality requires dated parcel permissions and planning records.
+
 A person should be able to ask **“Where has tree canopy disappeared in the last 10 days?”**, see the places the system actually examined, and open the observations supporting each possible change. They should then be able to ask **“Which of those overlap notified private forests?”**, **“Was there any evidence of fire?”**, or **“Show me the earlier image.”**
 
 The useful unit is an **investigation with evidence**, not a chatbot paragraph or a stack of unrelated map layers. Each result connects a location, an observation interval, an observable change, relevant local records, and an explicit account of what remains unknown.
@@ -91,7 +93,7 @@ Use a small typed query contract, not model-generated SQL or arbitrary tool exec
 }
 ```
 
-This is the target contract; the first adapter supports the four observation intents, selected/named/statewide scope and date interpretation. Context filters and indexed-event queries are subsequent work.
+This is the target contract; the adapter supports five observation intents (canopy, surface water, waste, land change and fire), selected/named/statewide scope and date interpretation. Named places and statewide queries still return explicit preparation gaps. Context filters and indexed-event queries are subsequent work.
 
 The server resolves relative dates against an explicit clock in Asia/Kolkata and stores UTC instants. It validates geometry against a Goa boundary, area limits, date span, known layer IDs and supported operations. A model cannot change those limits. Named places resolve through a gazetteer with stable IDs, locality/taluka and aliases; ambiguous names return candidates. Until the gazetteer is available, the map selection is required and the model must not guess coordinates.
 
@@ -203,4 +205,8 @@ Continuation on 28 October recovered checkpoint `133bd4e`, reconciled main `a786
 
 The OpenAI secure picker previously selected a project and a 30-day key, but key creation/storage has not completed; no Decisions inference has run. Railway's control API returned Cloudflare 403 in the original executor; that historical result has not been retested by this imagery continuation. Deployment credential readiness does not prove API access. No hosted service or combined frontend release has been made.
 
-Remaining source work must be recorded honestly: Amche contextual geometry ingestion, place resolution, statewide indexing, FIRMS integration, evidence-grounded conversation history, field evaluation and alerts are not completed by the initial adapters. Keep this plan and the cloud implementation ledger updated as each stage is accepted.
+The next continuation adds private saved-investigation search by question/finding, topic and overlapping actual observation interval; result reopening; catalog freshness and newer-scene notices; same-footprint yes/no/uncertain canopy decisions and deterministic evidence-linked interpretations. Water-classified gains/losses use SCL on common usable pixels, with native-20-m and tide/seasonality caveats. Waste assessments concern resolvable large material accumulations, not ordinary litter or material identity. Saved research passages retain citation IDs, generation, reader/source links and retrieval dates, separately from the imagery conclusions. The adapter requires an explicitly ecology-scoped search response; it never calls research answer generation or changes its accounting/acceptance state. The current review endpoint responds but lacks domain confirmation, so live ecology integration is not accepted.
+
+This is a dashboard of the user's bounded investigations, retained for 30 days, not a Goa-wide event/coverage index. No automatic monitoring or scheduled notifications are enabled. OpenAI Decisions remains the default classifier and has not run live; Anthropic vision is an explicit opt-in alternative. See [current verification](../reports/satellite-decisions-2026-10-28/README.md).
+
+Remaining source work: Amche contextual geometry ingestion, place resolution, persistent watch areas and multi-acquisition timelines, statewide indexing and coverage ledger, FIRMS, conversational follow-ups, article-to-finding synthesis with semantic evaluation, field evaluation and alerts. The present article panel supplies cited background excerpts, not an evaluated generated synthesis. Keep this plan and the cloud implementation ledger updated as each stage is accepted.

@@ -79,7 +79,7 @@ def summarize_comparison(intent, evidence, classification, interval):
         elif presence['state'] == 'conflicting_evidence':
             headline, state = 'The image decisions do not agree about canopy loss.', 'conflicting_evidence'
     else:
-        key = {'fire': 'fire_evidence', 'surface_water': 'surface_water', 'land_change': 'land_change'}[intent]
+        key = {'fire': 'fire_evidence', 'surface_water': 'surface_water', 'land_change': 'land_change', 'waste':'waste_evidence'}[intent]
         descriptions = {
             'possible_burn': 'The image assessment suggests a possible burn-like change.',
             'no_visible_burn': 'The image assessment did not identify a visible burn scar.',
@@ -88,6 +88,8 @@ def summarize_comparison(intent, evidence, classification, interval):
             'possible_clearing': 'The image assessment suggests possible new bare ground or clearing.',
             'possible_construction': 'The image assessment suggests possible new built surfaces.',
             'no_visible_change': 'The image assessment did not identify a substantial land-surface change.',
+            'possible_large_accumulation':'The image assessment suggests a possible large accumulation of material that needs closer inspection.',
+            'no_resolvable_accumulation':'The image assessment did not resolve a large accumulation of material.',
         }
         choice = choices.get(key, 'uncertain')
         headline = descriptions.get(choice, 'The available evidence does not resolve this question.')
@@ -95,6 +97,16 @@ def summarize_comparison(intent, evidence, classification, interval):
         add(headline+' The assessment remains unvalidated and may miss small or obscured features.', 'assessment', 'before', 'after')
         if intent == 'fire':
             add('FIRMS fire detections have not been queried. These images cannot establish that no fire occurred.', 'assessment')
+        if intent == 'waste':
+            add('Ordinary litter, small dumps and the type of material cannot be reliably identified at this resolution. Field reports or finer imagery are needed to establish dumping.', 'before', 'after')
+        if intent == 'land_change':
+            add('Visible development does not establish whether construction is lawful. Parcel permissions and applicable planning records have not been checked.', 'before', 'after')
+        water=evidence.get('water_change')
+        if intent == 'surface_water' and water:
+            add(f"On the common usable area, the scene classification labels {water['before_area_m2']:,.0f} m² as water before and {water['after_area_m2']:,.0f} m² afterward; {water['gained_area_m2']:,.0f} m² gained and {water['lost_area_m2']:,.0f} m² lost that label.", 'spectral')
+            add('Tides, seasonality, sediment and classification errors can affect these boundaries. This does not measure flow, depth or water quality.', 'spectral', 'before', 'after')
+            if water['gained_area_m2']+water['lost_area_m2']>=900:
+                headline,state='Water-classified cover changed between these observations.','review_required'
     if relation == 'overlaps_window':
         add('The image interval overlaps your requested period. A possible change may have started before that period.', 'before', 'after')
     elif relation == 'outside_window':

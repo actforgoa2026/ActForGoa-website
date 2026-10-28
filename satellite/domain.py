@@ -33,6 +33,7 @@ class Intent(str, Enum):
     fire = 'fire'
     surface_water = 'surface_water'
     land_change = 'land_change'
+    waste = 'waste'
 
 
 class Area(StrictModel):
@@ -101,6 +102,7 @@ class CompareRequest(CatalogRequest):
     before_id: str = Field(min_length=1, max_length=180, pattern=r'^[A-Za-z0-9_.-]+$')
     after_id: str = Field(min_length=1, max_length=180, pattern=r'^[A-Za-z0-9_.-]+$')
     intent: Intent
+    question: str = Field(default='', max_length=1000)
     window_start: datetime | None = None
     window_end: datetime | None = None
 
@@ -114,12 +116,27 @@ class CompareRequest(CatalogRequest):
         return self
 
 
+class HistoryRequest(StrictModel):
+    query: str = Field(default='', max_length=300)
+    intent: Intent | None = None
+    start_date: date | None = None
+    end_date: date | None = None
+    offset: int = Field(default=0, ge=0, le=1000)
+    limit: int = Field(default=20, ge=1, le=25)
+
+    @model_validator(mode='after')
+    def ordered(self):
+        if self.start_date and self.end_date and self.start_date > self.end_date:
+            raise ValueError('Use an ordered observation period.')
+        return self
+
+
 def make_plan(query: Query, interpreted: Interpretation, now: datetime | None = None):
     now = (now or datetime.now(timezone.utc)).astimezone(IST)
     warnings = ['Sentinel-2 supports canopy patches, not a reliable count of individual trees.',
                 'Image dates bound when a change became observable; they do not establish its cause.']
     if interpreted.scope == 'unsupported':
-        return {'state': 'unsupported', 'message': 'Ask about canopy, fire evidence, visible water, or land change within Goa.'}
+        return {'state': 'unsupported', 'message': 'Ask about canopy, fire evidence, visible water, waste sites or development within Goa.'}
     if interpreted.scope == 'goa':
         return {'state': 'statewide_not_ready', 'message': 'Goa-wide change indexing is not available yet. Select an area for an on-demand investigation.', 'warnings': warnings}
     if interpreted.scope == 'named_place' or query.area is None:

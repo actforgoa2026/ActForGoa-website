@@ -1,0 +1,21 @@
+{
+  "mode": "offline reanalysis of recorded real CDSE rasters; no new provider call",
+  "source_report": "reports/satellite-live-2026-10-28/validation.json",
+  "inputs": {
+    "before.tif": "05e3467c49c43cfe9ab460cf05851c0a4082b30923ba28573b059c4439f6ac11",
+    "after.tif": "6973678b4f3126ec339d3a4c70d423b7e72bc3aabfb967d85d408804bea4b3ee"
+  },
+  "common_usable_fraction": 1.0,
+  "water_change": {
+    "before_area_m2": 0,
+    "after_area_m2": 0,
+    "gained_area_m2": 0,
+    "lost_area_m2": 0,
+    "method": "Area classified as water by Sentinel-2 SCL on common usable pixels. Native 20 m classification; not river flow, water quality or a surveyed shoreline."
+  },
+  "water_candidates": {
+    "type": "FeatureCollection",
+    "features": []
+  },
+  "caveat": "This coastal urban area is a plumbing check, not a labelled river-change validation."
+}

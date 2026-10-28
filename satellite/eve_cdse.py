@@ -105,7 +105,11 @@ class CDSE:
             data['next'] = next_page
         else:
             truncated = True
-        return {'state': 'available' if scenes else 'no_imagery', 'scenes': sorted(scenes, key=lambda s: (s['acquired_at'], s['id'])),
+        ordered=sorted(scenes, key=lambda s: (s['acquired_at'], s['id']))
+        return {'state': 'available' if scenes else 'no_imagery', 'scenes': ordered,
+                'searched_at':datetime.now(timezone.utc).isoformat(),
+                'latest_acquired_at':ordered[-1]['acquired_at'] if ordered else None,
+                'search_start':request.start_date.isoformat(),'search_end':request.end_date.isoformat(),
                 'truncated': truncated, 'cloud_note': 'Catalog cloud percentage describes the whole scene, not your selected area.'}
 
     def observation(self, scene, grid):
