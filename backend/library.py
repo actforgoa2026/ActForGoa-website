@@ -168,13 +168,18 @@ class Library:
             def citation(row, meta, matches):
                 identifier=row['id']
                 qs=urlencode({'generation':generation,'page':row['page'],'passage':identifier})
-                return {'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
+                result = {'id':identifier,'document_id':row['doc_id'],'page':row['page'],'label':row['label'],'start':row['start'],'end':row['end'],
                     'title':meta.get('title') or meta['url'],'url':meta['url'],'text':row['text'],'origin':row['origin'],'warning':row['warning'],
                     'page_heading':page_heading(row['page_context']),
                     'domains':document_domains(meta),
                     'retrieved_at':meta.get('retrieved_at'),'format':meta.get('format'),'matches':matches,
                     **{key:meta.get(key) for key in ('publisher_class','legal_currency','source_date_metadata','topics','document_kind_hint','guide_verification')},
                     'reader_url':f'/documents/{row["doc_id"]}?{qs}','generation':generation}
+                from .source_review import answer_exclusion
+                reason = answer_exclusion(result)
+                if reason:
+                    result['warning'] = ' '.join(filter(None, [result['warning'], reason]))
+                return result
 
             results=[]
             for identifier in selected:

@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "answer_exclusions": [
+    {
+      "passage_id": "5164d956688e8351a54a4a48c5c59253",
+      "document_id": "e7d9e0f5963656a55bfceb12-6f3ed3658fd5",
+      "text_sha256": "4589e68de8ddf1e6213583292a9f348db47d7f74b116bb84bca1c1c6deec70a8",
+      "source_url": "https://www.rtionline.goa.gov.in/FAQ",
+      "reason": "The source contains ambiguous jurisdiction wording about return versus transfer of RTI applications. Do not infer a rule from this passage. Read the original and confirm with the authority.",
+      "reviewed_utc": "2026-10-28",
+      "verification_url": "https://rtionline.goa.gov.in/FAQ.pdf"
+    }
+  ]
+}

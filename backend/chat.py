@@ -7,6 +7,7 @@ from .domains import Domain
 from .anthropic_answers import MAX_PROMPT_BYTES
 from .answer_brief import ANSWER_BRIEF
 from .source_context import with_source_context
+from .source_review import answer_exclusion
 
 MAX_LIBRARY_WORDS = 300
 MAX_LIBRARY_PARAGRAPHS = 5
@@ -160,7 +161,12 @@ def prepare_answer(request, evidence):
                'messages': []}
     with_source_context(evidence)  # Reject conflicting identities before budgeting.
     for hit in evidence:
-        group=[item for item in with_source_context([hit]) if item['id'] not in {old['id'] for old in selected}]
+        complete_group = with_source_context([hit])
+        # Do not rewrite a defective source or drop a required table qualifier.
+        # Keep the original searchable, but omit its whole answer-context group.
+        if any(answer_exclusion(item) for item in complete_group):
+            continue
+        group=[item for item in complete_group if item['id'] not in {old['id'] for old in selected}]
         visible_group=[]
         for item in group:
             visible={key:item[key] for key in fields if key in item}
