@@ -10,10 +10,6 @@
   "merged_to_main": false,
   "new_runtime_deployed": false,
   "source_sha256": {
-    "deploy/satellite/README.md": "0550ac7ad00a6a8ad2d4b67b404d313a3d91ecccec0c5a72b516ca1fcc42ea5d",
-    "docs/CLOUD-IMPLEMENTATION-PLAN.md": "9efc8ecf0426afcdd7e6a7d905551c06fc13ad5ff0f651fd658626aaf6850b4b",
-    "docs/SATELLITE-HANDOFF.md": "cd7f1d200152560ea77de3312085f666f5c8143595998d151d5a3b1047ff9f31",
-    "docs/SATELLITE-LOCAL-DEPLOYMENT.md": "09eec47b587a62730e9074acb035e35beb874105f52d3fb1d030d9f897447ae0",
     "satellite/app.py": "e0a9324c104d53ab0c8b36f23ef5a6a2a1657fd12a465546ed30345414482e87",
     "satellite/domain.py": "8c6c7282c482a0b1840d2222c6ce256cafd7971bf805cb72de44463f7d853a59",
     "satellite/evidence.py": "cbc00698634b372f7a68dbc0be9d87933c06c3dbc8e38863ee760bc4780d5eef",
@@ -38,5 +34,6 @@
   "live_data_note": "New real CDSE area retrieval on the first map/cache implementation; subsequent concurrency and single-PNG response refinements verified offline with same cached inputs. No paid request repeated.",
   "tooling_note": "Installed Impeccable skill unavailable; existing design conventions and rendered desktop/phone inspection used.",
   "navigation_fix_browser": "passed; stronger actual map/overlay intersection checked",
-  "navigation_fix_build": "production and standalone passed"
+  "navigation_fix_build": "production and standalone passed",
+  "package_commit": "100868dd94a25af1eac96afbd38b371082de1bec"
 }

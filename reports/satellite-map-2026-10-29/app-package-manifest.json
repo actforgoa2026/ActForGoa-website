@@ -1,6 +1,6 @@
 {
-  "commit": "cc1d399db244ded9871e29428ba56d056f26a833",
-  "tree": "51ded79cbbda72f8c8ddd1322891723c72567cd7",
+  "commit": "100868dd94a25af1eac96afbd38b371082de1bec",
+  "tree": "ada34c7aa165f742d9291bb2aeebb2bb0a1e31ec",
   "scope": "Satellite frontend and auth runtime only; no catalogue, credentials, accounts, imagery or research corpus.",
   "files": [
     {
@@ -34,9 +34,9 @@
       "sha256": "6bbb044ab420e07edb0a3042d2eb314b85e83a0182e945a15ab3b9092668dfd5"
     },
     {
-      "path": "dist-satellite/assets/satellite-BnJup9Qp.js",
-      "bytes": 629168,
-      "sha256": "ac755d7dda14ce893e5f2a2df7d88381bb64733cbadc2895c4a2469cd2d95c6a"
+      "path": "dist-satellite/assets/satellite-DXcrOeNJ.js",
+      "bytes": 629213,
+      "sha256": "0f69e4f258cc147dbb68fb97e1cae93b92d193a90513328782b0348adfb32bab"
     },
     {
       "path": "dist-satellite/assets/satellite-LXxtXdr5.css",
@@ -46,7 +46,7 @@
     {
       "path": "dist-satellite/satellite.html",
       "bytes": 442,
-      "sha256": "8ec10a1c984d54e88947b1fbc9a2337c369331b2139faa8c511f630919ef36e2"
+      "sha256": "3be2715a2317675090aa243fde766fc74d4a66db0e3646ef022afd4f3db35479"
     },
     {
       "path": "package-lock.json",
