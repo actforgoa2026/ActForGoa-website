@@ -105,14 +105,10 @@ def provider_schema(evidence):
             return [supported(value) for value in node]
         return node
     schema = supported(schema)
-    # The provider rejects a range quantifier around a whitespace/word group.
-    # Equivalent optional groups use its supported grammar without weakening
-    # the local 60-word bound or truncating any generated sentence.
-    # Split the optional words into two chains to stay below the provider's
-    # 50-level regex nesting limit, without exponential optional-group paths.
-    schema['$defs']['SupportedParagraph']['properties']['text']['pattern'] = (
-        r'^\S+' + r'(\s+\S+' * 29 + ')?' * 29
-        + r'(\s+\S+' * 30 + ')?' * 30 + r'\s*$')
+    # Keep native grammar compilation small. The provider cannot compile the
+    # grouped word range reliably. A simple character bound gives generation
+    # headroom; the independent local 60-word/180-total checks still fail closed.
+    schema['$defs']['SupportedParagraph']['properties']['text']['pattern'] = r'^[^\r\n]{1,300}$'
     schema['$defs']['Support']['properties']['citation_id']['enum'] = [item['id'] for item in evidence] or ['no-library-source']
     return schema
 
