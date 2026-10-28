@@ -6,6 +6,8 @@ import re
 import httpx
 from .anthropic_provider import reviewed_effort
 from .providers import PRICES
+from .evidence_plan import PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL, unit_selectors
+from .plan_protocol import decode_plan_response
 from .source_spans import ANCHOR_PROTOCOL
 from .paragraph_slots import (strict_answer_json, decode_envelope, AnswerEnvelopeError,
                               value_hash)
@@ -42,7 +44,7 @@ def credential_like_content(value, secrets=()):
 
 
 def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
-                       paragraph_protocol=None, answer_style=None):
+                       paragraph_protocol=None, answer_style=None, plan_protocol=None, final_internal_protocol=None):
     """Keep only bounded final answer JSON, never thinking or response metadata.
 
     Invalid JSON and unexpected fields are represented by fixed categories.
@@ -57,17 +59,30 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
     except UnicodeError:return {'capture_status': 'invalid_json'}
     if text_bytes > 65536:return {'capture_status': 'oversize_text'}
     mapping = None
-    if paragraph_protocol is not None or answer_style is not None:
+    if (paragraph_protocol is not None or answer_style is not None
+            or plan_protocol is not None or final_internal_protocol is not None):
         try:
             answer = strict_answer_json(text)
-            normalized, mapping = decode_envelope(answer, protocol=paragraph_protocol,
-                                                  style=answer_style, phase=phase)
+            if plan_protocol is not None or final_internal_protocol is not None:
+                normalized,mapping=decode_plan_response(answer,plan_protocol=plan_protocol,
+                    final_internal_protocol=final_internal_protocol,paragraph_protocol=paragraph_protocol,
+                    style=answer_style,phase=phase)
+            else:
+                normalized, mapping = decode_envelope(answer, protocol=paragraph_protocol,
+                                                      style=answer_style, phase=phase)
         except AnswerEnvelopeError as error:
             return {'capture_status': error.code}
         if credential_like_content(answer):return {'capture_status': 'unsafe_final_content'}
     else:
         try:answer=json.loads(text)
         except ValueError:return {'capture_status': 'invalid_json'}
+    if plan_protocol is not None and phase=='draft':
+        if anchor_protocol!=ANCHOR_PROTOCOL:return {'capture_status':'unexpected_anchor_protocol'}
+        return {'capture_status':'captured_unvalidated_json','representation':'source_selector_plan',
+                'plan':answer,'source_diagnostic_sha256':value_hash(answer),
+                'point_count':len(answer['points']),'unit_count':len(answer['units']),
+                'selector_occurrences':sum(len(unit_selectors(unit)) for unit in answer['units']),
+                'plan_protocol':plan_protocol}
     if not isinstance(answer,dict) or answer.get('status') not in ('answered','insufficient_evidence'):
         return {'capture_status':'unexpected_shape'}
     if paragraph_protocol is not None and answer_style == 'standard':
@@ -96,7 +111,8 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
             if (not isinstance(p['citations'],list) or len(p['citations']) > 20
                     or any(not isinstance(c,str) or len(c)>160 for c in p['citations'])):
                 return {'capture_status':'unexpected_shape'}
-        elif set(p) in ({'text','supports'}, {'text','primary_support','supports'}):
+        elif (set(p) in ({'text','supports'}, {'text','primary_support','supports'})
+              or final_internal_protocol==FINAL_INTERNAL_PROTOCOL and set(p)=={'plan_refs','text','primary_support','supports'}):
             if not isinstance(p['supports'],list) or len(p['supports']) > 20:
                 return {'capture_status':'unexpected_shape'}
             supports=p['supports']
@@ -112,6 +128,8 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
                    if phase == 'reconstruction' else [len(p['text'].split()) for p in paragraphs])
     result={'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
             'paragraph_count':len(captured_paragraphs),'word_counts':word_counts}
+    if final_internal_protocol is not None:
+        result['final_internal_protocol']=final_internal_protocol
     if paragraph_protocol is not None:
         result['source_diagnostic_sha256']=value_hash(answer)
         if mapping is not None:result['derived_slot_mapping']=mapping

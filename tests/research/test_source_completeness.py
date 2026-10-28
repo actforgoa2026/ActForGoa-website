@@ -10,7 +10,7 @@ import pytest
 from backend import reconstruction
 from backend.chat import AnswerCache
 from backend.phase_effort import PIPELINE_VERSION
-from backend.span_instructions import span_answer_instructions
+from backend.span_instructions import legacy_span_answer_instructions as span_answer_instructions
 from scripts import evaluate_anthropic_acceptance as acceptance
 from tests.research.span_fixtures import previous_source_completeness_prompt
 from tests.research.test_answer_pipeline import setup
@@ -61,4 +61,4 @@ def test_v8_cache_cannot_supply_v9_despite_same_workflow_and_effort(setup, monke
     assert previous != current and cache.get(current) is None
     with pytest.raises(ValueError):
         AnswerCache.key(replace(config, pipeline='two_pass_v8'), original)
-    assert reconstruction.pipeline_spec()['answer_workflow'] == 'required_coverage_first_v1'
+    assert reconstruction.pipeline_spec()['answer_workflow'] == 'evidence_plan_first_v1'

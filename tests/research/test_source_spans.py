@@ -141,7 +141,7 @@ def test_oversize_full_selector_schema_is_refused_without_pruning_ids():
 def test_registry_mutation_is_rejected_even_when_selected_text_would_match():
     request=ChatRequest(question='What do gates do?')
     original=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water.'}],provider='anthropic')
-    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]})
     native=response(claim(),prepared=prepared)
     first=next(iter(prepared.span_registry));prepared.span_registry[first]['start']+=1
     with pytest.raises(ValueError):normalize_reconstruction(native,prepared)
@@ -150,7 +150,7 @@ def test_registry_mutation_is_rejected_even_when_selected_text_would_match():
 def test_split_conditions_stay_visible_and_can_be_supported_in_one_claim():
     text=('Context sentence. '*25)+'Permitted only with Board consent. '+('Other context. '*25)+'Work must stop during nesting season.'
     request=ChatRequest(question='What conditions apply?');original=prepare_answer(request,[{'id':'a','text':text}],provider='anthropic')
-    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]})
     visible=json.loads(prepared.messages[-1]['content']);parts=visible['evidence'][0]['text']
     assert ''.join(p[1] for p in parts)==text
     unit=claim('Board consent is required and work must stop during nesting season.',quote='Permitted only with Board consent.',
@@ -163,7 +163,7 @@ def test_date_omission_is_still_a_semantic_negative_even_with_valid_span():
     text='The report published in 2024 records that the 2017 survey measured 25 units at Site V.'
     request=ChatRequest(question='What quantity was reported?')
     original=prepare_answer(request,[{'id':'a','text':text}],provider='anthropic')
-    draft={'status':'answered','paragraphs':[{'text':'The 2024 report records 25 units in the 2017 survey.','citations':['a']}]}
+    draft={'status':'insufficient_evidence','points':[],'units':[]}
     prepared=prepare_reconstruction(request,original,draft)
     assert 'Preserve visible source dates' in prepared.messages[0]['content']
     good=claim('The report published in 2024 records 25 units measured at Site V in 2017.',quote=text)
@@ -180,9 +180,9 @@ def wire_fixture():
     history=[{'role':'user','content':'Prior context 😀'}]
     scope={'answer_style':'standard','document_id':None,'generation':None}
     baseline=original_baseline(encoded(original).decode(),history,scope)
-    wrapper={**annotated,'request_scope':scope,'anchor_protocol':ANCHOR_PROTOCOL}
+    wrapper={**annotated,'request_scope':scope,'anchor_protocol':ANCHOR_PROTOCOL,'plan_protocol':'bounded_source_plan_v1'}
     draft={'messages':[*history,{'role':'user','content':encoded(wrapper).decode()}]}
-    correction={'messages':[*history,{'role':'user','content':encoded({**wrapper,'draft_answer':{'status':'insufficient_evidence','paragraphs':[]}}).decode()}]}
+    correction={'messages':[*history,{'role':'user','content':encoded({**wrapper,'evidence_plan':{'status':'insufficient_evidence','points':[],'units':[]}}).decode()}]}
     return draft,correction,registry,baseline
 
 

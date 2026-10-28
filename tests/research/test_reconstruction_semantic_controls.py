@@ -18,9 +18,12 @@ from tests.research.span_fixtures import select_response
 def test_supported_reconstruction_keeps_all_evidence_and_fills_source_coverage(case,draft_kind):
     request=ChatRequest(question=case['question'])
     original=prepare_answer(request,deepcopy(case['evidence']),provider='anthropic')
-    draft={'status':'insufficient_evidence','paragraphs':[]} if draft_kind=='insufficient' else {
-        'status':'answered','paragraphs':[{'text':case['supported_text'] if draft_kind=='supported' else case['unsupported_text'],
-                                        'citations':[e['id'] for e in case['evidence']]}]}
+    # Plans contain no prose. Exercise both empty recovery and an untrusted
+    # need label that suggests the old unsupported answer, never treated as evidence.
+    draft={'status':'insufficient_evidence','points':[],'units':[]}
+    if draft_kind!='insufficient':
+        label='Source coverage' if draft_kind=='supported' else 'Assert the unsupported conclusion'
+        draft['points']=[{'need':label,'coverage':'missing','gaps':['support']}]
     prepared=prepare_reconstruction(request,original,draft)
     payload=json.loads(prepared.messages[-1]['content'])
     restored,_=verify_annotated_payload({k:payload[k] for k in ('question','sources','evidence')},json.loads(original.messages[-1]['content']))
@@ -35,7 +38,7 @@ def test_supported_reconstruction_keeps_all_evidence_and_fills_source_coverage(c
 @pytest.mark.parametrize('case,wrong',NEGATIVE_CONTROLS)
 def test_quote_valid_wrong_reconstruction_remains_semantically_failed(case,wrong):
     request=ChatRequest(question=case['question']);original=prepare_answer(request,case['evidence'],provider='anthropic')
-    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]})
     unit={'primary_support':case['supports'][0],'supports':case['supports'][1:],'text':wrong}
     answer,_=normalize_reconstruction(json.dumps(select_response({'status':'answered','paragraphs':[{'claims':[unit]}]},json.loads(prepared.messages[-1]['content']))),prepared)
     assert answer['paragraphs'][0]['text']==wrong

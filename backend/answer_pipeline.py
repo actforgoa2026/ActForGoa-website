@@ -16,6 +16,7 @@ from .reconstruction import (PIPELINE_VERSION, pipeline_spec, CORRECTION_PROMPT_
 from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
 from .span_draft import prepare_span_draft, span_draft_message_request, normalize_span_draft
 from .paragraph_slots import PARAGRAPH_PROTOCOL, AnswerEnvelopeError
+from .evidence_plan import PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL
 from .phase_effort import (EFFORT_POLICY, PhasePolicyError, phase_effort, phase_policy_metadata,
                            validate_pipeline_config, check_phase_request)
 
@@ -198,7 +199,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             if payload is not None:
                 stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'],
                     anchor_protocol=ANCHOR_PROTOCOL, paragraph_protocol=PARAGRAPH_PROTOCOL,
-                    answer_style=original.answer_style)
+                    answer_style=original.answer_style,plan_protocol=PLAN_PROTOCOL,
+                    final_internal_protocol=FINAL_INTERNAL_PROTOCOL)
             notify()
 
         phase_started = time.monotonic()
@@ -209,7 +211,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                                             paragraph_protocol=PARAGRAPH_PROTOCOL,
                                             answer_style=original.answer_style, phase=stage['phase'],
                                             pipeline_version=PIPELINE_VERSION, effort_policy=EFFORT_POLICY,
-                                            base_config_effort=config.effort)
+                                            base_config_effort=config.effort,plan_protocol=PLAN_PROTOCOL,
+                                            final_internal_protocol=FINAL_INTERNAL_PROTOCOL)
         except TimeoutError:
             raise fail('provider_deadline' if time.monotonic() >= deadline else 'provider_stage_timeout') from None
         except (AnswerEnvelopeError, PhasePolicyError):
@@ -275,7 +278,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                     notify()
                 draft = await run_stage(client,current,draft_body,selected_draft.input_token_bound,
                     lambda content:normalize_span_draft(content,selected_draft,resolved_observer=observe_resolution))
-                trace['phases'][0]['normalized_draft'] = deepcopy(draft)
+                trace['phases'][0]['validated_plan'] = deepcopy(draft)
+                trace['phases'][0]['validated_plan_sha256'] = digest(draft)
                 # Preparation cannot discard any source or retained history.
                 current = trace['phases'][1]
                 correction = prepare_reconstruction(request, original, draft)
@@ -286,7 +290,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                     {k:next_payload[k] for k in ('question','sources','evidence')},first_payload)
                 if preserved != first_payload or correction.messages[1:-1] != original.messages[1:-1]:
                     raise fail('evidence_identity_changed')
-                current.update(compact_draft=deepcopy(correction.compact_draft),
+                current.update(compact_plan=deepcopy(correction.compact_plan),plan_sha256=digest(correction.compact_plan),
                     source_equality={'prepared_original_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
                                      'retained_history_equal':True, 'complete_evidence_equal':True},
                     request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256,

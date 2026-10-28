@@ -27,10 +27,16 @@ def select_response(native,payload):
     paragraphs=([result['paragraph']] if result.get('paragraph') is not None else []) if 'paragraph' in result else result['paragraphs']
     for paragraph in paragraphs:
         if 'claims' in paragraph:
-            paragraph['claims']=[select_claim(unit,payload) for unit in paragraph['claims']]
+            paragraph['claims']=[{**select_claim(unit,payload),'plan_refs':deepcopy(unit.get('plan_refs',[]))} for unit in paragraph['claims']]
         else:
             selected=select_claim(paragraph,payload)
             paragraph.clear();paragraph.update(selected)
+    if payload.get('plan_protocol')=='bounded_source_plan_v1' and 'evidence_plan' not in payload:
+        # Authored mock provider fixture for the explicitly selected first phase.
+        if result['status']=='insufficient_evidence':return empty_plan()
+        return {'status':'planned','points':[{'need':'Requested source proposition '+str(i+1),'coverage':'supported','gaps':[]} for i in range(len(paragraphs))],
+                'units':[{'point':i,'kind':'descriptive','primary_support':p['primary_support'],
+                          'linked_supports':[{'role':'other','support':v} for v in p['supports']]} for i,p in enumerate(paragraphs)]}
     return slot_response(result)
 
 
@@ -80,3 +86,26 @@ def previous_source_completeness_prompt(phase, style):
     return '\n'.join([rules['boundary'], rules['workflow'], PHASE_RULES[phase],
                       *[v for k, v in rules.items() if k not in ('boundary', 'workflow')],
                       STYLE_RULES[style]])
+
+
+def empty_plan():
+    return {'status':'insufficient_evidence','points':[],'units':[]}
+
+
+def historical_span_schema(schema, style, registry, *, phase, slots=True):
+    """Frozen v9 grammar for historical byte audits, never production fallback."""
+    from backend.anthropic_provider import native_answer_schema
+    from backend.paragraph_slots import standard_slot_schema
+    result=native_answer_schema(schema,style)
+    key='paragraph' if style=='brief' else 'paragraphs'
+    paragraph=result['properties'][key]['anyOf'][0] if style=='brief' else result['properties'][key]['items']
+    unit=deepcopy(paragraph)
+    unit['properties']={k:unit['properties'][k] for k in ('primary_support','supports','text')}
+    for primary,support in ((True,unit['properties']['primary_support']),(False,unit['properties']['supports']['items'])):
+        ids=[k for k,v in registry.items() if not primary or v['field']=='text']
+        support['properties']={'citation_id':support['properties']['citation_id'],'span_id':{'type':'string','enum':ids}}
+        support['required']=['citation_id','span_id']
+    unit['required']=['primary_support','supports','text'];paragraph.clear()
+    if phase=='draft':paragraph.update(unit)
+    else:paragraph.update(type='object',additionalProperties=False,properties={'claims':{'type':'array','items':unit}},required=['claims'])
+    return standard_slot_schema(result,style) if slots else result

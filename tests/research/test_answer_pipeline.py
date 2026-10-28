@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v9')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v10')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):
@@ -70,7 +70,7 @@ def setup(monkeypatch):
 def test_two_exact_captured_calls_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==8 and trace['status']=='completed'
+    assert trace['capture_version']==9 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==2 and transport.closed
     assert [p['state'] for p in trace['phases']]==['completed','completed']
     assert [p['provider_attempts'] for p in trace['phases']]==[1,1]
@@ -88,7 +88,7 @@ def test_two_exact_captured_calls_and_final_only_result(setup):
     assert trace['phases'][1]['source_equality']['byte_equality']
     assert trace['phases'][1]['source_equality']['prepared_original_payload_utf8_sha256']==trace['phases'][1]['source_equality']['reconstructed_payload_utf8_sha256']
     assert trace['phases'][1]['source_equality']['actual_request_body_sha256']==trace['phases'][1]['outgoing_request']['body_sha256']
-    assert trace['phases'][1]['compact_draft']==b['draft_answer']
+    assert trace['phases'][1]['compact_plan']==b['evidence_plan']
     assert result.answer['paragraphs']==[{'text':'Gates regulate tidal water.','citations':['a']}]
     assert trace['assembly_offsets'][0]['start']==0
     saved=json.dumps(observed)
@@ -137,7 +137,7 @@ def test_each_stage_failure_preserves_reservations_and_no_draft_visibility(setup
 def test_insufficient_draft_still_gets_source_coverage_reconstruction(setup):
     _,_,_,transport,_,_,run,_=setup;good=transport.handler
     async def handle(req,n):
-        if n==1:return model_response(slot_response({'status':'insufficient_evidence','paragraphs':[]}))
+        if n==1:return model_response({'status':'insufficient_evidence','points':[],'units':[]})
         return await good(req,n)
     transport.handler=handle
     result=run();assert len(transport.requests)==2 and result.answer['status']=='answered'
@@ -168,7 +168,7 @@ def test_actual_either_phase_mutation_after_preparation_is_reserved_but_unsent(s
     class MutatingClient(AsyncAnthropicClient):
         async def send(self,body,**kwargs):
             selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
-            if (2 if 'draft_answer' in payload else 1)==target_phase:
+            if (2 if 'evidence_plan' in payload else 1)==target_phase:
                 if mutation=='effort':selected['output_config']['effort']='high'
                 if mutation=='scope':payload['request_scope']['answer_style']='brief'
                 if mutation=='history':selected['messages'].insert(0,{'role':'user','content':'Altered history.'})
@@ -197,7 +197,7 @@ def test_in_place_request_mutation_cannot_change_both_sides_of_identity_check(se
     config,request,prepared,transport,limits,_,_,_=setup
     class MutatingClient(AsyncAnthropicClient):
         async def send(self,body,**kwargs):
-            actual_phase=2 if 'draft_answer' in json.loads(body['messages'][-1]['content']) else 1
+            actual_phase=2 if 'evidence_plan' in json.loads(body['messages'][-1]['content']) else 1
             if actual_phase==phase:body['service_tier']='priority'
             return await super().send(body,**kwargs)
     def factory():return MutatingClient('fixture-only',transport=transport)
@@ -212,11 +212,11 @@ def test_in_place_request_mutation_cannot_change_both_sides_of_identity_check(se
 
 def test_compact_draft_overflow_stops_before_second_reservation(setup):
     _,_,_,transport,limits,_,run,_=setup
-    async def handle(req,n):return model_response(select_response({'status':'answered','paragraphs':[claim('界'*2800+'.')]},json.loads(json.loads(req.content)['messages'][-1]['content'])))
+    async def handle(req,n):return model_response({'status':'insufficient_evidence','points':[{'need':'界'*33,'coverage':'missing','gaps':['support']}],'units':[]})
     transport.handler=handle
     with pytest.raises(pipeline.PipelineFailure) as caught:run()
     assert len(transport.requests)==len(limits.receipts)==1
-    assert caught.value.trace['phases'][1]['state']=='failed' and 'final_answer' not in caught.value.trace
+    assert caught.value.trace['phases'][0]['state']=='failed' and 'final_answer' not in caught.value.trace
 
 
 def test_stage_deadline_really_cancels_and_closes_io(setup,monkeypatch):

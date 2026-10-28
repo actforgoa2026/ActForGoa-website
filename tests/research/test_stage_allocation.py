@@ -17,7 +17,7 @@ from backend.span_instructions import STYLE_RULES
 from backend.chat import AnswerCache, ChatRequest, Message, prepare_answer
 from tests.research.test_answer_pipeline import setup, model_response
 from tests.research.test_reconstruction import claim
-from tests.research.span_fixtures import select_response, previous_workflow_prompt
+from tests.research.span_fixtures import select_response, previous_workflow_prompt, historical_span_schema
 
 
 @pytest.fixture
@@ -54,7 +54,7 @@ def test_actual_transport_read_timeout_matches_stage_with_other_limits_unchanged
     ('brief', ['7cf3aa8096fd9d49ea17d2e35ff87b48f9dbdb0adee6618ed1d129582b6c6927',
                '20ea11fcdb89ed7215e9d65be78ba3f8624366cf8111916e75b1f36513353131']),
 ])
-def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_delta(setup, monkeypatch, style, expected_hashes):
+def test_actual_source_history_and_historical_wire_lineage_remain_pinned(setup, monkeypatch, style, expected_hashes):
     # Independently captured from fb60d77110c2e3ca55695088935451fbf0663d57
     # with this source-neutral fixture and real HTTPX serialization/fake I/O.
     config, _, _, transport, limits, _, _, factory = setup
@@ -72,13 +72,23 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config,
                          limits=limits, client_factory=factory))
     assert result.trace['status'] == 'completed' and len(transport.requests) == 2
-    # Undo only v7's reviewed draft-effort field before the historical shape
-    # comparison below. Reconstruction remains exact for this same draft.
+    # V10 intentionally replaces both wire schemas and the first output.
+    # Reconstruct only this authored historical fixture to audit old hashes;
+    # this is not production repair or transfer of model-output acceptance.
     bodies = [json.loads(r.content) for r in transport.requests]
     assert [b['output_config']['effort'] for b in bodies] == ['low', 'medium']
-    # Reverse the reviewed v9 source rules and v8 workflow before historical comparison.
+    selected = span_draft.prepare_span_draft(request, original)
     for body, phase in zip(bodies, ('draft', 'reconstruction')):
-        body['system'] = previous_workflow_prompt(phase, style)
+        payload=json.loads(body['messages'][-1]['content'])
+        assert payload.pop('plan_protocol')=='bounded_source_plan_v1'
+        base={k:payload[k] for k in ('question','sources','evidence','request_scope')}
+        if phase=='reconstruction':
+            assert payload['evidence_plan']==result.trace['phases'][0]['validated_plan']
+            base['draft_answer']={'status':'answered','paragraphs':[{'text':'Gates regulate tidal water.','citations':['a']}]}
+        base['anchor_protocol']=payload['anchor_protocol']
+        body['messages'][-1]['content']=reconstruction.encoded(base).decode()
+        body['system']=previous_workflow_prompt(phase,style)
+        body['output_config']['format']['schema']=historical_span_schema(original.schema,style,selected.span_registry,phase=phase)
     bodies[0]['output_config']['effort'] = 'medium'
     if style == 'brief':
         assert [hashlib.sha256(httpx.Request('POST', str(r.url), json=b).content).hexdigest()
@@ -95,10 +105,8 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
             assert body['system'].endswith(STYLE_RULES['standard'])
             before = deepcopy(body)
             before['system'] = body['system'].removesuffix(STYLE_RULES['standard']) + old_style
-            with monkeypatch.context() as m:
-                m.setattr(span_draft, 'standard_slot_schema', lambda schema, style: schema)
-                before['output_config']['format']['schema'] = span_draft.span_schema(
-                    original.schema, style, selected.span_registry, phase=phase)
+            before['output_config']['format']['schema'] = historical_span_schema(
+                original.schema, style, selected.span_registry, phase=phase, slots=False)
             assert len(body['system'].encode()) - len(before['system'].encode()) == 181
             assert len(reconstruction.encoded(body['output_config']['format']['schema'])) - len(
                 reconstruction.encoded(before['output_config']['format']['schema'])) == 341

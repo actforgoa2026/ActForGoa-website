@@ -28,8 +28,8 @@ def test_draft_selectors_preserve_original_selection_and_resolve_only_server_tex
     native={'status':'answered',**({'paragraph':claim()} if style=='brief' else {'paragraphs':[claim()]})}
     selected=select_response(native,payload);observed=[]
     answer=normalize_span_draft(json.dumps(selected),prepared,resolved_observer=observed.append)
-    assert answer['paragraphs']==[{'text':'Gates regulate tidal water.','citations':['a']}]
-    assert observed[-1]['complete'] and observed[-1]['paragraphs'][0]['resolved_supports'][0]['quote']==original.evidence[0]['text']
+    assert answer==selected and answer['status']=='planned'
+    assert observed[-1]['complete'] and observed[-1]['units'][0]['resolved_supports'][0]['quote']==original.evidence[0]['text']
     # The old copied-quote format, including a plausible case change, is not a
     # selector answer and is never repaired into an accepted draft.
     with pytest.raises(ValueError):normalize_span_draft(json.dumps(native),prepared)
@@ -102,16 +102,16 @@ def test_draft_partial_resolution_keeps_raw_selector_failure_and_stops_correctio
     _,_,_,transport,limits,_,run,_=setup;good=transport.handler
     async def broken(req,n):
         response=await good(req,n);payload=response.json();native=json.loads(payload['content'][-1]['text'])
-        native['paragraph_1']['supports']=[{'citation_id':'a','span_id':'unknown'}]
+        native['units'][0]['linked_supports']=[{'role':'condition','support':{'citation_id':'a','span_id':'unknown'}}]
         return model_response(native)
     transport.handler=broken
     with pytest.raises(answer_pipeline.PipelineFailure) as caught:run()
     phase=caught.value.trace['phases'][0]
     assert len(transport.requests)==len(limits.receipts)==1
-    assert phase['final_output_diagnostic']['answer']['paragraph_1']['supports'][0]['span_id']=='unknown'
+    assert phase['final_output_diagnostic']['plan']['units'][0]['linked_supports'][0]['support']['span_id']=='unknown'
     resolution=phase['deterministic_support_resolution']
-    assert not resolution['complete'] and len(resolution['paragraphs'][0]['resolved_supports'])==1
-    assert resolution['paragraphs'][0]['status']=='failed'
+    assert not resolution['complete'] and len(resolution['units'][0]['resolved_supports'])==1
+    assert resolution['units'][0]['status']=='failed'
     assert caught.value.trace['phases'][1]['provider_attempts']==0 and 'final_answer' not in caught.value.trace
 
 
@@ -123,24 +123,24 @@ def test_valid_selectors_do_not_prove_omitted_conditions_or_dates_semantically_c
     wrong=claim('The rules permit work with Board consent.',quote=source)
     selected=select_response({'status':'answered','paragraphs':[wrong]},json.loads(prepared.messages[-1]['content']))
     answer=normalize_span_draft(json.dumps(selected),prepared)
-    assert answer['paragraphs'][0]['text']==wrong['text']
+    assert answer==selected and wrong['text'] not in json.dumps(answer)
+    assert 'text' not in answer['units'][0]
     # Explicit semantic negative: date and mandatory design condition omitted.
     # Mechanical acceptance is not a reviewed factual or legal accuracy pass.
 
 
-@pytest.mark.parametrize('change',['missing_support','missing_year','cross_source'])
-def test_paragraph_draft_keeps_existing_publication_guards(change):
+@pytest.mark.parametrize('change',['missing_support','cross_source'])
+def test_plan_keeps_publication_ownership_and_full_label_guards(change):
     from tests.research.test_source_publication import dated_evidence,dated_unit
     evidence=dated_evidence()+[{'id':'other','text':'An unrelated source.',
                               'source_date_metadata':[{'field':'datePublished','value':'2025'}]}]
     request=ChatRequest(question='What did the survey record?')
     prepared=prepare_span_draft(request,prepare_answer(request,evidence,provider='anthropic'))
     native=select_response({'status':'answered','paragraphs':[dated_unit()]},json.loads(prepared.messages[-1]['content']))
-    assert normalize_span_draft(json.dumps(native),prepared)['status']=='answered'
-    unit=native['paragraph_1']
-    if change=='missing_support':unit['supports']=[]
-    elif change=='missing_year':unit['text']=unit['text'].replace('2025','an unspecified year')
-    else:unit['supports'][0]['citation_id']='other'
+    assert normalize_span_draft(json.dumps(native),prepared)['status']=='planned'
+    unit=native['units'][0]
+    if change=='missing_support':unit['linked_supports']=[]
+    else:unit['linked_supports'][0]['support']['citation_id']='other'
     with pytest.raises(ValueError):normalize_span_draft(json.dumps(native),prepared)
 
 
@@ -155,11 +155,11 @@ def test_paragraph_draft_cannot_omit_required_header_text_support():
     with pytest.raises(ValueError):normalize_span_draft(json.dumps(selected),prepared)
     unit['supports']=[{'citation_id':'header','field':'text','quote':header['text']}]
     selected=select_response({'status':'answered','paragraphs':[unit]},payload)
-    assert normalize_span_draft(json.dumps(selected),prepared)['status']=='answered'
+    assert normalize_span_draft(json.dumps(selected),prepared)['status']=='planned'
 
 
 def test_exact_independently_reviewed_wire_instruction_hashes_are_pinned():
-    from backend.span_instructions import span_answer_instructions
+    from backend.span_instructions import legacy_span_answer_instructions as span_answer_instructions
     record=json.loads((Path(__file__).parents[2]/'docs/research-source-completeness-parity.json').read_text())
     for phase,styles in record['rendered_instructions'].items():
         for style,pin in styles.items():
