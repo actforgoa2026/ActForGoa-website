@@ -72,8 +72,14 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config,
                          limits=limits, client_factory=factory))
     assert result.trace['status'] == 'completed' and len(transport.requests) == 2
+    # Undo only v7's reviewed draft-effort field before the historical shape
+    # comparison below. Reconstruction remains exact for this same draft.
+    bodies = [json.loads(r.content) for r in transport.requests]
+    assert [b['output_config']['effort'] for b in bodies] == ['low', 'medium']
+    bodies[0]['output_config']['effort'] = 'medium'
     if style == 'brief':
-        assert [hashlib.sha256(r.content).hexdigest() for r in transport.requests] == expected_hashes
+        assert [hashlib.sha256(httpx.Request('POST', str(r.url), json=b).content).hexdigest()
+                for r, b in zip(transport.requests, bodies)] == expected_hashes
     else:
         # Reverse only the two reviewed shape changes, then require the exact
         # independently captured v4 bytes; all other sent content must agree.
@@ -82,7 +88,7 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
                      'empty array.')
         selected = span_draft.prepare_span_draft(request, original)
         for index, (actual, phase) in enumerate(zip(transport.requests, ('draft', 'reconstruction'))):
-            body = json.loads(actual.content)
+            body = bodies[index]
             assert body['system'].endswith(STYLE_RULES['standard'])
             before = deepcopy(body)
             before['system'] = body['system'].removesuffix(STYLE_RULES['standard']) + old_style

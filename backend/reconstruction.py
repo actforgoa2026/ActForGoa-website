@@ -15,15 +15,23 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
 from .span_draft import PIPELINE_VERSION, span_schema
 from .span_instructions import span_answer_instructions
 from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, decode_envelope, source_slot
+from .phase_effort import phase_effort, phase_policy_metadata, validate_pipeline_config
 
 CORRECTION_PROMPT_BYTES = 36000
 COMPACT_DRAFT_BYTES = 8192
 PROVIDER_DEADLINE_SECONDS = 65
 PROVIDER_STAGE_SECONDS = 45
-PIPELINE_SPEC = {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
-                 'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-                 'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 5, 'paragraph_protocol': PARAGRAPH_PROTOCOL,
-                 'anchor_protocol': ANCHOR_PROTOCOL}
+def pipeline_spec():
+    """Detached export; neither callers nor nested maps can change policy."""
+    return {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
+            'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
+            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 6,
+            'paragraph_protocol': PARAGRAPH_PROTOCOL, 'anchor_protocol': ANCHOR_PROTOCOL,
+            **phase_policy_metadata()}
+
+
+# Compatibility export for readers; execution always obtains a fresh spec.
+PIPELINE_SPEC = pipeline_spec()
 
 
 def encoded(value):
@@ -114,9 +122,7 @@ def validate_prepared_identity(prepared):
 
 
 def reconstruction_message_request(config, prepared):
-    if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
-            PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'medium', 12000):
-        raise ValueError('Reconstruction requires the reviewed Haiku configuration')
+    validate_pipeline_config(config)
     validate_prepared_identity(prepared)
     _represented_contexts(prepared.original)
     _represented_publications(prepared.original)
@@ -124,7 +130,7 @@ def reconstruction_message_request(config, prepared):
     return {'model': config.model, 'max_tokens': config.max_output_tokens,
             'system': prepared.messages[0]['content'], 'messages': prepared.messages[1:],
             'stream': False, 'service_tier': 'standard_only', 'thinking': {'type': 'adaptive'},
-            'output_config': {'effort': config.effort,
+            'output_config': {'effort': phase_effort('reconstruction'),
                 'format': {'type': 'json_schema', 'schema': prepared.schema}}}
 
 
@@ -132,7 +138,7 @@ def reconstruction_cache_identity(original, version):
     if version != PIPELINE_VERSION:
         raise ValueError('Unknown reconstruction pipeline version')
     annotated,registry=annotate_payload(json.loads(original.messages[-1]['content']))
-    return {'spec': PIPELINE_SPEC, 'request_scope': original.request_scope,
+    return {'spec': pipeline_spec(), 'request_scope': deepcopy(original.request_scope),
             'correction_instructions': reconstruction_instructions(original.base_instructions, original.answer_style),
             'draft_schema': span_schema(original.schema,original.answer_style,registry,phase='draft'),
             'draft_instructions':span_answer_instructions('draft',original.answer_style),

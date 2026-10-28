@@ -24,8 +24,10 @@ from backend.hosting import PublicLimits
 from backend.providers import PRICES, chat_config
 from backend.usage_reconciliation import inspect_ledger
 from backend.answer_trace import final_json_capture, outgoing_request_capture
-from backend.answer_pipeline import run_answer_pipeline, PipelineFailure, pair_maximum_cost
-from backend.reconstruction import PIPELINE_VERSION, PIPELINE_SPEC, PROVIDER_DEADLINE_SECONDS
+from backend.answer_pipeline import run_answer_pipeline, PipelineFailure, pair_maximum_cost, initial_pipeline_trace
+from backend.reconstruction import PIPELINE_VERSION, pipeline_spec, PROVIDER_DEADLINE_SECONDS
+from backend.phase_effort import (BASE_CONFIG_EFFORT, phase_policy_metadata, validate_policy_metadata,
+                                  validate_pipeline_config)
 from backend.async_anthropic import AsyncAnthropicClient
 
 
@@ -110,6 +112,9 @@ def planned_model(plan):
 
 
 def planned_effort(plan):
+    if plan.get('pipeline') == PIPELINE_VERSION:
+        planned_pipeline(plan)
+        return BASE_CONFIG_EFFORT
     # Omitted historical fields mean medium, never an implicit high comparison.
     return reviewed_effort(planned_model(plan), plan.get('effort', 'medium'))
 
@@ -127,9 +132,28 @@ def planned_pipeline(plan):
     pipeline = plan.get('pipeline', 'single_pass')
     if pipeline not in ('single_pass', PIPELINE_VERSION):
         raise ValueError('Unknown planned answer pipeline')
-    if pipeline == PIPELINE_VERSION and plan.get('pipeline_spec') != PIPELINE_SPEC:
-        raise ValueError('Frozen pipeline spec must match the actual runtime')
+    if pipeline == PIPELINE_VERSION:
+        validate_policy_metadata(plan)
+        if plan.get('pipeline_spec') != pipeline_spec():
+            raise ValueError('Frozen pipeline spec must match the actual runtime')
     return pipeline
+
+
+def configuration_capture(config):
+    if config.pipeline == 'single_pass':
+        return {'effort': config.effort}
+    validate_pipeline_config(config)
+    return {**phase_policy_metadata(), 'pipeline': PIPELINE_VERSION,
+            'pipeline_spec': pipeline_spec(), 'capture_version': pipeline_spec()['capture_version']}
+
+
+def readiness_report(config, context, stage_name):
+    return {'ready_for_separate_authorization': True, 'stage': stage_name, 'model': config.model,
+            **configuration_capture(config), 'max_output_tokens': config.max_output_tokens,
+            'pipeline': config.pipeline, 'max_cases': context['count'],
+            'max_attempts': context['provider_attempt_ceiling'],
+            'max_reservation_microusd': context['worst_reservation_microusd'],
+            'provider_calls': 0, 'heldout_questions_parsed': False}
 
 
 def preflight(plan, stage_name, config, *, execute=False):
@@ -145,8 +169,8 @@ def preflight(plan, stage_name, config, *, execute=False):
     if config.pipeline != planned_pipeline(plan):
         raise ValueError('Configured pipeline must match the reviewed plan pipeline')
     two_pass = config.pipeline == PIPELINE_VERSION
-    if two_pass and (config.model, config.effort, config.max_output_tokens) != ('claude-haiku-5-5', 'medium', 12000):
-        raise ValueError('Two-pass plan requires the reviewed Haiku configuration')
+    if two_pass:
+        validate_pipeline_config(config)
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')
     count = sum(p['count'] for p in stage['packets'])
@@ -321,13 +345,12 @@ def run_cases(library, client, capture, config, cases, context, output):
     with output.open('x'):pass
     output.chmod(0o600)
     report={'source_commit':source_identity(),'harness_sha256':sha(__file__),'generation':library.generation,
-        'api_version':API_VERSION,'model':config.model,'effort':config.effort,
+        'api_version':API_VERSION,'model':config.model,**configuration_capture(config),
         'max_output_tokens':config.max_output_tokens,'before':context['before'],'cases':[],
         'originals_checked':{},'entailment_acceptance':'pending_human_review','complete':False}
     two_pass = config.pipeline == PIPELINE_VERSION
     if two_pass:
-        report.update(capture_version=PIPELINE_SPEC['capture_version'], pipeline=PIPELINE_VERSION, pipeline_spec=dict(PIPELINE_SPEC),
-                      provider_attempt_ceiling=context['provider_attempt_ceiling'], max_cases=context['count'])
+        report.update(provider_attempt_ceiling=context['provider_attempt_ceiling'], max_cases=context['count'])
     limits=PublicLimits(context['ledger'].parent,chats_per_day=100,monthly_usd='5')
     save(report,output)
     for case in cases:
@@ -348,7 +371,7 @@ def run_cases(library, client, capture, config, cases, context, output):
         report['cases'].append(entry)
         if two_pass:
             entry['parent_id']=uuid.uuid4().hex
-            entry['pipeline_trace']={'capture_version':PIPELINE_SPEC['capture_version'],'parent_id':entry['parent_id'],'status':'not_started','phases':[]}
+            entry['pipeline_trace']=initial_pipeline_trace(entry['parent_id'],context['day'])
         else:capture.entry=entry
         save(report,output)
         fatal=False
@@ -445,11 +468,7 @@ def main():
     config=chat_config()
     context=preflight(plan,args.stage,config,execute=args.execute)
     if not args.execute:
-        print(json.dumps({'ready_for_separate_authorization':True,'stage':args.stage,'model':config.model,'effort':config.effort,
-            'max_output_tokens':config.max_output_tokens,'pipeline':config.pipeline,'max_cases':context['count'],
-            'max_attempts':context['provider_attempt_ceiling'],
-            'max_reservation_microusd':context['worst_reservation_microusd'],'provider_calls':0,
-            'heldout_questions_parsed':False}));return
+        print(json.dumps(readiness_report(config,context,args.stage)));return
     if not args.output or args.output.exists():raise ValueError('A new output path is required')
     cases=load_cases(context['stage'],plan['generation'])
     values=dotenv_values(args.key_env_file) if args.key_env_file else os.environ

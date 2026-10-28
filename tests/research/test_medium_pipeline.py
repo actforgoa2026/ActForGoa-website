@@ -1,4 +1,4 @@
-"""Explicit v6/medium identity; no provider, keys, corpus or live ledgers."""
+"""Explicit v7 base-medium and fixed phase identity; no provider, keys, corpus or live ledgers."""
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
@@ -13,7 +13,7 @@ from tests.research.test_answer_pipeline import setup
 
 
 @pytest.mark.parametrize('pipeline,effort',[
-    ('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
     ('two_pass_v2','medium'),('two_pass_v1','medium')])
 def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
     monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
@@ -63,10 +63,10 @@ def test_medium_configuration_and_caps_remain_fixed(setup):
     config,request,original,transport,limits,_,run,_=setup
     draft=span_draft_message_request(config,prepare_span_draft(request,original))
     correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]}))
-    assert draft['output_config']['effort']==correction['output_config']['effort']=='medium'
+    assert (draft['output_config']['effort'],correction['output_config']['effort'])==('low','medium')
     assert draft['max_tokens']==correction['max_tokens']==12000
     assert answer_pipeline.pair_maximum_costs(config)==[9424,10624]
     assert answer_pipeline.PROVIDER_STAGE_SECONDS==45 and answer_pipeline.PROVIDER_DEADLINE_SECONDS==65
     result=run()
-    assert all(phase['request_shape']['effort']=='medium' for phase in result.trace['phases'])
+    assert [phase['request_shape']['effort'] for phase in result.trace['phases']]==['low','medium']
     assert len(transport.requests)==len(limits.receipts)==2
