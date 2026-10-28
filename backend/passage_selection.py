@@ -16,6 +16,16 @@ from snowballstemmer.english_stemmer import EnglishStemmer
 DISCOURSE = frozenset('according saved official specify specifies stated state must under user guide manual list whom much someone outside before after should found does i not you yours us our'.split())
 
 
+def retrieval_focus(query):
+    """Favor the requested subject before an explicit comparison alternative.
+
+    Both sides remain in hybrid recall and in the model's question. Only the
+    coverage bonus uses the requested subject so a frequent alternative cannot
+    crowd it out. No topic, source identity or answer is injected.
+    """
+    return re.split(r'\b(?:rather than|instead of)\b', query, maxsplit=1, flags=re.I)[0].strip() or query
+
+
 def select_passages(query, candidates, baseline_ids, scores, stop_words):
     """Return candidate IDs in the existing document-slot order (at most two).
 
@@ -35,7 +45,7 @@ The objective contains no source IDs, named topics, or question-specific rules.
                 [word for word in words if word not in stop_words and word not in DISCOURSE]))
         return token_cache[text]
 
-    query_terms = tokens(query)
+    query_terms = tokens(retrieval_focus(query))
     pools = {}
     for identifier, (row, meta) in candidates.items():
         pools.setdefault(row['doc_id'], []).append(identifier)

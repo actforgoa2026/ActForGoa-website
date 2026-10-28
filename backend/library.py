@@ -8,7 +8,7 @@ import zvec
 from .embeddings import Encoder, ROOT
 from .extraction import safe_path
 from .domains import document_domains, legal_authority_multiplier
-from .passage_selection import select_passages
+from .passage_selection import retrieval_focus, select_passages
 from .source_context import preceding_prose_chunk, preceding_table_chunk, tabular_lines
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
@@ -105,7 +105,9 @@ class Library:
             vector_filter="document in ("+','.join("'"+identifier+"'" for identifier in domain_ids)+")"
         terms=list(dict.fromkeys(t.lower() for t in re.findall(r'[^\W_]+',query,re.UNICODE) if len(t)>1 and t.lower() not in STOP))[:24]
         if not terms:terms=re.findall(r'[^\W_]+',query)[:8]
-        query_concepts={t[:5] if len(t)>5 else t for t in terms}
+        focus=retrieval_focus(query)
+        focus_terms=terms if focus==query else [t.lower() for t in re.findall(r'[^\W_]+',focus,re.UNICODE) if len(t)>1 and t.lower() not in STOP]
+        query_concepts={t[:5] if len(t)>5 else t for t in focus_terms}
         if any(t in terms for t in ['mhadei','mahadayi','mandovi']):terms.extend(['mhadei','mahadayi','mandovi'])
         expression=' OR '.join('"'+t+'"' for t in dict.fromkeys(terms))
         with self.connect(generation) as db:

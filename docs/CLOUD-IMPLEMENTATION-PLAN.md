@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Focused contrast-retrieval correction
+
+The combined candidate includes merged PR93/94/96/99. Acceptance on5456414 reached22 accepted cases, then water-10 failed HTTP502: its missing-evidence note was550characters against the unchanged500-character bound, and it returned no coverage for a case expecting a supported answer. The failed output remains rejected and charged. Canonical October28 accounting is100attempts and8,584,037microUSD reserved; production reconciliation is still pending.
+
+The cause investigation found comparison alternatives crowding out the requested subject: generic coverage ranking now favors the subject before explicit “rather than” or “instead of”, while both sides remain in hybrid recall and the model question. The changed request includes the original Goa water-policy passage on gauging and discharge-data limitations. No source, prompt, provider schema, answer bounds or frozen expectation changed.166research tests pass. All22 accepted requests, selected-source lists and accepted assembled answers were re-prepared/replayed and verified identical; those real captures remain evidence without duplicate paid generations. The failed water-10 requires a fresh dispatch on its changed payload. No result is a new live HTTP pass merely because replay succeeds.
+
+All71 frozen cases and3HTTP journeys remain required. From100attempts,49remaining cases plus3HTTP journeys and4launch slots need156total. A replacement160-today request is pending; only150today/$15October is authorized until the user answers. Stop before a stage would spend reserved launch capacity or exceed either hard cap. Default100daily resumes29October and$5monthly resumesNovember. No alias promotion before acceptance, accounting reconciliation, fresh packaging and hosted verification.
+
 ## Current citation-assembly correction
 
 PR99 homepage routing is integrated alongside PR93/94/96. PR94 has landed on main as d4268ff; PR96's routine merge conflict is being reconciled. Sole local ORCHESTRATOR retains review-alias promotion ownership. The named editorial account is preserved. No public deployment has occurred.

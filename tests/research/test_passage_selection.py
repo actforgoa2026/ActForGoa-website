@@ -2,7 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 
-from backend.passage_selection import select_passages
+from backend.passage_selection import retrieval_focus, select_passages
 
 STOP=set('what are the and for is who must about a to'.split())
 
@@ -39,3 +39,18 @@ def test_concurrent_searches_do_not_share_mutable_stemming_state():
     expected=[select(q) for q in questions]
     with ThreadPoolExecutor(max_workers=4) as executor:
         assert list(executor.map(select,questions))==expected
+
+
+def test_comparison_alternative_does_not_displace_requested_measurement():
+    candidates=pool(['Annual tourism revenue and visitor numbers are recorded.',
+                     'Seasonal shoreline erosion is measured along the coast.'],title='Coastal records')
+    original=deepcopy(candidates)
+    query='Which records measure seasonal shoreline erosion rather than annual tourism revenue and visitor numbers?'
+    assert select_passages(query,candidates,['p0'],{'p0':.05,'p1':.05},STOP)==['p1']
+    assert candidates==original
+
+
+def test_focus_keeps_noncomparative_and_empty_subject_queries_intact():
+    assert retrieval_focus('Compare rainfall and runoff')=='Compare rainfall and runoff'
+    assert retrieval_focus('instead of rainfall')=='instead of rainfall'
+    assert retrieval_focus('Measure runoff RATHER THAN rainfall')=='Measure runoff'
