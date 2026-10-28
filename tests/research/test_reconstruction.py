@@ -18,13 +18,12 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v9')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v10')
     evidence = [{'id': 'a', 'text': 'Gates regulate tidal water. Design must follow Appendix C.',
                  'document_id': 'doc-a', 'generation': 'fixture'}]
     request = ChatRequest(question='What do the gates do?', history=[Message(role='user',content='Tell me about gates.')])
     original = prepare_answer(request, evidence, provider='anthropic')
-    draft = {'status': 'answered', 'paragraphs': [{'text': 'Gates regulate tidal water.', 'citations': ['a']}],
-             'citations': evidence, 'notice': 'not forwarded'}
+    draft = {'status':'insufficient_evidence','points':[],'units':[]}
     return chat_config(), request, original, draft
 
 
@@ -51,7 +50,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
     source=json.loads(original.messages[-1]['content']);actual=json.loads(wire['messages'][-1]['content'])
     assert verify_annotated_payload({k:actual[k] for k in ('question','sources','evidence')},source)[0]==source
     assert wire['messages'][:-1]==original.messages[1:-1]
-    assert actual['draft_answer']=={k:draft[k] for k in ('status','paragraphs')}
+    assert actual['evidence_plan']==draft
     assert actual['request_scope']=={'answer_style':style,'document_id':None,'generation':None}
     assert original==before and 'not forwarded' not in str(wire)
     assert len(encoded(prepared.messages))+2048==prepared.input_token_bound
@@ -68,7 +67,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
 
 def test_insufficient_draft_is_reconstructed_and_final_abstention_is_empty(setup):
     _,request,original,_=setup
-    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]})
     assert normalize_reconstruction(response(claim(),prepared=prepared),prepared)[0]['status']=='answered'
     answer,mapping=normalize_reconstruction(json.dumps(slot_response({'status':'insufficient_evidence','paragraphs':[]})),prepared)
     assert answer['paragraphs']==[] and mapping==[]
@@ -89,9 +88,9 @@ def test_mutated_prepared_input_cannot_dispatch(setup,mutation):
 
 def test_multibyte_compact_draft_overflow_is_not_truncated(setup):
     _,request,original,draft=setup
-    draft['paragraphs'][0]['text']='界'*2800+'.'
+    draft.update(status='insufficient_evidence',points=[{'need':'界'*33,'coverage':'missing','gaps':['support']}],units=[])
     before=deepcopy(draft)
-    with pytest.raises(ValueError,match='draft exceeds'):prepare_reconstruction(request,original,draft)
+    with pytest.raises(ValueError,match='invalid_evidence_plan'):prepare_reconstruction(request,original,draft)
     assert draft==before
 
 
@@ -121,7 +120,7 @@ def test_claim_local_context_cannot_be_borrowed_from_sibling(setup):
     context={'id':'ctx-header','text':'Table: Endemic to Region R.','document_id':'doc-a','generation':'fixture','page':1}
     row={'id':'a','text':'Species P occurs here.','document_id':'doc-a','generation':'fixture','page':1,'supporting_context':[context]}
     original=prepare_answer(request,[row],provider='anthropic')
-    draft={'status':'insufficient_evidence','paragraphs':[]}
+    draft={'status':'insufficient_evidence','points':[],'units':[]}
     prepared=prepare_reconstruction(request,original,draft)
     row_claim=claim('Species P occurs here.',quote='Species P occurs here.')
     header_claim=claim('The header labels regional endemism.',citation='ctx-header',quote=context['text'])

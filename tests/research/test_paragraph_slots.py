@@ -99,6 +99,25 @@ def test_invalid_envelope_capture_contains_no_answer_or_mapping(mutation, phase)
 
 
 def invalid_json(raw, mutation, style):
+    # The owned first phase now has plan labels/units, not prose slots.
+    if '"points":' in raw:
+        if mutation in ('slot','text','escaped_text','claims','surrogate','escaped_secret'):
+            if mutation=='slot':return raw.replace('"units":','"units":[],"units":',1)
+            if mutation=='text':return raw.replace('"need":','"need":"sk-ant-sensitive-fixture","need":',1)
+            if mutation=='escaped_text':return raw.replace('"need":','"\\u006eeed":"fixture-only","need":',1)
+            if mutation=='claims':return raw.replace('"linked_supports":','"linked_supports":[],"linked_supports":',1)
+            if mutation=='surrogate':return raw.replace('"need":','"bad":"\\ud800","need":',1)
+            secret=''.join('\\u%04x'%ord(c) for c in 'fixture-only')
+            return raw.replace('"need":','"need":"'+secret+'","need":',1)
+        if mutation in ('hole','missing_slot','fifth_slot','status_content','wrong_slot','unknown_status'):
+            value=json.loads(raw)
+            if mutation=='hole':value['units']=[]
+            if mutation=='missing_slot':value.pop('units')
+            if mutation=='fifth_slot':value['extra_unit']={}
+            if mutation=='status_content':value['status']='insufficient_evidence'
+            if mutation=='wrong_slot':value['units']={}
+            if mutation=='unknown_status':value['status']='maybe'
+            return json.dumps(value)
     if mutation == 'status':return raw.replace('"status":', '"status":"hidden-workspace","status":', 1)
     if mutation == 'slot':
         key = 'paragraph_1' if style == 'standard' else 'paragraph'
@@ -187,7 +206,7 @@ def test_capture_and_normalizer_defensively_reject_duplicates(setup, style, phas
     request = ChatRequest(question='What do gates do?', answer_style=style)
     original = prepare_answer(request, [{'id': 'a', 'text': 'Gates regulate tidal water.'}], provider='anthropic')
     prepared = (prepare_span_draft(request, original) if phase == 'draft' else
-                prepare_reconstruction(request, original, {'status': 'insufficient_evidence', 'paragraphs': []}))
+                prepare_reconstruction(request, original, {'status':'insufficient_evidence','points':[],'units':[]}))
     payload = json.loads(prepared.messages[-1]['content'])
     raw = invalid_json(encoded(authored(payload, phase, style)).decode(), 'escaped_text', style)
     diagnostic = capture(raw, style, phase)
@@ -195,8 +214,10 @@ def test_capture_and_normalizer_defensively_reject_duplicates(setup, style, phas
     observed = []
     normalizer = normalize_span_draft if phase == 'draft' else normalize_reconstruction
     with pytest.raises(ValueError):normalizer(raw, prepared, resolved_observer=observed.append)
-    assert 'slot_mapping' not in observed[-1]
-    assert not observed[-1]['complete']
+    if phase=='draft':assert observed==[]
+    else:
+        assert 'slot_mapping' not in observed[-1]
+        assert not observed[-1]['complete']
 
 
 @pytest.mark.parametrize('style', ['standard', 'brief'])
@@ -218,7 +239,12 @@ def test_valid_unicode_answer_keeps_exact_text_and_original_slot_traces(setup, s
     for phase in result.trace['phases']:
         diagnostic = phase['final_output_diagnostic']
         resolution = phase['deterministic_support_resolution']
-        records = resolution['paragraphs'] if phase['phase'] == 'draft' else resolution['claims']
+        if phase['phase']=='draft':
+            assert resolution['units'][0]['unit_index']==0 and 'slot_mapping' not in resolution
+            assert diagnostic['plan']==phase['validated_plan']
+            assert diagnostic['representation']=='source_selector_plan'
+            continue
+        records = resolution['claims']
         assert records[0]['slot_name'] == expected_slot
         if style == 'standard':
             assert diagnostic['derived_slot_mapping'] == resolution['slot_mapping']
@@ -239,12 +265,15 @@ def test_valid_insufficient_evidence_keeps_style_specific_shape_through_both_pha
     original = prepare_answer(request, [{'id': 'a', 'text': 'Gates regulate tidal water.'}], provider='anthropic')
     value = ({'status': 'insufficient_evidence', 'paragraph': None} if style == 'brief' else
              slot_response({'status': 'insufficient_evidence', 'paragraphs': []}))
-    async def handler(*_):return model_response(value)
+    async def handler(req,n):return model_response({'status':'insufficient_evidence','points':[],'units':[]} if n==1 else value)
     transport.handler = handler
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config, limits=limits, client_factory=factory))
     assert result.answer['status'] == 'insufficient_evidence' and result.answer['paragraphs'] == []
     assert len(transport.requests) == len(limits.receipts) == 2
     for phase in result.trace['phases']:
+        if phase['phase']=='draft':
+            assert phase['final_output_diagnostic']['plan']=={'status':'insufficient_evidence','points':[],'units':[]}
+            continue
         assert phase['final_output_diagnostic']['answer'] == value
         if style == 'brief':assert 'derived_slot_mapping' not in phase['final_output_diagnostic']
 
@@ -256,7 +285,8 @@ def test_transport_refuses_untrusted_or_inconsistent_context_before_io(setup, ch
     body = span_draft_message_request(config, prepare_span_draft(request, original))
     context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': 'draft',
                'pipeline_version': PIPELINE_VERSION, 'effort_policy': EFFORT_POLICY,
-               'base_config_effort': 'medium', **change}
+               'base_config_effort': 'medium','plan_protocol':'bounded_source_plan_v1',
+               'final_internal_protocol':'planned_claim_supports_v1', **change}
     def no_callback(*_):pytest.fail('Invalid context must not reach a request or response callback')
     async def scenario():
         async with factory() as client:

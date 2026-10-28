@@ -22,10 +22,10 @@ from tests.research.span_fixtures import select_response
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
     plan.pop('effort',None)
-    plan.update(pipeline='two_pass_v9',pipeline_spec=deepcopy(PIPELINE_SPEC),
+    plan.update(pipeline='two_pass_v10',pipeline_spec=deepcopy(PIPELINE_SPEC),
                 **phase_policy_metadata(),max_output_tokens=12000)
     plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v9')
+    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v10')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
@@ -55,7 +55,7 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     assert context['provider_attempt_ceiling']==4 and context['worst_reservation_microusd']==40096
     report=run(setup)
     assert report==json.loads((tmp/'capture-v2.json').read_text())
-    assert report['capture_version']==8 and report['pipeline_spec']==PIPELINE_SPEC
+    assert report['capture_version']==9 and report['pipeline_spec']==PIPELINE_SPEC
     assert report['complete'] and report['attempts']==4 and report['entailment_acceptance']=='pending_human_review'
     assert len(transports)==2 and all(t.closed for t in transports)
     for entry,transport in zip(report['cases'],transports):
@@ -67,8 +67,8 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
             assert phase['outgoing_request']['body_utf8'].encode()==request.content
             receipt=phase['reservation_receipt'];assert receipt['reserved'] and receipt['parent_id']==entry['parent_id']
             assert receipt['after']['day_attempts']==receipt['before']['day_attempts']+1
-        draft=json.loads(json.loads(transport.requests[1].content)['messages'][-1]['content'])['draft_answer']
-        assert draft==trace['phases'][1]['compact_draft']
+        draft=json.loads(json.loads(transport.requests[1].content)['messages'][-1]['content'])['evidence_plan']
+        assert draft==trace['phases'][1]['compact_plan']
     assert 'fixture-only' not in json.dumps(report) and 'private diagnostic' not in json.dumps(report)
     assert (tmp/'capture-v2.json').stat().st_mode & 0o777==0o600
     with pytest.raises(FileExistsError):

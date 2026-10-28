@@ -174,11 +174,12 @@ def verify_wire_binding(actual_body_utf8, baseline, expected_registry_sha256, *,
         original_bytes=baseline['payload_utf8'].encode('utf-8')
         original=json.loads(original_bytes)
         wrapper=json.loads(actual['messages'][-1]['content'])
-        keys={'question','sources','evidence','request_scope','anchor_protocol'}
-        if phase=='reconstruction':keys.add('draft_answer')
+        from .evidence_plan import PLAN_PROTOCOL
+        keys={'question','sources','evidence','request_scope','anchor_protocol','plan_protocol'}
+        if phase=='reconstruction':keys.add('evidence_plan')
         elif phase!='draft':raise ValueError()
         if (set(wrapper)!=keys
-                or wrapper['anchor_protocol']!=ANCHOR_PROTOCOL
+                or wrapper['anchor_protocol']!=ANCHOR_PROTOCOL or wrapper['plan_protocol']!=PLAN_PROTOCOL
                 or encoded(wrapper['request_scope'])!=encoded(baseline['request_scope'])
                 or encoded(actual['messages'][:-1])!=encoded(baseline['retained_history'])):raise ValueError()
         restored,registry=verify_annotated_payload({k:wrapper[k] for k in ('question','sources','evidence')},original)
@@ -193,6 +194,7 @@ def verify_wire_binding(actual_body_utf8, baseline, expected_registry_sha256, *,
             'actual_request_body_sha256':digest(actual_body_utf8.encode('utf-8')),
             'retained_history_equal':True,'request_scope_equal':True,'span_registry_sha256':registry_hash(registry)}
         if phase=='reconstruction':
+            proof['plan_sha256']=digest(encoded(wrapper['evidence_plan']))
             if not isinstance(draft_body_utf8,str):raise ValueError()
             draft_proof=verify_wire_binding(draft_body_utf8,baseline,expected_registry_sha256,phase='draft')
             proof['captured_draft_request_body_sha256']=draft_proof['actual_request_body_sha256']

@@ -82,10 +82,11 @@ def test_transport_rejects_missing_or_wrong_policy_context_before_callbacks(setu
     config, request, original, transport, _, _, _, factory = setup
     body = (span_draft_message_request(config, prepare_span_draft(request, original)) if phase == 'draft'
             else reconstruction_message_request(config, prepare_reconstruction(request, original,
-                 {'status': 'insufficient_evidence', 'paragraphs': []})))
+                 {'status':'insufficient_evidence','points':[],'units':[]})))
     context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': phase,
                'pipeline_version': PIPELINE_VERSION, 'effort_policy': EFFORT_POLICY,
-               'base_config_effort': 'medium', **change}
+               'base_config_effort': 'medium', 'plan_protocol':'bounded_source_plan_v1',
+               'final_internal_protocol':'planned_claim_supports_v1', **change}
     def no_callback(*_):pytest.fail('Invalid policy must not reach any request/response callback')
     async def scenario():
         async with factory() as client:
@@ -102,7 +103,7 @@ def test_direct_owned_transport_enforces_fixed_model_and_output_bound(setup, pha
     config, request, original, transport, _, _, _, factory = setup
     body = (span_draft_message_request(config, prepare_span_draft(request, original)) if phase == 'draft'
             else reconstruction_message_request(config, prepare_reconstruction(request, original,
-                 {'status': 'insufficient_evidence', 'paragraphs': []})))
+                 {'status':'insufficient_evidence','points':[],'units':[]})))
     if value is None:body.pop(field)
     else:body[field] = value
     def no_callback(*_):pytest.fail('Invalid fixed configuration must fail before callbacks or I/O')
@@ -111,7 +112,8 @@ def test_direct_owned_transport_enforces_fixed_model_and_output_bound(setup, pha
             with pytest.raises(PhasePolicyError):
                 await client.send(body, on_request=no_callback, on_response=no_callback,
                     paragraph_protocol=PARAGRAPH_PROTOCOL, answer_style='standard', phase=phase,
-                    pipeline_version=PIPELINE_VERSION, effort_policy=EFFORT_POLICY, base_config_effort='medium')
+                    pipeline_version=PIPELINE_VERSION, effort_policy=EFFORT_POLICY, base_config_effort='medium',
+                    plan_protocol='bounded_source_plan_v1',final_internal_protocol='planned_claim_supports_v1')
     asyncio.run(scenario())
     assert not transport.requests and transport.closed
 
@@ -179,7 +181,7 @@ def test_new_plan_policy_is_exact_before_packet_or_ledger_access(acceptance_setu
 def assert_policy(value):
     assert 'effort' not in value
     assert all(value[k] == v for k, v in phase_policy_metadata().items())
-    assert value['capture_version'] == 8 and value['pipeline_spec'] == reconstruction.pipeline_spec()
+    assert value['capture_version'] == 9 and value['pipeline_spec'] == reconstruction.pipeline_spec()
 
 
 def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acceptance_setup, monkeypatch, capsys):

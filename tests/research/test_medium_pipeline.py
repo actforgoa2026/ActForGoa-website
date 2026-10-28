@@ -13,7 +13,7 @@ from tests.research.test_answer_pipeline import setup
 
 
 @pytest.mark.parametrize('pipeline,effort',[
-    ('two_pass_v9','low'),('two_pass_v8','medium'),('two_pass_v8','low'),('two_pass_v7','medium'),('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('two_pass_v10','low'),('two_pass_v9','medium'),('two_pass_v9','low'),('two_pass_v8','medium'),('two_pass_v8','low'),('two_pass_v7','medium'),('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
     ('two_pass_v2','medium'),('two_pass_v1','medium')])
 def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
     monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
@@ -35,7 +35,7 @@ def test_every_two_phase_entry_rejects_mismatched_configuration_before_keys_or_s
     monkeypatch.setattr(providers.os,'getenv',no_keys)
     with pytest.raises(ValueError):bad.async_client()
     draft=prepare_span_draft(request,original)
-    correction=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
+    correction=prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]})
     with pytest.raises(ValueError):span_draft_message_request(bad,draft)
     with pytest.raises(ValueError):reconstruction_message_request(bad,correction)
     def no_client():pytest.fail('Invalid configuration must not open transport')
@@ -62,7 +62,7 @@ def test_current_cache_cannot_reuse_prior_v3_low_identity(setup,monkeypatch):
 def test_medium_configuration_and_caps_remain_fixed(setup):
     config,request,original,transport,limits,_,run,_=setup
     draft=span_draft_message_request(config,prepare_span_draft(request,original))
-    correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]}))
+    correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]}))
     assert (draft['output_config']['effort'],correction['output_config']['effort'])==('low','medium')
     assert draft['max_tokens']==correction['max_tokens']==12000
     assert answer_pipeline.pair_maximum_costs(config)==[9424,10624]

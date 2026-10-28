@@ -5,9 +5,9 @@ import httpx
 
 from .anthropic_provider import ENDPOINT, API_VERSION, AnthropicAPIError, native_content
 from .reconstruction import PROVIDER_STAGE_SECONDS
-from .paragraph_slots import (strict_answer_json, decode_envelope, check_request_context,
-                              AnswerEnvelopeError)
+from .paragraph_slots import strict_answer_json, AnswerEnvelopeError
 from .phase_effort import check_phase_request
+from .plan_protocol import check_plan_request, decode_plan_response
 
 
 class AsyncAnthropicClient:
@@ -53,10 +53,12 @@ class AsyncAnthropicClient:
                 'synthetic_baseline_body_sha256':baseline_capture['body_sha256']},json.loads(baseline_body['messages'][-1]['content'])
 
     async def send(self, body, *, on_request, on_response, paragraph_protocol,
-                   answer_style, phase, pipeline_version, effort_policy, base_config_effort):
+                   answer_style, phase, pipeline_version, effort_policy, base_config_effort,
+                   plan_protocol, final_internal_protocol):
         if self._request_observer is not None:
             raise ValueError('Concurrent use of an owned provider transport')
-        check_request_context(body, protocol=paragraph_protocol, style=answer_style, phase=phase)
+        check_plan_request(body, plan_protocol=plan_protocol, final_internal_protocol=final_internal_protocol,
+                           paragraph_protocol=paragraph_protocol, style=answer_style, phase=phase)
         check_phase_request(body, pipeline_version=pipeline_version,
                             effort_policy=effort_policy, base_config_effort=base_config_effort, phase=phase)
         self._request_observer = on_request
@@ -97,7 +99,8 @@ class AsyncAnthropicClient:
                          self._http.headers.get('x-api-key'),self._http.headers.get('anthropic-workspace-id')]
                 try:
                     decoded = strict_answer_json(final)
-                    decode_envelope(decoded, protocol=paragraph_protocol, style=answer_style, phase=phase)
+                    decode_plan_response(decoded,plan_protocol=plan_protocol,final_internal_protocol=final_internal_protocol,
+                                         paragraph_protocol=paragraph_protocol,style=answer_style,phase=phase)
                     decoded_final = json.dumps(decoded, ensure_ascii=False)
                 except AnswerEnvelopeError as error:
                     # The final text must never reach a payload-bearing

@@ -14,19 +14,23 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
                           resolve_selector, registry_hash, original_baseline)
 from .span_draft import PIPELINE_VERSION, span_schema
 from .span_instructions import ANSWER_WORKFLOW, span_answer_instructions
-from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, decode_envelope, source_slot
+from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, source_slot
 from .phase_effort import phase_effort, phase_policy_metadata, validate_pipeline_config
+from .evidence_plan import (PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL, COMPACT_PLAN_BYTES,
+                            validate_evidence_plan, validate_plan_refs)
+from .plan_protocol import decode_plan_response
 
 CORRECTION_PROMPT_BYTES = 36000
-COMPACT_DRAFT_BYTES = 8192
+COMPACT_DRAFT_BYTES = COMPACT_PLAN_BYTES  # Historical constant name; same immutable cap.
 PROVIDER_DEADLINE_SECONDS = 65
 PROVIDER_STAGE_SECONDS = 45
 def pipeline_spec():
     """Detached export; neither callers nor nested maps can change policy."""
     return {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
-            'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 8,
-            'answer_workflow': ANSWER_WORKFLOW,
+            'compact_plan_bytes': COMPACT_PLAN_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
+            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 9,
+            'answer_workflow': ANSWER_WORKFLOW, 'plan_protocol':PLAN_PROTOCOL,
+            'final_internal_protocol':FINAL_INTERNAL_PROTOCOL,
             'paragraph_protocol': PARAGRAPH_PROTOCOL, 'anchor_protocol': ANCHOR_PROTOCOL,
             **phase_policy_metadata()}
 
@@ -56,7 +60,7 @@ def reconstruction_instructions(base, style):
 class ReconstructionPrepared:
     original: PreparedAnswer
     request: dict
-    compact_draft: dict
+    compact_plan: dict
     messages: list[dict]
     schema: dict
     input_token_bound: int
@@ -74,15 +78,6 @@ class ReconstructionPrepared:
 def prepare_reconstruction(request, original, draft):
     if not isinstance(request, ChatRequest) or request.answer_style != original.answer_style:
         raise ValueError('Reconstruction request identity differs')
-    # Do not forward full public citation records, raw model reasoning or notices.
-    try:
-        compact = {k: deepcopy(draft[k]) for k in ('status', 'paragraphs')}
-        validated = GroundedAnswer.model_validate(compact, strict=True)
-        validate_answer(validated, original.evidence, original.answer_style)
-    except (ValueError, ValidationError, KeyError, TypeError):
-        raise ValueError('Reconstruction draft did not match the public contract') from None
-    if len(encoded(compact)) > COMPACT_DRAFT_BYTES:
-        raise ValueError('Reconstruction draft exceeds its byte bound')
     if not original.base_instructions:
         raise ValueError('Missing native answer instructions')
     payload = json.loads(original.messages[-1]['content'])
@@ -97,8 +92,9 @@ def prepare_reconstruction(request, original, draft):
     annotated,registry=annotate_payload(payload)
     restored,actual_registry=verify_annotated_payload(annotated,payload)
     if restored!=payload or actual_registry!=registry:raise ValueError('Source span preparation differs')
-    correction_payload = {**annotated, 'request_scope': scope, 'draft_answer': compact,
-                          'anchor_protocol':ANCHOR_PROTOCOL}
+    compact=validate_evidence_plan(draft,original,registry)
+    correction_payload = {**annotated, 'request_scope': scope,
+                          'anchor_protocol':ANCHOR_PROTOCOL,'plan_protocol':PLAN_PROTOCOL,'evidence_plan':compact}
     history = deepcopy(original.messages[1:-1])
     messages = [{'role': 'system', 'content': reconstruction_instructions(original.base_instructions, original.answer_style)},
                 *history, {'role': 'user', 'content': encoded(correction_payload).decode()}]
@@ -108,14 +104,16 @@ def prepare_reconstruction(request, original, draft):
     schema = reconstruction_schema(original.schema, original.answer_style,registry)
     binding = digest({'version': PIPELINE_VERSION, 'request': request.model_dump(),
                       'draft_messages': original.messages, 'draft_evidence': original.evidence,
-                      'correction_messages': messages, 'schema': schema,'span_registry':registry})
+                      'correction_messages': messages, 'schema': schema,'span_registry':registry,
+                      'plan_sha256':digest(compact),'plan_protocol':PLAN_PROTOCOL,
+                      'final_internal_protocol':FINAL_INTERNAL_PROTOCOL})
     return ReconstructionPrepared(original, request.model_dump(), compact, messages, schema,
                                   size + FRAMING_TOKEN_ALLOWANCE, binding,registry,registry_hash(registry),
                                   digest(payload),digest(annotated))
 
 
 def validate_prepared_identity(prepared):
-    expected = prepare_reconstruction(ChatRequest(**prepared.request), prepared.original, prepared.compact_draft)
+    expected = prepare_reconstruction(ChatRequest(**prepared.request), prepared.original, prepared.compact_plan)
     for key in ('messages','schema','binding_sha256','input_token_bound','span_registry',
                 'span_registry_sha256','source_payload_sha256','annotated_payload_sha256'):
         if encoded(getattr(prepared,key))!=encoded(getattr(expected,key)):
@@ -147,7 +145,7 @@ def reconstruction_cache_identity(original, version):
             'correction_schema': reconstruction_schema(original.schema, original.answer_style,registry),
             'span_registry_sha256':registry_hash(registry),
             'annotated_payload_sha256':digest(annotated),
-            'correction_prompt_limit': CORRECTION_PROMPT_BYTES, 'draft_byte_limit': COMPACT_DRAFT_BYTES}
+            'correction_prompt_limit': CORRECTION_PROMPT_BYTES, 'plan_byte_limit': COMPACT_PLAN_BYTES}
 
 
 def normalize_reconstruction(content, prepared, *, resolved_observer=None):
@@ -169,8 +167,9 @@ def normalize_reconstruction(content, prepared, *, resolved_observer=None):
         if (correction_payload.get('anchor_protocol')!=ANCHOR_PROTOCOL or registry!=prepared.span_registry
                 or registry_hash(registry)!=prepared.span_registry_sha256
                 or digest(restored)!=prepared.source_payload_sha256):raise ValueError()
-        payload,mapping = decode_envelope(strict_answer_json(content),protocol=PARAGRAPH_PROTOCOL,
-                                          style=original.answer_style,phase='reconstruction')
+        payload,mapping = decode_plan_response(strict_answer_json(content),plan_protocol=PLAN_PROTOCOL,
+            final_internal_protocol=FINAL_INTERNAL_PROTOCOL,paragraph_protocol=PARAGRAPH_PROTOCOL,
+            style=original.answer_style,phase='reconstruction')
         if mapping is not None:resolution['slot_mapping']=mapping
         key = 'paragraph' if original.answer_style == 'brief' else 'paragraphs'
         if not isinstance(payload, dict) or set(payload) != {'status', key}:
@@ -199,12 +198,16 @@ def normalize_reconstruction(content, prepared, *, resolved_observer=None):
             for ci, selected_unit in enumerate(paragraph['claims']):
                 resolved_record={'paragraph_index':pi,'slot_name':source_slot(original.answer_style,pi),'claim_index':ci,'status':'pending','resolved_supports':[]}
                 resolution['claims'].append(resolved_record)
-                if (not isinstance(selected_unit,dict) or set(selected_unit)!={'text','primary_support','supports'}
+                if (not isinstance(selected_unit,dict) or set(selected_unit)!={'plan_refs','text','primary_support','supports'}
                         or not isinstance(selected_unit['supports'],list)
                         or len(selected_unit['supports'])>=MAX_SUPPORTS):raise ValueError()
                 for si,selector in enumerate([selected_unit['primary_support'],*selected_unit['supports']]):
                     support=resolve_selector(selector,registry,restored,primary=si==0)
                     resolved_record['resolved_supports'].append(support)
+                def observe_refs(value):
+                    resolved_record['plan_reference_check']=value
+                    observe_resolution()
+                validate_plan_refs(selected_unit,prepared.compact_plan,observer=observe_refs)
                 resolved_record['status']='resolved';observe_resolution()
                 unit={'text':selected_unit['text'],'primary_support':resolved_record['resolved_supports'][0],
                       'supports':resolved_record['resolved_supports'][1:]}
