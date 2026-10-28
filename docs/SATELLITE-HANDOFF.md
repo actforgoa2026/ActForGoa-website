@@ -14,6 +14,8 @@ The subsequent monitoring continuation adds authenticated private history (quest
 
 This dashboard covers saved user-selected areas, not statewide monitoring. History is private to each actor and limited to 30 days; catalog coverage is bounded to the chosen period and may be truncated. Place resolution, watch areas, multi-acquisition timelines, statewide processing/coverage, FIRMS and field accuracy remain unfinished. The broader product plan now records these explicitly. No merge or deployment has occurred.
 
+Current implementation/runtime checkpoint: `f42617bb956f20c5b2ca921f3cf8e08226f3d3d8`. Its 17-file package and Docker build pass, including history isolation and saved results across restart. Current [manifest and container evidence](../reports/satellite-decisions-2026-10-28/README.md) supersede the earlier 15-file runtime for this dashboard. Later screenshot/docs corrections leave runtime source unchanged.
+
 ### Earlier live retrieval and package checkpoint
 
 Recovered checkpoint `133bd4e` into `/workspace/actforgoa-satellite`, merged current main `a786df5` without conflicts (`f60597a`), and committed real imagery validation/fixes as `deb1f1d`. Both CDSE bindings are now ready **and actual OAuth, catalog and Process calls succeed**. The corrected Process request explicitly asks for `application/tar`; without it the provider returned only a TIFF and provenance validation stopped safely.

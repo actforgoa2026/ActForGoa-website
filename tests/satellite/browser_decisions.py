@@ -120,7 +120,7 @@ def main():
                 assert not page.locator('.satellite-results').evaluate('(root)=>[root,...root.querySelectorAll("*")].some(n=>getComputedStyle(n).fontStyle!=="normal")')
                 assert not errors
                 page.locator('.satellite-results').evaluate('''root=>{const label=document.createElement('p'); label.textContent='UI TEST — synthetic imagery and Decisions answers. Not a real finding.'; label.style.cssText='font-weight:750;padding:16px;background:#fff1cf;color:#193e32';root.prepend(label)}''')
-                page.add_style_tag(content='.site-header,.skip-link{visibility:hidden!important}html{scroll-behavior:auto!important}')
+                page.add_style_tag(content='header:not(main header),.skip-link{visibility:hidden!important}html{scroll-behavior:auto!important}')
                 page.locator('.satellite-results').screenshot(path=str(output/f'{name}-synthetic-decisions.png'))
                 saved_search_start=page.get_by_label('Search from').input_value()
                 page.get_by_label('Search from').fill('2025-10-02')

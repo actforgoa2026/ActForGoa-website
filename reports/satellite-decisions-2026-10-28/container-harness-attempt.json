@@ -1,0 +1,14 @@
+{
+  "state": "failed_harness",
+  "stage": "health after container restart",
+  "earlier_checks_passed": [
+    "startup health",
+    "history authentication",
+    "unconfigured providers",
+    "saved history and actual-date filter",
+    "cross-actor isolation"
+  ],
+  "error": "Health polling used the original dynamically allocated host port after restart. Recheck the port mapping before interpreting this as a service failure.",
+  "provider_credentials_passed": false,
+  "cleanup": "container and temporary volume removed"
+}
