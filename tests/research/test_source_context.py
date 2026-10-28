@@ -6,7 +6,7 @@ import pytest
 
 from backend.chat import (ChatRequest, GroundedAnswer, MAX_PROMPT_BYTES,
                           prepare_answer, validate_answer)
-from backend.source_context import preceding_table_chunk, with_source_context
+from backend.source_context import preceding_prose_chunk, preceding_table_chunk, with_source_context
 
 
 TEXT = ('   Table- 4: Items and recorded areas\n\n'
@@ -126,3 +126,20 @@ def test_prompt_budget_never_keeps_rows_without_their_required_header():
     payload,evidence=prepare_answer(ChatRequest(question='What is supported?'),[normal,{**rows,'supporting_context':[large]}])
     assert [item['id'] for item in evidence]==['ordinary']
     assert len(json.dumps(payload,ensure_ascii=False).encode())<=MAX_PROMPT_BYTES
+
+
+def test_mid_sentence_count_retains_exact_preceding_qualification():
+    text='The orchid book includes some species not reported from Goa. Out of these, 23 are endemic to the wider region.'
+    start=text.index('from Goa')
+    previous={'id':'before','start':0,'end':text.index('23'),'text':text[:text.index('23')]}
+    hit={'id':'selected','start':start,'end':len(text),'text':text[start:]}
+    assert preceding_prose_chunk(text,start,len(text),[previous,hit])==previous
+    assert preceding_prose_chunk(text,start,len(text),[{**previous,'text':'Rewritten subject.'},hit]) is None
+    assert preceding_prose_chunk(text,0,len(text),[previous,hit]) is None
+
+
+def test_prose_context_does_not_guess_from_an_unrelated_prior_section():
+    text='A prior section.\nA complete independent statement.'
+    start=text.index('A complete')
+    previous={'id':'before','start':0,'end':start,'text':text[:start]}
+    assert preceding_prose_chunk(text,start,len(text),[previous]) is None

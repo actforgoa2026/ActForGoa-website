@@ -9,7 +9,7 @@ from .embeddings import Encoder, ROOT
 from .extraction import safe_path
 from .domains import document_domains, legal_authority_multiplier
 from .passage_selection import select_passages
-from .source_context import preceding_table_chunk, tabular_lines
+from .source_context import preceding_prose_chunk, preceding_table_chunk, tabular_lines
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
 STOP = set('a an the of in on at to from for is are was were be have has how why what which when where who does do can could would should explain tell me about and or with its it this that goa s sources source say says evidence research known'.split())
@@ -185,12 +185,15 @@ class Library:
             for identifier in selected:
                 row,meta=candidates[identifier]
                 result=citation(row,meta,channels[identifier])
-                if len(tabular_lines(row['text']))>=2:
+                if row['start'] or len(tabular_lines(row['text']))>=2:
                     page=db.execute('SELECT text FROM pages WHERE doc_id=? AND page=?',(row['doc_id'],row['page'])).fetchone()
                     siblings=db.execute('SELECT c.*,p.warning,p.label,substr(p.text,1,1400) AS page_context FROM chunks c JOIN pages p ON p.doc_id=c.doc_id AND p.page=c.page WHERE c.doc_id=? AND c.page=? ORDER BY c.start',(row['doc_id'],row['page'])).fetchall()
-                    context=preceding_table_chunk(page['text'],row['start'],row['end'],siblings)
-                    if context is not None and context['id']!=identifier:
-                        result['supporting_context']=[citation(context,meta,['source_context'])]
+                    contexts=[preceding_prose_chunk(page['text'],row['start'],row['end'],siblings)]
+                    if len(tabular_lines(row['text']))>=2:
+                        contexts.append(preceding_table_chunk(page['text'],row['start'],row['end'],siblings))
+                    contexts={context['id']:context for context in contexts if context is not None and context['id']!=identifier}
+                    if contexts:
+                        result['supporting_context']=[citation(context,meta,['source_context']) for context in contexts.values()]
                 results.append(result)
                 if len(results)>=limit:break
         return results

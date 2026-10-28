@@ -20,6 +20,24 @@ def tabular_lines(text):
             and (ROW.match(line) or len(re.findall(r'\S', line)) >= 12)]
 
 
+def preceding_prose_chunk(page_text, start, end, chunks):
+    """Carry an existing overlapping predecessor for a mid-sentence fragment.
+
+    A fragment such as 'from Goa. Out of these...' cannot establish the subject
+    of its own count. Keep the preceding original chunk as citable context,
+    never reconstruct a sentence or guess an antecedent from a document title.
+    """
+    text = page_text[start:end].lstrip()
+    if not start or not text:
+        return None
+    if not (text[0].islower() or text[0] in '.,;:)' or re.match(r'^(These|Those|They|Their|This|Such|It)\b', text)):
+        return None
+    candidates = [chunk for chunk in chunks
+                  if chunk['start'] < start < chunk['end']
+                  and chunk['text'] == page_text[chunk['start']:chunk['end']]]
+    return max(candidates, key=lambda chunk: chunk['start'], default=None)
+
+
 def preceding_table_chunk(page_text, start, end, chunks):
     """Return one existing header-bearing chunk, never a guessed column label.
 
