@@ -30,3 +30,11 @@ Build passed. Local and public Chromium checks confirm initial playback >1, exac
 Source `27285db` (including `a94cd0b`) is live at `/explore` through isolated deployment `dpl_8RDqSrA9CZafsYWEpDX9qRGUAqqo`. The entrance now integrates animation time explicitly: inner/middle/outer rings complete 3/2.5/2 full revolutions in three seconds and then retain their original 90/150/240-second periods. Matching counter rotations keep tiles upright. Pausing also pauses the entrance progression. Photo sizes are 62–78px inside, 86–102px in the middle and 116–132px outside. No eyebrows.
 
 Production build and public Chromium checks pass at 1440/390/320px, covering loaded photos, no horizontal overflow/page errors, pause/resume, exact draft transfer and reduced motion. Live measured entrance turns after settling: approximately 3.04, 2.52 and 2.01. Existing production target and project routing definitions are unchanged.
+
+### Rolling headline and shared navigation
+
+User follow-up source `a9f8e4a` is published at `/explore` via isolated deployment `dpl_36ZVhBLW4cF3MNmmsBhUe7WebRdj`. Reuses the homepage's exact `Header` / `SiteHeader`, including desktop dropdowns, language selector, search and mobile accordion menu. Explore's former simplified header is removed. Scene height accounts for the shared header.
+
+The headline reads “A place to” and rolls through “find local help.”, “protect nature.”, “know your rights.”, “take local action.” and “care for Goa.” every four seconds. Outgoing text rotates up and out while the incoming text rolls in from below, using clipped perspective, blur and opacity. Stable accessible heading text avoids repeated screen-reader announcements; the document title uses that label. Pause motion pauses the headline too; reduced-motion presents a stationary first phrase. No eyebrows.
+
+Production build passed. Public Chromium navigation checks at 1440/390/320px confirm one header, no horizontal overflow, Resources dropdown/accordion, correct legal destination, and keyboard dismissal. `headline-qa.json` checks all five phrases fit each viewport, pause and reduced-motion; `headline-*.png` capture desktop/phone states. Existing production target and scoped routing definitions remain unchanged.
