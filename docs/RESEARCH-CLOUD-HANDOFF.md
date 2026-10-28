@@ -2,6 +2,14 @@
 
 The cloud branch implements scoped legal/ecology retrieval and one-call Anthropic answers. It has not activated or replaced the live research service. The primary cloud coordinator identified in `docs/CLOUD-IMPLEMENTATION-PLAN.md` owns key wiring, corpus restoration, acceptance and review-site release; the former local workers remain paused.
 
+## Answer voice
+
+The user selected **warm, friendly and simple**. `VOICE_INSTRUCTIONS` in `backend/chat.py` is the shared editorial brief for both legal and ecology answers: everyday language, direct answers, explained jargon and useful supported next steps. Future voice changes belong in that block; the evidence, legal/ecology qualifications and outside-context rules remain separate. This is a server prompt setting, not a dashboard control.
+
+Simple questions normally get 1–3 short paragraphs under 160 words. Questions needing explanation, including requests for more detail or steps, can use up to five short paragraphs and 300 words. The server accepts the longer supported answer intact instead of rejecting it at the former 180-word/three-paragraph limit. Outside-library context remains separate and capped at 80 words. Provider output-token and usage-budget limits are unchanged.
+
+The 119 research tests pass with the voice follow-up, including a four-step answer over 180 words, preserved citations, rejection of a fabricated support quote and rejection of an oversized answer. These tests verify the contract, not the model's warmth or answer accuracy. Review the actual conversational tone as part of the existing live acceptance process; no paid call was made for this change.
+
 ## API contract
 
 - `GET /api/status`: existing readiness/generation/stats plus `provider: "anthropic"`, `domains: ["legal", "ecology"]`, `domain_counts`, `outside_context_supported: true`, `answer_mode: "library_first"`, and `chat_unavailable_reason`.
