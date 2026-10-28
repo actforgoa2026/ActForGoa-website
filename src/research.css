@@ -10,6 +10,8 @@
 .reader-view{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}.reader-view h2{font-size:26px}.document-text:has(.original-page){max-width:none}.original-page{width:100%;height:auto;border:1px solid var(--line)}
 
 .research-mode-fieldset{border:0;min-width:0;padding:0;margin:0}.research-composer textarea{min-height:124px}.reader-pagination form>div{width:76px}.reader-pagination form>span{padding-bottom:12px}.research-starters>button{justify-content:space-between;white-space:normal;height:auto;min-height:52px}.research-starters>button>span{width:100%}.research-turn{scroll-margin-top:120px}.research-reader mark{outline:1px solid var(--line)}
+/* Arc's animated label has nested nowrap spans; let question labels wrap within the phone width. */
+.research-starters>button span{white-space:normal;min-width:0;max-width:100%}
 
 .research-heading .research-eyebrow{font-size:13px;font-weight:700;margin-block:0 12px;color:var(--muted)}
 .research-domains{display:flex;gap:12px;flex-wrap:wrap;margin-block:0 32px}
