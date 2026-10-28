@@ -134,7 +134,7 @@ def provider_schema(evidence):
             return [supported(value) for value in node]
         return node
     schema = supported(schema)
-    schema['$defs']['ReferencedParagraph']['properties']['text']['description'] = 'One complete concise paragraph. Keep the entire answer within 300 words; do not omit source qualifications to fit.'
+    schema['$defs']['ReferencedParagraph']['properties']['text']['description'] = 'One complete concise paragraph. Plan the whole answer for about 200 words, leaving margin below the absolute 300-word ceiling. Use fewer paragraphs when sufficient. Keep all qualifications attached to included facts; omit optional examples rather than their qualifications.'
     schema['$defs']['ReferencedParagraph']['properties']['supports']['items']['enum'] = [item['id'] for item in evidence] or ['no-library-source']
     return schema
 
