@@ -24,3 +24,15 @@
 
 .goa-orbit-page{height:calc(100svh - 96px);min-height:684px}
 @media(max-width:1399px){.goa-orbit-page{height:calc(100svh - 80px);min-height:610px}}
+
+/* Individual equal-distance spiral flow replaces rotating ring containers. */
+.goa-photo-ring,.goa-photo-counter,.goa-orbit-scene{animation:none}
+.goa-photo-position{transform-origin:0 0;will-change:transform,opacity}
+.goa-photo-counter img{opacity:.86}
+.goa-photo-ring-0 img,.goa-photo-ring-2 img{opacity:.86}
+
+.goa-orbit-navigation{position:sticky;top:0;z-index:30;isolation:isolate}
+.goa-orbit-navigation:before{content:'';position:absolute;inset:0 0 auto;height:190px;pointer-events:none;background:linear-gradient(to bottom,#f7f6f2 0%,#f7f6f2f0 34%,#f7f6f2a6 62%,#f7f6f200 100%)}
+.goa-orbit-navigation header,.goa-orbit-navigation header[data-scrolled]{background:transparent;border-bottom-color:transparent;box-shadow:none}
+.goa-orbit-page{margin-top:-96px;height:100svh;min-height:780px;padding-top:96px;box-sizing:border-box}
+@media(max-width:1399px){.goa-orbit-page{margin-top:-80px;height:100svh;min-height:690px;padding-top:80px}.goa-orbit-navigation:before{height:165px}}
