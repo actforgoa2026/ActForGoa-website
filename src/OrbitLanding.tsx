@@ -14,19 +14,27 @@ export default function OrbitLanding(){
   const scene = useRef<HTMLDivElement>(null);
   useEffect(() => {
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const animations = Array.from(scene.current?.querySelectorAll('.goa-photo-ring, .goa-photo-counter') || [])
-      .flatMap(element => element.getAnimations());
+    const animations = Array.from(scene.current?.querySelectorAll('.goa-photo-ring') || [])
+      .flatMap((ring, index) => {
+        // Integral of (1 - progress)^2 over three seconds is one second:
+        // duration × revolutions adds 3 / 2.5 / 2 full entrance turns.
+        const revolutions = 3 - index * .5;
+        return [ring, ...ring.querySelectorAll('.goa-photo-counter')].flatMap(element =>
+          element.getAnimations().map(animation => ({animation,
+            boost: Number(animation.effect?.getTiming().duration) / 1000 * revolutions})));
+      });
     const started = performance.now();
     let frame = 0;
     const settle = (now: number) => {
       const progress = Math.min(1, (now - started) / 3000);
       // Matching ring/counter rates keep the photographs upright throughout.
-      const rate = 1 + 4 * (1 - progress) ** 2;
-      animations.forEach(animation => { animation.playbackRate = rate; });
+      animations.forEach(({animation, boost}) => {
+        animation.playbackRate = 1 + boost * (1 - progress) ** 2;
+      });
       if (progress < 1) frame = requestAnimationFrame(settle);
     };
     settle(started);
-    return () => { cancelAnimationFrame(frame); animations.forEach(animation => { animation.playbackRate = 1; }); };
+    return () => { cancelAnimationFrame(frame); animations.forEach(({animation}) => { animation.playbackRate = 1; }); };
   }, []);
   const [question,setQuestion]=useState('');
   const [paused,setPaused]=useState(false);
