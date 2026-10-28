@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-28T10:37:39.005845+00:00",
+  "image_id": "sha256:458bede1773e5d295e849d3b97197658e2cf210f08fafe3ade05c66cd5e233fb",
+  "package_commit": "ebf570a771396ad126960400faeef9f0ea50b9a8",
+  "provider_credentials_passed": false,
+  "checks": {
+    "health": "passed",
+    "unauthenticated_status": 401,
+    "authenticated_status": 200,
+    "unconfigured_provider_abstention": 503,
+    "mcp_tools": 4,
+    "quota_survives_restart": "passed",
+    "interrupted_job_fails_without_retry": "passed",
+    "sqlite_permissions": "0600",
+    "no_build_ca_or_env_or_reports_in_image": "passed"
+  },
+  "state": "passed"
+}

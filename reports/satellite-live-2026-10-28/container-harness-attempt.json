@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-28T10:36:30.421269+00:00",
+  "image_id": "sha256:458bede1773e5d295e849d3b97197658e2cf210f08fafe3ade05c66cd5e233fb",
+  "package_commit": "ebf570a771396ad126960400faeef9f0ea50b9a8",
+  "provider_credentials_passed": false,
+  "checks": {
+    "health": "passed",
+    "unauthenticated_status": 401,
+    "authenticated_status": 200,
+    "unconfigured_provider_abstention": 503,
+    "mcp_tools": 4
+  },
+  "state": "failed",
+  "error_type": "OperationalError",
+  "explanation": "Persistence probe tried to open the root-owned 0600 SQLite file from the unprivileged host. The final probe runs inside the container and keeps those private file permissions."
+}

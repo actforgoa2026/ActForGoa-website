@@ -1,6 +1,6 @@
 {
-  "commit": "deb1f1d1e54d828f1463da787e9b75dd2e4aea45",
-  "tree": "b19897d37514fe366ce0b1a94217bfd1f680ad07",
+  "commit": "ebf570a771396ad126960400faeef9f0ea50b9a8",
+  "tree": "cda317de06450399829dd9686a9fe6c00bebfdeb",
   "files": [
     {
       "path": "satellite/__init__.py",
@@ -64,8 +64,8 @@
     },
     {
       "path": "Dockerfile",
-      "bytes": 395,
-      "sha256": "a0eefa2bbac130addffb6007c8889c5e1ede02a70e637634594ee3c54246cb10"
+      "bytes": 774,
+      "sha256": "7b8e64efdc017fc30cc07e1083f2d4467348845f26b9a5ccaaedd47a262bd55f"
     },
     {
       "path": "requirements.txt",
