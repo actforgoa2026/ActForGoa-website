@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v11')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v12')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):
@@ -70,12 +70,12 @@ def setup(monkeypatch):
 def test_two_exact_captured_calls_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==10 and trace['status']=='completed'
+    assert trace['capture_version']==11 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==2 and transport.closed
     assert [p['state'] for p in trace['phases']]==['completed','completed']
     assert [p['provider_attempts'] for p in trace['phases']]==[1,1]
     assert all(p['usage_within_reservation'] for p in trace['phases'])
-    assert [json.loads(req.content)['output_config']['effort'] for req in transport.requests]==['low','medium']
+    assert [json.loads(req.content)['output_config']['effort'] for req in transport.requests]==['low','high']
     for record,request in zip(trace['phases'],transport.requests):
         assert record['outgoing_request']['body_utf8'].encode()==request.content
     first=json.loads(transport.requests[0].content);second=json.loads(transport.requests[1].content)
@@ -169,7 +169,7 @@ def test_actual_either_phase_mutation_after_preparation_is_reserved_but_unsent(s
         async def send(self,body,**kwargs):
             selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
             if (2 if 'evidence_plan' in payload else 1)==target_phase:
-                if mutation=='effort':selected['output_config']['effort']='high'
+                if mutation=='effort':selected['output_config']['effort']='medium'
                 if mutation=='scope':payload['request_scope']['answer_style']='brief'
                 if mutation=='history':selected['messages'].insert(0,{'role':'user','content':'Altered history.'})
                 if mutation=='system':selected['system']='Altered instructions.'

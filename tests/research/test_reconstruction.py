@@ -18,7 +18,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v11')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v12')
     evidence = [{'id': 'a', 'text': 'Gates regulate tidal water. Design must follow Appendix C.',
                  'document_id': 'doc-a', 'generation': 'fixture'}]
     request = ChatRequest(question='What do the gates do?', history=[Message(role='user',content='Tell me about gates.')])
@@ -55,7 +55,7 @@ def test_exact_complete_input_and_deterministic_claim_assembly(setup,style):
     assert original==before and 'not forwarded' not in str(wire)
     assert len(encoded(prepared.messages))+2048==prepared.input_token_bound
     assert len(encoded(prepared.schema))<4096
-    assert wire['output_config']['effort']=='medium' and wire['max_tokens']==12000
+    assert wire['output_config']['effort']=='high' and wire['max_tokens']==12000
     assert 'direct the reader to the original table' not in wire['system']
     units=[claim(),claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')]
     answer,offsets=normalize_reconstruction(response(*units,style=style,prepared=prepared),prepared)

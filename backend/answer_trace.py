@@ -136,7 +136,7 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
     return result
 
 
-def outgoing_request_capture(request):
+def outgoing_request_capture(request, *, phase_context=None):
     """Capture exact safe request bytes, never headers or generated thinking.
 
     This is diagnostic instrumentation, not a request builder. Unknown shapes
@@ -179,8 +179,15 @@ def outgoing_request_capture(request):
                    for m in messages)):
         return {'capture_status': 'unexpected_request_shape'}, None
     try:
-        reviewed_effort(body['model'], output['effort'])
-    except ValueError:
+        if phase_context is None:
+            reviewed_effort(body['model'], output['effort'])
+        else:
+            from .phase_effort import check_phase_request
+            keys = {'pipeline_version', 'effort_policy', 'base_config_effort', 'phase'}
+            if not isinstance(phase_context, dict) or set(phase_context) != keys:
+                raise ValueError('Invalid trusted phase context')
+            check_phase_request(body, **phase_context)
+    except (ValueError, TypeError):
         return {'capture_status': 'unexpected_request_shape'}, None
     # Header values are used only to refuse accidental credential echoes. They
     # are never persisted. Also refuse common key prefixes and credential fields.

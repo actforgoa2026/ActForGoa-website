@@ -1,9 +1,9 @@
 """Fixed phase policy; exported metadata is never execution authority."""
 
-PIPELINE_VERSION = 'two_pass_v11'
-EFFORT_POLICY = 'low_draft_medium_reconstruction_v1'
+PIPELINE_VERSION = 'two_pass_v12'
+EFFORT_POLICY = 'low_draft_high_reconstruction_v1'
 BASE_CONFIG_EFFORT = 'medium'
-_PHASE_EFFORTS = (('draft', 'low'), ('reconstruction', 'medium'))
+_PHASE_EFFORTS = (('draft', 'low'), ('reconstruction', 'high'))
 
 
 class PhasePolicyError(ValueError):

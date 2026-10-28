@@ -113,7 +113,7 @@ def test_new_workflow_is_unambiguous_in_readiness_and_initial_failure_capture(ac
     context = acceptance.preflight(plan, 'test', config)
     for value in (acceptance.readiness_report(config, context, 'test'),
                   pipeline.initial_pipeline_trace('synthetic-parent', context['day'])):
-        assert value['capture_version'] == 10
-        assert value['pipeline_spec']['version'] == 'two_pass_v11'
+        assert value['capture_version'] == 11
+        assert value['pipeline_spec']['version'] == 'two_pass_v12'
         assert value['pipeline_spec']['answer_workflow'] == 'evidence_plan_first_v1'
-        assert value['phase_efforts'] == {'draft': 'low', 'reconstruction': 'medium'}
+        assert value['phase_efforts'] == {'draft': 'low', 'reconstruction': 'high'}

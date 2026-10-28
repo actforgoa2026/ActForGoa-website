@@ -168,7 +168,9 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                 await phase_available()
                 if not first_hook or str(actual.url)!='https://api.anthropic.com/v1/messages':
                     raise fail('duplicate_or_unreserved_dispatch')
-                capture, actual_body = outgoing_request_capture(actual)
+                capture, actual_body = outgoing_request_capture(actual, phase_context={
+                    'pipeline_version': PIPELINE_VERSION, 'effort_policy': EFFORT_POLICY,
+                    'base_config_effort': config.effort, 'phase': stage['phase']})
                 stage['outgoing_request'] = capture
                 if (actual_body is None or actual_body != body
                         or digest(actual_body)!=stage['prepared_request_sha256']):

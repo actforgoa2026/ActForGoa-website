@@ -28,7 +28,7 @@ def pipeline_spec():
     """Detached export; neither callers nor nested maps can change policy."""
     return {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
             'compact_plan_bytes': COMPACT_PLAN_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 10,
+            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 11,
             'answer_workflow': ANSWER_WORKFLOW, 'plan_protocol':PLAN_PROTOCOL,
             'final_internal_protocol':FINAL_INTERNAL_PROTOCOL,
             'paragraph_protocol': PARAGRAPH_PROTOCOL, 'anchor_protocol': ANCHOR_PROTOCOL,

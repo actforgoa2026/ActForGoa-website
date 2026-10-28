@@ -76,7 +76,7 @@ def test_actual_source_history_and_historical_wire_lineage_remain_pinned(setup, 
     # Reconstruct only this authored historical fixture to audit old hashes;
     # this is not production repair or transfer of model-output acceptance.
     bodies = [json.loads(r.content) for r in transport.requests]
-    assert [b['output_config']['effort'] for b in bodies] == ['low', 'medium']
+    assert [b['output_config']['effort'] for b in bodies] == ['low', 'high']
     selected = span_draft.prepare_span_draft(request, original)
     for body, phase in zip(bodies, ('draft', 'reconstruction')):
         payload=json.loads(body['messages'][-1]['content'])
@@ -89,7 +89,8 @@ def test_actual_source_history_and_historical_wire_lineage_remain_pinned(setup, 
         body['messages'][-1]['content']=reconstruction.encoded(base).decode()
         body['system']=previous_workflow_prompt(phase,style)
         body['output_config']['format']['schema']=historical_span_schema(original.schema,style,selected.span_registry,phase=phase)
-    bodies[0]['output_config']['effort'] = 'medium'
+        # Undo the v12 final-high experiment for this historical wire audit.
+        body['output_config']['effort'] = 'medium'
     if style == 'brief':
         assert [hashlib.sha256(httpx.Request('POST', str(r.url), json=b).content).hexdigest()
                 for r, b in zip(transport.requests, bodies)] == expected_hashes
