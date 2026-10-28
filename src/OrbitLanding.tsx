@@ -23,17 +23,20 @@ export default function OrbitLanding(){
           element.getAnimations().map(animation => ({animation,
             boost: Number(animation.effect?.getTiming().duration) / 1000 * revolutions})));
       });
-    const started = performance.now();
+    let previous = performance.now();
+    let elapsed = 0;
     let frame = 0;
     const settle = (now: number) => {
-      const progress = Math.min(1, (now - started) / 3000);
-      // Matching ring/counter rates keep the photographs upright throughout.
+      if (!scene.current?.closest('.is-paused')) elapsed += now - previous;
+      previous = now;
+      const progress = Math.min(1, elapsed / 3000);
+      // Match ring/counter time exactly, keeping photographs upright throughout.
       animations.forEach(({animation, boost}) => {
-        animation.playbackRate = 1 + boost * (1 - progress) ** 2;
+        animation.currentTime = elapsed + boost * 1000 * (1 - (1 - progress) ** 3);
       });
       if (progress < 1) frame = requestAnimationFrame(settle);
     };
-    settle(started);
+    settle(previous);
     return () => { cancelAnimationFrame(frame); animations.forEach(({animation}) => { animation.playbackRate = 1; }); };
   }, []);
   const [question,setQuestion]=useState('');
