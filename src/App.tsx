@@ -50,7 +50,6 @@ import {
 import SiteHeader from "./components/arc/site-header/site-header";
 import { LanguageSwitcher, useLanguage } from "./language";
 import { translatePriority } from "./priority-translations";
-import HomeCarousel from "./HomeCarousel";
 import { RecordCard } from "./components/RecordCard";
 import { TopicIcon } from "./components/TopicIcon";
 import { TopicPage, TopicChoices } from "./TopicPage";
@@ -250,7 +249,7 @@ function Home({ records }: { records: RecordItem[] }) {
   const { language } = useLanguage();
   return (
     <main>
-      <HomeCarousel><SearchBox large /></HomeCarousel>
+      <OrbitLanding embedded />
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
           <h2 id="home-actions-heading" lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
