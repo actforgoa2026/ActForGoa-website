@@ -12,10 +12,11 @@ from .chat import (ChatRequest, PreparedAnswer, Paragraph, GroundedAnswer, citat
                    validate_answer, FRAMING_TOKEN_ALLOWANCE)
 from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_payload,
                           resolve_selector, registry_hash, original_baseline)
-from .span_draft import PIPELINE_VERSION, span_schema
-from .span_instructions import ANSWER_WORKFLOW, span_answer_instructions
+from .span_draft import span_schema
+from .span_instructions import span_answer_instructions
 from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, source_slot
-from .phase_effort import phase_effort, phase_policy_metadata, validate_pipeline_config
+from .phase_effort import (PIPELINE_VERSION, phase_effort, phase_policy_metadata, validate_pipeline_config,
+                           local_plan_adapter, validate_local_plan_adapter)
 from .evidence_plan import (PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL, COMPACT_PLAN_BYTES,
                             validate_evidence_plan, validate_plan_refs)
 from .plan_protocol import decode_plan_response
@@ -23,12 +24,13 @@ from .plan_protocol import decode_plan_response
 CORRECTION_PROMPT_BYTES = 36000
 COMPACT_DRAFT_BYTES = COMPACT_PLAN_BYTES  # Historical constant name; same immutable cap.
 PROVIDER_DEADLINE_SECONDS = 65
-PROVIDER_STAGE_SECONDS = 45
+PROVIDER_STAGE_SECONDS = 65
+ANSWER_WORKFLOW = 'single_final_full_evidence_v1'
 def pipeline_spec():
     """Detached export; neither callers nor nested maps can change policy."""
     return {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
             'compact_plan_bytes': COMPACT_PLAN_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 11,
+            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 12,
             'answer_workflow': ANSWER_WORKFLOW, 'plan_protocol':PLAN_PROTOCOL,
             'final_internal_protocol':FINAL_INTERNAL_PROTOCOL,
             'paragraph_protocol': PARAGRAPH_PROTOCOL, 'anchor_protocol': ANCHOR_PROTOCOL,
@@ -78,8 +80,16 @@ class ReconstructionPrepared:
 def prepare_reconstruction(request, original, draft):
     if not isinstance(request, ChatRequest) or request.answer_style != original.answer_style:
         raise ValueError('Reconstruction request identity differs')
-    if not original.base_instructions:
-        raise ValueError('Missing native answer instructions')
+    from .anthropic_provider import native_answer_instructions
+    if (not original.base_instructions or original.messages[0] !=
+            {'role': 'system', 'content': native_answer_instructions(original.base_instructions, original.answer_style)}):
+        raise ValueError('Legacy selection instructions differ')
+    history = original.messages[1:-1]
+    request_history = [item.model_dump() for item in request.history]
+    if history and encoded(history) != encoded(request_history[-len(history):]):
+        raise ValueError('Retained history differs from request')
+    validate_local_plan_adapter(draft)
+    original_baseline(original.messages[-1]['content'], history, original.request_scope)
     payload = json.loads(original.messages[-1]['content'])
     if payload.get('question') != request.question:
         raise ValueError('Reconstruction question differs from draft evidence')
@@ -92,6 +102,7 @@ def prepare_reconstruction(request, original, draft):
     annotated,registry=annotate_payload(payload)
     restored,actual_registry=verify_annotated_payload(annotated,payload)
     if restored!=payload or actual_registry!=registry:raise ValueError('Source span preparation differs')
+    # Validate the locally supplied compatibility value, never a model plan.
     compact=validate_evidence_plan(draft,original,registry)
     correction_payload = {**annotated, 'request_scope': scope,
                           'anchor_protocol':ANCHOR_PROTOCOL,'plan_protocol':PLAN_PROTOCOL,'evidence_plan':compact}
@@ -139,8 +150,7 @@ def reconstruction_cache_identity(original, version):
     annotated,registry=annotate_payload(json.loads(original.messages[-1]['content']))
     return {'spec': pipeline_spec(), 'request_scope': deepcopy(original.request_scope),
             'correction_instructions': reconstruction_instructions(original.base_instructions, original.answer_style),
-            'draft_schema': span_schema(original.schema,original.answer_style,registry,phase='draft'),
-            'draft_instructions':span_answer_instructions('draft',original.answer_style),
+            'local_adapter': phase_policy_metadata()['local_adapter'],
             'prepared_original':original_baseline(original.messages[-1]['content'],original.messages[1:-1],original.request_scope),
             'correction_schema': reconstruction_schema(original.schema, original.answer_style,registry),
             'span_registry_sha256':registry_hash(registry),

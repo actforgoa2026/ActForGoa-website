@@ -232,6 +232,14 @@ class PublicLimits:
         """
         if type(costs_microusd) not in (list, tuple) or len(costs_microusd) != 2:
             raise ValueError('Pair preflight requires exactly two costs')
+        return self._preflight_costs(costs_microusd, expected_day, 2)
+
+    def preflight_single(self, cost_microusd, expected_day):
+        """Read-only one-stage advice; reserve_stage alone authorizes dispatch."""
+        _validate_stage_cost(cost_microusd)
+        return self._preflight_costs([cost_microusd], expected_day, 1)
+
+    def _preflight_costs(self, costs_microusd, expected_day, required_attempts):
         for cost in costs_microusd:
             _validate_stage_cost(cost)
         total = sum(costs_microusd)
@@ -260,11 +268,11 @@ class PublicLimits:
         reason = 'allowed'
         if day != expected_day:
             reason = 'day_mismatch'
-        elif observed['day_attempts'] + 2 > self.chat_limit:
+        elif observed['day_attempts'] + required_attempts > self.chat_limit:
             reason = 'daily_limit'
         elif observed['month_reserved_microusd'] + total > self.monthly_limit:
             reason = 'monthly_limit'
-        return {'version': STAGE_PREFLIGHT_VERSION,
+        return {'version': STAGE_PREFLIGHT_VERSION if required_attempts == 2 else 'afg-single-preflight-v1',
                 'allowed': reason == 'allowed', 'reason': reason,
                 'expected_day': expected_day, 'day': day, 'month': day[:7],
-                'observed': observed, 'required_attempts': 2, 'required_cost_microusd': total}
+                'observed': observed, 'required_attempts': required_attempts, 'required_cost_microusd': total}

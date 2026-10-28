@@ -202,3 +202,36 @@ def verify_wire_binding(actual_body_utf8, baseline, expected_registry_sha256, *,
         return proof
     except (ValueError,KeyError,TypeError,IndexError,AttributeError):
         raise ValueError('Source span actual-wire binding differs') from None
+
+
+def verify_single_final_wire_binding(actual_body_utf8, baseline, expected_registry_sha256):
+    """Prove the sole actual request matches the safe original; invent no draft."""
+    try:
+        from .evidence_plan import PLAN_PROTOCOL
+        from .phase_effort import validate_local_plan_adapter
+        expected = original_baseline(baseline['payload_utf8'], baseline['retained_history'], baseline['request_scope'])
+        if encoded(baseline) != encoded(expected):raise ValueError()
+        actual = json.loads(actual_body_utf8)
+        wrapper = json.loads(actual['messages'][-1]['content'])
+        if (set(wrapper) != {'question','sources','evidence','request_scope','anchor_protocol','plan_protocol','evidence_plan'}
+                or wrapper['anchor_protocol'] != ANCHOR_PROTOCOL or wrapper['plan_protocol'] != PLAN_PROTOCOL
+                or encoded(wrapper['request_scope']) != encoded(baseline['request_scope'])
+                or encoded(actual['messages'][:-1]) != encoded(baseline['retained_history'])):raise ValueError()
+        validate_local_plan_adapter(wrapper['evidence_plan'])
+        original_bytes = baseline['payload_utf8'].encode('utf-8')
+        restored, registry = verify_annotated_payload(
+            {k:wrapper[k] for k in ('question','sources','evidence')}, json.loads(original_bytes))
+        rebuilt = encoded(restored)
+        if rebuilt != original_bytes or registry_hash(registry) != expected_registry_sha256:raise ValueError()
+        digest = lambda value: hashlib.sha256(value).hexdigest()
+        return {'actual_wire_verified':True, 'value_equality':True, 'byte_equality':True,
+                'baseline_kind':'prepared_original_payload', 'phase':'reconstruction',
+                'wire_count':1, 'plan_origin':'local_empty', 'generated_plan':False,
+                'serialization_contract':PAYLOAD_SERIALIZATION, 'original_payload_utf8_bytes':len(original_bytes),
+                'prepared_original_payload_utf8_sha256':digest(original_bytes),
+                'reconstructed_payload_utf8_sha256':digest(rebuilt),
+                'actual_request_body_sha256':digest(actual_body_utf8.encode('utf-8')),
+                'retained_history_equal':True, 'request_scope_equal':True,
+                'span_registry_sha256':registry_hash(registry), 'local_adapter_sha256':digest(encoded(wrapper['evidence_plan']))}
+    except (ValueError,KeyError,TypeError,IndexError,AttributeError):
+        raise ValueError('Single final actual-wire binding differs') from None
