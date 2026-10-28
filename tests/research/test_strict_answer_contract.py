@@ -43,6 +43,10 @@ def test_links_are_derived_only_after_validating_exact_support():
 
 def test_word_boundaries_preserve_complete_text_and_reject_overflow_without_truncating():
     wire_pattern = provider_schema(EVIDENCE)['$defs']['SupportedParagraph']['properties']['text']['pattern']
+    depth = 0
+    for char in wire_pattern:
+        depth += (char == '(') - (char == ')')
+        assert depth < 50
     for separator in [' ', '\n', '\t', '\u00a0']:
         valid = separator.join(['Word'] * 60)
         assert re.fullmatch(wire_pattern, valid)
