@@ -1,0 +1,32 @@
+[
+  {
+    "id": "legal-rti",
+    "question": "How can I submit an RTI application online in Goa, and what application fee do the saved official sources state?",
+    "answer_style": "brief",
+    "review_focus": "Check online scope, application fee and exemptions; distinguish dates and unverified current procedures."
+  },
+  {
+    "id": "legal-tcp",
+    "question": "Is TCP technical clearance the same as a building licence in Goa?",
+    "answer_style": "brief",
+    "review_focus": "Distinguish planning clearance from local-body building licence and avoid asserting unverified current procedure."
+  },
+  {
+    "id": "legal-farm",
+    "question": "How should a farmer report crop damage under the Shetkari Adhar Nidhi scheme in Goa?",
+    "answer_style": "brief",
+    "review_focus": "Preserve stated reporting deadlines, eligible circumstances, documentation and scheme version."
+  },
+  {
+    "id": "legal-dogs",
+    "question": "Can a private person relocate dogs from a school in Goa?",
+    "answer_style": "brief",
+    "review_focus": "Distinguish institutional instructions, responsible authorities and private relocation; use saved 2025 court material and limitations."
+  },
+  {
+    "id": "legal-parra",
+    "question": "What does the final January 2025 notification establish about Parra wetlands?",
+    "answer_style": "brief",
+    "review_focus": "Distinguish final notification from draft, exactly named waterbody, notified area and limits; no parcel/map inference."
+  }
+]

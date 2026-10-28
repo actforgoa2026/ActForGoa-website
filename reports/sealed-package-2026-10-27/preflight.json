@@ -1,0 +1,18 @@
+{
+  "package_id": "actforgoa-research-20261027-sealed-v1",
+  "package_path": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "source": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-restoration-candidate",
+  "accepted_outer_manifest_sha256": "2b86bf87e963fa1c2c5c6c3be894ba2c141777f5c330b0147e34c2daa2dcd095",
+  "generation": "20261027T065155-law-5bc5619b",
+  "prior_generations": [
+    "20261022T153326-3e2e65fe",
+    "20261022T155317-11b07ef4",
+    "20261022T155701-21661179"
+  ],
+  "disk_free_bytes": 169885593600,
+  "copy_method": "APFS clonefile via cp -cR; byte copies only; source not opened with Library, Zvec or SQLite",
+  "current_payload_source": "legal-package/data",
+  "history_source": "refreshed-data/.research-index/generations",
+  "source_git_commit": "c2bef796e2765d55ef767ecf7f9107661466d446",
+  "disk_free_before_copy_bytes": 170021015552
+}

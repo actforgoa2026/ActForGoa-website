@@ -1,0 +1,38 @@
+{
+  "source_commit": null,
+  "model": "claude-haiku-5-5",
+  "effort": "medium",
+  "max_output_tokens": 9000,
+  "generation": "20261027T065155-law-5bc5619b",
+  "date_utc": "2026-10-27",
+  "data_root": null,
+  "usage_root": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-usage-reconciliation/validation/.research-usage",
+  "stages": {
+    "critical": {
+      "approval_reference": null,
+      "expected_ledger": null,
+      "max_attempts": 15,
+      "packets": [
+        {"path": "tests/research/legal-chat-cases.json", "sha256": "1ee50fd40b504962015cb9d6fa5a1fb8526fabcb53d845555265a5143070d0bc", "count": 5, "partition": "regression"},
+        {"path": "tests/research/goa-chat-cases.json", "sha256": "5ad99abb3c643763bfdf0db356601c8d8cde3d6be17ea0ae32e8a304bf382939", "count": 6, "partition": "regression", "include_ids": ["climate-08", "biodiversity-03", "terrain-05", "water-04", "water-02", "scope-01"]},
+        {"path": "tests/research/goa-chat-cases.json", "sha256": "5ad99abb3c643763bfdf0db356601c8d8cde3d6be17ea0ae32e8a304bf382939", "count": 4, "partition": "abstention", "include_ids": ["abstention-01", "abstention-02", "abstention-03", "abstention-04"]}
+      ]
+    },
+    "remaining_regressions": {
+      "approval_reference": null,
+      "expected_ledger": null,
+      "max_attempts": 40,
+      "packets": [
+        {"path": "tests/research/goa-chat-cases.json", "sha256": "5ad99abb3c643763bfdf0db356601c8d8cde3d6be17ea0ae32e8a304bf382939", "count": 40, "partition": "regression", "exclude_ids": ["climate-08", "biodiversity-03", "terrain-05", "water-04", "water-02", "scope-01", "abstention-01", "abstention-02", "abstention-03", "abstention-04"]}
+      ]
+    },
+    "independent_heldout": {
+      "approval_reference": null,
+      "expected_ledger": null,
+      "max_attempts": 12,
+      "packets": [
+        {"path": "/Users/zakkrevitt/.codex/worktrees/research-passage-selection/ActForGoa/reports/passage-selection-2026-10-27/assessment-cases.json", "sha256": "7420098b89731896c4689f1b16bfb5003f41b98a0e302756b0d6de9d96c26d9f", "count": 12, "partition": "independent_heldout"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "source": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27",
+  "candidate": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-restoration-candidate",
+  "snapshot_manifest_sha256": "2b86bf87e963fa1c2c5c6c3be894ba2c141777f5c330b0147e34c2daa2dcd095",
+  "all_accepted_snapshot_entries_match": 2623,
+  "recovered_file": "legal-package/data/.research-index/generations/20261027T065155-law-5bc5619b/zvec/3/embedding.index.1.proxima",
+  "recovered_file_sha256": "4c8c86b4cf9768ef21d237201218e6b05369d2f91b92729ce7553a6c7c973185",
+  "original_snapshot_overwritten": false,
+  "candidate_opened_in_zvec": false
+}

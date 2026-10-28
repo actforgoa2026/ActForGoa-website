@@ -1,0 +1,20 @@
+{
+  "checked_at": "2026-10-27T08:24:28.563889+00:00",
+  "package": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "package_entries_verified": 1258,
+  "package_files_including_seal": 1259,
+  "seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "complete_file_and_directory_coverage": true,
+  "new_data_and_service_allowlists_match": true,
+  "all_data_entries_match_accepted_source_bytes": true,
+  "restoration_source": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-restoration-candidate",
+  "restoration_entries_verified": 2623,
+  "accepted_outer_manifest_sha256": "2b86bf87e963fa1c2c5c6c3be894ba2c141777f5c330b0147e34c2daa2dcd095",
+  "original_and_restoration_historical_manifests_unchanged": true,
+  "no_symlinks_credentials_or_usage_files": true,
+  "all_checks_after_native_child_exit": true,
+  "source_and_package_native_opens": 0,
+  "disk_free_after_bytes": 168521113600,
+  "provider_calls": 0,
+  "deployment_or_uploads": false
+}

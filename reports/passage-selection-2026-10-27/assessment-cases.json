@@ -1,0 +1,330 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "purpose": "Fresh source-reviewed assessment. These twelve questions have not been searched or scored. Freeze before final candidate assessment; never retune on this set. Four saved official documents outside the earlier seven expectation documents. Text recall only, not current law or answer entailment. Form/table questions require extraction caveats in generated answers.",
+  "cases": [
+    {
+      "id": "assessment-danger-tree",
+      "question": "In the saved Goa tree-preservation Act, when must an owner report a tree felled immediately because it posed grave danger?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "7fd7e16dc160345ecad003ea8abf59ce"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "7fd7e16dc160345ecad003ea8abf59ce",
+          "document_id": "5374dd62fd73bd8f3dac0ff4-d9b098c6e83c",
+          "document_title": "THE GOA DAMAN AND DIU PRESERVATION OF TREES ACT, 1984",
+          "source_url": "http://forest.goa.gov.in/sites/default/files/2022-06/pta.pdf",
+          "original_sha256": "5374dd62fd73bd8f3dac0ff49c35b6240865582e449dc35670fad92c2e434d9f",
+          "page": 8,
+          "start": 809,
+          "end": 1740,
+          "text_sha256": "bf07c2b2403d90a5220d5ace6e182f965ca8abf646dde423ef64a61747f4e7ed",
+          "reviewed_text": "or forest produce in any land, whether in his \nownership or occupancy or otherwise, except with the previous permission of the Tree \nOfficer: \nProvided that if the tree is not immediately felled, there would be grave danger to life \nor property or traffic, the owner of the land  may take immediate action to fell such tree \nand report the fact to the Tree Officer within twenty-four hours of such felling. \n9. Procedure for obtaining permission to fell, cut, remove or dispose of a tree.—  \n(1) Any person desiring to fell or remove or otherwise dispose of by any means a tree, \nshall make an application to the concerned Tree Officer for permission and such \napplication shall be accompanied by attested copies of the documents as may be \nprescribed in support of ownership over the land, the number and kind of trees to be cut, \ntheir girth measured at a height of 1.85 meters from ground level and the reasons \ntherefor, survey"
+        }
+      ]
+    },
+    {
+      "id": "assessment-coconut",
+      "question": "Does the saved Goa tree-preservation Act expressly include coconut trees in the definition of tree?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "9e9e793bc67c12c859596287ee4d0095"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "9e9e793bc67c12c859596287ee4d0095",
+          "document_id": "5374dd62fd73bd8f3dac0ff4-d9b098c6e83c",
+          "document_title": "THE GOA DAMAN AND DIU PRESERVATION OF TREES ACT, 1984",
+          "source_url": "http://forest.goa.gov.in/sites/default/files/2022-06/pta.pdf",
+          "original_sha256": "5374dd62fd73bd8f3dac0ff49c35b6240865582e449dc35670fad92c2e434d9f",
+          "page": 4,
+          "start": 639,
+          "end": 1465,
+          "text_sha256": "7d73f3fe5a20f1ab12854498d5c38a167180a6d0cbf703602351dd9e8ec27d83",
+          "reviewed_text": "of Goa, Daman and Diu. \nBe it enacted by the Legislative Assembly of Goa, Daman and Diu in the Thirty-fifth \nYear of the Republic of India as follows:— \nCHAPTER I \n Preliminary \n1. Short title, extent and commencement.— (1) This Act may be called the Goa, \nDaman and Diu Preservation of Trees Act, 1984. \n(2) It shall extend to the whole of the Union territory of Goa, Daman and Diu. \n(3) It shall come into force on such date as the Government may, by notification, \nappoint. \n1[1-A. Definition of the term “tree”:  Notwithstanding anything in the Goa,  \nDaman and Diu Preservation of Trees Act, 19 84 or in any other Act for the time being \nin force, the term “tree” used in this Act,  shall, besides other trees, include coconut \ntrees.] \n \n                                                 \n1 Inserted vide Amendment Act 13"
+        }
+      ]
+    },
+    {
+      "id": "assessment-planting-work",
+      "question": "Under section 13 of the saved Goa tree Act, when does preparatory planting work have to start and in which season are trees to be planted?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "b49d5856358910e02710074f28faef93"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "b49d5856358910e02710074f28faef93",
+          "document_id": "5374dd62fd73bd8f3dac0ff4-d9b098c6e83c",
+          "document_title": "THE GOA DAMAN AND DIU PRESERVATION OF TREES ACT, 1984",
+          "source_url": "http://forest.goa.gov.in/sites/default/files/2022-06/pta.pdf",
+          "original_sha256": "5374dd62fd73bd8f3dac0ff49c35b6240865582e449dc35670fad92c2e434d9f",
+          "page": 11,
+          "start": 712,
+          "end": 1685,
+          "text_sha256": "e94a815acf2a0312405fa2f83bfa925fff0a486a83ae8856002232a3bbd27626",
+          "reviewed_text": "13. Implementation of order made or dir ections given under sections 9, 10 and 11 \nand recovery of expenditure on failure to comply with them.—  (1) Every person who \nis under an obligation to plant trees under an order made under section 9 or a direction \ngiven under section 10 or section 11 shall start preparatory work within thirty days of the \ndate of receipt of the order or direction, as the case may be, and shall plant trees in \naccordance with such order or direction in the ensuing or following rainy season or \nwithin such extended time as the Tree Officer  may allow and shall provide adequate and \neffective protection to the trees that exist or are planted in the land or the area from any \ndamage. \n(2) In case of default by such person, the Tree Officer may cause trees to be planted \nand may recover the cost of plantation from such person in the prescribed manner. \n14. Adoption of trees.— Notwithstanding anything contained in this Act or in any \nother"
+        }
+      ]
+    },
+    {
+      "id": "assessment-adoption",
+      "question": "Who maintains a tree after a company or institution adopts it with written permission under the saved Goa tree Act?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "4db630f18948a7af1c125075b6830d65"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "4db630f18948a7af1c125075b6830d65",
+          "document_id": "5374dd62fd73bd8f3dac0ff4-d9b098c6e83c",
+          "document_title": "THE GOA DAMAN AND DIU PRESERVATION OF TREES ACT, 1984",
+          "source_url": "http://forest.goa.gov.in/sites/default/files/2022-06/pta.pdf",
+          "original_sha256": "5374dd62fd73bd8f3dac0ff49c35b6240865582e449dc35670fad92c2e434d9f",
+          "page": 11,
+          "start": 1523,
+          "end": 2426,
+          "text_sha256": "377d2eeb196f2b5f7f7d801012fac1c0b8ba9c5347683fbdd205771ed66a1de4",
+          "reviewed_text": "recover the cost of plantation from such person in the prescribed manner. \n14. Adoption of trees.— Notwithstanding anything contained in this Act or in any \nother law for the time being in force, the Tr ee Authority may, subject to such terms and \nconditions as it may specify in that behalf, af ter giving notice to the owner of the tree to \nshow cause, if any, as to why the tree should not be given in adoption, allow, by a written \npermission, any body corporate or institution to adopt the tree for such period as may be \nspecified in the permission and during such period, the said body corporate or institution \nshall be responsible for the maintenance and preservation of the said tree. \n15. Appeal.— (1) An appeal shall lie against the order or direction of the 5[Tree \nOfficer or the Deputy Collector, as the case may be] under sections 9, 10, 11 and 6[12 and \n12 A] to the Appellate Authority"
+        }
+      ]
+    },
+    {
+      "id": "assessment-appeal-attachments",
+      "question": "What must accompany a written appeal under section 15 of the saved Goa tree-preservation Act?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "e0014b400797f9db981acf22ad474022"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "e0014b400797f9db981acf22ad474022",
+          "document_id": "5374dd62fd73bd8f3dac0ff4-d9b098c6e83c",
+          "document_title": "THE GOA DAMAN AND DIU PRESERVATION OF TREES ACT, 1984",
+          "source_url": "http://forest.goa.gov.in/sites/default/files/2022-06/pta.pdf",
+          "original_sha256": "5374dd62fd73bd8f3dac0ff49c35b6240865582e449dc35670fad92c2e434d9f",
+          "page": 11,
+          "start": 2310,
+          "end": 3265,
+          "text_sha256": "d2358c717de5347ecfeb332cac32a30db515f38c75454fa6d3be1df5fc847d85",
+          "reviewed_text": "or the Deputy Collector, as the case may be] under sections 9, 10, 11 and 6[12 and \n12 A] to the Appellate Authority within a period of thirty days: \nProvided that an appeal may be admitted after the expiry of the said period of thirty \ndays if the appellant satisfies the Appellate Au thority that he had sufficient cause for not \npreferring the appeal within that period. \n(2) Every appeal under this section shall be made by a petition in writing and shall be \naccompanied by a copy of the order or direction appealed against and shall be \naccompanied by 7[a fee as may be prescribed by the Government from time to time.] \n(3) In disposing of an appeal, the Appellate  Authority shall follow such procedure as \nmay be prescribed: \nProvided that no appeal shall be disposed of unless the appellant has been given a \nreasonable opportunity of being heard. \n                                                 \n5 Substituted vide Amendment Act 13 of 2008. \n6"
+        }
+      ]
+    },
+    {
+      "id": "assessment-farmer-property",
+      "question": "Does the indemnity in the individual Goa Krishi Card registration form let assistance establish a right to the declared property?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "c4ab3028fd7f9ed4a24a43eb5dcb3878"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "c4ab3028fd7f9ed4a24a43eb5dcb3878",
+          "document_id": "4feaf0959f7e282012f02efd-23ae7783e3e8",
+          "document_title": "krishi card Application for individual farmer",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2020/03/krishi-card-Application-for-individual-farmer.pdf",
+          "original_sha256": "4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c",
+          "page": 2,
+          "start": 1004,
+          "end": 2129,
+          "text_sha256": "4e2cce9790b8b5e0fe1e85f091047d6ae853e197a2a6976714cb96dbbbbd07e6",
+          "reviewed_text": "ment slip             EPIC card                      Ration Card \n   Bank pass book                  Cancelled Cheque/Mandate form          Proof of Residence \n    Form I & XIV of all Land Parcel              Caste claimant to provide SC/ST certificate  \nOptional Documents to be attached: \n    Copy of Kisan Credit Card                   \n    *Supporting documents towards land holding (Kindly refer Instructions.) \nIndemnity \n \nThe request for my registration is only to avail the benefits of various developmental \nschemes of Government of Goa  and information furnished herein is true to the best of my \nknowledge and belief. \nIf any or all of the information furnished above is not tru e, I hereby state and affirm that \nany assistance availed by me, based on the above details shall not be construed or used as a \nlegal evidence or proof to establish right to the declared property. \nI indemnify the Government of Goa against any legal claims a rising out of the said \nregistration. \n  \nDate:                                                                                                     Signature of the Applicant"
+        }
+      ]
+    },
+    {
+      "id": "assessment-sale-deed",
+      "question": "Which supporting documents does the Goa individual farmer registration form list when an owner has a sale deed but their name is not on the survey records?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "1f99078eef6ec1028b8cae68602052ab"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "1f99078eef6ec1028b8cae68602052ab",
+          "document_id": "4feaf0959f7e282012f02efd-23ae7783e3e8",
+          "document_title": "krishi card Application for individual farmer",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2020/03/krishi-card-Application-for-individual-farmer.pdf",
+          "original_sha256": "4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c",
+          "page": 3,
+          "start": 3,
+          "end": 939,
+          "text_sha256": "7881752f33a8c0eb5bc58213e608283173f1df0a58c57162737385849e6dde7b",
+          "reviewed_text": "Page 3 \n \nInstructions  \nCod\ne \nConditions and Document Descriptions Required documents \n \n1. In case of Self Owned Land:   \n1A Actual owners Name reflecting on I & XIV Form I and XIV \n1B Actual owner having valid Sale deed/Gift deed but name \nnot recorded on survey records and a affidavit \nSale deed/Gift deed & affidavit \n1C Claiming ownership via 'POA'  from the actual land owner POA & affidavit \n1D Claiming ownership via Court proceedings Court judgement & affidavit \n2. In case of Inherited Land:  \n2A  legal heir of the person whose ancestors name reflects as \noccupant on I & XIV \nAffidavit  & death certificate \n2B Claiming inheritance via Succession Deed or Search report \nor Inventory proceeding \nSuccession Deed or Search \nreport or Inventory proceeding \n& affidavit \n2C Claiming inheritance via Sale deed between Ancestor and \nthe applicant \nSale deed & Affidavit  & death \ncertificate \n2D Claiming inheritance via POA or"
+        }
+      ]
+    },
+    {
+      "id": "assessment-land-holding",
+      "question": "Does the individual Goa farmer application require a separate Land Details for Farmer sheet for each holding?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "3337b10e52a79ce601c3d40192a6a58c"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "3337b10e52a79ce601c3d40192a6a58c",
+          "document_id": "4feaf0959f7e282012f02efd-23ae7783e3e8",
+          "document_title": "krishi card Application for individual farmer",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2020/03/krishi-card-Application-for-individual-farmer.pdf",
+          "original_sha256": "4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c",
+          "page": 4,
+          "start": 3,
+          "end": 608,
+          "text_sha256": "1272a4f391e71f024077935ae14132c537f8a47a8b21d058b17bde3bd1250d79",
+          "reviewed_text": "Page 4 \n \n \nGovernment of Goa \nLand Details for Farmer \n(To be filled separately for each land holding) \n \nLand Details: \n \nTaluka      :  ____________________         Village                           :____________________ \n \nSurvey No: ____________________          Sub Division No           :_____________________ \n \nArea          :_____________________sq mts. \n \n \nCrop Cultivation Details:  \n \n \nAgriculture Assets Details: \nSr No Particulars Description Subsidy Received \n1 Fencing   \n2 Support Price   \n3 Mechanization   \n4 Tractor   \n5 Pump   \n  \nSoil Nutrients Details: \nNitrogen: _______________"
+        }
+      ]
+    },
+    {
+      "id": "assessment-dairy-production",
+      "question": "What daily milk-production and sales information is requested on the dairy page of the Goa individual farmer registration form?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "dbc809475dfa0ec16541b34eaec4aae2"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "dbc809475dfa0ec16541b34eaec4aae2",
+          "document_id": "4feaf0959f7e282012f02efd-23ae7783e3e8",
+          "document_title": "krishi card Application for individual farmer",
+          "source_url": "https://www.goa.gov.in/wp-content/uploads/2020/03/krishi-card-Application-for-individual-farmer.pdf",
+          "original_sha256": "4feaf0959f7e282012f02efd8c4dbf2b1d983493227b9000ff6545fa839f097c",
+          "page": 5,
+          "start": 3,
+          "end": 629,
+          "text_sha256": "51ae178d06fa68bd40bedde814ce38c9702f634606300011ab7a0cbdcf9510a1",
+          "reviewed_text": "Page 5 \n \n \n \nGovernment of Goa \nDairy Farmer Details \n(To be filled separately for dairy) \n \nInformation of existing milch animals, if any: \nType of \nAnimal \nNumber  Microchip \nNo \nNo of Animals \nPurchased under \nKamdhenu Sudharit \nSubsidy received \n(in Rs.)  \n2012-13 Male Female \nCross Bred      \nImproved \nBuffalo \n     \nLocal/Non \nDescript. \n     \n \n Average daily milk production  \no Cow milk (In Litres)  : ___________________   \no Buffalo Milk (In Litres) : ___________________ \n Quantity of milk daily sold to Dairy Co-op. Society (Litres):_____________________ \n Name of the Dairy Co-op. Society__________________"
+        }
+      ]
+    },
+    {
+      "id": "assessment-bite-category",
+      "question": "Which existing reporting fields does the AWBI August 2025 letter say can distinguish pet-dog bites from street-dog bites?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "421b5b3d31ebc73f47134715342d7fd3"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "421b5b3d31ebc73f47134715342d7fd3",
+          "document_id": "1ab326b64c72218272d9ecd2-d743fb422534",
+          "document_title": "30 Request for Issuance of Directions to All Medical Institutions for Separate Recording of Dog Bites by Pet Dogs and Street Dogs - dated 04.08.2025 04-08-2025 Download",
+          "source_url": "https://awbi.gov.in/uploads/regulations/175438510056Advisory of seperate Dog bite Data dated 04.08.2025.pdf",
+          "original_sha256": "1ab326b64c72218272d9ecd2137acd58b2a8e6d67a2b7f845e6c611e24934e45",
+          "page": 1,
+          "start": 643,
+          "end": 1456,
+          "text_sha256": "d284d15504d9bea382ace59655beab896eaeccf0ac11b171bb1f6e9344f162c7",
+          "reviewed_text": "Letter No. 3-2/2023-24/PCA dated 14.06.2023\n2. DGHS Letter No. NRCP/55/260/03/2024/COH-NCDC dated 07\" March, 2024\n\nSir/Madam,\n\nIn continuation of our correspondence referred above regarding the standard format for reporting\ndog bite cases, the Animal Welfare Board of India (AWBI) reiterates the urgent need to distinguish\nbetween pet dog and street (stray) dog bites. The format already includes fields for capturing dog\nownership and category, thereby facilitating such classification.\n\n2 Between 2018 and early 2023, Delhi reported over 1.27 lakh dog bite cases, and Mumbai recorded\n3.53 lakh cases from 2018-2022. While some involve pet dogs, the lack of clear classification leads to all\nbeing logged as stray dog bites.\n\n5 Effective dog bite management depends on distinguishing pet-related incidents, which"
+        }
+      ]
+    },
+    {
+      "id": "assessment-bite-directions",
+      "question": "What does the AWBI letter dated 4 August 2025 ask States and medical institutions to record separately?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "2c446a3e1d71c677a88ab3de19fca306"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "2c446a3e1d71c677a88ab3de19fca306",
+          "document_id": "1ab326b64c72218272d9ecd2-d743fb422534",
+          "document_title": "30 Request for Issuance of Directions to All Medical Institutions for Separate Recording of Dog Bites by Pet Dogs and Street Dogs - dated 04.08.2025 04-08-2025 Download",
+          "source_url": "https://awbi.gov.in/uploads/regulations/175438510056Advisory of seperate Dog bite Data dated 04.08.2025.pdf",
+          "original_sha256": "1ab326b64c72218272d9ecd2137acd58b2a8e6d67a2b7f845e6c611e24934e45",
+          "page": 1,
+          "start": 2191,
+          "end": 2899,
+          "text_sha256": "715165c122ea180f739a82ff2921b2a8c5b8cf1f6df69bbc31030df5d671e72b",
+          "reviewed_text": "ownership.\n\n5. Accurate reporting will improve understanding, guide control measures for street dog\npopulations, and enhance public safety.\n\n6. In view of the above, States and medical institutions may once again be advised to record pet and\nstray dog bite cases separately. An update on the action taken in this regard may kindly be shared.\nYours sincerely,\n\nCopy for information to:\nThe Secretary, Ministry of Health and Family Welfare. Government of India.\n\nEmail: secyhfw@nic.in\n\n42 WgeReM, Peech-arT eed, G.Ta.-2, seers, welerare-121004 (eftarm)\n42 Milestone, Delhi-Agra Highway, NH-2, Ballabhgarh, Faridabad-121004 (Haryana)\nTel.: +91 129 2555700 | Email: support-awbi@gov.in | Website: www.awbi.gov.in"
+        }
+      ]
+    },
+    {
+      "id": "assessment-service-enabling-law",
+      "question": "Which Act is invoked by the notification saved on the Goa Forest Department public-grievances page to designate time-bound public services?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Separately reviewed saved source support",
+          "any_of": [
+            "3be9b227d9b2e8e80feba72bc0e928ab"
+          ]
+        }
+      ],
+      "source_review": [
+        {
+          "passage_id": "3be9b227d9b2e8e80feba72bc0e928ab",
+          "document_id": "065ad37b84bdfb0354f1c42f-663da92d89f4",
+          "document_title": "Department of Public Grievances | Forest Department",
+          "source_url": "https://forest.goa.gov.in/index.php/department-of-public-grievances",
+          "original_sha256": "065ad37b84bdfb0354f1c42f4045dacded9b23c466c72ed161d97ef69a89023d",
+          "page": 1,
+          "start": 0,
+          "end": 755,
+          "text_sha256": "6dbbf24cbe6529ee07ff608acb42365fc68aeafbf99985bfda90d055bc04a889",
+          "reviewed_text": "Notification\nN0. 1/22/ 2013-14/DPG/GPGRAMS/II1/1(2)\nIn     addition      to     the      Services      notified      vide    Notification     No.    1/22/2013- 14/DPG/GPGRAMS/III/1(2) dated 8'^ April 2015 published in the Official Gazette Series-11 No.3 dated 16'\" April 2015 , the Government of Goa in exercise of the powers conferred by sub - sections (1) and (2) of Section 4 of the Goa (Right of Citizens to Time-bound Delivery of Public Services) Act, 2013 (Goa Act 19 of 2013) (hereinafter referred to as the “said Act“), hereby specifies the service specified in column (2) of the Schedule below to be a public service for the purposes of the said Act, which shall be provided by the designated officer as specified in corresponding entry in column"
+        }
+      ]
+    }
+  ]
+}

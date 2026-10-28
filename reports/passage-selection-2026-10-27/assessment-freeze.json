@@ -1,0 +1,9 @@
+{
+  "created_at": "2026-10-27T11:05:17.578269+00:00",
+  "fixture_sha256": "7420098b89731896c4689f1b16bfb5003f41b98a0e302756b0d6de9d96c26d9f",
+  "questions": 12,
+  "documents": 4,
+  "assessment_queries_run": 0,
+  "known_development_cases": 44,
+  "scope": "Original 9 + prior 15 + prior 20 are development and regression evidence. No unseen assessment has been run yet. This is not an independent human evaluation."
+}

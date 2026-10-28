@@ -17,7 +17,7 @@ The packaged runtime includes the local embedding model; queries do not need an 
 
 ## Generated answers
 
-Source search, extracted text, original downloads and rendered PDF pages work without an OpenAI key. `/api/status` reports `chat_ready:false`, and `/api/chat` returns a clear 503 until a server-only `OPENAI_API_KEY` has been securely provisioned. Set it through the secure setup flow or the hosting secret store, never a command argument, repository file or frontend variable. `OPENAI_CHAT_MODEL` defaults to `gpt-5-mini`. Restart after adding the key and run a separate live-provider answer/citation test; fixture tests are not evidence of live chat.
+Source search, extracted text, original downloads and rendered PDF pages work without an OpenRouter key. `/api/status` reports `chat_ready:false`, and `/api/chat` returns a clear 503 until a server-only `OPENROUTER_API_KEY` has been securely provisioned. Set it through the secure setup flow or the hosting secret store, never a command argument, repository file or frontend variable. `OPENROUTER_CHAT_MODEL` defaults to `openai/gpt-5.6-luna`. Restart after adding the key and run a separate live-provider answer/citation test; fixture tests are not evidence of live chat.
 
 The daily answer limit reserves attempts before provider calls and persists across restarts. Aggregate search is limited to 120 requests per minute; search concurrency is four and answer concurrency is two. Request bodies are limited to 64 KiB. These bounds protect a small public service but are not user authentication or a distributed abuse-control system. Cross-origin browser writes are rejected; API access itself remains public.
 
@@ -26,3 +26,18 @@ The daily answer limit reserves attempts before provider calls and persists acro
 The user-authorized release publishes the indexed public-source corpus. Available source provenance and rights metadata are retained, including unknown rights; indexing does not assert ownership, legal currency, or a redistribution licence. Originals are served as attachments, and archived HTML is never trusted application HTML. PDF page numbers refer to physical pages. English OCR and extraction may contain errors; original pages remain available for checking tables and numbers. Review and update the collection as sources change.
 
 References: [Railway volumes](https://docs.railway.com/volumes), [Railway CLI deployments](https://docs.railway.com/cli/up).
+
+
+## OpenRouter activation
+
+Set server variables `RESEARCH_CHAT_PROVIDER=openrouter`, `OPENROUTER_CHAT_MODEL=openai/gpt-5.6-luna`, `RESEARCH_MONTHLY_ANSWER_BUDGET_USD=5` and `RESEARCH_DAILY_ANSWER_LIMIT=100`. Add `OPENROUTER_API_KEY` through Railway Variables; never put a key in CLI arguments. Use a dedicated OpenRouter key with its own $5 monthly limit. Provider credit-purchase fees/tax and Railway/Vercel costs are separate.
+
+For code-only updates, run `python scripts/package_research.py --service-only` and deploy the generated service directory to the explicitly selected research service. This does not read, package or replace the existing corpus/volume. Keep `/data/research/.research-usage/answer-usage.sqlite` across updates so the usage cap is not reset. Do not redeploy the reporting service.
+
+`/api/status` reports the configured provider and whether a credential exists. It does not prove a valid key, paid balance or successful inference. Run `scripts/evaluate_live_chat.py` against the actual backend and then test the frontend citation/reader flow on phone and desktop before coordinated promotion. See `RESEARCH.md` for privacy, routing, budget and evaluation details.
+
+## Direct Anthropic configuration
+
+After integration and coordinated accounting/retrieval acceptance, select `RESEARCH_CHAT_PROVIDER=anthropic` and `ANTHROPIC_CHAT_MODEL=claude-haiku-5-5`. Provision `ANTHROPIC_API_KEY` through the research service's secret store. For a key that is not workspace-scoped, also set `ANTHROPIC_WORKSPACE_ID` to the credited organization's intended workspace. Preserve `RESEARCH_MONTHLY_ANSWER_BUDGET_USD=5`, `RESEARCH_DAILY_ANSWER_LIMIT=100` and the existing aggregate usage database. Account credits do not reset application reservations. Do not copy a local environment file into the service package.
+
+The adapter uses a fixed Anthropic endpoint, standard pricing, medium effort, native JSON outputs and no automatic retry or fallback. Its request/response, pricing sources, conservative token reservation and acceptance limits are documented in [the provider contract](../../docs/research-anthropic-provider.md). Package updated runtime code separately with `--service-only` after integration and record the exact integrated source commit. Do not rebuild or modify a sealed data package for this provider change.

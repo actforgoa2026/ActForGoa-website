@@ -1,0 +1,126 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "purpose": "Offline recall of reviewed supporting passages, including survival of prompt budgeting. This is not answer acceptance or legal-currency verification.",
+  "cases": [
+    {
+      "id": "legal-rti",
+      "question": "How can I submit an RTI application online in Goa, and what application fee do the saved official sources state?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rti-fee-short",
+      "question": "What is the application fee for Goa RTI Online?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rti-non-bpl",
+      "question": "What fee does the Goa RTI applicant manual specify for a non-BPL applicant?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rti-file-and-pay",
+      "question": "How do I file an RTI request in Goa and pay the application fee?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "rti-keywords",
+      "question": "RTI online Goa application fee and submission procedure",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legal-tcp",
+      "question": "Is TCP technical clearance the same as a building licence in Goa?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Exact authority and approval mapping",
+          "any_of": [
+            "6453618429d81ad36ea31f0be7ecfe06",
+            "bb353e2814795a6bf9d081f5e87abc0d",
+            "e0ea390e4eae2675631cb10ef03d60bf"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legal-farm",
+      "question": "How should a farmer report crop damage under the Shetkari Adhar Nidhi scheme in Goa?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Revised scheme reporting destination and deadline",
+          "any_of": [
+            "49c4df829e149d7df512df066a379ae0"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legal-dogs",
+      "question": "Can a private person relocate dogs from a school in Goa?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Reviewed institutional SOP procedure and authority",
+          "any_of": [
+            "7e2890b60d2eaff0d9e31cc713895154",
+            "d42390295a29bf9be2ff42e33d5a5630"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "legal-parra",
+      "question": "What does the final January 2025 notification establish about Parra wetlands?",
+      "answer_style": "brief",
+      "required_evidence": [
+        {
+          "name": "Final Parra Lake notification and ownership provision",
+          "any_of": [
+            "64eed0b3b39365cd0a949e93c0901765"
+          ]
+        }
+      ]
+    }
+  ]
+}

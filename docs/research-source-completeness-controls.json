@@ -1,0 +1,109 @@
+{
+  "purpose": "Independent fictional review examples authored for this generic proposal. Not real legal advice, model outputs, private controls, or changes to the frozen acceptance cases. Example text is not inserted into runtime prompts.",
+  "controls": [
+    {
+      "id": "missing-legal-subject",
+      "question": "Am I exempt from the application fee, and what condition applies?",
+      "evidence": "shall be exempt from the application fee. The exemption requires a prior inspection certificate.",
+      "required": [
+        "Who qualifies for the exemption is absent from this fragment, so personal eligibility is unestablished.",
+        "The visible exemption has a prior-inspection-certificate condition."
+      ],
+      "failure": "Inventing an eligible group, then adding a caveat that the beginning is missing.",
+      "partial-evidence-control": "Do not refuse to state the visible certificate condition merely because the eligible subject is missing."
+    },
+    {
+      "id": "missing-predicate",
+      "question": "What can the licence holder do, and where do I apply?",
+      "evidence": [
+        "The holder of a Class R licence may [text ends].",
+        "Applications for Class R licences are submitted to the district clerk."
+      ],
+      "required": [
+        "The permitted activity is missing; do not invent it.",
+        "The district clerk receives applications."
+      ],
+      "failure": "Guessing a permitted activity from the licence title or refusing the separately supported application location."
+    },
+    {
+      "id": "explicit-continuation-resolves-subject",
+      "question": "What conditions apply to a temporary public stage?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "A temporary public stage is the structure governed by clause 4."
+        },
+        {
+          "id": "b",
+          "text": "That structure may remain for 48 hours after inspection approval. Its supports and design must follow Appendix D.",
+          "explicit_context_id": "a"
+        }
+      ],
+      "required": [
+        "Resolve the subject using the explicitly linked substantive context.",
+        "Keep the 48-hour limit, prior inspection approval, and supports/design obligation.",
+        "Appendix D details are not supplied."
+      ],
+      "failure": "Rejecting a supported antecedent because it crosses a passage boundary, or dropping conditions for brevity."
+    },
+    {
+      "id": "derivation-versus-receiving-identity",
+      "question": "Where was this estimate applied?",
+      "evidence": "Parameters were derived in a coastal fishery study in 2018. Those parameters were used in the present study area. The receiving location is not named in this excerpt.",
+      "required": [
+        "The receiving study area is unnamed.",
+        "The coastal fishery label and 2018 derivation date describe the derivation study; they do not identify the receiving study."
+      ],
+      "failure": "Calling the receiving area coastal or a fishery merely because the parameters originated there."
+    },
+    {
+      "id": "relevant-possible-abstract-warning",
+      "question": "What result is reported, and can this excerpt verify the full method?",
+      "evidence": {
+        "text": "The 2023 pilot reported a reduction in processing time.",
+        "warning": "Webpage extraction may contain only an abstract or index; full article access is not established."
+      },
+      "required": [
+        "Attribute the reported result to the available webpage excerpt and keep 2023.",
+        "The excerpt does not establish full-method access or verification.",
+        "Treat abstract/index status as possible, not confirmed."
+      ],
+      "failure": "Claiming the full paper was reviewed, merely naming an excerpt without stating the relevant access uncertainty, calling the page definitely an abstract, or treating the visible reported result as unsupported solely because of the warning."
+    },
+    {
+      "id": "irrelevant-warning-is-not-boilerplate",
+      "question": "Which office accepts licence applications?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The District Licensing Desk accepts licence applications.",
+          "warning": ""
+        },
+        {
+          "id": "b",
+          "text": "Archive index for historical meeting notes.",
+          "warning": "The webpage may be an index only."
+        }
+      ],
+      "required": [
+        "Answer from a and cite it."
+      ],
+      "failure": "Adding the unrelated warning from b or refusing the supported answer."
+    },
+    {
+      "id": "concise-readable-attribution",
+      "question": "Briefly, what must I do before installing the canopy?",
+      "evidence": {
+        "internal_source_id": "source-2",
+        "name": "District Canopy Handbook",
+        "text": "Before installation, obtain written approval from the building office and an inspection certificate. Supports and design must follow Appendix K. Appendix K is not reproduced here."
+      },
+      "required": [
+        "Keep prior written approval and the inspection certificate, both supports/design duties, and missing Appendix K details within the existing 80-word brief limit.",
+        "Use the handbook name if attribution is needed, with citations carrying the reference."
+      ],
+      "failure": "Printing Source-2 in prose, dropping a condition to shorten, inventing Appendix K details, or mechanically truncating the answer."
+    }
+  ],
+  "revision": 2
+}

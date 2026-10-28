@@ -1,0 +1,809 @@
+{
+  "generation": "20261027T065155-law-5bc5619b",
+  "provider_calls": 0,
+  "cases": [
+    {
+      "id": "legal-rti",
+      "question": "How can I submit an RTI application online in Goa, and what application fee do the saved official sources state?",
+      "seconds": 1.122,
+      "passed": false,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ],
+          "retrieved": false,
+          "in_model_prompt": false
+        }
+      ],
+      "results": [
+        {
+          "id": "5164d956688e8351a54a4a48c5c59253",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "6183710959614cd2c57392d1c3a98837",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "2c654db7ba1725a4e2e916c3abf43de1",
+          "title": "Environment and Pollution Laws updated in March 2025",
+          "page": 192,
+          "in_model_prompt": true
+        },
+        {
+          "id": "3ff91ad9b3fe76d360034f758fb24e04",
+          "title": "Goa RTI Online applicant manual",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "851be322a18e43da647ca5bbbe31894b",
+          "title": "Environment and Pollution Laws updated in March 2025",
+          "page": 191,
+          "in_model_prompt": true
+        },
+        {
+          "id": "262d4ddf089ce3304fb165a8b5e4e779",
+          "title": "Goa RTI Online applicant manual",
+          "page": 18,
+          "in_model_prompt": true
+        },
+        {
+          "id": "d621bd1ba0734d64ec294ea425f51735",
+          "title": "Revised Instructions to Candidates Towards Filling Up Various Posts in Forest Department",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "6baf2a6b221ee0b15a3389ba6aff1055",
+          "title": "Automatic Water Level Monitoring",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "7a9d18915cf2bc619209caf54741e930",
+          "title": "Water Resources Department",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "7125b2b0c488aa5c8b759e7140a8085a",
+          "title": "5. Compendium of gazette notifications on environmental impact assessment pdf",
+          "page": 258,
+          "in_model_prompt": false
+        }
+      ]
+    },
+    {
+      "id": "rti-fee-short",
+      "question": "What is the application fee for Goa RTI Online?",
+      "seconds": 0.0532,
+      "passed": false,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ],
+          "retrieved": false,
+          "in_model_prompt": false
+        }
+      ],
+      "results": [
+        {
+          "id": "5164d956688e8351a54a4a48c5c59253",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "49ff41ddc06f36676bc275d817b1dc14",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "3ff91ad9b3fe76d360034f758fb24e04",
+          "title": "Goa RTI Online applicant manual",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "262d4ddf089ce3304fb165a8b5e4e779",
+          "title": "Goa RTI Online applicant manual",
+          "page": 18,
+          "in_model_prompt": true
+        },
+        {
+          "id": "9306790c5c53f27ea915c7cd1564a065",
+          "title": "ICARGOA",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "d621bd1ba0734d64ec294ea425f51735",
+          "title": "Revised Instructions to Candidates Towards Filling Up Various Posts in Forest Department",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f74517a4bc598700656e0b3b0c3cd416",
+          "title": "Air Preventionand Control of Pollution Rules 1989",
+          "page": 41,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f97bbcbb90d175c13d7e93235da81504",
+          "title": "Revised Instructions to Candidates Towards Filling Up Various Posts in Forest Department",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "0a9129e88b73743c0e763746796eb039",
+          "title": "Goa Agriculture corrected citizen charter",
+          "page": 39,
+          "in_model_prompt": false
+        },
+        {
+          "id": "7a9d18915cf2bc619209caf54741e930",
+          "title": "Water Resources Department",
+          "page": 1,
+          "in_model_prompt": false
+        }
+      ]
+    },
+    {
+      "id": "rti-non-bpl",
+      "question": "What fee does the Goa RTI applicant manual specify for a non-BPL applicant?",
+      "seconds": 0.1287,
+      "passed": false,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ],
+          "retrieved": false,
+          "in_model_prompt": false
+        }
+      ],
+      "results": [
+        {
+          "id": "6beb1ebe2e03b602bc1184416cde6681",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "5164d956688e8351a54a4a48c5c59253",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "3ff91ad9b3fe76d360034f758fb24e04",
+          "title": "Goa RTI Online applicant manual",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "55a7990613ad217c9d5b6b2a5f0f355c",
+          "title": "Goa RTI Online applicant manual",
+          "page": 6,
+          "in_model_prompt": true
+        },
+        {
+          "id": "9306790c5c53f27ea915c7cd1564a065",
+          "title": "ICARGOA",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "b9c13bd691cf3ad6884de492b7bcfda1",
+          "title": "Right to Information Act, 2005 and Goa state rules: Manual of Goa Laws compilation",
+          "page": 10,
+          "in_model_prompt": true
+        },
+        {
+          "id": "bfd7982a1e86f6420a1af14ae5c1a95e",
+          "title": "Goa Agricultural Produce Marketing (Development and Regulation) Act and Rules",
+          "page": 101,
+          "in_model_prompt": true
+        },
+        {
+          "id": "ac75e234d6696239f4e085d05509b831",
+          "title": "RTI",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "439c5c8432d8c0acaa078f2a9cdc2bff",
+          "title": "RTI",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "dcd94c6f75f82c2ac5527c39a5abc981",
+          "title": "Manual of Goa Laws (Vol. II)",
+          "page": 119,
+          "in_model_prompt": true
+        }
+      ]
+    },
+    {
+      "id": "rti-file-and-pay",
+      "question": "How do I file an RTI request in Goa and pay the application fee?",
+      "seconds": 0.0513,
+      "passed": false,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ],
+          "retrieved": false,
+          "in_model_prompt": false
+        }
+      ],
+      "results": [
+        {
+          "id": "6beb1ebe2e03b602bc1184416cde6681",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "49ff41ddc06f36676bc275d817b1dc14",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "af9c5bf8e4f529af7b04eb9ef034cb62",
+          "title": "Goa RTI Online applicant manual",
+          "page": 5,
+          "in_model_prompt": true
+        },
+        {
+          "id": "9306790c5c53f27ea915c7cd1564a065",
+          "title": "ICARGOA",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "262d4ddf089ce3304fb165a8b5e4e779",
+          "title": "Goa RTI Online applicant manual",
+          "page": 18,
+          "in_model_prompt": true
+        },
+        {
+          "id": "a3ae5b40a8bc862b64ccf5e17664d2ad",
+          "title": "Goa Economic Survey 2025-26",
+          "page": 271,
+          "in_model_prompt": true
+        },
+        {
+          "id": "c00b39754ef7a7c496efc8d314f1d3cb",
+          "title": "Air Prevention and Control of Pollution Amendment Rules 2011",
+          "page": 65,
+          "in_model_prompt": true
+        },
+        {
+          "id": "750629cbc24b2573fb536d033bc8446b",
+          "title": "Bye-Laws Of \u2018\u2019The Goa Agricultural Marketing Board\u2019\u2019",
+          "page": 21,
+          "in_model_prompt": true
+        },
+        {
+          "id": "5986cc06defc70c3cab1d98c3654f84a",
+          "title": "Goa Restrictions on Transfer of Agricultural Land Rules, 2023",
+          "page": 17,
+          "in_model_prompt": false
+        },
+        {
+          "id": "5a7a64359cb6cf237afe845f35af41e5",
+          "title": "Citizens Charter",
+          "page": 22,
+          "in_model_prompt": false
+        }
+      ]
+    },
+    {
+      "id": "rti-keywords",
+      "question": "RTI online Goa application fee and submission procedure",
+      "seconds": 0.0394,
+      "passed": false,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Non-BPL application fee in manual page 7",
+          "any_of": [
+            "e5d0e7777a79a19cf17cced54e173507"
+          ],
+          "retrieved": false,
+          "in_model_prompt": false
+        }
+      ],
+      "results": [
+        {
+          "id": "49ff41ddc06f36676bc275d817b1dc14",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "013bdbcbff32c3f714db3f21f9520f15",
+          "title": "Revised Instructions to Candidates Towards Filling Up Various Posts in Forest Department",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "5164d956688e8351a54a4a48c5c59253",
+          "title": "Goa RTI Online FAQ",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "60a3a240f3310b21032050aed92d5497",
+          "title": "Water Monitoring",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "414d2c2323b7448575081453283013d7",
+          "title": "Environment and Pollution Laws updated in March 2025",
+          "page": 571,
+          "in_model_prompt": true
+        },
+        {
+          "id": "a0a05293b558858e7bce86382a76ddcb",
+          "title": "5. Compendium of gazette notifications on environmental impact assessment pdf",
+          "page": 258,
+          "in_model_prompt": true
+        },
+        {
+          "id": "7125b2b0c488aa5c8b759e7140a8085a",
+          "title": "5. Compendium of gazette notifications on environmental impact assessment pdf",
+          "page": 258,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f97bbcbb90d175c13d7e93235da81504",
+          "title": "Revised Instructions to Candidates Towards Filling Up Various Posts in Forest Department",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "3ff91ad9b3fe76d360034f758fb24e04",
+          "title": "Goa RTI Online applicant manual",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "262d4ddf089ce3304fb165a8b5e4e779",
+          "title": "Goa RTI Online applicant manual",
+          "page": 18,
+          "in_model_prompt": false
+        }
+      ]
+    },
+    {
+      "id": "legal-tcp",
+      "question": "Is TCP technical clearance the same as a building licence in Goa?",
+      "seconds": 0.2383,
+      "passed": true,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Exact authority and approval mapping",
+          "any_of": [
+            "6453618429d81ad36ea31f0be7ecfe06",
+            "bb353e2814795a6bf9d081f5e87abc0d",
+            "e0ea390e4eae2675631cb10ef03d60bf"
+          ],
+          "retrieved": true,
+          "in_model_prompt": true
+        }
+      ],
+      "results": [
+        {
+          "id": "02ff70fcbbecb3d1bddd43d524244cd0",
+          "title": "Goa Land Development and Building Construction Regulations, 2010",
+          "page": 132,
+          "in_model_prompt": true
+        },
+        {
+          "id": "7f670746f5d43b197a73611ac8a5737c",
+          "title": "Investment Promotion Board land and development approval guidance",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "d0afba61a78bf1e1b5827ce778c5f1be",
+          "title": "Goa Land Development and Building Construction Regulations, 2010",
+          "page": 40,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f5d40f41be5ae4e51b0fbfd766781df8",
+          "title": "Guideline for Notary Architects",
+          "page": 3,
+          "in_model_prompt": true
+        },
+        {
+          "id": "379e4423995aea1c176da382a3d51562",
+          "title": "The Goa (Regulation of Land Development and Building Construction) Act, 2008 (amendments upto September 2018)",
+          "page": 60,
+          "in_model_prompt": true
+        },
+        {
+          "id": "6453618429d81ad36ea31f0be7ecfe06",
+          "title": "Procedure-for-Technical-Clearance.pdf",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "bb353e2814795a6bf9d081f5e87abc0d",
+          "title": "The Goa (Regulation of Land Development and Building Construction) Act, 2008 and the Goa Land Development and Building Construction Regulations, 2010",
+          "page": 144,
+          "in_model_prompt": true
+        },
+        {
+          "id": "076ca158360e8f572a0f3bc621648b4b",
+          "title": "Occupancy-Certificate-by-Municipal-Council.pdf",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "10d0844a6ac6fb451fcf9e9b7c5eb0ff",
+          "title": "The Goa (Regulation of Land Development and Building Construction) Act, 2008 (amendments upto September 2018)",
+          "page": 152,
+          "in_model_prompt": true
+        },
+        {
+          "id": "82e43e5c1e9647f7e3bc116c75690fa9",
+          "title": "Procedure-for-Technical-Clearance.pdf",
+          "page": 9,
+          "in_model_prompt": true
+        }
+      ]
+    },
+    {
+      "id": "legal-farm",
+      "question": "How should a farmer report crop damage under the Shetkari Adhar Nidhi scheme in Goa?",
+      "seconds": 0.1368,
+      "passed": true,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Revised scheme reporting destination and deadline",
+          "any_of": [
+            "49c4df829e149d7df512df066a379ae0"
+          ],
+          "retrieved": true,
+          "in_model_prompt": true
+        }
+      ],
+      "results": [
+        {
+          "id": "8323c723fd6e36fa5da97b1a9d23911b",
+          "title": "Revised Shetkari Adhar Nidhi scheme",
+          "page": 2,
+          "in_model_prompt": true
+        },
+        {
+          "id": "491bdce0608f55429949dadfbf6b11c1",
+          "title": "Goa Assembly answer on Shetkari Adhar Nidhi, 31 July 2023",
+          "page": 1,
+          "in_model_prompt": true
+        },
+        {
+          "id": "49c4df829e149d7df512df066a379ae0",
+          "title": "Revised Shetkari Adhar Nidhi scheme",
+          "page": 4,
+          "in_model_prompt": true
+        },
+        {
+          "id": "8377ff815c037ce03bdf224ce50e4f67",
+          "title": "Goa climate action plan",
+          "page": 60,
+          "in_model_prompt": true
+        },
+        {
+          "id": "92e8266aed4fbce4d1c0c41f4b60a3b2",
+          "title": "Goa Economic Survey 2025-26",
+          "page": 70,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f6f8a82d2bc88521a7c69528457b2b5c",
+          "title": "Goa State Biodiversity Strategy & Action Plan (GSBSAP) draft \u2014 open for public input and suggestions (PDF, 58.2 MB)",
+          "page": 215,
+          "in_model_prompt": false
+        },
+        {
+          "id": "ee452c009cee8d40e5c6a5e495b9b315",
+          "title": "Goa Economic Survey 2025-26",
+          "page": 70,
+          "in_model_prompt": false
+        },
+        {
+          "id": "11987b366ad02ad34bd3ff8ef4f46bc1",
+          "title": "Goa Agriculture corrected citizen charter",
+          "page": 31,
+          "in_model_prompt": false
+        },
+        {
+          "id": "902c612dfe57f840d165b87a2ee5aeeb",
+          "title": "Goa Agriculture Minister statement to the Assembly, 9 March 2026",
+          "page": 1,
+          "in_model_prompt": false
+        },
+        {
+          "id": "cbbc9709eaa12242ee00e220f4f32a25",
+          "title": "Goa Assembly answer on Shetkari Adhar Nidhi, 31 July 2023",
+          "page": 1,
+          "in_model_prompt": false
+        }
+      ]
+    },
+    {
+      "id": "legal-dogs",
+      "question": "Can a private person relocate dogs from a school in Goa?",
+      "seconds": 0.0497,
+      "passed": true,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Reviewed institutional SOP procedure and authority",
+          "any_of": [
+            "7e2890b60d2eaff0d9e31cc713895154",
+            "d42390295a29bf9be2ff42e33d5a5630"
+          ],
+          "retrieved": true,
+          "in_model_prompt": true
+        }
+      ],
+      "results": [
+        {
+          "id": "7e2890b60d2eaff0d9e31cc713895154",
+          "title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "page": 5,
+          "in_model_prompt": true
+        },
+        {
+          "id": "0ed27aeae2483ea6a1b76502d6fe1f15",
+          "title": "Pollution Control Acts, Rules & Notifications Issued Thereunder \u2013 CPCB \u2013 April 2021",
+          "page": 999,
+          "in_model_prompt": true
+        },
+        {
+          "id": "4d613c3f2f49c8925c767a0e9e4af770",
+          "title": "98 Advisory to identify sufficient number of feeding spots for stray dogs in every district and to properly implement the (AWBI Revised Guidelines on Pet dogs and street dogs)  dated 03.03.2021 03-03-2021 Download",
+          "page": 2,
+          "in_model_prompt": true
+        },
+        {
+          "id": "d42390295a29bf9be2ff42e33d5a5630",
+          "title": "AWBI institutional animal-management SOP, 27 November 2025",
+          "page": 5,
+          "in_model_prompt": true
+        },
+        {
+          "id": "7133668621f02ca4ba2657e1f8988b99",
+          "title": "2 Revised Module cum SOP for Implementation of Animal Birth Control Programme dated 27.02.2025 - Download",
+          "page": 124,
+          "in_model_prompt": true
+        },
+        {
+          "id": "59de3079dc3c20f10661fbe84c0a3c57",
+          "title": "Goa Municipalities Act 1968",
+          "page": 8,
+          "in_model_prompt": true
+        },
+        {
+          "id": "58888ffdf692037c719e9113ba43be4a",
+          "title": "Goa Agricultural Produce and Livestock Marketing (Promotion and Facilitation) Act, 2007 \u2013 Updated",
+          "page": 8,
+          "in_model_prompt": true
+        },
+        {
+          "id": "716eed9ad084ec301d504f7d47c10f22",
+          "title": "Annexure II- all goa student photography competition 2023",
+          "page": 2,
+          "in_model_prompt": true
+        },
+        {
+          "id": "b3fd9e16a039f6217f870401aac24dac",
+          "title": "8 The Prevention of Cruelty to Animals (Dog Breeding and Marketing Rules) Rules, 2017 - Download",
+          "page": 17,
+          "in_model_prompt": true
+        },
+        {
+          "id": "cd8f41421d293f4e01ec53d483735eb6",
+          "title": "155 AWBI's letter to DGP, Kerala and reply from DGP, Kerala regarding illegal killing of stray dogs in Kerala dated 24.09.2015 24-09-2015 Download",
+          "page": 2,
+          "in_model_prompt": true
+        }
+      ]
+    },
+    {
+      "id": "legal-parra",
+      "question": "What does the final January 2025 notification establish about Parra wetlands?",
+      "seconds": 0.0749,
+      "passed": true,
+      "passage_integrity": true,
+      "required_evidence": [
+        {
+          "name": "Final Parra Lake notification and ownership provision",
+          "any_of": [
+            "64eed0b3b39365cd0a949e93c0901765"
+          ],
+          "retrieved": true,
+          "in_model_prompt": true
+        }
+      ],
+      "results": [
+        {
+          "id": "64eed0b3b39365cd0a949e93c0901765",
+          "title": "Ten final Goa wetland notifications, Gazette 9 January 2025",
+          "page": 35,
+          "in_model_prompt": true
+        },
+        {
+          "id": "074aad971c5672387db70ac6c9b642f5",
+          "title": "Ten final Goa wetland notifications, Gazette 9 January 2025",
+          "page": 34,
+          "in_model_prompt": true
+        },
+        {
+          "id": "73eade44b4123c987aa2b6a6a4acf9b4",
+          "title": "Annual Report 2024\u201325 (PDF, 11.2 MB)",
+          "page": 29,
+          "in_model_prompt": true
+        },
+        {
+          "id": "9c2b76a6f401ac6469f7457bb9aab365",
+          "title": "Draft wetland notifications 2023",
+          "page": 2,
+          "in_model_prompt": true
+        },
+        {
+          "id": "6b2b25206f2ea71925e2e7991a6033b6",
+          "title": "Draft wetland notifications 2023",
+          "page": 69,
+          "in_model_prompt": true
+        },
+        {
+          "id": "347b3c695fbd26e5f38e24f7cbfdd190",
+          "title": "Pollution Control Acts, Rules & Notifications Issued Thereunder \u2013 CPCB \u2013 April 2021",
+          "page": 1134,
+          "in_model_prompt": true
+        },
+        {
+          "id": "60fc73d2517ecf5e1ac0997922299806",
+          "title": "Notification- Goa State Wetland Authority (GSWA) Proposes to Issue in Exercise of the Powers Conferred Under Rule 7 of the Wetlands (Conservation and Management) Rules, 2017.",
+          "page": 2,
+          "in_model_prompt": true
+        },
+        {
+          "id": "f96f95853a3da5314ec9957c2d8560f0",
+          "title": "Notification- Goa State Wetland Authority (GSWA) Proposes to Issue in Exercise of the Powers Conferred Under Rule 7 of the Wetlands (Conservation and Management) Rules, 2017.",
+          "page": 25,
+          "in_model_prompt": true
+        },
+        {
+          "id": "02424cc95bef765085611a010944afcf",
+          "title": "Pollution Control Acts, Rules & Notifications Issued Thereunder \u2013 CPCB \u2013 April 2021",
+          "page": 1127,
+          "in_model_prompt": true
+        },
+        {
+          "id": "85880cdadf337a553f011dbb2188cbe4",
+          "title": "Draft Notification Of Bondvol Lake Under Goa State Wetland Authority",
+          "page": 4,
+          "in_model_prompt": false
+        }
+      ]
+    }
+  ],
+  "smoke": [
+    {
+      "query": "How do khazans manage saline water with sluice gates?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "How do laterite plateaus supply groundwater and springs?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What is Goa State Water Policy 2021?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What does the climate action plan say about rainfall and flooding?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What are Goa monsoon rainfall trends?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What is the Mhadei Mandovi river basin?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What are the habitats of Cnemaspis goaensis?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What is the bird diversity of Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What are threats to sacred groves in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "Where do olive ridley turtles nest in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What causes forest fires in Goa?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What are the impacts of mining on groundwater?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "How is water quality monitored by GSPCB?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What does Goa agriculture policy say about farming?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What is the pre-monsoon groundwater level in Goa in 2025?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    },
+    {
+      "query": "What is Goa forest cover in the India State of Forest Report?",
+      "expected_term_in_top5": true,
+      "passage_integrity": true
+    }
+  ],
+  "summary": {
+    "evidence_cases_passed": 4,
+    "evidence_cases_total": 9,
+    "smoke_passed": 16,
+    "smoke_total": 16
+  },
+  "limits": "Checks recall of reviewed evidence and exact passage slices, including prompt budgeting. A failure may indicate another valid supporting passage needs review. Passing does not establish answer entailment, current law or live acceptance. Original checksums are not repeated."
+}

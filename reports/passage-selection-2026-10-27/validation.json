@@ -1,0 +1,22 @@
+{
+  "candidate_commit": "6fea94e0f22bf7f2646799d1e0af3e048f15d361",
+  "backend_tests_passed": 149,
+  "warnings": "Five existing PyMuPDF/SWIG deprecations.",
+  "visual_changes": false,
+  "provider_calls": 0,
+  "genuine_usage_operations": 0,
+  "runtime_models_added": [],
+  "dependency_added": "snowballstemmer==3.0.1",
+  "environment": "Existing pinned research environment plus isolated target install of snowballstemmer; ecology environment unchanged. A fresh dependency installation attempt timed out on PyPI jiter download and was not used for validation.",
+  "local_timing": {
+    "baseline_seconds": {
+      "median_seconds": 0.049040833953768015,
+      "p95_seconds": 0.23867933405563235
+    },
+    "candidate_seconds": {
+      "median_seconds": 0.09655866608954966,
+      "p95_seconds": 0.1672252919524908
+    }
+  },
+  "timing_limits": "One paired sequential local run, first sample excluded; not randomized or a Railway benchmark."
+}

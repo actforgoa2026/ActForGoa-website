@@ -1,0 +1,556 @@
+{
+  "scope": "Iterative development on the known 44 cases and 16 smoke queries only. These are not independent assessments. Preliminary partial cross-encoder output was overwritten by its complete 60-case scoring before final freeze. No variant other than the hash-frozen runtime is used in the assessment.",
+  "variants": [
+    {
+      "name": "anchor_focus",
+      "sha256": "d92066617188c25b99dbaa88933b91d646d4cc0e1976e18112b9e488c9dc762d",
+      "evaluated_cases": 60,
+      "passed": 44,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-2",
+        "held-fee-4",
+        "held-fee-5",
+        "held-bpl-submission",
+        "held-farm",
+        "held-dogs",
+        "frozen-appeal-status",
+        "frozen-farm-card",
+        "frozen-farm-disbursement",
+        "frozen-licensing-bodies",
+        "frozen-planning-forms"
+      ]
+    },
+    {
+      "name": "anchor_mixed",
+      "sha256": "8337e8d42138310a41ea0cb1188eb69a08a0dbf427561f7d437ae90da7787d70",
+      "evaluated_cases": 60,
+      "passed": 46,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-2",
+        "held-fee-4",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs",
+        "frozen-appeal-status",
+        "frozen-farm-card",
+        "frozen-farm-report",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "context",
+      "sha256": "d53ec2b5478b712127d1d428b77c3cad93887cfbc1ccc69146152ba22dff59d3",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-5",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "context_novelty",
+      "sha256": "4d0a3722937d7ef427a8dc2598310d9fa110b671a2c4b5ef88a57f448af97321",
+      "evaluated_cases": 60,
+      "passed": 55,
+      "failures": [
+        "rti-keywords",
+        "held-fee-1",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "cross-allmax",
+      "sha256": "65222fbea3ba1367829420826117681a2077ccff7adf56b1941c5a553e448c55",
+      "evaluated_cases": 60,
+      "passed": 50,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-2",
+        "held-fee-5",
+        "held-tcp",
+        "held-farm",
+        "held-dogs"
+      ]
+    },
+    {
+      "name": "cross-anchor_cross",
+      "sha256": "4713694aa6b11b89bce3605dac4c50e78756c068f2c5e899ef5b8c4799983bfb",
+      "evaluated_cases": 60,
+      "passed": 50,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "held-fee-2",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs"
+      ]
+    },
+    {
+      "name": "cross-fused",
+      "sha256": "3662bcab9380b1beb3282e4b38815a8db5aba81badeca367aedf544ebde17241",
+      "evaluated_cases": 60,
+      "passed": 51,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "held-fee-2",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "cross-shortmax",
+      "sha256": "e42ea81e6d94d2db46d9ea121ce05fcfa82d1c7c6a61d52fbd2f9729bdbfb64d",
+      "evaluated_cases": 60,
+      "passed": 49,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-2",
+        "held-fee-5",
+        "held-tcp",
+        "held-farm",
+        "held-dogs",
+        "frozen-wetland-rights"
+      ]
+    },
+    {
+      "name": "cross-whole",
+      "sha256": "e115254d9ac8320591417250e9b9eab239716340cd123675ce60bf30d8a28921",
+      "evaluated_cases": 60,
+      "passed": 51,
+      "failures": [
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "held-fee-2",
+        "held-fee-5",
+        "held-tcp",
+        "held-farm",
+        "held-dogs",
+        "frozen-farm-report"
+      ]
+    },
+    {
+      "name": "doc_focus",
+      "sha256": "2e47cb25e9e1c7ca7565073396e97c21706526ea5602162e5e9ab433b35f6e0e",
+      "evaluated_cases": 60,
+      "passed": 44,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-2",
+        "held-fee-4",
+        "held-fee-5",
+        "held-bpl-submission",
+        "held-farm",
+        "held-dogs",
+        "frozen-farm-card",
+        "frozen-licensing-bodies",
+        "frozen-planning-forms"
+      ]
+    },
+    {
+      "name": "docfocus",
+      "sha256": "fef7a44f46251ccec8709cc9c1299a3e816c39d30221862214930393f538490c",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-2",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "docnov",
+      "sha256": "85be5e2e8fb9457455bacf70094f90a4c6545ccb1e42847942f62c0a55ff97b7",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "held-fee-2",
+        "held-fee-3",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "docpair",
+      "sha256": "325135ed361384c3d931a28adaca5e83e07ed668052469ff0b3908e4e65740cb",
+      "evaluated_cases": 60,
+      "passed": 55,
+      "failures": [
+        "legal-tcp",
+        "held-fee-2",
+        "held-request-complete",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "field_anchor_novelty",
+      "sha256": "0253a98bb45a273775a17d276a348b145e73c9459adb71b52f2777aef6dbbea6",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "held-fee-2",
+        "held-fee-3",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "field_focuslex",
+      "sha256": "b229a1384883045e0414d5a6d67e47684228b370dd338d14e875dc339964cbad",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-2",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "field_novelty",
+      "sha256": "029c0b152de954f279134b9720c21c8b92d7c9dbb57f9480a933d1feaf0c9bde",
+      "evaluated_cases": 60,
+      "passed": 50,
+      "failures": [
+        "legal-rti",
+        "legal-farm",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-3",
+        "held-payment-verification",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "focus",
+      "sha256": "e6883266fc957a43addac6ff36f171cd650a318e01ca0b0755991eee7ca291dd",
+      "evaluated_cases": 60,
+      "passed": 40,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-2",
+        "held-fee-4",
+        "held-fee-5",
+        "held-bpl-submission",
+        "held-farm",
+        "held-dogs",
+        "frozen-appeal-status",
+        "frozen-login",
+        "frozen-farm-card",
+        "frozen-farm-report",
+        "frozen-farm-disbursement",
+        "frozen-licensing-bodies",
+        "frozen-planning-forms"
+      ]
+    },
+    {
+      "name": "focuslex",
+      "sha256": "952fa7cf6a77aa5d7e639fcb23e2007c4339d50b84a6415c404083cd43a476a6",
+      "evaluated_cases": 60,
+      "passed": 51,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-farm",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-5",
+        "held-farm",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "full",
+      "sha256": "240affda6f2296e29a4b795525da60cfd92efec86bca428fe23b4b1758ef24e4",
+      "evaluated_cases": 60,
+      "passed": 36,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-non-bpl",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-tcp",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-3",
+        "held-fee-4",
+        "held-fee-5",
+        "held-tcp",
+        "held-farm",
+        "held-dogs",
+        "frozen-registration",
+        "frozen-appeal-status",
+        "frozen-farm-card",
+        "frozen-farm-report",
+        "frozen-food-waste",
+        "frozen-designated-shelter",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "interleaved_pair",
+      "sha256": "384b72ef7ec1dc3a83374a2861134879d0de7716e9a8ffb777e42f3aaf21bd54",
+      "evaluated_cases": 60,
+      "passed": 51,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "legal-tcp",
+        "legal-farm",
+        "legal-dogs",
+        "held-fee-2",
+        "held-fee-5",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "mixed",
+      "sha256": "21d91a80d641d88cbec4266e89eb4e111b0d57ad66f1eed5145be56724133290",
+      "evaluated_cases": 60,
+      "passed": 42,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "legal-farm",
+        "legal-dogs",
+        "legal-parra",
+        "held-fee-2",
+        "held-fee-4",
+        "held-fee-5",
+        "held-bpl-submission",
+        "held-tcp",
+        "held-farm",
+        "held-dogs",
+        "frozen-appeal-status",
+        "frozen-farm-card",
+        "frozen-farm-report",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "novelty",
+      "sha256": "686d06a8fc410afa81d4c96966cab3f109c1d0d86c19031009bed186f1a82c63",
+      "evaluated_cases": 60,
+      "passed": 51,
+      "failures": [
+        "legal-rti",
+        "rti-keywords",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-3",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "passage_pair",
+      "sha256": "d81a049e91c1430d02471675507cd580677bcbfeb54514908e5702a935dee363",
+      "evaluated_cases": 60,
+      "passed": 50,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-5",
+        "held-payment-verification",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "regularized_baseline_slots",
+      "sha256": "9ad600340d395681defdecb212102731b3cd4b6ad97d56944e87f94e507f5ffa",
+      "evaluated_cases": 60,
+      "passed": 55,
+      "failures": [
+        "rti-keywords",
+        "held-fee-1",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "regularized_field_slots",
+      "sha256": "3564c3e2ec4b5fc7527b5b4c58623a83ae76a82b33c6fa63939bbc430156b017",
+      "evaluated_cases": 60,
+      "passed": 55,
+      "failures": [
+        "legal-tcp",
+        "legal-dogs",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "regularized_pair",
+      "sha256": "848e5811fe21b684a57e1ed2c4d2aa5ee321b312ed770df461b765edd6e7e30c",
+      "evaluated_cases": 60,
+      "passed": 56,
+      "failures": [
+        "legal-tcp",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "scoped_anchor",
+      "sha256": "4035dfc3ce34deee42f43417047a7c31a0c33bac635d57f6e00d7fe8fdec6170",
+      "evaluated_cases": 60,
+      "passed": 48,
+      "failures": [
+        "legal-rti",
+        "rti-fee-short",
+        "rti-file-and-pay",
+        "rti-keywords",
+        "held-fee-2",
+        "held-fee-3",
+        "held-fee-5",
+        "held-payment-verification",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "scoped_baseline_slots",
+      "sha256": "8f5d5b10fb6a5324b82944f7204ad18a3afb492f71fde0d82fd1b471726f6ce0",
+      "evaluated_cases": 60,
+      "passed": 52,
+      "failures": [
+        "rti-keywords",
+        "held-fee-1",
+        "held-fee-2",
+        "held-fee-3",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "scoped_field_slots",
+      "sha256": "1386bba720bd9e98e6053b910dbee6ecc41194844e6341f577f740f78219c3a5",
+      "evaluated_cases": 60,
+      "passed": 54,
+      "failures": [
+        "held-fee-2",
+        "held-fee-3",
+        "held-dogs",
+        "frozen-fee-choice",
+        "frozen-verify-result",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "snowball_baseline_slots",
+      "sha256": "83f23828a021f0f458ccb800d538e2a803ade2715d5b8ea1212f80f33f86944d",
+      "evaluated_cases": 60,
+      "passed": 56,
+      "failures": [
+        "held-fee-1",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    },
+    {
+      "name": "snowball_field_slots",
+      "sha256": "8747fe1db25cd089cbe40d4a2315f4734860cd1753d5743959947bbf692955a1",
+      "evaluated_cases": 60,
+      "passed": 55,
+      "failures": [
+        "legal-tcp",
+        "legal-dogs",
+        "held-fee-2",
+        "held-dogs",
+        "frozen-licensing-bodies"
+      ]
+    }
+  ]
+}

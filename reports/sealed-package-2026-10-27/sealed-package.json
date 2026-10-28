@@ -1,0 +1,17 @@
+{
+  "package_path": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "package_id": "actforgoa-research-20261027-sealed-v1",
+  "generation": "20261027T065155-law-5bc5619b",
+  "generations": 4,
+  "data_files": 1236,
+  "service_files": 18,
+  "sealed_entries": 1258,
+  "package_manifest_sha256": "ea7135bc57b912f6b5ef23135d1d60dd7226aab4a3cb8405e29e150862581006",
+  "data_allowlist_sha256": "6b2ed3ac358c8787989145fbd6c6c117de96feb00d8a00d842d3ce4aefb528a4",
+  "service_allowlist_sha256": "f0152d6409f86742e6e50a2edf2f9aa4d7dba533db132628e37789d83c616218",
+  "provenance_sha256": "15ff39bd5652d6c243016c34eb4c8b16fd047cf664e974a346c75bc94fbd7cda",
+  "seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "total_payload_bytes": 3442070201,
+  "old_nested_allowlist_sha256": "e5095ce040de7df04e37f6ab904d05592245e96d98c12ef3c1807000793b46dd",
+  "accepted_outer_manifest_sha256": "2b86bf87e963fa1c2c5c6c3be894ba2c141777f5c330b0147e34c2daa2dcd095"
+}

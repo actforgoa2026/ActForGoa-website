@@ -1,0 +1,97 @@
+{
+  "pipeline": "two_pass_v7",
+  "capture_version": 6,
+  "baseline_runtime": "f854a270917a34cf24d8974c5e522df7040cc09e",
+  "contract_sha256": "1e995fcae59aeef6a550d8eab7f11611970fbf483230fd9c9d334fd883671bfa",
+  "base_config_effort": "medium",
+  "effort_policy": "low_draft_medium_reconstruction_v1",
+  "phase_efforts": {
+    "draft": "low",
+    "reconstruction": "medium"
+  },
+  "fixture": "test_stage_allocation.py source-neutral gates/history fixture via real HTTPX serialization and fake I/O, both styles and phases",
+  "scope": "Only draft effort changes for identical input. Correction identity requires identical compact draft. No provider, latency, semantic or release acceptance implied.",
+  "cases": [
+    {
+      "variant": "standard_draft",
+      "baseline_sha256": "06049997129716876945f2bf9a8a8da1a30bb8ba05f093fd4c66e9ef50c8608c",
+      "candidate_sha256": "e049e2ddc723459ab86830f429cb30a6a187b9f07ffd217cfb0d1877efa4a92b",
+      "wire_delta_bytes": -3,
+      "messages_and_system_exact": true,
+      "schema_exact": true,
+      "only_draft_effort_changed": true,
+      "reserved_input_tokens": 17909,
+      "reservation_microusd": 7791,
+      "timeout": {
+        "connect": 10,
+        "read": 45,
+        "write": 10,
+        "pool": 10
+      }
+    },
+    {
+      "variant": "standard_reconstruction",
+      "baseline_sha256": "16d5def9a9e552580b188bc70e0f7f1059f27c3eda56fd8dd68f3ef3040ab530",
+      "candidate_sha256": "16d5def9a9e552580b188bc70e0f7f1059f27c3eda56fd8dd68f3ef3040ab530",
+      "wire_delta_bytes": 0,
+      "messages_and_system_exact": true,
+      "schema_exact": true,
+      "only_draft_effort_changed": true,
+      "reserved_input_tokens": 18485,
+      "reservation_microusd": 7849,
+      "timeout": {
+        "connect": 10,
+        "read": 45,
+        "write": 10,
+        "pool": 10
+      }
+    },
+    {
+      "variant": "brief_draft",
+      "baseline_sha256": "7cf3aa8096fd9d49ea17d2e35ff87b48f9dbdb0adee6618ed1d129582b6c6927",
+      "candidate_sha256": "2673c10ab5f1533476ad03f55adc5cb51d33de1850cfd9267c42e684385f99a6",
+      "wire_delta_bytes": -3,
+      "messages_and_system_exact": true,
+      "schema_exact": true,
+      "only_draft_effort_changed": true,
+      "reserved_input_tokens": 17845,
+      "reservation_microusd": 7785,
+      "timeout": {
+        "connect": 10,
+        "read": 45,
+        "write": 10,
+        "pool": 10
+      }
+    },
+    {
+      "variant": "brief_reconstruction",
+      "baseline_sha256": "20ea11fcdb89ed7215e9d65be78ba3f8624366cf8111916e75b1f36513353131",
+      "candidate_sha256": "20ea11fcdb89ed7215e9d65be78ba3f8624366cf8111916e75b1f36513353131",
+      "wire_delta_bytes": 0,
+      "messages_and_system_exact": true,
+      "schema_exact": true,
+      "only_draft_effort_changed": true,
+      "reserved_input_tokens": 18421,
+      "reservation_microusd": 7843,
+      "timeout": {
+        "connect": 10,
+        "read": 45,
+        "write": 10,
+        "pool": 10
+      }
+    }
+  ],
+  "preserved_files": [
+    "backend/chat.py",
+    "backend/source_spans.py",
+    "backend/span_instructions.py",
+    "backend/paragraph_slots.py",
+    "backend/answer_trace.py",
+    "backend/anthropic_provider.py",
+    "backend/usage_reconciliation.py",
+    "docs/research-span-instruction-parity.json",
+    "docs/research-slot-instruction-parity.json"
+  ],
+  "prompt_parity_reference": "research-slot-instruction-parity.json",
+  "focused_tests": "687 passed; pure/fake transport and disposable test ledgers only"
+}

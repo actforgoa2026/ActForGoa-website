@@ -1,0 +1,42 @@
+{
+  "backup": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27",
+  "generation": "20261027T065155-law-5bc5619b",
+  "payload_files": 2607,
+  "payload_bytes": 5612058404,
+  "payload_manifest_sha256": "0e7499391b4ec61d13d09bc59baf2b792cfe04379d5cdee30950a536ca1e65b0",
+  "files_identical_to_recovery_output": 2500,
+  "source_input_files_verified": 102,
+  "durable_package_reopened": true,
+  "sample_reader": {
+    "document_id": "15f824204521f56804181aad-1d07c970c80b",
+    "title": "Chorao khazan field account",
+    "pages_read": 1,
+    "page_count": 1,
+    "original_verified": true,
+    "citation_slice_verified": true,
+    "channels": [
+      "keyword",
+      "semantic"
+    ]
+  },
+  "old_v16_document_accessible": true,
+  "scope": "Manifest covers the four named payload directories only. Reports and the handoff will be captured in a separate final snapshot manifest. No provider calls or app/usage initialization.",
+  "multipage_originals": [
+    {
+      "citation": "V01",
+      "document_id": "2e0577bc1234b3edf3cd31d8-d413eb87182d",
+      "all_pages_read": 18,
+      "first_page_text_sha256": "6dc66c9df09832971b8855612d16907f592640b44e1bf1e4365fe32664da3328",
+      "last_page_text_sha256": "eca8556c25882b384b8280a6fa2a19d3b206c20c0ea8fd9c79c131060b4d0e3c",
+      "pdf_last_page_rendered_in_memory": true
+    },
+    {
+      "citation": "V16",
+      "document_id": "493ffb4c35a00be1f1f28e9b-c9efabb977ca",
+      "all_pages_read": 13,
+      "first_page_text_sha256": "357442eeb0f3e7d79d2bfdb21c75fb89a43002d901c03b78675951d51dda893e",
+      "last_page_text_sha256": "fb1b76fbbcd05b9d1e7cf8bc3766c1f92d9842efdc4e51a74f516f7cf4f17db1",
+      "pdf_last_page_rendered_in_memory": true
+    }
+  ]
+}

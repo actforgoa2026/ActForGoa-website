@@ -1,0 +1,1025 @@
+{
+  "reviewed_contract_sha256": "063acf0fcb29aedd0642cdf08149bb4d521b194b11ee1725be29844359fd22ad",
+  "reviewed_manifest_sha256": "3b98ad117adee2f9f01c5bee9b02613213d6c3da22c1c133a1d0e759f64eda80",
+  "prompts": {
+    "plan-standard": {
+      "bytes": 7246,
+      "sha256": "04cb80a642a0aabc02c90e5c1507e015d4ce92abce88a738b4f4beae28044878"
+    },
+    "final-standard": {
+      "bytes": 8149,
+      "sha256": "756422aa3dcb24b728cd35e487a20e6c2d7ab6fb25c5a65e6e5f62718ac96b49"
+    },
+    "plan-brief": {
+      "bytes": 7262,
+      "sha256": "a948cb104de2357b9f31d445534e7c44011c2bd66d61673ab6807945e4213a3e"
+    },
+    "final-brief": {
+      "bytes": 8088,
+      "sha256": "6997647030fdc17c64f92e73b060be88e9d3d77767b71a2d55c081e0c1389483"
+    }
+  },
+  "citation_ids": [
+    "00000000000000000000000000000000",
+    "00000000000000000000000000000001",
+    "00000000000000000000000000000002",
+    "00000000000000000000000000000003",
+    "00000000000000000000000000000004",
+    "00000000000000000000000000000005",
+    "00000000000000000000000000000006",
+    "00000000000000000000000000000007",
+    "00000000000000000000000000000008",
+    "00000000000000000000000000000009"
+  ],
+  "registry": {
+    "s1": {
+      "field": "text"
+    },
+    "s2": {
+      "field": "text"
+    },
+    "s3": {
+      "field": "text"
+    },
+    "s4": {
+      "field": "text"
+    },
+    "s5": {
+      "field": "catalogue_scope_hint"
+    },
+    "s6": {
+      "field": "source_publication"
+    },
+    "s7": {
+      "field": "text"
+    },
+    "s8": {
+      "field": "text"
+    },
+    "s9": {
+      "field": "text"
+    },
+    "s10": {
+      "field": "text"
+    },
+    "s11": {
+      "field": "catalogue_scope_hint"
+    },
+    "s12": {
+      "field": "source_publication"
+    },
+    "s13": {
+      "field": "text"
+    },
+    "s14": {
+      "field": "text"
+    },
+    "s15": {
+      "field": "text"
+    },
+    "s16": {
+      "field": "text"
+    },
+    "s17": {
+      "field": "catalogue_scope_hint"
+    },
+    "s18": {
+      "field": "source_publication"
+    },
+    "s19": {
+      "field": "text"
+    },
+    "s20": {
+      "field": "text"
+    },
+    "s21": {
+      "field": "text"
+    },
+    "s22": {
+      "field": "text"
+    },
+    "s23": {
+      "field": "catalogue_scope_hint"
+    },
+    "s24": {
+      "field": "source_publication"
+    },
+    "s25": {
+      "field": "text"
+    },
+    "s26": {
+      "field": "text"
+    },
+    "s27": {
+      "field": "text"
+    },
+    "s28": {
+      "field": "text"
+    },
+    "s29": {
+      "field": "catalogue_scope_hint"
+    },
+    "s30": {
+      "field": "source_publication"
+    },
+    "s31": {
+      "field": "text"
+    },
+    "s32": {
+      "field": "text"
+    },
+    "s33": {
+      "field": "text"
+    },
+    "s34": {
+      "field": "text"
+    },
+    "s35": {
+      "field": "catalogue_scope_hint"
+    },
+    "s36": {
+      "field": "source_publication"
+    },
+    "s37": {
+      "field": "text"
+    },
+    "s38": {
+      "field": "text"
+    },
+    "s39": {
+      "field": "text"
+    },
+    "s40": {
+      "field": "text"
+    },
+    "s41": {
+      "field": "catalogue_scope_hint"
+    },
+    "s42": {
+      "field": "source_publication"
+    },
+    "s43": {
+      "field": "text"
+    },
+    "s44": {
+      "field": "text"
+    },
+    "s45": {
+      "field": "text"
+    },
+    "s46": {
+      "field": "text"
+    },
+    "s47": {
+      "field": "catalogue_scope_hint"
+    },
+    "s48": {
+      "field": "source_publication"
+    },
+    "s49": {
+      "field": "text"
+    },
+    "s50": {
+      "field": "text"
+    },
+    "s51": {
+      "field": "text"
+    },
+    "s52": {
+      "field": "text"
+    },
+    "s53": {
+      "field": "catalogue_scope_hint"
+    },
+    "s54": {
+      "field": "source_publication"
+    },
+    "s55": {
+      "field": "text"
+    },
+    "s56": {
+      "field": "text"
+    },
+    "s57": {
+      "field": "text"
+    },
+    "s58": {
+      "field": "text"
+    },
+    "s59": {
+      "field": "catalogue_scope_hint"
+    },
+    "s60": {
+      "field": "source_publication"
+    }
+  },
+  "wire_schemas": {
+    "plan-wire": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "planned",
+            "insufficient_evidence"
+          ]
+        },
+        "points": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/point"
+          },
+          "description": "At most 8 points; planned requires at least one."
+        },
+        "units": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/unit"
+          },
+          "description": "At most 12 units. Compact entire plan at most8192 UTF-8 bytes."
+        }
+      },
+      "required": [
+        "status",
+        "points",
+        "units"
+      ],
+      "definitions": {
+        "citation": {
+          "type": "string",
+          "enum": [
+            "00000000000000000000000000000000",
+            "00000000000000000000000000000001",
+            "00000000000000000000000000000002",
+            "00000000000000000000000000000003",
+            "00000000000000000000000000000004",
+            "00000000000000000000000000000005",
+            "00000000000000000000000000000006",
+            "00000000000000000000000000000007",
+            "00000000000000000000000000000008",
+            "00000000000000000000000000000009"
+          ]
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s5",
+                "s6",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s11",
+                "s12",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s17",
+                "s18",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s23",
+                "s24",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s29",
+                "s30",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s35",
+                "s36",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s41",
+                "s42",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s47",
+                "s48",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s53",
+                "s54",
+                "s55",
+                "s56",
+                "s57",
+                "s58",
+                "s59",
+                "s60"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "primary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s55",
+                "s56",
+                "s57",
+                "s58"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "point": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "need": {
+              "type": "string",
+              "description": "1 to 96 UTF-8 bytes; no control characters."
+            },
+            "coverage": {
+              "type": "string",
+              "enum": [
+                "supported",
+                "partial",
+                "missing"
+              ]
+            },
+            "gaps": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "support",
+                  "subject",
+                  "predicate",
+                  "antecedent",
+                  "procedure",
+                  "reference",
+                  "scope",
+                  "date",
+                  "quantity",
+                  "currentness",
+                  "source_access"
+                ]
+              },
+              "description": "At most 4 distinct codes."
+            }
+          },
+          "required": [
+            "need",
+            "coverage",
+            "gaps"
+          ]
+        },
+        "link": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "role": {
+              "type": "string",
+              "enum": [
+                "condition",
+                "exception",
+                "duty",
+                "scope",
+                "quantity",
+                "date",
+                "context",
+                "publication",
+                "extraction",
+                "other"
+              ]
+            },
+            "support": {
+              "$ref": "#/definitions/selector"
+            }
+          },
+          "required": [
+            "role",
+            "support"
+          ]
+        },
+        "unit": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "point": {
+              "type": "integer",
+              "enum": [
+                0,
+                1,
+                2,
+                3,
+                4,
+                5,
+                6,
+                7
+              ]
+            },
+            "kind": {
+              "type": "string",
+              "enum": [
+                "descriptive",
+                "normative"
+              ]
+            },
+            "primary_support": {
+              "$ref": "#/definitions/primary"
+            },
+            "linked_supports": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/link"
+              },
+              "description": "At most 9 links; 48 total selector occurrences across plan."
+            }
+          },
+          "required": [
+            "point",
+            "kind",
+            "primary_support",
+            "linked_supports"
+          ]
+        }
+      }
+    },
+    "final-standard-wire": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "answered",
+            "insufficient_evidence"
+          ]
+        },
+        "paragraph_1": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/paragraph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "paragraph_2": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/paragraph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "paragraph_3": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/paragraph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "paragraph_4": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/paragraph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "paragraph_1",
+        "paragraph_2",
+        "paragraph_3",
+        "paragraph_4"
+      ],
+      "definitions": {
+        "citation": {
+          "type": "string",
+          "enum": [
+            "00000000000000000000000000000000",
+            "00000000000000000000000000000001",
+            "00000000000000000000000000000002",
+            "00000000000000000000000000000003",
+            "00000000000000000000000000000004",
+            "00000000000000000000000000000005",
+            "00000000000000000000000000000006",
+            "00000000000000000000000000000007",
+            "00000000000000000000000000000008",
+            "00000000000000000000000000000009"
+          ]
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s5",
+                "s6",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s11",
+                "s12",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s17",
+                "s18",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s23",
+                "s24",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s29",
+                "s30",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s35",
+                "s36",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s41",
+                "s42",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s47",
+                "s48",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s53",
+                "s54",
+                "s55",
+                "s56",
+                "s57",
+                "s58",
+                "s59",
+                "s60"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "primary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s55",
+                "s56",
+                "s57",
+                "s58"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "paragraph": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claims": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "plan_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "enum": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                      ]
+                    },
+                    "description": "Distinct valid unit indices; empty allowed for direct recovery."
+                  },
+                  "primary_support": {
+                    "$ref": "#/definitions/primary"
+                  },
+                  "supports": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/selector"
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "plan_refs",
+                  "primary_support",
+                  "supports",
+                  "text"
+                ]
+              }
+            }
+          },
+          "required": [
+            "claims"
+          ]
+        }
+      }
+    },
+    "final-brief-wire": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "answered",
+            "insufficient_evidence"
+          ]
+        },
+        "paragraph": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/paragraph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "paragraph"
+      ],
+      "definitions": {
+        "citation": {
+          "type": "string",
+          "enum": [
+            "00000000000000000000000000000000",
+            "00000000000000000000000000000001",
+            "00000000000000000000000000000002",
+            "00000000000000000000000000000003",
+            "00000000000000000000000000000004",
+            "00000000000000000000000000000005",
+            "00000000000000000000000000000006",
+            "00000000000000000000000000000007",
+            "00000000000000000000000000000008",
+            "00000000000000000000000000000009"
+          ]
+        },
+        "selector": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s5",
+                "s6",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s11",
+                "s12",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s17",
+                "s18",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s23",
+                "s24",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s29",
+                "s30",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s35",
+                "s36",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s41",
+                "s42",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s47",
+                "s48",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s53",
+                "s54",
+                "s55",
+                "s56",
+                "s57",
+                "s58",
+                "s59",
+                "s60"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "primary": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "citation_id": {
+              "$ref": "#/definitions/citation"
+            },
+            "span_id": {
+              "type": "string",
+              "enum": [
+                "s1",
+                "s2",
+                "s3",
+                "s4",
+                "s7",
+                "s8",
+                "s9",
+                "s10",
+                "s13",
+                "s14",
+                "s15",
+                "s16",
+                "s19",
+                "s20",
+                "s21",
+                "s22",
+                "s25",
+                "s26",
+                "s27",
+                "s28",
+                "s31",
+                "s32",
+                "s33",
+                "s34",
+                "s37",
+                "s38",
+                "s39",
+                "s40",
+                "s43",
+                "s44",
+                "s45",
+                "s46",
+                "s49",
+                "s50",
+                "s51",
+                "s52",
+                "s55",
+                "s56",
+                "s57",
+                "s58"
+              ]
+            }
+          },
+          "required": [
+            "citation_id",
+            "span_id"
+          ]
+        },
+        "paragraph": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "claims": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "plan_refs": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "enum": [
+                        0,
+                        1,
+                        2,
+                        3,
+                        4,
+                        5,
+                        6,
+                        7,
+                        8,
+                        9,
+                        10,
+                        11
+                      ]
+                    },
+                    "description": "Distinct valid unit indices; empty allowed for direct recovery."
+                  },
+                  "primary_support": {
+                    "$ref": "#/definitions/primary"
+                  },
+                  "supports": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/selector"
+                    }
+                  },
+                  "text": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "plan_refs",
+                  "primary_support",
+                  "supports",
+                  "text"
+                ]
+              }
+            }
+          },
+          "required": [
+            "claims"
+          ]
+        }
+      }
+    }
+  }
+}

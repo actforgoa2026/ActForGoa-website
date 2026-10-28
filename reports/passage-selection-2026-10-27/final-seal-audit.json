@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-27T11:29:55.313138+00:00",
+  "sealed_package": "/Users/zakkrevitt/Documents/ActForGoa Recovery/2026-10-27-sealed-package-v1",
+  "seal_sha256": "26227d014c3c948f7d10f0d4d13dab4820d1b510d14772e95cb44f7361ab0249",
+  "files_checked": 1258,
+  "bytes_checked": 3442070201,
+  "mismatches": [],
+  "file_coverage_exact": true,
+  "directory_coverage_exact": true,
+  "native_processes_completed_before_audit": true,
+  "native_source_opens": 0,
+  "method": "Ordinary byte reads and SHA-256 only; no Library, Zvec or SQLite."
+}

@@ -1,0 +1,406 @@
+"""Two-stage mechanics with synthetic HTTP transports and in-memory budgets."""
+import asyncio
+from copy import deepcopy
+from datetime import datetime,timezone
+import json
+import time
+
+import httpx
+import pytest
+
+from backend.async_anthropic import AsyncAnthropicClient
+from backend import answer_pipeline as pipeline
+from backend.chat import ChatRequest, prepare_answer, AnswerCache
+from backend.providers import chat_config
+from tests.research.test_reconstruction import claim, response
+from tests.research.test_anthropic_provider import anthropic_message
+from tests.research.span_fixtures import select_response,slot_response
+from backend.source_spans import verify_annotated_payload
+
+
+class Limits:
+    def __init__(self, deny_phase=None, allow=True):
+        self.receipts=[];self.deny_phase=deny_phase;self.allow=allow
+    def preflight_single(self,cost,day):
+        assert cost==10624
+        return {'allowed':self.allow,'reason':'allowed' if self.allow else 'monthly_limit'}
+    def reserve_stage(self,cost,day,parent,phase):
+        result={'reserved':phase!=self.deny_phase,'reason':'reserved' if phase!=self.deny_phase else 'daily_limit',
+                'parent_id':parent,'phase':phase,'cost_microusd':cost,'day':day,'receipt_id':'r'+str(len(self.receipts))}
+        self.receipts.append(result)
+        return result
+
+
+class Transport(httpx.AsyncBaseTransport):
+    def __init__(self,handler):self.handler=handler;self.requests=[];self.closed=False;self.cancelled=False
+    async def handle_async_request(self,request):
+        self.requests.append(request)
+        try:return await self.handler(request,len(self.requests))
+        except asyncio.CancelledError:
+            self.cancelled=True;raise
+    async def aclose(self):self.closed=True
+
+
+def model_response(native, **kwargs):
+    payload=anthropic_message(native,**kwargs)
+    payload['usage'].update(cache_creation_input_tokens=0,cache_read_input_tokens=0)
+    return httpx.Response(200,json=payload)
+
+
+@pytest.fixture
+def setup(monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
+    monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
+    monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','single_final_v2')
+    config=chat_config();request=ChatRequest(question='What do gates do?')
+    prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
+    async def handler(actual,n):
+        payload=json.loads(json.loads(actual.content)['messages'][-1]['content'])
+        native=json.loads(response(claim()))
+        return model_response(select_response(native,payload))
+    transport=Transport(handler);limits=Limits();observed=[]
+    def factory():return AsyncAnthropicClient('fixture-only',transport=transport)
+    def run(**kwargs):
+        return asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,
+                                                       observer=observed.append,**kwargs))
+    return config,request,prepared,transport,limits,observed,run,factory
+
+
+def test_one_exact_captured_call_and_final_only_result(setup):
+    _,_,prepared,transport,limits,observed,run,_=setup
+    result=run();trace=result.trace
+    assert trace['capture_version']==13 and trace['status']=='completed'
+    assert len(transport.requests)==len(limits.receipts)==1 and transport.closed
+    assert trace['provider_call_count']==1
+    assert trace['phase_efforts']=={'reconstruction':'medium'}
+    record=trace['phases'][0];request=transport.requests[0]
+    assert record['state']=='completed' and record['provider_attempts']==1
+    assert record['usage_within_reservation']
+    assert record['outgoing_request']['body_utf8'].encode()==request.content
+    body=json.loads(request.content);wrapper=json.loads(body['messages'][-1]['content'])
+    baseline=json.loads(trace['prepared_original']['payload_utf8'])
+    assert verify_annotated_payload({k:wrapper[k] for k in ('question','sources','evidence')},baseline)[0]==baseline
+    assert body['output_config']['effort']=='medium'
+    assert wrapper['evidence_plan']==trace['local_adapter']['value']
+    assert trace['local_adapter']['provenance']=={'plan_origin':'local_empty','generated_plan':False}
+    assert record['source_equality']['actual_wire_verified'] and record['source_equality']['byte_equality']
+    assert record['source_equality']['wire_count']==1
+    assert 'both_actual_wires_match_baseline' not in record['source_equality']
+    assert record['source_equality']['actual_request_body_sha256']==record['outgoing_request']['body_sha256']
+    assert result.answer['paragraphs']==[{'text':'Gates regulate tidal water.','citations':['a']}]
+    assert trace['assembly_offsets'][0]['start']==0
+    saved=json.dumps(observed)
+    assert 'fixture-only' not in saved and 'private diagnostic' not in saved and 'authorization' not in saved
+    assert 'validated_plan' not in saved and '"compact_plan":' not in saved
+    assert all('final_answer' not in item for item in observed if item['status']!='completed')
+    resolved=record['deterministic_support_resolution']
+    assert resolved['kind']=='deterministic_source_span_lookup' and resolved['complete']
+    assert resolved['claims'][0]['resolved_supports'][0]=={'citation_id':'a','field':'text','quote':prepared.evidence[0]['text']}
+    assert resolved['claims'][0]['plan_reference_check']['plan_refs']==[]
+
+
+
+@pytest.mark.parametrize('which',['reconstruction'])
+def test_reservation_refusal_stops_without_final_or_extra_dispatch(setup,which):
+    _,_,_,transport,limits,_,run,_=setup;limits.deny_phase=which
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert caught.value.code=='reservation_refused'
+    assert not transport.requests and len(limits.receipts)==1
+    assert 'final_answer' not in caught.value.trace and transport.closed
+
+
+def test_pair_refusal_never_opens_transport_or_reserves(setup):
+    _,_,_,transport,limits,_,run,_=setup;limits.allow=False
+    with pytest.raises(pipeline.PipelineFailure,match='pair_allowance_refused'):run()
+    assert not transport.requests and not limits.receipts
+
+
+@pytest.mark.parametrize('phase',[1])
+@pytest.mark.parametrize('failure',['http','stop','shape','usage'])
+def test_each_stage_failure_preserves_reservations_and_no_draft_visibility(setup,phase,failure):
+    _,_,_,transport,limits,_,run,_=setup;good=transport.handler
+    async def handle(req,n):
+        if n!=phase:return await good(req,n)
+        if failure=='http':return httpx.Response(402,json={'error':'private upstream text'})
+        if failure=='stop':return model_response({},stop='max_tokens')
+        if failure=='shape':return model_response({'status':'answered','paragraphs':[{'text':'unanchored.'}]})
+        result=await good(req,n);body=json.loads(result.content);body['usage']['output_tokens']=12001
+        return httpx.Response(200,json=body)
+    transport.handler=handle
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert len(transport.requests)==len(limits.receipts)==phase and transport.closed
+    assert 'final_answer' not in caught.value.trace
+    assert 'private upstream text' not in json.dumps(caught.value.trace)
+    assert all(r['reserved'] for r in limits.receipts)
+
+
+def test_local_empty_adapter_does_not_force_final_abstention(setup):
+    _,_,_,transport,_,_,run,_=setup
+    result=run()
+    assert len(transport.requests)==1 and result.answer['status']=='answered'
+    assert result.trace['local_adapter']['value']=={'status':'insufficient_evidence','points':[],'units':[]}
+
+
+
+def test_failed_selector_preserves_original_raw_and_partial_deterministic_supports(setup):
+    _,_,_,transport,_,_,run,_=setup;good=transport.handler
+    async def wrong(req,n):
+        result=await good(req,n)
+        if n==1:
+            payload=result.json();native=json.loads(payload['content'][-1]['text'])
+            native['paragraph_1']['claims'][0]['supports']=[{'citation_id':'a','span_id':'not-supplied'}]
+            return model_response(native)
+        return result
+    transport.handler=wrong
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    phase=caught.value.trace['phases'][0]
+    assert phase['final_output_diagnostic']['answer']['paragraph_1']['claims'][0]['supports'][0]['span_id']=='not-supplied'
+    resolved=phase['deterministic_support_resolution']
+    assert not resolved['complete'] and resolved['claims'][0]['status']=='failed'
+    assert len(resolved['claims'][0]['resolved_supports'])==1 and 'final_answer' not in caught.value.trace
+
+
+@pytest.mark.parametrize('target_phase',[1])
+@pytest.mark.parametrize('mutation',['text','id','owner','field_type','inner_escape','inner_order','scope','history','system','schema','effort'])
+def test_actual_either_phase_mutation_after_preparation_is_reserved_but_unsent(setup,mutation,target_phase):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            selected=deepcopy(body);payload=json.loads(selected['messages'][-1]['content'])
+            if 1==target_phase:
+                if mutation=='effort':selected['output_config']['effort']='high'
+                if mutation=='scope':payload['request_scope']['answer_style']='brief'
+                if mutation=='history':selected['messages'].insert(0,{'role':'user','content':'Altered history.'})
+                if mutation=='system':selected['system']='Altered instructions.'
+                if mutation=='schema':selected['output_config']['format']['schema']['extra']=True
+                if mutation=='text':payload['evidence'][0]['text'][0][1]='Altered source.'
+                if mutation=='id':payload['evidence'][0]['text'][0][0]='altered'
+                if mutation=='owner':payload['evidence'][0]['source']='another-source'
+                if mutation=='field_type':payload['evidence'][0]['text']='Gates regulate tidal water.'
+                if mutation=='inner_order':payload={key:payload[key] for key in reversed(payload)}
+                value=json.dumps(payload,ensure_ascii=False,separators=(',',':'))
+                if mutation=='inner_escape':value=value.replace('Gates','\\u0047ates')
+                selected['messages'][-1]['content']=value
+            return await super().send(selected,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    phase=caught.value.trace['phases'][target_phase-1]
+    assert len(limits.receipts)==target_phase and len(transport.requests)==target_phase-1 and transport.closed
+    assert phase['reservation_receipt']['reserved'] and phase['provider_attempts']==0
+    assert phase['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
+
+
+@pytest.mark.parametrize('phase',[1])
+def test_in_place_request_mutation_cannot_change_both_sides_of_identity_check(setup,phase):
+    config,request,prepared,transport,limits,_,_,_=setup
+    class MutatingClient(AsyncAnthropicClient):
+        async def send(self,body,**kwargs):
+            actual_phase=1
+            if actual_phase==phase:body['service_tier']='priority'
+            return await super().send(body,**kwargs)
+    def factory():return MutatingClient('fixture-only',transport=transport)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
+    stopped=caught.value.trace['phases'][phase-1]
+    assert caught.value.code=='request_capture_mismatch'
+    assert len(limits.receipts)==phase and len(transport.requests)==phase-1 and transport.closed
+    assert stopped['reservation_receipt']['reserved'] and stopped['provider_attempts']==0
+    assert stopped['dispatch_status']=='blocked_before_transport' and 'final_answer' not in caught.value.trace
+
+
+def test_model_plan_is_invalid_final_and_never_published(setup):
+    _,_,_,transport,limits,_,run,_=setup
+    async def handle(req,n):return model_response({'status':'insufficient_evidence','points':[{'need':'界'*33,'coverage':'missing','gaps':['support']}],'units':[]})
+    transport.handler=handle
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert len(transport.requests)==len(limits.receipts)==1
+    assert caught.value.trace['phases'][0]['state']=='failed' and 'final_answer' not in caught.value.trace
+
+
+def test_stage_deadline_really_cancels_and_closes_io(setup,monkeypatch):
+    _,_,_,transport,limits,_,run,_=setup
+    monkeypatch.setattr(pipeline,'PROVIDER_DEADLINE_SECONDS',0.02)
+    async def handle(*_):await asyncio.sleep(10)
+    transport.handler=handle
+    with pytest.raises(pipeline.PipelineFailure,match='provider_deadline'):run()
+    assert transport.cancelled and transport.closed and len(limits.receipts)==1 and len(transport.requests)==1
+
+
+def test_transport_suppressed_timeout_cannot_publish_late_response(setup,monkeypatch):
+    _,_,_,transport,limits,_,run,_=setup;good=transport.handler
+    monkeypatch.setattr(pipeline,'PROVIDER_DEADLINE_SECONDS',.02)
+    async def late(req,n):
+        try:await asyncio.sleep(10)
+        except asyncio.CancelledError:pass
+        return await good(req,n)
+    transport.handler=late
+    with pytest.raises(pipeline.PipelineFailure,match='provider_deadline') as caught:run()
+    assert len(transport.requests)==len(limits.receipts)==1 and transport.closed
+    assert 'final_answer' not in caught.value.trace
+
+
+def test_already_expired_entry_time_never_reserves_or_dispatches(setup):
+    _,_,_,transport,limits,_,run,_=setup
+    with pytest.raises(pipeline.PipelineFailure,match='provider_deadline'):run(request_started_at=time.monotonic()-66)
+    assert not limits.receipts and not transport.requests
+
+
+def test_browser_disconnect_cancels_io_and_joins_before_return(setup):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    async def scenario():
+        entered=asyncio.Event();gone=False
+        async def handle(*_):entered.set();await asyncio.sleep(10)
+        async def disconnected():return gone
+        transport.handler=handle
+        task=asyncio.create_task(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,
+            client_factory=factory,disconnected=disconnected))
+        await entered.wait();gone=True
+        with pytest.raises(pipeline.PipelineFailure,match='client_disconnected'):await task
+        assert transport.closed and transport.cancelled and len(transport.requests)==1
+    asyncio.run(scenario())
+
+
+def test_utc_change_after_reservation_cannot_dispatch(setup,monkeypatch):
+    _,_,_,transport,limits,_,run,_=setup
+    day=pipeline.utc_day();original=limits.reserve_stage
+    def reserve(*args):
+        receipt=original(*args);monkeypatch.setattr(pipeline,'utc_day',lambda:'2099-01-01');return receipt
+    limits.reserve_stage=reserve
+    with pytest.raises(pipeline.PipelineFailure,match='utc_day_changed'):run(expected_day=day)
+    assert len(limits.receipts)==1 and not transport.requests
+
+
+def test_cache_separates_pipeline_and_both_instruction_schema_identities(setup,monkeypatch):
+    from dataclasses import replace
+    import backend.reconstruction as reconstruction
+    config,_,prepared,*_=setup
+    key=AnswerCache.key(config,prepared)
+    assert key!=AnswerCache.key(replace(config,pipeline='single_pass'),prepared)
+    old=reconstruction.reconstruction_instructions
+    monkeypatch.setattr(reconstruction,'reconstruction_instructions',lambda *a:old(*a)+' A new correction policy.')
+    assert key!=AnswerCache.key(config,prepared)
+
+
+def test_cancelled_native_worker_is_joined_not_abandoned():
+    import threading
+    entered=threading.Event();release=threading.Event();finished=threading.Event()
+    def native():entered.set();release.wait();finished.set();return 1
+    async def scenario():
+        task=asyncio.create_task(pipeline.joined_native_call(native))
+        while not entered.is_set():await asyncio.sleep(.001)
+        task.cancel();await asyncio.sleep(.01)
+        assert not task.done() and not finished.is_set()
+        release.set()
+        with pytest.raises(asyncio.CancelledError):await task
+        assert finished.is_set()
+    asyncio.run(scenario())
+
+
+def test_cache_separates_request_document_scope_even_with_same_visible_evidence(setup):
+    config,request,prepared,*_=setup
+    scoped=prepare_answer(request.model_copy(update={'document_id':'doc-a','generation':'fixture'}),prepared.evidence,provider='anthropic')
+    assert scoped.messages==prepared.messages
+    assert AnswerCache.key(config,scoped)!=AnswerCache.key(config,prepared)
+
+
+@pytest.mark.parametrize('phase',[1])
+def test_disconnect_after_commit_before_send_keeps_receipt(setup,phase):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    async def scenario():
+        async def gone():return len(limits.receipts)>=phase
+        with pytest.raises(pipeline.PipelineFailure) as caught:
+            await pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,disconnected=gone)
+        assert caught.value.code=='client_disconnected'
+        assert len(limits.receipts)==phase and len(transport.requests)==phase-1 and transport.closed
+        assert caught.value.trace['phases'][phase-1]['reservation_receipt']['reserved']
+        assert 'final_answer' not in caught.value.trace
+    asyncio.run(scenario())
+
+
+def test_utc_crossing_during_dispatch_capture_stops_before_transport(setup,monkeypatch):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    day=pipeline.utc_day()
+    def observer(trace):
+        if trace['phases'][0]['state']=='dispatched':monkeypatch.setattr(pipeline,'utc_day',lambda:'2099-01-01')
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,observer=observer,expected_day=day))
+    assert caught.value.code=='utc_day_changed' and len(limits.receipts)==1 and not transport.requests
+    phase=caught.value.trace['phases'][0]
+    assert phase['provider_attempts']==0 and phase['dispatch_status']=='blocked_before_transport'
+
+
+@pytest.mark.parametrize('phase',[1])
+def test_failed_pretransport_capture_records_zero_calls_for_reserved_phase(setup,phase):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    raised=False
+    def observer(trace):
+        nonlocal raised
+        if trace['phases'][phase-1]['state']=='dispatched' and not raised:
+            raised=True;raise OSError('private synthetic storage detail')
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,observer=observer))
+    record=caught.value.trace['phases'][phase-1]
+    assert record['provider_attempts']==0 and record['dispatch_status']=='blocked_before_transport'
+    assert len(transport.requests)==phase-1 and len(limits.receipts)==phase and transport.closed
+    assert record['reservation_receipt']['reserved'] and 'final_answer' not in caught.value.trace
+
+
+def test_correction_late_response_after_disconnect_never_succeeds(setup):
+    config,request,prepared,transport,limits,_,_,factory=setup;good=transport.handler
+    async def scenario():
+        entered=asyncio.Event();gone=False
+        async def late(req,n):
+            if n==1:
+                entered.set()
+                try:await asyncio.sleep(10)
+                except asyncio.CancelledError:pass  # hostile transport suppresses cancellation
+            return await good(req,n)
+        transport.handler=late
+        async def disconnected():return gone
+        task=asyncio.create_task(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,
+            client_factory=factory,disconnected=disconnected))
+        await entered.wait();gone=True
+        with pytest.raises(pipeline.PipelineFailure) as caught:await task
+        assert caught.value.code=='client_disconnected' and 'final_answer' not in caught.value.trace
+        assert len(transport.requests)==1 and len(limits.receipts)==1 and transport.closed
+    asyncio.run(scenario())
+
+
+def test_transport_error_records_uncertain_receipt_without_redispatch(setup):
+    _,_,_,transport,limits,_,run,_=setup
+    async def broken(*_):raise httpx.ReadError('private transport detail')
+    transport.handler=broken
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert len(limits.receipts)==len(transport.requests)==1 and transport.closed
+    assert caught.value.trace['phases'][0]['dispatch_status']=='initiated_receipt_unconfirmed'
+    assert 'private transport detail' not in json.dumps(caught.value.trace)
+
+
+def test_failed_final_capture_never_leaves_final_in_failure_trace(setup):
+    config,request,prepared,transport,limits,_,_,factory=setup
+    observed=[]
+    def observer(trace):
+        if trace['status']=='completed':raise OSError('private storage detail')
+        observed.append(trace)
+    with pytest.raises(pipeline.PipelineFailure) as caught:
+        asyncio.run(pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory,observer=observer))
+    assert caught.value.trace['status']=='failed' and 'final_answer' not in caught.value.trace
+    assert 'final_answer' not in observed[-1] and len(transport.requests)==1 and transport.closed
+
+
+@pytest.mark.parametrize('secret',['fixture-only','sk-ant-sensitive-fixture'])
+@pytest.mark.parametrize('escaped',[False,True])
+def test_credential_like_response_never_enters_diagnostic_or_public_answer(setup,secret,escaped):
+    _,_,_,transport,_,observed,run,_=setup
+    async def leaked(actual,n):
+        wrapper=json.loads(json.loads(actual.content)['messages'][-1]['content'])
+        native=select_response({'status':'answered','paragraphs':[{'claims':[claim(secret+'.')]}]},wrapper)
+        response=model_response(native);payload=response.json()
+        if escaped:payload['content'][-1]['text']=payload['content'][-1]['text'].replace(secret,''.join('\\u%04x'%ord(c) for c in secret))
+        return httpx.Response(200,json=payload)
+    transport.handler=leaked
+    with pytest.raises(pipeline.PipelineFailure) as caught:run()
+    assert secret not in json.dumps(caught.value.trace) and secret not in json.dumps(observed)
+    assert len(transport.requests)==1 and transport.closed and 'final_answer' not in caught.value.trace
