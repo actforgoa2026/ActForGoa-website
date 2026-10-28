@@ -1,6 +1,10 @@
 # ActForGoa integration
 
-The user appointed the “ORCHESTRATOR” chat (`01a17774-6d09-7751-915c-3fbf3a8994c4`) to coordinate concurrent feature work, PRs, merges and review-site releases. During concurrent work, prepare an isolated commit/PR and give the coordinator the exact head, scope, dependencies and verification evidence. The coordinator owns the combined deployment unless the user directs otherwise.
+## Current cloud handoff
+
+Start every resumed task by reading `docs/CLOUD-IMPLEMENTATION-PLAN.md`. It is the current work ledger, ownership map and continuation plan. The user moved orchestration into the cloud on 28 October 2026 and asked the local orchestrator to pause. Run implementation, tests and browser checks in the cloud; do not wake local workers or use the user's computer for builds. Update the ledger when work changes state, recording exact commits, checks, blockers and next actions. The cloud root orchestrator owns the combined release for this request.
+
+The former “ORCHESTRATOR” chat (`01a17774-6d09-7751-915c-3fbf3a8994c4`) contains prior release evidence and is paused. During concurrent work, prepare an isolated commit/PR and give the cloud coordinator the exact head, scope, dependencies and verification evidence. The coordinator owns the combined deployment unless the user directs otherwise.
 
 - Start from freshly fetched `origin/main`; preserve newer features when resolving conflicts.
 - The primary shared checkout can contain other agents' unfinished work. Do not reset, stash, sweep-commit or publish it. Use a suitable isolated worktree.
