@@ -38,3 +38,4 @@ corpus/ocr/
 
 .DS_Store
 .vercel_python_packages/
+dist-satellite/

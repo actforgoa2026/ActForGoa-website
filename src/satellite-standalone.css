@@ -1,0 +1,6 @@
+.satellite-account{max-width:680px;min-height:65vh;padding-block:48px 72px}
+.satellite-account h1{font-size:clamp(30px,5vw,44px);line-height:1.2;letter-spacing:-.035em}
+.satellite-account p{line-height:1.7}
+.satellite-account form{display:grid;gap:24px;margin-top:32px;justify-items:start}
+.satellite-account form>div{width:100%}
+.satellite-standalone-footer{padding-block:24px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}

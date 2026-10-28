@@ -110,7 +110,8 @@ export default function Satellite(){
     {session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. You can still inspect dated imagery and numeric comparisons.</p>}
     {session&&<SatelliteHistory csrfToken={session.csrfToken} revision={historyRevision} busy={!!busy} onOpen={openSaved}/>}
     <form className="satellite-question" onSubmit={ask}><Textarea label="Ask about this area" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Has tree canopy disappeared here in the last 10 days?"/>
-      <Button type="submit" disabled={!session||!!busy||question.trim().length<3}>Prepare investigation</Button></form>
+      <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
+      {session&&readiness&&!readiness.planner_ready&&<p className="satellite-note">Question interpretation is unavailable until configured. Choose an area, dates and investigation topic below to compare imagery.</p>}</form>
     {plan&&<div className="satellite-plan" role="status"><p>{plan.message}</p>{plan.window_start&&<p>Requested period: {dateLabel(plan.window_start)} to {dateLabel(plan.window_end!)}.</p>}{plan.place_name&&<p>Requested place: {plan.place_name}. Select it on the map, then ask about “this area”.</p>}{plan.warnings?.map(w=><p key={w}>{w}</p>)}</div>}
     <fieldset className="satellite-controls" disabled={!!busy}><legend>Choose your area and observations</legend>
       <AreaMap area={area} onArea={chooseArea} candidates={result?.intent==='surface_water'?result.evidence.water_candidates:result?.intent==='canopy_loss'?result.evidence.candidates:undefined}/>
