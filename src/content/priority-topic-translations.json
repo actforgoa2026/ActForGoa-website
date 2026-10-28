@@ -321,7 +321,10 @@
     "Prepare a crop damage report": "फसल क्षति का विवरण तैयार करें",
     "Fill in the building checklist": "निर्माण की जाँच सूची भरें",
     "Ask about building permissions": "निर्माण की अनुमति के बारे में पूछें",
-    "Ask about completion or occupancy": "निर्माण पूर्णता या उपयोग की अनुमति के बारे में पूछें"
+    "Ask about completion or occupancy": "निर्माण पूर्णता या उपयोग की अनुमति के बारे में पूछें",
+    "Community and Youth": "समुदाय और युवा",
+    "Biodiversity": "जैव विविधता",
+    "Youth care & community support": "युवाओं की देखभाल और सामुदायिक सहायता"
   },
   "gom": {
     "Waste & recycling": "कोयर & रिसायकल करप",
@@ -645,6 +648,9 @@
     "Prepare a crop damage report": "पिकाच्या लुकसाणीचो अहवाल तयार करात",
     "Fill in the building checklist": "बांदकामाची तपासणी वळेरी भरात",
     "Ask about building permissions": "बांदकामाच्या परवानगेविशीं विचारात",
-    "Ask about completion or occupancy": "बांदकाम पूर्णताय वा वापर परवानगेविशीं विचारात"
+    "Ask about completion or occupancy": "बांदकाम पूर्णताय वा वापर परवानगेविशीं विचारात",
+    "Community and Youth": "समाज आनी तरणाटे",
+    "Biodiversity": "जैवविविधताय",
+    "Youth care & community support": "तरणाट्यांची जतनाय आनी समाजीक आदार"
   }
 }
