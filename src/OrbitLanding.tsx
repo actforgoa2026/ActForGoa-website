@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState, type CSSProperties, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
-import {ArrowUp, ArrowUpRight, Pause, Play, Search} from 'lucide-react';
+import {ArrowUp, ArrowUpRight, ChevronDown, Pause, Play, Search} from 'lucide-react';
 import {createOrbitPath, orbitEntranceSpeed} from './orbit-motion';
 import {searchDestination} from './search-navigation';
 import photos from './content/orbit-photos.json';
@@ -59,6 +59,14 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
   const navigate=useNavigate();
   function search(value:string){if(value.trim())navigate(searchDestination(location.pathname, location.search, value));}
   function ask(event:FormEvent){event.preventDefault();search(question);}
+  function scrollToPaths(event:React.MouseEvent<HTMLAnchorElement>){
+    const heading = document.getElementById('home-actions-heading');
+    if (!heading) return;
+    event.preventDefault();
+    heading.scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});
+    heading.tabIndex = -1;
+    heading.focus({preventScroll:true});
+  }
   return <Container className={'goa-orbit-page'+(embedded?' goa-orbit-home-hero':'')+(paused?' is-paused':'')} aria-label={embedded?'Explore Goa':undefined}>
     <div ref={scene} className="goa-orbit-scene" aria-hidden="true">
       {rings.map((ring,ri)=><div key={ri} className={'goa-photo-ring goa-photo-ring-'+ri} style={{'--radius':ring.radius+'px','--duration':ring.duration+'s'} as CSSProperties}>
@@ -81,6 +89,7 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
       <div className="goa-orbit-suggestions" aria-label="Suggested questions">{suggestions.map((text)=><button key={text} onClick={()=>search(text)}>{text}<ArrowUpRight size={13}/></button>)}</div>
       <Link className="goa-orbit-chat-link" to="/ask">Or start a conversation <ArrowUpRight size={15}/></Link>
     </section>
+    <a className="goa-orbit-scroll" href={embedded?"#home-actions-heading":"/#home-actions-heading"} onClick={scrollToPaths} aria-label="Scroll to ways to take action"><ChevronDown size={23} aria-hidden="true"/></a>
     <footer className="goa-orbit-footer"><span>Rooted in Goa. Made for all of us.</span><button onClick={()=>setPaused(!paused)} aria-pressed={paused} aria-label={paused?'Resume motion':'Pause motion'}>{paused?<Play size={13}/>:<Pause size={13}/>}<span>{paused?'Resume motion':'Pause motion'}</span></button>{embedded?<a href="#home-actions-heading">Find your next step <ArrowUpRight size={13}/></a>:<Link to="/about">About ActForGoa <ArrowUpRight size={13}/></Link>}</footer>
   </Container>;
 }
