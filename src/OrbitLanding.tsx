@@ -22,7 +22,7 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
     if (!root) return;
     const path = createOrbitPath();
     const tiles = Array.from(root.querySelectorAll<HTMLElement>('.goa-photo-position'));
-    let previous = performance.now(), elapsed = 0, offset = 0, frame = 0;
+    let previous = performance.now(), elapsed = 0, offset = 0, frame = 0, disposed = false;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
     const draw = () => tiles.forEach((tile, index) => {
       const progress = (index / tiles.length + offset + .037) % 1;
@@ -43,8 +43,16 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
       frame = requestAnimationFrame(flow);
     };
     draw();
-    if (!reduced.matches) frame = requestAnimationFrame(flow);
-    return () => cancelAnimationFrame(frame);
+    root.style.opacity = '0';
+    // Start the arrival clock when the photos can actually be seen.
+    const images = Array.from(root.querySelectorAll('img'));
+    void Promise.all(images.map(image => image.decode().catch(() => {}))).then(() => {
+      if (disposed) return;
+      root.style.opacity = '1';
+      previous = performance.now();
+      if (!reduced.matches) frame = requestAnimationFrame(flow);
+    });
+    return () => { disposed = true; cancelAnimationFrame(frame); };
   }, []);
   const [question,setQuestion]=useState('');
   const [paused,setPaused]=useState(false);
