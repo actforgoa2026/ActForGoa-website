@@ -19,15 +19,14 @@ RULES = {'boundary': 'Answer the actual question about Goa using only supplied e
              'before calling a requested detail absent: a stated value of uncertain applicability '
              'is not missing. Finally check coverage, entailment, omitted conditions, dates, scope '
              'and the requested length.',
- 'normative': 'For any permission, duty, prohibition or exception, treat the rule and its linked '
-              'conditions as one qualified proposition. Before writing it, check adjacent '
-              'conditions, exceptions, design obligations and cross-referenced requirements. '
-              'Preserve each material requirement and its force (must, shall, may, should, will, '
-              'only, unless). A stated permission must not omit a linked duty. If a referenced '
-              'annexure or procedure is unavailable, retain the obligation to follow it without '
-              'inventing its details; state when required referenced details are missing. An '
-              'unrequested legal point may be omitted entirely. Never turn a qualified permission '
-              'into a broader rule.',
+ 'normative': 'For a permission, duty, prohibition or exception, require an established subject, '
+                  'action and linked conditions. Never guess missing subjects, predicates or '
+                  'antecedents: a caveat cannot support a missing rule. Give the specific gap and '
+                  'supported requested parts. Check adjacent conditions, exceptions, design duties and '
+                  'cross-references. Keep each requirement and its force (must, shall, may, should, '
+                  'will, only, unless); do not drop linked duties. Retain obligations to follow '
+                  'unavailable annexures or procedures, state the missing details, and invent none. Omit '
+                  'unrequested legal points. Never broaden a qualified rule.',
  'legal': 'Use directly relevant official primary evidence for legal claims; label commentary as '
           'commentary. Follow legal_currency and source_date_metadata. Unknown or unverified '
           'applicability must remain explicit for obligations; official publication does not '
@@ -43,14 +42,15 @@ RULES = {'boundary': 'Answer the actual question about Goa using only supplied e
           'occurrence, Western Ghats endemism and Goa endemism differ; a wider category or '
           'occurrence does not establish a narrower category. Missing proof means unestablished, '
           'not false or impossible.',
- 'inference': 'Separate observation, projection, proposal and inference. Where values were '
-              'derived, later reused and shown valid are distinct: derivation or reuse establishes '
-              'neither applicability nor exclusion elsewhere. Name each study and keep its date '
-              'and conditions; unknown receiving scope stays unknown. Most A being B does not '
-              'imply most B are A. Do not transfer whole-habitat or wider-animal-group claims to a '
-              'pool, smaller habitat or different group. A hazard list does not establish '
-              'causation. Attribute contested or questionable claims; identify source '
-              'contradictions without inventing them from a prior gap followed by new analysis.',
+ 'inference': 'Separate observation, projection, proposal and inference. Distinguish where values '
+                  'were derived, reused and shown valid. Derivation or reuse establishes neither '
+                  'validity nor exclusion elsewhere. Name each study with its date and conditions; do '
+                  'not transfer its location or entity labels to an unspecified receiving study. Most A '
+                  'being B does not imply most B are A. Do not transfer whole-habitat or '
+                  'wider-animal-group claims to a pool, smaller habitat or different group. A hazard '
+                  'list does not establish causation. Attribute contested or questionable claims; '
+                  'identify source contradictions without inventing them from a prior gap followed by '
+                  'new analysis.',
  'quantities': 'Keep measures, units, denominators, dates and territorial limits. Use numbers only '
                'when complete prose supplies the quantity, unit and relevant conditions. Never '
                'reproduce or calculate values from table fragments. Read visible column headings '
@@ -63,11 +63,12 @@ RULES = {'boundary': 'Answer the actual question about Goa using only supplied e
           'upload/retrieval dates are none of these. Do not infer dates from catalogue metadata. '
           'Historical assessments do not establish present conditions; historical laws are not '
           'verified current law.',
- 'limitations': 'Keep relevant extraction limitations and specific gaps with their '
-                'passage-supported point, not as metadata-only conclusions. Call extraction OCR '
-                'only when its supplied warning explicitly does. A webpage abstract is not the '
-                'complete article. For partial evidence answer only supported requested parts; if '
-                'none can be answered, return insufficient_evidence with no content.',
+ 'limitations': 'Keep relevant extraction limits and gaps with the supported point. When full-article '
+                  'access is unverified and this limits interpretation or verification, explicitly state '
+                  'that uncertainty; naming a webpage excerpt alone is insufficient. A possible '
+                  'abstract/index is not a known abstract or unsupported text. Say OCR only when the '
+                  'warning does. Answer supported requested parts; if none, return insufficient_evidence '
+                  'with no content.',
  'spans': 'Eligible fields contain ordered [span_id,text] pairs; read all fragments in order as '
           'the complete original field. [null,text] preserves whitespace and cannot support a '
           'claim. Empty/null/non-string/nested fields remain unchanged. Each support contains only '
@@ -90,12 +91,12 @@ RULES = {'boundary': 'Answer the actual question about Goa using only supplied e
                 'is not an observation year, current condition or verified legal force. '
                 'Publication labels may appear in one support unit in the paragraph. Other '
                 'metadata supports only dates and limitations.',
- 'presentation': 'Write complete plain-text sentences, no Markdown or inline evidence IDs. Put IDs '
-                 'only in support objects. Use the fewest sufficient paragraphs. Conceptual '
-                 'distinctions need no unrequested numerical examples; omit unrelated procedures '
-                 'and background. Keep specific source qualifications needed for the answer; the '
-                 'application separately displays generic legal-currency warnings. Follow the '
-                 'requested style and output shape exactly.'}
+ 'presentation': 'Write complete plain-text sentences within the requested word limit. Cut repetition '
+                  'and optional material, never needed qualifications or requested points. Use readable '
+                  'source attribution, not Source-N aliases, Markdown or inline IDs; IDs belong in '
+                  'supports. Use few sufficient paragraphs. Conceptual distinctions need no unrequested '
+                  'numbers. The app displays generic legal-currency warnings. Follow the exact output '
+                  'shape.'}
 
 PHASE_RULES = {'draft': 'Produce a draft answer. A support unit is one paragraph. Each paragraph has '
           'primary_support, supports and text only. Select primary_support and zero to nine '

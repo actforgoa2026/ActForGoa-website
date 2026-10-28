@@ -179,7 +179,7 @@ def test_new_plan_policy_is_exact_before_packet_or_ledger_access(acceptance_setu
 def assert_policy(value):
     assert 'effort' not in value
     assert all(value[k] == v for k, v in phase_policy_metadata().items())
-    assert value['capture_version'] == 7 and value['pipeline_spec'] == reconstruction.pipeline_spec()
+    assert value['capture_version'] == 8 and value['pipeline_spec'] == reconstruction.pipeline_spec()
 
 
 def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acceptance_setup, monkeypatch, capsys):

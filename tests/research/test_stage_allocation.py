@@ -76,7 +76,7 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
     # comparison below. Reconstruction remains exact for this same draft.
     bodies = [json.loads(r.content) for r in transport.requests]
     assert [b['output_config']['effort'] for b in bodies] == ['low', 'medium']
-    # v8 changes only the two reviewed workflow sections and their priority.
+    # Reverse the reviewed v9 source rules and v8 workflow before historical comparison.
     for body, phase in zip(bodies, ('draft', 'reconstruction')):
         body['system'] = previous_workflow_prompt(phase, style)
     bodies[0]['output_config']['effort'] = 'medium'
