@@ -24,7 +24,7 @@ from backend.hosting import PublicLimits
 from backend.providers import PRICES, chat_config
 from backend.usage_reconciliation import inspect_ledger
 from backend.answer_trace import final_json_capture, outgoing_request_capture
-from backend.answer_pipeline import run_answer_pipeline, PipelineFailure, pair_maximum_cost, initial_pipeline_trace
+from backend.answer_pipeline import run_answer_pipeline, PipelineFailure, maximum_answer_cost, initial_pipeline_trace
 from backend.reconstruction import PIPELINE_VERSION, pipeline_spec, PROVIDER_DEADLINE_SECONDS
 from backend.phase_effort import (BASE_CONFIG_EFFORT, phase_policy_metadata, validate_policy_metadata,
                                   validate_pipeline_config)
@@ -134,7 +134,8 @@ def planned_pipeline(plan):
         raise ValueError('Unknown planned answer pipeline')
     if pipeline == PIPELINE_VERSION:
         validate_policy_metadata(plan)
-        if plan.get('pipeline_spec') != pipeline_spec():
+        validate_policy_metadata(plan.get('pipeline_spec'))
+        if json.dumps(plan.get('pipeline_spec'), sort_keys=True, allow_nan=False) != json.dumps(pipeline_spec(), sort_keys=True, allow_nan=False):
             raise ValueError('Frozen pipeline spec must match the actual runtime')
     return pipeline
 
@@ -168,17 +169,17 @@ def preflight(plan, stage_name, config, *, execute=False):
         raise ValueError('Configured max_output_tokens must match the reviewed plan bound')
     if config.pipeline != planned_pipeline(plan):
         raise ValueError('Configured pipeline must match the reviewed plan pipeline')
-    two_pass = config.pipeline == PIPELINE_VERSION
-    if two_pass:
+    single_final = config.pipeline == PIPELINE_VERSION
+    if single_final:
         validate_pipeline_config(config)
     stage = plan['stages'][stage_name]
     if execute and not stage.get('approval_reference'):raise ValueError('Coordinator execution authorization is required')
     count = sum(p['count'] for p in stage['packets'])
-    attempts = count * (2 if two_pass else 1)
-    if two_pass:
+    attempts = count  # Fixed one generated request per current-workflow case.
+    if single_final:
         if (stage.get('max_cases') != count or type(stage.get('max_cases')) is not int
                 or type(stage.get('max_attempts')) is not int or not 1 <= attempts <= stage['max_attempts'] <= 100):
-            raise ValueError('Two-pass stage must bound cases and provider attempts separately')
+            raise ValueError('Single-final stage must bound cases and provider attempts separately')
     elif not 1 <= count <= stage['max_attempts'] <= 99:raise ValueError('Stage exceeds its bounded attempt plan')
     verify_packets(stage)
     root = Path(plan['data_root']).resolve()
@@ -193,7 +194,7 @@ def preflight(plan, stage_name, config, *, execute=False):
     before = inspect_ledger(ledger)
     if not before['exists'] or before != stage['expected_ledger']:
         raise ValueError('Existing canonical ledger does not match the approved baseline')
-    worst = pair_maximum_cost(config) if two_pass else config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)
+    worst = maximum_answer_cost(config) if single_final else config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)
     if before['days'].get(day, 0)+attempts > 100:raise ValueError('Not enough daily attempts for this stage')
     if before['months'].get(day[:7], 0)+worst*count > 5_000_000:
         raise ValueError('Not enough monthly allowance for this bounded stage')
@@ -297,7 +298,7 @@ def phase_accounting(before, after, trace, day):
     return after == expected
 
 
-def enough_time_for_pair():
+def enough_time_for_answer():
     now = datetime.now(timezone.utc)
     reset = (now + timedelta(days=1)).replace(hour=0, minute=0, second=0, microsecond=0)
     return (reset - now).total_seconds() > PROVIDER_DEADLINE_SECONDS
@@ -348,16 +349,16 @@ def run_cases(library, client, capture, config, cases, context, output):
         'api_version':API_VERSION,'model':config.model,**configuration_capture(config),
         'max_output_tokens':config.max_output_tokens,'before':context['before'],'cases':[],
         'originals_checked':{},'entailment_acceptance':'pending_human_review','complete':False}
-    two_pass = config.pipeline == PIPELINE_VERSION
-    if two_pass:
+    single_final = config.pipeline == PIPELINE_VERSION
+    if single_final:
         report.update(provider_attempt_ceiling=context['provider_attempt_ceiling'], max_cases=context['count'])
     limits=PublicLimits(context['ledger'].parent,chats_per_day=100,monthly_usd='5')
     save(report,output)
     for case in cases:
         started = time.monotonic()
-        if two_pass and (not enough_time_for_pair()
-                or sum(e['provider_attempts'] for e in report['cases']) + 2 > context['provider_attempt_ceiling']):
-            report['stop_reason']='No complete pair fits the remaining UTC window or frozen attempt ceiling';break
+        if single_final and (not enough_time_for_answer()
+                or sum(e['provider_attempts'] for e in report['cases']) + 1 > context['provider_attempt_ceiling']):
+            report['stop_reason']='No complete answer fits the remaining UTC window or frozen attempt ceiling';break
         before=inspect_ledger(context['ledger'])
         expected_previous=report['cases'][-1]['ledger_after'] if report['cases'] else context['before']
         if before != expected_previous or datetime.now(timezone.utc).date().isoformat()!=context['day']:
@@ -369,7 +370,7 @@ def run_cases(library, client, capture, config, cases, context, output):
                'outgoing_request':{'capture_status':'not_dispatched'},
                'human_review':{'status':'pending','claims':[],'material_omissions':[],'reviewer':None}}
         report['cases'].append(entry)
-        if two_pass:
+        if single_final:
             entry['parent_id']=uuid.uuid4().hex
             entry['pipeline_trace']=initial_pipeline_trace(entry['parent_id'],context['day'])
         else:capture.entry=entry
@@ -399,7 +400,7 @@ def run_cases(library, client, capture, config, cases, context, output):
                 if not entry['required_evidence_retained']:
                     raise ValueError('Reviewed required evidence is missing before dispatch')
                 entry['prompt_sha256']=hashlib.sha256(json.dumps(prepared.messages,ensure_ascii=False,separators=(',',':')).encode()).hexdigest()
-                if two_pass:
+                if single_final:
                     def observe(trace):
                         entry['pipeline_trace']=trace
                         entry['provider_attempts']=sum(p['provider_attempts'] for p in trace['phases'])
@@ -432,9 +433,9 @@ def run_cases(library, client, capture, config, cases, context, output):
             fatal=True
         finally:
             entry['ledger_after']=inspect_ledger(context['ledger'])
-            entry['accounting_matches']=(phase_accounting(before,entry['ledger_after'],entry['pipeline_trace'],context['day']) if two_pass
+            entry['accounting_matches']=(phase_accounting(before,entry['ledger_after'],entry['pipeline_trace'],context['day']) if single_final
                 else accounting_matches(before,entry['ledger_after'],context['day'],int(entry['reserved']),entry['reservation_microusd']))
-            if two_pass:
+            if single_final:
                 entry['usage_within_reservation']=all(p.get('usage_within_reservation',False)
                     for p in entry['pipeline_trace']['phases'] if p['provider_attempts'])
                 if not entry['usage_within_reservation']:fatal=True

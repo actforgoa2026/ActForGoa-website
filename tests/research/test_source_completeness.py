@@ -47,7 +47,7 @@ def test_stale_v8_plan_stops_before_packet_key_and_ledger(acceptance_setup, monk
         acceptance.preflight(plan, 'test', config)
 
 
-def test_v8_cache_cannot_supply_v9_despite_same_workflow_and_effort(setup, monkeypatch):
+def test_historical_v8_cache_cannot_supply_current_workflow(setup, monkeypatch):
     config, _, original, *_ = setup
     current = AnswerCache.key(config, original)
     historical = reconstruction.reconstruction_cache_identity(original, PIPELINE_VERSION)
@@ -61,4 +61,4 @@ def test_v8_cache_cannot_supply_v9_despite_same_workflow_and_effort(setup, monke
     assert previous != current and cache.get(current) is None
     with pytest.raises(ValueError):
         AnswerCache.key(replace(config, pipeline='two_pass_v8'), original)
-    assert reconstruction.pipeline_spec()['answer_workflow'] == 'evidence_plan_first_v1'
+    assert reconstruction.pipeline_spec()['answer_workflow'] == 'single_final_full_evidence_v1'

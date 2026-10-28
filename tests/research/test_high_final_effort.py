@@ -41,7 +41,7 @@ def capture(body, **kwargs):
     return outgoing_request_capture(request, **kwargs)
 
 
-@pytest.mark.parametrize('phase,effort', [('draft', 'low'), ('reconstruction', 'high')])
+@pytest.mark.parametrize('phase,effort', [('reconstruction', 'high')])
 def test_exact_trusted_phase_context_captures_unmodified_body(setup, phase, effort):
     body = body_for(setup, phase)
     record, decoded = capture(body, phase_context=context(phase))
@@ -94,7 +94,7 @@ def test_high_cannot_escape_into_unscoped_capture_or_native_builder(setup):
     ('claude-sonnet-5-5', 'medium'), ('claude-sonnet-5-5', 'high'),
 ])
 def test_legacy_unscoped_capture_and_single_pass_review_remain_valid(setup, model, effort):
-    body = body_for(setup, 'draft')
+    body = body_for(setup, 'reconstruction')
     body['model'] = model
     body['output_config']['effort'] = effort
     assert reviewed_effort(model, effort) == effort
@@ -114,17 +114,17 @@ def test_actual_owned_hook_passes_fresh_complete_local_context(setup, monkeypatc
     _, _, _, transport, limits, _, run, _ = setup
     seen = []
     def inspect(actual, *, phase_context=None):
-        assert phase_context == context('draft' if not seen else 'reconstruction')
+        assert phase_context == context('reconstruction')
         seen.append(phase_context)
         return outgoing_request_capture(actual, phase_context=phase_context)
     monkeypatch.setattr(answer_pipeline, 'outgoing_request_capture', inspect)
     result = run()
-    assert len(seen) == len(transport.requests) == len(limits.receipts) == 2
-    assert seen[0] is not seen[1]
+    assert len(seen) == len(transport.requests) == len(limits.receipts) == 1
+    assert len(seen) == 1
     assert result.trace['status'] == 'completed'
 
 
-@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('phase', ['reconstruction'])
 def test_capture_rejection_retains_reservation_and_never_sends_target(setup, monkeypatch, phase):
     _, _, _, transport, limits, _, run, _ = setup
     def forged(actual, *, phase_context=None):
@@ -134,7 +134,7 @@ def test_capture_rejection_retains_reservation_and_never_sends_target(setup, mon
     monkeypatch.setattr(answer_pipeline, 'outgoing_request_capture', forged)
     with pytest.raises(answer_pipeline.PipelineFailure, match='request_capture_mismatch') as caught:
         run()
-    count = 1 if phase == 'draft' else 2
+    count = 1
     stopped = caught.value.trace['phases'][count - 1]
     assert len(limits.receipts) == count and len(transport.requests) == count - 1
     assert stopped['reservation_receipt']['reserved'] and stopped['provider_attempts'] == 0

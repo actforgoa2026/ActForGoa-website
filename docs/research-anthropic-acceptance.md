@@ -1,5 +1,7 @@
 # Bounded Anthropic acceptance plan
 
+The active offline candidate is now documented in [single-final corpus answers](research-single-final-answers.md). The configurations, counts and observations below describe earlier candidates and do not authorize the new runtime or a release.
+
 For the new explicitly selected draft/reconstruction candidate, see [two-pass answers](research-two-pass-answers.md). Its capture v8, separate case/attempt ceilings and shared execution path supersede the single-pass execution details below only when `pipeline=two_pass_v9`. Earlier diagnostics and their failed or unreviewed judgments remain historical evidence.
 
 Prepared only; this document does not authorize provider calls or publication. The one-call connectivity/schema/accounting calibration is complete. It is not acceptance of the final retrieval candidate. LAW owns retrieval and `prepare_answer` compaction; this harness changes neither.

@@ -49,7 +49,7 @@ def test_only_approved_final_workflow_paragraph_changes_from_v10(style):
 def test_v10_cache_identity_cannot_supply_current_answer(setup, monkeypatch):
     config, _, original, *_ = setup
     current = AnswerCache.key(config, original)
-    identity = reconstruction.reconstruction_cache_identity(original, 'two_pass_v12')
+    identity = reconstruction.reconstruction_cache_identity(original, 'single_final_v1')
     previous = deepcopy(identity)
     previous['spec'].update(version='two_pass_v10', capture_version=9)
     paragraphs = previous['correction_instructions'].split('\n')
@@ -72,8 +72,8 @@ def test_detached_spec_mutation_cannot_restore_v10_identity(setup, monkeypatch):
     exported.update(version='two_pass_v10', capture_version=9)
     monkeypatch.setitem(reconstruction.PIPELINE_SPEC, 'version', 'two_pass_v10')
     monkeypatch.setitem(reconstruction.PIPELINE_SPEC, 'capture_version', 9)
-    assert reconstruction.pipeline_spec()['version'] == 'two_pass_v12'
-    assert reconstruction.pipeline_spec()['capture_version'] == 11
+    assert reconstruction.pipeline_spec()['version'] == 'single_final_v1'
+    assert reconstruction.pipeline_spec()['capture_version'] == 12
     assert before == AnswerCache.key(config, original)
 
 
@@ -98,9 +98,9 @@ def test_readiness_and_initial_capture_bind_v12_and_capture11(acceptance_setup):
     context = acceptance.preflight(plan, 'test', config)
     for value in (acceptance.readiness_report(config, context, 'test'),
                   answer_pipeline.initial_pipeline_trace('synthetic-parent', context['day'])):
-        assert value['capture_version'] == 11
+        assert value['capture_version'] == 12
         assert value['pipeline_spec'] == reconstruction.pipeline_spec()
-        assert value['pipeline_spec']['version'] == 'two_pass_v12'
+        assert value['pipeline_spec']['version'] == 'single_final_v1'
 
 
 def test_prepared_final_cannot_be_mutated_back_to_old_prompt(setup):
@@ -117,7 +117,7 @@ def test_prepared_final_cannot_be_mutated_back_to_old_prompt(setup):
 @pytest.mark.parametrize('style', ['standard', 'brief'])
 def test_actual_httpx_bytes_use_approved_prompts_and_unchanged_sources_history(style, monkeypatch):
     for key, value in {'RESEARCH_CHAT_PROVIDER': 'anthropic', 'ANTHROPIC_CHAT_MODEL': 'claude-haiku-5-5',
-                       'ANTHROPIC_CHAT_EFFORT': 'medium', 'ANTHROPIC_ANSWER_PIPELINE': 'two_pass_v12'}.items():
+                       'ANTHROPIC_CHAT_EFFORT': 'medium', 'ANTHROPIC_ANSWER_PIPELINE': 'single_final_v1'}.items():
         monkeypatch.setenv(key, value)
     source = {'id': 'fictional-register', 'text': 'Permit holders must retain the inspection certificate.',
               'title': 'Fictional register', 'source_date_metadata': [{'field': 'datePublished', 'value': '2024'}]}
@@ -132,17 +132,16 @@ def test_actual_httpx_bytes_use_approved_prompts_and_unchanged_sources_history(s
                 'supports': [{'citation_id': source['id'], 'field': 'source_publication',
                               'quote': 'Source publication year: 2024 (source metadata).'}],
                 'text': 'The fictional register, published in 2024, requires permit holders to retain the inspection certificate.'}
-        if n == 2:
-            unit['plan_refs'] = [0]
-        paragraph = unit if n == 1 else {'claims': [unit]}
+        unit['plan_refs'] = []
+        paragraph = {'claims': [unit]}
         native = {'status': 'answered', **({'paragraph': paragraph} if style == 'brief' else {'paragraphs': [paragraph]})}
         return model_response(select_response(native, payload))
     transport = Transport(handler)
     limits = Limits()
     result = asyncio.run(answer_pipeline.run_answer_pipeline(request, original, chat_config(), limits=limits,
                         client_factory=lambda: AsyncAnthropicClient('fixture-only', transport=transport)))
-    assert len(transport.requests) == len(limits.receipts) == 2 and transport.closed
-    for phase, actual, trace in zip(('draft', 'reconstruction'), transport.requests, result.trace['phases']):
+    assert len(transport.requests) == len(limits.receipts) == 1 and transport.closed
+    for phase, actual, trace in zip(('reconstruction',), transport.requests, result.trace['phases']):
         body = json.loads(actual.content)
         assert body['system'] == INSTRUCTIONS[phase][style]
         if phase == 'reconstruction':
@@ -154,6 +153,6 @@ def test_actual_httpx_bytes_use_approved_prompts_and_unchanged_sources_history(s
         assert trace['source_equality']['actual_wire_verified'] and trace['source_equality']['byte_equality']
         assert body['max_tokens'] == 12000
         assert body['output_config']['effort'] == ('low' if phase == 'draft' else 'high')
-    assert result.trace['capture_version'] == 11
-    assert result.trace['pipeline_spec']['version'] == 'two_pass_v12'
+    assert result.trace['capture_version'] == 12
+    assert result.trace['pipeline_spec']['version'] == 'single_final_v1'
     assert 'plan_refs' not in json.dumps(result.answer) and 'points' not in result.answer

@@ -1,9 +1,32 @@
 """Fixed phase policy; exported metadata is never execution authority."""
 
-PIPELINE_VERSION = 'two_pass_v12'
-EFFORT_POLICY = 'low_draft_high_reconstruction_v1'
+PIPELINE_VERSION = 'single_final_v1'
+EFFORT_POLICY = 'single_final_high_v1'
 BASE_CONFIG_EFFORT = 'medium'
-_PHASE_EFFORTS = (('draft', 'low'), ('reconstruction', 'high'))
+_PHASE_EFFORTS = (('reconstruction', 'high'),)
+_EMPTY_PLAN_UTF8 = '{"status":"insufficient_evidence","points":[],"units":[]}'
+
+
+def local_plan_adapter():
+    """Fresh local no-plan input, never a generated evidence assessment."""
+    import json
+    return json.loads(_EMPTY_PLAN_UTF8)
+
+
+def validate_local_plan_adapter(value):
+    import json
+    if (type(value) is not dict or type(value.get('status')) is not str
+            or type(value.get('points')) is not list or type(value.get('units')) is not list
+            or json.dumps(value, ensure_ascii=False, separators=(',', ':')) != _EMPTY_PLAN_UTF8):
+        raise PhasePolicyError()
+
+
+def execution_metadata():
+    import hashlib
+    return {'provider_call_count': 1, 'plan_input_mode': 'no_generated_plan_empty_adapter_v1',
+            'local_adapter': {'value': local_plan_adapter(),
+                'sha256': hashlib.sha256(_EMPTY_PLAN_UTF8.encode()).hexdigest(),
+                'provenance': {'plan_origin': 'local_empty', 'generated_plan': False}}}
 
 
 class PhasePolicyError(ValueError):
@@ -21,14 +44,21 @@ def phase_effort(phase):
 def phase_policy_metadata():
     """Return detached JSON values, including a fresh nested phase map."""
     return {'base_config_effort': BASE_CONFIG_EFFORT, 'effort_policy': EFFORT_POLICY,
-            'phase_efforts': dict(_PHASE_EFFORTS)}
+            'phase_efforts': dict(_PHASE_EFFORTS), **execution_metadata()}
 
 
 def validate_policy_metadata(value):
+    import json
     expected = phase_policy_metadata()
-    if (not isinstance(value, dict) or 'effort' in value
-            or any(value.get(key) != item for key, item in expected.items())):
-        raise PhasePolicyError()
+    try:
+        validate_local_plan_adapter(value.get('local_adapter', {}).get('value') if isinstance(value, dict) else None)
+        if (not isinstance(value, dict) or 'effort' in value
+                or type(value.get('provider_call_count')) is not int
+                or any(json.dumps(value.get(key), sort_keys=True, allow_nan=False) !=
+                       json.dumps(item, sort_keys=True, allow_nan=False) for key, item in expected.items())):
+            raise PhasePolicyError()
+    except (AttributeError, TypeError, ValueError):
+        raise PhasePolicyError() from None
 
 
 def validate_pipeline_config(config):

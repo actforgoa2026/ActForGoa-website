@@ -15,7 +15,7 @@ from backend.paragraph_slots import (PARAGRAPH_PROTOCOL, SLOT_NAMES, AnswerEnvel
 from backend.source_spans import ANCHOR_PROTOCOL
 from backend.span_draft import prepare_span_draft, normalize_span_draft
 from backend.span_draft import span_draft_message_request
-from backend.reconstruction import prepare_reconstruction, normalize_reconstruction
+from backend.reconstruction import prepare_reconstruction, normalize_reconstruction, reconstruction_message_request
 from tests.research.test_answer_pipeline import setup, model_response
 from tests.research.test_anthropic_provider import anthropic_message
 from tests.research.test_reconstruction import claim
@@ -152,7 +152,7 @@ def invalid_json(raw, mutation, style):
 
 
 @pytest.mark.parametrize('style', ['standard', 'brief'])
-@pytest.mark.parametrize('target', [1, 2])
+@pytest.mark.parametrize('target', [1])
 @pytest.mark.parametrize('mutation', ['status', 'slot', 'text', 'escaped_text', 'claims', 'selector',
                                     'nan', 'infinity', 'negative_infinity', 'overflow_float', 'malformed', 'legacy_array',
                                     'depth','surrogate','escaped_secret','hole','missing_slot','fifth_slot',
@@ -170,7 +170,7 @@ def test_invalid_final_json_stops_before_payload_callback_for_every_style_and_st
     monkeypatch.setattr(answer_trace, 'credential_like_content', scan)
     async def handler(actual, n):
         payload = json.loads(json.loads(actual.content)['messages'][-1]['content'])
-        raw = encoded(authored(payload, 'draft' if n == 1 else 'reconstruction', style)).decode()
+        raw = encoded(authored(payload, 'reconstruction', style)).decode()
         nonlocal invalid_returned
         if n == target:
             raw = invalid_json(raw, mutation, style)
@@ -229,7 +229,7 @@ def test_valid_unicode_answer_keeps_exact_text_and_original_slot_traces(setup, s
     async def handler(actual, n):
         payload = json.loads(json.loads(actual.content)['messages'][-1]['content'])
         unit = claim(text, quote=text)
-        paragraph = unit if n == 1 else {'claims': [unit]}
+        paragraph = {'claims': [unit]}
         return model_response(select_response({'status': 'answered', **({'paragraph': paragraph}
             if style == 'brief' else {'paragraphs': [paragraph]})}, payload))
     transport.handler = handler
@@ -239,11 +239,6 @@ def test_valid_unicode_answer_keeps_exact_text_and_original_slot_traces(setup, s
     for phase in result.trace['phases']:
         diagnostic = phase['final_output_diagnostic']
         resolution = phase['deterministic_support_resolution']
-        if phase['phase']=='draft':
-            assert resolution['units'][0]['unit_index']==0 and 'slot_mapping' not in resolution
-            assert diagnostic['plan']==phase['validated_plan']
-            assert diagnostic['representation']=='source_selector_plan'
-            continue
         records = resolution['claims']
         assert records[0]['slot_name'] == expected_slot
         if style == 'standard':
@@ -259,31 +254,28 @@ def test_valid_unicode_answer_keeps_exact_text_and_original_slot_traces(setup, s
 
 
 @pytest.mark.parametrize('style', ['standard', 'brief'])
-def test_valid_insufficient_evidence_keeps_style_specific_shape_through_both_phases(setup, style):
+def test_valid_insufficient_evidence_keeps_style_specific_shape_through_sole_final_phase(setup, style):
     config, _, _, transport, limits, _, _, factory = setup
     request = ChatRequest(question='What do gates do?', answer_style=style)
     original = prepare_answer(request, [{'id': 'a', 'text': 'Gates regulate tidal water.'}], provider='anthropic')
     value = ({'status': 'insufficient_evidence', 'paragraph': None} if style == 'brief' else
              slot_response({'status': 'insufficient_evidence', 'paragraphs': []}))
-    async def handler(req,n):return model_response({'status':'insufficient_evidence','points':[],'units':[]} if n==1 else value)
+    async def handler(req,n):return model_response(value)
     transport.handler = handler
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config, limits=limits, client_factory=factory))
     assert result.answer['status'] == 'insufficient_evidence' and result.answer['paragraphs'] == []
-    assert len(transport.requests) == len(limits.receipts) == 2
+    assert len(transport.requests) == len(limits.receipts) == 1
     for phase in result.trace['phases']:
-        if phase['phase']=='draft':
-            assert phase['final_output_diagnostic']['plan']=={'status':'insufficient_evidence','points':[],'units':[]}
-            continue
         assert phase['final_output_diagnostic']['answer'] == value
         if style == 'brief':assert 'derived_slot_mapping' not in phase['final_output_diagnostic']
 
 
 @pytest.mark.parametrize('change', [{'paragraph_protocol': None}, {'paragraph_protocol': 'legacy'},
-                                  {'answer_style': 'brief'}, {'phase': 'reconstruction'}])
+                                  {'answer_style': 'brief'}, {'phase': 'draft'}])
 def test_transport_refuses_untrusted_or_inconsistent_context_before_io(setup, change):
     config, request, original, transport, _, _, _, factory = setup
-    body = span_draft_message_request(config, prepare_span_draft(request, original))
-    context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': 'draft',
+    body = reconstruction_message_request(config, prepare_reconstruction(request, original, {'status':'insufficient_evidence','points':[],'units':[]}))
+    context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': 'reconstruction',
                'pipeline_version': PIPELINE_VERSION, 'effort_policy': EFFORT_POLICY,
                'base_config_effort': 'medium','plan_protocol':'bounded_source_plan_v1',
                'final_internal_protocol':'planned_claim_supports_v1', **change}

@@ -22,17 +22,17 @@ from tests.research.span_fixtures import select_response
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
     plan.pop('effort',None)
-    plan.update(pipeline='two_pass_v12',pipeline_spec=deepcopy(PIPELINE_SPEC),
+    plan.update(pipeline='single_final_v1',pipeline_spec=deepcopy(PIPELINE_SPEC),
                 **phase_policy_metadata(),max_output_tokens=12000)
-    plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v12')
+    plan['stages']['test'].update(max_cases=2,max_attempts=2)
+    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='single_final_v1')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
         payload=json.loads(json.loads(request.content)['messages'][-1]['content']);evidence=payload['evidence'][0]
         unit={'primary_support':{'citation_id':evidence['id'],'field':'text','quote':'Gates regulate tidal water.'},'supports':[],
               'text':'Gates regulate tidal water.'}
-        native={'status':'answered','paragraphs':[unit if n==1 else {'claims':[unit]}]}
+        native={'status':'answered','paragraphs':[{'claims':[unit]}]}
         native=select_response(native,payload)
         return model_response(native)
     handlers=[handler]
@@ -49,26 +49,26 @@ def run(setup):
     return acceptance.run_cases(library,factory,None,config,cases,context,tmp/'capture-v2.json')
 
 
-def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
+def test_single_final_receipt_and_truthful_local_adapter_capture(setup):
     plan,config,_,tmp,_,transports,_=setup
     context=acceptance.preflight(plan,'test',config)
-    assert context['provider_attempt_ceiling']==4 and context['worst_reservation_microusd']==40096
+    assert context['provider_attempt_ceiling']==2 and context['worst_reservation_microusd']==21248
     report=run(setup)
     assert report==json.loads((tmp/'capture-v2.json').read_text())
-    assert report['capture_version']==11 and report['pipeline_spec']==PIPELINE_SPEC
-    assert report['complete'] and report['attempts']==4 and report['entailment_acceptance']=='pending_human_review'
+    assert report['capture_version']==12 and report['pipeline_spec']==PIPELINE_SPEC
+    assert report['complete'] and report['attempts']==2 and report['entailment_acceptance']=='pending_human_review'
     assert len(transports)==2 and all(t.closed for t in transports)
     for entry,transport in zip(report['cases'],transports):
-        assert entry['reserved_count']==2 and entry['accounting_matches'] and entry['usage_within_reservation']
+        assert entry['reserved_count']==1 and entry['accounting_matches'] and entry['usage_within_reservation']
         assert entry['mechanical_passed'] and entry['human_review']['status']=='pending'
         trace=entry['pipeline_trace']
-        assert trace['status']=='completed' and len(trace['phases'])==2 and trace['final_answer']==entry['answer']
+        assert trace['status']=='completed' and len(trace['phases'])==1 and trace['final_answer']==entry['answer']
         for phase,request in zip(trace['phases'],transport.requests):
             assert phase['outgoing_request']['body_utf8'].encode()==request.content
             receipt=phase['reservation_receipt'];assert receipt['reserved'] and receipt['parent_id']==entry['parent_id']
             assert receipt['after']['day_attempts']==receipt['before']['day_attempts']+1
-        draft=json.loads(json.loads(transport.requests[1].content)['messages'][-1]['content'])['evidence_plan']
-        assert draft==trace['phases'][1]['compact_plan']
+        draft=json.loads(json.loads(transport.requests[0].content)['messages'][-1]['content'])['evidence_plan']
+        assert draft==trace['local_adapter']['value']
     assert 'fixture-only' not in json.dumps(report) and 'private diagnostic' not in json.dumps(report)
     assert (tmp/'capture-v2.json').stat().st_mode & 0o777==0o600
     with pytest.raises(FileExistsError):
@@ -77,7 +77,7 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
 
 @pytest.mark.parametrize('change',[
     lambda p:p.pop('pipeline'),lambda p:p['pipeline_spec'].update(correction_prompt_bytes=32000),
-    lambda p:p['stages']['test'].pop('max_cases'),lambda p:p['stages']['test'].update(max_attempts=2),
+    lambda p:p['stages']['test'].pop('max_cases'),lambda p:p['stages']['test'].update(max_attempts=1),
     lambda p:p.update(pipeline='two_pass_v1'),
     lambda p:p.update(pipeline='two_pass_v2'),
     lambda p:p.update(pipeline='two_pass_v3'),
@@ -115,7 +115,7 @@ def test_midnight_guard_preserves_unrun_case_and_spend(setup,monkeypatch):
     assert report['before']==report['after'] and not setup[5]
 
 
-@pytest.mark.parametrize('phase',[1,2])
+@pytest.mark.parametrize('phase',[1])
 def test_v2_failure_keeps_receipts_and_available_diagnostics_without_final(setup,phase):
     handlers=setup[6];good=handlers[0]
     async def broken(request,n):
@@ -149,11 +149,11 @@ def test_no_evidence_is_zero_call_and_still_requires_correct_expected_behavior(s
 
 def test_tampered_receipt_fails_exact_accounting(setup):
     report=run(setup);entry=report['cases'][0];trace=deepcopy(entry['pipeline_trace'])
-    trace['phases'][1]['reservation_receipt']['after']['day_attempts']+=1
+    trace['phases'][0]['reservation_receipt']['after']['day_attempts']+=1
     assert not acceptance.phase_accounting(entry['ledger_before'],entry['ledger_after'],trace,setup[0]['date_utc'])
 
 
-def test_persistence_failure_after_draft_prevents_second_dispatch(setup,monkeypatch):
+def test_persistence_failure_prevents_publication_and_next_case(setup,monkeypatch):
     original=acceptance.save
     def failing_save(report,path):
         if report['cases'] and any(p.get('state')=='completed' for p in report['cases'][-1].get('pipeline_trace',{}).get('phases',[])):

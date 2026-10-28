@@ -1,4 +1,4 @@
-"""Shared two-phase execution for HTTP and acceptance, with no implicit retries."""
+"""Shared single-final execution for HTTP and acceptance, with no implicit retries."""
 import asyncio
 from copy import deepcopy
 from dataclasses import dataclass
@@ -13,12 +13,11 @@ from .chat import MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
 from .reconstruction import (PIPELINE_VERSION, pipeline_spec, CORRECTION_PROMPT_BYTES,
     PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
-from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
-from .span_draft import prepare_span_draft, span_draft_message_request, normalize_span_draft
+from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_single_final_wire_binding, original_baseline
 from .paragraph_slots import PARAGRAPH_PROTOCOL, AnswerEnvelopeError
 from .evidence_plan import PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL
 from .phase_effort import (EFFORT_POLICY, PhasePolicyError, phase_effort, phase_policy_metadata,
-                           validate_pipeline_config, check_phase_request)
+                           validate_pipeline_config, check_phase_request, local_plan_adapter)
 
 
 class PipelineFailure(Exception):
@@ -38,13 +37,9 @@ def utc_day():
     return datetime.now(timezone.utc).date().isoformat()
 
 
-def pair_maximum_cost(config):
-    return sum(pair_maximum_costs(config))
-
-
-def pair_maximum_costs(config):
-    return [config.maximum_cost_microusd(MAX_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE),
-            config.maximum_cost_microusd(CORRECTION_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)]
+def maximum_answer_cost(config):
+    validate_pipeline_config(config)
+    return config.maximum_cost_microusd(CORRECTION_PROMPT_BYTES + FRAMING_TOKEN_ALLOWANCE)
 
 
 def usage_within_bound(stage):
@@ -64,7 +59,7 @@ def initial_pipeline_trace(parent_id, expected_day):
                 {'phase': name, 'state': 'not_started', 'provider_attempts': 0,
                  'effort_policy': EFFORT_POLICY, 'expected_phase_effort': phase_effort(name),
                  'outgoing_request': {'capture_status': 'not_dispatched'}}
-                for name in ('draft', 'reconstruction')]}
+                for name in ('reconstruction',)]}
 
 
 async def joined_native_call(function):
@@ -91,7 +86,7 @@ async def joined_native_call(function):
 async def run_answer_pipeline(request, prepared, config, *, limits, client_factory,
                               observer=None, request_started_at=None, request_id=None,
                               expected_day=None, disconnected=None):
-    """Return only a corrected final answer; preserve every committed reservation.
+    """Return only a validated final answer; preserve every committed reservation.
 
     Retrieval happens in its original owner before this entry point. Its elapsed
     time counts against the provider/no-new-dispatch deadline, not a hard native
@@ -177,10 +172,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                     raise fail('request_capture_mismatch')
                 check_phase_request(actual_body, pipeline_version=PIPELINE_VERSION,
                                     effort_policy=EFFORT_POLICY, base_config_effort=config.effort, phase=stage['phase'])
-                proof=verify_wire_binding(capture['body_utf8'],json.loads(frozen_baseline_utf8),
-                    stage['span_registry_sha256'],phase=stage['phase'],
-                    draft_body_utf8=(trace['phases'][0]['outgoing_request']['body_utf8']
-                                     if stage['phase']=='reconstruction' else None))
+                proof=verify_single_final_wire_binding(capture['body_utf8'],json.loads(frozen_baseline_utf8),
+                    stage['span_registry_sha256'])
                 stage['source_equality'].update(proof)
                 stage.update(state='dispatched', provider_attempts=1, dispatch_status='initiated_receipt_unconfirmed',
                          dispatched_elapsed_seconds=time.monotonic() - started,
@@ -206,7 +199,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             notify()
 
         phase_started = time.monotonic()
-        phase_deadline = min(deadline, phase_started + PROVIDER_STAGE_SECONDS)
+        phase_deadline = deadline  # Sole request owns only the original remaining overall allowance.
         try:
             async with asyncio.timeout(max(0, phase_deadline - phase_started)):
                 content = await client.send(body, on_request=on_request, on_response=on_response,
@@ -247,58 +240,43 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             except PhasePolicyError:
                 raise fail('pipeline_configuration')
             await available()
+            # Relocated deterministic preparation checks run before observation,
+            # credential access or reservation. No generated plan exists.
+            correction = prepare_reconstruction(request, original, local_plan_adapter())
+            correction_body = reconstruction_message_request(config, correction)
+            original_body = message_request(config, original)
+            baseline = original_baseline(original.messages[-1]['content'], original.messages[1:-1], original.request_scope)
+            frozen_baseline_utf8 = encoded(baseline).decode()
             trace['status'] = 'prepared'
-            trace['pair_preflight'] = limits.preflight_pair(pair_maximum_costs(config), expected_day)
+            trace['single_preflight'] = limits.preflight_single(maximum_answer_cost(config), expected_day)
             notify()
-            if not trace['pair_preflight'].get('allowed'):
+            if not trace['single_preflight'].get('allowed'):
+                # Compatibility category already mapped by the unchanged HTTP route.
                 raise fail('pair_allowance_refused')
             await available()
-            # Preserve the legacy preparation/selection exactly. The new wire
-            # prompt is applied only after it has selected the complete input.
-            original_body = message_request(config, original)
-            selected_draft = prepare_span_draft(request,original)
-            draft_body = span_draft_message_request(config,selected_draft)
-            frozen_baseline_utf8=encoded(selected_draft.baseline).decode()
             async with client_factory() as client:
-                # The real transport checks its actual credential/workspace
-                # values locally. No unchecked baseline reaches an observer,
-                # reservation or HTTP dispatch, even if annotation splits it.
-                safety,safe_baseline=client.capture_prepared_original(original_body,selected_draft.baseline)
+                safety,safe_baseline=client.capture_prepared_original(original_body,baseline)
                 if safe_baseline is None or encoded(safe_baseline).decode()!=frozen_baseline_utf8:
                     raise fail('unsafe_prepared_original')
                 trace['prepared_original']=deepcopy(safe_baseline)
                 trace['prepared_original_safety']=deepcopy(safety)
-                current=trace['phases'][0]
-                current.update(source_equality={'complete_evidence_equal':True},
-                    request_scope=deepcopy(safe_baseline['request_scope']),
-                    input_binding_sha256=selected_draft.binding_sha256,anchor_protocol=ANCHOR_PROTOCOL,
-                    span_registry_sha256=selected_draft.span_registry_sha256,
-                    span_registry={key:{k:v for k,v in span.items() if k!='text'} for key,span in selected_draft.span_registry.items()},
-                    annotated_payload_sha256=selected_draft.annotated_payload_sha256)
-                def observe_resolution(value):
-                    current['deterministic_support_resolution']=value
-                    notify()
-                draft = await run_stage(client,current,draft_body,selected_draft.input_token_bound,
-                    lambda content:normalize_span_draft(content,selected_draft,resolved_observer=observe_resolution))
-                trace['phases'][0]['validated_plan'] = deepcopy(draft)
-                trace['phases'][0]['validated_plan_sha256'] = digest(draft)
-                # Preparation cannot discard any source or retained history.
-                current = trace['phases'][1]
-                correction = prepare_reconstruction(request, original, draft)
-                correction_body = reconstruction_message_request(config, correction)
+                current = trace['phases'][0]
                 first_payload = json.loads(original.messages[-1]['content'])
                 next_payload = json.loads(correction.messages[-1]['content'])
                 preserved,actual_registry = verify_annotated_payload(
                     {k:next_payload[k] for k in ('question','sources','evidence')},first_payload)
                 if preserved != first_payload or correction.messages[1:-1] != original.messages[1:-1]:
                     raise fail('evidence_identity_changed')
-                current.update(compact_plan=deepcopy(correction.compact_plan),plan_sha256=digest(correction.compact_plan),
+                current.update(local_adapter=deepcopy(phase_policy_metadata()['local_adapter']),
                     source_equality={'prepared_original_sha256':digest(first_payload), 'reconstruction_sha256':digest(preserved),
                                      'retained_history_equal':True, 'complete_evidence_equal':True},
                     request_scope=next_payload['request_scope'], input_binding_sha256=correction.binding_sha256,
                     anchor_protocol=ANCHOR_PROTOCOL,span_registry_sha256=correction.span_registry_sha256,
                     span_registry={key:{k:v for k,v in span.items() if k!='text'} for key,span in actual_registry.items()},
                     annotated_payload_sha256=correction.annotated_payload_sha256)
+                def observe_resolution(value):
+                    current['deterministic_support_resolution']=value
+                    notify()
                 final, assembly = await run_stage(client, current, correction_body, correction.input_token_bound,
                     lambda content: normalize_reconstruction(content, correction,resolved_observer=observe_resolution))
                 trace['assembly_offsets'] = assembly
@@ -306,6 +284,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             await available()
             trace.update(status='completed', final_answer=deepcopy(final))
             notify()
+            await available()
             return PipelineResult(final, deepcopy(trace))
         except asyncio.CancelledError:
             trace.pop('final_answer', None)
