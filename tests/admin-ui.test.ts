@@ -38,6 +38,17 @@ test('editor detects unsaved content and validates publication separately from d
   assert.deepEqual(parseTags('Water, Community, Water, ,'), ['Water', 'Community']);
 });
 
+test('story URLs cannot shadow the original archive route', () => {
+  const draft = {...emptyPost(), title: 'Archive', excerpt: 'An update.', body: 'A story.', slug: 'archive'};
+  assert.match(validatePost(draft), /reserved/);
+  assert.match(validatePost(draft, true), /reserved/);
+  assert.match(validatePost({...draft, slug: ' Archive '}), /reserved/);
+  assert.equal(slugFromTitle('Archive'), 'archive-story');
+  assert.equal(slugFromTitle('ARCHIVE!'), 'archive-story');
+  assert.equal(validatePost({...draft, slug: slugFromTitle(draft.title)}, true), '');
+  assert.equal(validatePost({...draft, slug: 'archive-news'}, true), '');
+});
+
 test('admin writes send cookie credentials and CSRF without URL secrets', async t => {
   let requestUrl = ''; let requestOptions: RequestInit | undefined;
   t.mock.method(globalThis, 'fetch', async (url: string | URL | Request, options?: RequestInit) => {

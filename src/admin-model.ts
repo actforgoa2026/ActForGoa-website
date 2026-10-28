@@ -26,12 +26,16 @@ export function filterCuration(records: CurationRecord[], query: string, group: 
   const tokens = normalize(query).split(/\s+/).filter(Boolean);
   return records.filter(record => (!group || record.group === group) && (!onlyStarred || starred.has(record.id)) && tokens.every(token => normalize([record.title, record.summary, record.kind, ...record.topics].join(' ')).includes(token)));
 }
-export const slugFromTitle = (title: string) => normalize(title).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 100).replace(/-$/g, '');
+export function slugFromTitle(title: string) {
+  const slug = normalize(title).replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 100).replace(/-$/g, '');
+  return slug === 'archive' ? 'archive-story' : slug;
+}
 export const emptyPost = (): PostInput => ({title: '', slug: '', excerpt: '', body: '', tags: []});
 export function postInput(post: PostInput): PostInput { return {title: post.title, slug: post.slug, excerpt: post.excerpt, body: post.body, tags: [...post.tags]}; }
 export function postChanged(draft: PostInput, saved: PostInput | null) { return JSON.stringify(postInput(draft)) !== JSON.stringify(saved ? postInput(saved) : emptyPost()); }
 export function parseTags(text: string) { return [...new Set(text.split(',').map(tag => tag.trim()).filter(Boolean))]; }
 export function validatePost(draft: PostInput, publish = false): string {
+  if (draft.slug.trim().toLowerCase() === 'archive') return 'The URL name “archive” is reserved for the original story archive. Choose another URL name.';
   if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(draft.slug) || draft.slug.length > 100) return 'Add a URL name using lowercase letters, numbers and single hyphens.';
   if (draft.title.length > 180 || draft.excerpt.length > 500 || draft.body.length > 100000) return 'The story is over a field’s length limit. Shorten it before saving.';
   if (draft.tags.length > 12 || draft.tags.some(tag => tag.length > 40)) return 'Use up to 12 tags, with no more than 40 characters each.';
