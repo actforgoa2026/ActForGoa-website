@@ -15,3 +15,7 @@ The former local **ORCHESTRATOR** (`01a17774-6d09-7751-915c-3fbf3a8994c4`), LAW,
 - Keep private report data, credentials, personal CRM notes and raw research archives out of Git and static deployments.
 - Use the installed Impeccable skill and inspect the rendered desktop and phone result for visual changes. No italic/oblique text or decorative side stripes. Never launch Device Hub without explicit approval for that occasion.
 - State separately what is implemented, tested, merged and live. The review alias is `actforgoa-field-guide.vercel.app`; changing the original `actforgoa.org` site requires a separate user decision.
+
+## User design preference
+
+Never add eyebrow labels above headings. Do not use uppercase eyebrow text. The user explicitly requires no eyebrows, including on the orbit landing page.

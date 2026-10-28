@@ -12,7 +12,7 @@ export const topicDescriptions: Record<string, string> = {
  waste: 'Collection, recycling & dumping',
  nature: 'Animal help & conservation',
  water: 'Water supply & pollution',
- community: 'Local problems & your rights',
+ community: 'Youth care & community support',
  food: 'Growing food & farm support',
  culture: 'Heritage, arts & local groups',
  planning: 'Building work & getting around',
@@ -67,7 +67,7 @@ export const topicFlows: TopicFlow[] = [
    {id:'coast',label:'A beach or coastal area',icon:'nature',query:'coast marine conservation',peopleIds:['org-3','org-18'],links:[{label:'Find the coastal authority',href:'https://www.czma.goa.gov.in/Default.aspx',icon:'heritage'},inspection],steps:['Note the location and the activity you are concerned about.','Ask the coastal authority to check the site and the relevant clearance.'],resourceIds:['guide-environmental-protection']},
   ]},
  ]},
- {slug:'community',topic:'Community & rights',label:'Community & rights',icon:'community',actions:[
+ {slug:'community',topic:'Community & rights',label:'Community and Youth',icon:'community',actions:[
   {id:'report',label:'Report a local problem',icon:'report',query:'complaint community',question:'Where are you in the process?',choices:[
    {id:'new',label:'Make a new complaint',icon:'report',query:'complaint community',links:[report('Start a government complaint'),complaint],steps:['Describe what happened, where and when. Include what you would like the office to do.','Save a copy and the complaint reference.'],resourceIds:['guide-reporting']},
    {id:'follow-up',label:'Follow up a complaint',icon:'file',query:'complaint follow up',links:[report('Open the complaint tracking service'),form('Write a follow-up letter','02-follow-up.txt')],steps:['Find your original complaint reference, submission date and any reply.','Ask for the current status and the next action, and keep a copy of your follow-up.'],resourceIds:['guide-reporting']},
@@ -86,7 +86,7 @@ export const topicFlows: TopicFlow[] = [
    {id:'disability',label:'Disability support',icon:'access',query:'disability support',links:[{label:'Choose the support you need',href:'/topics/health/disability',icon:'access'},people('See disability organisations')],peopleIds:['org-5','org-16','org-15','org-14']},
   ]},
  ]},
- {slug:'nature',topic:'Nature & wildlife',label:'Nature & wildlife',icon:'nature',actions:[
+ {slug:'nature',topic:'Nature & wildlife',label:'Biodiversity',icon:'nature',actions:[
   {id:'animal',label:'Help an injured animal',icon:'animal',query:'animal welfare rescue',question:'What kind of animal needs help?',choices:[
    {id:'pet',label:'A dog, cat or other pet',icon:'animal',query:'animal veterinary clinic',peopleIds:['org-2','org-52'],links:[vets,people('See animal welfare organisations'),form('Prepare an animal assistance note','12-animal-assistance.txt')],steps:animalSteps,resourceIds:['guide-animal-welfare']},
    {id:'livestock',label:'Cattle or a farm animal',icon:'animal',query:'cattle animal veterinary',peopleIds:['org-2'],links:[vets,people('See animal welfare organisations')],steps:animalSteps,resourceIds:['guide-animal-welfare']},

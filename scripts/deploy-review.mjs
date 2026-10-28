@@ -20,7 +20,7 @@ const tree = git('rev-parse', 'HEAD^{tree}');
 if (commit !== git('rev-parse', 'origin/main')) {
   throw new Error('Release HEAD must equal freshly fetched origin/main. Integrate and merge first.');
 }
-const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask', '/ask/legal', '/ask/ecology', '/admin', '/blog', '/blog/archive'];
+const requiredRoutes = ['/', '/explore', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask', '/ask/legal', '/ask/ecology', '/admin', '/blog', '/blog/archive'];
 if (evidence.treeSha !== tree || evidence.desktop !== true || evidence.mobile !== true
     || !requiredRoutes.every(route => evidence.routes?.includes(route))
     || !evidence.routes?.some(route => route.startsWith('/documents/'))) {
