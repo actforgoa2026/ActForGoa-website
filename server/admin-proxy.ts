@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const MAX_BODY = 420000;
-const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
+const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
 
 export function configuredAdminOrigin(raw = process.env.ADMIN_API_ORIGIN): string | null {
   if (!raw) return null;
@@ -53,11 +53,11 @@ export function createAdminProxy(options: {origin?:string; fetcher?:typeof fetch
       const body = await requestBody(req);
       const response = await (options.fetcher ?? fetch)(origin + url.pathname + url.search, {
         method:req.method || 'GET', headers, body:body as BodyInit | undefined,
-        redirect:'manual', signal:AbortSignal.timeout(20_000),
+        redirect:'manual', signal:AbortSignal.timeout(url.pathname.startsWith('/api/admin/satellite/') ? 60_000 : 20_000),
       });
       if (response.status >= 300 && response.status < 400) return fail(502,'The team tools service returned an unexpected redirect.');
       const payload = await response.arrayBuffer();
-      if (payload.byteLength > 2 * 1024 * 1024) return fail(502,'The team tools response was too large.');
+      if (payload.byteLength > (url.pathname.startsWith('/api/admin/satellite/') ? 4 : 2) * 1024 * 1024) return fail(502,'The team tools response was too large.');
       res.statusCode=response.status;
       res.setHeader('Content-Type',response.headers.get('content-type') || 'application/json; charset=utf-8');
       if (isAdmin) {
