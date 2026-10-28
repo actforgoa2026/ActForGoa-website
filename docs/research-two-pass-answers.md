@@ -28,7 +28,7 @@ The shared $5/month and 100-attempt/day limits remain. Complete-pair preflight i
 
 At the currently reviewed rates and fixed maximum bounds, draft reserves at most 9,424 micro-USD; reconstruction 10,624; a pair 20,048 ($0.020048). Actual smaller packets reserve less. Seventy-one complete pairs reserve at most 1,423,408 micro-USD and normally require 142 provider attempts, so evaluation must span UTC-day stages. These are conservative reservations, not actual invoice totals. Prices, schema/token overhead and reported usage still need the existing live checks.
 
-## Capture v7 and frozen plans
+## Capture v8 and frozen plans
 
 Historical single-pass and `two_pass_v1`/`two_pass_v2`/`two_pass_v3`/`two_pass_v4`/`two_pass_v5`/`two_pass_v6`/`two_pass_v7`/`two_pass_v8` artifacts remain unchanged and cannot authorize this candidate. New plans must contain `pipeline: "two_pass_v9"`, the exact shared `PIPELINE_SPEC` including `anchor_protocol: "lossless_source_spans_v2"` and `paragraph_protocol: "four_nullable_slots_v1"` and `answer_workflow: "required_coverage_first_v1"` with capture version 8, and for each UTC-day stage separate `max_cases` (equal to selected packet count) and `max_attempts` (at least twice that count, at most 100). The environment must independently select the same pipeline/model/effort/output bound. Existing exact-head, generation, ledger and execution-authorization checks still run before key loading or native access. Planning only hashes question packets.
 
