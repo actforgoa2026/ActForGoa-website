@@ -1,0 +1,66 @@
+{
+  "routes": [
+    {
+      "name": "admin-login",
+      "route": "/admin",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "overflow": false,
+      "heading": "Welcome back."
+    },
+    {
+      "name": "public-blog-phone",
+      "route": "/blog",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "overflow": false,
+      "heading": "Good work, shared."
+    },
+    {
+      "name": "public-story-phone",
+      "route": "/blog/cloud-qa-community-story",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "overflow": false,
+      "heading": "Cloud QA community story"
+    },
+    {
+      "name": "public-blog-desktop",
+      "route": "/blog",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "overflow": false,
+      "heading": "Good work, shared."
+    },
+    {
+      "route": "/documents/c3c10d8d88052d7dfceb550e-bda111aa3133?generation=20261028T082353-480d3ec2&page=1&passage=7fa58b3d792a49803bb13a68849d5a44",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "heading": "Plan building or repair work",
+      "overflow": false
+    },
+    {
+      "name": "research-document-phone",
+      "route": "/documents/c3c10d8d88052d7dfceb550e-bda111aa3133?generation=20261028T082353-480d3ec2&page=1&passage=7fa58b3d792a49803bb13a68849d5a44",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "overflow": false,
+      "heading": "Plan building or repair work"
+    }
+  ],
+  "pageErrors": [],
+  "admin_flow": "login, persistent star, draft privacy, publish, private edits, republish, public list/detail",
+  "research": "real five-guide Zvec source search and document reader; no provider calls"
+}

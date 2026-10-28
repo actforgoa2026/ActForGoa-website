@@ -4,6 +4,8 @@ A public-site archive and searchable redesign of [ActForGoa](https://actforgoa.o
 
 [Open the client-review site](https://actforgoa-field-guide.vercel.app/) · [Private GitHub repository](https://github.com/actforgoa2026/ActForGoa-website)
 
+Start ongoing work with the [cloud implementation and handoff ledger](docs/CLOUD-IMPLEMENTATION-PLAN.md). It distinguishes implemented, tested, merged and live work and records the local deployment steps for PR #90.
+
 ## Run locally
 
 ```sh
@@ -16,7 +18,9 @@ Open http://127.0.0.1:4173. Build with `npm run build`; test with `npm test`. No
 ## What works
 
 - Eight guided topic menus with 95 topic, submenu and outcome routes.
-- Research library at `/ask` with hybrid source retrieval, page-level citations, full extracted documents and original downloads. Generated answers require a separately configured server key; source search remains available without it. [Research architecture and checks](RESEARCH.md).
+- Research library at `/ask`, `/ask/legal` and `/ask/ecology` with Zvec/keyword retrieval, citations and full extracted documents. Short Anthropic answers separate library evidence from outside-library general context, with relevant community matches. Generated answers require the server key, preserved accounting and live acceptance; source search remains available independently. [Research architecture and checks](RESEARCH.md).
+- Phone-friendly editors for all 43 topic form actions, with 18 authored templates and direct PDF export. Word and print remain optional; completing a blank form never requires downloading it first. [Form scope and verification](reports/FORMS-CLOUD-20261028.md).
+- Internal dashboard at `/admin` for shared community/resource curation and blogging. Individual accounts, shared stars, versioned drafts, preview and explicit publication use the separate persistent editorial service. New articles appear at `/blog`; original articles remain at `/blog/archive`. [Setup and deployment](deploy/admin/README.md).
 - Sourced photographs, work tags and direct actions connect reviewed archive records to the CRM through exact source identities. [Directory evidence](reports/DIRECTORY-ENRICHMENT.md).
 - Private incident reporting with photo/location intake and an authenticated review inbox.
 - The community CRM at `/directory` includes 3,267 sourced records, searchable public contacts, activity and verification filters, participation routes, and browser-local relationship notes with JSON backup/restore. [CRM usage and maintenance](docs/CRM.md).

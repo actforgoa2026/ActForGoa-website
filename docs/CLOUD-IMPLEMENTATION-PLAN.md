@@ -1,6 +1,6 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-This chat is the new cloud orchestrator requested by the user. The former local ORCHESTRATOR was asked to pause. All commands, builds, tests, indexing and browser QA run under `/workspace` in the cloud. Do not restart local agents or use the user's computer for execution.
+This chat is the new cloud orchestrator requested by the user. The former local ORCHESTRATOR was asked to pause. Feature development, tests, indexing and browser QA ran under `/workspace` in the cloud. The user subsequently authorized a focused local handoff for existing credentials, service wiring and shipping; do not restart the old parallel workers or heartbeat coordination.
 
 ## Resume here
 
@@ -8,20 +8,45 @@ Read this file and `AGENTS.md` before doing work. Inspect `git status`, fetch `o
 
 ## Work ledger
 
-Last updated: 28 October 2026. All paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90 (draft until combined checks finish).
+Last updated: 28 October 2026. All `/workspace` paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90. Branch: `codex/cloud-integration-20261028`. Implementation and cloud acceptance are complete. **Not merged or live.** Local shipping remains next.
 
 | Task | Owner | Status | Finished / evidence | Next action |
 | --- | --- | --- | --- | --- |
 | Cloud setup and baseline | Root | Complete | Shell works; Python 3.12 / Node 24; freshly fetched main `fa43cf8`; six isolated worktrees | Keep all execution in cloud |
-| Previous-work recovery | Root + reference_recovery | In progress | Prior orchestrator pause confirmed; Admin Curation Plan recovered; prior Anthropic branches located | Recover Disco blogging reference and any reusable curation code |
-| Research backend | research_api | In progress | API contract agreed with research_ui; preserving prior budget constraints | Implement Anthropic/domain retrieval/provenance; test disposable Zvec index |
-| Legal and ecology UX | research_ui | In progress | `/ask/legal`, `/ask/ecology`, `/ask` agreed; community matching scoped to public registry | Implement and deliver code/tests to root |
-| Mobile forms/PDF | mobile_forms | In progress | Raw template links in topic pathways identified; existing 18 editors reusable | Replace download prerequisites; add direct PDF export and phone checks |
-| Internal backend | admin_api | In progress | Node SQLite/session/CSRF API contract agreed | Implement persistent curation/blog storage, auth, provisioning and tests |
-| Internal dashboard | admin_ui | In progress | `/admin/*` shell + curation/blog flow agreed | Implement UI and public blog views; incorporate recovered Disco reference |
-| Shared integration | Root | In progress | Worktree/file ownership assigned; this ledger created and linked from AGENTS.md | Wire routes, public curation ranking, dev proxies, service deployment config |
-| Combined tests and visual review | Root | Pending implementation | No combined acceptance yet | Test/build; desktop/phone screenshots and regression checks |
-| PR / merge / release | Root | Pending acceptance | No feature commits merged or published by this cloud task | Create reviewed PR, then follow release script when gates and cloud access pass |
+| Previous-work recovery | Root + reference_recovery | Complete with limitation | Admin Curation Plan and previous Anthropic/accounting work recovered; exact Disco source inaccessible | Local reference comparison remains; do not claim exact parity |
+| Research backend | research_api | Implemented + tested | Scoped Zvec + FTS5/RRF, concise Anthropic answers, explicit outside context, preserved budgets, loss-safe ledger; 118 Python tests | Restore full corpus/accounting and run bounded live-provider acceptance locally |
+| Legal and ecology UX | research_ui | Implemented + tested | `/ask/legal`, `/ask/ecology`, `/ask`; cited library/outside separation; relevant public registry matches and source caveats | Verify against restored hosted service |
+| Mobile forms/PDF | mobile_forms | Implemented + tested | 43 topic form actions use editors; all 18 authored forms export real PDFs; desktop/phone download + Unicode verified | Preserve official-form limitations; no blank download prerequisite in topic paths |
+| Internal backend | admin_api | Implemented + tested | Durable SQLite, individual accounts, CSRF/session checks, shared stars, versioned drafts/published snapshots, paginated lists | Deploy separate persistent service and provision named accounts |
+| Internal dashboard | admin_ui | Implemented + tested | Sidebar overview, community/resources curation, draft/editor/preview/publish; public journal and retained archive | Hosted login/publishing smoke after local service wiring |
+| Shared integration | Root | Implemented + tested | Routes/nav, relevant-only public curation, same-origin admin transport, cloud launch/proxies, release guards and allowlisted packager | Local Vercel `ADMIN_API_ORIGIN` configuration |
+| Combined tests and visual review | Root | Complete in cloud | 176 Node tests; 118 Python tests; build; 36 route/provenance browser checks and real admin workflow | Live provider + hosted deployment checks remain distinct |
+| PR / merge / release | Root then local ORCHESTRATOR | PR ready; merge/live pending | PR #90 with portable evidence and handoff docs | Resume local orchestrator with instructions below; no cloud-to-local send tool available |
+
+### Exact continuation for the local orchestrator
+
+The cloud session could inspect local chats but had no `send_message_to_thread` or `handoff_thread` tool. **No local worker has been resumed or told that deployment is complete.** The user can give the existing **ORCHESTRATOR** chat (`01a17774-6d09-7751-915c-3fbf3a8994c4`) this instruction:
+
+> Ship ActForGoa PR #90 from `codex/cloud-integration-20261028`. Read `docs/CLOUD-IMPLEMENTATION-PLAN.md` first. Cloud implementation and tests are complete. Use the existing local credentials and preserved corpus/accounting to finish service wiring, live acceptance, merge and review-site deployment. Do not restart the old worker chats or coordination heartbeat. Preserve all newer work and do not change actforgoa.org.
+
+1. Fetch PR #90 into a clean isolated checkout; inspect the exact remote head and this ledger. Do not reuse/reset the dirty shared checkout. Cloud code evidence is in [reports/cloud-release-2026-10-28](../reports/cloud-release-2026-10-28/README.md). The report hashes runtime files, so changes can be distinguished from the already-checked code.
+2. Read [RESEARCH-CLOUD-HANDOFF.md](RESEARCH-CLOUD-HANDOFF.md). Recover the verified full research corpus and existing usage ledger using the prior local checkpoint at `/Users/zakkrevitt/.codex/worktrees/research-accounting/ActForGoa/.reports/anthropic-acceptance-20261027/checkpoint-after-main-release.json`. Inspect checkpoint JSON first; use disposable copies rather than opening sealed preservation databases. Retain older citation generations and the $5 monthly / 100-attempt daily limits. The five-guide cloud smoke dataset is **not** a release corpus.
+3. Package/deploy the new research runtime to the existing research service, preserve source-search routing, and use the already-provided server-only Anthropic key. Verify model availability/pricing and the small legal/ecology/partial/no-match acceptance set described in the handoff. Quote validation is not semantic acceptance. Keep chat disabled if acceptance fails; do not reset accounting or repeat unchanged paid failures.
+4. Follow [deploy/admin/README.md](../deploy/admin/README.md). Run `node scripts/package-admin.mjs --output .reports/admin-release-20261028` from clean committed source, deploy its `service/` directory with one replica and persistent `/data/admin`, set `ADMIN_PUBLIC_ORIGIN=https://actforgoa-field-guide.vercel.app` and `ADMIN_BEHIND_FRONTEND_PROXY=true`, and provision named editor accounts through the hidden-input CLI. These credentials are separate from private incident reporting.
+5. Set Vercel server-only `ADMIN_API_ORIGIN` to that service's exact HTTPS origin. The PR includes same-origin `/api/admin/*`, `/api/curation`, and `/api/blog*` handlers. Verify actual cookies/login, star propagation, draft privacy, publication and public journal listing. Existing blog archive remains at `/blog/archive`.
+6. Use the locally installed Impeccable workflow if available and check the restored hosted content on desktop/phone. Complete release evidence for the exact integrated tree with the **current**, freshly inspected previous deployment ID; do not copy a historical ID from old notes. The release script now requires new research/admin/blog routes and checks scoped research + admin/journal readiness.
+7. Review/merge the PR, fetch exact merged main into the clean release checkout, then run `npm run release:review -- --check --evidence .reports/release-evidence.json` and `npm run release:review -- --evidence .reports/release-evidence.json`. Verify the review alias and update this ledger with merged commit, service/deployment IDs, actual live-provider result and remaining limitations. Do not equate PR merge with deployment.
+
+### Completed commit map
+
+| Workstream | Feature commit(s) | Integrated evidence |
+| --- | --- | --- |
+| Research backend | `05ed430`, follow-up `a190ad9` | Integrated as `c148541`, `3c2e50c`; 118 Python tests, real 5-guide index; ledger and route fixes independently rechecked |
+| Research UX | `c7802d9`, `6b7ece5`, `37c59ac` | Integrated as `70574b2`, `99ead3f`, `04d3f4b`; phone wrapping and source caveats verified |
+| Forms | `393d8b7` | Integrated as `1ccaa7c`; [form audit](../reports/FORMS-CLOUD-20261028.md) |
+| Admin backend | `4c74f37`, `669ca3d` | Integrated as `120f4e1`, `61c60b4`; auth/storage + actual proxy checks and real browser publishing |
+| Dashboard UI | `4e19529` | Integrated as `2ea5873`; sidebar, curation, editor and public journal checked |
+| Root integration | `e46a28c`, `71e66f6`, `92a5da7` and subsequent release/handoff commits | PR contains exact final routes, services, tests and evidence; use its current head rather than an intermediate SHA |
 
 ### Agreed cloud-to-local handoff
 
@@ -57,7 +82,7 @@ For each landed workstream append: exact commit SHA; files/interfaces changed; c
 | Admin API | `/workspace/actforgoa-admin-api` | new admin service/storage/auth, shared contract, server tests |
 | Admin UX | `/workspace/actforgoa-admin-ui` | new dashboard/blog components/styles/API client and tests |
 
-Agents commit only their changes and return exact commits, interfaces, verification and remaining blockers. Root cherry-picks into the integration branch, resolves shared changes and owns publication. No independent deployments. Review contract changes between research/API owners and dashboard/API owners before integration.
+Agents commit only their changes and return exact commits, interfaces, verification and remaining blockers. Cloud root cherry-picks into the integration branch and owns acceptance. Local ORCHESTRATOR takes the focused shipping work after the user resumes it. No independent feature-agent deployments.
 
 ## Existing work to preserve
 

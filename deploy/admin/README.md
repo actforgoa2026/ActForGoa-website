@@ -42,7 +42,9 @@ Sessions expire after 12 hours; cookies are Secure in production, HttpOnly and S
 
 ## Deploy
 
-Prepare an allowlisted staging directory with this folder's `package.json`, `package-lock.json`, `Dockerfile` and `railway.json` at its root; copy `server/admin.ts`, `server/admin-store.ts`, `server/admin-accounts.ts`, `shared/admin.ts`, `public/data/catalog.json`, `public/data/crm.json`, and `src/content/guide-records.json` preserving paths. Do not stage `.reports`, env files, incident data or raw research archives.
+From the committed, clean integrated checkout, run `node scripts/package-admin.mjs --output .reports/admin-release-20261028`. It creates a fresh `service/` directory from the exact source/public-catalogue allowlist and a checksummed manifest with the commit/tree identity. Existing output directories are rejected. Deploy that `service/` directory, not the frontend checkout. Do not stage env files, incident data or raw research archives.
+
+Set the Vercel project's server-only `ADMIN_API_ORIGIN` to the deployed service's exact HTTPS origin. The checked-in API functions forward the dashboard, public curation and journal through the website origin, preserving cookies and CSRF headers. Set `ADMIN_BEHIND_FRONTEND_PROXY=true` on the service. No frontend `VITE_*` key or cross-site session configuration is needed.
 
 Use one replica with a persistent volume mounted at `/data`; do not share this SQLite file across containers. Set production variables, deploy, then provision named accounts using the service's private shell. `/api/admin/config` is the readiness endpoint. Frontend rewrites must preserve `Cookie`, `Set-Cookie`, and `X-CSRF-Token`. Repackage the public source snapshots whenever their record identities change. Back up the SQLite database with its backup API or after a clean shutdown; copying only the live main file may miss its WAL. Never commit backups or package them as frontend assets.
 

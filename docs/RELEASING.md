@@ -6,6 +6,8 @@ Start from freshly fetched `origin/main`. Never release from the shared, dirty d
 
 Before merging, run `npm test`, `npm run build`, the installed Impeccable workflow, and actual desktop and phone browser checks. Check the hero and sectioned feed, guided topic paths, CRM and archive, emergency actions, reporting controls and API health, guides, template export, search and any newly added routes. Preserve original-source links and uncertainty labels. A build alone is not visual verification.
 
+For the cloud research/forms/editorial release, begin with `docs/CLOUD-IMPLEMENTATION-PLAN.md`, `docs/RESEARCH-CLOUD-HANDOFF.md` and `deploy/admin/README.md`. Include `/ask/legal`, `/ask/ecology`, `/admin`, `/blog` and `/blog/archive` in desktop/phone evidence. Promotion now also checks nonempty scoped research collections, the configured internal service and the public journal response. This does not prove live Anthropic answer accuracy or provision an editor account; those remain explicit acceptance steps. In the managed cloud, use `NODE_USE_ENV_PROXY=1 npm test` so the existing MCP integration test uses the supplied network proxy.
+
 After the source is committed, save a JSON evidence record under ignored `.reports/`. Record `treeSha` from `git rev-parse HEAD^{tree}`, `desktop: true`, `mobile: true`, the checked route strings in `routes`, screenshot locations, test/build results, and the current live deployment ID as `previousDeploymentId`. Required route strings are listed in `scripts/deploy-review.mjs`. Evidence must describe checks that actually ran. The Git tree stays the same across an ordinary PR merge, so verification remains tied to the exact content.
 
 Merge the reviewed PR, fetch the merged main into the clean release checkout, and run:
