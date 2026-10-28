@@ -2,7 +2,7 @@
 .admin-sidebar { position: relative; display: flex; flex-direction: column; background: var(--white); padding: 30px 20px 24px; border-right: 1px solid var(--line); gap: 28px; }
 .admin-brand { font-size: 24px; font-weight: 850; letter-spacing: -1px; display: grid; }
 .admin-brand span { font-size: 12px; font-weight: 600; letter-spacing: .03em; color: var(--muted); }
-.admin-sidebar-label, .admin-topline, .admin-eyebrow { font-size: 11px; font-weight: 750; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.admin-topline, .admin-record-kind, .admin-login-brand { font-size: 13px; font-weight: 650; letter-spacing: 0; color: var(--muted); }
 .admin-sidebar-label { margin: 12px 12px -18px; }
 .admin-sidebar nav { display: grid; gap: 6px; }
 .admin-sidebar nav button { display: flex; align-items: center; text-align: left; gap: 10px; width: 100%; min-height: 48px; border: 0; border-radius: 6px; background: transparent; color: var(--muted); padding: 12px; font-size: 13px; font-weight: 650; }
