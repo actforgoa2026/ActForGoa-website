@@ -1,0 +1,46 @@
+{
+  "state": "available",
+  "searched_at": "2026-10-28T19:46:07.923846+00:00",
+  "latest_acquired_at": "2026-10-25T05:44:40.103Z",
+  "search_start": "2026-10-01",
+  "search_end": "2026-10-28",
+  "truncated": false,
+  "cloud_note": "Catalog cloud percentage describes the whole scene, not your selected area.",
+  "scenes": [
+    {
+      "id": "S2A_MSIL2A_20261002T053241_N0513_R105_T43PCT_20261002T101803.SAFE",
+      "acquired_at": "2026-10-02T05:44:53.095Z",
+      "scene_cloud_percent": 12.7
+    },
+    {
+      "id": "S2B_MSIL2A_20261005T052659_N0513_R105_T43PCT_20261005T091517.SAFE",
+      "acquired_at": "2026-10-05T05:44:40.17Z",
+      "scene_cloud_percent": 69.66
+    },
+    {
+      "id": "S2C_MSIL2A_20261010T052731_N0513_R105_T43PCT_20261010T102100.SAFE",
+      "acquired_at": "2026-10-10T05:44:41.348Z",
+      "scene_cloud_percent": 0.83
+    },
+    {
+      "id": "S2B_MSIL2A_20261015T052759_N0513_R105_T43PCT_20261015T090952.SAFE",
+      "acquired_at": "2026-10-15T05:44:38.416Z",
+      "scene_cloud_percent": 43.28
+    },
+    {
+      "id": "S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE",
+      "acquired_at": "2026-10-20T05:44:40.053Z",
+      "scene_cloud_percent": 1.15
+    },
+    {
+      "id": "S2A_MSIL2A_20261022T053241_N0513_R105_T43PCT_20261022T102211.SAFE",
+      "acquired_at": "2026-10-22T05:44:48.534Z",
+      "scene_cloud_percent": 28.96
+    },
+    {
+      "id": "S2B_MSIL2A_20261025T052909_N0513_R105_T43PCT_20261025T090829.SAFE",
+      "acquired_at": "2026-10-25T05:44:40.103Z",
+      "scene_cloud_percent": 7.08
+    }
+  ]
+}

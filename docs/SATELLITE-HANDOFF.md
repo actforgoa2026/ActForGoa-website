@@ -16,7 +16,7 @@ The user is moving to a new chat to pick up saved CDSE credentials. Continue the
 
 ## Map and timeline continuation — 29 October 2026 (IST)
 
-The user now asks for a navigable area-selection map using Amche context and a time slider, not another fixed example. The latest source implements that flow on `/map` and in the standalone entry. Read [map/timeline verification](../reports/satellite-map-2026-10-29/README.md) before new provider calls.
+The user now asks for a navigable area-selection map using Amche context and a time slider, not another fixed example. Runtime source `f181babf0b757e069f91609cbca0f8ee30e8adc9` implements that flow on `/map` and in the standalone entry. Read [map/timeline verification](../reports/satellite-map-2026-10-29/README.md) before new provider calls.
 
 - Native Leaflet navigation and bounded area drawing/viewport selection; actual Amche water-body and private-forest reference layers, opt-in with source dates and attribution. The base map is OpenStreetMap. Amche's deployed application currently lacks the location-sharing bridge present in its GitHub source; its restricted Mapbox token was not copied. The full Atlas remains linked to the selected location.
 - Real-acquisition timeline with explicit single-image loading, immediate switching among loaded dates, georeferenced imagery over the map, opacity control, before/after selection and separate analysis. Scrubbing performs no imagery or model request. Same-area/actor observations are cached durably and reused by comparisons.

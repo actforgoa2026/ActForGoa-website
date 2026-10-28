@@ -1,0 +1,196 @@
+{
+  "started_at": "2026-10-28T19:47:15.603049+00:00",
+  "request": {
+    "area": {
+      "bbox": [
+        73.878,
+        15.499,
+        73.892,
+        15.511
+      ]
+    },
+    "start_date": "2026-10-01",
+    "end_date": "2026-10-28"
+  },
+  "classification": {
+    "state": "skipped",
+    "answers": {},
+    "message": "Insufficient common clear coverage for reliable image classification."
+  },
+  "hosted": false,
+  "scenes": [
+    {
+      "id": "S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE",
+      "acquired_at": "2026-10-20T05:44:40.053Z",
+      "scene_cloud_percent": 1.15
+    },
+    {
+      "id": "S2B_MSIL2A_20261025T052909_N0513_R105_T43PCT_20261025T090829.SAFE",
+      "acquired_at": "2026-10-25T05:44:40.103Z",
+      "scene_cloud_percent": 7.08
+    }
+  ],
+  "state": "passed",
+  "cache_hit_without_network": true,
+  "observations": [
+    {
+      "acquired_at": [
+        "2026-10-20T05:44:40.053Z"
+      ],
+      "quality": {
+        "usable_fraction": 0.7309,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.2691
+      },
+      "map_layer": {
+        "bbox": [
+          73.87789505240414,
+          15.498899656597603,
+          73.89210362023718,
+          15.511149924219565
+        ],
+        "crs": "EPSG:3857",
+        "width": 152,
+        "height": 136,
+        "note": "Display reprojected to Web Mercator. Measurements use the original 10 m UTM grid."
+      }
+    },
+    {
+      "acquired_at": [
+        "2026-10-25T05:44:40.103Z"
+      ],
+      "quality": {
+        "usable_fraction": 0.5931,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.4069
+      },
+      "map_layer": {
+        "bbox": [
+          73.87789505240414,
+          15.498899656597603,
+          73.89210362023718,
+          15.511149924219565
+        ],
+        "crs": "EPSG:3857",
+        "width": 152,
+        "height": 136,
+        "note": "Display reprojected to Web Mercator. Measurements use the original 10 m UTM grid."
+      }
+    }
+  ],
+  "summary": {
+    "state": "inconclusive",
+    "headline": "There is not enough clear imagery to assess this area reliably.",
+    "statements": [
+      {
+        "text": "The selected observations were acquired on 20 Oct 2026, 11:14 IST and 25 Oct 2026, 11:14 IST.",
+        "sources": [
+          "before",
+          "after"
+        ]
+      },
+      {
+        "text": "54.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+        "sources": [
+          "coverage"
+        ]
+      },
+      {
+        "text": "Cloud, shadow or missing data prevents a reliable comparison across the selected area. An unobserved area is not evidence of no change.",
+        "sources": [
+          "coverage"
+        ]
+      },
+      {
+        "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+        "sources": [
+          "before",
+          "after"
+        ]
+      }
+    ],
+    "method": "checked-evidence-v1"
+  },
+  "evidence": {
+    "common_usable_fraction": 0.5398,
+    "state": "insufficient_clear_coverage",
+    "metrics": {
+      "ndvi": {
+        "before_median": 0.5224,
+        "after_median": 0.5133,
+        "median_paired_change": -0.0038,
+        "paired_pixels": 10760
+      },
+      "ndwi": {
+        "before_median": -0.5447,
+        "after_median": -0.5152,
+        "median_paired_change": 0.0132,
+        "paired_pixels": 10760
+      },
+      "nbr": {
+        "before_median": 0.2692,
+        "after_median": 0.3129,
+        "median_paired_change": 0.0531,
+        "paired_pixels": 10760
+      }
+    },
+    "water_change": {
+      "before_area_m2": 373200,
+      "after_area_m2": 392400,
+      "gained_area_m2": 19200,
+      "lost_area_m2": 0,
+      "method": "Area classified as water by Sentinel-2 SCL on common usable pixels. Native 20 m classification; not river flow, water quality or a surveyed shoreline."
+    },
+    "method": "Exploratory reflectance changes; thresholds require Goa field validation. Vegetation is not necessarily tree canopy.",
+    "water_candidates_truncated": false,
+    "candidates_truncated": false
+  },
+  "comparison_reused_observations": true,
+  "requests": [
+    {
+      "url": "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
+      "status": 200,
+      "processing_units": null
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/catalog/v1/search",
+      "status": 200,
+      "processing_units": "0.01"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/process/v1",
+      "status": 200,
+      "processing_units": "0.36529539771436254"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/catalog/v1/search",
+      "status": 200,
+      "processing_units": "0.01"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/process/v1",
+      "status": 200,
+      "processing_units": "0.36529539771436254"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/catalog/v1/search",
+      "status": 200,
+      "processing_units": "0.01"
+    }
+  ],
+  "processing_units_reported": 0.7605907954287251,
+  "source_sha256": {
+    "satellite/__init__.py": "6b85c3e1a1eb1a8b7e90fc1b7ad1ce23a01f8c61414a06624f830d3d46ebe2d3",
+    "satellite/app.py": "e0a9324c104d53ab0c8b36f23ef5a6a2a1657fd12a465546ed30345414482e87",
+    "satellite/context.py": "b5257547ff2230c13b7ac16cdfacd5bf3a1887f9a055efc9cdc481facfa3abc3",
+    "satellite/domain.py": "8c6c7282c482a0b1840d2222c6ce256cafd7971bf805cb72de44463f7d853a59",
+    "satellite/eve_cdse.py": "f0cc446d29997f382d9dc5540a85569f565b41037045afc6377cd48b30a18bca",
+    "satellite/evidence.py": "bcf4cfdbc4d13fc6a827c7a7158bfc0806682d3a7da1cfc617dd29deb8687b18",
+    "satellite/providers.py": "b2b56e00b855c1f24a63b5777fd1c0d01d6bfbe7365acf62cab99d108cb1976e",
+    "satellite/run.py": "ace344b6e3c500bc7334119569f6b407f08038ff7aeec97aa15f4617114a6c76",
+    "satellite/service.py": "06e95c3b2126b3b806b21b18bcdd62c0314fb6e0b33cdbfcf11fcfe34d225a2c",
+    "satellite/store.py": "11ff5d84fbb5e78656c6d3ab518d433d5173a3dbcf9ff81c6a8ca3343ed97765",
+    "satellite/summary.py": "0cd160865674792285720bfee7afbe8637d0fa0bcb9b292d343dbd35502a5763"
+  },
+  "telemetry_correction": "The initial counter checked /api/v1/process instead of CDSE /process/v1. Retained request log confirms two Process calls total; the comparison reused both cached observations. No network call was repeated."
+}
