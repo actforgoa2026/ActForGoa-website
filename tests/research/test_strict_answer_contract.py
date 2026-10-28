@@ -1,7 +1,6 @@
 """Regressions for real citation identity and answer-length failures."""
 from copy import deepcopy
 import json
-import re
 import pytest
 from backend.chat import ChatRequest, normalize_answer, prepare_answer, provider_schema
 
@@ -42,10 +41,6 @@ def test_links_are_derived_only_after_validating_exact_support():
 
 
 def test_word_boundaries_preserve_complete_text_and_reject_overflow_without_truncating():
-    wire_pattern = provider_schema(EVIDENCE)['$defs']['SupportedParagraph']['properties']['text']['pattern']
-    assert '(' not in wire_pattern
-    assert re.fullmatch(wire_pattern, 'word ' * 59 + 'word')
-    assert not re.fullmatch(wire_pattern, 'x' * 301)
     for separator in [' ', '\n', '\t', '\u00a0']:
         valid = separator.join(['Word'] * 60)
         assert normalize_answer(answer(valid), REQUEST, EVIDENCE)['paragraphs'][0]['text'] == valid
@@ -59,7 +54,7 @@ def test_word_boundaries_preserve_complete_text_and_reject_overflow_without_trun
 
 def test_strict_schema_omits_unsupported_constraints_but_retains_server_checks():
     schema = json.dumps(provider_schema(EVIDENCE))
-    for forbidden in ['minLength', 'maxLength', 'maxItems']:
+    for forbidden in ['minLength', 'maxLength', 'maxItems', 'pattern']:
         assert forbidden not in schema
     raw = answer(); raw['paragraphs'][0]['supports'] *= 7
     with pytest.raises(ValueError): normalize_answer(raw, REQUEST, EVIDENCE)

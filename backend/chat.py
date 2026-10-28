@@ -93,22 +93,20 @@ def provider_schema(evidence):
     """Constrain source identities at generation time; validate again locally.
 
     Anthropic strict tools do not support string lengths or array maxima. Keep
-    those bounds in Pydantic, and use its supported regex for the word limit.
+    those bounds in Pydantic. Word-count grammars are also kept local because
+    grouped patterns are not reliably supported by the provider compiler.
     No provider-generated second citation list can disagree with the supports.
     """
     schema = ProviderAnswer.model_json_schema()
     def supported(node):
         if isinstance(node, dict):
             return {key: supported(value) for key, value in node.items()
-                    if key not in ('minLength', 'maxLength', 'maxItems')}
+                    if key not in ('minLength', 'maxLength', 'maxItems', 'pattern')}
         if isinstance(node, list):
             return [supported(value) for value in node]
         return node
     schema = supported(schema)
-    # Keep native grammar compilation small. The provider cannot compile the
-    # grouped word range reliably. A simple character bound gives generation
-    # headroom; the independent local 60-word/180-total checks still fail closed.
-    schema['$defs']['SupportedParagraph']['properties']['text']['pattern'] = r'^[^\r\n]{1,300}$'
+    schema['$defs']['SupportedParagraph']['properties']['text']['description'] = 'One complete concise paragraph: aim for 30 to 45 words; maximum 60 words. Do not omit source qualifications to fit.'
     schema['$defs']['Support']['properties']['citation_id']['enum'] = [item['id'] for item in evidence] or ['no-library-source']
     return schema
 
