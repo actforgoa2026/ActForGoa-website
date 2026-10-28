@@ -6,6 +6,14 @@ Feature development, tests, indexing and browser QA ran under `/workspace` in th
 
 Read this file and `AGENTS.md` before doing work. Inspect `git status`, fetch `origin/main`, and compare workstream commits below before rebuilding or deploying. Never treat an in-progress row as completed. After each handoff, update its implementation, tests, merge and live states separately. Keep pending questions and exact next actions here so another agent can resume without the chat transcript.
 
+## Latest voice follow-up and active release operation
+
+After PR #90 merged as `7bf1965a2c46f76537437a822056b2bf9023f96c`, the user chose **warm, friendly and simple** as the answer voice. The follow-up branch `codex/warm-research-voice` updates the shared legal/ecology prompt, honors requests for simpler wording or more detail, and replaces the rigid 180-word/three-paragraph rejection with a 300-word/five-paragraph maximum while keeping simple answers short by default. Citations, evidence qualification, outside-context separation and budget limits remain enforced. See [RESEARCH-CLOUD-HANDOFF.md](RESEARCH-CLOUD-HANDOFF.md#answer-voice) for the editable editorial brief and exact limits. No dashboard voice control is included.
+
+Implementation and offline verification are complete: **119 research tests pass**. The new regression checks a longer four-step answer, citation preservation and failure for fabricated support or oversized text. Live tone/semantic acceptance and deployment are still pending; the follow-up is not automatically merged into a release being prepared elsewhere. The prior portable runtime hashes describe PR #90, not this changed prompt.
+
+The latest operation recorded in [issue #89, comment 6465343889](https://github.com/actforgoa2026/ActForGoa-website/issues/89#issuecomment-6465343889) reports a direct user-authorized focused local **ORCHESTRATOR** release. Treat it as the active promotion owner and do not race it. Other local workers and the old heartbeat remain paused; the primary cloud coordinator keeps reporting oversight. This newer operation supersedes the earlier default deployment-owner wording below. The release owner should review/include this voice follow-up before creating its accepted runtime package, and record its exact head and actual live acceptance. Existing full-corpus/accounting gates and the separate post-merge legal extraction finding in #89 remain outstanding; this voice change does not resolve them.
+
 ## Work ledger
 
 Last updated: 28 October 2026. All `/workspace` paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90. Branch: `codex/cloud-integration-20261028`. Implementation and cloud acceptance are complete; the fresh review corrections below are included in the source landing. **Live deployment remains pending.** The exact merge SHA and latest release state are recorded on PR #90 and issue #89; a merge alone is not deployment.
