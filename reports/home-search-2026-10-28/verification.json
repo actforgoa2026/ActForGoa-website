@@ -1,0 +1,37 @@
+{
+  "featureCommit": "9cdac9c09e6da4f1734ed6f23daa7b1f844f1fa7",
+  "basedOn": "9cea6e2",
+  "implemented": true,
+  "tested": true,
+  "merged": false,
+  "live": false,
+  "authorization": "User requested shipping on 28 October 2026 after reviewing the local change.",
+  "releaseOwner": "ORCHESTRATOR (01a17774-6d09-7751-915c-3fbf3a8994c4), per current cloud ledger; no independent alias promotion.",
+  "verification": {
+    "nodeTests": {
+      "passed": 191,
+      "failed": 0
+    },
+    "productionBuild": "passed; existing large-chunk advisory",
+    "impeccable": "Context, harden and craft-floor followed. Rendered desktop and phone checked. Detector: 0 primary findings, 5 inherited advisories.",
+    "browser": "All eight topic destinations, emergency routing, ambiguous-query feedback, fallback focus and mobile layout. Retained route shells checked at 1280x800 and 390x844.",
+    "keyboard": "Enter submission, Shift+Enter newline and disabled blank submission checked in the original local implementation; same component transferred to this branch.",
+    "sourceStyleScan": "Changed source adds no italic/oblique text or decorative side stripes."
+  },
+  "limits": [
+    "English intent matching uses curated local rules; unclear requests ask the visitor to choose.",
+    "Retained-route smoke is not hosted-service, authenticated admin, physical-device or screen-reader acceptance.",
+    "No deployment or public-alias change has occurred."
+  ],
+  "sha256": {
+    "src/App.tsx": "13c101d82e353e2e7f51a8805cdcd06dc50217855ad6c192c6f188583def154a",
+    "src/home-search.ts": "2f4cea1fe94ecab593c373873ce920f36c4e7c902d9c1ce741c63f410c5f3bcc",
+    "src/home-hero.css": "b0f8b4d0c4c690bda9fb46f460d3ca9c2b05ca3aa19253bca71ddefd482c2f04",
+    "tests/home-search.test.ts": "49c89086acdb43a5ddfec6b33e4fe853ee3b068e8ffeda252dd5e18345c94408"
+  },
+  "screenshots": [
+    "desktop-topic.png",
+    "mobile-topic.png",
+    "mobile-feedback.png"
+  ]
+}
