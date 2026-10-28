@@ -125,7 +125,7 @@ function Workspace({session, onSession, onLogout}: {session: AdminSession; onSes
   }
   async function toggleStar(recordId: string) {
     setPendingStar(recordId); setError(''); setNotice(''); const removing = starMap.has(recordId);
-    try { const data = await adminApi<{stars: CuratedStar[]}>('/api/admin/stars', {method: 'PUT', csrfToken: session.csrfToken, body: {recordId, starred: !removing}}); setStars(data.stars); setNotice(removing ? 'Removed from team picks.' : 'Added to team picks.'); }
+    try { const data = await adminApi<{stars: CuratedStar[]}>('/api/admin/stars', {method: 'PUT', csrfToken: session.csrfToken, body: {recordId, starred: !removing}}); setStars(data.stars); window.dispatchEvent(new Event('actforgoa:curation-changed')); setNotice(removing ? 'Removed from team picks.' : 'Added to team picks.'); }
     catch (error) { failed(error); } finally { setPendingStar(''); }
   }
   async function logout() {

@@ -518,6 +518,7 @@ a.button.green {
   color: var(--muted);
 }
 .footer-bottom > div {
+  flex-wrap: wrap;
   display: flex;
   gap: 24px;
 }

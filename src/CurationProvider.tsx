@@ -28,8 +28,10 @@ export function CurationProvider({ children }: { children: ReactNode }) {
       finally { clearTimeout(timer); }
     }
     void refresh();
+    const changed = () => { lastAttempt = 0; void refresh(); };
     window.addEventListener('focus', refresh);
-    return () => { active = false; controller?.abort(); window.removeEventListener('focus', refresh); };
+    window.addEventListener('actforgoa:curation-changed', changed);
+    return () => { active = false; controller?.abort(); window.removeEventListener('focus', refresh); window.removeEventListener('actforgoa:curation-changed', changed); };
   }, []);
   return <CurationContext.Provider value={stars}>{children}</CurationContext.Provider>;
 }
