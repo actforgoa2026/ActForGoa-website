@@ -150,8 +150,8 @@ class PublicLimits:
     def effective_limits(self, day):
         # Explicit user authorization for this launch only. Evaluate against the
         # transaction's UTC date so an already-running service expires correctly.
-        daily = 150 if self.release_allowance and day == '2026-10-28' else self.chat_limit
-        monthly = 15_000_000 if self.release_allowance and day[:7] == '2026-10' else self.monthly_limit
+        daily = 160 if self.release_allowance and day == '2026-10-28' else self.chat_limit
+        monthly = 15_300_000 if self.release_allowance and day[:7] == '2026-10' else self.monthly_limit
         return daily, monthly
 
     def _open_ledger(self, *, write):

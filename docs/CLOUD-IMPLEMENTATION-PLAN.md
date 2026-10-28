@@ -1,5 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Final allowance approved and resumed
+
+The user answered all pending allowance questions and explicitly approved the final160 combined requests for the Oct28 UTC window and$15.30 total October hard reservation cap. This supersedes the earlier155/$15 and160/$15 responses. At resumption it is Oct29 locally but still Oct28 UTC. The dated opt-in expires to100daily on Oct29UTC and$5monthly on November1; every failed/unknown reservation remains charged. Starting checkpoint:a77966e,66/71 accepted,146requests/$13.694491 reserved. Resume only assessment-service-enabling-law, boundary4 and three distinct HTTP/browser journeys, preserving four launch slots. Other local agents remain paused; issue89 records sole local release ownership. No deployment or generated-answer activation has yet occurred.
+
+
 ## Current conditional and document-selection correction
 
 The combined PR93/94/96/99 candidate now has 66 of 71 frozen cases accepted on research runtime d58b786. Before that correction, it reached 55 accepted cases. The next saved-law case returned the correct 24-hour report deadline but converted the source's counterfactual danger condition into an assertion that immediate felling had not occurred. That answer remains failed and charged. Canonical accounting after the eleven-case consumed12 prefix is 146 attempts on 28 October and 13,694,491 microUSD reserved for October; production reconciliation is still pending.
