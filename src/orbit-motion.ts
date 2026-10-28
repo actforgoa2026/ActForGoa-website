@@ -23,9 +23,8 @@ export function createOrbitPath(radius = 1050, turns = 4, samples = 4096) {
     return {x:equal[index].x+(equal[index+1].x-equal[index].x)*fraction,y:equal[index].y+(equal[index+1].y-equal[index].y)*fraction};
   }};
 }
-/** Gentle version of Cosmos's ramp-up followed by quadratic burst decay. */
+/** Arrive at burst speed, then ease continuously into the gentle cruising speed. */
 export function orbitEntranceSpeed(elapsed:number) {
-  const ramp = Math.min(elapsed / 700, 1) ** 2;
   const remaining = 1 - Math.min(elapsed / 3200, 1);
-  return 1 + 6.9 * remaining ** 2 * ramp;
+  return 1 + 6.9 * remaining ** 2;
 }
