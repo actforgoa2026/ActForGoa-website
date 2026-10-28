@@ -110,6 +110,27 @@ test('post validation permits unfinished drafts but refuses unsafe slugs and inc
   } finally { store.close(); }
 });
 
+test('the archive route is reserved on create, edit and publication of older drafts', async () => {
+  const store = new AdminStore(':memory:', new Set());
+  try {
+    const user = await store.provision('writer@example.test', 'Writer', password);
+    const reserved = { ...draft, slug: 'archive' };
+    const reservedError = (error: unknown) => error instanceof AdminError && error.status === 400 && /reserved for the blog archive/.test(error.message);
+    assert.throws(() => store.createPost(user, reserved), reservedError);
+    const post = store.createPost(user, draft);
+    assert.throws(() => store.updatePost(user, post.id, post.version, reserved), reservedError);
+    assert.equal(store.getPost(post.id).slug, draft.slug, 'rejected edit leaves the saved draft unchanged');
+    // Represent a draft saved before reserved route validation was introduced.
+    store.db.prepare('UPDATE admin_posts SET slug=?, data=? WHERE id=?').run('archive', JSON.stringify(reserved), post.id);
+    assert.throws(() => store.publishPost(user, post.id, post.version, true), reservedError);
+    assert.equal(store.getPost(post.id).version, post.version, 'failed publication leaves the draft revision unchanged');
+    assert.equal(store.publicPosts().total, 0);
+    const corrected = store.updatePost(user, post.id, post.version, { ...draft, slug: 'archive-news' });
+    store.publishPost(user, corrected.id, corrected.version, true);
+    assert.equal(store.publicPost('archive-news').id, post.id, 'related but non-reserved slugs remain usable');
+  } finally { store.close(); }
+});
+
 test('login throttling persists independently of valid account identity', async () => {
   const store = new AdminStore(':memory:', new Set());
   try {

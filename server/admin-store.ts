@@ -165,6 +165,9 @@ export class AdminStore {
   }
   getPost(id: string) { return this.post(this.row(id)); }
   private slugAvailable(slug: string, id?: string) {
+    // /blog/archive is an existing application route, not a journal article.
+    // Check here so previously saved drafts cannot publish to it either.
+    if (slug === 'archive') fail(400, 'This URL is reserved for the blog archive. Choose another slug.');
     const conflict = this.db.prepare('SELECT id FROM admin_posts WHERE slug=? AND id!=? UNION SELECT post_id AS id FROM admin_published_posts WHERE slug=? AND post_id!=?').get(slug, id ?? '', slug, id ?? '');
     if (conflict) fail(409, 'That URL is already used by another post. Choose another slug.');
   }
