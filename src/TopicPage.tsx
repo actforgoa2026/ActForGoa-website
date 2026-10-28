@@ -1,7 +1,7 @@
 import {useEffect} from 'react';
 import {useLanguage} from './language';
 import {translatePriority} from './priority-translations';
-import {Link, useParams} from 'react-router-dom';
+import {Link, useLocation, useParams} from 'react-router-dom';
 import {ArrowLeft, ArrowRight, ArrowUpRight, Download} from 'lucide-react';
 import {topicFlows, actionHref, type TopicFlow, type TopicAction} from './topic-flows';
 import {TopicIcon} from './components/TopicIcon';
@@ -25,6 +25,7 @@ export function TopicChoices({flow, parent}: {flow:TopicFlow; parent?:TopicActio
 
 export function TopicPage({records}: {records:RecordItem[]}) {
  const { language }=useLanguage();
+ const location=useLocation();
  const {slug,actionId,choiceId}=useParams();
  const flow=topicFlows.find(f=>f.slug===slug);
  const parent=flow?.actions.find(a=>a.id===actionId);
@@ -52,7 +53,7 @@ export function TopicPage({records}: {records:RecordItem[]}) {
   {!action ? <TopicChoices flow={flow}/> : action.choices ? <TopicChoices flow={flow} parent={action}/> : <>
    {!!action.links?.length && <section className="action-destinations" aria-label="Take your next step"><div className="choice-grid">
     {action.links.map(link => link.href.startsWith('#') || link.href.startsWith('/read/') || (link.href.startsWith('/') && !link.download)
-     ? <Link className="choice-link" key={link.href} to={link.href} state={{fromCatalogue:true}}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span><ArrowRight size={24}/></Link>
+     ? <Link className="choice-link" key={link.href} to={link.href} state={{fromCatalogue:true,...(link.href.startsWith('/templates/') ? {returnTo:location.pathname} : {})}}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span><ArrowRight size={24}/></Link>
      : <a className="choice-link" key={link.href} href={link.href} download={link.download || undefined}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span>{link.download ? <Download size={24}/> : <ArrowUpRight size={24}/>}</a>)}
    </div></section>}
    {!!action.steps?.length && <section className="action-steps"><h2 lang={language}>{translatePriority('How to get started', language)}</h2><ol>{action.steps.map(step=><li key={step} lang={translatePriority(step, language) === step ? "en" : language}>{translatePriority(step, language)}</li>)}</ol></section>}

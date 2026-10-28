@@ -8,6 +8,8 @@ import {guideForReaders} from '../src/guide-presentation.ts';
 import {needsCatalogue, createCatalogueLoader} from '../src/catalogue-loader.ts';
 import {actionsInBranch, topicPeople} from '../src/topic-records.ts';
 import type {RecordItem} from '../src/types.ts';
+import {templates} from '../src/template-catalogue.ts';
+import {templatePurpose} from '../src/template-path.ts';
 
 const records = JSON.parse(readFileSync('public/data/catalog.json', 'utf8'));
 const ids = new Set([...records, ...guideDocuments].map(r=>r.id));
@@ -28,7 +30,7 @@ test('each topic has an action menu, with waste first and no snake shortcut at t
  assert.equal(actionHref(waste,collection.choices![0],collection),'/topics/waste/collection/household');
 });
 
-test('every menu outcome has usable destinations, valid record ids, anchors and downloads',()=>{
+test('every menu outcome has usable destinations, valid records, anchors and form editors',()=>{
  for(const flow of topicFlows) for(const action of leaves(flow.actions)) {
   assert(action.links?.length,`${flow.slug}/${action.id} is a dead end`);
   for(const id of [...(action.resourceIds ?? []),...(action.peopleIds ?? [])]) assert(ids.has(id),id);
@@ -49,7 +51,8 @@ test('every menu outcome has usable destinations, valid record ids, anchors and 
      const headings=[...guideForReaders(doc.markdown).matchAll(/^## (.+)$/gm)].map(m=>guideHeadingId(m[1]));
      assert(headings.includes(url.hash.slice(1)),`Missing heading: ${href}`);
     }
-   } else if(download) assert(existsSync('public'+url.pathname),href);
+   } else if(href.startsWith('/templates/')) assert(templates.some(t=>t.id===url.pathname.slice('/templates/'.length)),href);
+   else if(download) assert(existsSync('public'+url.pathname),href);
    else if(href.startsWith('/topics/')) {
     const [, ,slug,actionId,choiceId]=url.pathname.split('/');
     const target=topicFlows.find(f=>f.slug===slug)?.actions.find(a=>a.id===actionId);
@@ -59,6 +62,22 @@ test('every menu outcome has usable destinations, valid record ids, anchors and 
    else assert.equal(url.protocol,'https:');
   }
  }
+});
+
+test('no main topic pathway requires downloading a blank form',()=>{
+ let editors=0;
+ for(const flow of topicFlows) for(const action of leaves(flow.actions)) for(const link of action.links ?? []) {
+  assert(!link.download, `${flow.slug}/${action.id}: ${link.label}`);
+  assert(!link.href.startsWith('/guides/templates/'), link.href);
+  assert(!/download|\.pdf(?:$|[?#])/i.test(link.href), link.href);
+  assert(!/download/i.test(link.label), link.label);
+  if(link.href.startsWith('/templates/')) editors++;
+ }
+ assert(editors >= 25, `Expected all former downloads to have editors, found ${editors}`);
+ const damage=topicFlows.find(f=>f.slug==='food')!.actions.find(a=>a.id==='damage')!;
+ const href=damage.links!.find(l=>l.href.startsWith('/templates/'))!.href;
+ assert.equal(templatePurpose(new URL(href, 'https://example.test').search), 'damage');
+ assert.equal(templatePurpose('?purpose=unknown'), undefined);
 });
 
 test('non-waste needs lead to a specific action instead of a generic text or search page',()=>{
@@ -72,7 +91,7 @@ test('non-waste needs lead to a specific action instead of a generic text or sea
     assert(!action.choices.some(c=>c.choices),'Routes support one follow-up question');
    } else {
     assert(action.links!.length>=2,`${flow.slug}/${action.id} needs a useful next step and alternative`);
-    assert(action.links!.some(l=>l.download || l.href.startsWith('#') || l.href.startsWith('https:') || l.href.startsWith('mailto:') || /^\/(contact|get-involved|topics)/.test(l.href)),`${flow.slug}/${action.id} only leads to more reading`);
+    assert(action.links!.some(l=>l.href.startsWith('/templates/') || l.href.startsWith('#') || l.href.startsWith('https:') || l.href.startsWith('mailto:') || /^\/(contact|get-involved|topics)/.test(l.href)),`${flow.slug}/${action.id} only leads to more reading`);
     assert(!action.links!.some(l=>/^\/(search|directory|library)/.test(l.href)),`${flow.slug}/${action.id} falls back to generic results`);
    }
   }
