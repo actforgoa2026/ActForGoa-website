@@ -1,0 +1,13 @@
+{
+  "checked_at": "2026-10-28T10:32:52.655596+00:00",
+  "image_id": "sha256:d6a718b9b1ac4f12ed38d488764afdb093b709e91bcfe4433d0c95e65154ba2f",
+  "package_commit": "deb1f1d1e54d828f1463da787e9b75dd2e4aea45",
+  "provider_credentials_passed": false,
+  "checks": {},
+  "state": "failed",
+  "error": {
+    "stage": "startup",
+    "code": "missing_system_library",
+    "message": "Rasterio could not import: libexpat.so.1 absent from python:3.12-slim."
+  }
+}

@@ -4,6 +4,12 @@ Source chat: **SAT IMAGE ANALYSIS**, ID `01a181d5-fcf6-745a-b440-89a455d69065`, 
 
 The user is moving to a new chat to pick up saved CDSE credentials. Continue the implementation; do not restart research from scratch. Read `AGENTS.md`, `docs/CLOUD-IMPLEMENTATION-PLAN.md`, `docs/GOA-MAP-INTELLIGENCE-PLAN.md`, and `reports/satellite-2026-10-28/README.md`.
 
+## Latest continuation — 28 October 2026
+
+Recovered checkpoint `133bd4e` into `/workspace/actforgoa-satellite`, merged current main `a786df5` without conflicts (`f60597a`), and committed real imagery validation/fixes as `deb1f1d`. Both CDSE bindings are now ready **and actual OAuth, catalog and Process calls succeed**. The corrected Process request explicitly asks for `application/tar`; without it the provider returned only a TIFF and provenance validation stopped safely.
+
+The real 10/20 October 2026 pair for the default Goa area passed acquisition, bundle, eight-band grid and numeric comparison checks with 100% common usable coverage. Zero patches met the exploratory vegetation-loss thresholds; this does not establish absence of tree removal. See [live evidence](../reports/satellite-live-2026-10-28/README.md). Tests now pass: 29 satellite Python, 181 Node, production build. Raw provider imagery remains under ignored `.reports/`; reviewed metadata and previews are committed. OpenAI Decisions remains unconfigured and untested; no classification call was attempted. The older credential and synthetic-only statements below describe the original executor, not this continuation.
+
 ## Recover the code
 
 Repository: `actforgoa2026/ActForGoa-website`. Branch: `codex/satellite-monitoring`. Isolated worktree in the original executor: `/workspace/actforgoa-satellite`. Shared checkout `/workspace/ActForGoa-website` was left untouched. The feature branch starts from main `7bf1965a2c46f76537437a822056b2bf9023f96c`. Fetch current main and reconcile carefully; preserve other owners' work. No merge or deployment has been performed.
@@ -29,8 +35,8 @@ Vercel REST was accessible; project `prj_4BRx1f4MrLFE5p6Ljnhkp33TOltz`, account 
 
 ## Next concrete steps
 
-1. Check newly applied CDSE variables, then run one bounded OAuth/catalog/Process smoke for the documented Goa AOI. Validate actual TAR response names, TIFF grid/band order, scene timestamps against Process metadata, pixel coverage and provider charges. Fix adapter discrepancies before claiming readiness. Respect quotas and do not automatically repeat failed paid requests.
-2. Review code and any new-main conflicts. Tests cover contracts, not provider accuracy. Complete real Decisions smoke when secure key setup is resolved. Preserve failed checks and actual provenance.
+1. CDSE credential and bounded live retrieval checks are complete; read the live evidence linked above before making further provider calls. The corrected pair consumed 0.45450926254445223 reported processing units; the initial unbundled failure's usage was not captured. Keep this separate from currency costs and field accuracy. Do not automatically repeat successful or failed requests.
+2. Main through `a786df5` was reconciled without conflicts and tests/build pass. Complete real Decisions smoke when secure key setup is resolved. Preserve failed checks and actual provenance.
 3. Exercise `scripts/package-satellite.py` from clean committed source and inspect the allowlist/manifest. Test the Docker package. Service must be a new Railway service with one replica, private persistent `/data/satellite`, separate server-only service/MCP tokens. Repackage admin service to include the satellite proxy. Do not replace research/reporting services.
 4. Make a reviewable PR if one is not already present. Use the coordinator's release process in `docs/RELEASING.md`; no independent review-alias promotion. Full release-route/browser acceptance is still required and other project acceptance blockers remain. Original actforgoa.org is out of scope.
 5. Continue the plan's context/places/index work as appropriate. The current Amche integration is a location link, not ingested/queryable context. Current NL flow plans a bounded investigation; it does not yet answer statewide conversational queries from an event index. FIRMS, field accuracy and alerts are outstanding.
