@@ -1070,8 +1070,7 @@ function Detail({ records }: { records: RecordItem[] }) {
     </main>
   );
 }
-function About({ records }: { records: RecordItem[] }) {
-  const r = records.find((r) => r.id === "wp-2059");
+function About() {
   return (
     <main className="about shell">
       <div className="about-intro">
@@ -1084,35 +1083,22 @@ function About({ records }: { records: RecordItem[] }) {
       </div>
       <div className="about-layout">
         <div className="reading-body">
-          <h2>Why ActForGoa exists</h2>
           <p>
-            ACTforGOA is a new platform to help sustainable development take
-            root in Goa.
+            ActforGoa is envisioned as a platform belonging to everyone who loves
+            Goa. The content you find here is the collective work of a vast array
+            of people.
           </p>
           <p>
-            What future could be possible if we all worked together to keep Goa
-            Clean and Green now and for the future?
+            ActforGoa will strive to promote content that is well meaning and
+            factual, and will censor personal attacks, slander or attempts at
+            defamation.
           </p>
-          {r ? (
-            <>
-              <h2>In ActForGoa’s own words</h2>
-              {r.blocks
-                .filter(
-                  (b) =>
-                    b.text.length > 75 &&
-                    !b.text.includes("ACTforGOA is a new platform"),
-                )
-                .map((b, i) => (
-                  <p key={i}>{b.text}</p>
-                ))}
-            </>
-          ) : (
-            <p>
-              <a href="https://actforgoa.org/about-2/">
-                Read the full original About page.
-              </a>
-            </p>
-          )}
+          <p>Kokum Trust is the legal managing entity for Act for Goa.</p>
+          <p>
+            With deep gratitude to the numerous people who care for Goa and give
+            back generously with their time, money, expertise, networks,
+            influence, premises or other resources.
+          </p>
           <a className="text-link" href="https://actforgoa.org/about-2/">
             Read the original About page <ArrowUpRight size={16} />
           </a>
@@ -1428,7 +1414,7 @@ export default function App() {
             <Route path="/admin/*" element={<AdminDashboard />} />
             <Route path="/read/:id" element={<Detail records={records} />} />
             <Route path="/templates/:id" element={<TemplateEditor />} />
-            <Route path="/about" element={<About records={records} />} />
+            <Route path="/about" element={<About />} />
             <Route path="/get-involved" element={<Contact involve />} />
             <Route path="/report" element={<ReportIncident />} />
             <Route path="/reports/review" element={<ReportInbox />} />
