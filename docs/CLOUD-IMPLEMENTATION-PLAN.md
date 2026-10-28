@@ -133,3 +133,7 @@ Admin Curation Plan was approved, but its prior summary says only isolated relev
 ## Initial environment gaps
 
 Environment reports no bound secrets or cloud identities. HTTP access currently allows the review alias and package-manager hosts, but not Anthropic, Railway or Vercel control APIs. Secure runtime key/deployment access and permitted destination configuration must be restored for live provider testing and publication. Continue implementation and offline checks independently. Impeccable is referenced by AGENTS.md but its installed skill has not yet been found in the cloud; preserve existing design documents and record the verification limitation if unavailable.
+
+## About copy update — 28 October 2026
+
+Branch `codex/about-copy-update` replaces the About page's historic introductory text and imported blocks with the user's supplied platform statement, content policy, Kokum Trust attribution and gratitude paragraph. The archive link, sidebar and field-guide provenance remain available. Implementation complete; production build passes and Chromium at 1440px and 390px confirms the supplied copy and no horizontal overflow. Screenshots: `.reports/about/1440.png` and `.reports/about/390.png` (local). Rendered desktop/phone reviewed; Impeccable skill unavailable in this executor. Merge and live deployment pending; existing release owner retains promotion ownership.
