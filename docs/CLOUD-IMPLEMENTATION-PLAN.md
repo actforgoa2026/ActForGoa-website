@@ -84,6 +84,18 @@ The earlier user instruction allowed local credential wiring after cloud impleme
 
 For each landed workstream append: exact commit SHA; files/interfaces changed; commands and results; screenshot/evidence paths; known limits; integration dependencies; implemented / tested / merged / live states. A future orchestrator should work from the next-action column, then verify facts against Git and service health.
 
+## Answer first follow up
+
+The user supplied answer/retrieval briefs and explicitly requested shipping a conversational, corpus-first answer experience. Branch `codex/answer-first-evidence` implements this bounded follow-up for the focused release owner to integrate:
+
+- `backend/answer_brief.py` directs the model to read the supplied excerpts, answer directly, synthesize supporting passages, explain supported inferences and conflicts, and state specific gaps. It is included in the existing answer request; it does not add a second model call or claim that hybrid retrieval performs model-based query decomposition.
+- The actual provider message retains complete excerpt text and now includes document identity, page/section label, offsets and source URL alongside existing publication metadata and qualifications. An HTTP-boundary regression test inspects the serialized provider request, verifies two exact excerpts and their locations, and preserves all-or-nothing passage budgeting. Titles/IDs alone are not an evidence pack.
+- Answer mode renders the synthesized response before expandable **View sources**. A failed answer keeps matching sources collapsed. When generation is unavailable, Ask is disabled with an explicit explanation; browsing requires choosing **Find sources**, rather than silently converting the request into search.
+- The user's subsequent visual direction is implemented as a rounded chat interface: compact auto-growing composer, circular send control, user message bubbles, pill-shaped collection controls and suggested questions, and collapsed source/community/library details. Enter sends, Shift+Enter inserts a line, and composition input is preserved. This scoped chat treatment supersedes the old rectangular form styling for `/ask` and its domain routes.
+- Validation: 121 research tests, 178 Node tests, production build, and nine Chromium fixture scenarios at 1440, 390 and 320 pixels. Browser checks cover answer/source order, source expansion, exact-passage navigation and return, follow-up context, generation failure and unavailable-answer behavior. Evidence is in `reports/answer-first-2026-10-28/`. These are not live model or semantic acceptance.
+
+The existing local focused corrective release remains the sole promotion operation, as recorded in issue #89 after the later direct user instruction. Integrate this prompt change before freezing its candidate; previous provider acceptance does not transfer to changed instructions. Preserve the citation-contract corrections, full corpus, accounting and existing acceptance requirements. This follow-up does not authorize a budget increase or claim live deployment. The installed Impeccable skill was unavailable in this executor; the existing design guidance and rendered desktop/phone output were checked.
+
 ## Outcomes
 
 1. Separate legal and ecology entry points using library-first Zvec dense + lexical hybrid retrieval and server-side Anthropic answers. Concise cited library answers and clearly separate outside-library context; never label model knowledge as a verified external source.

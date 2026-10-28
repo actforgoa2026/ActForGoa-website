@@ -1,0 +1,15 @@
+{
+  "runtime_sha256": {
+    "backend/answer_brief.py": "0b01b1daed4e7211d8c4e382ee6c0af034abf09b71887e7c69dc2ad995011bc6",
+    "backend/chat.py": "4cf5fc331f1ec01839c81f085f7be4ed4a1e009adfb64133f89fde1bb5304df5",
+    "src/Research.tsx": "ef87c8888d2bfe9cac073255e557e9bed61b2c32fe1628039c7135c325ce8107",
+    "src/research.css": "77f1702348445c39221b3529cfe97bbc5ae77fc656186143dc8821bb4415d568"
+  },
+  "research_tests": 121,
+  "node_tests": 178,
+  "production_build": "passed",
+  "browser_fixture_scenarios": 9,
+  "live_provider_calls": 0,
+  "live_semantic_acceptance": false,
+  "deployment": null
+}
