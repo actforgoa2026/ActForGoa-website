@@ -15,7 +15,7 @@ from .anthropic_answers import AnthropicAnswers, AnthropicAPIError, configured_m
 from .domains import Domain
 from .embeddings import ROOT
 from .library import Library
-from .hosting import public_config, PublicLimits, RequestSizeLimit
+from .hosting import public_config, PublicLimits, RequestSizeLimit, UsageLedgerUnavailable
 from .chat import ChatRequest, answer_question, prepare_answer
 
 load_dotenv(ROOT/'.env.local')
@@ -23,9 +23,10 @@ load_dotenv(ROOT/'.env.local')
 def create_app(root=None, index_root=None, client=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
+    ledger_required=os.getenv('RESEARCH_REQUIRE_EXISTING_USAGE','1' if public_origin else '0')=='1'
     # Keep the same durable ledger path across releases; never reset production usage.
     limits=PublicLimits(root/'.research-usage',chats_per_day=min(100,int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))),
-                        monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))))
+                        monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))),require_existing=ledger_required)
     model=configured_model()
     @asynccontextmanager
     async def lifespan(app):
@@ -33,10 +34,8 @@ def create_app(root=None, index_root=None, client=None):
         except (FileNotFoundError, KeyError, ValueError):app.state.library=None
         # Existing public services must restore their ledger, never silently start
         # a new allowance because a volume or data-root selector was misplaced.
-        ledger_required=os.getenv('RESEARCH_REQUIRE_EXISTING_USAGE','1' if public_origin else '0')=='1'
-        ledger_ready=not ledger_required or (root/'.research-usage/answer-usage.sqlite').is_file()
-        app.state.client=client or (AnthropicAnswers(os.environ['ANTHROPIC_API_KEY']) if os.getenv('ANTHROPIC_API_KEY') and os.getenv('RESEARCH_CHAT_ENABLED')=='1' and ledger_ready else None)
-        app.state.chat_unavailable_reason=None if app.state.client else ('usage_ledger_missing' if not ledger_ready else 'not_configured')
+        ledger_ready=limits.existing_ledger_ready()
+        app.state.client=(client or (AnthropicAnswers(os.environ['ANTHROPIC_API_KEY']) if os.getenv('ANTHROPIC_API_KEY') and os.getenv('RESEARCH_CHAT_ENABLED')=='1' else None)) if ledger_ready else None
         yield
         if app.state.client and client is None:app.state.client.close()
         app.state.library=None
@@ -77,14 +76,20 @@ def create_app(root=None, index_root=None, client=None):
         try:return library().search(*args)
         finally:search_slots.release()
 
+    def chat_unavailable_reason():
+        if not limits.existing_ledger_ready():
+            return 'usage_ledger_unavailable' if (root/'.research-usage/answer-usage.sqlite').is_file() else 'usage_ledger_missing'
+        return None if app.state.client else 'not_configured'
+
     @app.get('/api/status')
     def status():
         lib=app.state.library
-        return {'search_ready':lib is not None,'chat_ready':bool(lib and app.state.client),'generation':lib.generation if lib else None,
+        reason=chat_unavailable_reason()
+        return {'search_ready':lib is not None,'chat_ready':bool(lib and reason is None),'generation':lib.generation if lib else None,
                 'stats':lib.manifest['stats'] if lib else {},'model':model,'provider':'anthropic',
                 'domains':['legal','ecology'],'domain_counts':lib.domain_counts() if lib else {'legal':0,'ecology':0},
                 'outside_context_supported':True,'answer_mode':'library_first',
-                'chat_unavailable_reason':app.state.chat_unavailable_reason,
+                'chat_unavailable_reason':reason,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 
     @app.get('/api/search')
@@ -141,7 +146,7 @@ def create_app(root=None, index_root=None, client=None):
     @app.post('/api/chat')
     def chat(request:ChatRequest):
         lib=library()
-        if not app.state.client:raise HTTPException(503,'Answers are not configured yet. You can still search and read the full sources.')
+        if chat_unavailable_reason():raise HTTPException(503,'Answers are currently unavailable. You can still search and read the full sources.')
         if not request.question.strip():raise HTTPException(422,'Enter a question.')
         if not chat_slots.acquire(blocking=False):raise HTTPException(429,'Two answers are already being prepared. Please try again shortly.')
         try:
@@ -157,6 +162,8 @@ def create_app(root=None, index_root=None, client=None):
             if not receipt['reserved']:
                 raise HTTPException(429,'The answer budget has been reached. Search and full documents are still available.')
             return answer_question(app.state.client,model,request,evidence,prepared)
+        except UsageLedgerUnavailable:
+            raise HTTPException(503,'Answers are currently unavailable. You can still search and read the full sources.') from None
         except AnthropicAPIError as error:
             status=getattr(error,'status_code',None)
             detail='The answer service is unavailable. Search and full documents still work.'

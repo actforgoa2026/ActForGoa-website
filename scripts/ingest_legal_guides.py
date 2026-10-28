@@ -18,7 +18,7 @@ GUIDES = {
     'BUILDING_GUIDE_DRAFT.md': ('building', 'Plan building or repair work', ['legal']),
     'FARMING_GUIDE_DRAFT.md': ('farming', 'Start or sustain farming', ['legal', 'ecology']),
     'ANIMAL_WELFARE_GUIDE_DRAFT.md': ('animal-welfare', 'Help animals and report cruelty', ['legal', 'ecology']),
-    'ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md': ('environment', 'Protect the environment', ['legal', 'ecology']),
+    'ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md': ('environmental-protection', 'Protect the environment', ['legal', 'ecology']),
 }
 LIMITATION = 'ActForGoa authored draft guide, not primary legislation or verified consolidated current law. Check the cited official source and the guide verification register before acting.'
 

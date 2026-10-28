@@ -131,16 +131,25 @@ def test_preparation_does_not_truncate_source_qualifications():
     assert maximum_cost('claude-haiku-5-5',payload)>0
 
 
-def test_missing_preserved_usage_ledger_keeps_chat_disabled_but_search_works(section_library,tmp_path,monkeypatch):
+@pytest.mark.parametrize('initial',['missing','empty','wrong_schema'])
+def test_missing_preserved_usage_ledger_keeps_chat_disabled_but_search_works(section_library,tmp_path,monkeypatch,initial):
     monkeypatch.setenv('ANTHROPIC_API_KEY','fixture-not-a-real-key')
     monkeypatch.setenv('RESEARCH_CHAT_ENABLED','1')
     monkeypatch.setenv('RESEARCH_REQUIRE_EXISTING_USAGE','1')
+    path=tmp_path/'.research-usage/answer-usage.sqlite'
+    if initial!='missing':
+        path.parent.mkdir()
+        if initial=='empty':path.touch()
+        else:
+            with sqlite3.connect(path) as db:db.execute('CREATE TABLE unrelated(value TEXT)')
+    before=path.read_bytes() if path.exists() else None
     with TestClient(create_app(tmp_path,index_root=section_library/'.research-index')) as client:
         status=client.get('/api/status').json()
         assert status['search_ready'] and not status['chat_ready']
-        assert status['chat_unavailable_reason']=='usage_ledger_missing'
+        assert status['chat_unavailable_reason']==('usage_ledger_missing' if initial=='missing' else 'usage_ledger_unavailable')
         assert client.post('/api/chat',json={'question':'What permission?','domain':'legal'}).status_code==503
-    assert not (tmp_path/'.research-usage').exists()
+    assert (path.read_bytes() if path.exists() else None)==before
+    if initial=='missing':assert not path.parent.exists()
 
 
 def test_no_evidence_with_outside_disabled_never_calls_provider(section_library,tmp_path):
@@ -151,3 +160,57 @@ def test_no_evidence_with_outside_disabled_never_calls_provider(section_library,
         assert response.status_code==200
         assert response.json()['coverage']=='none' and response.json()['outside_context'] is None
     assert not (tmp_path/'.research-usage').exists()
+
+
+def test_authored_guide_source_urls_all_resolve_to_canonical_guide_records(tmp_path):
+    from urllib.parse import urlsplit
+    source_root=Path(__file__).resolve().parents[2]
+    canonical={item['id'] for item in json.loads((source_root/'src/content/guides.json').read_text())}
+    ingest(tmp_path,source_root/'corpus/guides')
+    for metadata in (tmp_path/'corpus/metadata').glob('*.json'):
+        source=json.loads(metadata.read_text())
+        assert urlsplit(source['url']).path.removeprefix('/read/') in canonical
+    assert GUIDES['ENVIRONMENTAL_PROTECTION_GUIDE_DRAFT.md'][0]=='environmental-protection'
+
+
+@pytest.mark.parametrize('damage',['removed','empty','wrong_schema'])
+def test_running_service_detects_lost_required_ledger_and_keeps_search_available(section_library,tmp_path,monkeypatch,damage):
+    from backend.hosting import PublicLimits
+    monkeypatch.setenv('RESEARCH_REQUIRE_EXISTING_USAGE','1')
+    ledger_root=tmp_path/'.research-usage'
+    assert PublicLimits(ledger_root).reserve_answer(10)
+    path=ledger_root/'answer-usage.sqlite'
+    class NoProviderCall:
+        def answer(self,*args):raise AssertionError('Unavailable accounting must not dispatch')
+    with TestClient(create_app(tmp_path,index_root=section_library/'.research-index',client=NoProviderCall())) as client:
+        assert client.get('/api/status').json()['chat_ready']
+        path.unlink()
+        if damage=='empty':path.touch()
+        if damage=='wrong_schema':
+            with sqlite3.connect(path) as db:db.execute('CREATE TABLE unrelated(value TEXT)')
+        before=path.read_bytes() if path.exists() else None
+        status=client.get('/api/status').json()
+        assert status['search_ready'] and not status['chat_ready']
+        assert status['chat_unavailable_reason']==('usage_ledger_missing' if damage=='removed' else 'usage_ledger_unavailable')
+        assert client.post('/api/chat',json={'question':'What permission?','domain':'legal'}).status_code==503
+        assert client.get('/api/search',params={'q':'permission','domain':'legal'}).json()['results']
+        assert (path.read_bytes() if path.exists() else None)==before
+
+
+def test_ledger_loss_between_readiness_and_reservation_fails_closed(section_library,tmp_path,monkeypatch):
+    from backend.hosting import PublicLimits
+    monkeypatch.setenv('RESEARCH_REQUIRE_EXISTING_USAGE','1')
+    ledger_root=tmp_path/'.research-usage';assert PublicLimits(ledger_root).reserve_answer(10)
+    path=ledger_root/'answer-usage.sqlite'
+    original=PublicLimits.reserve_stage
+    def disappears(self,*args,**kwargs):
+        path.unlink()
+        return original(self,*args,**kwargs)
+    monkeypatch.setattr(PublicLimits,'reserve_stage',disappears)
+    class NoProviderCall:
+        def answer(self,*args):raise AssertionError('A missing ledger must never dispatch')
+    with TestClient(create_app(tmp_path,index_root=section_library/'.research-index',client=NoProviderCall())) as client:
+        assert client.get('/api/status').json()['chat_ready']
+        response=client.post('/api/chat',json={'question':'What permission?','domain':'legal'})
+        assert response.status_code==503 and not path.exists()
+        assert not client.get('/api/status').json()['chat_ready']

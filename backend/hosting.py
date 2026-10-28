@@ -1,6 +1,6 @@
 """Explicit public-host configuration and bounded public-service operations."""
 from collections import deque
-from contextlib import closing
+from contextlib import closing, contextmanager
 from datetime import date, datetime, timezone
 from decimal import Decimal
 from pathlib import Path
@@ -18,6 +18,10 @@ STAGE_RESERVATION_VERSION = 'afg-stage-reservation-v1'
 STAGE_PREFLIGHT_VERSION = 'afg-stage-preflight-v1'
 STAGE_LOCK_TIMEOUT_SECONDS = 0.25
 SQLITE_MAX_INTEGER = (1 << 63) - 1
+
+
+class UsageLedgerUnavailable(Exception):
+    """Dispatch is disabled; no historical accounting may be initialized."""
 
 
 def _stage_tables(db):
@@ -55,6 +59,25 @@ def _stage_snapshot(db, day, month, tables):
     if any(type(value) is not int or not 0 <= value <= SQLITE_MAX_INTEGER for value in snapshot.values()):
         raise ValueError('Invalid stage reservation counters')
     return snapshot
+
+
+def _preserved_tables(db):
+    """Validate an existing ledger without requiring optional receipt tables.
+
+    Legacy monthly ledgers with only usage/spend remain compatible. An empty
+    file, empty schema or counterless replacement is not preserved accounting.
+    """
+    try:
+        tables = _stage_tables(db)
+        if not {'usage', 'spend'} <= tables:
+            raise ValueError('Missing preserved counters')
+        for table, column in [('usage', 'attempts'), ('spend', 'reserved_microusd')]:
+            values = [row[0] for row in db.execute(f'SELECT {column} FROM {table}')]
+            if not values or any(type(value) is not int or not 0 <= value <= SQLITE_MAX_INTEGER for value in values):
+                raise ValueError('Invalid preserved counters')
+        return tables
+    except (sqlite3.Error, ValueError):
+        raise UsageLedgerUnavailable('Existing answer accounting is unavailable.') from None
 
 
 def _validate_stage_cost(cost_microusd):
@@ -115,12 +138,47 @@ def public_config():
 
 class PublicLimits:
     """Single-instance aggregate limits. No client identifiers are collected."""
-    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5'):
+    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5', require_existing=False):
         self.root=Path(root);self.search_limit=search_per_minute;self.chat_limit=chats_per_day
+        self.require_existing=require_existing
         amount=Decimal(str(monthly_usd))
         if not amount.is_finite() or amount<0:raise ValueError('Monthly answer budget must be non-negative')
         self.monthly_limit=int(amount*1_000_000)
         self.searches=deque();self.lock=threading.Lock()
+
+    def _open_ledger(self, *, write):
+        path=self.root/'answer-usage.sqlite'
+        if self.require_existing:
+            # mode=rw is enforced on every reservation, eliminating the gap
+            # between a startup/readiness check and a later missing volume.
+            try:
+                return sqlite3.connect(path.resolve().as_uri()+('?mode=rw' if write else '?mode=ro'),
+                                       uri=True,timeout=STAGE_LOCK_TIMEOUT_SECONDS,isolation_level=None)
+            except sqlite3.Error:
+                raise UsageLedgerUnavailable('Existing answer accounting is unavailable.') from None
+        if write:self.root.mkdir(parents=True,exist_ok=True)
+        return sqlite3.connect(path,timeout=STAGE_LOCK_TIMEOUT_SECONDS,isolation_level=None)
+
+    def existing_ledger_ready(self):
+        if not self.require_existing:return True
+        try:
+            with closing(self._open_ledger(write=False)) as db:
+                db.execute('BEGIN')
+                try:_preserved_tables(db)
+                finally:db.rollback()
+            return True
+        except (UsageLedgerUnavailable,sqlite3.Error):
+            return False
+
+    @contextmanager
+    def _ledger(self, *, write):
+        try:
+            with closing(self._open_ledger(write=write)) as db:
+                yield db
+        except sqlite3.Error:
+            if self.require_existing:
+                raise UsageLedgerUnavailable('Existing answer accounting is unavailable.') from None
+            raise
     def allow_search(self):
         now=time.monotonic()
         with self.lock:
@@ -131,6 +189,9 @@ class PublicLimits:
         # Charge the conservative maximum before dispatch. Failures/timeouts still count.
         # SQLite serializes reservations across concurrent processes and survives restarts.
         if not isinstance(cost_microusd,int) or cost_microusd<0:raise ValueError('Invalid cost reservation')
+        if self.require_existing:
+            result=self.reserve_stage(cost_microusd,datetime.now(timezone.utc).date().isoformat(),uuid4().hex,'draft')
+            return result['reserved']
         self.root.mkdir(parents=True,exist_ok=True)
         today=datetime.now(timezone.utc).date().isoformat()
         month=today[:7]
@@ -157,19 +218,16 @@ class PublicLimits:
         This method performs no network work and has no retry or refund path.
         """
         _validate_stage_request(cost_microusd, expected_day, parent_id, phase)
-        self.root.mkdir(parents=True, exist_ok=True)
         # SQLite, rather than the instance lock, serializes this operation with
         # legacy reservations and other processes. Bound waiting for its lock.
-        with closing(sqlite3.connect(self.root / 'answer-usage.sqlite',
-                                     timeout=STAGE_LOCK_TIMEOUT_SECONDS,
-                                     isolation_level=None)) as db:
+        with self._ledger(write=True) as db:
             db.execute('BEGIN IMMEDIATE')
             try:
                 # Read the clock only after acquiring the write transaction: a
                 # reservation waiting across UTC midnight must not charge yesterday.
                 day = datetime.now(timezone.utc).date().isoformat()
                 month = day[:7]
-                tables = _stage_tables(db)
+                tables = _preserved_tables(db) if self.require_existing else _stage_tables(db)
                 before = _stage_snapshot(db, day, month, tables)
                 result = {
                     'version': STAGE_RESERVATION_VERSION,
@@ -246,9 +304,18 @@ class PublicLimits:
         _validate_stage_cost(total)
         _validate_stage_day(expected_day)
         path = self.root / 'answer-usage.sqlite'
+        if self.require_existing:
+            with self._ledger(write=False) as db:
+                db.execute('BEGIN')
+                try:
+                    _preserved_tables(db)
+                finally:
+                    db.rollback()
         try:
             path.lstat()
         except FileNotFoundError:
+            if self.require_existing:
+                raise UsageLedgerUnavailable('Existing answer accounting is unavailable.') from None
             day = datetime.now(timezone.utc).date().isoformat()
             observed = {'day_attempts': 0, 'month_reserved_microusd': 0}
         else:
@@ -260,7 +327,7 @@ class PublicLimits:
                                          isolation_level=None)) as db:
                 db.execute('BEGIN')
                 try:
-                    tables = _stage_tables(db)
+                    tables = _preserved_tables(db) if self.require_existing else _stage_tables(db)
                     day = datetime.now(timezone.utc).date().isoformat()
                     observed = _stage_snapshot(db, day, day[:7], tables)
                 finally:
