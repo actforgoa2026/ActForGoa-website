@@ -1,0 +1,11 @@
+{
+  "checks": [
+    "Blog draft stays private until explicit publication",
+    "Explicit publish makes the saved snapshot readable",
+    "Edits to published articles stay private until republished",
+    "Unpublish removes public access",
+    "Failed star save reports the error without falsely changing saved state",
+    "Expired session hides controls and offers sign-in after rejecting the write"
+  ],
+  "environment": "Disposable local preview only"
+}

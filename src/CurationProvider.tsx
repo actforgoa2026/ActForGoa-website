@@ -1,13 +1,17 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
 import { parseStarredIds } from './curation';
+import {listenForTeamChange} from './team-events';
 
 const empty = new Set<string>();
 const CurationContext = createContext<ReadonlySet<string>>(empty);
 export const useStarredIds = () => useContext(CurationContext);
+const CurationUpdates = createContext<(ids: string[]) => void>(() => {});
+export const useUpdateStarredIds = () => useContext(CurationUpdates);
 
 /** Public metadata only. An unavailable service preserves the original ordering. */
 export function CurationProvider({ children }: { children: ReactNode }) {
   const [stars, setStars] = useState<ReadonlySet<string>>(empty);
+  const update = useCallback((ids: string[]) => setStars(parseStarredIds({starredIds: ids})), []);
   useEffect(() => {
     let active = true;
     let controller: AbortController | undefined;
@@ -23,15 +27,15 @@ export function CurationProvider({ children }: { children: ReactNode }) {
         const response = await fetch('/api/curation', { signal: request.signal, credentials: 'omit' });
         if (!response.ok) return;
         const data: unknown = await response.json();
-        if (active) setStars(parseStarredIds(data));
+        if (active && !request.signal.aborted) setStars(parseStarredIds(data));
       } catch { /* Optional curation must never block public content. */ }
       finally { clearTimeout(timer); }
     }
     void refresh();
     const changed = () => { lastAttempt = 0; void refresh(); };
     window.addEventListener('focus', refresh);
-    window.addEventListener('actforgoa:curation-changed', changed);
-    return () => { active = false; controller?.abort(); window.removeEventListener('focus', refresh); window.removeEventListener('actforgoa:curation-changed', changed); };
+    const stop = listenForTeamChange('curation', changed);
+    return () => { active = false; controller?.abort(); window.removeEventListener('focus', refresh); stop(); };
   }, []);
-  return <CurationContext.Provider value={stars}>{children}</CurationContext.Provider>;
+  return <CurationUpdates.Provider value={update}><CurationContext.Provider value={stars}>{children}</CurationContext.Provider></CurationUpdates.Provider>;
 }

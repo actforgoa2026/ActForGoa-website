@@ -26,6 +26,12 @@ The user subsequently instructed CLOUD to ship [PR #92](https://github.com/actfo
 
 The local release owner now [reports working Vercel/Railway credentials and a live acceptance hold](https://github.com/actforgoa2026/ActForGoa-website/issues/89#issuecomment-6465660719). On the earlier `7bf1965` runtime, water-04 returned a mechanically valid answer without final semantic acceptance; scope-01 returned an app 502 after the provider used document titles as citation IDs while its supports used passage IDs. That captured answer also exceeded the old 180-word bound, and the owner flagged ecological scope/population wording concerns. Only the length bound is changed by the voice follow-up: citation identity and semantic issues remain unresolved. Do not relabel the failed capture as accepted, replay unchanged diagnostics or bypass validation. The remaining cases and HTTP/hosted/admin checks have not passed. The owner retained both charged reservations, reconciled accounting and stopped promotion; deployment of AI answers remains held.
 
+## Internal tools continuation — public-site curation
+
+The user requested shipping the blogging/internal tools, then added curation while browsing the normal website. Source `26a447bfea5d7c3d2129b160ba0130a4ed64d504` on `codex/internal-tools-shipping` adds staff-only stars on public records, the staff browsing bar, direct dashboard team-picks view, and cross-tab synchronization of the existing shared curation. It preserves relevant-only ranking and private sessions. See [the scoped handoff and verification](../reports/internal-tools-2026-10-28/README.md).
+
+Implemented and cloud-tested; this follow-up is pending integration and is **not live**. 178 Node tests/build and 17 local real-service browser checks passed. Cloud Railway requests return a Cloudflare 403, despite a ready binding. The user explicitly chose **ORCHESTRATOR’s working local access** to deploy. No competing alias promotion or service creation occurred here; the existing focused release owner remains responsible for the hosted editorial service, named accounts, server-only Vercel wiring and actual hosted checks. This request does not waive research acceptance or increase its budget. The original domain remains out of scope.
+
 ## Work ledger
 
 Last updated: 28 October 2026. All `/workspace` paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90. Branch: `codex/cloud-integration-20261028`. Implementation and cloud acceptance are complete; the fresh review corrections below are included in the source landing. **Live deployment remains pending.** The exact merge SHA and latest release state are recorded on PR #90 and issue #89; a merge alone is not deployment.
@@ -168,6 +174,10 @@ Latest satellite instruction: user explicitly authorized getting an iterative ve
 
 Recorded preview **live**: source `18112a2`, deployment `dpl_4b7qNRdy2VsQEhXLig7bBF2sgEhP`, existing Vercel project, preview target. New-project creation was forbidden, so only an isolated preview deployment was created; project build/protection settings and production `dpl_FzbANqhz96u2JNt2eb6fK4BDtS7c` are unchanged. A seven-day deployment-scoped share link was supplied to the user; token omitted from Git. Anonymous desktop/390px/320px hosted checks pass. [Evidence](../reports/satellite-preview-2026-10-28/README.md). **Full hosted queries remain unconnected; PR #95 remains unmerged.** No CDSE/model calls or research generation occurred during this preview publication.
 
+## About copy update — 28 October 2026
+
+Branch `codex/about-copy-update` replaces the About page's historic introductory text and imported blocks with the user's supplied platform statement, content policy, Kokum Trust attribution and gratitude paragraph. The archive link, sidebar and field-guide provenance remain available. Implementation complete; production build passes and Chromium at 1440px and 390px confirms the supplied copy and no horizontal overflow. Screenshots: `.reports/about/1440.png` and `.reports/about/390.png` (local). Rendered desktop/phone reviewed; Impeccable skill unavailable in this executor. Merge and live deployment pending; existing release owner retains promotion ownership.
+
 ## Cloud-only claim assessment continuation — 28 October 2026
 
 The user's latest instruction keeps this research-chat work entirely in cloud;
@@ -256,3 +266,9 @@ Implemented: reproducible Git recovery, actual-native budget construction and
 matching-obligation counterexamples. Semantically accepted: none. Merged: no.
 Production verified: no. No paid provider calls, model/config sweeps, ledger
 changes, local-host reads/execution, stopped-thread messages or activation.
+
+## Homepage search routing, 28 October 2026
+
+Feature commit `9cdac9c09e6da4f1734ed6f23daa7b1f844f1fa7` on `codex/home-search-routing` changes the homepage question composer to open the matching top-level topic menu, exactly like its large topic button. Emergency requests use the existing emergency destination; unclear or competing needs retain the input and offer the topic choices. Catalogue search retains its existing filters and retrieval behavior. The user explicitly requested shipping.
+
+Implemented and verified in an isolated checkout based on fresh main `9cea6e2`: 191 Node tests pass, production build passes, all eight topic destinations and emergency routing were exercised, and desktop/phone render and retained-route smoke checks pass. Impeccable reports no primary findings. Exact runtime hashes, screenshots, scope and limitations are in `reports/home-search-2026-10-28/`. Source landing and live deployment are pending at this handoff. The active ORCHESTRATOR retains combined promotion ownership; this feature chat has not changed the public alias. Next: review/land the branch and include it in the coordinator’s accepted release through `release:review`.
