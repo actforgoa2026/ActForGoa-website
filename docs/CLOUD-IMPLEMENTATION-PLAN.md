@@ -1,5 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Reviewed source inconsistency
+
+The b98b352 candidate reached39 accepted cases before biodiversity-04 reproduced an internally inconsistent statistic in the original report:158 of218 amphibian species was printed as87.8percent. The original PDF physical page135 was rendered and inspected; the inconsistency is in the source, not an extraction repair. The failed answer and its reservation remain rejected/preserved. The existing exact-byte source-review registry now excludes only that passage from answer evidence, while original-document access and search remain available with a warning. No corrected number, source text, prompt or frozen expectation is substituted.
+
+All39 accepted provider payloads, selected source lists and assembled answers were re-prepared/replayed and verified identical after this source-review change. They remain captured-generation evidence, not new paid HTTP passes. The failed case has a changed evidence payload and requires a fresh dispatch. Canonical October28 accounting is118attempts and10,582,575microUSD reserved. With32 frozen cases,3HTTP journeys and4launch slots still needed, the minimum is157total attempts. Only150today/$15October is authorized; the160-today request is still pending. Continue only stages that preserve4launch slots and the hard monthly cap. Default100daily resumes29October and$5monthly resumesNovember. No public activation or alias promotion has occurred.
+
+
 ## Focused contrast-retrieval correction
 
 The combined candidate includes merged PR93/94/96/99. Acceptance on5456414 reached22 accepted cases, then water-10 failed HTTP502: its missing-evidence note was550characters against the unchanged500-character bound, and it returned no coverage for a case expecting a supported answer. The failed output remains rejected and charged. Canonical October28 accounting is100attempts and8,584,037microUSD reserved; production reconciliation is still pending.

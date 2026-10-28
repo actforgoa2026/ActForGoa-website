@@ -9,6 +9,15 @@
       "reason": "The source contains ambiguous jurisdiction wording about return versus transfer of RTI applications. Do not infer a rule from this passage. Read the original and confirm with the authority.",
       "reviewed_utc": "2026-10-28",
       "verification_url": "https://rtionline.goa.gov.in/FAQ.pdf"
+    },
+    {
+      "passage_id": "b7071c8265d170f450c5d74f5fac71a1",
+      "document_id": "ff1cc7a0f11da0f10e4d19ac-68cca0a5d51f",
+      "text_sha256": "e5b431059e34c17c4e367c4c91823f360fce8eacb41fbea6d2e7dabf47132635",
+      "source_url": "https://envcc.goa.gov.in/document-category/environment-reports/upload/EIA report from Kulem to Castlerock Section.pdf",
+      "reason": "The original report gives an internally inconsistent percentage and count for Western Ghats amphibian endemism: 87.8 percent (158 species) among 218 species. This is visible in the original PDF, not an extraction repair. Do not infer a corrected figure; inspect the original and seek clarification.",
+      "reviewed_utc": "2026-10-28",
+      "verification_url": "https://envcc.goa.gov.in/document-category/environment-reports/upload/EIA report from Kulem to Castlerock Section.pdf#page=135"
     }
   ]
 }
