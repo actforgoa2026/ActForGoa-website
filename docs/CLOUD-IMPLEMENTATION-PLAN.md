@@ -133,3 +133,34 @@ Admin Curation Plan was approved, but its prior summary says only isolated relev
 ## Initial environment gaps
 
 Environment reports no bound secrets or cloud identities. HTTP access currently allows the review alias and package-manager hosts, but not Anthropic, Railway or Vercel control APIs. Secure runtime key/deployment access and permitted destination configuration must be restored for live provider testing and publication. Continue implementation and offline checks independently. Impeccable is referenced by AGENTS.md but its installed skill has not yet been found in the cloud; preserve existing design documents and record the verification limitation if unavailable.
+
+## Cloud-only claim assessment continuation — 28 October 2026
+
+The user's latest instruction keeps this research-chat work entirely in cloud;
+do not reactivate the stopped local ECO SYSTEM thread. Earlier local-release
+references above do not authorize local execution for this continuation.
+
+Fresh remote main is `a786df50a9f69663c0e68751accc6d136890715a`;
+PR #88 head remains `0c234e6f53dce24632875cc1f58f0c4dd302078a`.
+Isolated branch: `codex/offline-claim-assessment`, cloud worktree
+`/workspace/actforgoa-claim-assessment`. Candidate files:
+`experiments/claim_review_candidate.py`, its test module, and
+`docs/RESEARCH-OFFLINE-CLAIM-CANDIDATE.md`.
+
+Implemented: offline explicit-span/claim review prototype only. Complete evidence
+still permits wrong wording; the tests deliberately preserve that counterexample.
+Mechanical verification: experiment discovery ran 71 tests, with one skipped
+(70 executed); this count is coincidental and is NOT the 71-case semantic gate.
+Unchanged research suite: 121 passed. `git diff --check` passed. No production
+runtime, UI, provider configuration, ledger or acceptance expectations changed.
+Semantic acceptance: none. Merge: not merged. Production verification: none.
+No paid calls, deployments or local-thread activation performed.
+
+Missing: historical capture reviews, unsealed dependency assessment, frozen
+71 semantic cases plus three HTTP journeys, and verified persistent accounting.
+Reported 28 daily attempts / 2,316,292 monthly microdollars remain historical,
+not reconciled values. The source documents a runtime-limit mismatch on current
+main that must be resolved before any dispatch. Next: review the offline candidate,
+recover missing evidence through cloud storage, finish complete-set assessment,
+and only then seek authorization for a concrete bounded acceptance run. Hold AI
+activation and preserve distinct semantic, HTTP and production launch gates.
