@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState, type CSSProperties, type FormEvent} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import {ArrowUp, ArrowUpRight, Pause, Play, Search} from 'lucide-react';
+import {createOrbitPath, orbitEntranceSpeed} from './orbit-motion';
 import {searchDestination} from './search-navigation';
 import photos from './content/orbit-photos.json';
 import './orbit-landing.css';
@@ -17,31 +18,33 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
   const location = useLocation();
   const scene = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-    const animations = Array.from(scene.current?.querySelectorAll('.goa-photo-ring') || [])
-      .flatMap((ring, index) => {
-        // Integral of (1 - progress)^2 over three seconds is one second:
-        // A 70% gentler entrance adds .9 / .75 / .6 turns.
-        const revolutions = (3 - index * .5) * .3;
-        return [ring, ...ring.querySelectorAll('.goa-photo-counter')].flatMap(element =>
-          element.getAnimations().map(animation => ({animation,
-            boost: Number(animation.effect?.getTiming().duration) / 1000 * revolutions})));
-      });
-    let previous = performance.now();
-    let elapsed = 0;
-    let frame = 0;
-    const settle = (now: number) => {
-      if (!scene.current?.closest('.is-paused')) elapsed += now - previous;
+    const root = scene.current;
+    if (!root) return;
+    const path = createOrbitPath();
+    const tiles = Array.from(root.querySelectorAll<HTMLElement>('.goa-photo-position'));
+    let previous = performance.now(), elapsed = 0, offset = 0, frame = 0;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)');
+    const draw = () => tiles.forEach((tile, index) => {
+      const progress = (index / tiles.length + offset + .037) % 1;
+      const point = path.point(progress);
+      const depth = Math.min(Math.hypot(point.x, point.y) / path.radius, 1);
+      const scale = .45 + .75 * depth ** .65;
+      tile.style.transform = `translate3d(${point.x}px, ${point.y}px, 0) scale(${scale})`;
+      tile.style.opacity = String(Math.min(progress / .035, (1 - progress) / .07, 1));
+    });
+    const flow = (now:number) => {
+      const delta = Math.min(now - previous, 50);
       previous = now;
-      const progress = Math.min(1, elapsed / 3000);
-      // Match ring/counter time exactly, keeping photographs upright throughout.
-      animations.forEach(({animation, boost}) => {
-        animation.currentTime = elapsed + boost * 1000 * (1 - (1 - progress) ** 3);
-      });
-      if (progress < 1) frame = requestAnimationFrame(settle);
+      if (!root.closest('.is-paused') && !document.hidden) {
+        elapsed += delta;
+        offset = (offset + 25 * orbitEntranceSpeed(elapsed) * delta / 1000 / path.length) % 1;
+        draw();
+      }
+      frame = requestAnimationFrame(flow);
     };
-    settle(previous);
-    return () => { cancelAnimationFrame(frame); animations.forEach(({animation}) => { animation.playbackRate = 1; }); };
+    draw();
+    if (!reduced.matches) frame = requestAnimationFrame(flow);
+    return () => cancelAnimationFrame(frame);
   }, []);
   const [question,setQuestion]=useState('');
   const [paused,setPaused]=useState(false);
@@ -51,7 +54,7 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
   return <Container className={'goa-orbit-page'+(embedded?' goa-orbit-home-hero':'')+(paused?' is-paused':'')} aria-label={embedded?'Explore Goa':undefined}>
     <div ref={scene} className="goa-orbit-scene" aria-hidden="true">
       {rings.map((ring,ri)=><div key={ri} className={'goa-photo-ring goa-photo-ring-'+ri} style={{'--radius':ring.radius+'px','--duration':ring.duration+'s'} as CSSProperties}>
-        {Array.from({length:ring.count},(_,i)=>{const photo=photos[rings.slice(0,ri).reduce((total, ring) => total + ring.count, 0) + i];const angle=360/ring.count*i+ring.start;return <div className="goa-photo-position" key={i} style={{'--angle':angle+'deg','--tilt':'0deg','--photo-size':([70,94,124][ri] + (i%3-1)*8)+'px'} as CSSProperties}><div className="goa-photo-counter"><img src={photo.src} alt="" draggable={false} width="120" height="120" loading="eager"/></div></div>;})}
+        {Array.from({length:ring.count},(_,i)=>{const photo=photos[rings.slice(0,ri).reduce((total, ring) => total + ring.count, 0) + i];const angle=360/ring.count*i+ring.start;return <div className="goa-photo-position" key={i} style={{'--angle':angle+'deg','--tilt':'0deg','--photo-size':'112px'} as CSSProperties}><div className="goa-photo-counter"><img src={photo.src} alt="" draggable={false} width="120" height="120" loading="eager"/></div></div>;})}
       </div>)}
     </div>
     <section className="goa-orbit-center" aria-labelledby="orbit-title">
