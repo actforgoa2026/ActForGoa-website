@@ -1,6 +1,7 @@
 """Explicit public-host configuration and bounded public-service operations."""
 from collections import deque
 from datetime import datetime, timezone
+from decimal import Decimal
 from pathlib import Path
 import os
 import sqlite3
@@ -44,8 +45,11 @@ def public_config():
 
 class PublicLimits:
     """Single-instance aggregate limits. No client identifiers are collected."""
-    def __init__(self, root, search_per_minute=120, chats_per_day=100):
+    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5'):
         self.root=Path(root);self.search_limit=search_per_minute;self.chat_limit=chats_per_day
+        amount=Decimal(str(monthly_usd))
+        if not amount.is_finite() or amount<0:raise ValueError('Monthly answer budget must be non-negative')
+        self.monthly_limit=int(amount*1_000_000)
         self.searches=deque();self.lock=threading.Lock()
     def allow_search(self):
         now=time.monotonic()
@@ -53,15 +57,22 @@ class PublicLimits:
             while self.searches and self.searches[0]<now-60:self.searches.popleft()
             if len(self.searches)>=self.search_limit:return False
             self.searches.append(now);return True
-    def reserve_answer(self):
-        # Persistent reservation counts failed provider attempts too, preventing retries bypassing the budget.
+    def reserve_answer(self, cost_microusd=0):
+        # Charge the conservative maximum before dispatch. Failures/timeouts still count.
+        # SQLite serializes reservations across concurrent processes and survives restarts.
+        if not isinstance(cost_microusd,int) or cost_microusd<0:raise ValueError('Invalid cost reservation')
         self.root.mkdir(parents=True,exist_ok=True)
         today=datetime.now(timezone.utc).date().isoformat()
+        month=today[:7]
         with self.lock,sqlite3.connect(self.root/'answer-usage.sqlite') as db:
             db.execute('CREATE TABLE IF NOT EXISTS usage(day TEXT PRIMARY KEY, attempts INTEGER NOT NULL)')
+            db.execute('CREATE TABLE IF NOT EXISTS spend(month TEXT PRIMARY KEY, reserved_microusd INTEGER NOT NULL)')
             db.execute('BEGIN IMMEDIATE')
             count=db.execute('SELECT attempts FROM usage WHERE day=?',(today,)).fetchone()
-            if count and count[0]>=self.chat_limit:return False
+            if (count[0] if count else 0)>=self.chat_limit:return False
+            spend=db.execute('SELECT reserved_microusd FROM spend WHERE month=?',(month,)).fetchone()
+            if (spend[0] if spend else 0)+cost_microusd>self.monthly_limit:return False
             db.execute('INSERT INTO usage VALUES (?,1) ON CONFLICT(day) DO UPDATE SET attempts=attempts+1',(today,))
+            db.execute('INSERT INTO spend VALUES (?,?) ON CONFLICT(month) DO UPDATE SET reserved_microusd=reserved_microusd+excluded.reserved_microusd',(month,cost_microusd))
             db.execute('DELETE FROM usage WHERE day<?',(today,))
         return True

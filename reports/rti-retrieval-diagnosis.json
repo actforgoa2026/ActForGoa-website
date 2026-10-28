@@ -1,0 +1,394 @@
+{
+  "source_head": "e274f85aad794813b5487089439c14f17861d0b6",
+  "generation": "20261026T131818-law-23a2e6a6",
+  "provider_calls": 0,
+  "decision": "Do not adopt the experimental reranker; retain current retrieval and its known RTI failure.",
+  "experiment": {
+    "model": "cross-encoder/ms-marco-MiniLM-L6-v2",
+    "revision": "233902d25c440f23af6f7d6e94d2946bac0bee0a",
+    "onnx_file": "onnx/model_qint8_arm64.onnx",
+    "onnx_sha256": "3573b6b9593cb2f75987a31815d409ca3dd8808629118fd20451bb1a5d90cec7",
+    "tokenizer_sha256": "d241a60d5e8f04cc1b2b3e9ef7a4921b27bf526d9f6050ab90f9267a1f9e5c66",
+    "cpu_threads": 2,
+    "batch_size": 8,
+    "max_pair_tokens": 384,
+    "input": "question paired with document title and exact passage text",
+    "ranking": "Cross-encoder logit descending, existing relevance as tie-break; unchanged candidate pool, document cap and duplicate filtering."
+  },
+  "broad_comparison": {
+    "queries": 71,
+    "additional_rti_variants": 4,
+    "passage_integrity_passes": 75,
+    "baseline_smoke_passes": 16,
+    "reranker_smoke_passes": 16,
+    "smoke_total": 16,
+    "candidate_count_min": 93,
+    "candidate_count_max": 160,
+    "reranker_median_seconds": 1.5679,
+    "reranker_p95_seconds": 1.8397,
+    "baseline_median_seconds": 0.0961
+  },
+  "evidence_cases": [
+    {
+      "id": "legal-rti",
+      "question": "How can I submit an RTI application online in Goa, and what application fee do the saved official sources state?",
+      "baseline": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": 4
+        }
+      }
+    },
+    {
+      "id": "rti-fee-short",
+      "question": "What is the application fee for Goa RTI Online?",
+      "baseline": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": 2
+        }
+      }
+    },
+    {
+      "id": "rti-non-bpl",
+      "question": "What fee does the Goa RTI applicant manual specify for a non-BPL applicant?",
+      "baseline": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": 1
+        }
+      }
+    },
+    {
+      "id": "rti-file-and-pay",
+      "question": "How do I file an RTI request in Goa and pay the application fee?",
+      "baseline": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": 4
+        }
+      }
+    },
+    {
+      "id": "rti-keywords",
+      "question": "RTI online Goa application fee and submission procedure",
+      "baseline": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      },
+      "reranker": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Non-BPL application fee in manual page 7",
+            "any_of": [
+              "e5d0e7777a79a19cf17cced54e173507"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "e5d0e7777a79a19cf17cced54e173507": null
+        }
+      }
+    },
+    {
+      "id": "legal-tcp",
+      "question": "Is TCP technical clearance the same as a building licence in Goa?",
+      "baseline": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Exact authority and approval mapping",
+            "any_of": [
+              "6453618429d81ad36ea31f0be7ecfe06",
+              "bb353e2814795a6bf9d081f5e87abc0d",
+              "e0ea390e4eae2675631cb10ef03d60bf"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "6453618429d81ad36ea31f0be7ecfe06": 6,
+          "bb353e2814795a6bf9d081f5e87abc0d": 7,
+          "e0ea390e4eae2675631cb10ef03d60bf": null
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Exact authority and approval mapping",
+            "any_of": [
+              "6453618429d81ad36ea31f0be7ecfe06",
+              "bb353e2814795a6bf9d081f5e87abc0d",
+              "e0ea390e4eae2675631cb10ef03d60bf"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "6453618429d81ad36ea31f0be7ecfe06": null,
+          "bb353e2814795a6bf9d081f5e87abc0d": 1,
+          "e0ea390e4eae2675631cb10ef03d60bf": 5
+        }
+      }
+    },
+    {
+      "id": "legal-farm",
+      "question": "How should a farmer report crop damage under the Shetkari Adhar Nidhi scheme in Goa?",
+      "baseline": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Revised scheme reporting destination and deadline",
+            "any_of": [
+              "49c4df829e149d7df512df066a379ae0"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "49c4df829e149d7df512df066a379ae0": 3
+        }
+      },
+      "reranker": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Revised scheme reporting destination and deadline",
+            "any_of": [
+              "49c4df829e149d7df512df066a379ae0"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "49c4df829e149d7df512df066a379ae0": null
+        }
+      }
+    },
+    {
+      "id": "legal-dogs",
+      "question": "Can a private person relocate dogs from a school in Goa?",
+      "baseline": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Reviewed institutional SOP procedure and authority",
+            "any_of": [
+              "7e2890b60d2eaff0d9e31cc713895154",
+              "d42390295a29bf9be2ff42e33d5a5630"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "7e2890b60d2eaff0d9e31cc713895154": 1,
+          "d42390295a29bf9be2ff42e33d5a5630": 4
+        }
+      },
+      "reranker": {
+        "passed": false,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Reviewed institutional SOP procedure and authority",
+            "any_of": [
+              "7e2890b60d2eaff0d9e31cc713895154",
+              "d42390295a29bf9be2ff42e33d5a5630"
+            ],
+            "retrieved": false,
+            "in_model_prompt": false
+          }
+        ],
+        "required_ranks": {
+          "7e2890b60d2eaff0d9e31cc713895154": null,
+          "d42390295a29bf9be2ff42e33d5a5630": null
+        }
+      }
+    },
+    {
+      "id": "legal-parra",
+      "question": "What does the final January 2025 notification establish about Parra wetlands?",
+      "baseline": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Final Parra Lake notification and ownership provision",
+            "any_of": [
+              "64eed0b3b39365cd0a949e93c0901765"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "64eed0b3b39365cd0a949e93c0901765": 1
+        }
+      },
+      "reranker": {
+        "passed": true,
+        "passage_integrity": true,
+        "required_evidence": [
+          {
+            "name": "Final Parra Lake notification and ownership provision",
+            "any_of": [
+              "64eed0b3b39365cd0a949e93c0901765"
+            ],
+            "retrieved": true,
+            "in_model_prompt": true
+          }
+        ],
+        "required_ranks": {
+          "64eed0b3b39365cd0a949e93c0901765": 1
+        }
+      }
+    }
+  ],
+  "raw_artifacts_sha256": {
+    "compare.py": "477c078ab3799cd7b33384f45f131e44fedb1b99eac7665e0e1a8908a7afb28e",
+    "comparison.json": "8e7354fb2773395e7e5ebb48dd0de313ede3be1c1be536bbcea998c05be6e741",
+    "rti-variants.json": "56899a240d5905bbe3a746fefc8eaef35eb8f4440a648024c125a8ae210ad3e4",
+    "baseline-evidence-gate.json": "75275e331d8e019eaa2807dbee4f7561cb1d8d3b7ac4c70bfa4d5ca7ab2568ca"
+  },
+  "limits": "This offline comparison checks retrieval of selected reviewed spans, not complete relevance labels, live answers, entailment or legal currency. All 50 ecology queries were executed for ordering and passage integrity, not scored against human relevance judgments. Timing is this Mac, not Railway. No model or ranking change is deployed."
+}

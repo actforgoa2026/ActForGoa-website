@@ -26,7 +26,7 @@ def collection(tmp_path_factory):
     for sid,title,text in sources:
         pdf=pymupdf.open()
         for page_text in [text,'Final page of '+title+'. The complete document includes this last page.']:
-            page=pdf.new_page();page.insert_text((40,60),page_text,fontsize=10)
+            page=pdf.new_page();page.insert_textbox((40,40,550,800),page_text,fontsize=10)
         raw=pdf.tobytes();pdf.close();checksum=hashlib.sha256(raw).hexdigest();relative=f'corpus/raw/{checksum}.pdf';(root/relative).write_bytes(raw)
         meta={'id':sid,'url':f'https://example.org/{sid}.pdf','title':title,'status':'downloaded','sha256':checksum,'raw_path':relative,'format':'pdf','publisher_class':'research','retrieved_at':'2026-10-22T00:00:00Z'}
         (root/'corpus/metadata'/f'{sid}.json').write_text(json.dumps(meta))
@@ -39,12 +39,39 @@ def test_real_hybrid_search_and_complete_document(collection):
     found=lib.search('khazan sluice gates salt water')
     assert found and found[0]['title']=='Khazan water management'
     assert set(found[0]['matches'])=={'keyword','semantic'}
+    assert found[0]['publisher_class']=='research'
+    assert {'legal_currency','source_date_metadata','topics'}<=found[0].keys()
     pages=lib.pages(found[0]['document_id'])
     assert len(pages)==2 and 'Final page' in pages[-1]['text']
     assert found[0]['text']==pages[0]['text'][found[0]['start']:found[0]['end']]
+    assert 'page_context' not in found[0]
     assert lib.search('springs rainfall laterite')[0]['title']=='Laterite aquifer study'
     assert len(lib.search('gecko',doc_id=found[0]['document_id']))<=4
     assert manifest['stats']['documents']==3
+
+def test_offline_evidence_gate_detects_invalid_citation_slice(collection,monkeypatch):
+    from scripts.evaluate_retrieval_evidence import evaluate_case
+    lib=Library(collection[0]);question='How do khazan sluice gates manage saline water?'
+    hits=lib.search(question,10)
+    case={'id':'fixture','question':question,'required_evidence':[{'name':'Sluice mechanism','any_of':[hits[0]['id']]}]}
+    assert evaluate_case(lib,case)['passed']
+    hits[0]=dict(hits[0],text=hits[0]['text']+' This claim is outside the cited slice.')
+    monkeypatch.setattr(lib,'search',lambda *args:hits)
+    result=evaluate_case(lib,case)
+    assert result['required_evidence'][0]['in_model_prompt']
+    assert not result['passage_integrity'] and not result['passed']
+
+def test_offline_evidence_gate_checks_prompt_budget_not_only_retrieval(collection,monkeypatch):
+    from scripts.evaluate_retrieval_evidence import evaluate_case
+    lib=Library(collection[0]);hits=lib.search('khazan sluice gates',10)
+    # Metadata is model input too. Simulate lower-ranked evidence being dropped by
+    # the real prompt budget while keeping all cited text/page slices intact.
+    padded=[dict(hits[0],legal_currency='Recorded limitation. '*300) for _ in range(9)]+[hits[-1]]
+    monkeypatch.setattr(lib,'search',lambda *args:padded)
+    case={'id':'fixture','question':'How do khazans manage water?','required_evidence':[{'name':'Last passage','any_of':[hits[-1]['id']]}]}
+    result=evaluate_case(lib,case)
+    assert result['passage_integrity'] and result['required_evidence'][0]['retrieved']
+    assert not result['required_evidence'][0]['in_model_prompt'] and not result['passed']
 
 @pytest.mark.parametrize('staged',[True,False])
 def test_release_package_reopens_zvec_and_keeps_only_indexed_originals(collection,tmp_path,staged):
@@ -88,13 +115,16 @@ def test_document_endpoints_and_original_checksum(collection):
         assert client.get('/api/status',headers={'host':'evil.example'}).status_code==400
 
 def test_missing_credential_keeps_search_working(collection,monkeypatch):
-    monkeypatch.delenv('OPENAI_API_KEY',raising=False)
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    monkeypatch.delenv('OPENROUTER_API_KEY',raising=False)
     with TestClient(create_app(collection[0])) as client:
         assert client.get('/api/status').json()['chat_ready'] is False
         assert client.post('/api/chat',json={'question':'How do sluice gates work?'}).status_code==503
         assert client.get('/api/search',params={'q':'sluice'}).json()['results']
 
-def test_responses_sdk_citation_contract(collection):
+def test_responses_sdk_citation_contract(collection,monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openai')
+    monkeypatch.setenv('OPENAI_CHAT_MODEL','gpt-5-mini')
     captured=[]
     def provider(request):
         body=json.loads(request.content);captured.append(body)
@@ -193,3 +223,87 @@ def test_corrupted_text_is_flagged_for_search_exclusion():
     from backend.extraction import text_quality_warning
     assert text_quality_warning('abc\ufffd\ufffd\ufffd\x01')
     assert not text_quality_warning('Goa’s rivers include the Mandovi.\nRainfall: 2,900 mm.')
+
+
+def test_openrouter_chat_citations_documents_followup_and_cache(collection,monkeypatch):
+    from tests.research.test_chat_controls import completion
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    captured=[]
+    def provider(request):
+        body=json.loads(request.content);captured.append(body)
+        evidence=json.loads(body['messages'][-1]['content'])['evidence'][0]
+        return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[
+            {'text':evidence['text'],'citations':[evidence['id']]}]})))
+    with OpenAI(api_key='fixture-only',base_url='https://openrouter.ai/api/v1',max_retries=0,
+                http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            question='How do khazan gates regulate saline water?'
+            first=client.post('/api/chat',json={'question':question})
+            assert first.status_code==200,first.text
+            answer=first.json()
+            assert client.post('/api/chat',json={'question':question}).json()==answer and len(captured)==1
+            for cite in answer['citations']:
+                doc=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']}).json()
+                assert hashlib.sha256(client.get(doc['original_url']).content).hexdigest()==doc['sha256']
+                text=client.get(doc['text_url']);assert text.status_code==200 and 'Final page' in text.text
+                pages=client.get('/api/documents/'+cite['document_id']+'/pages',params={'start':cite['page'],'generation':cite['generation']}).json()['pages']
+                assert cite['text'] in pages[0]['text']
+            followup={'question':'And during the monsoon?','history':[
+                {'role':'user','content':question},{'role':'assistant','content':answer['paragraphs'][0]['text']}]}
+            assert client.post('/api/chat',json=followup).status_code==200
+            assert client.post('/api/chat',json=followup).status_code==200
+            assert len(captured)==3
+            assert captured[-1]['messages'][1:3]==followup['history']
+            cite=answer['citations'][0]
+            scoped=client.post('/api/chat',json={'question':question,'document_id':cite['document_id'],'generation':cite['generation']})
+            assert scoped.status_code==200
+            assert all(c['document_id']==cite['document_id'] for c in scoped.json()['citations'])
+
+
+@pytest.mark.parametrize('failure',['401','402','429','timeout','bad-citation'])
+def test_provider_failure_is_safe_not_retried_or_cached_and_reservation_persists(collection,monkeypatch,failure):
+    import sqlite3
+    from tests.research.test_chat_controls import completion
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    count=[0]
+    def provider(request):
+        count[0]+=1
+        if failure=='timeout':raise httpx.ReadTimeout('private diagnostic',request=request)
+        if failure=='bad-citation':
+            return httpx.Response(200,json=completion(json.dumps({'status':'answered','paragraphs':[
+                {'text':'Unsupported','citations':['invented']}]})))
+        return httpx.Response(int(failure),json={'error':{'message':'private diagnostic','type':'failure'}})
+    with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+        before=db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]
+    with OpenAI(api_key='fixture-only',max_retries=0,http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            for _ in range(2):
+                response=client.post('/api/chat',json={'question':'What controls khazan tidal water?'})
+                assert response.status_code==502
+                assert 'private diagnostic' not in response.text and 'fixture-only' not in response.text
+            assert count[0]==2
+            assert client.get('/api/search',params={'q':'khazan'}).status_code==200
+    with sqlite3.connect(collection[0]/'.research-usage/answer-usage.sqlite') as db:
+        assert db.execute('SELECT SUM(reserved_microusd) FROM spend').fetchone()[0]>before
+
+
+def test_exhausted_budget_does_not_call_provider(collection,monkeypatch):
+    monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','openrouter')
+    monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','0')
+    def provider(_):raise AssertionError('A depleted budget must prevent dispatch')
+    with OpenAI(api_key='fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider))) as model:
+        with TestClient(create_app(collection[0],client=model)) as client:
+            assert client.post('/api/chat',json={'question':'How do khazan sluice gates work?'}).status_code==429
+            assert client.get('/api/search',params={'q':'khazan'}).json()['results']
+
+
+def test_service_only_package_does_not_require_or_replace_corpus(tmp_path):
+    output=tmp_path/'release';service=output/'service';service.mkdir(parents=True)
+    (service/'stale-secret.env').write_text('fixture that must not survive regeneration')
+    data=output/'data';data.mkdir();(data/'keep.txt').write_text('existing volume package')
+    script=Path(__file__).resolve().parents[2]/'scripts/package_research.py'
+    report=json.loads(subprocess.check_output([sys.executable,str(script),'--service-only',
+        '--data-root',str(tmp_path/'not-present'),'--output',str(output)],text=True))
+    assert (Path(report['service'])/'backend/providers.py').exists()
+    assert not (service/'stale-secret.env').exists()
+    assert (data/'keep.txt').read_text()=='existing volume package'
