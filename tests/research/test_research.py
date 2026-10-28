@@ -99,7 +99,7 @@ def test_anthropic_citation_contract(collection):
     def provider(request):
         body=json.loads(request.content);captured.append(body)
         payload=json.loads(body['messages'][-1]['content']);evidence=payload['evidence'][0]
-        output={'coverage':'full','paragraphs':[{'text':evidence['text'],'supports':[{'citation_id':evidence['id'],'quote':evidence['text']}]}],'outside_context':None,'limitation':None}
+        output={'coverage':'full','paragraph_1':{'text':evidence['text'],'supports':[{'citation_id':evidence['id'],'quote':evidence['text']}]},'paragraph_2':None,'paragraph_3':None,'outside_context':None,'limitation':None}
         return httpx.Response(200,json={'id':'msg_test','stop_reason':'tool_use','content':[{'type':'tool_use','name':'answer_library_question','input':output}]})
     model=AnthropicAnswers('test-fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider)))
     with TestClient(create_app(collection[0],client=model)) as client:

@@ -12,8 +12,8 @@ REQUEST = ChatRequest(question='What geographic range does the source identify?'
 
 
 def answer(text='The table identifies the Western Ghats as the endemic range.'):
-    return {'coverage': 'full', 'paragraphs': [{'text': text, 'supports': [
-        {'citation_id': EVIDENCE[0]['id'], 'quote': EVIDENCE[0]['text']}]}],
+    return {'coverage': 'full', 'paragraph_1': {'text': text, 'supports': [
+        {'citation_id': EVIDENCE[0]['id'], 'quote': EVIDENCE[0]['text']}]},'paragraph_2':None,'paragraph_3':None,
         'outside_context': None, 'limitation': None}
 
 
@@ -33,10 +33,10 @@ def test_links_are_derived_only_after_validating_exact_support():
     assert result['citations'] == EVIDENCE
     for change in ['document_title', 'unknown_id', 'altered_quote', 'legacy_second_list']:
         raw = answer()
-        if change == 'document_title': raw['paragraphs'][0]['supports'][0]['citation_id'] = EVIDENCE[0]['title']
-        if change == 'unknown_id': raw['paragraphs'][0]['supports'][0]['citation_id'] = 'unknown'
-        if change == 'altered_quote': raw['paragraphs'][0]['supports'][0]['quote'] = 'Endemic only to Goa'
-        if change == 'legacy_second_list': raw['paragraphs'][0]['citations'] = [EVIDENCE[0]['title']]
+        if change == 'document_title': raw['paragraph_1']['supports'][0]['citation_id'] = EVIDENCE[0]['title']
+        if change == 'unknown_id': raw['paragraph_1']['supports'][0]['citation_id'] = 'unknown'
+        if change == 'altered_quote': raw['paragraph_1']['supports'][0]['quote'] = 'Endemic only to Goa'
+        if change == 'legacy_second_list': raw['paragraph_1']['citations'] = [EVIDENCE[0]['title']]
         with pytest.raises(ValueError): normalize_answer(raw, REQUEST, EVIDENCE)
 
 
@@ -46,9 +46,10 @@ def test_word_boundaries_preserve_complete_text_and_reject_overflow_without_trun
         assert normalize_answer(answer(valid), REQUEST, EVIDENCE)['paragraphs'][0]['text'] == valid
         with pytest.raises(ValueError): normalize_answer(answer(valid + ' extra'), REQUEST, EVIDENCE)
     raw = answer(' '.join(['Word'] * 60))
-    raw['paragraphs'] *= 3
+    raw['paragraph_2'] = deepcopy(raw['paragraph_1'])
+    raw['paragraph_3'] = deepcopy(raw['paragraph_1'])
     assert len(normalize_answer(raw, REQUEST, EVIDENCE)['paragraphs']) == 3
-    raw['paragraphs'].append(deepcopy(raw['paragraphs'][0]))
+    raw['paragraph_4'] = deepcopy(raw['paragraph_1'])
     with pytest.raises(ValueError): normalize_answer(raw, REQUEST, EVIDENCE)
 
 
@@ -56,7 +57,7 @@ def test_strict_schema_omits_unsupported_constraints_but_retains_server_checks()
     schema = json.dumps(provider_schema(EVIDENCE))
     for forbidden in ['minLength', 'maxLength', 'maxItems', 'pattern']:
         assert forbidden not in schema
-    raw = answer(); raw['paragraphs'][0]['supports'] *= 7
+    raw = answer(); raw['paragraph_1']['supports'] *= 7
     with pytest.raises(ValueError): normalize_answer(raw, REQUEST, EVIDENCE)
 
 

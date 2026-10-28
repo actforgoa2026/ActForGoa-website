@@ -58,7 +58,7 @@ def test_section_api_echoes_scope_and_unsupported_domains_fail(section_library,m
 
 def example():
     evidence=[{'id':'source-1','text':'A permit may be required. Ask the responsible authority to confirm the current procedure.', 'legal_currency':'Historical draft; not consolidated current law.'}]
-    raw={'coverage':'partial','paragraphs':[{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'supports':[{'citation_id':'source-1','quote':evidence[0]['text']}]}],
+    raw={'coverage':'partial','paragraph_1':{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'supports':[{'citation_id':'source-1','quote':evidence[0]['text']}]},'paragraph_2':None,'paragraph_3':None,
          'outside_context':'You can prepare a short description of your planned work before asking for guidance.', 'limitation':'The library does not establish which permit applies to your site.'}
     return evidence,raw
 
@@ -76,8 +76,8 @@ def test_library_and_outside_answers_have_distinct_provenance():
 @pytest.mark.parametrize('corruption',['unknown_citation','fabricated_quote','full_with_outside','no_evidence_with_claim','outside_disabled','invented_link'])
 def test_answer_contract_rejects_provenance_mixing(corruption):
     evidence,raw=example();request=ChatRequest(question='What permission applies?',domain='legal')
-    if corruption=='unknown_citation':raw['paragraphs'][0]['supports'][0]['citation_id']='fabricated'
-    if corruption=='fabricated_quote':raw['paragraphs'][0]['supports'][0]['quote']='The permit is always required.'
+    if corruption=='unknown_citation':raw['paragraph_1']['supports'][0]['citation_id']='fabricated'
+    if corruption=='fabricated_quote':raw['paragraph_1']['supports'][0]['quote']='The permit is always required.'
     if corruption=='full_with_outside':raw['coverage']='full'
     if corruption=='no_evidence_with_claim':raw['coverage']='none'
     if corruption=='outside_disabled':request.include_outside_context=False
@@ -86,7 +86,7 @@ def test_answer_contract_rejects_provenance_mixing(corruption):
 
 
 def test_no_library_match_is_labeled_and_never_has_fake_citations():
-    raw={'coverage':'none','paragraphs':[],'outside_context':'Start by describing the location and the activity you want help with.', 'limitation':'No matching information was found in our library.'}
+    raw={'coverage':'none','paragraph_1':None,'paragraph_2':None,'paragraph_3':None,'outside_context':'Start by describing the location and the activity you want help with.', 'limitation':'No matching information was found in our library.'}
     result=normalize_answer(raw,ChatRequest(question='An uncovered topic?',domain='legal'),[])
     assert result['status']=='insufficient_evidence' and result['citations']==[]
     assert result['outside_context']['text'] and result['library_notice']
