@@ -160,7 +160,7 @@ def test_paragraph_draft_cannot_omit_required_header_text_support():
 
 def test_exact_independently_reviewed_wire_instruction_hashes_are_pinned():
     from backend.span_instructions import span_answer_instructions
-    record=json.loads((Path(__file__).parents[2]/'docs/research-required-coverage-parity.json').read_text())
+    record=json.loads((Path(__file__).parents[2]/'docs/research-source-completeness-parity.json').read_text())
     for phase,styles in record['rendered_instructions'].items():
         for style,pin in styles.items():
             actual=span_answer_instructions(phase,style).encode()

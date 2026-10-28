@@ -14,7 +14,7 @@ from backend.phase_effort import PIPELINE_VERSION
 from backend.span_draft import prepare_span_draft, span_draft_message_request
 from backend.span_instructions import ANSWER_WORKFLOW, span_answer_instructions
 from scripts import evaluate_anthropic_acceptance as acceptance
-from tests.research.span_fixtures import previous_workflow_prompt, select_response
+from tests.research.span_fixtures import previous_workflow_prompt, previous_source_completeness_prompt, select_response
 from tests.research.test_answer_pipeline import setup, model_response
 from tests.research.test_reconstruction import claim
 from tests.research.test_anthropic_acceptance import setup as legacy_setup
@@ -29,7 +29,7 @@ def test_reversing_only_reviewed_workflow_reproduces_prior_prompt_hash(phase, st
     after = json.loads((root / 'research-required-coverage-parity.json').read_text())
     old_pin, new_pin = (record['rendered_instructions'][phase][style] for record in (before, after))
     old = previous_workflow_prompt(phase, style).encode()
-    new = span_answer_instructions(phase, style).encode()
+    new = previous_source_completeness_prompt(phase, style).encode()
     assert (len(old), hashlib.sha256(old).hexdigest()) == (old_pin['utf8_bytes'], old_pin['sha256'])
     assert (len(new), hashlib.sha256(new).hexdigest()) == (new_pin['utf8_bytes'], new_pin['sha256'])
     assert len(new) - len(old) == new_pin['delta_bytes']
@@ -113,7 +113,7 @@ def test_new_workflow_is_unambiguous_in_readiness_and_initial_failure_capture(ac
     context = acceptance.preflight(plan, 'test', config)
     for value in (acceptance.readiness_report(config, context, 'test'),
                   pipeline.initial_pipeline_trace('synthetic-parent', context['day'])):
-        assert value['capture_version'] == 7
-        assert value['pipeline_spec']['version'] == 'two_pass_v8'
+        assert value['capture_version'] == 8
+        assert value['pipeline_spec']['version'] == 'two_pass_v9'
         assert value['pipeline_spec']['answer_workflow'] == 'required_coverage_first_v1'
         assert value['phase_efforts'] == {'draft': 'low', 'reconstruction': 'medium'}
