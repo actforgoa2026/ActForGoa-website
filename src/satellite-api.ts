@@ -8,6 +8,7 @@ export type SatelliteContext = {state:string;message:string;searched_at?:string;
 export type SatelliteRequest = {area:SatelliteArea;start_date:string;end_date:string;before_id:string;after_id:string;intent:SatelliteIntent;question?:string;window_start?:string;window_end?:string};
 export type SatelliteHistory = {items:{id:string;status:string;created_at:string;request:SatelliteRequest|null;summary:SatelliteResult['summary']|null;observation_interval:SatelliteResult['observation_interval']|null;freshness:SatelliteFreshness|null;'evidence.common_usable_fraction':number|null;error?:string}[];next_offset:number|null;retention_days:number;scope:string};
 export type SatelliteResult = {
+  recorded_example?:{kind:'recorded-real';retrieved_at:string;source_url:string;note:string};
   intent?:SatelliteIntent; freshness?:SatelliteFreshness;library_context?:SatelliteContext;planning_context?:{message:string};
   before:SatelliteObservation; after:SatelliteObservation;
   evidence:{state:string;common_usable_fraction:number;metrics:Record<string,{before_median:number;after_median:number;median_paired_change:number}>;candidates:GeoJSON.FeatureCollection; candidates_truncated?:boolean;water_candidates?:GeoJSON.FeatureCollection;water_change?:{before_area_m2:number;after_area_m2:number;gained_area_m2:number;lost_area_m2:number;method:string}|null};
