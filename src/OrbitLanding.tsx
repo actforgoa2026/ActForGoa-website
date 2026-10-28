@@ -51,7 +51,7 @@ export default function OrbitLanding(){
     </header>
     <div ref={scene} className="goa-orbit-scene" aria-hidden="true">
       {rings.map((ring,ri)=><div key={ri} className={'goa-photo-ring goa-photo-ring-'+ri} style={{'--radius':ring.radius+'px','--duration':ring.duration+'s'} as CSSProperties}>
-        {Array.from({length:ring.count},(_,i)=>{const photo=photos[(i*5+ri*3)%photos.length];const angle=360/ring.count*i+ring.start;return <div className="goa-photo-position" key={i} style={{'--angle':angle+'deg','--tilt':'0deg','--photo-size':(i%3===0?110:i%3===1?84:96)+'px'} as CSSProperties}><div className="goa-photo-counter"><img src={photo.src} alt="" draggable={false} width="120" height="120" loading="eager"/></div></div>;})}
+        {Array.from({length:ring.count},(_,i)=>{const photo=photos[(i*5+ri*3)%photos.length];const angle=360/ring.count*i+ring.start;return <div className="goa-photo-position" key={i} style={{'--angle':angle+'deg','--tilt':'0deg','--photo-size':([70,94,124][ri] + (i%3-1)*8)+'px'} as CSSProperties}><div className="goa-photo-counter"><img src={photo.src} alt="" draggable={false} width="120" height="120" loading="eager"/></div></div>;})}
       </div>)}
     </div>
     <section className="goa-orbit-center" aria-labelledby="orbit-title">
