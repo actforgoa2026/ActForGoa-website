@@ -75,6 +75,19 @@ try {
       const admin = JSON.parse(run('vercel', ['curl', '/api/admin/config', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (admin.available !== true) throw new Error('Staged team tools service is unavailable. Nothing promoted.');
+      // Plain Vercel Node functions do not give [...path].ts Next.js catch-all
+      // semantics. Probe every article depth through the deployed router.
+      // Anonymous GETs must reach authentication without reading or changing data.
+      const probeId = '00000000-0000-0000-0000-000000000000';
+      for (const suffix of ['', '/publish', '/unpublish']) {
+        const result = run('vercel', ['curl', `/api/admin/posts/${probeId}${suffix}`, '--deployment', deploymentUrl,
+          '--', '--silent', '--show-error', '--max-time', '30', '--write-out', '\n%{http_code}']);
+        const separator = result.lastIndexOf('\n');
+        if (result.slice(separator + 1) !== '401'
+            || JSON.parse(result.slice(0, separator)).error !== 'Sign in to continue.') {
+          throw new Error('Staged article routing or authentication is unavailable. Nothing promoted.');
+        }
+      }
       const blog = JSON.parse(run('vercel', ['curl', '/api/blog', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');
