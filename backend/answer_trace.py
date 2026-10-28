@@ -53,7 +53,9 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
     texts = [b['text'] for b in blocks if isinstance(b, dict) and b.get('type') == 'text' and isinstance(b.get('text'), str)]
     text = ''.join(texts)
     if not text:return {'capture_status': 'missing_text'}
-    if len(text.encode()) > 65536:return {'capture_status': 'oversize_text'}
+    try:text_bytes = len(text.encode())
+    except UnicodeError:return {'capture_status': 'invalid_json'}
+    if text_bytes > 65536:return {'capture_status': 'oversize_text'}
     mapping = None
     if paragraph_protocol is not None or answer_style is not None:
         try:

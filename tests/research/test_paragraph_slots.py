@@ -30,6 +30,15 @@ def capture(raw, style, phase):
                               anchor_protocol=ANCHOR_PROTOCOL, paragraph_protocol=PARAGRAPH_PROTOCOL)
 
 
+@pytest.mark.parametrize('style', ['standard', 'brief'])
+@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('codepoint', [0xd800, 0xdc00])
+def test_direct_capture_rejects_unpaired_surrogate_before_utf8_length_check(style, phase, codepoint):
+    # This is an invalid raw Python string at the defensive capture boundary,
+    # distinct from a JSON-escaped surrogate tested through owned transport.
+    assert capture('{"invalid":"' + chr(codepoint) + '"}', style, phase) == {'capture_status': 'invalid_json'}
+
+
 def authored(payload, phase, style, text='Gates regulate tidal water.'):
     unit = claim(text)
     paragraph = unit if phase == 'draft' else {'claims': [unit]}
