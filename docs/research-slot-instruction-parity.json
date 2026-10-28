@@ -1,0 +1,35 @@
+{
+  "pipeline": "two_pass_v6",
+  "capture_version": 5,
+  "paragraph_protocol": "four_nullable_slots_v1",
+  "anchor_protocol": "lossless_source_spans_v2",
+  "baseline_runtime": "85bd8a45a48f1d4b86bcb6c824d9338b03c9914d",
+  "parent_instruction_review": "research-span-instruction-parity.json",
+  "contract_sha256": "6d2de3d09412284cdb2c6428ffed642fd72b4748fa136297d5a8405addef58e6",
+  "proposal_sha256": "4fbac76e00d769eb172169e97f7925562449d9c3d9a6e8c16cf46d57c433e8d1",
+  "independent_design_review_sha256": "4bb828b573a0ec775f388b3175af1d1ac4713352ef2d01b18d5d711f9f7ff3cc",
+  "scope": "Exact standard output-shape amendment only. Semantic instruction prefixes and both brief prompts unchanged. No generated-answer acceptance implied.",
+  "standard_shape_replacement": "Return only status, paragraph_1, paragraph_2, paragraph_3 and paragraph_4. These are ordered paragraph slots. For answered, use one to four contiguous non-null paragraph objects starting at paragraph_1, with at most350 words total; set every remaining slot to null. For insufficient_evidence, set all four slots to null. Never return a paragraphs array.",
+  "rendered_instructions": {
+    "draft": {
+      "standard": {
+        "utf8_bytes": 7200,
+        "sha256": "519ad818da7ac686f8782c22f7f5e793b6f1202bddfa40fdc746357f4ef003b0"
+      },
+      "brief": {
+        "utf8_bytes": 7139,
+        "sha256": "d3817456c67025bc6a14c14952e58dae60ed0310074197743850591c536ce7b6"
+      }
+    },
+    "reconstruction": {
+      "standard": {
+        "utf8_bytes": 7651,
+        "sha256": "d5094e586b7d686a8a20327ec28719c52ec40a697baa29789e29f39e70bfda55"
+      },
+      "brief": {
+        "utf8_bytes": 7590,
+        "sha256": "fc7c5651ede73f00bc275c075e8337f6abeff6603c0fcdd6f200974d9efa329d"
+      }
+    }
+  }
+}

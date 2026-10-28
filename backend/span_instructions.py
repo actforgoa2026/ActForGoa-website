@@ -109,9 +109,7 @@ PHASE_RULES = {'draft': 'Produce a draft answer. A support unit is one paragraph
                    'ten. Return the reconstructed answer, never a score, approval, critique or '
                    'description of the draft.'}
 
-STYLE_RULES = {'standard': 'Return only status and paragraphs. For answered, provide one to four paragraph '
-             'objects with at most350 words total. For insufficient_evidence, paragraphs is an '
-             'empty array.',
+STYLE_RULES = {'standard': 'Return only status, paragraph_1, paragraph_2, paragraph_3 and paragraph_4. These are ordered paragraph slots. For answered, use one to four contiguous non-null paragraph objects starting at paragraph_1, with at most350 words total; set every remaining slot to null. For insufficient_evidence, set all four slots to null. Never return a paragraphs array.',
  'brief': 'Return only status and paragraph, never paragraphs. For answered, paragraph is one '
           'object with at most three short sentences: target50 words, maximum80. For '
           'insufficient_evidence, paragraph is null. Keep authority-to-approval mappings exact; '

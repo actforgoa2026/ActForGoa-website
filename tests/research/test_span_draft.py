@@ -102,13 +102,13 @@ def test_draft_partial_resolution_keeps_raw_selector_failure_and_stops_correctio
     _,_,_,transport,limits,_,run,_=setup;good=transport.handler
     async def broken(req,n):
         response=await good(req,n);payload=response.json();native=json.loads(payload['content'][-1]['text'])
-        native['paragraphs'][0]['supports']=[{'citation_id':'a','span_id':'unknown'}]
+        native['paragraph_1']['supports']=[{'citation_id':'a','span_id':'unknown'}]
         return model_response(native)
     transport.handler=broken
     with pytest.raises(answer_pipeline.PipelineFailure) as caught:run()
     phase=caught.value.trace['phases'][0]
     assert len(transport.requests)==len(limits.receipts)==1
-    assert phase['final_output_diagnostic']['answer']['paragraphs'][0]['supports'][0]['span_id']=='unknown'
+    assert phase['final_output_diagnostic']['answer']['paragraph_1']['supports'][0]['span_id']=='unknown'
     resolution=phase['deterministic_support_resolution']
     assert not resolution['complete'] and len(resolution['paragraphs'][0]['resolved_supports'])==1
     assert resolution['paragraphs'][0]['status']=='failed'
@@ -137,7 +137,7 @@ def test_paragraph_draft_keeps_existing_publication_guards(change):
     prepared=prepare_span_draft(request,prepare_answer(request,evidence,provider='anthropic'))
     native=select_response({'status':'answered','paragraphs':[dated_unit()]},json.loads(prepared.messages[-1]['content']))
     assert normalize_span_draft(json.dumps(native),prepared)['status']=='answered'
-    unit=native['paragraphs'][0]
+    unit=native['paragraph_1']
     if change=='missing_support':unit['supports']=[]
     elif change=='missing_year':unit['text']=unit['text'].replace('2025','an unspecified year')
     else:unit['supports'][0]['citation_id']='other'
@@ -160,7 +160,7 @@ def test_paragraph_draft_cannot_omit_required_header_text_support():
 
 def test_exact_independently_reviewed_wire_instruction_hashes_are_pinned():
     from backend.span_instructions import span_answer_instructions
-    record=json.loads((Path(__file__).parents[2]/'docs/research-span-instruction-parity.json').read_text())
+    record=json.loads((Path(__file__).parents[2]/'docs/research-slot-instruction-parity.json').read_text())
     for phase,styles in record['rendered_instructions'].items():
         for style,pin in styles.items():
             actual=span_answer_instructions(phase,style).encode()

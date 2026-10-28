@@ -8,9 +8,12 @@ import json
 import time
 
 import pytest
+import httpx
 
 from backend import answer_pipeline as pipeline, reconstruction
 from backend.async_anthropic import AsyncAnthropicClient
+from backend import span_draft
+from backend.span_instructions import STYLE_RULES
 from backend.chat import AnswerCache, ChatRequest, Message, prepare_answer
 from tests.research.test_answer_pipeline import setup, model_response
 from tests.research.test_reconstruction import claim
@@ -51,7 +54,7 @@ def test_actual_transport_read_timeout_matches_stage_with_other_limits_unchanged
     ('brief', ['7cf3aa8096fd9d49ea17d2e35ff87b48f9dbdb0adee6618ed1d129582b6c6927',
                '20ea11fcdb89ed7215e9d65be78ba3f8624366cf8111916e75b1f36513353131']),
 ])
-def test_actual_both_stage_request_bytes_equal_v4_base(setup, style, expected_hashes):
+def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_delta(setup, monkeypatch, style, expected_hashes):
     # Independently captured from fb60d77110c2e3ca55695088935451fbf0663d57
     # with this source-neutral fixture and real HTTPX serialization/fake I/O.
     config, _, _, transport, limits, _, _, factory = setup
@@ -69,7 +72,29 @@ def test_actual_both_stage_request_bytes_equal_v4_base(setup, style, expected_ha
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config,
                          limits=limits, client_factory=factory))
     assert result.trace['status'] == 'completed' and len(transport.requests) == 2
-    assert [hashlib.sha256(r.content).hexdigest() for r in transport.requests] == expected_hashes
+    if style == 'brief':
+        assert [hashlib.sha256(r.content).hexdigest() for r in transport.requests] == expected_hashes
+    else:
+        # Reverse only the two reviewed shape changes, then require the exact
+        # independently captured v4 bytes; all other sent content must agree.
+        old_style = ('Return only status and paragraphs. For answered, provide one to four paragraph '
+                     'objects with at most350 words total. For insufficient_evidence, paragraphs is an '
+                     'empty array.')
+        selected = span_draft.prepare_span_draft(request, original)
+        for index, (actual, phase) in enumerate(zip(transport.requests, ('draft', 'reconstruction'))):
+            body = json.loads(actual.content)
+            assert body['system'].endswith(STYLE_RULES['standard'])
+            before = deepcopy(body)
+            before['system'] = body['system'].removesuffix(STYLE_RULES['standard']) + old_style
+            with monkeypatch.context() as m:
+                m.setattr(span_draft, 'standard_slot_schema', lambda schema, style: schema)
+                before['output_config']['format']['schema'] = span_draft.span_schema(
+                    original.schema, style, selected.span_registry, phase=phase)
+            assert len(body['system'].encode()) - len(before['system'].encode()) == 181
+            assert len(reconstruction.encoded(body['output_config']['format']['schema'])) - len(
+                reconstruction.encoded(before['output_config']['format']['schema'])) == 341
+            prior_bytes = httpx.Request('POST', str(actual.url), json=before).content
+            assert hashlib.sha256(prior_bytes).hexdigest() == expected_hashes[index]
 
 
 def test_stage_can_finish_after_thirty_only_within_shared_remaining_budget(setup, clock, monkeypatch):
