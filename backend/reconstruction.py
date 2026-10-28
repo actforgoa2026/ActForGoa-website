@@ -93,8 +93,8 @@ def prepare_reconstruction(request, original, draft):
     restored,actual_registry=verify_annotated_payload(annotated,payload)
     if restored!=payload or actual_registry!=registry:raise ValueError('Source span preparation differs')
     compact=validate_evidence_plan(draft,original,registry)
-    correction_payload = {**annotated, 'request_scope': scope, 'evidence_plan': compact,
-                          'anchor_protocol':ANCHOR_PROTOCOL,'plan_protocol':PLAN_PROTOCOL}
+    correction_payload = {**annotated, 'request_scope': scope,
+                          'anchor_protocol':ANCHOR_PROTOCOL,'plan_protocol':PLAN_PROTOCOL,'evidence_plan':compact}
     history = deepcopy(original.messages[1:-1])
     messages = [{'role': 'system', 'content': reconstruction_instructions(original.base_instructions, original.answer_style)},
                 *history, {'role': 'user', 'content': encoded(correction_payload).decode()}]
