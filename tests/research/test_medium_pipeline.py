@@ -13,7 +13,7 @@ from tests.research.test_answer_pipeline import setup
 
 
 @pytest.mark.parametrize('pipeline,effort',[
-    ('single_final_v1','low'),('single_final_v1','high'),('two_pass_v12','medium'),('two_pass_v12','low'),('two_pass_v12','high'),('two_pass_v12','xhigh'),('two_pass_v12','max'),('two_pass_v12','invalid'),('two_pass_v11','medium'),('two_pass_v11','low'),('two_pass_v11','high'),('two_pass_v10','medium'),('two_pass_v10','low'),('two_pass_v9','medium'),('two_pass_v9','low'),('two_pass_v8','medium'),('two_pass_v8','low'),('two_pass_v7','medium'),('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('single_final_v2','low'),('single_final_v2','high'),('single_final_v1','medium'),('two_pass_v12','medium'),('two_pass_v12','low'),('two_pass_v12','high'),('two_pass_v12','xhigh'),('two_pass_v12','max'),('two_pass_v12','invalid'),('two_pass_v11','medium'),('two_pass_v11','low'),('two_pass_v11','high'),('two_pass_v10','medium'),('two_pass_v10','low'),('two_pass_v9','medium'),('two_pass_v9','low'),('two_pass_v8','medium'),('two_pass_v8','low'),('two_pass_v7','medium'),('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
     ('two_pass_v2','medium'),('two_pass_v1','medium')])
 def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
     monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
@@ -22,7 +22,7 @@ def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,
 
 
 @pytest.mark.parametrize('change',[
-    {'effort':'low'},{'effort':'high'},{'effort':'xhigh'},{'effort':'max'},{'effort':'invalid'},{'pipeline':'two_pass_v12'},{'pipeline':'two_pass_v11'},{'pipeline':'two_pass_v10'},{'pipeline':'two_pass_v5'},{'pipeline':'two_pass_v4'},{'pipeline':'two_pass_v3'},
+    {'effort':'low'},{'effort':'high'},{'effort':'xhigh'},{'effort':'max'},{'effort':'invalid'},{'pipeline':'single_final_v1'},{'pipeline':'two_pass_v12'},{'pipeline':'two_pass_v11'},{'pipeline':'two_pass_v10'},{'pipeline':'two_pass_v5'},{'pipeline':'two_pass_v4'},{'pipeline':'two_pass_v3'},
     {'model':'claude-sonnet-5-5'},{'provider':'openrouter'},{'max_output_tokens':11999}])
 def test_every_two_phase_entry_rejects_mismatched_configuration_before_keys_or_sends(setup,monkeypatch,change):
     config,request,original,transport,limits,_,_,_=setup
@@ -63,10 +63,10 @@ def test_medium_configuration_and_caps_remain_fixed(setup):
     config,request,original,transport,limits,_,run,_=setup
     with pytest.raises(ValueError):span_draft_message_request(config,prepare_span_draft(request,original))
     correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','points':[],'units':[]}))
-    assert correction['output_config']['effort']=='high'
+    assert correction['output_config']['effort']=='medium'
     assert correction['max_tokens']==12000
     assert answer_pipeline.maximum_answer_cost(config)==10624
     assert answer_pipeline.PROVIDER_STAGE_SECONDS==65 and answer_pipeline.PROVIDER_DEADLINE_SECONDS==65
     result=run()
-    assert [phase['request_shape']['effort'] for phase in result.trace['phases']]==['high']
+    assert [phase['request_shape']['effort'] for phase in result.trace['phases']]==['medium']
     assert len(transport.requests)==len(limits.receipts)==1

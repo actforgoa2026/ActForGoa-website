@@ -76,7 +76,7 @@ def test_actual_source_history_and_historical_wire_lineage_remain_pinned(setup, 
     # Reconstruct only this authored historical fixture to audit old hashes;
     # this is not production repair or transfer of model-output acceptance.
     bodies = [json.loads(r.content) for r in transport.requests]
-    assert [b['output_config']['effort'] for b in bodies] == ['high']
+    assert [b['output_config']['effort'] for b in bodies] == ['medium']
     selected = span_draft.prepare_span_draft(request, original)
     for body, phase in zip(bodies, ('reconstruction',)):
         payload=json.loads(body['messages'][-1]['content'])

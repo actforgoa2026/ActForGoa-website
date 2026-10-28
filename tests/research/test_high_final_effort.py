@@ -1,4 +1,4 @@
-"""Scoped final-high capture with fictional sources and mock I/O only."""
+"""Current medium capture and historical high rejection; fictional sources and mock I/O only."""
 from copy import deepcopy
 from dataclasses import replace
 import hashlib
@@ -41,7 +41,7 @@ def capture(body, **kwargs):
     return outgoing_request_capture(request, **kwargs)
 
 
-@pytest.mark.parametrize('phase,effort', [('reconstruction', 'high')])
+@pytest.mark.parametrize('phase,effort', [('reconstruction', 'medium')])
 def test_exact_trusted_phase_context_captures_unmodified_body(setup, phase, effort):
     body = body_for(setup, phase)
     record, decoded = capture(body, phase_context=context(phase))
@@ -68,7 +68,7 @@ def test_high_capture_requires_complete_matching_trusted_context(setup, bad):
 
 
 @pytest.mark.parametrize('field,value', [
-    ('effort', 'medium'), ('effort', 'low'), ('effort', 'xhigh'), ('effort', 'max'),
+    ('effort', 'high'), ('effort', 'low'), ('effort', 'xhigh'), ('effort', 'max'),
     ('effort', None), ('model', 'claude-sonnet-5-5'), ('max_tokens', 11999),
     ('max_tokens', 12000.0),
 ])
@@ -82,6 +82,7 @@ def test_valid_context_cannot_authorize_wrong_final_body(setup, field, value):
 def test_high_cannot_escape_into_unscoped_capture_or_native_builder(setup):
     config, _, original, *_ = setup
     high = body_for(setup, 'reconstruction')
+    high['output_config']['effort'] = 'high'  # Historical native-high negative remains unchanged.
     for kwargs in ({}, {'phase_context': None}):
         assert capture(high, **kwargs) == ({'capture_status': 'unexpected_request_shape'}, None)
     with pytest.raises(ValueError): reviewed_effort(config.model, 'high')
