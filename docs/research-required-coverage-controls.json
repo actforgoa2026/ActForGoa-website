@@ -1,0 +1,135 @@
+{
+  "purpose": "Authored fictional source-neutral review controls. These are not Goa legal advice, model outputs, runtime fixtures or changes to the frozen 71-case acceptance set.",
+  "review_basis": "Minimum means all requested points and necessary linked qualifications, not shortness at the cost of coverage.",
+  "controls": [
+    {
+      "id": "procedure-with-missing-detail",
+      "question": "Where should I report the blocked drain, and what documents must I attach?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The District Service Desk accepts blocked-drain complaints through its public form."
+        },
+        {
+          "id": "b",
+          "text": "The drainage network was extended by 12 km during the pilot."
+        }
+      ],
+      "required_coverage": [
+        "District Service Desk and public form, citing a",
+        "The supplied passages do not list required attachments; do not infer them"
+      ],
+      "optional_to_omit": [
+        "Pilot network length"
+      ],
+      "semantic_failure": [
+        "Inventing identity photographs or a mandatory form number",
+        "Answering only where and silently dropping the attachment question"
+      ]
+    },
+    {
+      "id": "conditional-permission",
+      "question": "What conditions govern beginning work on this wall?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The 2022 rules permit wall repairs only after Board consent. Structure details and design shall follow Appendix C. Scheduled structures are excluded from this permission.",
+          "legal_currency": "unverified"
+        }
+      ],
+      "required_coverage": [
+        "Attribute the 2022 source with uncertain current applicability",
+        "Prior Board consent",
+        "Both structure details and design must follow Appendix C",
+        "Scheduled-structure exception",
+        "Appendix C details and whether this wall is scheduled are not supplied"
+      ],
+      "optional_to_omit": [
+        "Unrelated local statistics or general planning procedures"
+      ],
+      "semantic_failure": [
+        "Dropping an obligation to make the answer shorter",
+        "Treating publication as verified current permission"
+      ]
+    },
+    {
+      "id": "conceptual-authority-distinction",
+      "question": "Does a national product certificate itself provide municipal construction permission?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The National Product Board certifies equipment. Construction permission for a proposed site is issued separately by the municipal planning office."
+        },
+        {
+          "id": "b",
+          "text": "The Product Board issued 780 certificates in the 2023 reporting period."
+        }
+      ],
+      "required_coverage": [
+        "Product certification and municipal construction permission are distinct functions",
+        "A product certificate alone does not establish the separately issued permission"
+      ],
+      "optional_to_omit": [
+        "Unrequested certificate count"
+      ],
+      "semantic_failure": [
+        "Merging two authorities",
+        "Adding the count without its reporting period",
+        "Expanding into an unsupported application procedure"
+      ]
+    },
+    {
+      "id": "broad-overview-preserves-both-sides",
+      "question": "What benefit and limitation do these sources describe for the pilot barrier?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The 2021 pilot report observed reduced water-level fluctuations behind the barrier."
+        },
+        {
+          "id": "b",
+          "text": "The same pilot report notes that the barrier restricted fish passage. It did not assess effects across the whole estuary."
+        }
+      ],
+      "required_coverage": [
+        "Attributed 2021 pilot benefit",
+        "Fish-passage limitation",
+        "Pilot evidence does not establish whole-estuary effects"
+      ],
+      "optional_to_omit": [
+        "Unrequested construction history"
+      ],
+      "semantic_failure": [
+        "Retaining only the benefit for brevity",
+        "Converting a pilot observation into a universal claim"
+      ]
+    },
+    {
+      "id": "conflicting-incomplete-information",
+      "question": "What fee and filing deadline do the supplied sources give?",
+      "evidence": [
+        {
+          "id": "a",
+          "text": "The undated service sheet lists a fee of 10 units."
+        },
+        {
+          "id": "b",
+          "text": "A second undated sheet lists a fee of 20 units. Neither sheet is identified as superseding the other."
+        }
+      ],
+      "required_coverage": [
+        "Report the conflicting supplied fees with attribution",
+        "The supplied evidence does not establish which fee currently applies",
+        "No filing deadline is supplied"
+      ],
+      "optional_to_omit": [
+        "General office history"
+      ],
+      "semantic_failure": [
+        "Choosing one fee without a basis",
+        "Inventing a deadline or claiming the entire corpus has none",
+        "Refusing all useful information instead of explaining the conflict"
+      ]
+    }
+  ]
+}

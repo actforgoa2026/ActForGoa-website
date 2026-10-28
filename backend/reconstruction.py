@@ -13,7 +13,7 @@ from .chat import (ChatRequest, PreparedAnswer, Paragraph, GroundedAnswer, citat
 from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_payload,
                           resolve_selector, registry_hash, original_baseline)
 from .span_draft import PIPELINE_VERSION, span_schema
-from .span_instructions import span_answer_instructions
+from .span_instructions import ANSWER_WORKFLOW, span_answer_instructions
 from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, decode_envelope, source_slot
 from .phase_effort import phase_effort, phase_policy_metadata, validate_pipeline_config
 
@@ -25,7 +25,8 @@ def pipeline_spec():
     """Detached export; neither callers nor nested maps can change policy."""
     return {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
             'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 6,
+            'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 7,
+            'answer_workflow': ANSWER_WORKFLOW,
             'paragraph_protocol': PARAGRAPH_PROTOCOL, 'anchor_protocol': ANCHOR_PROTOCOL,
             **phase_policy_metadata()}
 

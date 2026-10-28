@@ -22,10 +22,10 @@ from tests.research.span_fixtures import select_response
 def setup(legacy_setup,monkeypatch):
     plan,config,library,tmp=legacy_setup
     plan.pop('effort',None)
-    plan.update(pipeline='two_pass_v7',pipeline_spec=deepcopy(PIPELINE_SPEC),
+    plan.update(pipeline='two_pass_v8',pipeline_spec=deepcopy(PIPELINE_SPEC),
                 **phase_policy_metadata(),max_output_tokens=12000)
     plan['stages']['test'].update(max_cases=2,max_attempts=4)
-    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v7')
+    config=replace(config,effort='medium',max_output_tokens=12000,pipeline='two_pass_v8')
     monkeypatch.setattr(answer_pipeline,'utc_day',lambda:plan['date_utc'])
     transports=[]
     async def handler(request,n):
@@ -55,7 +55,7 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     assert context['provider_attempt_ceiling']==4 and context['worst_reservation_microusd']==40096
     report=run(setup)
     assert report==json.loads((tmp/'capture-v2.json').read_text())
-    assert report['capture_version']==6 and report['pipeline_spec']==PIPELINE_SPEC
+    assert report['capture_version']==7 and report['pipeline_spec']==PIPELINE_SPEC
     assert report['complete'] and report['attempts']==4 and report['entailment_acceptance']=='pending_human_review'
     assert len(transports)==2 and all(t.closed for t in transports)
     for entry,transport in zip(report['cases'],transports):
@@ -84,6 +84,10 @@ def test_v2_complete_wire_phase_receipts_and_exact_draft_capture(setup):
     lambda p:p.update(pipeline='two_pass_v4'),
     lambda p:p.update(pipeline='two_pass_v5'),
     lambda p:p.update(pipeline='two_pass_v6'),
+    lambda p:p.update(pipeline='two_pass_v7'),
+    lambda p:p['pipeline_spec'].update(capture_version=6),
+    lambda p:p['pipeline_spec'].pop('answer_workflow'),
+    lambda p:p['pipeline_spec'].update(answer_workflow='draft_expansion'),
     lambda p:p['pipeline_spec'].update(capture_version=5),
     lambda p:p['pipeline_spec'].update(capture_version=4),
     lambda p:p['pipeline_spec'].pop('paragraph_protocol'),

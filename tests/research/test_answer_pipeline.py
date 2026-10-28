@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v7')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v8')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):
@@ -70,7 +70,7 @@ def setup(monkeypatch):
 def test_two_exact_captured_calls_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==6 and trace['status']=='completed'
+    assert trace['capture_version']==7 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==2 and transport.closed
     assert [p['state'] for p in trace['phases']]==['completed','completed']
     assert [p['provider_attempts'] for p in trace['phases']]==[1,1]

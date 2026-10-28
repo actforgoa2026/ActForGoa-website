@@ -1,6 +1,6 @@
 """Fixed phase policy; exported metadata is never execution authority."""
 
-PIPELINE_VERSION = 'two_pass_v7'
+PIPELINE_VERSION = 'two_pass_v8'
 EFFORT_POLICY = 'low_draft_medium_reconstruction_v1'
 BASE_CONFIG_EFFORT = 'medium'
 _PHASE_EFFORTS = (('draft', 'low'), ('reconstruction', 'medium'))
