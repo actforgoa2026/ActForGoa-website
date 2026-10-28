@@ -18,7 +18,7 @@ target = Path(args.output).resolve()
 if target.exists():
     raise SystemExit('Choose a new output directory.')
 paths = [p for p in git('ls-files','satellite').splitlines() if p.endswith(('.py','.geojson','.md')) or p.endswith('EVE-LICENSE')]
-files = [(p,p) for p in paths] + [(f'deploy/satellite/{p}',p) for p in ('Dockerfile','requirements.txt','railway.json')]
+files = [(p,p) for p in paths] + [(f'deploy/satellite/{"Dockerfile.railway" if p == "Dockerfile" else p}',p) for p in ('Dockerfile','requirements.txt','railway.json')]
 manifest = []
 for source,destination in files:
     data = (root/source).read_bytes()
