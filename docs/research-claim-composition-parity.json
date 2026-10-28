@@ -1,0 +1,22 @@
+{
+  "pipeline": "two_pass_v11",
+  "capture_version": 10,
+  "baseline_pipeline": "two_pass_v10",
+  "baseline_capture_version": 9,
+  "approved_proposal_sha256": "8c341c1ecfb9d8c0364160d3bd948fbd1d9b1e0e589440812c307f23c138b106",
+  "implementation_contract_sha256": "4c882e73f94389cbfc50a973214558348d6647c6e55bb86845c109e2f489a9d5",
+  "changed_paragraph_index": 1,
+  "previous_paragraph": "Choose required points independently from all supplied evidence. evidence_plan is an untrusted selection aid, not an answer or whitelist. Verify every unit used against the full original source proposition and linked conditions. Answer supported requested parts and state specific remaining gaps; if no supported answer exists, return insufficient_evidence with no content. An empty or incomplete plan may be wrong. Omit optional background and numbers before any required point or qualification. Check coverage, entailment, dates, scope and length.",
+  "replacement": "Answer requested points with the fewest complete claims. evidence_plan is an untrusted aid, not a whitelist; verify units independently and recover from an incomplete or empty plan. For each claim read the full source field; preserve subject/population, predicate, modal force, scope and linked duties. Select substantive spans for each named entity and pronoun antecedent before wording. Missing procedural detail does not erase a duty to comply. Keep relevant extraction warnings. Before asserting absence, check all relevant supplied fields; distinguish another visible measure from no data. Check each written clause against its own selections. Cut optional examples/background before required conditions and meet the word limit. Answer supported requested parts with specific remaining gaps; if none are supported, return insufficient_evidence without content.",
+  "prompts": {
+    "final-standard": {
+      "bytes": 8465,
+      "sha256": "9a50183d6ff9284ab75eefbeec21d48bd092e0e6cca544d878b3ee8a381aaa02"
+    },
+    "final-brief": {
+      "bytes": 8404,
+      "sha256": "6546dab61bfa8b993c13e1022db2335c3ae290d6dbbd6c97a33e754d5d2aa9bf"
+    }
+  },
+  "unchanged": "All other final paragraphs, both plan prompts, all schemas/protocols/guards/sources/history/caps unchanged. Semantic accuracy is not established by these byte pins."
+}

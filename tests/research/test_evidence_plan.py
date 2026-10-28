@@ -37,6 +37,9 @@ def test_exact_reviewed_prompt_and_wire_schema_bytes(phase,style):
     fixture=json.loads((Path(__file__).parents[2]/'docs/research-evidence-plan-parity.json').read_text())
     key=('plan' if phase=='draft' else 'final')+'-'+style
     raw=span_answer_instructions(phase,style).encode();pin=fixture['prompts'][key]
+    if phase=='reconstruction':
+        current=json.loads((Path(__file__).parents[2]/'docs/research-claim-composition-parity.json').read_text())
+        pin=current['prompts'][key]
     assert len(raw)==pin['bytes'] and hashlib.sha256(raw).hexdigest()==pin['sha256']
     schema=plan_answer_schema(fixture['citation_ids'],fixture['registry'],phase=phase,style=style)
     assert schema==fixture['wire_schemas']['plan-wire' if phase=='draft' else 'final-'+style+'-wire']

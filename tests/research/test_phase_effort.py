@@ -74,7 +74,7 @@ def test_wrong_phase_effort_is_reserved_but_never_sent(setup, phase, wrong, in_p
 
 @pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
 @pytest.mark.parametrize('change', [
-    {'pipeline_version': 'two_pass_v6'}, {'pipeline_version': None},
+    {'pipeline_version': 'two_pass_v10'}, {'pipeline_version': 'two_pass_v6'}, {'pipeline_version': None},
     {'effort_policy': None}, {'effort_policy': 'uniform_medium'},
     {'base_config_effort': None}, {'base_config_effort': 'low'},
 ])
@@ -181,7 +181,7 @@ def test_new_plan_policy_is_exact_before_packet_or_ledger_access(acceptance_setu
 def assert_policy(value):
     assert 'effort' not in value
     assert all(value[k] == v for k, v in phase_policy_metadata().items())
-    assert value['capture_version'] == 9 and value['pipeline_spec'] == reconstruction.pipeline_spec()
+    assert value['capture_version'] == 10 and value['pipeline_spec'] == reconstruction.pipeline_spec()
 
 
 def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acceptance_setup, monkeypatch, capsys):
