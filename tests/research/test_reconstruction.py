@@ -10,7 +10,7 @@ from backend.providers import chat_config
 from backend.reconstruction import (prepare_reconstruction, reconstruction_message_request,
     normalize_reconstruction, encoded, CORRECTION_PROMPT_BYTES)
 from backend.source_spans import verify_annotated_payload
-from tests.research.span_fixtures import select_response,payload_from_prepared
+from tests.research.span_fixtures import select_response,payload_from_prepared,slot_response
 
 
 @pytest.fixture
@@ -18,7 +18,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v5')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v6')
     evidence = [{'id': 'a', 'text': 'Gates regulate tidal water. Design must follow Appendix C.',
                  'document_id': 'doc-a', 'generation': 'fixture'}]
     request = ChatRequest(question='What do the gates do?', history=[Message(role='user',content='Tell me about gates.')])
@@ -70,7 +70,7 @@ def test_insufficient_draft_is_reconstructed_and_final_abstention_is_empty(setup
     _,request,original,_=setup
     prepared=prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]})
     assert normalize_reconstruction(response(claim(),prepared=prepared),prepared)[0]['status']=='answered'
-    answer,mapping=normalize_reconstruction(json.dumps({'status':'insufficient_evidence','paragraphs':[]}),prepared)
+    answer,mapping=normalize_reconstruction(json.dumps(slot_response({'status':'insufficient_evidence','paragraphs':[]})),prepared)
     assert answer['paragraphs']==[] and mapping==[]
 
 

@@ -15,6 +15,7 @@ from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
 from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
 from .span_draft import prepare_span_draft, span_draft_message_request, normalize_span_draft
+from .paragraph_slots import PARAGRAPH_PROTOCOL, AnswerEnvelopeError
 
 
 class PipelineFailure(Exception):
@@ -186,16 +187,23 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             stage['dispatch_status'] = 'http_response_received'
             if payload is not None:
                 stage['final_output_diagnostic'] = final_json_capture(payload, phase=stage['phase'],
-                    anchor_protocol=ANCHOR_PROTOCOL)
+                    anchor_protocol=ANCHOR_PROTOCOL, paragraph_protocol=PARAGRAPH_PROTOCOL,
+                    answer_style=original.answer_style)
             notify()
 
         phase_started = time.monotonic()
         phase_deadline = min(deadline, phase_started + PROVIDER_STAGE_SECONDS)
         try:
             async with asyncio.timeout(max(0, phase_deadline - phase_started)):
-                content = await client.send(body, on_request=on_request, on_response=on_response)
+                content = await client.send(body, on_request=on_request, on_response=on_response,
+                                            paragraph_protocol=PARAGRAPH_PROTOCOL,
+                                            answer_style=original.answer_style, phase=stage['phase'])
         except TimeoutError:
             raise fail('provider_deadline' if time.monotonic() >= deadline else 'provider_stage_timeout') from None
+        except AnswerEnvelopeError:
+            if stage['provider_attempts'] == 0:
+                stage['dispatch_status'] = 'blocked_before_transport'
+            raise
         await available()
         if time.monotonic() >= phase_deadline:
             # A misbehaving transport can suppress task cancellation and return

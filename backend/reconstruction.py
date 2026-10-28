@@ -14,6 +14,7 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
                           resolve_selector, registry_hash, original_baseline)
 from .span_draft import PIPELINE_VERSION, span_schema
 from .span_instructions import span_answer_instructions
+from .paragraph_slots import PARAGRAPH_PROTOCOL, strict_answer_json, decode_envelope, source_slot
 
 CORRECTION_PROMPT_BYTES = 36000
 COMPACT_DRAFT_BYTES = 8192
@@ -21,7 +22,7 @@ PROVIDER_DEADLINE_SECONDS = 65
 PROVIDER_STAGE_SECONDS = 45
 PIPELINE_SPEC = {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
                  'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
-                 'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 4,
+                 'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 5, 'paragraph_protocol': PARAGRAPH_PROTOCOL,
                  'anchor_protocol': ANCHOR_PROTOCOL}
 
 
@@ -161,14 +162,16 @@ def normalize_reconstruction(content, prepared, *, resolved_observer=None):
         if (correction_payload.get('anchor_protocol')!=ANCHOR_PROTOCOL or registry!=prepared.span_registry
                 or registry_hash(registry)!=prepared.span_registry_sha256
                 or digest(restored)!=prepared.source_payload_sha256):raise ValueError()
-        payload = json.loads(content)
+        payload,mapping = decode_envelope(strict_answer_json(content),protocol=PARAGRAPH_PROTOCOL,
+                                          style=original.answer_style,phase='reconstruction')
+        if mapping is not None:resolution['slot_mapping']=mapping
         key = 'paragraph' if original.answer_style == 'brief' else 'paragraphs'
         if not isinstance(payload, dict) or set(payload) != {'status', key}:
             raise ValueError()
         if payload['status'] == 'insufficient_evidence':
             if payload[key] != (None if key == 'paragraph' else []):
                 raise ValueError()
-            normalized = normalize_native_answer(content, original)
+            normalized = normalize_native_answer(json.dumps(payload,ensure_ascii=False), original)
             resolution['complete']=True;observe_resolution()
             return validate_answer(GroundedAnswer.model_validate_json(normalized, strict=True),
                                    original.evidence, original.answer_style), []
@@ -187,7 +190,7 @@ def normalize_reconstruction(content, prepared, *, resolved_observer=None):
             texts, supports, seen = [], [], set()
             offset = 0
             for ci, selected_unit in enumerate(paragraph['claims']):
-                resolved_record={'paragraph_index':pi,'claim_index':ci,'status':'pending','resolved_supports':[]}
+                resolved_record={'paragraph_index':pi,'slot_name':source_slot(original.answer_style,pi),'claim_index':ci,'status':'pending','resolved_supports':[]}
                 resolution['claims'].append(resolved_record)
                 if (not isinstance(selected_unit,dict) or set(selected_unit)!={'text','primary_support','supports'}
                         or not isinstance(selected_unit['supports'],list)
@@ -202,7 +205,7 @@ def normalize_reconstruction(content, prepared, *, resolved_observer=None):
                 claim = Paragraph.model_validate({'text': unit['text'], 'citations': citations}, strict=True)
                 if citation_text(claim.text, fields) != claim.text:
                     raise ValueError()
-                offsets.append({'paragraph_index': pi, 'claim_index': ci, 'start': offset,
+                offsets.append({'paragraph_index': pi, 'slot_name':source_slot(original.answer_style,pi), 'claim_index': ci, 'start': offset,
                                 'end': offset + len(claim.text), 'text_sha256': hashlib.sha256(claim.text.encode()).hexdigest(),
                                 'citation_ids': citations,
                                 'span_ids':list(dict.fromkeys(s['span_id'] for s in [selected_unit['primary_support'],*selected_unit['supports']]))})

@@ -12,8 +12,10 @@ from .chat import (ChatRequest, PreparedAnswer, GroundedAnswer, validate_answer,
 from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_payload,
                           original_baseline, registry_hash, resolve_selector, encoded)
 from .span_instructions import span_answer_instructions
+from .paragraph_slots import (PARAGRAPH_PROTOCOL, standard_slot_schema, strict_answer_json,
+                              decode_envelope, source_slot)
 
-PIPELINE_VERSION = 'two_pass_v5'
+PIPELINE_VERSION = 'two_pass_v6'
 
 
 def digest(value):
@@ -41,6 +43,7 @@ def span_schema(schema, style, registry, *, phase):
         paragraph.update(type='object',additionalProperties=False,
                          properties={'claims':{'type':'array','items':unit}},required=['claims'])
     else:raise ValueError('Unknown span phase')
+    result=standard_slot_schema(result,style)
     if len(encoded(result))>MAX_SCHEMA_BYTES:raise ValueError('Span schema exceeds its reserved allowance')
     return result
 
@@ -121,7 +124,9 @@ def normalize_span_draft(content,prepared,*,resolved_observer=None):
         if resolved_observer is not None:resolved_observer(deepcopy(resolution))
     validate_span_draft_identity(prepared)
     try:
-        result=json.loads(content)
+        result,mapping=decode_envelope(strict_answer_json(content),protocol=PARAGRAPH_PROTOCOL,
+                                       style=prepared.answer_style,phase='draft')
+        if mapping is not None:resolution['slot_mapping']=mapping
         key='paragraph' if prepared.answer_style=='brief' else 'paragraphs'
         if not isinstance(result,dict) or set(result)!={'status',key}:raise ValueError()
         if result['status']=='insufficient_evidence':
@@ -134,7 +139,7 @@ def normalize_span_draft(content,prepared,*,resolved_observer=None):
         payload=json.loads(prepared.baseline['payload_utf8'])
         native=[]
         for index,unit in enumerate(units):
-            record={'paragraph_index':index,'status':'pending','resolved_supports':[]}
+            record={'paragraph_index':index,'slot_name':source_slot(prepared.answer_style,index),'status':'pending','resolved_supports':[]}
             resolution['paragraphs'].append(record);observe()
             if (not isinstance(unit,dict) or set(unit)!={'text','primary_support','supports'}
                     or not isinstance(unit['supports'],list) or not 0<=len(unit['supports'])<MAX_SUPPORTS):raise ValueError()

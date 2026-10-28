@@ -31,7 +31,15 @@ def select_response(native,payload):
         else:
             selected=select_claim(paragraph,payload)
             paragraph.clear();paragraph.update(selected)
-    return result
+    return slot_response(result)
+
+
+def slot_response(result):
+    """Author a new protocol fixture, never repair a provider response."""
+    if 'paragraphs' not in result:return deepcopy(result)
+    paragraphs=result['paragraphs']
+    assert len(paragraphs)<=4
+    return {'status':result['status'],**{f'paragraph_{i+1}':deepcopy(paragraphs[i]) if i<len(paragraphs) else None for i in range(4)}}
 
 
 def payload_from_prepared(prepared):

@@ -20,7 +20,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v5')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v6')
     monkeypatch.delenv('RESEARCH_PUBLIC_ORIGIN',raising=False)
     monkeypatch.setenv('RESEARCH_USAGE_ROOT',str(tmp_path/'usage'))
     monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5')
@@ -50,7 +50,7 @@ def setup(tmp_path, monkeypatch):
 def test_http_final_only_cache_styles_history_and_source_search(setup):
     app,evidence,transports,_,ledger=setup
     with TestClient(app) as client:
-        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v5'
+        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v6'
         question={'question':'What do the sources say about these gates?'}
         answer=client.post('/api/chat',json=question)
         assert answer.status_code==200 and answer.json()['paragraphs'][0]['text']=='Design must follow Appendix C.'
@@ -83,6 +83,30 @@ def test_http_second_phase_failure_never_returns_or_caches_draft(setup):
         assert client.post('/api/chat',json=question).status_code==200
         assert len(transports)==2
     assert sum(inspect_ledger(ledger)['days'].values())==4
+
+
+@pytest.mark.parametrize('style',['standard','brief'])
+@pytest.mark.parametrize('phase',[1,2])
+def test_duplicate_final_json_never_reaches_http_answer_or_cache(setup,style,phase):
+    app,_,transports,handlers,ledger=setup;good=handlers[0]
+    async def broken(request,n):
+        response=await good(request,n)
+        if n!=phase:return response
+        payload=response.json()
+        text=payload['content'][-1]['text']
+        payload['content'][-1]['text']=text.replace('"status":','"status":"hidden-fixture","status":',1)
+        return httpx.Response(200,json=payload)
+    handlers[0]=broken
+    with TestClient(app) as client:
+        question={'question':'What do gates do?','answer_style':style}
+        failed=client.post('/api/chat',json=question)
+        assert failed.status_code==502
+        assert 'Gates regulate' not in failed.text and 'hidden-fixture' not in failed.text
+        assert len(transports)==1 and len(transports[0].requests)==phase
+        handlers[0]=good
+        assert client.post('/api/chat',json=question).status_code==200
+        assert len(transports)==2 and len(transports[1].requests)==2
+    assert sum(inspect_ledger(ledger)['days'].values())==phase+2
 
 
 def test_no_evidence_has_no_provider_or_budget_write(setup):

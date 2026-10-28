@@ -7,6 +7,8 @@ import httpx
 from .anthropic_provider import reviewed_effort
 from .providers import PRICES
 from .source_spans import ANCHOR_PROTOCOL
+from .paragraph_slots import (strict_answer_json, decode_envelope, AnswerEnvelopeError,
+                              value_hash)
 
 
 def credential_like_content(value, secrets=()):
@@ -39,7 +41,8 @@ def credential_like_content(value, secrets=()):
                 or field.search(decoded) or field.search(raw.replace('\\"','"')))
 
 
-def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
+def final_json_capture(payload, *, phase='draft', anchor_protocol=None,
+                       paragraph_protocol=None, answer_style=None):
     """Keep only bounded final answer JSON, never thinking or response metadata.
 
     Invalid JSON and unexpected fields are represented by fixed categories.
@@ -51,11 +54,23 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
     text = ''.join(texts)
     if not text:return {'capture_status': 'missing_text'}
     if len(text.encode()) > 65536:return {'capture_status': 'oversize_text'}
-    try:answer=json.loads(text)
-    except ValueError:return {'capture_status': 'invalid_json'}
+    mapping = None
+    if paragraph_protocol is not None or answer_style is not None:
+        try:
+            answer = strict_answer_json(text)
+            normalized, mapping = decode_envelope(answer, protocol=paragraph_protocol,
+                                                  style=answer_style, phase=phase)
+        except AnswerEnvelopeError as error:
+            return {'capture_status': error.code}
+        if credential_like_content(answer):return {'capture_status': 'unsafe_final_content'}
+    else:
+        try:answer=json.loads(text)
+        except ValueError:return {'capture_status': 'invalid_json'}
     if not isinstance(answer,dict) or answer.get('status') not in ('answered','insufficient_evidence'):
         return {'capture_status':'unexpected_shape'}
-    if set(answer) == {'status','paragraph'}:
+    if paragraph_protocol is not None and answer_style == 'standard':
+        paragraphs=normalized['paragraphs'];representation='parsed_unvalidated_slots'
+    elif set(answer) == {'status','paragraph'}:
         paragraphs=[] if answer['paragraph'] is None else [answer['paragraph']]
         representation='native_brief'
     elif set(answer) == {'status','paragraphs'} and isinstance(answer['paragraphs'],list) and len(answer['paragraphs'])<=16:
@@ -93,8 +108,12 @@ def final_json_capture(payload, *, phase='draft', anchor_protocol=None):
         else:return {'capture_status':'unexpected_shape'}
     word_counts = ([sum(len(u['text'].split()) for u in p['claims']) for p in captured_paragraphs]
                    if phase == 'reconstruction' else [len(p['text'].split()) for p in paragraphs])
-    return {'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
+    result={'capture_status':'captured_unvalidated_json','representation':representation,'answer':answer,
             'paragraph_count':len(captured_paragraphs),'word_counts':word_counts}
+    if paragraph_protocol is not None:
+        result['source_diagnostic_sha256']=value_hash(answer)
+        if mapping is not None:result['derived_slot_mapping']=mapping
+    return result
 
 
 def outgoing_request_capture(request):

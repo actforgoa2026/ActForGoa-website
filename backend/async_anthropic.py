@@ -5,6 +5,8 @@ import httpx
 
 from .anthropic_provider import ENDPOINT, API_VERSION, AnthropicAPIError, native_content
 from .reconstruction import PROVIDER_STAGE_SECONDS
+from .paragraph_slots import (strict_answer_json, decode_envelope, check_request_context,
+                              AnswerEnvelopeError)
 
 
 class AsyncAnthropicClient:
@@ -49,9 +51,11 @@ class AsyncAnthropicClient:
                 'synthetic_original_body_sha256':capture['body_sha256'],
                 'synthetic_baseline_body_sha256':baseline_capture['body_sha256']},json.loads(baseline_body['messages'][-1]['content'])
 
-    async def send(self, body, *, on_request, on_response):
+    async def send(self, body, *, on_request, on_response, paragraph_protocol,
+                   answer_style, phase):
         if self._request_observer is not None:
             raise ValueError('Concurrent use of an owned provider transport')
+        check_request_context(body, protocol=paragraph_protocol, style=answer_style, phase=phase)
         self._request_observer = on_request
         try:
             try:
@@ -88,8 +92,16 @@ class AsyncAnthropicClient:
                 from .answer_trace import credential_like_content
                 secrets=[self._http.headers.get('authorization','').removeprefix('Bearer '),
                          self._http.headers.get('x-api-key'),self._http.headers.get('anthropic-workspace-id')]
-                try:decoded_final=json.dumps(json.loads(final),ensure_ascii=False)
-                except ValueError:decoded_final=final
+                try:
+                    decoded = strict_answer_json(final)
+                    decode_envelope(decoded, protocol=paragraph_protocol, style=answer_style, phase=phase)
+                    decoded_final = json.dumps(decoded, ensure_ascii=False)
+                except AnswerEnvelopeError as error:
+                    # The final text must never reach a payload-bearing
+                    # callback after ambiguity, syntax or envelope failure.
+                    metadata['response_validation_failure'] = error.code
+                    on_response(metadata)
+                    raise ValueError('The answer service returned invalid final JSON') from None
                 if credential_like_content(decoded_final,secrets):
                     on_response(metadata)
                     raise ValueError('The answer service returned unsafe final content')

@@ -14,7 +14,7 @@ from backend.chat import ChatRequest, prepare_answer, AnswerCache
 from backend.providers import chat_config
 from tests.research.test_reconstruction import claim, response
 from tests.research.test_anthropic_provider import anthropic_message
-from tests.research.span_fixtures import select_response
+from tests.research.span_fixtures import select_response,slot_response
 from backend.source_spans import verify_annotated_payload
 
 
@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v5')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v6')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):
@@ -70,7 +70,7 @@ def setup(monkeypatch):
 def test_two_exact_captured_calls_and_final_only_result(setup):
     _,_,prepared,transport,limits,observed,run,_=setup
     result=run();trace=result.trace
-    assert trace['capture_version']==4 and trace['status']=='completed'
+    assert trace['capture_version']==5 and trace['status']=='completed'
     assert len(transport.requests)==len(limits.receipts)==2 and transport.closed
     assert [p['state'] for p in trace['phases']]==['completed','completed']
     assert [p['provider_attempts'] for p in trace['phases']]==[1,1]
@@ -94,7 +94,7 @@ def test_two_exact_captured_calls_and_final_only_result(setup):
     saved=json.dumps(observed)
     assert 'fixture-only' not in saved and 'private diagnostic' not in saved and 'authorization' not in saved
     assert all('final_answer' not in item for item in observed if item['status']!='completed')
-    assert trace['phases'][1]['final_output_diagnostic']['representation']=='source_spans_reconstruction_paragraph_array'
+    assert trace['phases'][1]['final_output_diagnostic']['representation']=='source_spans_reconstruction_parsed_unvalidated_slots'
     resolved=trace['phases'][1]['deterministic_support_resolution']
     assert resolved['kind']=='deterministic_source_span_lookup' and resolved['complete']
     assert resolved['claims'][0]['resolved_supports'][0]=={'citation_id':'a','field':'text','quote':prepared.evidence[0]['text']}
@@ -137,7 +137,7 @@ def test_each_stage_failure_preserves_reservations_and_no_draft_visibility(setup
 def test_insufficient_draft_still_gets_source_coverage_reconstruction(setup):
     _,_,_,transport,_,_,run,_=setup;good=transport.handler
     async def handle(req,n):
-        if n==1:return model_response({'status':'insufficient_evidence','paragraphs':[]})
+        if n==1:return model_response(slot_response({'status':'insufficient_evidence','paragraphs':[]}))
         return await good(req,n)
     transport.handler=handle
     result=run();assert len(transport.requests)==2 and result.answer['status']=='answered'
@@ -149,13 +149,13 @@ def test_failed_selector_preserves_original_raw_and_partial_deterministic_suppor
         result=await good(req,n)
         if n==2:
             payload=result.json();native=json.loads(payload['content'][-1]['text'])
-            native['paragraphs'][0]['claims'][0]['supports']=[{'citation_id':'a','span_id':'not-supplied'}]
+            native['paragraph_1']['claims'][0]['supports']=[{'citation_id':'a','span_id':'not-supplied'}]
             return model_response(native)
         return result
     transport.handler=wrong
     with pytest.raises(pipeline.PipelineFailure) as caught:run()
     phase=caught.value.trace['phases'][1]
-    assert phase['final_output_diagnostic']['answer']['paragraphs'][0]['claims'][0]['supports'][0]['span_id']=='not-supplied'
+    assert phase['final_output_diagnostic']['answer']['paragraph_1']['claims'][0]['supports'][0]['span_id']=='not-supplied'
     resolved=phase['deterministic_support_resolution']
     assert not resolved['complete'] and resolved['claims'][0]['status']=='failed'
     assert len(resolved['claims'][0]['resolved_supports'])==1 and 'final_answer' not in caught.value.trace
