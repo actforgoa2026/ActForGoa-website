@@ -1,6 +1,6 @@
 # Research backend cloud handoff
 
-The cloud branch implements scoped legal/ecology retrieval and one-call Anthropic answers. It has not activated or replaced the live research service. The local orchestrator owns key wiring, corpus restoration, acceptance and review-site release.
+The cloud branch implements scoped legal/ecology retrieval and one-call Anthropic answers. It has not activated or replaced the live research service. The primary cloud coordinator identified in `docs/CLOUD-IMPLEMENTATION-PLAN.md` owns key wiring, corpus restoration, acceptance and review-site release; the former local workers remain paused.
 
 ## API contract
 
@@ -41,7 +41,9 @@ Legacy index generations need no in-place schema migration. Sections derive from
 
 Package the **new integrated source** using `python scripts/package_research.py --data-root /path/to/verified-working-data --output /path/to/fresh-release --stage-data`. Use a fresh output directory. This allowlist copies runtime/backend/model files and the selected index/originals; it excludes keys, unrelated raw archives and usage ledgers. Never redeploy an old sealed service package. Upload indexed data additively to the existing volume, preserving the older generations and separately preserved ledger.
 
-Before enabling generated answers, check `/healthz`, `/api/status` domain counts, legal/ecology scoped queries, original source readers and old saved citation URLs. Confirm the existing ledger has capacity. Then enable `RESEARCH_CHAT_ENABLED=1` on the selected candidate service and perform a small, budgeted live acceptance set:
+The pre-existing release gate remains **71 semantic cases plus three HTTP journeys**. Restore its frozen expectations and evidence through the coordinator; the scenarios below supplement that gate and do not replace it. Preserve the existing no-paid-continuation constraint and failed-candidate decisions. This document does not authorize new paid diagnostics or tuning.
+
+Before enabling generated answers, check `/healthz`, `/api/status` domain counts, legal/ecology scoped queries, original source readers and old saved citation URLs. Confirm the existing ledger has capacity. Only after applicable provider-call authorization is established, enable `RESEARCH_CHAT_ENABLED=1` on an isolated candidate service for the complete budgeted acceptance process. Include these additional new-contract scenarios:
 
 - A legal question whose official source includes a duty, an exception and a date; verify each against the cited text.
 - An ecology question involving geographical/population scope; verify that Goa, Western Ghats and mere occurrence are not conflated.
@@ -51,4 +53,4 @@ Before enabling generated answers, check `/healthz`, `/api/status` domain counts
 
 Inspect concise synthesis manually; passing quote validation alone does not establish semantic accuracy. Keep the exact response/citation and reservation evidence without exposing credentials or personal data. If acceptance fails, disable chat and retain charged reservations. The previous experimental multi-stage Anthropic pipeline was not accepted, and its failed results are not evidence for this new single-call implementation.
 
-Finally run the integrated desktop/phone checks and `npm run release:review` through the root coordinator. Report code implemented, fixture tests passed, live-provider acceptance, deployment and alias verification separately.
+Finally run the integrated desktop/phone checks and `npm run release:review` through the primary cloud coordinator. Report code implemented, fixture tests passed, live-provider acceptance, deployment and alias verification separately.
