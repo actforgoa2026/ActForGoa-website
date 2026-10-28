@@ -1,5 +1,14 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Accepted runtime ready for hosted release
+
+Research runtime `961652d` passes all 71 frozen semantic cases and three actual HTTP/browser conversation journeys, including the repaired referential follow-up. The 71 accepted cases and first two HTTP requests retain identical prepared queries/payloads after the focused retrieval fix; only the changed failed follow-up was dispatched again. Its prior failure remains charged. The final follow-up cites the original low-flow passages, preserves the draft policy attribution and states the missing dry-season salinity evidence. Desktop and phone checks show the rounded answer-first interface and correct exact-passage links. Research tests: 176 passed. Frontend integration: 193 Node tests and production build passed.
+
+Final authorization is 160 combined requests on October 28 UTC and a $15.30 October conservative reservation cap, returning automatically to 100 daily on October 29 UTC and $5 monthly in November. Accounting reached 155 requests and $14.698659 reserved; four launch requests remain reserved. The exact 125-reservation delta after the recorded `7bf1965` production checkpoint was imported once with receipt `anthropic-validation-after7bf1965-through961652d-20261028-v1`, before/after backups, and unchanged historical counters. Failed and unknown attempts remain counted. No old sealed service package is deployable. Preservation byte audit passed for all 1,258 files and 31 directories after native test processes exited.
+
+The remaining release operation is fresh accepted service deployment, hosted named-editor and AI checks, `release:review`, and native homepage routing cutover. This section supersedes older pending-budget and failed-acceptance status below; those entries are retained as the audit trail. Other local agents remain paused. Only the review alias is authorized.
+
+
 ## Browser follow-up correction
 
 All71 frozen semantic cases passed on fe461dc; the first two browser journeys also passed. The third safely abstained because the eight-word question “How does that differ during the dry season?” lost its prior Mandovi/Zuari retrieval subject. The HTTP body carried the correct history, but the API only appended prior user context below eight words. Reservation154/$14.588499 remains charged and the journey remains failed. Referential follow-ups now retain the last user subject regardless of that length threshold; assistant history is never used as retrieval evidence. Verify the71 accepted request queries and two accepted browser queries remain unchanged before retaining their captures. Then rerun only the changed failed follow-up. Limits remain160/$15.30; four launch slots remain reserved.
