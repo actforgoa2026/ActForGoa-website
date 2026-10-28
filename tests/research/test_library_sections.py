@@ -58,7 +58,7 @@ def test_section_api_echoes_scope_and_unsupported_domains_fail(section_library,m
 
 def example():
     evidence=[{'id':'source-1','text':'A permit may be required. Ask the responsible authority to confirm the current procedure.', 'legal_currency':'Historical draft; not consolidated current law.'}]
-    raw={'coverage':'partial','paragraphs':[{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'citations':['source-1'], 'supports':[{'citation_id':'source-1','quote':evidence[0]['text']}]}],
+    raw={'coverage':'partial','paragraphs':[{'text':'The draft says a permit may be required; confirm the current procedure with the responsible authority.', 'supports':[{'citation_id':'source-1','quote':evidence[0]['text']}]}],
          'outside_context':'You can prepare a short description of your planned work before asking for guidance.', 'limitation':'The library does not establish which permit applies to your site.'}
     return evidence,raw
 
@@ -76,7 +76,7 @@ def test_library_and_outside_answers_have_distinct_provenance():
 @pytest.mark.parametrize('corruption',['unknown_citation','fabricated_quote','full_with_outside','no_evidence_with_claim','outside_disabled','invented_link'])
 def test_answer_contract_rejects_provenance_mixing(corruption):
     evidence,raw=example();request=ChatRequest(question='What permission applies?',domain='legal')
-    if corruption=='unknown_citation':raw['paragraphs'][0]['citations']=['fabricated']
+    if corruption=='unknown_citation':raw['paragraphs'][0]['supports'][0]['citation_id']='fabricated'
     if corruption=='fabricated_quote':raw['paragraphs'][0]['supports'][0]['quote']='The permit is always required.'
     if corruption=='full_with_outside':raw['coverage']='full'
     if corruption=='no_evidence_with_claim':raw['coverage']='none'
