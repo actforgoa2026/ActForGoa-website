@@ -27,6 +27,10 @@ if(tool==='vercel') {
    const req=JSON.parse(args[args.indexOf('--data')+1]);
    let result=req.method==='initialize'?{protocolVersion:'2025-03-26',serverInfo:{name:'actforgoa'}}:req.method==='tools/list'?{tools:['search_site','search_directory','search_research'].map(name=>({name}))}:{content:[{type:'text',text:JSON.stringify({results:scenario==='mcp-empty'?[]:[{id:'source'}]})}]};
    process.stdout.write(JSON.stringify(scenario==='mcp-error'?{jsonrpc:'2.0',id:req.id,error:{code:-32603,message:'failed'}}:{jsonrpc:'2.0',id:req.id,result}));
+  } else if(args.some(x=>x.startsWith('/api/admin/posts/'))) {
+   const path=args[1];
+   const missing=scenario==='article-route-missing'&&!path.endsWith('publish')||scenario==='publish-route-missing'&&path.endsWith('/publish')||scenario==='unpublish-route-missing'&&path.endsWith('/unpublish');
+   process.stdout.write(missing?'NOT_FOUND\\n404':scenario==='article-auth-missing'?'{}\\n200':'{"error":"Sign in to continue."}\\n401');
   } else if(args.includes('/api/admin/config')) process.stdout.write(JSON.stringify({available:scenario!=='admin-unavailable'}));
   else if(args.includes('/api/blog')) process.stdout.write(JSON.stringify(scenario==='blog-unavailable'?{error:'unavailable'}:{posts:[]}));
   else process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable',chat_ready:scenario!=='answers-unavailable',domains:scenario==='research-unscoped'?[]:['legal','ecology'],domain_counts:{legal:3,ecology:5}}));
@@ -65,7 +69,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','missing-explore','main-during-build','alias-during-build','failed-build','research-unavailable','answers-unavailable','research-unscoped','admin-unavailable','blog-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
+for(const scenario of ['dirty','stale','wrong-tree','missing-explore','main-during-build','alias-during-build','failed-build','research-unavailable','answers-unavailable','research-unscoped','admin-unavailable','article-route-missing','publish-route-missing','unpublish-route-missing','article-auth-missing','blog-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);
@@ -86,5 +90,6 @@ for(const scenario of ['ok','flat-json']) test(`release stages ${scenario} outpu
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[1]==='https://actforgoa-field-guide.vercel.app'));
  assert(result.calls.slice(deployment+1,promotion).some(x=>x.tool==='vercel'&&x.args[0]==='curl'&&x.args.includes('/api/status')&&x.args.includes('https://actforgoa-field-guide-test.vercel.app')));
  assert.equal(result.calls.slice(deployment+1,promotion).filter(x=>x.tool==='vercel'&&x.args.includes('/api/mcp')).length,5);
+ assert.equal(result.calls.slice(deployment+1,promotion).filter(x=>x.tool==='vercel'&&x.args[1]?.startsWith('/api/admin/posts/')).length,3);
  assert.equal(result.calls[promotion].args[1],'https://actforgoa-field-guide-test.vercel.app');
 });

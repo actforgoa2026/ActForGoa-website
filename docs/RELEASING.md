@@ -21,6 +21,8 @@ The release command rejects dirty or stale source, missing browser evidence and 
 
 After publishing, verify the public alias on desktop and phone, confirm new and retained routes, and record deployment ID plus commit in the release report. Report separately what is implemented, tested, merged and live. An unconfigured external service remains explicitly unavailable. Do not claim generated answers, dispatch, email delivery or current service availability without corresponding evidence.
 
+Editorial acceptance must exercise draft creation, reopening, publishing, private revision, republishing and unpublishing through the hosted frontend. A ready `/api/admin/config` does not prove deeper article routes work. Plain Node function routing is distinct from Next.js catch-all routing: retain explicit handlers for `/api/admin/posts/:id` and `/api/admin/posts/:id/:action`. The release wrapper probes these routes anonymously and requires the service's 401 JSON response before promotion. This read-only check must not create posts or bypass authentication.
+
 If a release process crashes, inspect the owner record in the shared Git `actforgoa-release.lock` directory and confirm that process has ended before removing the stale lock. Never remove an active owner's lock.
 
 
