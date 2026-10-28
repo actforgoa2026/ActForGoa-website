@@ -24,3 +24,9 @@ A future integrated deployment must explicitly retire these two project routing 
 User follow-up source `ce0b0ed` removes the eyebrow entirely, records the no-eyebrow preference in `AGENTS.md`, and adds a three-second spiral entrance. Scene scale settles from 1.16 to 1; ring and matching counter animations start at 5× playback and ease quadratically to 1× after 3000ms, keeping images upright. Reduced-motion disables the entrance and orbit animation.
 
 Build passed. Local and public Chromium checks confirm initial playback >1, exact 1× after three seconds, all matching counter animations settled and zero eyebrow elements. The internal asset alias now serves deployment `dpl_8LKejjCqfL5fdVNoDx77d6YPeEtn` at the same public `/explore` route. Existing production target and route rules are unchanged.
+
+### Full revolutions and photo depth
+
+Source `27285db` (including `a94cd0b`) is live at `/explore` through isolated deployment `dpl_8RDqSrA9CZafsYWEpDX9qRGUAqqo`. The entrance now integrates animation time explicitly: inner/middle/outer rings complete 3/2.5/2 full revolutions in three seconds and then retain their original 90/150/240-second periods. Matching counter rotations keep tiles upright. Pausing also pauses the entrance progression. Photo sizes are 62–78px inside, 86–102px in the middle and 116–132px outside. No eyebrows.
+
+Production build and public Chromium checks pass at 1440/390/320px, covering loaded photos, no horizontal overflow/page errors, pause/resume, exact draft transfer and reduced motion. Live measured entrance turns after settling: approximately 3.04, 2.52 and 2.01. Existing production target and project routing definitions are unchanged.
