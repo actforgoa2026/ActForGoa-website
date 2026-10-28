@@ -61,7 +61,8 @@ or whether a source is relevant, current or correctly interpreted.
 
 A separate reasoned reviewer decision records each claim/facet as preserved,
 not applicable, failed or unresolved. Any failure or unresolved judgment blocks
-that review. Even a complete favorable facet review retains release hold:
+that facet review. A favorable checklist now records only `facet_review: recorded_pass`,
+with `semantic: not_assessed` and release hold:
 question coverage, relevance, omissions, conflicts, useful abstention and the
 unchanged launch gates still require independent assessment. There is no automated
 semantic judge, second provider call, repair, fallback or retry.
@@ -112,3 +113,14 @@ including thinking, 65 seconds including retrieval, $5/month and 100 attempts pe
 UTC day. Acceptance must precede real Goa question/citation/full-document checks
 and desktop/phone verification on the actual production alias. No visual changes
 were made, so Impeccable and rendered review were not invoked here.
+
+
+## Source-grounded continuation
+
+See [RESEARCH-SOURCE-CONTEXT-ASSESSMENT.md](RESEARCH-SOURCE-CONTEXT-ASSESSMENT.md)
+for newly recovered public sources, original-PDF verification, source conflicts,
+seven reproducible authored probes, and the current decision. This does not recover
+the missing historical captures. The original native/final/schema budgeting and
+complete acceptance-set sizing remain unverified. The initial facet prototype is
+**not a demonstrated semantic correction** and is not recommended for runtime
+integration in its current form. No candidate has been semantically accepted.

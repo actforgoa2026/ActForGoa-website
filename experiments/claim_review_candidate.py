@@ -47,7 +47,7 @@ def check(pack, claims):
         if set(claim) != {'text', 'supports', 'facets'} or not claim['text'].strip():
             raise ValueError('invalid claim')
         ids = claim['supports']
-        if not ids or len(set(ids)) != len(ids) or any(i not in lookup for i in ids):
+        if not ids or len(ids) > 6 or len(set(ids)) != len(ids) or any(i not in lookup for i in ids):
             raise ValueError('invalid explicit supports')
         if set(claim['facets']) != set(FACETS):
             raise ValueError('missing facet review entries')
@@ -55,11 +55,14 @@ def check(pack, claims):
             if not isinstance(identifiers, list) or any(i not in ids for i in identifiers):
                 raise ValueError('facet evidence must be explicitly selected')
         for identifier in ids:
+            selected_span = lookup[identifier]
+            if selected_span.end - selected_span.start > 1600:
+                raise ValueError('selected support exceeds existing quote allowance')
             if any(d not in ids for d in lookup[identifier].requires):
                 raise ValueError('incomplete explicit support selection')
     # Bind later review to these exact bytes; edited claims invalidate decisions.
-    frozen = json.dumps({'passages': passages,
-                         'spans': [s.__dict__ for s in spans], 'claims': claims},
+    frozen = json.dumps({'pack': {**pack, 'spans': [s.__dict__ for s in spans]},
+                         'claims': claims},
                         ensure_ascii=False, sort_keys=True).encode()
     return {'sha256': hashlib.sha256(frozen).hexdigest(),
             'claim_count': len(claims),
@@ -83,5 +86,5 @@ def review(result, decisions):
            or not e['reason'].strip() for e in entries):
         raise ValueError('review requires reasoned verdicts')
     accepted = all(e['verdict'] in ('preserved', 'not_applicable') for e in entries)
-    return {**result, 'semantic': 'reviewer_accepted' if accepted else 'rejected_or_unresolved',
-            'release': 'hold'}
+    return {**result, 'facet_review': 'recorded_pass' if accepted else 'rejected_or_unresolved',
+            'semantic': 'not_assessed', 'release': 'hold'}

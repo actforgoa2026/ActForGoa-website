@@ -42,7 +42,8 @@ class ClaimReviewTests(unittest.TestCase):
                             'reason': 'Synthetic counterexample requires source-to-wording review.'}
                            for f in FACETS]
                 assessed = review(result, {'sha256': result['sha256'], 'claim_count': 1, 'entries': entries})
-                self.assertEqual(assessed['semantic'], 'rejected_or_unresolved')
+                self.assertEqual(assessed['facet_review'], 'rejected_or_unresolved')
+                self.assertEqual(assessed['semantic'], 'not_assessed')
                 self.assertEqual(assessed['release'], 'hold')
 
     def test_positive_conversational_control(self):
@@ -72,6 +73,26 @@ class ClaimReviewTests(unittest.TestCase):
         decision['entries'] = entries[:-1]
         with self.assertRaisesRegex(ValueError, 'incomplete'):
             review(result, decision)
+
+    def test_question_and_provenance_changes_invalidate_review(self):
+        pack = self.pack(['Approval is required.'])
+        pack.update(question='What is required?', provenance={'generation': 'old'})
+        claim = self.claim('You need approval.', ['0'])
+        original = check(pack, [claim])['sha256']
+        pack['question'] = 'Is approval optional?'
+        self.assertNotEqual(original, check(pack, [claim])['sha256'])
+        pack['question'] = 'What is required?'
+        pack['provenance']['generation'] = 'new'
+        self.assertNotEqual(original, check(pack, [claim])['sha256'])
+
+    def test_support_limits_fail_without_truncation_or_bundling(self):
+        pack = self.pack(['a' * 1601])
+        with self.assertRaisesRegex(ValueError, 'quote allowance'):
+            check(pack, [self.claim('A long source.', ['0'])])
+        self.assertEqual(len(pack['passages']['0']), 1601)
+        pack = self.pack(['A'] * 7)
+        with self.assertRaisesRegex(ValueError, 'explicit supports'):
+            check(pack, [self.claim('Seven supports.', [str(i) for i in range(7)])])
 
     def test_cycles_and_invalid_offsets_fail(self):
         pack = self.pack(['A', 'B'])

@@ -164,3 +164,34 @@ main that must be resolved before any dispatch. Next: review the offline candida
 recover missing evidence through cloud storage, finish complete-set assessment,
 and only then seek authorization for a concrete bounded acceptance run. Hold AI
 activation and preserve distinct semantic, HTTP and production launch gates.
+
+### Source-grounded offline follow-up
+
+Continued from `dabe9b353c13a0ed4c4d1bdd4b71c0939affccf7` on the same isolated
+cloud branch. Fresh main remains `a786df5`. Read-only production status confirms
+search ready/chat disabled and the older 1,156-document generation. Recovered
+public extracted pages and authenticated the original 155-page biodiversity PDF
+against its source metadata hash; inspected original pages 61/66/67. The narrative
+104 total conflicts with table numbering through 105. The lake extracts also
+contain an unresolved area disagreement. No historical capture was recovered.
+
+Implementation: seven authored real-source development probes with pinned private
+inputs, a reproducible offline review packet, stronger review fingerprints and
+support-limit failures. Facet checklist pass no longer implies semantic acceptance.
+See `docs/RESEARCH-SOURCE-CONTEXT-ASSESSMENT.md` for hashes, source identities,
+source-only verification and all limitations. The prototype is explicitly rejected
+as a sufficient automatic semantic fix; no runtime integration is recommended yet.
+
+Checks: experiment discovery 75 run/one skipped; evidence auditor 64 passed;
+capture adapter 40 run/one skipped; diff whitespace check passed. Frozen specs and
+expectations unchanged. Runtime regression result remains 121 passed from the
+previous commit; runtime files are unchanged. Semantic acceptance: none. Merged:
+no. Production launch verification: none. No paid call or ledger inspection;
+canonical reconciliation remains mandatory before any future paid call. No local
+execution, stopped-chat activation, release promotion or AI enabling occurred.
+
+Read-only issue #89 inspection found a newer reported accounting checkpoint of
+39 attempts / 2,360,028 monthly microdollars (comment 6467306803). This is reported,
+not reconciled persistent state; the user's 100-attempt constraint remains in
+force. Historical issue instructions do not authorize paid calls or local work.
+The missing historical evidence's cloud location has been requested from the user.
