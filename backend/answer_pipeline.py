@@ -147,10 +147,15 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
         notify()
         await available()
 
+        async def phase_available():
+            await available()
+            if time.monotonic() >= phase_deadline:
+                raise fail('provider_stage_timeout')
+
         async def on_request(actual):
             first_hook=stage['state']=='reserved' and stage['provider_attempts']==0
             try:
-                await available()
+                await phase_available()
                 if not first_hook or str(actual.url)!='https://api.anthropic.com/v1/messages':
                     raise fail('duplicate_or_unreserved_dispatch')
                 capture, actual_body = outgoing_request_capture(actual)
@@ -171,7 +176,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                             'format':body['output_config']['format']['type']})
                 # No transport has started; even persistence can cross a deadline.
                 notify()
-                await available()
+                await phase_available()
             except BaseException:
                 if first_hook:stage.update(provider_attempts=0, dispatch_status='blocked_before_transport')
                 raise

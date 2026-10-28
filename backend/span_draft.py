@@ -13,7 +13,7 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
                           original_baseline, registry_hash, resolve_selector, encoded)
 from .span_instructions import span_answer_instructions
 
-PIPELINE_VERSION = 'two_pass_v4'
+PIPELINE_VERSION = 'two_pass_v5'
 
 
 def digest(value):

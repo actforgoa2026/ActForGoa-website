@@ -18,7 +18,7 @@ from .span_instructions import span_answer_instructions
 CORRECTION_PROMPT_BYTES = 36000
 COMPACT_DRAFT_BYTES = 8192
 PROVIDER_DEADLINE_SECONDS = 65
-PROVIDER_STAGE_SECONDS = 30
+PROVIDER_STAGE_SECONDS = 45
 PIPELINE_SPEC = {'version': PIPELINE_VERSION, 'correction_prompt_bytes': CORRECTION_PROMPT_BYTES,
                  'compact_draft_bytes': COMPACT_DRAFT_BYTES, 'provider_deadline_seconds': PROVIDER_DEADLINE_SECONDS,
                  'provider_stage_seconds': PROVIDER_STAGE_SECONDS, 'capture_version': 4,

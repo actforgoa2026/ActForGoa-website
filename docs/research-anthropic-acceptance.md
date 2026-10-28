@@ -1,6 +1,6 @@
 # Bounded Anthropic acceptance plan
 
-For the new explicitly selected draft/reconstruction candidate, see [two-pass answers](research-two-pass-answers.md). Its capture v4, separate case/attempt ceilings and shared execution path supersede the single-pass execution details below only when `pipeline=two_pass_v4`. Earlier diagnostics and their failed or unreviewed judgments remain historical evidence.
+For the new explicitly selected draft/reconstruction candidate, see [two-pass answers](research-two-pass-answers.md). Its capture v4, separate case/attempt ceilings and shared execution path supersede the single-pass execution details below only when `pipeline=two_pass_v5`. Earlier diagnostics and their failed or unreviewed judgments remain historical evidence.
 
 Prepared only; this document does not authorize provider calls or publication. The one-call connectivity/schema/accounting calibration is complete. It is not acceptance of the final retrieval candidate. LAW owns retrieval and `prepare_answer` compaction; this harness changes neither.
 
