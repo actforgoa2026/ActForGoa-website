@@ -17,7 +17,7 @@ from backend.span_instructions import STYLE_RULES
 from backend.chat import AnswerCache, ChatRequest, Message, prepare_answer
 from tests.research.test_answer_pipeline import setup, model_response
 from tests.research.test_reconstruction import claim
-from tests.research.span_fixtures import select_response
+from tests.research.span_fixtures import select_response, previous_workflow_prompt
 
 
 @pytest.fixture
@@ -76,6 +76,9 @@ def test_actual_requests_preserve_brief_bytes_and_only_approved_standard_shape_d
     # comparison below. Reconstruction remains exact for this same draft.
     bodies = [json.loads(r.content) for r in transport.requests]
     assert [b['output_config']['effort'] for b in bodies] == ['low', 'medium']
+    # v8 changes only the two reviewed workflow sections and their priority.
+    for body, phase in zip(bodies, ('draft', 'reconstruction')):
+        body['system'] = previous_workflow_prompt(phase, style)
     bodies[0]['output_config']['effort'] = 'medium'
     if style == 'brief':
         assert [hashlib.sha256(httpx.Request('POST', str(r.url), json=b).content).hexdigest()

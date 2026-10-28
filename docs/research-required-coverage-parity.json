@@ -1,0 +1,54 @@
+{
+  "pipeline": "two_pass_v8",
+  "capture_version": 7,
+  "answer_workflow": "required_coverage_first_v1",
+  "baseline_runtime": "a9bd55f9c9c7173e31a384cd9f535c364f51e56d",
+  "contract_sha256": "3b0c8e913c9774b962a4bb7d38b4fb210b0c1bc2ddddf5591fa27c44d3d966aa",
+  "proposal_sha256": "d4d2b586b8e40f2b7db5488435b7629ffdd1ef10ed3f639d824b10cc6424f5d6",
+  "parent_instruction_review": "research-slot-instruction-parity.json",
+  "scope": "Exact required-coverage workflow and priority change. Every other rule, shape, source payload and validator unchanged. Offline parity is not evidence of generated-answer accuracy.",
+  "previous_workflow": "Work in this order: choose only directly responsive points; read each complete source proposition and its surrounding qualifications; select supports for that full proposition; then word it. Finally check requested coverage, omitted conditions, dates and scope. Answer useful supported parts and state their specific limits with the supported point. Check every passage before calling a requested detail absent: a stated value of uncertain applicability is not missing.",
+  "previous_reconstruction_prefix": "Reconstruct the final answer from evidence; draft_answer may omit requested details or contain unsupported assertions. Check and rewrite its propositions, including a draft saying insufficient_evidence. ",
+  "new_workflow": "Start from the user's requested points, not the number of available sources. From the complete evidence, choose the smallest set of fully qualified claims that covers those points. Read each full source proposition and linked conditions; select supports before wording it. Necessary conditions, provenance, limits and missing requested details are part of coverage and must survive shortening. Omit background, examples and numbers that do not help answer a requested point. Check every passage before calling a requested detail absent: a stated value of uncertain applicability is not missing. Finally check coverage, entailment, omitted conditions, dates, scope and the requested length.",
+  "new_reconstruction_prefix": "Choose the final answer's required points independently from the complete evidence before using draft_answer. Then use the draft only to check for a missed requested point, and verify that point directly in the evidence. Rebuild the answer; do not polish or expand the draft, or retain a claim merely because it appears there. A draft saying insufficient_evidence can be wrong. ",
+  "unchanged_rules": [
+    "boundary",
+    "normative",
+    "legal",
+    "scope",
+    "inference",
+    "quantities",
+    "dates",
+    "limitations",
+    "spans",
+    "local_support",
+    "publication",
+    "presentation"
+  ],
+  "rendered_instructions": {
+    "draft": {
+      "standard": {
+        "utf8_bytes": 7420,
+        "sha256": "fff2b1de208978f107e3017ee7817251fdcf220130c946ca39dc92a45696bf9b",
+        "delta_bytes": 220
+      },
+      "brief": {
+        "utf8_bytes": 7359,
+        "sha256": "9ab2258b84e81802a437f1b55fe1915b3f0b64d4666884cb368cfe70817f5935",
+        "delta_bytes": 220
+      }
+    },
+    "reconstruction": {
+      "standard": {
+        "utf8_bytes": 8046,
+        "sha256": "4cb039ed7b0fb07a5a67cc6645ee8931008fac46d069f7afae7f054da495e6b9",
+        "delta_bytes": 395
+      },
+      "brief": {
+        "utf8_bytes": 7985,
+        "sha256": "ab5f368a62cdc8a56e02f5c80350a954a09f3f93c125d34229c092b489dac1b1",
+        "delta_bytes": 395
+      }
+    }
+  }
+}

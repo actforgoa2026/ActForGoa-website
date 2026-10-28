@@ -44,3 +44,18 @@ def slot_response(result):
 
 def payload_from_prepared(prepared):
     return json.loads(prepared.messages[-1]['content'])
+
+
+def previous_workflow_prompt(phase, style):
+    """Reverse only the reviewed workflow edits for historical byte checks."""
+    import json
+    from pathlib import Path
+    from backend.span_instructions import RULES, PHASE_RULES, STYLE_RULES
+    record = json.loads((Path(__file__).parents[2] / 'docs/research-required-coverage-parity.json').read_text())
+    rules = {**RULES, 'workflow': record['previous_workflow']}
+    phase_rule = PHASE_RULES[phase]
+    if phase == 'reconstruction':
+        assert phase_rule.startswith(record['new_reconstruction_prefix'])
+        phase_rule = record['previous_reconstruction_prefix'] + phase_rule.removeprefix(record['new_reconstruction_prefix'])
+    return '\n'.join([rules['boundary'], phase_rule,
+                      *[value for key, value in rules.items() if key != 'boundary'], STYLE_RULES[style]])

@@ -1,4 +1,4 @@
-"""Explicit v7 base-medium and fixed phase identity; no provider, keys, corpus or live ledgers."""
+"""Explicit v8 base-medium and fixed phase identity; no provider, keys, corpus or live ledgers."""
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
@@ -13,7 +13,7 @@ from tests.research.test_answer_pipeline import setup
 
 
 @pytest.mark.parametrize('pipeline,effort',[
-    ('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('two_pass_v8','low'),('two_pass_v7','medium'),('two_pass_v7','low'),('two_pass_v6','medium'),('two_pass_v6','low'),('two_pass_v5','medium'),('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
     ('two_pass_v2','medium'),('two_pass_v1','medium')])
 def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
     monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
