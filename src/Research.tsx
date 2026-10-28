@@ -6,7 +6,7 @@ import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
 import {researchApi as api} from './research-api';
-import {citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
+import {citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
 import {researchCommunityMatches} from './research-community';
 import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
@@ -32,10 +32,11 @@ type Document={id:string;title:string;url:string;retrieved_at:string;format:stri
 type Page={page:number;label:string;text:string;origin:string;warning:string};
 const date=(value:string)=>value?new Date(value).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'Date unavailable';
 function Source({source,number,returnTo}:{source:Evidence;number?:number;returnTo:string}){
- return <article className="research-source"><div className="research-source-meta">{number&&<span>Source {number}</span>}<span>{source.label}</span><span>{source.format==='pdf'?'PDF':source.format==='html'?'Webpage':source.format.toUpperCase()}</span></div>
+ return <article className="research-source"><div className="research-source-meta">{number&&<span>Source {number}</span>}<span>{source.label}</span><span>{source.format==='pdf'?'PDF':source.format==='html'?'Webpage':source.format.toUpperCase()}</span>{source.publisher_class==='actforgoa_authored_guide'&&<span>Authored draft guide</span>}</div>
   <h3><Link to={source.reader_url} state={{researchReturn:returnTo}}>{source.title}<ArrowUpRight size={17}/></Link></h3>
   <p className="source-excerpt">{source.text.slice(0,310)}{source.text.length>310?'…':''}</p>
   {source.warning&&<p className="extraction-note">{source.warning}</p>}
+  {researchSourceNotes(source).map(note=><p key={note.label} className="extraction-note"><strong>{note.label}:</strong> {note.text}</p>)}
   <details><summary>Read the cited passage</summary><p className="evidence-text">{source.text}</p><a href={source.url} target="_blank" rel="noreferrer">Publisher’s source <ArrowUpRight size={14}/></a><p className="research-small">Saved {date(source.retrieved_at)}. This is the retrieval date.</p></details>
   <Link className="text-link" to={source.reader_url} state={{researchReturn:returnTo}}>Open full document <BookOpen size={16}/></Link>
  </article>
