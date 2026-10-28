@@ -1116,15 +1116,17 @@ function About() {
           their publication date is shown where available.
         </p>
         <p>
-          Search starts with keywords. You can optionally download a language model to expand matches by meaning on
-          your device. It finds relevant entries; it does not generate advice or
-          verify contact details. No account is needed and search queries are
-          not sent to an AI provider.
+          Directory and library search find entries without generating answers.
+          Ask uses Anthropic to write answers from source passages: your question,
+          relevant excerpts and recent conversation are sent to that provider.
+          No account is needed. Check the cited passages and their dates; an AI
+          answer does not verify current contact details or replace professional advice.
         </p>
         <p>
-          Contact forms prepare an email for you to review and send. The preview
-          does not store submissions. The existing ActForGoa website remains the
-          original source.
+          Contact forms prepare an email for you to review and send without
+          storing that message here. Private incident reports use a separate
+          review inbox and are not published or automatically forwarded to authorities.
+          The existing ActForGoa website remains the original source.
         </p>
       </section>
     </main>

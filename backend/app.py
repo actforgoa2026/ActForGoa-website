@@ -11,7 +11,7 @@ from fastapi.responses import FileResponse, PlainTextResponse, JSONResponse, Res
 import pymupdf
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from dotenv import load_dotenv
-from .anthropic_answers import AnthropicAnswers, AnthropicAPIError, configured_model, maximum_cost
+from .anthropic_answers import AnthropicAnswers, AnthropicAPIError, configured_model, maximum_cost, maximum_request_cost
 from .domains import Domain
 from .embeddings import ROOT
 from .library import Library
@@ -26,7 +26,8 @@ def create_app(root=None, index_root=None, client=None):
     ledger_required=os.getenv('RESEARCH_REQUIRE_EXISTING_USAGE','1' if public_origin else '0')=='1'
     # Keep the same durable ledger path across releases; never reset production usage.
     limits=PublicLimits(root/'.research-usage',chats_per_day=min(100,int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))),
-                        monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))),require_existing=ledger_required)
+                        monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))),require_existing=ledger_required,
+                        release_allowance=os.getenv('RESEARCH_RELEASE_ALLOWANCE_20261028')=='1')
     model=configured_model()
     @asynccontextmanager
     async def lifespan(app):
@@ -85,6 +86,11 @@ def create_app(root=None, index_root=None, client=None):
     def status():
         lib=app.state.library
         reason=chat_unavailable_reason()
+        if reason is None:
+            try:
+                capacity=limits.preflight_single(maximum_request_cost(model),datetime.now(timezone.utc).date().isoformat())
+                if not capacity['allowed']:reason=capacity['reason']
+            except UsageLedgerUnavailable:reason='usage_ledger_unavailable'
         return {'search_ready':lib is not None,'chat_ready':bool(lib and reason is None),'generation':lib.generation if lib else None,
                 'stats':lib.manifest['stats'] if lib else {},'model':model,'provider':'anthropic',
                 'domains':['legal','ecology'],'domain_counts':lib.domain_counts() if lib else {'legal':0,'ecology':0},

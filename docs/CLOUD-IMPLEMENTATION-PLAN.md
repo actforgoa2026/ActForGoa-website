@@ -2,6 +2,12 @@
 
 Feature development, tests, indexing and browser QA ran under `/workspace` in the cloud. CLOUD owns this implementation. The user subsequently appointed **Coordinate agent threads and PRs** (`01a181ad-56ba-70c2-93cd-1aa5185d007a`) as the continuing cloud release coordinator. Its durable inbox and release record is [issue #89](https://github.com/actforgoa2026/ActForGoa-website/issues/89). The earlier proposal to resume the local ORCHESTRATOR is superseded; keep local workers and their old heartbeat paused. The user then directly instructed CLOUD to “ship it”: CLOUD is completing the bounded PR #90 source landing; the primary coordinator retains live deployment ownership.
 
+## Current Sonnet release authorization
+
+On 28 October the user explicitly approved Claude Sonnet 5.5, a $15 October total AI cap and 150 combined testing/public requests for this UTC day. Default daily100 resumes29October; monthly$5 resumes1November. The dated opt-in is checked within ledger transactions and expires without requiring a restart. All failed and unknown requests remain charged. Canonical accounting before Sonnet acceptance is44Oct28attempts and2,387,513microUSD October reserved. The74 remaining checks reserve at most8,387,456additional microUSD;32launch slots remain within150 if all pass. This supersedes the earlier120-testing/$5 authorization below, without waiving accuracy checks.
+
+The full combined PR93/94/96 runtime will be validated fresh with Sonnet, medium adaptive effort, a4,096output-token ceiling and60second timeout. The latest Haiku scope answer still generalized a104-bird survey into104species without its bird qualifier and is rejected. Mechanical validity is not semantic acceptance. No failed result transfers to Sonnet. The named editorial account has been provisioned securely; hosted workflow verification and review-alias publication remain outstanding. Other local agents remain paused.
+
 ## Resume here
 
 The user subsequently resumed the local ORCHESTRATOR for a focused release, then explicitly requested an audit and correction of the live acceptance failure. Issue #89 records sole promotion ownership. Other local workers and their heartbeat remain paused. The clean `codex/anthropic-release-contract` worktree is the correction owner; do not promote concurrently.

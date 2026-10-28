@@ -34,6 +34,11 @@ def maximum_cost(model, payload):
     return int(((size + 8192) * input_rate + MAX_OUTPUT_TOKENS * output_rate).to_integral_value(rounding=ROUND_CEILING))
 
 
+def maximum_request_cost(model):
+    input_rate, output_rate = map(Decimal, MODEL_PRICES[model])
+    return int(((MAX_PROMPT_BYTES + 8192) * input_rate + MAX_OUTPUT_TOKENS * output_rate).to_integral_value(rounding=ROUND_CEILING))
+
+
 class AnthropicAnswers:
     def __init__(self, key, http_client=None):
         self.key = key

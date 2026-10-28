@@ -67,6 +67,7 @@ try {
     const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
       '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
     if (research.search_ready !== true) throw new Error('Staged research routing or service is unavailable. Nothing promoted.');
+    if (research.chat_ready !== true) throw new Error('Staged AI answers are unavailable or exhausted. Nothing promoted.');
     if (!['legal', 'ecology'].every(domain => research.domains?.includes(domain) && research.domain_counts?.[domain] > 0)) {
       throw new Error('Staged legal/ecology collections are not ready. Restore and verify the complete corpus before promotion.');
     }
