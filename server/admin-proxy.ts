@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
-const MAX_BODY = 256 * 1024;
-const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:session|login|logout|stars|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
+const MAX_BODY = 420000;
+const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
 
 export function configuredAdminOrigin(raw = process.env.ADMIN_API_ORIGIN): string | null {
   if (!raw) return null;
@@ -45,7 +45,7 @@ export function createAdminProxy(options: {origin?:string; fetcher?:typeof fetch
     if (!['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS'].includes(req.method || 'GET')) return fail(405,'Method not allowed.');
     const isAdmin = url.pathname.startsWith('/api/admin/');
     const headers = new Headers({accept:'application/json'});
-    for (const key of ['content-type','origin','x-csrf-token', ...(isAdmin ? ['cookie'] : [])]) {
+    for (const key of ['content-type','origin','sec-fetch-site','x-csrf-token', ...(isAdmin ? ['cookie'] : [])]) {
       const value = req.headers[key];
       if (typeof value === 'string') headers.set(key,value);
     }

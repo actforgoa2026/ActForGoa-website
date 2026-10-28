@@ -12,6 +12,8 @@ import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
 import {splitCodePointRange} from './text-range';
 import './research.css';
+import {useStarredIds} from './CurationProvider';
+import {prioritizeStarred} from './curation';
 
 type Turn={question:string;answer?:Answer;results:Evidence[];error?:string;notice?:string;mode:'search'|'ask'};
 type Session={question:string;turns:Turn[];mode:'search'|'ask'};
@@ -50,7 +52,8 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
  </div>;
 }
 function CommunitySuggestions({data,question,loading,error}:{data:CRMSnapshot|null;question:string;loading:boolean;error:boolean}){
- const matches=useMemo(()=>researchCommunityMatches(data?.records||[],question),[data,question]);
+ const starredIds=useStarredIds();
+ const matches=useMemo(()=>prioritizeStarred(researchCommunityMatches(data?.records||[],question,6),starredIds,match=>match.record.record_id).slice(0,3),[data,question,starredIds]);
  return <section className="research-community" aria-label="Relevant community and government"><h3><Users size={18}/>People and organisations to explore</h3>
   <p className="research-small">Public registry matches, not endorsements. Check current roles and availability.</p>
   {loading?<p role="status" className="research-small">Finding related community records…</p>:error?<p className="research-small">Community matches could not load. <Link to="/directory">Open the directory</Link>.</p>:!matches.length?<p className="research-small">No close registry match for this question. <Link to="/directory">Browse the community directory</Link>.</p>:<ul>{matches.map(({record,reason,activity,verification,source})=><li key={record.record_id}>

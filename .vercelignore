@@ -20,6 +20,7 @@ README.md
 
 backend/
 .research-index/
+.research-usage/
 .research-release/
 requirements-research.txt
 .env*

@@ -39,7 +39,7 @@ test('invalid paths cannot become proxy destinations and oversized writes are re
   const fetcher:typeof fetch=async()=>{calls++;return new Response('{}');};
   await withProxy(createAdminProxy({origin:'https://admin.example',fetcher}),async(url)=>{
     assert.equal((await fetch(url+'/api/admin/secrets')).status,404);
-    assert.equal((await fetch(url+'/api/admin/posts',{method:'POST',body:'x'.repeat(256*1024+1)})).status,413);
+    assert.equal((await fetch(url+'/api/admin/posts',{method:'POST',body:'x'.repeat(420001)})).status,413);
   });
   assert.equal(calls,0);
 });

@@ -86,6 +86,8 @@ const GuideRoute = lazy(() => import("./GuideRoute"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
 const ReportInbox = lazy(() => import("./ReportInbox"));
+const AdminDashboard = lazy(() => import('./AdminDashboard'));
+const Blog = lazy(() => import('./Blog'));
 
 const topicIcons = [
   Recycle,
@@ -1123,7 +1125,7 @@ function About({ records }: { records: RecordItem[] }) {
         <p>
           This preview brings together publicly available information from
           ActForGoa, retrieved on 22 October 2026. Original content and links
-          have been preserved in a local archive. Five practical guides add official sources, downloadable templates and visible verification flags. They remain drafts for legal and service review. Some records are historical;
+          have been preserved in a local archive. Five practical guides add official sources, forms you can fill in here and save as PDF, and visible verification flags. They remain drafts for legal and service review. Some records are historical;
           their publication date is shown where available.
         </p>
         <p>
@@ -1376,6 +1378,8 @@ export default function App() {
           <Routes>
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
+            <Route path="/ask/legal" element={<Research domain="legal" />} />
+            <Route path="/ask/ecology" element={<Research domain="ecology" />} />
             <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/" element={<Home records={records} />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
@@ -1402,7 +1406,10 @@ export default function App() {
                 <Catalogue key="stories" records={records} mode="stories" />
               }
             />
-            <Route path="/blog" element={<Catalogue key="blog" records={records} mode="blog" />} />
+            <Route path="/blog" element={<Blog />} />
+            <Route path="/blog/archive" element={<Catalogue key="blog-archive" records={records} mode="blog" />} />
+            <Route path="/blog/:slug" element={<Blog />} />
+            <Route path="/admin/*" element={<AdminDashboard />} />
             <Route path="/read/:id" element={<Detail records={records} />} />
             <Route path="/templates/:id" element={<TemplateEditor />} />
             <Route path="/about" element={<About records={records} />} />
