@@ -1,5 +1,16 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Current conditional and document-selection correction
+
+The combined PR93/94/96/99 candidate reached 55 accepted frozen cases. The next saved-law case returned the correct 24-hour report deadline but converted the source's counterfactual danger condition into an assertion that immediate felling had not occurred. That answer remains failed and charged. Canonical accounting is 135 attempts on 28 October and 12,470,073 microUSD reserved for October; production reconciliation is still pending.
+
+Selected original excerpts containing an explicit counterfactual now receive focused guidance to preserve the condition, permitted action and deadline. No source text or generated answer is rewritten. Offline preflight also found that unrelated building documents crowded the individual-farmer form out of the input budget. Generic document ranking now distinguishes a named form/manual/law's subject from a trailing hypothetical condition and uses its title only for document identification. Full conditions remain in hybrid recall, within-document passage selection and model context; metadata remains inadmissible as factual answer evidence. All 55 accepted provider requests, selected sources and assembled answers remain identical in exact capture replay. All 16 remaining cases now include their frozen required passages. These are offline checks, not fresh paid or hosted acceptance.
+
+The source passes 171 research tests. The previously verified frontend/server/API content remains unchanged, with 192 Node tests and the configured production build passing. Local desktop/phone checks cover integrated homepage, topics, About, directory, reporting, emergency actions, guides, forms/PDF, editorial curation and blog workflows. Hosted AI and named-account checks still remain.
+
+Only 150 combined attempts today and $15 October are approved. Completing all remaining checks plus four reserved launch requests requires at least 158 attempts and a conservative $15.041 total reservation. A replacement request for 160 today/$15.30 October is pending and must not be applied without the user's answer. Continue only a bounded portion that fits current limits, preserving the exact pending case, every failure and four launch slots. No source expectation is relaxed. Daily 100 resumes 29 October; monthly $5 resumes November. No new production accounting import, activation or alias promotion has occurred. The local ORCHESTRATOR remains sole release owner; other local agents stay paused.
+
+
 ## Reviewed source inconsistency
 
 The b98b352 candidate reached39 accepted cases before biodiversity-04 reproduced an internally inconsistent statistic in the original report:158 of218 amphibian species was printed as87.8percent. The original PDF physical page135 was rendered and inspected; the inconsistency is in the source, not an extraction repair. The failed answer and its reservation remain rejected/preserved. The existing exact-byte source-review registry now excludes only that passage from answer evidence, while original-document access and search remain available with a warning. No corrected number, source text, prompt or frozen expectation is substituted.

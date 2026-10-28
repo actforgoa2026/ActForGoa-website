@@ -8,7 +8,7 @@ import zvec
 from .embeddings import Encoder, ROOT
 from .extraction import safe_path
 from .domains import document_domains, legal_authority_multiplier
-from .passage_selection import retrieval_focus, select_passages
+from .passage_selection import document_focus, retrieval_focus, select_passages
 from .source_context import preceding_prose_chunk, preceding_table_chunk, tabular_lines
 
 IDENTIFIER = re.compile(r'^[a-zA-Z0-9-]{1,80}$')
@@ -105,7 +105,8 @@ class Library:
             vector_filter="document in ("+','.join("'"+identifier+"'" for identifier in domain_ids)+")"
         terms=list(dict.fromkeys(t.lower() for t in re.findall(r'[^\W_]+',query,re.UNICODE) if len(t)>1 and t.lower() not in STOP))[:24]
         if not terms:terms=re.findall(r'[^\W_]+',query)[:8]
-        focus=retrieval_focus(query)
+        focus=document_focus(query)
+        named_document_condition=focus!=retrieval_focus(query)
         focus_terms=terms if focus==query else [t.lower() for t in re.findall(r'[^\W_]+',focus,re.UNICODE) if len(t)>1 and t.lower() not in STOP]
         query_concepts={t[:5] if len(t)>5 else t for t in focus_terms}
         if any(t in terms for t in ['mhadei','mahadayi','mandovi']):terms.extend(['mhadei','mahadayi','mandovi'])
@@ -140,7 +141,10 @@ class Library:
             # channels. Reward coverage of the question's distinct concepts too.
             def relevance(identifier):
                 row,meta=candidates[identifier]
-                words=re.findall(r'[^\W_]+',row['text'].lower(),re.UNICODE)
+                # Titles identify the requested document; they remain metadata,
+                # never support for an answer's substantive claims.
+                ranked_text=row['text']+(' '+meta.get('title','') if named_document_condition else '')
+                words=re.findall(r'[^\W_]+',ranked_text.lower(),re.UNICODE)
                 # Light prefix matching joins variants such as estuary/estuarine.
                 concepts={w[:5] if len(w)>5 else w for w in words}
                 coverage=len(query_concepts & concepts)/max(len(query_concepts),1)

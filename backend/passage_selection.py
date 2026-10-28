@@ -26,6 +26,23 @@ def retrieval_focus(query):
     return re.split(r'\b(?:rather than|instead of)\b', query, maxsplit=1, flags=re.I)[0].strip() or query
 
 
+def document_focus(query):
+    """Keep a named document's subject ahead of a trailing hypothetical.
+
+    This only controls the document relevance bonus. Hybrid recall, selection
+    of complementary passages within a document and the model keep the full
+    condition. Otherwise common conditions (ownership, damage, payment) can
+    let an unrelated manual displace the form or law the user asked about.
+    """
+    focus = retrieval_focus(query)
+    parts = re.split(r'\b(?:when|if)\b', focus, maxsplit=1, flags=re.I)
+    if len(parts) == 2 and re.search(
+            r'\b(?:form|manual|act|rules|report)\s+'
+            r'(?:list|require|say|state|specif|provide|allow)\w*\b', parts[0], re.I):
+        return parts[0].strip()
+    return focus
+
+
 def select_passages(query, candidates, baseline_ids, scores, stop_words):
     """Return candidate IDs in the existing document-slot order (at most two).
 

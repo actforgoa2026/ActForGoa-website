@@ -2,7 +2,7 @@
 from concurrent.futures import ThreadPoolExecutor
 from copy import deepcopy
 
-from backend.passage_selection import retrieval_focus, select_passages
+from backend.passage_selection import document_focus, retrieval_focus, select_passages
 
 STOP=set('what are the and for is who must about a to'.split())
 
@@ -54,3 +54,20 @@ def test_focus_keeps_noncomparative_and_empty_subject_queries_intact():
     assert retrieval_focus('Compare rainfall and runoff')=='Compare rainfall and runoff'
     assert retrieval_focus('instead of rainfall')=='instead of rainfall'
     assert retrieval_focus('Measure runoff RATHER THAN rainfall')=='Measure runoff'
+
+
+def test_document_focus_preserves_subject_without_losing_passage_condition():
+    query = 'What does the vessel registration form require when ownership changes?'
+    assert document_focus(query) == 'What does the vessel registration form require'
+    candidates = pool(['Vessel registration form. An introduction.',
+                       'When ownership changes, attach a signed transfer record.'],
+                      title='Vessel registration form')
+    assert select_passages(query, candidates, ['p0'], {'p0': .05, 'p1': .04}, STOP) == ['p1']
+
+
+def test_document_focus_does_not_discard_ordinary_or_leading_conditions():
+    for query in ['What happens when ownership changes?',
+                  'When ownership changes, which form is needed?',
+                  'Can a reef form when water warms?',
+                  'What does the vessel registration manual require?']:
+        assert document_focus(query) == query
