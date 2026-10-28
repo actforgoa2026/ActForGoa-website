@@ -21,7 +21,7 @@ Keep simple answers brief, usually 1-3 short paragraphs and under 160 words; thi
 class Paragraph(BaseModel):
     model_config = ConfigDict(extra='forbid')
     text: str = Field(min_length=1, max_length=1600)
-    citations: list[str] = Field(max_length=6)
+    citations: list[str] = Field(max_length=24)
 
 
 class GroundedAnswer(BaseModel):
@@ -53,7 +53,7 @@ class Support(BaseModel):
 
 class SupportedParagraph(BaseModel):
     model_config = ConfigDict(extra='forbid')
-    supports: list[Support] = Field(min_length=1, max_length=6)
+    supports: list[Support] = Field(min_length=1, max_length=24)
     text: str = Field(min_length=1, max_length=1600)
 
 
@@ -212,10 +212,33 @@ def normalize_answer(raw, request, evidence):
         if item is None:
             continue
         supports = []
-        for identifier in item.supports:
+        identifiers = []
+        visiting = set()
+        def include_source(identifier):
+            if identifier in visiting:
+                raise ValueError('Source context contains a cycle')
+            if identifier in identifiers:
+                return
             source = allowed.get(identifier)
             if not source or not source.get('text', '').strip():
                 raise ValueError('The supporting source is absent from the supplied evidence')
+            visiting.add(identifier)
+            for context_id in source.get('context_ids', []):
+                context = allowed.get(context_id)
+                if not context or any(context.get(key) != source.get(key)
+                                      for key in ('document_id', 'generation', 'page')):
+                    raise ValueError('Required source context is missing or has a different identity')
+                include_source(context_id)
+            visiting.remove(identifier)
+            identifiers.append(identifier)
+        # Context membership is known by the retriever, not inferred by the
+        # model. Attach the exact supplied context to every cited fragment.
+        # This changes no generated prose or source text and makes each
+        # paragraph's citations complete even if the model omitted a repeat.
+        for identifier in item.supports:
+            include_source(identifier)
+        for identifier in identifiers:
+            source = allowed[identifier]
             # Retain the exact complete retrieved passage, including OCR/control
             # characters and qualifications. No fuzzy quote repair or truncation.
             supports.append(Support(citation_id=identifier, quote=source['text']))

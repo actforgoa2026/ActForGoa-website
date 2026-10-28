@@ -51,3 +51,31 @@ def test_prompt_budget_does_not_authorize_omitted_sources():
     payload,selected=prepare_answer(REQUEST,EVIDENCE+[{'id':'omitted','text':'x'*40000}])
     assert selected==EVIDENCE
     assert payload['tools'][0]['input_schema']['$defs']['ReferencedParagraph']['properties']['supports']['items']['enum']==[EVIDENCE[0]['id']]
+
+def test_server_attaches_exact_context_to_each_paragraph_without_rewriting_prose():
+    context={'id':'context','document_id':'doc','generation':'v1','page':1,'text':'Only the orchid subset, including species not reported in Goa.'}
+    fragment={**EVIDENCE[0],'document_id':'doc','generation':'v1','page':1,'context_ids':['context']}
+    raw=answer();raw['paragraph_2']=deepcopy(raw['paragraph_1'])
+    original=deepcopy(raw)
+    result=normalize_answer(raw,REQUEST,[fragment,context])
+    assert raw==original
+    assert all(p['citations']==['context',fragment['id']] for p in result['paragraphs'])
+    assert result['citations']==[context,fragment]
+    assert [p['text'] for p in result['paragraphs']]==[original[f'paragraph_{i}']['text'] for i in (1,2)]
+
+def test_missing_wrong_identity_and_cyclic_context_fail_closed():
+    context={'id':'context','document_id':'doc','generation':'v1','page':1,'text':'Original qualification.'}
+    fragment={**EVIDENCE[0],'document_id':'doc','generation':'v1','page':1,'context_ids':['context']}
+    for evidence in [[fragment],[fragment,{**context,'page':2}],[fragment,{**context,'context_ids':[fragment['id']]}]]:
+        with pytest.raises(ValueError,match='context'):
+            normalize_answer(answer(),REQUEST,evidence)
+
+def test_model_reference_limit_does_not_discard_required_context():
+    evidence=[]
+    for i in range(6):
+        evidence.extend([{'id':f'fragment-{i}','text':'Original fragment.','document_id':str(i),'page':1,'context_ids':[f'context-{i}']},
+                         {'id':f'context-{i}','text':'Original qualifier.','document_id':str(i),'page':1}])
+    raw=answer();raw['paragraph_1']['supports']=[f'fragment-{i}' for i in range(6)]
+    result=normalize_answer(raw,REQUEST,evidence)
+    assert len(result['paragraphs'][0]['citations'])==12
+    assert len(result['citations'])==12

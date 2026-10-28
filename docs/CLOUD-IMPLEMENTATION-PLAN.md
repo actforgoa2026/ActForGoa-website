@@ -1,5 +1,14 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Current citation-assembly correction
+
+PR99 homepage routing is integrated alongside PR93/94/96. PR94 has landed on main as d4268ff; PR96's routine merge conflict is being reconciled. Sole local ORCHESTRATOR retains review-alias promotion ownership. The named editorial account is preserved. No public deployment has occurred.
+
+The a2b0070 request configuration passed water-04, scope-01, RTI, TCP and farming semantic review. The next dog-relocation answer failed HTTP validation because its second paragraph omitted a context ID already present in the supplied evidence and first paragraph. The failed reservation remains charged. Canonical October28 accounting is83attempts and6,691,025microUSD; production reconciliation remains pending. Caps remain150today/$15October;155today is awaiting user approval.
+
+Citation assembly now expands each selected passage to its exact required original context on the server, with missing/cross-document/cyclic context rejected. Generated prose and original source bytes are never repaired. This changes response assembly only: the model, prompt, strict tool schema, evidence selection, xhigh effort,5632token output ceiling,20000byte input ceiling and60second timeout remain unchanged. Before retaining any generation evidence, compare each newly prepared request byte-for-byte with its captured provider payload, then replay that real response through the corrected assembly and repeat semantic review. This is a new assembly test, not a relabeling of the old HTTP failure or a duplicate paid generation. All71 frozen cases plus3HTTP journeys and hosted checks remain required; report capture reuse and fresh dispatch separately. Any changed provider payload invalidates its capture. All failed and unknown accounting is retained, with no refunds or cap bypass.
+
+
 Feature development, tests, indexing and browser QA ran under `/workspace` in the cloud. CLOUD owns this implementation. The user subsequently appointed **Coordinate agent threads and PRs** (`01a181ad-56ba-70c2-93cd-1aa5185d007a`) as the continuing cloud release coordinator. Its durable inbox and release record is [issue #89](https://github.com/actforgoa2026/ActForGoa-website/issues/89). The earlier proposal to resume the local ORCHESTRATOR is superseded; keep local workers and their old heartbeat paused. The user then directly instructed CLOUD to “ship it”: CLOUD is completing the bounded PR #90 source landing; the primary coordinator retains live deployment ownership.
 
 ## Focused Sonnet source review and acceptance checkpoint
