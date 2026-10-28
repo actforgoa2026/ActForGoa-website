@@ -121,7 +121,7 @@ def test_anthropic_citation_contract(collection,monkeypatch,model_id):
         assert captured[0]['tool_choice']=={'type':'auto','disable_parallel_tool_use':True}
         assert captured[0]['thinking']=={'type':'adaptive','display':'omitted'}
         assert captured[0]['output_config']['effort']=='xhigh'
-        assert captured[0]['max_tokens']==4096
+        assert captured[0]['max_tokens']==6144
         assert answer['outside_context'] is None
         for cite in answer['citations']:
             meta=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']});assert meta.status_code==200

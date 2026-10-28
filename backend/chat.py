@@ -169,7 +169,7 @@ def prepare_answer(request, evidence):
         group=[item for item in complete_group if item['id'] not in {old['id'] for old in selected}]
         visible_group=[]
         for item in group:
-            visible={key:item[key] for key in fields if key in item}
+            visible={key:item[key] for key in fields if key in item and item[key] is not None}
             # Locator notes are not the source passage. Preserve dates/caveats,
             # but do not let reviewed factual summaries masquerade as evidence.
             if isinstance(visible.get('source_date_metadata'),dict):
@@ -180,12 +180,12 @@ def prepare_answer(request, evidence):
         before=len(body['evidence'])
         body['evidence'].extend(visible_group)
         payload['tools'][0]['input_schema']=provider_schema([*selected,*group])
-        payload['messages']=[{'role':'user','content':json.dumps(body,ensure_ascii=False)}]
+        payload['messages']=[{'role':'user','content':json.dumps(body,ensure_ascii=False,separators=(',',':'))}]
         if len(json.dumps(payload,ensure_ascii=False).encode())>MAX_PROMPT_BYTES:
             del body['evidence'][before:]
             continue
         selected.extend(group)
-    payload['messages'] = [{'role': 'user', 'content': json.dumps(body, ensure_ascii=False)}]
+    payload['messages'] = [{'role': 'user', 'content': json.dumps(body, ensure_ascii=False,separators=(',',':'))}]
     payload['tools'][0]['input_schema'] = provider_schema(selected)
     if len(json.dumps(payload, ensure_ascii=False).encode()) > MAX_PROMPT_BYTES:
         raise ValueError('Question and context exceed the input allowance')
