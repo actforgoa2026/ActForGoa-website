@@ -18,3 +18,9 @@ Internal origin alias: `actforgoa-explore-assets.vercel.app` (alias-specific pub
 - Route `94bf18e7-a5ea-45a0-ad4b-3d9b168ff70d`: same host, `^/orbit-assets/(.*)$` → `https://actforgoa-explore-assets.vercel.app/$1`.
 
 A future integrated deployment must explicitly retire these two project routing rules after verifying its native `/explore`; otherwise the isolated page keeps precedence. Do not overwrite unrelated staged routing changes. Before this feature there were no project routing rules. The existing site's optional `/api/curation` returns 404 and falls back normally; no new API service was published. AI generation itself was not exercised.
+
+### Entrance and no-eyebrow update
+
+User follow-up source `ce0b0ed` removes the eyebrow entirely, records the no-eyebrow preference in `AGENTS.md`, and adds a three-second spiral entrance. Scene scale settles from 1.16 to 1; ring and matching counter animations start at 5× playback and ease quadratically to 1× after 3000ms, keeping images upright. Reduced-motion disables the entrance and orbit animation.
+
+Build passed. Local and public Chromium checks confirm initial playback >1, exact 1× after three seconds, all matching counter animations settled and zero eyebrow elements. The internal asset alias now serves deployment `dpl_8LKejjCqfL5fdVNoDx77d6YPeEtn` at the same public `/explore` route. Existing production target and route rules are unchanged.
