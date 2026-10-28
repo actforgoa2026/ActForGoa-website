@@ -1,8 +1,10 @@
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+import hashlib
+import json
 import threading
 import httpx
-from .domain import CatalogRequest, CompareRequest, DomainError, Query, make_plan, change_interval
+from .domain import CatalogRequest, CompareRequest, ObservationRequest, DomainError, Query, make_plan, change_interval
 from .eve_cdse import CDSE
 from .evidence import read_observation, compare_pixels, public_observation, classification_image
 from .providers import AnthropicPlanner, ImageClassifier
@@ -30,21 +32,100 @@ class SatelliteService:
         self.store.reserve('catalog', 100)
         return self.cdse.catalog(request)
 
+    @staticmethod
+    def _observation_key(scene_id, grid):
+        # Include the clipped geometry as well as the snapped grid: adjacent
+        # selections can share raster dimensions but have different ROI masks.
+        value = {'version': 1, 'scene_id': scene_id, 'crs': grid['crs'],
+                 'bounds': grid['bounds'], 'width': grid['width'], 'height': grid['height'],
+                 'geometry': grid['geometry']}
+        return hashlib.sha256(json.dumps(value, sort_keys=True, separators=(',', ':'), allow_nan=False).encode()).hexdigest()
+
+    def _cached_observation(self, scene_id, grid, actor):
+        if actor is None:
+            return None
+        cached = self.store.observation(actor, self._observation_key(scene_id, grid))
+        if cached is None:
+            return None
+        spectral, provenance, created = cached
+        if provenance.get('catalog_scene_id') != scene_id:
+            raise DomainError('invalid_provenance', 'The saved observation does not match the selected scene.', 502)
+        return read_observation(spectral, grid), provenance, created
+
+    def _load_observation(self, scene, grid, actor=None):
+        cached = self._cached_observation(scene['id'], grid, actor)
+        if cached and cached[1].get('catalog_acquired_at') == scene['acquired_at']:
+            return cached[0], cached[1]
+        spectral, provenance = self.cdse.observation(scene, grid)
+        observation = read_observation(spectral, grid)
+        if actor is not None:
+            self.store.cache_observation(actor, self._observation_key(scene['id'], grid), spectral, provenance)
+        return observation, provenance
+
+    @staticmethod
+    def _observation_result(observation, provenance, grid, cached=False):
+        return {'kind': 'observation', 'observation': public_observation(observation, provenance),
+                'area': {'geometry': grid['wgs84_geometry'], 'area_m2': round(grid['area_m2']),
+                         'clipped_to_goa': grid['clipped_to_goa']},
+                'cache_hit': cached, 'generated_at': datetime.now(timezone.utc).isoformat(),
+                'note': 'A dated observation, not a change finding. Browsing imagery does not run image decisions.'}
+
+    def observation(self, request: ObservationRequest, actor: str):
+        if not self.capacity.acquire(blocking=False):
+            raise DomainError('busy', 'Another imagery request is running. Please try again shortly.', 429)
+        handed_off = False
+        try:
+            # Decoding/reprojecting a cached TIFF uses substantial memory too.
+            # Keep it under the same one-request bound as provider retrieval.
+            grid = request.area.grid()
+            cached = self._cached_observation(request.scene_id, grid, actor)
+            if cached:
+                acquired = datetime.fromisoformat(cached[1]['catalog_acquired_at'].replace('Z', '+00:00'))
+                if not request.start_date <= acquired.date() <= request.end_date:
+                    raise DomainError('scene_unavailable', 'The selected observation is outside this date range.')
+                # Cache hits return directly: no provider call, reservation or
+                # duplicate stored image job is created by moving back in time.
+                return {'status': 'complete', 'result': self._observation_result(cached[0], cached[1], grid, True)}
+            self.store.reserve('observations', 20)
+            job = self.store.start(actor, {**request.model_dump(mode='json'), 'kind': 'observation'})
+            self.executor.submit(self._run_observation, job, request, actor)
+            handed_off = True
+            return {'id': job, 'status': 'running'}
+        finally:
+            if not handed_off:
+                self.capacity.release()
+
+    def _run_observation(self, job, request, actor):
+        try:
+            catalog = self.catalog(CatalogRequest.model_validate(request.model_dump(include={'area', 'start_date', 'end_date'})))
+            scene = next((value for value in catalog['scenes'] if value['id'] == request.scene_id), None)
+            if scene is None:
+                raise DomainError('scene_unavailable', 'This observation is unavailable in the current catalog. Search again.')
+            grid = request.area.grid()
+            observation, provenance = self._load_observation(scene, grid, actor)
+            self.store.finish(job, self._observation_result(observation, provenance, grid))
+        except DomainError as error:
+            self.store.finish(job, {'error': error.message, 'code': error.code}, failed=True)
+        except Exception:
+            self.store.finish(job, {'error': 'The observation could not be retrieved. No image was inferred.', 'code': 'observation_failed'}, failed=True)
+        finally:
+            self.capacity.release()
+
     def compare(self, request: CompareRequest, actor: str):
         if not self.capacity.acquire(blocking=False):
             raise DomainError('busy', 'Another comparison is running. Please try again shortly.', 429)
         try:
             self.store.reserve('comparisons', 10)
             job = self.store.start(actor,request.model_dump(mode='json'))
-            self.executor.submit(self._run, job, request)
+            self.executor.submit(self._run, job, request, actor)
             return {'id': job, 'status': 'running'}
         except Exception:
             self.capacity.release()
             raise
 
-    def _run(self, job, request):
+    def _run(self, job, request, actor):
         try:
-            self.store.finish(job, self.run_comparison(request))
+            self.store.finish(job, self.run_comparison(request, actor))
         except DomainError as error:
             self.store.finish(job, {'error':error.message,'code':error.code}, failed=True)
         except Exception:
@@ -53,7 +134,7 @@ class SatelliteService:
         finally:
             self.capacity.release()
 
-    def run_comparison(self, request):
+    def run_comparison(self, request, actor=None):
         catalog_request = CatalogRequest.model_validate(request.model_dump(include={'area','start_date','end_date'}))
         catalog = self.catalog(catalog_request)
         scenes = {s['id']:s for s in catalog['scenes']}
@@ -63,9 +144,8 @@ class SatelliteService:
         if datetime.fromisoformat(a['acquired_at']) >= datetime.fromisoformat(b['acquired_at']):
             raise DomainError('invalid_order', 'Choose two different observations in chronological order.')
         grid = request.area.grid()
-        before_data, before_source = self.cdse.observation(a, grid)
-        after_data, after_source = self.cdse.observation(b, grid)
-        before, after = read_observation(before_data, grid), read_observation(after_data, grid)
+        before, before_source = self._load_observation(a, grid, actor)
+        after, after_source = self._load_observation(b, grid, actor)
         evidence = compare_pixels(before, after, grid)
         classification = {'state':'skipped','answers':{},'message':'Insufficient common clear coverage for reliable image classification.'}
         if evidence['state'] == 'observable':

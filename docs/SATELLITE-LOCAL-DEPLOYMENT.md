@@ -1,3 +1,15 @@
+# Latest map/timeline update — 29 October 2026 (IST)
+
+Continue the existing standalone deployment; do not create another example site. Fetch the current `codex/satellite-monitoring` head, read `docs/SATELLITE-HANDOFF.md` and `reports/satellite-map-2026-10-29/README.md`, then package and deploy **both** the satellite API and satellite app. The frontend uses new authenticated `/observation` jobs, cached single acquisitions, reprojected imagery and a time slider. Keep the existing named account, SQLite data, imported recorded comparison, volumes and separate service tokens.
+
+Existing Railway project `e119f1f6-f1c7-4a58-a33c-0ea536dcfdce`, production environment `178f97df-ed3d-4d66-94ac-f86797aa736c`; API service `2a16820e-393c-4385-b4f3-82d8d922c4d2`; app service `aea6b770-cd6d-4165-9802-7ce46fa0fd4a`. App URL: https://satellite-app-production.up.railway.app/map.
+
+Securely configure real `CDSE_CLIENT_ID` and `CDSE_CLIENT_SECRET` on the satellite API service using the user's CDSE account settings. Cloud-injected placeholders are not portable keys. Do not request secrets in chat or place them in shell history/Git. OpenAI remains optional; no key-creation retry is authorized by this handoff.
+
+From clean committed source run `python scripts/package-satellite.py --output <new-staging-directory>` and `node scripts/package-satellite-app.mjs --output <different-new-staging-directory>`, deploy their allowlisted `service` directories using the existing local Railway workflow. Preserve volumes and one replica. Validate actual login, catalog for a new area, explicit observation load, date slider, two-image comparison, cache reuse and history persistence. Amche layers must load from their attributed public sources. Cloud already completed a bounded real river-area pair; avoid repeating it solely to reproduce screenshots. Record the exact new hosted source and any newly incurred provider usage. Keep the combined review alias and research services under ORCHESTRATOR ownership.
+
+The older initial deployment handoff follows for context; the services above already exist.
+
 # Local deployment handoff
 
 The user explicitly authorizes getting the Goa satellite dashboard live for iteration. **OpenAI is optional for initial imagery retrieval. Do not turn its missing key into a deployment gate.** Continue implementation and deployment; do not stop at another plan or PR.

@@ -10,7 +10,7 @@ from fastapi.exceptions import RequestValidationError
 import httpx
 from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
-from .domain import CatalogRequest, CompareRequest, Query, DomainError, HistoryRequest
+from .domain import CatalogRequest, CompareRequest, ObservationRequest, Query, DomainError, HistoryRequest
 from .service import SatelliteService
 from .providers import ImageClassifier
 
@@ -124,6 +124,11 @@ def create_app(service=None):
     @app.post('/compare',status_code=202)
     def compare(query:CompareRequest,request:Request):
         return service.compare(query,request.state.actor)
+
+    @app.post('/observation')
+    def observation(query:ObservationRequest,request:Request):
+        result = service.observation(query, request.state.actor)
+        return JSONResponse(result, status_code=200 if result['status'] == 'complete' else 202)
 
     @app.get('/jobs/{job_id}')
     def job(job_id:str,request:Request):

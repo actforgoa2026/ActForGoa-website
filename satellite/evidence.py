@@ -5,7 +5,8 @@ import numpy as np
 from PIL import Image
 from rasterio.features import geometry_mask, shapes
 from rasterio.io import MemoryFile
-from rasterio.transform import from_origin
+from rasterio.transform import from_origin, array_bounds
+from rasterio.warp import calculate_default_transform, reproject, transform_bounds, Resampling
 from shapely.geometry import shape, mapping
 from shapely.ops import transform
 from .domain import DomainError, TO_WGS
@@ -95,8 +96,41 @@ def compare_pixels(before, after, grid):
     return result
 
 
+def map_layer(observation):
+    """Reproject display pixels onto Web Mercator before Leaflet imageOverlay.
+
+    A north-up UTM image is rotated relative to Web Mercator: stretching the
+    original PNG to longitude/latitude corners would misplace its pixels. Keep
+    the original reflectance/masks unchanged for analysis and warp only RGBA.
+    """
+    rgba = np.asarray(Image.open(io.BytesIO(observation['png'])).convert('RGBA'))
+    height, width = rgba.shape[:2]
+    bounds = array_bounds(height, width, observation['transform'])
+    target_transform, target_width, target_height = calculate_default_transform(
+        'EPSG:32643', 'EPSG:3857', width, height, *bounds)
+    output = np.zeros((4, target_height, target_width), dtype='uint8')
+    for band in range(4):
+        reproject(rgba[:, :, band], output[band], src_transform=observation['transform'],
+                  src_crs='EPSG:32643', dst_transform=target_transform,
+                  dst_crs='EPSG:3857', src_nodata=0, dst_nodata=0, resampling=Resampling.nearest)
+    png = io.BytesIO()
+    Image.fromarray(output.transpose(1, 2, 0)).save(png, format='PNG')
+    geographic = transform_bounds('EPSG:3857', 'EPSG:4326',
+                                  *array_bounds(target_height, target_width, target_transform))
+    return {'image': 'data:image/png;base64,' + base64.b64encode(png.getvalue()).decode(),
+            'bbox': list(geographic), 'bbox_crs': 'EPSG:4326', 'crs': 'EPSG:3857',
+            'width': target_width, 'height': target_height,
+            'note': 'Display reprojected to Web Mercator. Measurements use the original 10 m UTM grid.'}
+
+
 def public_observation(observation, provenance):
-    return {**provenance, 'quality': observation['quality'], 'image': 'data:image/png;base64,' + base64.b64encode(observation['png']).decode()}
+    display = map_layer(observation)
+    image = display.pop('image')
+    # One display image serves the map and side-by-side viewer. Native PNGs
+    # remain internal for classification; duplicating both projections would
+    # exceed hosted proxy limits for otherwise valid areas.
+    return {**provenance, 'quality': observation['quality'],
+            'image': image, 'map_layer': display}
 
 
 def classification_image(observation, common):

@@ -116,6 +116,10 @@ class CompareRequest(CatalogRequest):
         return self
 
 
+class ObservationRequest(CatalogRequest):
+    scene_id: str = Field(min_length=1, max_length=180, pattern=r'^[A-Za-z0-9_.-]+$')
+
+
 class HistoryRequest(StrictModel):
     query: str = Field(default='', max_length=300)
     intent: Intent | None = None

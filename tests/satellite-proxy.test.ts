@@ -41,6 +41,10 @@ test('satellite route uses named-session authentication, CSRF and verified actor
     assert.equal((await fetch(base+'/api/admin/satellite/history',{method:'POST',headers:{Cookie:headers.Cookie,'Content-Type':'application/json'},body:'{}'})).status,403);
     assert.equal((await fetch(base+'/api/admin/satellite/history',{method:'POST',headers,body:'{}'})).status,200);
     assert.deepEqual(calls[1],{path:'/history',actor:user.id,token:'Bearer '+process.env.SATELLITE_SERVICE_TOKEN});
+    assert.equal((await fetch(base+'/api/admin/satellite/observation',{method:'POST',body:'{}'})).status,401);
+    assert.equal((await fetch(base+'/api/admin/satellite/observation',{method:'POST',headers:{Cookie:headers.Cookie,'Content-Type':'application/json'},body:'{}'})).status,403);
+    assert.equal((await fetch(base+'/api/admin/satellite/observation',{method:'POST',headers,body:'{}'})).status,200);
+    assert.deepEqual(calls[2],{path:'/observation',actor:user.id,token:'Bearer '+process.env.SATELLITE_SERVICE_TOKEN});
     store.logout(login.token);
     assert.equal((await fetch(base+'/api/admin/satellite/status',{headers})).status,401);
   } finally {
@@ -74,6 +78,37 @@ test('frontend proxy permits satellite endpoints while rejecting invented paths'
     assert.equal((await fetch(base+'/api/admin/satellite/catalog',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
     assert.equal((await fetch(base+'/api/admin/satellite/files')).status,404);
     assert.equal((await fetch(base+'/api/admin/satellite/history',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
-    assert.equal(paths.length,3);
+    assert.equal((await fetch(base+'/api/admin/satellite/observation',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
+    assert.equal(paths.length,4);
   }finally{await close(server);}
+});
+
+test('both proxy hops accept paired map images but stop streams at their original bounds', async()=>{
+  const display=JSON.stringify({image:'a'.repeat(3*1024*1024)});
+  let oversized=false,innerCancelled=false,outerCancelled=false;
+  const inner=createServer((req,res)=>void forwardSatellite('/api/admin/satellite/jobs/'+'a'.repeat(36),'GET','actor',undefined,res,{
+    origin:'https://satellite.example.test',token:'x'.repeat(40),fetcher:async()=>oversized
+      ?new Response(new ReadableStream({pull(controller){controller.enqueue(new Uint8Array(1024*1024));},cancel(){innerCancelled=true;}}))
+      :new Response(display),
+  }));
+  const handler=createAdminProxy({origin:'https://admin.example.test',fetcher:async()=>oversized
+    ?new Response(new ReadableStream({pull(controller){controller.enqueue(new Uint8Array(1024*1024));},cancel(){outerCancelled=true;}}))
+    :new Response(display)});
+  const outer=createServer((req,res)=>void handler(req,res));
+  const innerBase=await listen(inner),outerBase=await listen(outer);
+  try{
+    const route='/api/admin/satellite/jobs/'+'a'.repeat(36);
+    for(const url of [innerBase,outerBase+route]){
+      const response=await fetch(url);
+      assert.equal(response.status,200);
+      assert.equal((await response.json()).image.length,3*1024*1024);
+    }
+    // The non-satellite 2 MiB limit remains unchanged.
+    assert.equal((await fetch(outerBase+'/api/admin/stars')).status,502);
+    oversized=true;
+    assert.equal((await fetch(innerBase)).status,502);
+    assert.equal((await fetch(outerBase+route)).status,502);
+    assert.equal(innerCancelled,true);
+    assert.equal(outerCancelled,true);
+  }finally{await close(inner);await close(outer);}
 });

@@ -1,14 +1,15 @@
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Link} from 'react-router-dom';
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
 import {adminApi,type AdminSession} from './admin-api';
-import {satelliteApi,type SatelliteArea,type SatelliteScene,type SatellitePlan,type SatelliteResult,type SatelliteIntent,type SatelliteRequest} from './satellite-api';
+import {satelliteApi,type SatelliteArea,type SatelliteScene,type SatellitePlan,type SatelliteResult,type SatelliteIntent,type SatelliteRequest,type SatelliteObservation} from './satellite-api';
 import {SatelliteHistory,satelliteIntents as intents,observationDate as dateLabel} from './SatelliteHistory';
 import {SatelliteContext} from './SatelliteContext';
+import {SatelliteMap} from './SatelliteMap';
+import {SatelliteTimeline} from './SatelliteTimeline';
+import {areaError,orderedPair,orderedScenes} from './satellite-timeline';
 import './satellite.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
@@ -25,36 +26,6 @@ function ImageDecisions({result}:{result:SatelliteResult}){
   </div>;
 }
 
-function AreaMap({area,onArea,candidates}:{area:SatelliteArea|null;onArea:(area:SatelliteArea)=>void;candidates?:GeoJSON.FeatureCollection}) {
-  const container=useRef<HTMLDivElement>(null),map=useRef<L.Map|null>(null),selection=useRef<L.Rectangle|null>(null),features=useRef<L.GeoJSON|null>(null);
-  const selecting=useRef(false),first=useRef<L.LatLng|null>(null),callback=useRef(onArea);
-  const [drawing,setDrawing]=useState(false),[corner,setCorner]=useState(false);
-  callback.current=onArea;
-  useEffect(()=>{
-    if(!container.current)return;
-    const instance=L.map(container.current,{center:[15.4,74],zoom:10,minZoom:9,maxBounds:[[14.7,73.5],[16,74.6]],maxBoundsViscosity:.8});map.current=instance;
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(instance);
-    instance.on('click',(event:L.LeafletMouseEvent)=>{
-      if(!selecting.current)return;
-      if(!first.current){first.current=event.latlng;setCorner(true);return;}
-      const bounds=L.latLngBounds(first.current,event.latlng);
-      callback.current({bbox:[bounds.getWest(),bounds.getSouth(),bounds.getEast(),bounds.getNorth()]});
-      first.current=null;selecting.current=false;setDrawing(false);setCorner(false);
-    });
-    return()=>{instance.remove();map.current=null;};
-  },[]);
-  useEffect(()=>{
-    if(!map.current)return;
-    selection.current?.remove();
-    if(area){const [w,s,e,n]=area.bbox;selection.current=L.rectangle([[s,w],[n,e]],{color:'#193e32',weight:2,fillOpacity:.12}).addTo(map.current);map.current.fitBounds([[s,w],[n,e]],{maxZoom:16,padding:[20,20]});}
-  },[area]);
-  useEffect(()=>{if(map.current){features.current?.remove();if(candidates)features.current=L.geoJSON(candidates,{style:{color:'#8a391f',weight:2,fillOpacity:.3}}).addTo(map.current);}},[candidates]);
-  return <div className="satellite-map-section"><div ref={container} className="satellite-map" aria-label="Goa map. Use coordinate fields below as a keyboard alternative to drawing." />
-    <div className="satellite-map-toolbar"><Button type="button" variant="secondary" onClick={()=>{selecting.current=!selecting.current;first.current=null;setCorner(false);setDrawing(selecting.current);}}>{drawing?'Cancel area selection':'Select an area on the map'}</Button>
-      <p role="status">{drawing?(corner?'Choose the opposite corner.':'Choose the first corner.'):area?'Area selected. Keep it within Goa and under 25 km².':'Zoom to a place, then select two opposite corners.'}</p></div>
-  </div>;
-}
-
 export default function Satellite(){
   const [session,setSession]=useState<AdminSession|null>(null),[authChecked,setAuthChecked]=useState(false);
   const [area,setArea]=useState<SatelliteArea|null>(null),[coords,setCoords]=useState(['73.82','15.48','73.83','15.49']);
@@ -62,13 +33,14 @@ export default function Satellite(){
   const [start,setStart]=useState(()=>{const d=new Date();d.setDate(d.getDate()-40);return d.toISOString().slice(0,10);}),[end,setEnd]=useState(today);
   const [intent,setIntent]=useState<SatelliteIntent>('canopy_loss'),[plan,setPlan]=useState<SatellitePlan|null>(null);
   const [scenes,setScenes]=useState<SatelliteScene[]>([]),[before,setBefore]=useState(''),[after,setAfter]=useState('');
+  const [activeId,setActiveId]=useState(''),[observations,setObservations]=useState<Record<string,SatelliteObservation>>({});
   const [result,setResult]=useState<SatelliteResult|null>(null),[busy,setBusy]=useState(''),[error,setError]=useState(''),[notice,setNotice]=useState('');
   const [historyRevision,setHistoryRevision]=useState(0),[catalogFreshness,setCatalogFreshness]=useState<{searched_at:string;latest_acquired_at:string|null}|null>(null);
   const [readiness,setReadiness]=useState<{imagery_ready:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null}|null>(null);
   const controller=useRef<AbortController|null>(null),lock=useRef(false);
   useEffect(()=>{const abort=new AbortController();adminApi<AdminSession>('/api/admin/session',{signal:abort.signal}).then(s=>{setSession(s);return satelliteApi<typeof readiness>('/status',s.csrfToken,undefined,abort.signal);}).then(setReadiness).catch(()=>{}).finally(()=>{if(!abort.signal.aborted)setAuthChecked(true);});return()=>{abort.abort();controller.current?.abort();};},[]);
-  function clearResults(){setScenes([]);setBefore('');setAfter('');setResult(null);setNotice('');setError('');setCatalogFreshness(null);}
-  function chooseArea(value:SatelliteArea){setArea(value);setCoords(value.bbox.map(v=>v.toFixed(5)));setPlan(null);clearResults();}
+  function clearResults(){setActiveId('');setObservations({});setScenes([]);setBefore('');setAfter('');setResult(null);setNotice('');setError('');setCatalogFreshness(null);}
+  function chooseArea(value:SatelliteArea){if(lock.current)return;const message=areaError(value.bbox);if(message){setError(message);return;}setArea(value);setCoords(value.bbox.map(v=>v.toFixed(5)));setPlan(null);clearResults();}
   async function run(label:string,action:(signal:AbortSignal)=>Promise<void>){
     if(lock.current)return;lock.current=true;const abort=new AbortController();controller.current=abort;setBusy(label);setError('');
     try{await action(abort.signal);}catch(e){if(!abort.signal.aborted)setError(e instanceof Error?e.message:'The investigation could not complete.');}
@@ -81,50 +53,72 @@ export default function Satellite(){
   function findScenes(){if(!session||!area)return;void run('Finding dated observations…',async signal=>{
     clearResults();const data=await satelliteApi<{scenes:SatelliteScene[];truncated:boolean;searched_at:string;latest_acquired_at:string|null}>('/catalog',session.csrfToken,{area,start_date:start,end_date:end},signal);
     setCatalogFreshness(data);
-    setScenes(data.scenes);setNotice(data.scenes.length?(data.truncated?'This is a partial catalog. Narrow the date range to see all matches.':'Cloud percentages describe the whole satellite scene. Local visibility is checked during comparison.'):'No imagery was found for this area and date range. Try a wider range.');
+    const sorted=orderedScenes(data.scenes);setScenes(sorted);setActiveId(sorted.at(-1)?.id||'');setBefore(sorted[0]?.id||'');setAfter(sorted.length>1?sorted.at(-1)!.id:'');setNotice(data.scenes.length?(data.truncated?'This is a partial catalog. Narrow the date range to see all matches.':'Cloud percentages describe the whole satellite scene. Local visibility is checked during comparison.'):'No imagery was found for this area and date range. Try a wider range.');
   });}
-  function compare(){if(!session||!area)return;void run('Comparing observations…',async signal=>{
+  function compare(){if(!session||!area||!orderedPair(scenes,before,after))return;void run('Comparing observations…',async signal=>{
     setResult(null);const job=await satelliteApi<{id:string}>('/compare',session.csrfToken,{area,start_date:start,end_date:end,before_id:before,after_id:after,intent,question,
       ...(plan?.state==='ready'?{window_start:plan.window_start,window_end:plan.window_end}:{})},signal);
     for(let attempts=0;attempts<120;attempts++){
       await new Promise<void>((resolve,reject)=>{const abort=()=>{clearTimeout(timer);reject(new DOMException('Cancelled','AbortError'));};const timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},2000);signal.addEventListener('abort',abort,{once:true});});
       const update=await satelliteApi<{status:string;result:SatelliteResult&{error?:string}}>('/jobs/'+job.id,session.csrfToken,undefined,signal);
       if(update.status==='failed'){setHistoryRevision(v=>v+1);throw new Error(update.result.error);}
-      if(update.status==='complete'){setResult(update.result);setHistoryRevision(v=>v+1);return;}
+      if(update.status==='complete'){setResult(update.result);setObservations(previous=>({...previous,[before]:update.result.before,[after]:update.result.after}));setActiveId(after);setHistoryRevision(v=>v+1);return;}
     }
     throw new Error('This comparison is taking longer than expected. Its job reference is '+job.id+'.');
+  });}
+  function loadObservation(){if(!session||!area||!activeId||observations[activeId])return;void run('Loading this acquisition…',async signal=>{
+    const response=await satelliteApi<{id?:string;status:string;result?:{observation:SatelliteObservation}}>('/observation',session.csrfToken,{area,start_date:start,end_date:end,scene_id:activeId},signal);
+    const save=(observation:SatelliteObservation)=>setObservations(previous=>{
+      const entries=Object.entries(previous).filter(([id])=>id!==activeId).slice(-19);return {...Object.fromEntries(entries),[activeId]:observation};
+    });
+    if(response.status==='complete'&&response.result){save(response.result.observation);return;}
+    if(!response.id)throw new Error('The imagery service did not return an observation reference.');
+    for(let attempts=0;attempts<120;attempts++){
+      await new Promise<void>((resolve,reject)=>{const abort=()=>{clearTimeout(timer);reject(new DOMException('Cancelled','AbortError'));};const timer=setTimeout(()=>{signal.removeEventListener('abort',abort);resolve();},1500);signal.addEventListener('abort',abort,{once:true});});
+      const update=await satelliteApi<{status:string;result:{observation?:SatelliteObservation;error?:string}}>('/jobs/'+response.id,session.csrfToken,undefined,signal);
+      if(update.status==='failed')throw new Error(update.result.error||'The observation could not be loaded.');
+      if(update.status==='complete'&&update.result.observation){save(update.result.observation);return;}
+    }
+    throw new Error('The observation is taking longer than expected. Its reference is '+response.id+'.');
   });}
   function openSaved(id:string){if(!session)return;void run('Opening saved investigation…',async signal=>{
     const job=await satelliteApi<{status:string;request:SatelliteRequest|null;result:SatelliteResult}>('/jobs/'+id,session.csrfToken,undefined,signal);
     if(job.status!=='complete')throw new Error('This investigation has not completed.');
     clearResults();setPlan(null);
-    if(job.request){const r=job.request;setArea(r.area);setCoords(r.area.bbox.map(String));setStart(r.start_date);setEnd(r.end_date);setIntent(r.intent);setQuestion(r.question||'');}
+    if(job.request){const r=job.request;setArea(r.area);setCoords(r.area.bbox.map(String));setStart(r.start_date);setEnd(r.end_date);setIntent(r.intent);setQuestion(r.question||'');}else{setArea(null);setCoords(['','','','']);}
     setResult(job.result);
+    const pair=[job.result.before,job.result.after];setObservations(Object.fromEntries(pair.map(o=>[o.catalog_scene_id,o])));
+    setScenes(orderedScenes(pair.map(o=>({id:o.catalog_scene_id,acquired_at:o.acquired_at[0],scene_cloud_percent:null}))));
+    setBefore(pair[0].catalog_scene_id);setAfter(pair[1].catalog_scene_id);setActiveId(pair[1].catalog_scene_id);
     requestAnimationFrame(()=>document.querySelector('.satellite-results')?.scrollIntoView({behavior:'smooth',block:'start'}));
   });}
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
-  return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore changes in Goa</h1><p>Follow changes in trees, rivers, wetlands and land use over time. Compare dated satellite observations, revisit investigations and read relevant ecology research.</p></header>
+  return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Choose a place on the map. Browse dated satellite imagery, compare what changed, and investigate trees, water and land use.</p></header>
     <p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p>
     {authChecked&&!session&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
     {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until Copernicus is connected. You can explore the map and open saved results.</p>}
     {session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. You can still inspect dated imagery and numeric comparisons.</p>}
-    {session&&<SatelliteHistory csrfToken={session.csrfToken} revision={historyRevision} busy={!!busy} onOpen={openSaved}/>}
+    <section className="satellite-workbench" aria-label="Map and timeline">
+      <SatelliteMap area={area} onArea={chooseArea} disabled={!!busy} observation={observations[activeId]} candidates={result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)?result.intent==='surface_water'?result.evidence.water_candidates:result.intent==='canopy_loss'?result.evidence.candidates:undefined:undefined}/>
+      {result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)&&<p className="satellite-note">Any change outlines compare {dateLabel(result.before.acquired_at[0])} with {dateLabel(result.after.acquired_at[0])}. They are exploratory candidates.</p>}
+      {!scenes.length&&<p className="satellite-note">Select an area, then find observations for the dates below. Satellite imagery will appear over this map.</p>}
+      <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
+    </section>
+    {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
     <form className="satellite-question" onSubmit={ask}><Textarea label="Ask about this area" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Has tree canopy disappeared here in the last 10 days?"/>
       <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
       {session&&readiness&&!readiness.planner_ready&&<p className="satellite-note">Question interpretation is unavailable until configured. Choose an area, dates and investigation topic below to compare imagery.</p>}</form>
     {plan&&<div className="satellite-plan" role="status"><p>{plan.message}</p>{plan.window_start&&<p>Requested period: {dateLabel(plan.window_start)} to {dateLabel(plan.window_end!)}.</p>}{plan.place_name&&<p>Requested place: {plan.place_name}. Select it on the map, then ask about “this area”.</p>}{plan.warnings?.map(w=><p key={w}>{w}</p>)}</div>}
     <fieldset className="satellite-controls" disabled={!!busy}><legend>Choose your area and observations</legend>
-      <AreaMap area={area} onArea={chooseArea} candidates={result?.intent==='surface_water'?result.evidence.water_candidates:result?.intent==='canopy_loss'?result.evidence.candidates:undefined}/>
-      <div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
-      <Button type="button" variant="secondary" onClick={()=>{const v=coords.map(Number);if(coords.some(s=>!s.trim())||v.some(n=>!Number.isFinite(n))||v[0]>=v[2]||v[1]>=v[3]||v[0]<73.5||v[2]>74.6||v[1]<14.7||v[3]>16){setError('Enter a valid west/south/east/north area around Goa.');return;}chooseArea({bbox:v as SatelliteArea['bbox']});}}>Use these coordinates</Button>
+      <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
+      <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
       <div className="satellite-dates"><Input label="Search from" type="date" value={start} max={end} min="2017-03-28" onChange={e=>{setStart(e.target.value);setPlan(null);clearResults();}}/><Input label="Search until" type="date" value={end} min={start} max={today()} onChange={e=>{setEnd(e.target.value);setPlan(null);clearResults();}}/>
         <label>Investigate<select value={intent} onChange={e=>{setIntent(e.target.value as SatelliteIntent);setResult(null);setPlan(null);}}>{Object.entries(intents).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label></div>
       <Button type="button" disabled={!session||!readiness?.imagery_ready||!area||!start||!end||!!busy} onClick={findScenes}>Find observations</Button>
       {notice&&<p role="status">{notice}</p>}
       {catalogFreshness?.latest_acquired_at&&<p className="satellite-freshness">Latest acquisition found in this search: <strong>{dateLabel(catalogFreshness.latest_acquired_at)}</strong>. Catalog checked {dateLabel(catalogFreshness.searched_at)}. Availability does not guarantee clear local visibility.</p>}
-      {!!scenes.length&&<><div className="satellite-dates">{(['Before','After'] as const).map(label=><label key={label}>{label} observation<select value={label==='Before'?before:after} onChange={e=>{(label==='Before'?setBefore:setAfter)(e.target.value);setResult(null);}}><option value="">Choose an acquisition</option>{scenes.map(s=><option key={s.id} value={s.id}>{dateLabel(s.acquired_at)} · scene cloud {s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}</option>)}</select></label>)}</div><Button type="button" onClick={compare} disabled={!before||!after||before===after}>Compare selected observations</Button></>}
+      {!!scenes.length&&<><div className="satellite-dates">{(['Before','After'] as const).map(label=><label key={label}>{label} observation<select value={label==='Before'?before:after} onChange={e=>{(label==='Before'?setBefore:setAfter)(e.target.value);setResult(null);}}><option value="">Choose an acquisition</option>{scenes.map(s=><option key={s.id} value={s.id}>{dateLabel(s.acquired_at)} · scene cloud {s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}</option>)}</select></label>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
     </fieldset>
-    {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
     {result&&<section className="satellite-results"><h2>{result.summary?.headline??'What these observations show'}</h2>
       {result.recorded_example&&<p className="satellite-recorded"><strong>Recorded real comparison.</strong> Retrieved {dateLabel(result.recorded_example.retrieved_at)}. {result.recorded_example.note}{' '}<a href={result.recorded_example.source_url} target="_blank" rel="noreferrer">View the original verification</a></p>}
       <ImageDecisions result={result}/>
@@ -142,9 +136,10 @@ export default function Satellite(){
       <details><summary>What these observations cannot establish</summary><p>{result.fire_detections.message}</p>{result.intent==='land_change'&&<p>{result.planning_context?.message}</p>}{result.limitations.map(l=><p className="satellite-note" key={l}>{l}</p>)}</details>
       {result.library_context&&<SatelliteContext context={result.library_context}/>}
     </section>}
+    {session&&<SatelliteHistory csrfToken={session.csrfToken} revision={historyRevision} busy={!!busy} onOpen={openSaved}/>}
     <section className="satellite-context"><h2>Understand the local context</h2><p>Amche Atlas brings together Goa’s survey plots, forests, wetlands, water bodies and planning maps. Check each layer’s date and source alongside the satellite observations.</p>
       <a href={`https://amche.in/?atlas=goa#14/${centre[1].toFixed(5)}/${centre[0].toFixed(5)}`} target="_blank" rel="noreferrer">Open this location in Amche Atlas ↗</a>
-      <p>Context layers are not yet joined automatically to these findings. Map boundaries and planning records do not establish a change’s cause or legality.</p>
+      <p>Water-body and private-forest records from Amche are available in the map’s context controls. These reference layers are not automatically joined to findings; they do not establish a change’s cause or legality.</p>
     </section>
   </main>;
 }

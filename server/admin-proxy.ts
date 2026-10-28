@@ -1,7 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const MAX_BODY = 420000;
-const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|history|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
+const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|history|observation|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
 
 export function configuredAdminOrigin(raw = process.env.ADMIN_API_ORIGIN): string | null {
   if (!raw) return null;
@@ -56,15 +56,30 @@ export function createAdminProxy(options: {origin?:string; fetcher?:typeof fetch
         redirect:'manual', signal:AbortSignal.timeout(url.pathname.startsWith('/api/admin/satellite/') ? 60_000 : 20_000),
       });
       if (response.status >= 300 && response.status < 400) return fail(502,'The team tools service returned an unexpected redirect.');
-      const payload = await response.arrayBuffer();
-      if (payload.byteLength > (url.pathname.startsWith('/api/admin/satellite/') ? 4 : 2) * 1024 * 1024) return fail(502,'The team tools response was too large.');
+      const maximum = (url.pathname.startsWith('/api/admin/satellite/') ? 4 : 2) * 1024 * 1024;
+      const chunks: Uint8Array[] = [];
+      let size = 0;
+      const reader = response.body?.getReader();
+      if (reader) {
+        for (;;) {
+          const {done, value} = await reader.read();
+          if (done) break;
+          size += value.byteLength;
+          if (size > maximum) {
+            await reader.cancel();
+            return fail(502,'The team tools response was too large.');
+          }
+          chunks.push(value);
+        }
+      }
+      const payload = Buffer.concat(chunks);
       res.statusCode=response.status;
       res.setHeader('Content-Type',response.headers.get('content-type') || 'application/json; charset=utf-8');
       if (isAdmin) {
         const cookies=response.headers.getSetCookie();
         if (cookies.length) res.setHeader('Set-Cookie',cookies);
       }
-      res.end(req.method === 'HEAD' ? undefined : Buffer.from(payload));
+      res.end(req.method === 'HEAD' ? undefined : payload);
     } catch (error) {
       if (!res.headersSent) return fail(error instanceof Error && error.message === 'oversize' ? 413 : 502,
         error instanceof Error && error.message === 'oversize' ? 'This request is too large.' : 'The team tools service could not respond. Please try again.');
