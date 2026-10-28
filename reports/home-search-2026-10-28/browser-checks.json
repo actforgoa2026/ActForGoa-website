@@ -1,0 +1,316 @@
+{
+  "topicSearch": [
+    {
+      "query": "garbage collection",
+      "slug": "waste",
+      "passed": true
+    },
+    {
+      "query": "dirty tap water",
+      "slug": "water",
+      "passed": true
+    },
+    {
+      "query": "I want to volunteer",
+      "slug": "community",
+      "passed": true
+    },
+    {
+      "query": "grow vegetables",
+      "slug": "food",
+      "passed": true
+    },
+    {
+      "query": "building permission",
+      "slug": "planning",
+      "passed": true
+    },
+    {
+      "query": "mental health support",
+      "slug": "health",
+      "passed": true
+    },
+    {
+      "query": "heritage building",
+      "slug": "culture",
+      "passed": true
+    },
+    {
+      "fallbackFocus": "home-actions-heading",
+      "overflow": false,
+      "top": 111.9921875
+    }
+  ],
+  "retainedRoutes": [
+    {
+      "width": 1280,
+      "route": "/",
+      "heading": "VolunteerVolunteerin Goa",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/topics/waste",
+      "heading": "Waste & recycling",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/directory",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/directory/archive",
+      "heading": "People who care.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/emergency",
+      "heading": "Emergency services",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/report",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/read/guide-farming",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/templates/18-service-enquiry",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/ask",
+      "heading": "Ask about Goa.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/ask/legal",
+      "heading": "Understand your next step.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/ask/ecology",
+      "heading": "Understand Goa’s ecosystems.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/admin",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/blog",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/blog/archive",
+      "heading": "Notes from Goa.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "heading": "VolunteerVolunteerin Goa",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/topics/waste",
+      "heading": "Waste & recycling",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/directory",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/directory/archive",
+      "heading": "People who care.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/emergency",
+      "heading": "Emergency services",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/report",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/read/guide-farming",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/templates/18-service-enquiry",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/ask",
+      "heading": "Ask about Goa.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/ask/legal",
+      "heading": "Understand your next step.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/ask/ecology",
+      "heading": "Understand Goa’s ecosystems.",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/admin",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/blog",
+      "missing": false,
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/blog/archive",
+      "heading": "Notes from Goa.",
+      "missing": false,
+      "overflow": false
+    }
+  ],
+  "settledLazyRoutes": [
+    {
+      "width": 1280,
+      "route": "/directory",
+      "alerts": [],
+      "heading": "Goa community CRM",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/report",
+      "alerts": [],
+      "heading": "Report an infraction",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/read/guide-farming",
+      "alerts": [],
+      "heading": "Start or sustain farming in Goa",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/templates/18-service-enquiry",
+      "alerts": [],
+      "heading": "Local service enquiry",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/admin",
+      "alerts": [],
+      "heading": "Welcome back.",
+      "overflow": false
+    },
+    {
+      "width": 1280,
+      "route": "/blog",
+      "alerts": [],
+      "heading": "Good work, shared.",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/directory",
+      "alerts": [],
+      "heading": "Goa community CRM",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/report",
+      "alerts": [],
+      "heading": "Report an infraction",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/read/guide-farming",
+      "alerts": [],
+      "heading": "Start or sustain farming in Goa",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/templates/18-service-enquiry",
+      "alerts": [],
+      "heading": "Local service enquiry",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/admin",
+      "alerts": [],
+      "heading": "Welcome back.",
+      "overflow": false
+    },
+    {
+      "width": 390,
+      "route": "/blog",
+      "alerts": [],
+      "heading": "Good work, shared.",
+      "overflow": false
+    }
+  ]
+}
