@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from backend import answer_pipeline, span_draft
+from backend import answer_pipeline, span_draft, reconstruction
 from backend.chat import ChatRequest, prepare_answer, AnswerCache
 from backend.evidence_plan import (validate_plan_shape, validate_evidence_plan, validate_plan_refs,
                                   plan_answer_schema, PLAN_PROTOCOL, FINAL_INTERNAL_PROTOCOL)
@@ -49,9 +49,9 @@ def test_partial_condition_is_retained_despite_unknown_broader_subject():
     request,original,prepared,plan=prepared_plan()
     assert normalize_span_draft(json.dumps(plan),prepared)==plan
     assert plan['points'][0]['coverage']=='partial' and plan['points'][0]['gaps']==['subject']
-    final=prepare_reconstruction(request,original,plan)
+    final=prepare_reconstruction(request,original,empty_plan())
     unit=claim('For a permitted shed, its drainage plan must be retained.',quote=original.evidence[0]['text'],citation=original.evidence[0]['id'])
-    unit['plan_refs']=[0]
+    unit['plan_refs']=[]
     answer,_=normalize_reconstruction(response(unit,prepared=final),final)
     assert answer['status']=='answered'
 
@@ -107,37 +107,34 @@ def test_empty_plan_has_no_valid_ref_but_direct_recovery_remains_valid():
 
 
 def test_plan_identity_mutation_cannot_change_second_request():
-    request,original,_,plan=prepared_plan();prepared=prepare_reconstruction(request,original,plan)
-    prepared.compact_plan['points'][0]['need']='Changed'
+    request,original,_,plan=prepared_plan();prepared=prepare_reconstruction(request,original,empty_plan())
+    prepared.compact_plan['points'].append({'need':'Changed','coverage':'missing','gaps':['support']})
     with pytest.raises(ValueError):normalize_reconstruction(response(claim(),prepared=prepared),prepared)
 
 
 def test_final_schema_overflow_fails_before_first_reservation_or_client(setup,monkeypatch):
-    _,_,_,transport,limits,_,run,_=setup;original=span_draft.span_schema
+    _,_,_,transport,limits,_,run,_=setup;original=reconstruction.reconstruction_schema
     def schema(*args,**kwargs):
-        if kwargs['phase']=='reconstruction':raise ValueError('Final schema exceeds bound')
+        raise ValueError('Final schema exceeds bound')
         return original(*args,**kwargs)
-    monkeypatch.setattr(span_draft,'span_schema',schema)
+    monkeypatch.setattr(reconstruction,'reconstruction_schema',schema)
     with pytest.raises(answer_pipeline.PipelineFailure):run()
     assert not limits.receipts and not transport.requests and not transport.closed
 
 
-def test_empty_first_plan_recovers_full_evidence_and_only_publishes_final(setup):
-    _,_,_,transport,limits,observed,run,_=setup;good=transport.handler
-    async def handle(req,n):
-        if n==1:return model_response(empty_plan())
-        return await good(req,n)
-    transport.handler=handle;result=run()
-    assert len(limits.receipts)==2 and result.answer['status']=='answered'
-    assert result.trace['phases'][0]['validated_plan']==empty_plan()
-    assert result.trace['phases'][1]['plan_sha256']==result.trace['phases'][0]['validated_plan_sha256']
+def test_local_empty_adapter_recovers_full_evidence_and_only_publishes_final(setup):
+    _,_,_,transport,limits,observed,run,_=setup
+    result=run()
+    assert len(limits.receipts)==1 and result.answer['status']=='answered'
+    assert result.trace['local_adapter']['value']==empty_plan()
+    assert result.trace['local_adapter']['provenance']['generated_plan'] is False
     assert 'plan_refs' not in json.dumps(result.answer) and 'points' not in result.answer
     assert all('final_answer' not in x for x in observed if x['status']!='completed')
 
 
 def test_correct_selectors_do_not_prove_modal_fidelity():
-    request,original,_,plan=prepared_plan();prepared=prepare_reconstruction(request,original,plan)
-    wrong=claim('Permitted sheds may retain a drainage plan.',quote=original.evidence[0]['text'],citation=original.evidence[0]['id']);wrong['plan_refs']=[0]
+    request,original,_,plan=prepared_plan();prepared=prepare_reconstruction(request,original,empty_plan())
+    wrong=claim('Permitted sheds may retain a drainage plan.',quote=original.evidence[0]['text'],citation=original.evidence[0]['id']);wrong['plan_refs']=[]
     answer,_=normalize_reconstruction(response(wrong,prepared=prepared),prepared)
     assert answer['paragraphs'][0]['text']==wrong['text']
     # Explicit semantic-negative fixture: must became may. Mechanical acceptance
@@ -192,17 +189,17 @@ def test_submitted_ref_order_is_preserved_without_sorting():
     assert validate_plan_refs(c,plan)['plan_refs']==[1,0]
 
 
-def test_second_wire_cannot_replace_the_bound_plan_after_preparation(setup):
+def test_single_wire_cannot_replace_the_bound_local_adapter(setup):
     from backend.async_anthropic import AsyncAnthropicClient
     config,request,prepared,transport,limits,*_=setup
     class MutatingClient(AsyncAnthropicClient):
         async def send(self,body,**kwargs):
             changed=deepcopy(body);payload=json.loads(changed['messages'][-1]['content'])
             if 'evidence_plan' in payload:
-                payload['evidence_plan']['points'][0]['need']='Changed after binding'
+                payload['evidence_plan']['points'].append({'need':'Changed after binding','coverage':'missing','gaps':['support']})
                 changed['messages'][-1]['content']=json.dumps(payload,ensure_ascii=False,separators=(',',':'))
             return await super().send(changed,**kwargs)
     def factory():return MutatingClient('fixture-only',transport=transport)
     with pytest.raises(answer_pipeline.PipelineFailure,match='request_capture_mismatch'):
         asyncio.run(answer_pipeline.run_answer_pipeline(request,prepared,config,limits=limits,client_factory=factory))
-    assert len(limits.receipts)==2 and len(transport.requests)==1 and transport.closed
+    assert len(limits.receipts)==1 and not transport.requests and transport.closed

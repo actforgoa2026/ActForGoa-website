@@ -54,13 +54,13 @@ def test_stale_or_missing_workflow_plan_stops_before_packet_and_key_access(accep
 def test_detached_workflow_spec_cannot_downgrade_later_requests_or_cache(setup, monkeypatch):
     config, request, original, *_ = setup
     before_key = AnswerCache.key(config, original)
-    before_body = span_draft_message_request(config, prepare_span_draft(request, original))
+    before_body = reconstruction.reconstruction_message_request(config, reconstruction.prepare_reconstruction(request, original, {'status':'insufficient_evidence','points':[],'units':[]}))
     exported = reconstruction.reconstruction_cache_identity(original, PIPELINE_VERSION)
     exported['spec']['answer_workflow'] = 'draft_expansion'
     monkeypatch.setitem(reconstruction.PIPELINE_SPEC, 'answer_workflow', 'draft_expansion')
     assert AnswerCache.key(config, original) == before_key
-    assert span_draft_message_request(config, prepare_span_draft(request, original)) == before_body
-    assert reconstruction.pipeline_spec()['answer_workflow'] == ANSWER_WORKFLOW
+    assert reconstruction.reconstruction_message_request(config, reconstruction.prepare_reconstruction(request, original, {'status':'insufficient_evidence','points':[],'units':[]})) == before_body
+    assert reconstruction.pipeline_spec()['answer_workflow'] == reconstruction.ANSWER_WORKFLOW
 
 
 def test_prior_v7_mixed_effort_cache_cannot_supply_new_workflow(setup, monkeypatch):
@@ -90,21 +90,20 @@ def test_valid_label_with_omitted_year_still_blocks_final_after_both_calls(setup
                    'quote': 'Source publication year: 2022 (source metadata).'}
     async def handler(actual, n):
         body = json.loads(actual.content);payload = json.loads(body['messages'][-1]['content'])
-        text = ('The source published in 2022 states that gates regulate tidal water.' if n == 1
-                else 'Gates regulate tidal water.')
+        text = 'Gates regulate tidal water.'
         unit = claim(text, extras=[publication])
-        para = unit if n == 1 else {'claims': [unit]}
+        para = {'claims': [unit]}
         native = {'status': 'answered', **({'paragraph': para} if style == 'brief' else {'paragraphs': [para]})}
         return model_response(select_response(native, payload))
     transport.handler = handler
     with pytest.raises(pipeline.PipelineFailure, match='local_validation_failure') as caught:
         asyncio.run(pipeline.run_answer_pipeline(request, original, config, limits=limits, client_factory=factory))
     trace = caught.value.trace
-    assert len(transport.requests) == len(limits.receipts) == 2 and transport.closed
-    assert trace['phases'][0]['state'] == 'completed' and trace['phases'][1]['state'] == 'failed'
+    assert len(transport.requests) == len(limits.receipts) == 1 and transport.closed
+    assert trace['phases'][0]['state'] == 'failed'
     assert 'final_answer' not in trace
-    assert trace['pipeline_spec']['answer_workflow'] == ANSWER_WORKFLOW
-    assert trace['phases'][1]['final_output_diagnostic']['capture_status'] == 'captured_unvalidated_json'
+    assert trace['pipeline_spec']['answer_workflow'] == reconstruction.ANSWER_WORKFLOW
+    assert trace['phases'][0]['final_output_diagnostic']['capture_status'] == 'captured_unvalidated_json'
     assert all(p['reservation_receipt']['reserved'] for p in trace['phases'])
 
 
@@ -113,7 +112,7 @@ def test_new_workflow_is_unambiguous_in_readiness_and_initial_failure_capture(ac
     context = acceptance.preflight(plan, 'test', config)
     for value in (acceptance.readiness_report(config, context, 'test'),
                   pipeline.initial_pipeline_trace('synthetic-parent', context['day'])):
-        assert value['capture_version'] == 11
-        assert value['pipeline_spec']['version'] == 'two_pass_v12'
-        assert value['pipeline_spec']['answer_workflow'] == 'evidence_plan_first_v1'
-        assert value['phase_efforts'] == {'draft': 'low', 'reconstruction': 'high'}
+        assert value['capture_version'] == 12
+        assert value['pipeline_spec']['version'] == 'single_final_v1'
+        assert value['pipeline_spec']['answer_workflow'] == 'single_final_full_evidence_v1'
+        assert value['phase_efforts'] == {'reconstruction': 'high'}

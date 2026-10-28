@@ -1,5 +1,7 @@
 # Direct Anthropic research answers
 
+The active offline candidate is now documented in [single-final corpus answers](research-single-final-answers.md). The configurations, counts and observations below describe earlier candidates and do not authorize the new runtime or a release.
+
 This opt-in adapter uses `claude-haiku-5-5` through Anthropic's native Messages API. It does not change the default provider, retrieval, source documents or interface. The key stays on the server; no environment file belongs in Git, tests, a service artifact or the frontend. A configured key establishes neither credit availability nor answer quality.
 
 An explicit `ANTHROPIC_CHAT_MODEL=claude-sonnet-5-5` is also allowlisted for a bounded comparison. Haiku remains the Anthropic default, with no automatic model routing or fallback. The comparison uses identical prompts, source selection, schema, adaptive medium effort and 9,000-token output cap. Sonnet's reviewed standard rates are $2 per million input tokens and $10 per million output tokens ([official model overview](https://platform.claude.com/docs/en/models/sonnet-5-5/overview), checked 2026-10-27). At the current maximum prompt, its reservation is `ceil(34,240 × 2 + 9,000 × 10) = 158,480` micro-USD ($0.158480); at the retained 100,000-token input guard it is 290,000 micro-USD. These ceilings include thinking and do not increase the shared $5/month or 100/day limits. This allowlist entry is not approval for public activation or a larger acceptance run.

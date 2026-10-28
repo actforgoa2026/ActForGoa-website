@@ -18,7 +18,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v12')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','single_final_v1')
     evidence = [{'id': 'a', 'text': 'Gates regulate tidal water. Design must follow Appendix C.',
                  'document_id': 'doc-a', 'generation': 'fixture'}]
     request = ChatRequest(question='What do the gates do?', history=[Message(role='user',content='Tell me about gates.')])
@@ -90,13 +90,14 @@ def test_multibyte_compact_draft_overflow_is_not_truncated(setup):
     _,request,original,draft=setup
     draft.update(status='insufficient_evidence',points=[{'need':'界'*33,'coverage':'missing','gaps':['support']}],units=[])
     before=deepcopy(draft)
-    with pytest.raises(ValueError,match='invalid_evidence_plan'):prepare_reconstruction(request,original,draft)
+    with pytest.raises(ValueError):prepare_reconstruction(request,original,draft)
     assert draft==before
 
 
 def test_full_message_overflow_preserves_all_input_before_refusal(setup):
     _,request,original,draft=setup
-    original.messages.insert(1,{'role':'user','content':'界'*12000})
+    request=request.model_copy(update={'history':[Message(role='user',content='界'*4000),Message(role='assistant',content='界'*4000),Message(role='user',content='界'*4000),*request.history]})
+    original.messages[1:1]=[{'role':'user','content':'界'*4000},{'role':'assistant','content':'界'*4000},{'role':'user','content':'界'*4000}]
     before=deepcopy(original)
     with pytest.raises(ValueError,match='input exceeds'):prepare_reconstruction(request,original,draft)
     assert original==before

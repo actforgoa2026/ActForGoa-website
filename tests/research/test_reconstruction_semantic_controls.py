@@ -24,6 +24,9 @@ def test_supported_reconstruction_keeps_all_evidence_and_fills_source_coverage(c
     if draft_kind!='insufficient':
         label='Source coverage' if draft_kind=='supported' else 'Assert the unsupported conclusion'
         draft['points']=[{'need':label,'coverage':'missing','gaps':['support']}]
+        # Generated-plan recovery is historical; the sole-final adapter is immutable.
+        with pytest.raises(ValueError):prepare_reconstruction(request,original,draft)
+        return
     prepared=prepare_reconstruction(request,original,draft)
     payload=json.loads(prepared.messages[-1]['content'])
     restored,_=verify_annotated_payload({k:payload[k] for k in ('question','sources','evidence')},json.loads(original.messages[-1]['content']))

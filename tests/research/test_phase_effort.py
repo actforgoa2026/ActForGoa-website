@@ -41,19 +41,18 @@ def test_exported_maps_cache_identity_and_observer_cannot_mutate_policy(setup, m
     result = asyncio.run(pipeline.run_answer_pipeline(request, original, config,
         limits=limits, client_factory=factory, observer=observer))
     assert before == AnswerCache.key(config, original)
-    assert [json.loads(r.content)['output_config']['effort'] for r in transport.requests] == ['low', 'high']
-    assert [p['expected_phase_effort'] for p in result.trace['phases']] == ['low', 'high']
+    assert [json.loads(r.content)['output_config']['effort'] for r in transport.requests] == ['high']
+    assert [p['expected_phase_effort'] for p in result.trace['phases']] == ['high']
     assert result.trace['pipeline_spec'] == reconstruction.pipeline_spec()
-    assert phase_policy_metadata()['phase_efforts'] == {'draft': 'low', 'reconstruction': 'high'}
+    assert phase_policy_metadata()['phase_efforts'] == {'reconstruction': 'high'}
     assert config.effort == 'medium'
 
 
-@pytest.mark.parametrize('phase,wrong', [('draft', 'medium'), ('draft', 'high'),
-                                      ('reconstruction', 'low'), ('reconstruction', 'medium'), ('reconstruction', 'xhigh'), ('reconstruction', 'max')])
+@pytest.mark.parametrize('phase,wrong', [('reconstruction', 'low'), ('reconstruction', 'medium'), ('reconstruction', 'xhigh'), ('reconstruction', 'max')])
 @pytest.mark.parametrize('in_place', [False, True])
 def test_wrong_phase_effort_is_reserved_but_never_sent(setup, phase, wrong, in_place):
     config, request, original, transport, limits, _, _, _ = setup
-    target = 1 if phase == 'draft' else 2
+    target = 1
     class MutatingClient(AsyncAnthropicClient):
         async def send(self, body, **kwargs):
             selected = body if in_place else deepcopy(body)
@@ -72,7 +71,7 @@ def test_wrong_phase_effort_is_reserved_but_never_sent(setup, phase, wrong, in_p
     assert stopped['expected_phase_effort'] == phase_effort(phase)
 
 
-@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('phase', ['reconstruction'])
 @pytest.mark.parametrize('change', [
     {'pipeline_version': 'two_pass_v11'}, {'pipeline_version': 'two_pass_v10'}, {'pipeline_version': 'two_pass_v6'}, {'pipeline_version': None},
     {'effort_policy': 'low_draft_medium_reconstruction_v1'}, {'effort_policy': None}, {'effort_policy': 'uniform_medium'},
@@ -96,7 +95,7 @@ def test_transport_rejects_missing_or_wrong_policy_context_before_callbacks(setu
     assert not transport.requests and transport.closed
 
 
-@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('phase', ['reconstruction'])
 @pytest.mark.parametrize('field,value', [('model', 'claude-sonnet-5-5'), ('model', None),
     ('max_tokens', 9000), ('max_tokens', 12001), ('max_tokens', 12000.0), ('max_tokens', None)])
 def test_direct_owned_transport_enforces_fixed_model_and_output_bound(setup, phase, field, value):
@@ -118,7 +117,7 @@ def test_direct_owned_transport_enforces_fixed_model_and_output_bound(setup, pha
     assert not transport.requests and transport.closed
 
 
-@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('phase', ['reconstruction'])
 @pytest.mark.parametrize('field,value', [('model', 'claude-sonnet-5-5'), ('max_tokens', 9000)])
 def test_changed_fixed_configuration_retains_target_reservation_without_send(setup, phase, field, value):
     config, request, original, transport, limits, _, _, _ = setup
@@ -129,26 +128,26 @@ def test_changed_fixed_configuration_retains_target_reservation_without_send(set
     with pytest.raises(pipeline.PipelineFailure) as caught:
         asyncio.run(pipeline.run_answer_pipeline(request, original, config, limits=limits,
             client_factory=lambda: WrongConfiguration('fixture-only', transport=transport)))
-    target = 1 if phase == 'draft' else 2
+    target = 1
     stopped = caught.value.trace['phases'][target - 1]
     assert len(limits.receipts) == target and len(transport.requests) == target - 1
     assert stopped['dispatch_status'] == 'blocked_before_transport' and stopped['provider_attempts'] == 0
     assert stopped['reservation_receipt']['reserved'] and 'final_answer' not in caught.value.trace
 
 
-@pytest.mark.parametrize('phase', ['draft', 'reconstruction'])
+@pytest.mark.parametrize('phase', ['reconstruction'])
 def test_relabelled_phase_with_matching_effort_still_fails_its_schema(setup, phase):
     config, request, original, transport, limits, _, _, _ = setup
     class Relabelled(AsyncAnthropicClient):
         async def send(self, body, **kwargs):
             if kwargs['phase'] == phase:
                 kwargs['phase'] = 'reconstruction' if phase == 'draft' else 'draft'
-                body['output_config']['effort'] = phase_effort(kwargs['phase'])
+                body['output_config']['effort'] = 'high'  # Forged draft still cannot use final schema/policy.
             return await super().send(body, **kwargs)
     with pytest.raises(pipeline.PipelineFailure) as caught:
         asyncio.run(pipeline.run_answer_pipeline(request, original, config, limits=limits,
             client_factory=lambda: Relabelled('fixture-only', transport=transport)))
-    target = 1 if phase == 'draft' else 2
+    target = 1
     assert len(limits.receipts) == target and len(transport.requests) == target - 1
     assert caught.value.trace['phases'][target - 1]['dispatch_status'] == 'blocked_before_transport'
     assert 'final_answer' not in caught.value.trace
@@ -182,7 +181,7 @@ def test_new_plan_policy_is_exact_before_packet_or_ledger_access(acceptance_setu
 def assert_policy(value):
     assert 'effort' not in value
     assert all(value[k] == v for k, v in phase_policy_metadata().items())
-    assert value['capture_version'] == 11 and value['pipeline_spec'] == reconstruction.pipeline_spec()
+    assert value['capture_version'] == 12 and value['pipeline_spec'] == reconstruction.pipeline_spec()
 
 
 def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acceptance_setup, monkeypatch, capsys):
@@ -193,7 +192,7 @@ def test_actual_readiness_cli_and_complete_capture_describe_base_and_phases(acce
     acceptance.main()
     readiness = json.loads(capsys.readouterr().out)
     assert_policy(readiness)
-    assert readiness['provider_calls'] == 0 and readiness['max_attempts'] == 4 and not transports
+    assert readiness['provider_calls'] == 0 and readiness['max_attempts'] == 2 and not transports
     report = run_acceptance(acceptance_setup)
     assert_policy(report)
     for case in report['cases']:
@@ -212,7 +211,7 @@ def test_failure_before_dispatch_still_captures_expected_policy(acceptance_setup
     report = acceptance.run_cases(library, factory, None, config, cases, context, tmp / 'missing.json')
     assert_policy(report)
     trace = report['cases'][0]['pipeline_trace'];assert_policy(trace)
-    assert [p['expected_phase_effort'] for p in trace['phases']] == ['low', 'high']
+    assert [p['expected_phase_effort'] for p in trace['phases']] == ['high']
     assert all('request_shape' not in p for p in trace['phases'])
     assert report['attempts'] == 0 and report['before'] == report['after'] and not transports
 

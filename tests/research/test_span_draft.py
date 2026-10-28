@@ -98,21 +98,20 @@ def test_unsafe_original_is_withheld_before_any_reservation_observer_or_send(set
     assert secret not in saved and workspace not in saved and 'authored-fake-value' not in saved
 
 
-def test_draft_partial_resolution_keeps_raw_selector_failure_and_stops_correction(setup):
-    _,_,_,transport,limits,_,run,_=setup;good=transport.handler
-    async def broken(req,n):
-        response=await good(req,n);payload=response.json();native=json.loads(payload['content'][-1]['text'])
-        native['units'][0]['linked_supports']=[{'role':'condition','support':{'citation_id':'a','span_id':'unknown'}}]
-        return model_response(native)
-    transport.handler=broken
-    with pytest.raises(answer_pipeline.PipelineFailure) as caught:run()
-    phase=caught.value.trace['phases'][0]
-    assert len(transport.requests)==len(limits.receipts)==1
-    assert phase['final_output_diagnostic']['plan']['units'][0]['linked_supports'][0]['support']['span_id']=='unknown'
-    resolution=phase['deterministic_support_resolution']
+def test_historical_plan_partial_resolution_keeps_raw_selector_failure():
+    # Pure historical protocol check; active final selector failure is tested in
+    # test_answer_pipeline.test_failed_selector_preserves_partial_resolution.
+    request=ChatRequest(question='What do gates do?')
+    original=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water.'}],provider='anthropic')
+    prepared=prepare_span_draft(request,original)
+    native=select_response({'status':'answered','paragraphs':[claim()]},json.loads(prepared.messages[-1]['content']))
+    native['units'][0]['linked_supports']=[{'role':'condition','support':{'citation_id':'a','span_id':'unknown'}}]
+    observed=[]
+    with pytest.raises(ValueError):normalize_span_draft(json.dumps(native),prepared,resolved_observer=observed.append)
+    assert native['units'][0]['linked_supports'][0]['support']['span_id']=='unknown'
+    resolution=observed[-1]
     assert not resolution['complete'] and len(resolution['units'][0]['resolved_supports'])==1
     assert resolution['units'][0]['status']=='failed'
-    assert caught.value.trace['phases'][1]['provider_attempts']==0 and 'final_answer' not in caught.value.trace
 
 
 def test_valid_selectors_do_not_prove_omitted_conditions_or_dates_semantically_correct():

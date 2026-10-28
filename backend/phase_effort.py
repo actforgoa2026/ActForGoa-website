@@ -15,7 +15,9 @@ def local_plan_adapter():
 
 def validate_local_plan_adapter(value):
     import json
-    if (type(value) is not dict or json.dumps(value, ensure_ascii=False, separators=(',', ':')) != _EMPTY_PLAN_UTF8):
+    if (type(value) is not dict or type(value.get('status')) is not str
+            or type(value.get('points')) is not list or type(value.get('units')) is not list
+            or json.dumps(value, ensure_ascii=False, separators=(',', ':')) != _EMPTY_PLAN_UTF8):
         raise PhasePolicyError()
 
 
@@ -49,12 +51,13 @@ def validate_policy_metadata(value):
     import json
     expected = phase_policy_metadata()
     try:
+        validate_local_plan_adapter(value.get('local_adapter', {}).get('value') if isinstance(value, dict) else None)
         if (not isinstance(value, dict) or 'effort' in value
                 or type(value.get('provider_call_count')) is not int
                 or any(json.dumps(value.get(key), sort_keys=True, allow_nan=False) !=
                        json.dumps(item, sort_keys=True, allow_nan=False) for key, item in expected.items())):
             raise PhasePolicyError()
-    except (TypeError, ValueError):
+    except (AttributeError, TypeError, ValueError):
         raise PhasePolicyError() from None
 
 

@@ -20,7 +20,7 @@ def setup(tmp_path, monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v12')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','single_final_v1')
     monkeypatch.delenv('RESEARCH_PUBLIC_ORIGIN',raising=False)
     monkeypatch.setenv('RESEARCH_USAGE_ROOT',str(tmp_path/'usage'))
     monkeypatch.setenv('RESEARCH_MONTHLY_ANSWER_BUDGET_USD','5')
@@ -35,7 +35,7 @@ def setup(tmp_path, monkeypatch):
     transports=[]
     async def handler(request,n):
         body=json.loads(request.content);brief='paragraph' in body['output_config']['format']['schema']['properties']
-        unit=claim() if n==1 else {'claims':[claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')]}
+        unit={'claims':[claim('Design must follow Appendix C.',quote='Design must follow Appendix C.')]}
         native={'status':'answered',**({'paragraph':unit} if brief else {'paragraphs':[unit]})}
         native=select_response(native,json.loads(body['messages'][-1]['content']))
         return model_response(native)
@@ -50,7 +50,7 @@ def setup(tmp_path, monkeypatch):
 def test_http_final_only_cache_styles_history_and_source_search(setup):
     app,evidence,transports,_,ledger=setup
     with TestClient(app) as client:
-        assert client.get('/api/status').json()['answer_pipeline']=='two_pass_v12'
+        assert client.get('/api/status').json()['answer_pipeline']=='single_final_v1'
         question={'question':'What do the sources say about these gates?'}
         answer=client.post('/api/chat',json=question)
         assert answer.status_code==200 and answer.json()['paragraphs'][0]['text']=='Design must follow Appendix C.'
@@ -61,19 +61,19 @@ def test_http_final_only_cache_styles_history_and_source_search(setup):
         follow={'question':'What about design?','history':[{'role':'user','content':question['question']},
                                                        {'role':'assistant','content':answer.json()['paragraphs'][0]['text']}]}
         for _ in range(2):assert client.post('/api/chat',json=follow).status_code==200
-        assert len(transports)==4 and all(len(t.requests)==2 and t.closed for t in transports)
-        body=json.loads(transports[2].requests[1].content)
+        assert len(transports)==4 and all(len(t.requests)==1 and t.closed for t in transports)
+        body=json.loads(transports[2].requests[0].content)
         assert body['messages'][:-1]==follow['history']
         assert app.state.library.queries[-1][0].startswith('What about design? What do')
         assert client.get('/api/search',params={'q':'gates'}).json()['results']==evidence
         assert client.post('/api/chat',json=question,headers={'origin':'https://evil.example'}).status_code==403
-    assert sum(inspect_ledger(ledger)['days'].values())==8
+    assert sum(inspect_ledger(ledger)['days'].values())==4
 
 
-def test_http_second_phase_failure_never_returns_or_caches_draft(setup):
+def test_http_final_failure_never_returns_or_caches_output(setup):
     app,_,transports,handlers,ledger=setup;good=handlers[0]
     async def broken(request,n):
-        return await good(request,n) if n==1 else httpx.Response(500,json={'secret':'private provider message'})
+        return httpx.Response(500,json={'secret':'private provider message'})
     handlers[0]=broken
     with TestClient(app) as client:
         question={'question':'What do gates do?'}
@@ -82,11 +82,11 @@ def test_http_second_phase_failure_never_returns_or_caches_draft(setup):
         handlers[0]=good
         assert client.post('/api/chat',json=question).status_code==200
         assert len(transports)==2
-    assert sum(inspect_ledger(ledger)['days'].values())==4
+    assert sum(inspect_ledger(ledger)['days'].values())==2
 
 
 @pytest.mark.parametrize('style',['standard','brief'])
-@pytest.mark.parametrize('phase',[1,2])
+@pytest.mark.parametrize('phase',[1])
 def test_duplicate_final_json_never_reaches_http_answer_or_cache(setup,style,phase):
     app,_,transports,handlers,ledger=setup;good=handlers[0]
     async def broken(request,n):
@@ -105,8 +105,8 @@ def test_duplicate_final_json_never_reaches_http_answer_or_cache(setup,style,pha
         assert len(transports)==1 and len(transports[0].requests)==phase
         handlers[0]=good
         assert client.post('/api/chat',json=question).status_code==200
-        assert len(transports)==2 and len(transports[1].requests)==2
-    assert sum(inspect_ledger(ledger)['days'].values())==phase+2
+        assert len(transports)==2 and len(transports[1].requests)==1
+    assert sum(inspect_ledger(ledger)['days'].values())==phase+1
 
 
 def test_no_evidence_has_no_provider_or_budget_write(setup):
@@ -129,7 +129,7 @@ def test_actual_asgi_disconnect_cancels_provider_and_does_not_cache(setup):
     async def scenario():
         entered=asyncio.Event();incoming=asyncio.Queue();sent=[]
         async def slow(request,n):
-            if n==2:entered.set();await asyncio.sleep(10)
+            if n==1:entered.set();await asyncio.sleep(10)
             return await good(request,n)
         handlers[0]=slow
         await incoming.put({'type':'http.request','body':json.dumps({'question':'What do gates do?'}).encode()})
@@ -147,7 +147,7 @@ def test_actual_asgi_disconnect_cancels_provider_and_does_not_cache(setup):
                 assert (await client.post('/api/chat',json={'question':'What do gates do?'})).status_code==200
             assert len(transports)==2
     asyncio.run(scenario())
-    assert sum(inspect_ledger(ledger)['days'].values())==4
+    assert sum(inspect_ledger(ledger)['days'].values())==2
 
 
 def test_entry_deadline_includes_body_and_retrieval_before_dispatch(setup,monkeypatch):

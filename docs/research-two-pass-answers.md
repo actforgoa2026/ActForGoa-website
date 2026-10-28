@@ -1,5 +1,7 @@
 # Corpus-grounded reconstruction pipeline
 
+The active offline candidate is now documented in [single-final corpus answers](research-single-final-answers.md). The configurations, counts and observations below describe earlier candidates and do not authorize the new runtime or a release.
+
 Implementation for review; not a statement that AI answers are enabled or accepted. The coordinator owns integration, live calls, canonical accounting and site activation. Earlier failed semantic captures remain failed. Source-first retrieval and the full 71-case final-answer review gate are unchanged.
 
 ## Explicit configuration

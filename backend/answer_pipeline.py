@@ -284,6 +284,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             await available()
             trace.update(status='completed', final_answer=deepcopy(final))
             notify()
+            await available()
             return PipelineResult(final, deepcopy(trace))
         except asyncio.CancelledError:
             trace.pop('final_answer', None)
