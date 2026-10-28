@@ -1,0 +1,214 @@
+{
+  "checks": [
+    {
+      "route": "/",
+      "width": 1440,
+      "heading": "Volunteer\nin Goa",
+      "overflow": false
+    },
+    {
+      "route": "/topics/waste",
+      "width": 1440,
+      "heading": "Waste & recycling",
+      "overflow": false
+    },
+    {
+      "route": "/directory",
+      "width": 1440,
+      "heading": "Goa community CRM",
+      "overflow": false
+    },
+    {
+      "route": "/directory/archive",
+      "width": 1440,
+      "heading": "People who care.",
+      "overflow": false
+    },
+    {
+      "route": "/emergency",
+      "width": 1440,
+      "heading": "Emergency services",
+      "overflow": false
+    },
+    {
+      "route": "/report",
+      "width": 1440,
+      "heading": "Report an infraction",
+      "overflow": false
+    },
+    {
+      "route": "/read/guide-farming",
+      "width": 1440,
+      "heading": "Start or sustain farming in Goa",
+      "overflow": false
+    },
+    {
+      "route": "/templates/18-service-enquiry",
+      "width": 1440,
+      "heading": "Local service enquiry",
+      "overflow": false
+    },
+    {
+      "route": "/ask",
+      "width": 1440,
+      "heading": "Ask about Goa.",
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 1440,
+      "heading": "Understand your next step.",
+      "overflow": false
+    },
+    {
+      "route": "/ask/ecology",
+      "width": 1440,
+      "heading": "Understand Goa\u2019s ecosystems.",
+      "overflow": false
+    },
+    {
+      "route": "/blog/archive",
+      "width": 1440,
+      "heading": "Notes from Goa.",
+      "overflow": false
+    },
+    {
+      "route": "/blog",
+      "width": 1440,
+      "heading": "Good work, shared.",
+      "overflow": false
+    },
+    {
+      "route": "/",
+      "width": 390,
+      "heading": "Volunteer\nin Goa",
+      "overflow": false
+    },
+    {
+      "route": "/topics/waste",
+      "width": 390,
+      "heading": "Waste & recycling",
+      "overflow": false
+    },
+    {
+      "route": "/directory",
+      "width": 390,
+      "heading": "Goa community CRM",
+      "overflow": false
+    },
+    {
+      "route": "/directory/archive",
+      "width": 390,
+      "heading": "People who care.",
+      "overflow": false
+    },
+    {
+      "route": "/emergency",
+      "width": 390,
+      "heading": "Emergency services",
+      "overflow": false
+    },
+    {
+      "route": "/report",
+      "width": 390,
+      "heading": "Report an infraction",
+      "overflow": false
+    },
+    {
+      "route": "/read/guide-farming",
+      "width": 390,
+      "heading": "Start or sustain farming in Goa",
+      "overflow": false
+    },
+    {
+      "route": "/templates/18-service-enquiry",
+      "width": 390,
+      "heading": "Local service enquiry",
+      "overflow": false
+    },
+    {
+      "route": "/ask",
+      "width": 390,
+      "heading": "Ask about Goa.",
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 390,
+      "heading": "Understand your next step.",
+      "overflow": false
+    },
+    {
+      "route": "/ask/ecology",
+      "width": 390,
+      "heading": "Understand Goa\u2019s ecosystems.",
+      "overflow": false
+    },
+    {
+      "route": "/blog/archive",
+      "width": 390,
+      "heading": "Notes from Goa.",
+      "overflow": false
+    },
+    {
+      "route": "/blog",
+      "width": 390,
+      "heading": "Good work, shared.",
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "route": "/ask/ecology",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "route": "/admin",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "route": "/templates/18-service-enquiry",
+      "width": 320,
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "/ask/ecology",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "/admin",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "/templates/18-service-enquiry",
+      "width": 360,
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 1440,
+      "fixture": "separate provenance and community matches",
+      "overflow": false
+    },
+    {
+      "route": "/ask/legal",
+      "width": 390,
+      "fixture": "separate provenance and community matches",
+      "overflow": false
+    }
+  ],
+  "pageErrors": [],
+  "aiAnswerTest": "UI fixture only; no live provider calls"
+}

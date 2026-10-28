@@ -1,6 +1,6 @@
 import {Fragment, useEffect, useRef, useState} from 'react';
 import {Link, useLocation, useParams} from 'react-router-dom';
-import {ArrowLeft, ArrowRight, Download, Plus, Printer, Trash2} from 'lucide-react';
+import {ArrowLeft, ArrowRight, Download, Plus, Printer, Share2, Trash2} from 'lucide-react';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
@@ -8,26 +8,28 @@ import SegmentedControl from './components/arc/segmented-control/segmented-contr
 import {Switch} from './components/ui/switch';
 import {Checkbox} from './components/ui/checkbox';
 import {templates} from './template-catalogue';
-import {blockVisible, emptyDraft, fillTemplate, restoreDraft, tableFields, tableRowIds, visibleFields, type Draft, type Field, type TableBlock, type Template} from './template-model';
+import {templatePurpose} from './template-path';
+import {blockVisible, emptyDraft, fillTemplate, restoreDraft, tableFields, tableRowIds, templateNote, visibleFields, type Draft, type Field, type TableBlock, type Template} from './template-model';
 import './template-editor.css';
 
 const draftsInThisTab = new Map<string, Draft>();
 const storageKey = (id: string) => `actforgoa:template:v1:${id}`;
 const recordLabels = ['Permissions and approved plans', 'Inspection reports and findings', 'Complaint decisions and action taken', 'Rules, service standards and checklists', 'Responsible office and transfer records'];
 
-function readDraft(template: Template) {
+function readDraft(template: Template, purpose?: Draft['purpose']) {
+ const initialPurpose = (draft: Draft) => purpose && template.id === '11-farming-support-or-damage' ? {...draft, purpose} : draft;
  try {
   const saved = restoreDraft(template, localStorage.getItem(storageKey(template.id)));
-  return {draft: draftsInThisTab.get(template.id) || saved || emptyDraft(template), saved: !!saved, storageError: ''};
+  return {draft: initialPurpose(draftsInThisTab.get(template.id) || saved || emptyDraft(template)), saved: !!saved, storageError: ''};
  } catch {
-  return {draft: draftsInThisTab.get(template.id) || emptyDraft(template), saved: false, storageError: 'This browser cannot save drafts. You can still fill in and download this document.'};
+  return {draft: initialPurpose(draftsInThisTab.get(template.id) || emptyDraft(template)), saved: false, storageError: 'This browser cannot save drafts. You can still fill in this document and save a PDF.'};
  }
 }
 
 function DocumentPreview({template, draft}: {template: Template; draft: Draft}) {
  return <article className="template-document" aria-label="Filled document">
   <h2>{template.title}</h2>
-  <p className="document-note">{template.note}</p>
+  <p className="document-note">{templateNote(template)}</p>
   {fillTemplate(template, draft).map((block, i) => block.kind === 'table'
    ? <div className="document-table" key={i} tabIndex={0} role="region" aria-label="Document table"><table><thead><tr>{block.headers.map((h, c) => <th scope="col" key={c}>{h}</th>)}</tr></thead><tbody>{block.rows.map((row, r) => <tr key={r}>{row.map((cell, c) => <td key={c}>{cell}</td>)}</tr>)}</tbody></table></div>
    : block.kind === 'heading' ? <h3 key={i}>{block.text}</h3> : <p key={i}>{block.text}</p>)}
@@ -36,14 +38,17 @@ function DocumentPreview({template, draft}: {template: Template; draft: Draft}) 
 
 function Editor({template}: {template: (typeof templates)[number]}) {
  const location = useLocation();
- const [initial] = useState(() => readDraft(template));
+ const [initial] = useState(() => readDraft(template, templatePurpose(location.search)));
  const [draft, setDraft] = useState<Draft>(initial.draft);
+ const currentDraft = useRef(draft);
+ currentDraft.current = draft;
  const [saveOnDevice, setSaveOnDevice] = useState(initial.saved);
  const [storageError, setStorageError] = useState(initial.storageError);
  const [view, setView] = useState('fill');
  const [message, setMessage] = useState('');
  const [error, setError] = useState('');
- const [exporting, setExporting] = useState(false);
+ const [exporting, setExporting] = useState<'pdf' | 'word' | null>(null);
+ const [pdf, setPdf] = useState<{blob: Blob; url: string; filename: string} | null>(null);
  const [clearRequested, setClearRequested] = useState(false);
  const [undo, setUndo] = useState<{draft: Draft; save: boolean} | null>(null);
  const [focusRow, setFocusRow] = useState<string | null>(null);
@@ -52,6 +57,10 @@ function Editor({template}: {template: (typeof templates)[number]}) {
  const answered = fields.filter(f => draft.values[f.id]?.trim()).length;
  const choices = template.blocks.filter(b => b.kind !== 'table' && b.choice);
  const back = typeof location.state?.guideId === 'string' && /^guide-[a-z-]+$/.test(location.state.guideId) ? location.state.guideId : template.guideId;
+ const returnTo = typeof location.state?.returnTo === 'string' && /^\/topics\/[a-z0-9/-]+$/.test(location.state.returnTo) ? location.state.returnTo : null;
+
+ useEffect(() => {setPdf(null);}, [draft]);
+ useEffect(() => () => {if (pdf) URL.revokeObjectURL(pdf.url);}, [pdf]);
 
  useEffect(() => {
   const previous = document.title;
@@ -136,19 +145,39 @@ function Editor({template}: {template: (typeof templates)[number]}) {
   </section>;
  }
  function checkExport() {
-  if (!answered) { setError('Fill in at least one detail before downloading.'); return false; }
+  if (!answered) { setError('Fill in at least one detail before saving a copy.'); return false; }
   if (choices.length && !choices.some(b => b.kind !== 'table' && draft.choices[b.choice!])) { setError('Choose at least one record to request.'); return false; }
   setError(''); return true;
  }
  async function downloadWord() {
   if (!checkExport()) return;
-  setExporting(true); setMessage('');
+  setExporting('word'); setMessage('');
   try {
    const {createTemplateDocx, downloadBlob} = await import('./template-export');
    downloadBlob(await createTemplateDocx(template, draft), `${template.id}-filled.docx`);
    setMessage('Your Word document is ready. Check your browser’s downloads.');
   } catch { setError('The Word document could not be created. Try again, or use Print / save PDF.'); }
-  finally { setExporting(false); }
+  finally { setExporting(null); }
+ }
+ async function savePdf() {
+  if (!checkExport()) return;
+  setExporting('pdf'); setMessage('');
+  try {
+   const {createTemplatePdf} = await import('./template-pdf');
+   const {downloadBlob} = await import('./template-download');
+   const blob = await createTemplatePdf(template, draft);
+   if (currentDraft.current !== draft) throw new Error('Your details changed while the PDF was being prepared. Save PDF again for the latest version.');
+   const filename = `${template.id}-filled.pdf`;
+   setPdf({blob, filename, url: URL.createObjectURL(blob)});
+   downloadBlob(blob, filename);
+   setMessage('Your PDF is ready. If it did not save, open it below and save it to your files.');
+  } catch (cause) { setError(cause instanceof Error ? cause.message : 'The PDF could not be created. Use Print / save PDF or Word instead.'); }
+  finally { setExporting(null); }
+ }
+ async function sharePdf() {
+  if (!pdf) return;
+  try { await navigator.share({files: [new File([pdf.blob], pdf.filename, {type: 'application/pdf'})], title: template.label}); }
+  catch (cause) { if (!(cause instanceof DOMException && cause.name === 'AbortError')) setError('Sharing is unavailable here. Open the PDF below to save it.'); }
  }
  function clearDraft() {
   setUndo({draft, save: saveOnDevice});
@@ -159,18 +188,18 @@ function Editor({template}: {template: (typeof templates)[number]}) {
  }
 
  return <main className="shell template-editor">
-  <Link className="back-link" to={back ? `/read/${back}` : '/library'}><ArrowLeft size={16}/>Back to {back ? 'guide' : 'library'}</Link>
+  <Link className="back-link" to={returnTo || (back ? `/read/${back}` : '/library')}><ArrowLeft size={16}/>Back to {returnTo ? 'your next step' : back ? 'guide' : 'library'}</Link>
   <header className="template-heading">
    <h1>{template.label}</h1>
-   <p>Fill in your details, review the document, then download it ready to use.</p>
-   <p className="template-context">Use the required official form where one applies.</p>
+   <p>Fill in this form here. Review it, then save a PDF when you need a copy.</p>
+   <p className="template-context">This is an ActForGoa draft, not an official application. Check the receiving office’s requirements before submitting.</p>
   </header>
   <div className="template-toolbar">
    <label className="template-toggle"><Switch checked={saveOnDevice} onCheckedChange={setSaving} aria-describedby="draft-storage-hint"/><span>Save draft on this device</span></label>
    <p id="draft-storage-hint">{saveOnDevice && !storageError ? 'Saved in this browser. Anyone using this browser may be able to open it.' : 'Your entries stay in this tab until you close or refresh it. They are not sent to a server.'}</p>
    {storageError && <p role="alert">{storageError}</p>}
   </div>
-  <div className="template-mobile-view"><SegmentedControl label="Template view" value={view} onValueChange={setView} options={[{value:'fill',label:'Fill in details'},{value:'preview',label:'Preview & download'}]}/></div>
+  <div className="template-mobile-view"><SegmentedControl label="Template view" value={view} onValueChange={setView} options={[{value:'fill',label:'Fill in details'},{value:'preview',label:'Review & save'}]}/></div>
   <div className="template-layout" data-view={view}>
    <div className="template-form" ref={formRef}>
     <div className="template-section-title"><h2>Your details</h2><span>{answered} of {fields.length} fields filled</span></div>
@@ -204,23 +233,25 @@ function Editor({template}: {template: (typeof templates)[number]}) {
      <h2>Document preview</h2>
      <p>Review the wording and any missing details before you send it.</p>
      <div className="template-actions">
-      <Button onClick={downloadWord} loading={exporting}><Download size={17}/>Download Word</Button>
-      <Button variant="secondary" onClick={() => {if (checkExport()) window.print();}}><Printer size={17}/>Print / save PDF</Button>
+      <Button onClick={savePdf} loading={exporting === 'pdf'} disabled={!!exporting}><Download size={17}/>Save PDF</Button>
+      <Button variant="secondary" disabled={!!exporting} onClick={() => {if (checkExport()) window.print();}}><Printer size={17}/>Print / save PDF</Button>
      </div>
-     <p className="template-help">For PDF, choose “Save as PDF” in the print window.</p>
+     {pdf && <div className="template-pdf-ready"><a className="text-link" href={pdf.url} target="_blank" rel="noopener noreferrer">Open your completed PDF<ArrowRight size={17}/></a>{typeof navigator.canShare === 'function' && navigator.canShare({files: [new File([pdf.blob], pdf.filename, {type: 'application/pdf'})]}) && <Button variant="secondary" onClick={sharePdf}><Share2 size={17}/>Share PDF</Button>}</div>}
+     <details className="template-export-options"><summary>Other ways to save</summary><Button variant="ghost" onClick={downloadWord} loading={exporting === 'word'} disabled={!!exporting}><Download size={17}/>Save Word document</Button><p className="template-help">Print / save PDF uses your device’s print menu. All entries and exports stay on your device.</p></details>
      {error && <p role="alert" className="template-feedback">{error}</p>}
      <p role="status" className="template-feedback">{message}</p>
     </div>
     <DocumentPreview template={template} draft={draft}/>
    </aside>
   </div>
-  <div className="template-mobile-next"><Button variant="secondary" onClick={() => {setView(view === 'fill' ? 'preview' : 'fill');document.querySelector('.template-mobile-view')?.scrollIntoView({block:'start'});}}>{view === 'fill' ? 'Preview & download' : 'Back to details'}<ArrowRight size={16}/></Button></div>
+  <div className="template-mobile-next"><Button variant="secondary" onClick={() => {setView(view === 'fill' ? 'preview' : 'fill');document.querySelector('.template-mobile-view')?.scrollIntoView({block:'start'});}}>{view === 'fill' ? 'Review & save' : 'Back to details'}<ArrowRight size={16}/></Button></div>
  </main>;
 }
 
 export default function TemplateEditor() {
  const {id} = useParams();
+ const location = useLocation();
  const template = templates.find(t => t.id === id);
  if (!template) return <main className="shell empty-state"><h1>Template not found</h1><p>Choose a template from one of the practical guides.</p><Link className="back-link" to="/library">Back to library<ArrowRight size={16}/></Link></main>;
- return <Editor key={template.id} template={template}/>;
+ return <Editor key={`${template.id}:${templatePurpose(location.search) ?? ''}`} template={template}/>;
 }

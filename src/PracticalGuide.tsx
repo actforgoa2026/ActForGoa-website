@@ -46,7 +46,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
     </div>
    </article>
    <aside className="detail-aside guide-aside">
-    {guide.templates.length > 0 && <section><h2>Templates to use</h2><p>Fill in a template here, then download your completed document.</p>{guide.templates.map(t => <Link className="guide-download" key={t.url} to={templatePath(t.url)} state={{guideId:guide.id}}><span>{t.label}<small className="template-link-hint">Fill in template</small></span><ArrowRight size={16}/></Link>)}</section>}
+    {guide.templates.length > 0 && <section><h2>Forms to fill in</h2><p>Complete a form here, then save a PDF if you need a copy.</p>{guide.templates.map(t => <Link className="guide-download" key={t.url} to={templatePath(t.url)} state={{guideId:guide.id}}><span>{t.label}<small className="template-link-hint">Fill in form</small></span><ArrowRight size={16}/></Link>)}</section>}
     <section><h2>Sources and review</h2><Link className="guide-download" to="/read/guide-sources">Official source register<ArrowRight size={16}/></Link><Link className="guide-download" to="/read/guide-verification">Verification register<ArrowRight size={16}/></Link><a className="guide-download" href={guide.download} download>Download this guide<Download size={16}/></a><Link className="guide-download" to={'/contact?entry=' + encodeURIComponent(guide.title)}>Suggest a correction<ArrowRight size={16}/></Link></section>
     <section><h2>Related practical guides</h2>{guideDocuments.filter(g => g.listed && g.id !== guide.id).map(g => <Link className="guide-download" key={g.id} to={'/read/' + g.id}>{g.title}<ArrowRight size={16}/></Link>)}</section>
    </aside>

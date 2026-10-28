@@ -10,3 +10,37 @@
 .reader-view{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:24px}.reader-view h2{font-size:26px}.document-text:has(.original-page){max-width:none}.original-page{width:100%;height:auto;border:1px solid var(--line)}
 
 .research-mode-fieldset{border:0;min-width:0;padding:0;margin:0}.research-composer textarea{min-height:124px}.reader-pagination form>div{width:76px}.reader-pagination form>span{padding-bottom:12px}.research-starters>button{justify-content:space-between;white-space:normal;height:auto;min-height:52px}.research-starters>button>span{width:100%}.research-turn{scroll-margin-top:120px}.research-reader mark{outline:1px solid var(--line)}
+/* Arc's animated label has nested nowrap spans; let question labels wrap within the phone width. */
+.research-starters>button span{white-space:normal;min-width:0;max-width:100%}
+
+.research-heading .research-eyebrow{font-size:13px;font-weight:700;margin-block:0 12px;color:var(--muted)}
+.research-domains{display:flex;gap:12px;flex-wrap:wrap;margin-block:0 32px}
+.research-domains a{display:flex;gap:10px;align-items:center;min-height:48px;padding:12px 16px;border:1px solid var(--line);border-radius:8px;font-size:14px;line-height:1.5}
+.research-domains a[aria-current=page]{background:var(--pale);border-color:var(--green);font-weight:700}
+.research-domains a:hover{background:var(--pale)}
+.research-domains svg{flex-shrink:0}
+.research-answer-section{padding-block:8px 20px}
+.research-answer-section h3,.research-community>h3{display:flex;align-items:center;gap:10px;font-size:18px;line-height:1.5;margin-bottom:14px}
+.research-answer-section .answer-paragraph:last-child{margin-bottom:0}
+.research-outside{border-top:1px solid var(--line);margin-top:4px;padding-top:20px}
+.research-provenance{color:var(--muted);font-size:13px;line-height:1.7;margin-block:-6px 14px}
+.research-sources{border-block:1px solid var(--line);margin-block:12px 28px}
+.research-sources>summary{font-size:15px;font-weight:700;line-height:1.7;cursor:pointer;padding-block:16px;min-height:48px}
+.research-sources>summary>span{font-weight:400;color:var(--muted)}
+.research-sources .research-source:last-child{border-bottom:0}
+.research-community{padding-block:4px 12px}
+.research-community>h3{margin-bottom:6px}
+.research-community>p{margin-block:0 12px}
+.research-community ul{list-style:none;padding:0;margin:18px 0 0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+.research-community li{min-width:0;border-top:1px solid var(--line);padding-block:16px;overflow-wrap:anywhere}
+.community-match-meta{color:var(--muted);font-size:12px;margin-bottom:8px}
+.research-community h4{font-size:15px;line-height:1.6;margin-bottom:8px}
+.research-community h4 svg,.research-community li>a svg{display:inline;vertical-align:middle;margin-left:5px}
+.research-community li>p{font-size:13px;line-height:1.7;margin-bottom:8px}
+.research-community a:hover{text-decoration:underline}
+.research-community li>a{display:inline-flex;align-items:center;min-height:44px;text-decoration:underline}
+.research-community .research-small a{text-decoration:underline}
+.research-aside .research-service-status{margin-block:24px 6px}
+.research-answer-section .citation-link{min-height:32px;min-width:32px;text-align:center}
+@media(max-width:1050px){.research-community ul{grid-template-columns:minmax(0,1fr)}.research-community li{padding-block:14px}.research-community h4{font-size:16px}}
+@media(max-width:620px){.research-domains{gap:8px;margin-bottom:24px}.research-domains a{flex:1 1 100%;min-height:48px;padding:10px 14px}.research-community ul{gap:0}.research-answer-section h3,.research-community>h3{font-size:17px}.research-answer-section .answer-paragraph{font-size:16px;line-height:1.85}.research-community li>a{min-height:44px}}

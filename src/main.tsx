@@ -6,6 +6,7 @@ import "./components/arc/foundation.css";
 import "./styles.css";
 import App from "./App";
 import { LanguageProvider } from "./language";
+import { CurationProvider } from "./CurationProvider";
 import { createCatalogueLoader } from "./catalogue-loader";
 
 const loadCatalogue = createCatalogueLoader();
@@ -29,6 +30,6 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <LanguageProvider><RouterProvider router={router} /></LanguageProvider>
+    <LanguageProvider><CurationProvider><RouterProvider router={router} /></CurationProvider></LanguageProvider>
   </React.StrictMode>,
 );

@@ -308,7 +308,20 @@
     "Include the name, location, what the group does and a public website or contact.": "समूह का नाम, स्थान, समूह का कार्यक्षेत्र और सार्वजनिक वेबसाइट या संपर्क विवरण शामिल करें।",
     "The form prepares an email for you to review and send.": "यह फॉर्म आपके लिए एक ईमेल तैयार करता है जिसे आप समीक्षा करके भेज सकते हैं।",
     "Suggest a directory listing": "निर्देशिका सूची का सुझाव दें",
-    "See existing community listings": "मौजूदा सामुदायिक सूचियाँ देखें"
+    "See existing community listings": "मौजूदा सामुदायिक सूचियाँ देखें",
+    "Write a complaint": "शिकायत लिखें",
+    "Write a service enquiry": "सेवा के बारे में पूछताछ लिखें",
+    "Request an inspection": "निरीक्षण का अनुरोध करें",
+    "Write a follow-up letter": "अनुवर्ती पत्र लिखें",
+    "Write an RTI request": "आरटीआई आवेदन लिखें",
+    "Prepare an animal assistance note": "पशु सहायता का विवरण तैयार करें",
+    "Fill in a farm plan": "खेती की योजना भरें",
+    "Write a registration enquiry": "पंजीकरण के बारे में पूछताछ लिखें",
+    "Ask about farming support": "खेती की सहायता के बारे में पूछें",
+    "Prepare a crop damage report": "फसल क्षति का विवरण तैयार करें",
+    "Fill in the building checklist": "निर्माण की जाँच सूची भरें",
+    "Ask about building permissions": "निर्माण की अनुमति के बारे में पूछें",
+    "Ask about completion or occupancy": "निर्माण पूर्णता या उपयोग की अनुमति के बारे में पूछें"
   },
   "gom": {
     "Waste & recycling": "कोयर & रिसायकल करप",
@@ -619,6 +632,19 @@
     "Include the name, location, what the group does and a public website or contact.": "नांव, सुवात, गट कितें करता आनी भौशीक संकेतथळ वा संपर्क समाविष्ट करचो.",
     "The form prepares an email for you to review and send.": "तुमकां नियाळ करपाक आनी धाडपा खातीर फॉर्म एक ईमेल तयार करता.",
     "Suggest a directory listing": "निर्देशिका वळेरी सुचयात",
-    "See existing community listings": "सद्याच्यो समुदाय यादी पळयात"
+    "See existing community listings": "सद्याच्यो समुदाय यादी पळयात",
+    "Write a complaint": "कागाळ बरोवात",
+    "Write a service enquiry": "सेवेची चवकशी बरोवात",
+    "Request an inspection": "तपासणीची विनंती करात",
+    "Write a follow-up letter": "फाटोफाट पत्र बरोवात",
+    "Write an RTI request": "आरटीआय अर्ज बरोवात",
+    "Prepare an animal assistance note": "जनावराच्या मदतीची टिप तयार करात",
+    "Fill in a farm plan": "शेतीची येवजण भरात",
+    "Write a registration enquiry": "नोंदणेची चवकशी बरोवात",
+    "Ask about farming support": "शेतीच्या आदाराविशीं विचारात",
+    "Prepare a crop damage report": "पिकाच्या लुकसाणीचो अहवाल तयार करात",
+    "Fill in the building checklist": "बांदकामाची तपासणी वळेरी भरात",
+    "Ask about building permissions": "बांदकामाच्या परवानगेविशीं विचारात",
+    "Ask about completion or occupancy": "बांदकाम पूर्णताय वा वापर परवानगेविशीं विचारात"
   }
 }

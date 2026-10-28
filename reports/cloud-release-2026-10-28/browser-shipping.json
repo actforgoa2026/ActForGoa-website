@@ -1,0 +1,56 @@
+{
+  "service": "real disposable admin backend through integrated Vite proxy; no provider calls",
+  "checks": [
+    {
+      "width": 1440,
+      "check": "automatic archive avoidance and explicit reserved slug rejection",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "check": "Back cancellation retains unsaved fields and current route; no overflow",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "check": "router link and local tool cancellation retain fields",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "check": "real draft saved privately; Back discard succeeds and Forward does not restore discarded edits",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "check": "Forward into existing history entry blocks; cancel retains draft and discard proceeds",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "check": "automatic archive avoidance and explicit reserved slug rejection",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "check": "Back cancellation retains unsaved fields and current route; no overflow",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "check": "router link and local tool cancellation retain fields",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "check": "real draft saved privately; Back discard succeeds and Forward does not restore discarded edits",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "check": "Forward into existing history entry blocks; cancel retains draft and discard proceeds",
+      "passed": true
+    }
+  ],
+  "pageErrors": []
+}

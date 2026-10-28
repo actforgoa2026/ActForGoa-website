@@ -20,7 +20,7 @@ const tree = git('rev-parse', 'HEAD^{tree}');
 if (commit !== git('rev-parse', 'origin/main')) {
   throw new Error('Release HEAD must equal freshly fetched origin/main. Integrate and merge first.');
 }
-const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask'];
+const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask', '/ask/legal', '/ask/ecology', '/admin', '/blog', '/blog/archive'];
 if (evidence.treeSha !== tree || evidence.desktop !== true || evidence.mobile !== true
     || !requiredRoutes.every(route => evidence.routes?.includes(route))
     || !evidence.routes?.some(route => route.startsWith('/documents/'))) {
@@ -67,6 +67,17 @@ try {
     const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
       '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
     if (research.search_ready !== true) throw new Error('Staged research routing or service is unavailable. Nothing promoted.');
+    if (!['legal', 'ecology'].every(domain => research.domains?.includes(domain) && research.domain_counts?.[domain] > 0)) {
+      throw new Error('Staged legal/ecology collections are not ready. Restore and verify the complete corpus before promotion.');
+    }
+    if (existsSync('api/admin/[...path].ts')) {
+      const admin = JSON.parse(run('vercel', ['curl', '/api/admin/config', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
+      if (admin.available !== true) throw new Error('Staged team tools service is unavailable. Nothing promoted.');
+      const blog = JSON.parse(run('vercel', ['curl', '/api/blog', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
+      if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');
+    }
     if (existsSync('api/mcp.ts')) smokeMcp(deploymentUrl);
     // Remote builds take time too. Check the release boundary again before promotion.
     git('fetch', 'origin', 'main');

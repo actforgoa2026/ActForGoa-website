@@ -6,6 +6,11 @@ export type TemplateBlock = TextBlock | TableBlock;
 export type Template = {id: string; title: string; note: string; blocks: TemplateBlock[]};
 export type Draft = {values: Record<string, string>; rows: Record<string, string[]>; choices: Record<string, boolean>; handover: boolean; secondPoint: boolean; purpose: 'support' | 'damage'};
 export type FilledBlock = {kind: 'paragraph' | 'heading'; text: string} | {kind: 'table'; headers: string[]; rows: string[][]};
+// The editor performs these source-template instructions for the visitor.
+// Keep every legal/procedural caution in the finished document.
+export const templateNote = (template: Template) => template.note
+ .replace('Replace bracketed fields and remove inapplicable text. ', '')
+ .replace('Choose A or B; delete the unused section. ', '');
 const slots = /\[([^\]]*)\]/g;
 const sentenceCase = (text: string) => text === text.toUpperCase() ? text.charAt(0) + text.slice(1).toLowerCase() : text;
 const cleanHeading = (text: string) => sentenceCase(text.replace(/^#+\s*/, '').replace(/^DRAFT TEMPLATE:\s*/, ''));
@@ -122,7 +127,7 @@ export function fillTemplate(template: Template, draft: Draft): FilledBlock[] {
 
 export function filledText(template: Template, draft: Draft) {
  const blocks = fillTemplate(template, draft);
- return [template.title, template.note, ...blocks.map(b => b.kind === 'table' ? [b.headers, ...b.rows].map(row => row.join(' | ')).join('\n') : b.text)].join('\n\n');
+ return [template.title, templateNote(template), ...blocks.map(b => b.kind === 'table' ? [b.headers, ...b.rows].map(row => row.join(' | ')).join('\n') : b.text)].join('\n\n');
 }
 
 // Saved drafts are untrusted data. Bound their shape before they reach the editor.

@@ -3,7 +3,7 @@ import { publicCatalogue } from './public-record';
 
 export function needsCatalogue(pathname: string): boolean {
   const path = pathname.replace(/\/$/, '') || '/';
-  return ['/', '/search', '/directory/archive', '/library', '/stories', '/blog', '/about'].includes(path)
+  return ['/', '/search', '/directory/archive', '/library', '/stories', '/blog', '/blog/archive', '/about'].includes(path)
     || path.startsWith('/topics/')
     || /^\/read\/(?!guide-)[^/]+$/.test(path);
 }
