@@ -1,0 +1,51 @@
+{
+  "checks": [
+    {
+      "width": 1440,
+      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "case": "generation failure is explicit with opt-in sources",
+      "passed": true
+    },
+    {
+      "width": 1440,
+      "case": "unavailable answers do not silently become search; explicit browsing works",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "case": "generation failure is explicit with opt-in sources",
+      "passed": true
+    },
+    {
+      "width": 390,
+      "case": "unavailable answers do not silently become search; explicit browsing works",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "case": "generation failure is explicit with opt-in sources",
+      "passed": true
+    },
+    {
+      "width": 320,
+      "case": "unavailable answers do not silently become search; explicit browsing works",
+      "passed": true
+    }
+  ],
+  "pageErrors": [],
+  "scope": "API fixtures; no live provider calls or semantic acceptance"
+}

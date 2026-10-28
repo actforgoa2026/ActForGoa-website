@@ -15,7 +15,7 @@ import './research.css';
 import {useStarredIds} from './CurationProvider';
 import {prioritizeStarred} from './curation';
 
-type Turn={question:string;answer?:Answer;results:Evidence[];error?:string;notice?:string;mode:'search'|'ask'};
+type Turn={question:string;answer?:Answer;results:Evidence[];error?:string;mode:'search'|'ask'};
 type Session={question:string;turns:Turn[];mode:'search'|'ask'};
 const emptySession:Session={question:'',turns:[],mode:'ask'};
 type Memory={sessions:Record<string,Session>;update:(scope:string,change:Partial<Session>|((previous:Session)=>Partial<Session>))=>void};
@@ -92,12 +92,12 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
  useEffect(()=>{if(turns.length){latestTurn.current?.scrollIntoView({block:'start'});latestTurn.current?.focus({preventScroll:true});}},[turns.length]);
  useEffect(()=>{const previous=document.title;document.title=`${content.label} | ActForGoa`;return()=>{document.title=previous;};},[content.label]);
  async function run(value=question,requested=mode){
-  const clean=value.trim();if(clean.length<2||busy||!domainSupported)return;
-  const action=requested==='ask'&&canAsk?'ask':'search';setBusy(true);setQuestion(clean);const controller=new AbortController();request.current=controller;
+  const clean=value.trim();if(clean.length<2||busy||!domainSupported||(requested==='ask'&&!canAsk))return;
+  const action=requested;setBusy(true);setQuestion(clean);const controller=new AbortController();request.current=controller;
   try{
    const results=await api<{results:Evidence[];domain?:ResearchDomain}>('/api/search?'+new URLSearchParams({q:clean,domain,...(docId?{document_id:docId}:{}),...(sourceGeneration?{generation:sourceGeneration}:{})}),{signal:controller.signal});
    if(domain!=='all'&&results.domain!==domain)throw Error('This section is not available on the research service yet. Use All research to explore the current collection.');
-   const turn:Turn={question:clean,results:results.results,mode:action,notice:requested==='ask'&&!canAsk?'AI answers are unavailable. Here are matching library passages.':undefined};
+   const turn:Turn={question:clean,results:results.results,mode:action};
    if(action==='ask'){
     try{turn.answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:true,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:citedLibraryParagraphs(t.answer!).map(p=>p.text).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)})});}
     catch(e){if((e as Error).name==='AbortError')throw e;turn.error=(e as Error).message;}
@@ -113,19 +113,19 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
   <div className="research-layout"><div className="research-main">
    {!domainSupported&&<div className="research-message" role="status"><p>{statusText}</p>{status&&<Link className="text-link" to="/ask">Explore all available research<ArrowRight size={16}/></Link>}</div>}
    {turns.map((turn,index)=>{const sources=turn.answer?.citations.length?turn.answer.citations:turn.results;return <section className="research-turn" ref={index===turns.length-1?latestTurn:undefined} tabIndex={-1} key={index} aria-label={'Question '+(index+1)}><h2>{turn.question}</h2>
-    {turn.error&&<p role="alert" className="research-message">{turn.error}</p>}{turn.notice&&<p role="status" className="research-message">{turn.notice}</p>}
+    {turn.error&&<p role="alert" className="research-message">{turn.error}</p>}
     {turn.answer&&<AnswerSections answer={turn.answer} returnTo={returnTo}/>}
-    {sources.length?<details className="research-sources" open={!turn.answer||undefined}><summary>{turn.answer?'Sources for this answer':'Library passages to explore'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
+    {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
     <CommunitySuggestions data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/>
    </section>;})}
    <form className="research-composer" onSubmit={submit}>
     <Textarea label={turns.length?'Ask a follow-up':'What would you like to understand?'} ref={questionInput} id="research-question" value={question} onChange={event=>setQuestion(event.target.value)} rows={3} maxLength={2000} minLength={2} required placeholder={content.placeholder} disabled={busy}/>
-    <div className="composer-actions"><fieldset className="research-mode-fieldset" disabled={busy}><SegmentedControl label="Research mode" options={[{value:'ask',label:'Short answer'},{value:'search',label:'Find sources'}]} value={mode} onValueChange={value=>{if(!busy)setMode(value as 'search'|'ask');}}/></fieldset><Button className="research-submit" type="submit" disabled={busy||question.trim().length<2||!domainSupported}>{busy?'Working…':mode==='ask'&&canAsk?'Ask':'Find sources'}<ArrowRight size={17}/></Button></div>
-    {mode==='ask'&&!canAsk&&domainSupported&&<p className="research-small" role="status">AI answers are unavailable right now. You can still find and read sources.</p>}
+    <div className="composer-actions"><fieldset className="research-mode-fieldset" disabled={busy}><SegmentedControl label="Research mode" options={[{value:'ask',label:'Answer'},{value:'search',label:'Find sources'}]} value={mode} onValueChange={value=>{if(!busy)setMode(value as 'search'|'ask');}}/></fieldset><Button className="research-submit" type="submit" disabled={busy||question.trim().length<2||!domainSupported||(mode==='ask'&&!canAsk)}>{busy?'Working…':mode==='ask'?'Ask':'Find sources'}<ArrowRight size={17}/></Button></div>
+    {mode==='ask'&&!canAsk&&domainSupported&&<p className="research-small" role="status">Answers are unavailable right now. Choose “Find sources” to browse the library while we restore them.</p>}
     <p className="research-small">{mode==='ask'&&canAsk?'Your question, recent chat and selected passages go to Anthropic. General knowledge, when needed, is labelled separately.':'Source search uses our library and does not send your question to an AI provider.'} Your chat stays in this tab’s memory and clears on reload.</p>
     {busy&&<p role="status" className="research-small">{mode==='ask'&&canAsk?'Finding library evidence and preparing a short answer…':'Finding matching library passages…'}</p>}
    </form>
-   {!turns.length&&<div className="research-starters"><h2>Start with a question</h2>{content.starters.map(question=><Button variant="ghost" key={question} type="button" disabled={busy||!domainSupported} onClick={()=>void run(question)}>{question}<ArrowRight size={17}/></Button>)}</div>}
+   {!turns.length&&<div className="research-starters"><h2>Start with a question</h2>{content.starters.map(question=><Button variant="ghost" key={question} type="button" disabled={busy||!domainSupported||(mode==='ask'&&!canAsk)} onClick={()=>void run(question)}>{question}<ArrowRight size={17}/></Button>)}</div>}
   </div><aside className="research-aside"><h2>Our library comes first.</h2><p>Answers start with evidence from this collection. Source links let you check the passage and the full document.</p><p>When the library cannot fully answer, any extra AI context appears under <strong>Outside our library</strong>. It is not verified web research.</p>
    <p className="research-service-status" role="status">{statusText}</p>{(statusError||status&&!canAsk)&&<Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button>}
    {status?.search_ready&&<p className="research-coverage">{domain==='all'?`${status.stats.documents?.toLocaleString()||'Available'} documents in the collection`:status.domain_counts?.[domain]!==undefined?`${status.domain_counts[domain].toLocaleString()} documents in this section`:'Coverage is limited to the indexed collection.'}<br/>Matched by meaning and keywords.</p>}
