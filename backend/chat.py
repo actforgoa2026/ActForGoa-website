@@ -160,13 +160,22 @@ def prepare_answer(request, evidence):
                'tools': [{'name': 'answer_library_question', 'strict': True, 'description': 'Answer with cited library information and separately labeled general context.', 'input_schema': provider_schema([])}],
                'messages': []}
     with_source_context(evidence)  # Reject conflicting identities before budgeting.
+    document_groups = {}
     for hit in evidence:
         complete_group = with_source_context([hit])
         # Do not rewrite a defective source or drop a required table qualifier.
         # Keep the original searchable, but omit its whole answer-context group.
         if any(answer_exclusion(item) for item in complete_group):
             continue
-        group=[item for item in complete_group if item['id'] not in {old['id'] for old in selected}]
+        if len(json.dumps(complete_group, ensure_ascii=False).encode()) > MAX_PROMPT_BYTES:
+            continue  # An intrinsically oversized context group cannot fit at all.
+        # The retriever deliberately picks complementary passages within each
+        # document. Budget them together so an earlier fee paragraph cannot
+        # crowd out the same manual's application step at the end of the list.
+        key = (hit.get('document_id') or hit['id'], hit.get('generation'))
+        document_groups.setdefault(key, []).append(hit)
+    for hits in document_groups.values():
+        group=[item for item in with_source_context(hits) if item['id'] not in {old['id'] for old in selected}]
         visible_group=[]
         for item in group:
             visible={key:item[key] for key in fields if key in item and item[key] is not None}

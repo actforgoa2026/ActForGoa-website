@@ -74,3 +74,13 @@ def test_reviewed_locator_claims_cannot_substitute_for_source_passages():
     assert wire['source_date_metadata']=={'publication_date':'2020-06-01'}
     assert wire['guide_verification']=={'limitations':'Check later amendments.'}
     assert selected[0]['source_date_metadata']==item['source_date_metadata']
+
+
+def test_complementary_document_passages_are_budgeted_together():
+    first={'id':'first','document_id':'manual','text':'Application step. '+('x'*6000)}
+    last={'id':'last','document_id':'manual','text':'Required fee and exemption. '+('y'*6000)}
+    independent={'id':'other','document_id':'other','text':'A separate short source.'}
+    _, selected=prepare_answer(ChatRequest(question='How can I apply?'),[first,independent,last])
+    ids={item['id'] for item in selected}
+    assert ('first' in ids)==('last' in ids)
+    assert 'other' in ids
