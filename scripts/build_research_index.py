@@ -13,6 +13,7 @@ import numpy as np
 import zvec
 from backend.embeddings import Encoder, ROOT
 from backend.extraction import extract_source, VERSION, text_quality_warning
+from backend.domains import document_domains
 
 def build(root=ROOT, index_root=None, ecology_only=False, ocr_pages=40):
     root=Path(root); index=Path(index_root or root/'.research-index')
@@ -34,7 +35,8 @@ def build(root=ROOT, index_root=None, ecology_only=False, ocr_pages=40):
         fields=[zvec.FieldSchema('document',zvec.DataType.STRING)],
         vectors=[zvec.VectorSchema('embedding',zvec.DataType.VECTOR_FP32,dimension=384,
             index_param=zvec.HnswIndexParam(metric_type=zvec.MetricType.COSINE))]))
-    seeds={s['url'] for s in json.loads((root/'corpus/ecology-seeds.json').read_text())}
+    seed_path=root/'corpus/ecology-seeds.json'
+    seeds={s['url'] for s in json.loads(seed_path.read_text())} if seed_path.exists() else set()
     records=[json.loads(p.read_text()) for p in sorted((root/'corpus/metadata').glob('*.json'))]
     # Fully scanned, short ecological documents get OCR before image-only covers in long reports.
     records.sort(key=lambda r:(r['url'] not in seeds,not (r.get('extraction_status')=='needs_ocr' and r.get('page_count',999)<=50),r.get('title','')))
@@ -55,7 +57,7 @@ def build(root=ROOT, index_root=None, ecology_only=False, ocr_pages=40):
             raise RuntimeError('Zvec insertion failed')
         cache.commit();pending.clear()
     for r in records:
-        if r.get('status')!='downloaded' or r.get('inclusion_status','').startswith('excluded') or r.get('extraction_status')=='blocked_html':continue
+        if r.get('status') not in ('downloaded','authored') or r.get('inclusion_status','').startswith('excluded') or r.get('extraction_status')=='blocked_html':continue
         if ecology_only and r['url'] not in seeds:continue
         if r['sha256'] in seen:stats['duplicate_urls']+=1;continue
         try:
@@ -67,6 +69,7 @@ def build(root=ROOT, index_root=None, ecology_only=False, ocr_pages=40):
                   'page_labels':'physical_pdf_pages' if r.get('format')=='pdf' else 'document_sections',
                   'quality':{'low_text_pages':sum(len(p['text'].strip())<60 for p in pages),'ocr_pages':sum(p['origin'].startswith('ocr') for p in pages)},
                   'ecology_source':r['url'] in seeds,'aliases':[{'url':a['url'],'title':a.get('title')} for a in records if a.get('sha256')==r['sha256']]}
+        metadata['domains']=document_domains(metadata)
         db.execute('INSERT INTO documents VALUES(?,?)',(doc_id,json.dumps(metadata)))
         for page in pages:
             quality_warning=text_quality_warning(page['text'])
@@ -100,4 +103,5 @@ def build(root=ROOT, index_root=None, ecology_only=False, ocr_pages=40):
 
 if __name__=='__main__':
     parser=argparse.ArgumentParser();parser.add_argument('--ecology-only',action='store_true');parser.add_argument('--ocr-pages',type=int,default=40)
-    args=parser.parse_args();build(ecology_only=args.ecology_only,ocr_pages=args.ocr_pages)
+    parser.add_argument('--data-root',type=Path,default=ROOT);parser.add_argument('--index-root',type=Path)
+    args=parser.parse_args();build(root=args.data_root,index_root=args.index_root,ecology_only=args.ecology_only,ocr_pages=args.ocr_pages)

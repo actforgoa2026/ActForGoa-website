@@ -7,7 +7,7 @@ import sys
 import tarfile
 import httpx
 from fastapi.testclient import TestClient
-from openai import OpenAI
+from backend.anthropic_answers import AnthropicAnswers
 import pymupdf
 import pytest
 from backend.app import create_app
@@ -88,26 +88,27 @@ def test_document_endpoints_and_original_checksum(collection):
         assert client.get('/api/status',headers={'host':'evil.example'}).status_code==400
 
 def test_missing_credential_keeps_search_working(collection,monkeypatch):
-    monkeypatch.delenv('OPENAI_API_KEY',raising=False)
+    monkeypatch.delenv('ANTHROPIC_API_KEY',raising=False)
     with TestClient(create_app(collection[0])) as client:
         assert client.get('/api/status').json()['chat_ready'] is False
         assert client.post('/api/chat',json={'question':'How do sluice gates work?'}).status_code==503
         assert client.get('/api/search',params={'q':'sluice'}).json()['results']
 
-def test_responses_sdk_citation_contract(collection):
+def test_anthropic_citation_contract(collection):
     captured=[]
     def provider(request):
         body=json.loads(request.content);captured.append(body)
-        payload=json.loads(body['input'][-1]['content']);evidence=payload['evidence'][0]
-        output={'status':'answered','paragraphs':[{'text':evidence['text'],'citations':[evidence['id']]}]}
-        return httpx.Response(200,json={'id':'resp_test','object':'response','created_at':1,'status':'completed','model':'gpt-5-mini','output':[{'type':'message','id':'msg_test','role':'assistant','status':'completed','content':[{'type':'output_text','text':json.dumps(output),'annotations':[]}]}]})
-    model=OpenAI(api_key='test-fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider)))
+        payload=json.loads(body['messages'][-1]['content']);evidence=payload['evidence'][0]
+        output={'coverage':'full','paragraphs':[{'text':evidence['text'],'citations':[evidence['id']],'supports':[{'citation_id':evidence['id'],'quote':evidence['text']}]}],'outside_context':None,'limitation':None}
+        return httpx.Response(200,json={'id':'msg_test','stop_reason':'tool_use','content':[{'type':'tool_use','name':'answer_library_question','input':output}]})
+    model=AnthropicAnswers('test-fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider)))
     with TestClient(create_app(collection[0],client=model)) as client:
         response=client.post('/api/chat',json={'question':'How do khazan sluice gates manage saline water?'})
         assert response.status_code==200,response.text
         answer=response.json();assert answer['status']=='answered'
-        assert captured[0]['store'] is False
-        assert captured[0]['text']['format']['type']=='json_schema'
+        assert captured[0]['model']=='claude-haiku-5-5'
+        assert captured[0]['tool_choice']['name']=='answer_library_question'
+        assert answer['outside_context'] is None
         for cite in answer['citations']:
             meta=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']});assert meta.status_code==200
             pages=client.get('/api/documents/'+cite['document_id']+'/pages',params={'start':cite['page'],'generation':cite['generation']}).json()['pages']

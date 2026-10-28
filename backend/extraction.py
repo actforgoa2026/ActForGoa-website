@@ -60,7 +60,10 @@ def extract_source(root, metadata, improve=False, ocr_budget=None):
     ocr = {}
     if metadata.get('ocr_pages_path'):
         ocr = {p['page']:p for p in json.loads(safe_path(root, metadata['ocr_pages_path']).read_text())}
-    if metadata.get('format') == 'html':
+    if metadata.get('format') == 'markdown':
+        pages=[{'page':1,'label':'Authored guide','text':raw_bytes.decode('utf-8'),'origin':'authored_guide',
+                'warning':metadata.get('legal_currency','Authored draft guidance; check the original source before acting.')}]
+    elif metadata.get('format') == 'html':
         soup=BeautifulSoup(raw_bytes,'lxml')
         for element in soup.select('script,style,noscript,nav,header,footer,form,svg,[role=navigation],.site-header,.site-footer,.breadcrumb,.breadcrumbs'):
             element.decompose()

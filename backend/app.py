@@ -1,31 +1,42 @@
 """Local research API with explicit, bounded public-host configuration."""
 from contextlib import asynccontextmanager
+from datetime import datetime, timezone
 from functools import lru_cache
 import os
 from pathlib import Path
 import threading
+from uuid import uuid4
 from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.responses import FileResponse, PlainTextResponse, JSONResponse, Response
 import pymupdf
 from starlette.middleware.trustedhost import TrustedHostMiddleware
 from dotenv import load_dotenv
-from openai import OpenAI, APIError
+from .anthropic_answers import AnthropicAnswers, AnthropicAPIError, configured_model, maximum_cost
+from .domains import Domain
 from .embeddings import ROOT
 from .library import Library
 from .hosting import public_config, PublicLimits, RequestSizeLimit
-from .chat import ChatRequest, answer_question
+from .chat import ChatRequest, answer_question, prepare_answer
 
 load_dotenv(ROOT/'.env.local')
 
 def create_app(root=None, index_root=None, client=None):
     root=Path(root or os.getenv('RESEARCH_DATA_ROOT') or ROOT)
     public_origin,hosts=public_config()
-    limits=PublicLimits(root/'.research-usage',chats_per_day=int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))) if public_origin else None
+    # Keep the same durable ledger path across releases; never reset production usage.
+    limits=PublicLimits(root/'.research-usage',chats_per_day=min(100,int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))),
+                        monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))))
+    model=configured_model()
     @asynccontextmanager
     async def lifespan(app):
         try:app.state.library=Library(root,index_root)
         except (FileNotFoundError, KeyError, ValueError):app.state.library=None
-        app.state.client=client or (OpenAI(timeout=60,max_retries=1) if os.getenv('OPENAI_API_KEY') else None)
+        # Existing public services must restore their ledger, never silently start
+        # a new allowance because a volume or data-root selector was misplaced.
+        ledger_required=os.getenv('RESEARCH_REQUIRE_EXISTING_USAGE','1' if public_origin else '0')=='1'
+        ledger_ready=not ledger_required or (root/'.research-usage/answer-usage.sqlite').is_file()
+        app.state.client=client or (AnthropicAnswers(os.environ['ANTHROPIC_API_KEY']) if os.getenv('ANTHROPIC_API_KEY') and os.getenv('RESEARCH_CHAT_ENABLED')=='1' and ledger_ready else None)
+        app.state.chat_unavailable_reason=None if app.state.client else ('usage_ledger_missing' if not ledger_ready else 'not_configured')
         yield
         if app.state.client and client is None:app.state.client.close()
         app.state.library=None
@@ -70,12 +81,15 @@ def create_app(root=None, index_root=None, client=None):
     def status():
         lib=app.state.library
         return {'search_ready':lib is not None,'chat_ready':bool(lib and app.state.client),'generation':lib.generation if lib else None,
-                'stats':lib.manifest['stats'] if lib else {},'model':os.getenv('OPENAI_CHAT_MODEL','gpt-5-mini'),
+                'stats':lib.manifest['stats'] if lib else {},'model':model,'provider':'anthropic',
+                'domains':['legal','ecology'],'domain_counts':lib.domain_counts() if lib else {'legal':0,'ecology':0},
+                'outside_context_supported':True,'answer_mode':'library_first',
+                'chat_unavailable_reason':app.state.chat_unavailable_reason,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 
     @app.get('/api/search')
-    def search(q:str=Query(min_length=1,max_length=2000),limit:int=Query(default=8,ge=1,le=20),document_id:str|None=None,generation:str|None=None):
-        return {'results':retrieve(q,limit,document_id,generation),'generation':generation or library().generation}
+    def search(q:str=Query(min_length=1,max_length=2000),limit:int=Query(default=8,ge=1,le=20),document_id:str|None=None,generation:str|None=None,domain:Domain='all'):
+        return {'results':retrieve(q,limit,document_id,generation,domain),'generation':generation or library().generation,'domain':domain}
 
     @app.get('/api/documents/{doc_id}')
     def document(doc_id:str,generation:str|None=None):return library().document(doc_id,generation)
@@ -134,11 +148,16 @@ def create_app(root=None, index_root=None, client=None):
             # Include recent user context to resolve follow-ups, never treat model history as evidence.
             previous=next((m.content for m in reversed(request.history) if m.role=='user'),'')
             retrieval=request.question+(' '+previous[:500] if len(request.question.split())<8 else '')
-            evidence=retrieve(retrieval,10,request.document_id,request.generation)
-            if not evidence:return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'notice':'No evidence was found. Try different terms.'}
-            if limits and not limits.reserve_answer():raise HTTPException(429,'Today’s answer limit has been reached. Search and full documents are still available.')
-            return answer_question(app.state.client,os.getenv('OPENAI_CHAT_MODEL','gpt-5-mini'),request,evidence)
-        except APIError as error:
+            evidence=retrieve(retrieval,10,request.document_id,request.generation,request.domain)
+            if not evidence and not request.include_outside_context:
+                return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'outside_context':None,
+                        'domain':request.domain,'coverage':'none','library_notice':'Our library has no matching evidence. Try different terms.'}
+            prepared=prepare_answer(request,evidence)
+            receipt=limits.reserve_stage(maximum_cost(model,prepared[0]),datetime.now(timezone.utc).date().isoformat(),uuid4().hex,'draft')
+            if not receipt['reserved']:
+                raise HTTPException(429,'The answer budget has been reached. Search and full documents are still available.')
+            return answer_question(app.state.client,model,request,evidence,prepared)
+        except AnthropicAPIError as error:
             status=getattr(error,'status_code',None)
             detail='The answer service is unavailable. Search and full documents still work.'
             if status==401:detail='The answer service rejected its configured credential. Ask the maintainer to check it.'
