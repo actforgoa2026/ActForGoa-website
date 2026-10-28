@@ -1,5 +1,15 @@
 # Satellite continuation handoff
 
+## Standalone Railway release, 28 October 2026
+
+The user authorized a separate satellite deployment and then deferred supplying local CDSE secrets. The standalone app is live at **https://satellite-app-production.up.railway.app/map**, with its own named-account authentication, admin proxy and persistent storage. The satellite API is a separate persistent Railway service. ORCHESTRATOR explicitly reserved the combined review-site release; no existing service, Vercel environment, review alias or actforgoa.org was changed.
+
+New Railway project: `e119f1f6-f1c7-4a58-a33c-0ea536dcfdce`; environment: `178f97df-ed3d-4d66-94ac-f86797aa736c`. App service: `aea6b770-cd6d-4165-9802-7ce46fa0fd4a`. Satellite service: `2a16820e-393c-4385-b4f3-82d8d922c4d2`. Configuration used `https://backboard.railway.com/graphql/v2`. Server-only service and MCP tokens are separate and generated locally; no cloud placeholders were copied. CDSE, OpenAI and Anthropic keys remain unconfigured on these new services.
+
+A hash-verified **recorded real comparison** from the prior 10/20 October CDSE validation was imported into the user's private history. It retains the original acquisition/retrieval dates and numeric measurements, and is explicitly labeled as an import rather than retrieval by this deployment. No new provider requests or model calls were made. New retrieval and question interpretation controls are disabled until configured; AI decisions remain unavailable. This enables saved-result and layout iteration while credential transfer is deferred. It does not establish live Railway-to-CDSE access.
+
+Runtime source: app `78e7fe4`, satellite package `fe935ed`. Continue PR #95, not a new feature PR. See [standalone release evidence](../reports/satellite-standalone-2026-10-28/README.md) for exact deployments, checks and known limits. The failed OpenAI key-creation connector must not be retried automatically.
+
 Source chat: **SAT IMAGE ANALYSIS**, ID `01a181d5-fcf6-745a-b440-89a455d69065`, host `durable`.
 
 The user is moving to a new chat to pick up saved CDSE credentials. Continue the implementation; do not restart research from scratch. Read `AGENTS.md`, `docs/CLOUD-IMPLEMENTATION-PLAN.md`, `docs/GOA-MAP-INTELLIGENCE-PLAN.md`, and `reports/satellite-2026-10-28/README.md`.

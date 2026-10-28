@@ -1,0 +1,27 @@
+{
+  "account_survived_app_restart": true,
+  "session": 200,
+  "authenticated_satellite_status": 200,
+  "csrf_required": 403,
+  "history": 200,
+  "readiness": {
+    "imagery_ready": false,
+    "planner_ready": false,
+    "decisions_ready": false,
+    "classification_ready": false,
+    "classification_provider": null,
+    "statewide_ready": false,
+    "validation": "pending",
+    "scope": "Goa only",
+    "max_area_km2": 25
+  },
+  "cookies": [
+    {
+      "name": "afg_admin_session",
+      "secure": true,
+      "path": "/api/admin",
+      "HttpOnly": true,
+      "SameSite": "Strict"
+    }
+  ]
+}

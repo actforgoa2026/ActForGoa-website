@@ -1,0 +1,17 @@
+{
+  "endpoint": "https://backboard.railway.com/graphql/v2",
+  "projectId": "e119f1f6-f1c7-4a58-a33c-0ea536dcfdce",
+  "environmentId": "178f97df-ed3d-4d66-94ac-f86797aa736c",
+  "services": {
+    "satellite": {
+      "id": "2a16820e-393c-4385-b4f3-82d8d922c4d2",
+      "volumeId": "61b1303f-56b4-46e3-9c1b-0c7852b4d131",
+      "domain": "satellite-production-9bd0.up.railway.app"
+    },
+    "satellite-app": {
+      "id": "aea6b770-cd6d-4165-9802-7ce46fa0fd4a",
+      "volumeId": "818a0856-8d5c-488c-9f68-ddb9bb31a494",
+      "domain": "satellite-app-production.up.railway.app"
+    }
+  }
+}

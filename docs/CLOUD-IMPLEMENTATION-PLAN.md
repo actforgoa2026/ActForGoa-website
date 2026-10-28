@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Satellite standalone deployment update
+
+The user explicitly authorized a separate persistent Railway satellite release while ORCHESTRATOR retains the combined website release. App runtime `78e7fe4` and satellite package `fe935ed` are deployed in a new project `e119f1f6-f1c7-4a58-a33c-0ea536dcfdce`, at https://satellite-app-production.up.railway.app/map. No existing production service, website alias or actforgoa.org was changed. PR #95 contains the deployed source; it is not merged to main.
+
+The user subsequently deferred copying the cloud CDSE secrets locally and requested useful progress without them. The app therefore provides authenticated reopening of a clearly labeled recorded real 10/20 October comparison, imported from the existing hash-verified validation evidence. CDSE access from Railway is not verified or configured. New retrieval and question interpretation are disabled; OpenAI decisions remain unavailable. Both services have separate persistent volumes, and the new satellite account does not copy or reset editorial accounts. See [release evidence](../reports/satellite-standalone-2026-10-28/README.md). Future work is secure real CDSE configuration and a new hosted retrieval, not a repeat of the failed OpenAI key-creation flow.
+
 Feature development, tests, indexing and browser QA ran under `/workspace` in the cloud. CLOUD owns this implementation. The user subsequently appointed **Coordinate agent threads and PRs** (`01a181ad-56ba-70c2-93cd-1aa5185d007a`) as the continuing cloud release coordinator. Its durable inbox and release record is [issue #89](https://github.com/actforgoa2026/ActForGoa-website/issues/89). The earlier proposal to resume the local ORCHESTRATOR is superseded; keep local workers and their old heartbeat paused. The user then directly instructed CLOUD to “ship it”: CLOUD is completing the bounded PR #90 source landing; the primary coordinator retains live deployment ownership.
 
 ## Resume here
