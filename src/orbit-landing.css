@@ -36,3 +36,6 @@
 .goa-orbit-navigation header,.goa-orbit-navigation header[data-scrolled]{background:transparent;border-bottom-color:transparent;box-shadow:none}
 .goa-orbit-page{margin-top:-96px;height:100svh;min-height:780px;padding-top:96px;box-sizing:border-box}
 @media(max-width:1399px){.goa-orbit-page{margin-top:-80px;height:100svh;min-height:690px;padding-top:80px}.goa-orbit-navigation:before{height:165px}}
+
+.goa-orbit-scene{transition:opacity .18s ease-out}
+@media(prefers-reduced-motion:reduce){.goa-orbit-scene{transition:none}}
