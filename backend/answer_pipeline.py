@@ -10,12 +10,14 @@ import uuid
 from .anthropic_provider import API_VERSION, INPUT_ALLOWANCE, AnthropicAPIError, message_request
 from .answer_trace import outgoing_request_capture, final_json_capture
 from .chat import MAX_PROMPT_BYTES, FRAMING_TOKEN_ALLOWANCE
-from .reconstruction import (PIPELINE_VERSION, PIPELINE_SPEC, CORRECTION_PROMPT_BYTES,
+from .reconstruction import (PIPELINE_VERSION, pipeline_spec, CORRECTION_PROMPT_BYTES,
     PROVIDER_DEADLINE_SECONDS, PROVIDER_STAGE_SECONDS, prepare_reconstruction,
     reconstruction_message_request, normalize_reconstruction, encoded, digest)
 from .source_spans import ANCHOR_PROTOCOL, verify_annotated_payload, verify_wire_binding
 from .span_draft import prepare_span_draft, span_draft_message_request, normalize_span_draft
 from .paragraph_slots import PARAGRAPH_PROTOCOL, AnswerEnvelopeError
+from .phase_effort import (EFFORT_POLICY, PhasePolicyError, phase_effort, phase_policy_metadata,
+                           validate_pipeline_config, check_phase_request)
 
 
 class PipelineFailure(Exception):
@@ -54,6 +56,16 @@ def usage_within_bound(stage):
             and usage['cache_creation_input_tokens'] == 0)
 
 
+def initial_pipeline_trace(parent_id, expected_day):
+    return {'capture_version': pipeline_spec()['capture_version'], 'pipeline_spec': pipeline_spec(),
+            **phase_policy_metadata(), 'parent_id': parent_id, 'expected_day': expected_day,
+            'status': 'not_started', 'phases': [
+                {'phase': name, 'state': 'not_started', 'provider_attempts': 0,
+                 'effort_policy': EFFORT_POLICY, 'expected_phase_effort': phase_effort(name),
+                 'outgoing_request': {'capture_status': 'not_dispatched'}}
+                for name in ('draft', 'reconstruction')]}
+
+
 async def joined_native_call(function):
     """Do not abandon an owned non-cancellable native call on task cancellation.
 
@@ -90,11 +102,7 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
     expected_day = expected_day or utc_day()
     parent_id = request_id or uuid.uuid4().hex
     original = deepcopy(prepared)
-    trace = {'capture_version': PIPELINE_SPEC['capture_version'], 'pipeline_spec': deepcopy(PIPELINE_SPEC), 'parent_id': parent_id,
-             'expected_day': expected_day, 'status': 'not_started', 'phases': [
-                 {'phase': name, 'state': 'not_started', 'provider_attempts': 0,
-                  'outgoing_request': {'capture_status': 'not_dispatched'}}
-                 for name in ('draft', 'reconstruction')]}
+    trace = initial_pipeline_trace(parent_id, expected_day)
     disconnect_seen = asyncio.Event()
     disconnect_reason = 'client_disconnected'
     current = None
@@ -164,6 +172,8 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
                 if (actual_body is None or actual_body != body
                         or digest(actual_body)!=stage['prepared_request_sha256']):
                     raise fail('request_capture_mismatch')
+                check_phase_request(actual_body, pipeline_version=PIPELINE_VERSION,
+                                    effort_policy=EFFORT_POLICY, base_config_effort=config.effort, phase=stage['phase'])
                 proof=verify_wire_binding(capture['body_utf8'],json.loads(frozen_baseline_utf8),
                     stage['span_registry_sha256'],phase=stage['phase'],
                     draft_body_utf8=(trace['phases'][0]['outgoing_request']['body_utf8']
@@ -197,10 +207,12 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
             async with asyncio.timeout(max(0, phase_deadline - phase_started)):
                 content = await client.send(body, on_request=on_request, on_response=on_response,
                                             paragraph_protocol=PARAGRAPH_PROTOCOL,
-                                            answer_style=original.answer_style, phase=stage['phase'])
+                                            answer_style=original.answer_style, phase=stage['phase'],
+                                            pipeline_version=PIPELINE_VERSION, effort_policy=EFFORT_POLICY,
+                                            base_config_effort=config.effort)
         except TimeoutError:
             raise fail('provider_deadline' if time.monotonic() >= deadline else 'provider_stage_timeout') from None
-        except AnswerEnvelopeError:
+        except (AnswerEnvelopeError, PhasePolicyError):
             if stage['provider_attempts'] == 0:
                 stage['dispatch_status'] = 'blocked_before_transport'
             raise
@@ -225,8 +237,9 @@ async def run_answer_pipeline(request, prepared, config, *, limits, client_facto
     async def execute():
         nonlocal current, frozen_baseline_utf8
         try:
-            if (config.pipeline, config.provider, config.model, config.effort, config.max_output_tokens) != (
-                    PIPELINE_VERSION, 'anthropic', 'claude-haiku-5-5', 'medium', 12000):
+            try:
+                validate_pipeline_config(config)
+            except PhasePolicyError:
                 raise fail('pipeline_configuration')
             await available()
             trace['status'] = 'prepared'

@@ -7,6 +7,7 @@ from .anthropic_provider import ENDPOINT, API_VERSION, AnthropicAPIError, native
 from .reconstruction import PROVIDER_STAGE_SECONDS
 from .paragraph_slots import (strict_answer_json, decode_envelope, check_request_context,
                               AnswerEnvelopeError)
+from .phase_effort import check_phase_request
 
 
 class AsyncAnthropicClient:
@@ -52,10 +53,12 @@ class AsyncAnthropicClient:
                 'synthetic_baseline_body_sha256':baseline_capture['body_sha256']},json.loads(baseline_body['messages'][-1]['content'])
 
     async def send(self, body, *, on_request, on_response, paragraph_protocol,
-                   answer_style, phase):
+                   answer_style, phase, pipeline_version, effort_policy, base_config_effort):
         if self._request_observer is not None:
             raise ValueError('Concurrent use of an owned provider transport')
         check_request_context(body, protocol=paragraph_protocol, style=answer_style, phase=phase)
+        check_phase_request(body, pipeline_version=pipeline_version,
+                            effort_policy=effort_policy, base_config_effort=base_config_effort, phase=phase)
         self._request_observer = on_request
         try:
             try:

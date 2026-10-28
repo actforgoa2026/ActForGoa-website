@@ -8,6 +8,7 @@ import pytest
 from backend import answer_pipeline as pipeline, answer_trace
 from backend.answer_trace import final_json_capture
 from backend.async_anthropic import AsyncAnthropicClient
+from backend.phase_effort import PIPELINE_VERSION, EFFORT_POLICY
 from backend.chat import ChatRequest, prepare_answer
 from backend.paragraph_slots import (PARAGRAPH_PROTOCOL, SLOT_NAMES, AnswerEnvelopeError,
     strict_answer_json, decode_envelope, encoded, value_hash)
@@ -253,7 +254,9 @@ def test_valid_insufficient_evidence_keeps_style_specific_shape_through_both_pha
 def test_transport_refuses_untrusted_or_inconsistent_context_before_io(setup, change):
     config, request, original, transport, _, _, _, factory = setup
     body = span_draft_message_request(config, prepare_span_draft(request, original))
-    context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': 'draft', **change}
+    context = {'paragraph_protocol': PARAGRAPH_PROTOCOL, 'answer_style': 'standard', 'phase': 'draft',
+               'pipeline_version': PIPELINE_VERSION, 'effort_policy': EFFORT_POLICY,
+               'base_config_effort': 'medium', **change}
     def no_callback(*_):pytest.fail('Invalid context must not reach a request or response callback')
     async def scenario():
         async with factory() as client:

@@ -14,8 +14,7 @@ from .source_spans import (ANCHOR_PROTOCOL, annotate_payload, verify_annotated_p
 from .span_instructions import span_answer_instructions
 from .paragraph_slots import (PARAGRAPH_PROTOCOL, standard_slot_schema, strict_answer_json,
                               decode_envelope, source_slot)
-
-PIPELINE_VERSION = 'two_pass_v6'
+from .phase_effort import PIPELINE_VERSION, phase_effort, validate_pipeline_config
 
 
 def digest(value):
@@ -105,16 +104,14 @@ def validate_span_draft_identity(prepared):
 
 
 def span_draft_message_request(config,prepared):
-    if (config.pipeline,config.provider,config.model,config.effort,config.max_output_tokens)!=(
-            PIPELINE_VERSION,'anthropic','claude-haiku-5-5','medium',12000):
-        raise ValueError('Span draft requires the reviewed configuration')
+    validate_pipeline_config(config)
     validate_span_draft_identity(prepared)
     _represented_contexts(prepared.original);_represented_publications(prepared.original)
     config.maximum_cost_microusd(prepared.input_token_bound)
     return {'model':config.model,'max_tokens':config.max_output_tokens,
             'system':prepared.messages[0]['content'],'messages':prepared.messages[1:],
             'stream':False,'service_tier':'standard_only','thinking':{'type':'adaptive'},
-            'output_config':{'effort':config.effort,'format':{'type':'json_schema','schema':prepared.schema}}}
+            'output_config':{'effort':phase_effort('draft'),'format':{'type':'json_schema','schema':prepared.schema}}}
 
 
 def normalize_span_draft(content,prepared,*,resolved_observer=None):

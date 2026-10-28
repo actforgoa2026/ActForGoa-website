@@ -18,7 +18,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER', 'anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL', 'claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT', 'medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v6')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v7')
     evidence = [{'id': 'a', 'text': 'Gates regulate tidal water. Design must follow Appendix C.',
                  'document_id': 'doc-a', 'generation': 'fixture'}]
     request = ChatRequest(question='What do the gates do?', history=[Message(role='user',content='Tell me about gates.')])
