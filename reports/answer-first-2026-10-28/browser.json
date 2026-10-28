@@ -2,7 +2,7 @@
   "checks": [
     {
       "width": 1440,
-      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "case": "answer first, collapsed sources, citation, keyboard send/newline and contextual follow-up",
       "passed": true
     },
     {
@@ -17,7 +17,7 @@
     },
     {
       "width": 390,
-      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "case": "answer first, collapsed sources, citation, keyboard send/newline and contextual follow-up",
       "passed": true
     },
     {
@@ -32,7 +32,7 @@
     },
     {
       "width": 320,
-      "case": "answer first, collapsed sources, citation and contextual follow-up",
+      "case": "answer first, collapsed sources, citation, keyboard send/newline and contextual follow-up",
       "passed": true
     },
     {

@@ -87,6 +87,8 @@ def main():
                 page.get_by_role('button', name='Ask', exact=True).click()
 
             open_page()
+            assert not page.evaluate('document.documentElement.scrollWidth > innerWidth + 1')
+            page.screenshot(path=str(output / f'chat-ready-{width}.png'), full_page=True)
             ask('What did the survey find?')
             turn = page.locator('.research-turn').first
             expect(turn.locator('.answer-paragraph').first).to_have_text(answer['paragraphs'][0]['text'] + '[1]')
@@ -102,12 +104,19 @@ def main():
             page.get_by_role('link', name='Back to your research', exact=True).click()
             expect(page.locator('.research-turn')).to_have_count(1)
             expect(page.locator('details.research-sources .research-source')).not_to_be_visible()
-            ask('What about Site B?')
+            composer = page.locator('#research-question')
+            composer.fill('What about')
+            composer.press('Shift+Enter')
+            page.keyboard.insert_text('Site B?')
+            expect(composer).to_have_value('What about\nSite B?')
+            assert len(state['requests']) == 1
+            composer.press('Enter')
             expect(page.locator('.research-turn')).to_have_count(2)
+            assert state['requests'][-1]['question'] == 'What about\nSite B?'
             history = state['requests'][-1]['history']
             assert history[0] == {'role': 'user', 'content': 'What did the survey find?'}
             assert history[1]['role'] == 'assistant' and 'juvenile fish' in history[1]['content']
-            checks.append({'width': width, 'case': 'answer first, collapsed sources, citation and contextual follow-up', 'passed': True})
+            checks.append({'width': width, 'case': 'answer first, collapsed sources, citation, keyboard send/newline and contextual follow-up', 'passed': True})
 
             state['failure'] = True
             open_page()
