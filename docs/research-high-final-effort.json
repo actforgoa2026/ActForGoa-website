@@ -1,0 +1,36 @@
+{
+  "pipeline": "two_pass_v12",
+  "capture_version": 11,
+  "baseline_pipeline": "two_pass_v11",
+  "baseline_capture_version": 10,
+  "base_config_effort": "medium",
+  "effort_policy": "low_draft_high_reconstruction_v1",
+  "phase_efforts": {
+    "draft": "low",
+    "reconstruction": "high"
+  },
+  "baseline_commit": "ab2697affdf08b3c44d03cc89ee5764240d1bb9b",
+  "implementation_contract_sha256": "273c226c6b4441bb501fffc460cac60ab726e4d25a9cda703340f14005e2e182",
+  "approved_runtime_diff_sha256": "d38011ff629364cca07b7fdfacf7b631aa6e3367973d03a3dca14e0910e92cec",
+  "prompts": {
+    "plan-standard": {
+      "bytes": 7246,
+      "sha256": "04cb80a642a0aabc02c90e5c1507e015d4ce92abce88a738b4f4beae28044878"
+    },
+    "plan-brief": {
+      "bytes": 7262,
+      "sha256": "a948cb104de2357b9f31d445534e7c44011c2bd66d61673ab6807945e4213a3e"
+    },
+    "final-standard": {
+      "bytes": 8465,
+      "sha256": "9a50183d6ff9284ab75eefbeec21d48bd092e0e6cca544d878b3ee8a381aaa02"
+    },
+    "final-brief": {
+      "bytes": 8404,
+      "sha256": "6546dab61bfa8b993c13e1022db2335c3ae290d6dbbd6c97a33e754d5d2aa9bf"
+    }
+  },
+  "wire_change": "First-stage request bytes unchanged; final-stage output_config.effort changes medium to high only. Original native safety envelope remains medium. No model, source, history, prompt, schema, bound, rate or deadline change.",
+  "capture_boundary": "Only a complete trusted local v12 phase context permits final high in request capture. Unscoped capture and single-pass/native effort review remain unchanged.",
+  "acceptance": "Offline transport tests establish wiring and isolation only. Fresh real-model semantic acceptance, accounting, HTTP and live-site checks remain required; the prior two diagnostic cases failed meaning checks."
+}
