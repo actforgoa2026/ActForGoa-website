@@ -78,6 +78,8 @@ import { Input } from "./components/arc/input/input";
 import { Textarea } from "./components/arc/textarea/textarea";
 import SegmentedControl from "./components/arc/segmented-control/segmented-control";
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
+import { useStarredIds } from './CurationProvider';
+import { prioritizeStarred } from './curation';
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
@@ -185,7 +187,7 @@ const navigation = [
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", links: [{ label: "Reading library", href: "/library" }, { label: "Research library", description: "Search ecological sources and read full documents.", href: "/ask" }] },
+  { value: "resources", label: "Resources", links: [{ label: "Legal questions", description: "Find guidance in our legal framework and source documents.", href: "/ask/legal" }, { label: "Environment & ecosystems", description: "Ask about Goa’s environment and explore the research.", href: "/ask/ecology" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
   { value: "about", label: "About", links: [
     { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
     { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/read/wp-8905" },
@@ -201,7 +203,7 @@ function Header() {
   const { language } = useLanguage();
   const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "हमारे साथ काम करें", "स्वयंसेवा", "समुदाय"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "आमचे वांगडा काम करात", "स्वयंसेवा", "समुदाय"] : [];
   const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
-  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname === "/ask" || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.slice(1);
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={items} current={current} label="Main navigation" extraAction={<LanguageSwitcher />}
@@ -234,6 +236,7 @@ function Footer() {
           <a href="https://actforgoa.org/terms-and-conditions/">Terms</a>
           <Link to="/about#sources">About this guide</Link>
           <Link to="/mcp">MCP for AI assistants</Link>
+          <Link to="/admin">Team dashboard</Link>
         </div>
       </div>
     </footer>
@@ -270,6 +273,7 @@ function Home({ records }: { records: RecordItem[] }) {
 }
 
 function DiscoveryFeed({ records }: { records: RecordItem[] }) {
+  const starredIds = useStarredIds();
   const location = useLocation();
   const saved = homeFeedState.get(location.key);
   const [limit, setLimit] = useState(saved?.limit ?? 12);
@@ -279,7 +283,7 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
   const feedRoot = useRef<HTMLDivElement>(null);
   const pendingFocus = useRef<number | null>(null);
   const [announcement, setAnnouncement] = useState("");
-  const sections = useMemo(() => buildDiscoverySections(records, kind), [records, kind]);
+  const sections = useMemo(() => buildDiscoverySections(records, kind, starredIds), [records, kind, starredIds]);
   const entries = useMemo(() => sections.flatMap(section => section.records), [sections]);
   const shown = entries.slice(0, limit);
   const shownSections = sections.filter(section => section.start < limit).map(section => ({
@@ -425,6 +429,7 @@ function Catalogue({
   records: RecordItem[];
   mode?: "search" | "directory" | "library" | "stories" | "blog";
 }) {
+  const starredIds = useStarredIds();
   const [params, setParams] = useSearchParams();
   const query = params.get("q") || "";
   const { topic, type: filter } = catalogueFilters(params.toString());
@@ -565,7 +570,7 @@ function Catalogue({
   ).filter(({ record }) => (!topic || record.topics.includes(topic)) && (!tag || directoryTags(record).includes(tag)));
   const canFocus = mode === "search" && filter === "all" && intent !== null;
   const focused = canFocus && params.get("scope") !== "all" && focusedResults.length > 0;
-  const results = focused ? focusedResults : relatedResults;
+  const results = prioritizeStarred(focused ? focusedResults : relatedResults, starredIds, item => item.record.id);
   const grouped = query.trim() && mode === "search" && filter === "all";
   const groups = focused ? groupIntentResults(results, query, intent) : [
     { title: "People & organisations", kinds: ["organisation", "contact"] },
@@ -1313,6 +1318,7 @@ export default function App() {
   const { pathname, search } = useLocation();
   const navigationType = useNavigationType();
   const previousPath = useRef(pathname);
+  const internal = pathname === "/admin" || pathname.startsWith("/admin/");
   const { records, error } = useLoaderData() as {
     records: RecordItem[];
     error: boolean;
@@ -1346,8 +1352,8 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      <Header />
-      {language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
+      {!internal && <Header />}
+      {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
           <main className="empty-state shell">
@@ -1410,13 +1416,13 @@ export default function App() {
         )}
       </div>
       <ScrollRestoration />
-      <Footer />
-      <div className="preview-note">
+      {!internal && <Footer />}
+      {!internal && <div className="preview-note">
         A new field guide, in progress.{" "}
         <a href="https://actforgoa.org/">
           Visit the original site <ArrowUpRight size={12} />
         </a>
-      </div>
+      </div>}
     </ResearchMemoryProvider>
   );
 }

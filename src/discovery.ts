@@ -1,4 +1,5 @@
 import type { RecordItem, Kind } from "./types";
+import { prioritizeStarred } from './curation';
 
 // A deterministic, diverse sequence keeps reading and practical contacts together.
 // Each record appears once; missing categories never leave holes in the feed.
@@ -99,7 +100,7 @@ const sectionDetails = {
 
 // Build the entire stable sequence before revealing it. Loading another section
 // never moves new records above a section the visitor has already read.
-export function buildDiscoverySections(records: RecordItem[], kind = "all"): DiscoverySection[] {
+export function buildDiscoverySections(records: RecordItem[], kind = "all", starredIds: ReadonlySet<string> = new Set()): DiscoverySection[] {
   const queues: Record<DiscoverySectionType, RecordItem[]> = {
     guides: [], people: [], stories: [], documents: [],
   };
@@ -111,6 +112,7 @@ export function buildDiscoverySections(records: RecordItem[], kind = "all"): Dis
     queues[type].push(record);
   }
   const order = ["guides", "people", "stories", "documents"] as const;
+  for (const type of order) queues[type] = prioritizeStarred(queues[type], starredIds, record => record.id);
   const sections: DiscoverySection[] = [];
   let start = 0;
   for (let round = 0; order.some(type => queues[type].length); round++) {

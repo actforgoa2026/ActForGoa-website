@@ -8,7 +8,7 @@ Read this file and `AGENTS.md` before doing work. Inspect `git status`, fetch `o
 
 ## Work ledger
 
-Last updated: 28 October 2026. All paths below are on the cloud executor.
+Last updated: 28 October 2026. All paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90 (draft until combined checks finish).
 
 | Task | Owner | Status | Finished / evidence | Next action |
 | --- | --- | --- | --- | --- |
@@ -23,12 +23,17 @@ Last updated: 28 October 2026. All paths below are on the cloud executor.
 | Combined tests and visual review | Root | Pending implementation | No combined acceptance yet | Test/build; desktop/phone screenshots and regression checks |
 | PR / merge / release | Root | Pending acceptance | No feature commits merged or published by this cloud task | Create reviewed PR, then follow release script when gates and cloud access pass |
 
-### Blocking dependencies
+### Agreed cloud-to-local handoff
 
-- Cloud config has no bound Anthropic or deployment secrets. Secure configuration request sent to the user; do not solicit or print secret values in chat.
+The user explicitly directed: finish implementation and tests in the cloud, create the PR, then have the local orchestrator use its existing credentials to wire Anthropic/services and ship. Cloud credentials are therefore not a blocker to finishing this PR. Do not wake the paused local workers until the cloud commit and acceptance evidence are ready. Hand the existing local ORCHESTRATOR the PR, exact head, service configuration/data requirements, checks and unresolved live validations; ask it to use this ledger and avoid redoing completed feature development. It owns credential wiring, corpus restoration and final deployment after handoff. The original actforgoa.org site remains out of scope.
+
+### Deployment dependencies
+
+- Cloud config has no bound Anthropic or deployment secrets. User will use local credentials for deployment and may later add cloud keys; do not solicit or print secret values in chat.
 - Allowed destinations do not currently include Anthropic or Railway/Vercel control APIs. Do not bypass the configured proxy/policy.
 - Full research corpus/index is absent from this cloud checkout. Public live search previously contained 1,156 documents; prior private candidate contained 1,174 including legal additions. These numbers are historical handoff evidence, not verification of current cloud data. Restore verified public-source corpus via approved deployment/storage access, preserving generation IDs and existing accounting. The five tracked canonical guides can be indexed/tested separately and must not be described as the full legal/ecology corpus.
 - Impeccable skill installation has not been found. Existing `.impeccable` surface/design files and DESIGN.md are present. Record this gap; do not fabricate an Impeccable pass.
+- Exact Disco dashboard source was not accessible through connected GitHub installations or the cloud filesystem. Implement the requested dashboard workflow and have the local orchestrator compare against the existing Disco files before claiming exact parity. Do not replace the existing blog archive.
 
 ### Completion record format
 

@@ -13,6 +13,8 @@ import { crmDirectoryDetails } from './crm-directory';
 import { directoryMatches } from './mcp-search';
 import { ListingLink } from './ListingLink';
 import './crm.css';
+import { useStarredIds } from './CurationProvider';
+import { prioritizeStarred } from './curation';
 
 function download(name: string, text: string, type = 'application/json') {
   const url = URL.createObjectURL(new Blob([text], { type }));
@@ -37,6 +39,7 @@ function Photo({ record }: { record: CRMRecord }) {
 }
 
 export default function CRM() {
+  const starredIds = useStarredIds();
   const [data, setData] = useState<CRMSnapshot | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [retry, setRetry] = useState(0);
@@ -73,7 +76,10 @@ export default function CRM() {
   }, []);
   const opportunityIds = useMemo(() => new Set(data?.opportunities.flatMap(r => split(r.related_record_ids)) || []), [data]);
   const byId = useMemo(() => new Map(data?.records.map(r => [r.record_id, r]) || []), [data]);
-  const results = useMemo(() => directoryMatches(filterRecords(data?.records || [], opportunityIds, filters, workspace), Number.MAX_SAFE_INTEGER).map(({record}) => record), [data, opportunityIds, params, workspace]);
+  const results = useMemo(() => {
+    const matches = directoryMatches(filterRecords(data?.records || [], opportunityIds, filters, workspace), Number.MAX_SAFE_INTEGER).map(({record}) => record);
+    return filters.sort === 'relevance' ? prioritizeStarred(matches, starredIds, record => record.record_id) : matches;
+  }, [data, opportunityIds, params, workspace, starredIds]);
   const facets = useMemo(() => directoryFacets(data?.records || [], opportunityIds, filters, workspace, undefined, true), [data, opportunityIds, params, workspace]);
   const selected = recordId ? byId.get(recordId) : undefined;
   const page = Math.min(Math.max(1, Math.floor(Number(params.get('page'))) || 1), Math.max(1, Math.ceil(results.length / 25)));
