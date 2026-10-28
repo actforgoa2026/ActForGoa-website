@@ -1,0 +1,17 @@
+{
+  "checks": [
+    "Anonymous browsing hides staff controls; unauthorized writes are rejected",
+    "Staff can star on the public directory; matching pick rises immediately without leaving results",
+    "Dashboard opens saved picks directly and searches the same canonical record",
+    "Unstarring in the dashboard syncs to the open website tab",
+    "Starring on the website syncs back to an already-open dashboard",
+    "Visitors see curated ordering without staff controls or curator identities",
+    "Resource cards and detail pages share the same saved stars",
+    "Website and dashboard fit 390px with 44px star controls",
+    "Website and dashboard fit 320px with 44px star controls",
+    "Signing out in the dashboard removes controls from the open website tab",
+    "No browser page errors"
+  ],
+  "errors": [],
+  "preview": "Local real admin service with disposable SQLite and test account; not production"
+}

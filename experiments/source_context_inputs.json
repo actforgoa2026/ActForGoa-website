@@ -1,0 +1,14 @@
+{
+  "generation": "20261022T155701-21661179",
+  "origin": "read_only_public_source_recovery_2026_10_28",
+  "semantic_acceptance": "not_assessed",
+  "files": {
+    "bio-pages.json": "27ebfa48767972d0abdffe1b7942ee8f27d48fb6b8daa97a5affeadc279c3065",
+    "bio-context.json": "40c4dbc7d88266ff7215173155c39d4abd6d4e136d469343835396bd5be30df0",
+    "bio-meta.json": "dc1871faf3cd98845c17d01540cb6e115a19318c97ed85dae00a6a3dcf83cdc2",
+    "lake-pages.json": "5041b4bc7f7e86f8efedb18c625c2bd9ecc114c73a50e1d6c870c34c399483bd",
+    "lake.json": "e3558d5330bba7d48b0697477a34f41e305aad04d32051c8b4e3b7052fb33001",
+    "design-pages.json": "ae9cbb0d5fd09b8fe77988764316b43b0981a43511950e31f2fce43b1054a364",
+    "bio-original.pdf": "1feec0377b0046ae153a7d2f42a0c94028a5d31c8521db9b9459cac7f8ec1ccb"
+  }
+}

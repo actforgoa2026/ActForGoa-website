@@ -67,6 +67,7 @@ import { TOPICS, kindLabel } from "./types";
 import { hybridSearch } from "./search";
 import { inferSearchIntent, focusSearchResults, groupIntentResults } from "./search-intent";
 import { catalogueFilters, searchDestination, showEmergencyShortcut } from "./search-navigation";
+import { homeSearchDestination } from "./home-search";
 import EmergencyServices from "./EmergencyServices";
 import { buildDiscoverySections } from "./discovery";
 import { DiscoveryLinks, DiscoveryTopics } from "./DiscoveryLinks";
@@ -80,6 +81,7 @@ import SegmentedControl from "./components/arc/segmented-control/segmented-contr
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 import { useStarredIds } from './CurationProvider';
 import { prioritizeStarred } from './curation';
+import {CurationStar, TeamBrowsingBar} from './TeamAccess';
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
@@ -119,13 +121,21 @@ function SearchBox({
   large?: boolean;
 }) {
   const [value, setValue] = useState(initial);
+  const [needsTopic, setNeedsTopic] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   useEffect(() => setValue(initial), [initial]);
   function submit(e: FormEvent) {
     e.preventDefault();
     if (large && !value.trim()) return;
-    navigate(searchDestination(location.pathname, location.search, value), {
+    const destination = large
+      ? homeSearchDestination(value)
+      : searchDestination(location.pathname, location.search, value);
+    if (!destination) {
+      setNeedsTopic(true);
+      return;
+    }
+    navigate(destination, {
       preventScrollReset: location.pathname !== "/",
     });
   }
@@ -136,7 +146,10 @@ function SearchBox({
         label="What would you like help with in Goa?"
         placeholder="What would you like help with in Goa?"
         value={value}
-        onChange={(event) => setValue(event.target.value)}
+        onChange={(event) => {
+          setValue(event.target.value);
+          setNeedsTopic(false);
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
             event.preventDefault();
@@ -146,14 +159,17 @@ function SearchBox({
         rows={2}
         autoComplete="off"
         enterKeyHint="send"
-        aria-describedby="ask-hint"
+        aria-describedby={needsTopic ? "ask-hint ask-topic-feedback" : "ask-hint"}
       />
       <div className="ask-toolbar">
-        <span id="ask-hint">Find people, guides &amp; local knowledge</span>
+        <span id="ask-hint">Find the right topic for your next step</span>
         <Button type="submit" size="sm" disabled={!value.trim()} aria-label="Ask ActForGoa">
           <ArrowUp size={21} aria-hidden="true" />
         </Button>
       </div>
+      {needsTopic && <p id="ask-topic-feedback" className="ask-topic-feedback" role="status">
+        I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading">choose a topic below</a>.
+      </p>}
     </form>
   );
   return (
@@ -252,7 +268,7 @@ function Home({ records }: { records: RecordItem[] }) {
       <HomeCarousel><SearchBox large /></HomeCarousel>
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
-          <h2 id="home-actions-heading" lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
+          <h2 id="home-actions-heading" tabIndex={-1} lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
           <Link to="/emergency" className="button green emergency-entry">
             <Siren size={20} aria-hidden="true" />
             <span lang={language}><strong>{translatePriority("Emergency services", language)}</strong></span>
@@ -881,7 +897,7 @@ function Detail({ records }: { records: RecordItem[] }) {
             <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}</span>
             <span>{r.topics[0]}</span>
           </div>}
-          <h1>{r.title}</h1>
+          <div className="curation-heading"><h1>{r.title}</h1>{r.kind !== "page" && <CurationStar recordId={r.id} title={r.title}/>}</div>
           <div className="detail-byline">
             From ActForGoa
             {r.publishedAt && <> · Published {formatDate(r.publishedAt)}</>}
@@ -1340,7 +1356,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <Header />}
+      {!internal && <><Header /><TeamBrowsingBar /></>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (

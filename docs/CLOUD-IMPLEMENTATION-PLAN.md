@@ -20,6 +20,12 @@ The user subsequently instructed CLOUD to ship [PR #92](https://github.com/actfo
 
 The local release owner now [reports working Vercel/Railway credentials and a live acceptance hold](https://github.com/actforgoa2026/ActForGoa-website/issues/89#issuecomment-6465660719). On the earlier `7bf1965` runtime, water-04 returned a mechanically valid answer without final semantic acceptance; scope-01 returned an app 502 after the provider used document titles as citation IDs while its supports used passage IDs. That captured answer also exceeded the old 180-word bound, and the owner flagged ecological scope/population wording concerns. Only the length bound is changed by the voice follow-up: citation identity and semantic issues remain unresolved. Do not relabel the failed capture as accepted, replay unchanged diagnostics or bypass validation. The remaining cases and HTTP/hosted/admin checks have not passed. The owner retained both charged reservations, reconciled accounting and stopped promotion; deployment of AI answers remains held.
 
+## Internal tools continuation — public-site curation
+
+The user requested shipping the blogging/internal tools, then added curation while browsing the normal website. Source `26a447bfea5d7c3d2129b160ba0130a4ed64d504` on `codex/internal-tools-shipping` adds staff-only stars on public records, the staff browsing bar, direct dashboard team-picks view, and cross-tab synchronization of the existing shared curation. It preserves relevant-only ranking and private sessions. See [the scoped handoff and verification](../reports/internal-tools-2026-10-28/README.md).
+
+Implemented and cloud-tested; this follow-up is pending integration and is **not live**. 178 Node tests/build and 17 local real-service browser checks passed. Cloud Railway requests return a Cloudflare 403, despite a ready binding. The user explicitly chose **ORCHESTRATOR’s working local access** to deploy. No competing alias promotion or service creation occurred here; the existing focused release owner remains responsible for the hosted editorial service, named accounts, server-only Vercel wiring and actual hosted checks. This request does not waive research acceptance or increase its budget. The original domain remains out of scope.
+
 ## Work ledger
 
 Last updated: 28 October 2026. All `/workspace` paths below are on the cloud executor. Integration PR: https://github.com/actforgoa2026/ActForGoa-website/pull/90. Branch: `codex/cloud-integration-20261028`. Implementation and cloud acceptance are complete; the fresh review corrections below are included in the source landing. **Live deployment remains pending.** The exact merge SHA and latest release state are recorded on PR #90 and issue #89; a merge alone is not deployment.
@@ -137,3 +143,98 @@ Environment reports no bound secrets or cloud identities. HTTP access currently 
 ## About copy update — 28 October 2026
 
 Branch `codex/about-copy-update` replaces the About page's historic introductory text and imported blocks with the user's supplied platform statement, content policy, Kokum Trust attribution and gratitude paragraph. The archive link, sidebar and field-guide provenance remain available. Implementation complete; production build passes and Chromium at 1440px and 390px confirms the supplied copy and no horizontal overflow. Screenshots: `.reports/about/1440.png` and `.reports/about/390.png` (local). Rendered desktop/phone reviewed; Impeccable skill unavailable in this executor. Merge and live deployment pending; existing release owner retains promotion ownership.
+
+## Cloud-only claim assessment continuation — 28 October 2026
+
+The user's latest instruction keeps this research-chat work entirely in cloud;
+do not reactivate the stopped local ECO SYSTEM thread. Earlier local-release
+references above do not authorize local execution for this continuation.
+
+Fresh remote main is `a786df50a9f69663c0e68751accc6d136890715a`;
+PR #88 head remains `0c234e6f53dce24632875cc1f58f0c4dd302078a`.
+Isolated branch: `codex/offline-claim-assessment`, cloud worktree
+`/workspace/actforgoa-claim-assessment`. Candidate files:
+`experiments/claim_review_candidate.py`, its test module, and
+`docs/RESEARCH-OFFLINE-CLAIM-CANDIDATE.md`.
+
+Implemented: offline explicit-span/claim review prototype only. Complete evidence
+still permits wrong wording; the tests deliberately preserve that counterexample.
+Mechanical verification: experiment discovery ran 71 tests, with one skipped
+(70 executed); this count is coincidental and is NOT the 71-case semantic gate.
+Unchanged research suite: 121 passed. `git diff --check` passed. No production
+runtime, UI, provider configuration, ledger or acceptance expectations changed.
+Semantic acceptance: none. Merge: not merged. Production verification: none.
+No paid calls, deployments or local-thread activation performed.
+
+Missing: historical capture reviews, unsealed dependency assessment, frozen
+71 semantic cases plus three HTTP journeys, and verified persistent accounting.
+Reported 28 daily attempts / 2,316,292 monthly microdollars remain historical,
+not reconciled values. The source documents a runtime-limit mismatch on current
+main that must be resolved before any dispatch. Next: review the offline candidate,
+recover missing evidence through cloud storage, finish complete-set assessment,
+and only then seek authorization for a concrete bounded acceptance run. Hold AI
+activation and preserve distinct semantic, HTTP and production launch gates.
+
+### Source-grounded offline follow-up
+
+Continued from `dabe9b353c13a0ed4c4d1bdd4b71c0939affccf7` on the same isolated
+cloud branch. Fresh main remains `a786df5`. Read-only production status confirms
+search ready/chat disabled and the older 1,156-document generation. Recovered
+public extracted pages and authenticated the original 155-page biodiversity PDF
+against its source metadata hash; inspected original pages 61/66/67. The narrative
+104 total conflicts with table numbering through 105. The lake extracts also
+contain an unresolved area disagreement. No historical capture was recovered.
+
+Implementation: seven authored real-source development probes with pinned private
+inputs, a reproducible offline review packet, stronger review fingerprints and
+support-limit failures. Facet checklist pass no longer implies semantic acceptance.
+See `docs/RESEARCH-SOURCE-CONTEXT-ASSESSMENT.md` for hashes, source identities,
+source-only verification and all limitations. The prototype is explicitly rejected
+as a sufficient automatic semantic fix; no runtime integration is recommended yet.
+
+Checks: experiment discovery 75 run/one skipped; evidence auditor 64 passed;
+capture adapter 40 run/one skipped; diff whitespace check passed. Frozen specs and
+expectations unchanged. Runtime regression result remains 121 passed from the
+previous commit; runtime files are unchanged. Semantic acceptance: none. Merged:
+no. Production launch verification: none. No paid call or ledger inspection;
+canonical reconciliation remains mandatory before any future paid call. No local
+execution, stopped-chat activation, release promotion or AI enabling occurred.
+
+Read-only issue #89 inspection found a newer reported accounting checkpoint of
+39 attempts / 2,360,028 monthly microdollars (comment 6467306803). This is reported,
+not reconciled persistent state; the user's 100-attempt constraint remains in
+force. Historical issue instructions do not authorize paid calls or local work.
+The missing historical evidence's cloud location has been requested from the user.
+
+### Native Git-history recovery — cloud-only
+
+The user asked us to locate the prior material independently. Fetched remote
+research branches and recovered PR #88 head `0c234e6f53dce24632875cc1f58f0c4dd302078a`
+in an isolated detached cloud checkout. Recovered 50 Goa + 5 legal + 12 consumed
+assessment cases byte-for-byte with the exact frozen hashes; 67/71 are now available.
+Four boundary-case definitions, exact three HTTP journey definitions, private
+historical captures/reviews and unsealed dependency draft remain unrecovered.
+None is replaced or waived. See `docs/RESEARCH-NATIVE-RECOVERY.md` for the full
+reproduction and limitations.
+
+Native verification: 181 existing selected tests passed; six new pure-builder
+profiles retained all full-page source text within 24,000/36,000/4,096 byte caps,
+with 12,000 output tokens and no client, call or ledger access. The earlier
+main-only runtime-limit concern remains separate from this recovered native path.
+Offline support limits corrected to original native 10/600 from main's 6/1,600;
+no production change. The matching Annexure V source obligation was recovered
+from physical page 118 and added as an explicit two-probe extension. All nine
+source probes retain semantic unassessed/release hold; adding duty/scope labels
+again is explicitly rejected as a demonstrated fix because native plans already
+had them. Source replay/experiment suite: 75 run, one missing frozen-capture skip.
+
+Implemented: reproducible Git recovery, actual-native budget construction and
+matching-obligation counterexamples. Semantically accepted: none. Merged: no.
+Production verified: no. No paid provider calls, model/config sweeps, ledger
+changes, local-host reads/execution, stopped-thread messages or activation.
+
+## Homepage search routing, 28 October 2026
+
+Feature commit `9cdac9c09e6da4f1734ed6f23daa7b1f844f1fa7` on `codex/home-search-routing` changes the homepage question composer to open the matching top-level topic menu, exactly like its large topic button. Emergency requests use the existing emergency destination; unclear or competing needs retain the input and offer the topic choices. Catalogue search retains its existing filters and retrieval behavior. The user explicitly requested shipping.
+
+Implemented and verified in an isolated checkout based on fresh main `9cea6e2`: 191 Node tests pass, production build passes, all eight topic destinations and emergency routing were exercised, and desktop/phone render and retained-route smoke checks pass. Impeccable reports no primary findings. Exact runtime hashes, screenshots, scope and limitations are in `reports/home-search-2026-10-28/`. Source landing and live deployment are pending at this handoff. The active ORCHESTRATOR retains combined promotion ownership; this feature chat has not changed the public alias. Next: review/land the branch and include it in the coordinator’s accepted release through `release:review`.

@@ -1,0 +1,23 @@
+{
+  "sourceCommit": "26a447bfea5d7c3d2129b160ba0130a4ed64d504",
+  "sourceTree": "82ca8f9bbb8e88b9961794a031a673eb2999f4d6",
+  "nodeTests": {
+    "passed": 178,
+    "failed": 0
+  },
+  "build": "passed",
+  "browserChecks": 17,
+  "browserEnvironment": "Cloud Chromium, real local admin service and disposable SQLite; not hosted acceptance",
+  "viewports": [
+    1440,
+    390,
+    320
+  ],
+  "live": false,
+  "limitations": [
+    "Railway GraphQL returns Cloudflare HTTP 403 in this environment.",
+    "No persistent admin service or production account provisioned.",
+    "Impeccable skill unavailable; existing design contract read and screenshots visually inspected.",
+    "Screenshots contain test content and Preview Editor, not live editorial data."
+  ]
+}
