@@ -1377,7 +1377,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
           <Routes>
-            <Route path="/explore" element={<OrbitLanding />} />
+            <Route path="/explore" element={<Home records={records} />} />
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />
