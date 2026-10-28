@@ -12,6 +12,7 @@ from mcp.server.fastmcp import FastMCP
 from mcp.server.transport_security import TransportSecuritySettings
 from .domain import CatalogRequest, CompareRequest, Query, DomainError
 from .service import SatelliteService
+from .providers import ImageClassifier
 
 
 def create_app(service=None):
@@ -108,6 +109,8 @@ def create_app(service=None):
     def status():
         return {'imagery_ready':bool(os.getenv('CDSE_CLIENT_ID') and os.getenv('CDSE_CLIENT_SECRET')),
                 'planner_ready':bool(os.getenv('ANTHROPIC_API_KEY')),'decisions_ready':bool(os.getenv('OPENAI_API_KEY')),
+                'classification_ready':ImageClassifier.selected_provider() is not None,
+                'classification_provider':ImageClassifier.selected_provider(),
                 'statewide_ready':False,'validation':'pending','scope':'Goa only','max_area_km2':25}
 
     @app.post('/plan')

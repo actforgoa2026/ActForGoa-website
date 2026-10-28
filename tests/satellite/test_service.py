@@ -16,7 +16,8 @@ from satellite.domain import Area, CatalogRequest, CompareRequest, DomainError, 
 from satellite.eve_cdse import CDSE, TOKEN_URL, CATALOG_URL, PROCESS_URL
 from satellite.evidence import compare_pixels, read_observation, classification_image
 from PIL import Image
-from satellite.providers import AnthropicPlanner, DecisionsClassifier, QUESTIONS
+from satellite.providers import AnthropicPlanner, AnthropicClassifier, DecisionsClassifier, ImageClassifier, QUESTIONS
+from satellite.summary import canopy_presence, summarize_comparison
 from satellite.service import SatelliteService
 from satellite.store import Store
 
@@ -86,6 +87,7 @@ def credentials(monkeypatch):
         monkeypatch.setenv(name,'synthetic-test-only')
     monkeypatch.setenv('SATELLITE_SERVICE_TOKEN','a'*40)
     monkeypatch.setenv('SATELLITE_MCP_TOKEN','m'*40)
+    monkeypatch.setenv('SATELLITE_CLASSIFIER','openai-decisions')
 
 
 @pytest.mark.parametrize('bbox',[[0,0,.01,.01],[74.5,15.5,74.51,15.51],[73.8,15.3,74.2,15.7],[73.9,15.5,73.8,15.4],[73.82,15.48,73.82001,15.48001],[float('nan'),15.4,74,15.5]])
@@ -269,3 +271,121 @@ def test_no_save_paths_and_body_limits(tmp_path,credentials):
     with TestClient(create_app(service)) as client:
         assert client.post('/catalog',headers=HEADERS,json={**CATALOG,'save_path':'/tmp/x'}).status_code==422
         assert client.post('/plan',headers=HEADERS,content=b'x'*17000).status_code==413
+
+
+def checked_evidence(count=0, coverage=1.0):
+    return {'state':'observable' if coverage>=.8 else 'insufficient_clear_coverage',
+            'common_usable_fraction':coverage, 'candidates_truncated':False,
+            'candidates':{'type':'FeatureCollection','features':[{'properties':{'area_m2':900}} for _ in range(count)]}}
+
+
+def assessed(before='uncertain', after='uncertain', change='uncertain'):
+    return {'state':'complete','answers':{'before_canopy':{'choice':before},'after_canopy':{'choice':after},'canopy_change':{'choice':change}}}
+
+
+@pytest.mark.parametrize('before,after,state',[
+    ('yes','no','possible_disappearance'),('no','yes','possible_appearance'),
+    ('yes','yes','visible_both'),('no','no','not_identified'),
+    ('yes','uncertain','inconclusive'),('uncertain','no','inconclusive'),
+    ('no','uncertain','inconclusive'),('uncertain','yes','inconclusive'),('uncertain','uncertain','inconclusive'),
+])
+def test_same_location_presence_decisions_do_not_invent_tree_identity(before,after,state):
+    result=canopy_presence(checked_evidence(),assessed(before,after))
+    assert result['state']==state
+    assert result['before']==before and result['after']==after
+    assert 'not an individual-tree' in result['scope']
+    if before==after=='yes':assert 'partial loss' in result['interpretation']
+    if (before,after)==('yes','no'):assert 'does not establish cutting' in result['interpretation']
+
+
+def test_clouds_missing_classifier_and_invalid_answers_cannot_become_absence():
+    for evidence,classification in [
+        (checked_evidence(coverage=.3),assessed('yes','no')),
+        (checked_evidence(),{**assessed('yes','no'),'state':'unavailable'}),
+        (checked_evidence(),assessed('invalid','no')),
+    ]:
+        result=canopy_presence(evidence,classification)
+        assert result['state']=='inconclusive'
+        assert result['before']=='uncertain'
+
+
+def test_presence_and_change_disagreement_is_explicit():
+    result=canopy_presence(checked_evidence(1),assessed('yes','no','no_visible_loss'))
+    assert result['state']=='conflicting_evidence'
+
+
+@pytest.mark.parametrize('count,before,after,change,state',[
+    (0,'yes','yes','no_visible_loss','no_candidate_detected'),
+    (1,'yes','yes','no_visible_loss','conflicting_evidence'),
+    (0,'yes','no','possible_loss','conflicting_evidence'),
+    (1,'yes','no','possible_loss','review_required'),
+    (1,'yes','no','no_visible_loss','conflicting_evidence'),
+])
+def test_interpretation_reconciles_numeric_and_image_decisions(count,before,after,change,state):
+    result=summarize_comparison('canopy_loss',checked_evidence(count),assessed(before,after,change),{'before':TIMES[0],'after':TIMES[1],'query_window_relation':'overlaps_window'})
+    assert result['state']==state
+    text=' '.join(s['text'] for s in result['statements'])
+    assert 'before that period' in text and 'exact event date' in text
+    assert all(set(s['sources'])<={'before','after','spectral','coverage','assessment'} and s['sources'] for s in result['statements'])
+
+
+def test_cloud_coverage_and_outside_dates_override_apparent_change():
+    interval={'before':TIMES[0],'after':TIMES[1]}
+    cloud=summarize_comparison('canopy_loss',checked_evidence(1,.2),assessed('yes','no','possible_loss'),interval)
+    assert cloud['state']=='inconclusive'
+    assert 'not enough clear imagery' in cloud['headline']
+    outside=summarize_comparison('canopy_loss',checked_evidence(1),assessed('yes','no','possible_loss'),{**interval,'query_window_relation':'outside_window'})
+    assert outside['state']=='outside_window'
+
+
+def test_absence_of_visible_burn_does_not_mean_no_fire():
+    classification={'state':'complete','answers':{'fire_evidence':{'choice':'no_visible_burn'}}}
+    result=summarize_comparison('fire',checked_evidence(),classification,{'before':TIMES[0],'after':TIMES[1]})
+    assert any('cannot establish that no fire occurred' in s['text'] for s in result['statements'])
+
+
+def test_decisions_default_does_not_silently_switch_to_anthropic(monkeypatch):
+    monkeypatch.delenv('SATELLITE_CLASSIFIER',raising=False)
+    monkeypatch.delenv('OPENAI_API_KEY',raising=False)
+    monkeypatch.setenv('ANTHROPIC_API_KEY','test-only')
+    assert ImageClassifier.selected_provider() is None
+    monkeypatch.setenv('OPENAI_API_KEY','test-only')
+    assert ImageClassifier.selected_provider()=='openai-decisions'
+    monkeypatch.setenv('SATELLITE_CLASSIFIER','anthropic')
+    assert ImageClassifier.selected_provider()=='anthropic'
+
+
+def test_anthropic_assessment_uses_two_images_and_rejects_unbounded_findings(monkeypatch):
+    monkeypatch.setenv('ANTHROPIC_API_KEY','test-only')
+    choices={name:'uncertain' for name in QUESTIONS};choices.update(before_canopy='yes',after_canopy='no')
+    def handler(request):
+        body=json.loads(request.content)
+        assert body['tool_choice']['name']=='assess_observations'
+        assert len([p for p in body['messages'][0]['content'] if p['type']=='image'])==2
+        return httpx.Response(200,json={'model':'test-model','stop_reason':'tool_use','content':[{'type':'tool_use','name':'assess_observations','input':choices}],
+            'usage':{'input_tokens':100,'output_tokens':30,'untrusted':'discard'}})
+    classifier=AnthropicClassifier(httpx.Client(transport=httpx.MockTransport(handler)))
+    result=classifier.classify(b'before',b'after',{})
+    assert result['answers']['before_canopy']['choice']=='yes'
+    assert result['usage']=={'input_tokens':100,'output_tokens':30}
+    choices['trees_cut']=37
+    with pytest.raises(DomainError):classifier.classify(b'before',b'after',{})
+
+
+def test_failed_decisions_call_retains_imagery_and_reserves_usage_once(tmp_path,credentials,monkeypatch):
+    monkeypatch.setenv('ANTHROPIC_API_KEY','test-only')
+    calls=[];base=transport(calls)
+    def handler(request):
+        if str(request.url)=='https://api.openai.com/v1/decisions':
+            calls.append(str(request.url));return httpx.Response(503,json={'error':'unavailable'})
+        return base.handle_request(request)
+    service=SatelliteService(tmp_path/'jobs.sqlite',httpx.Client(transport=httpx.MockTransport(handler)))
+    try:
+        result=service.run_comparison(CompareRequest(**COMPARISON))
+        assert result['classification']['state']=='unavailable'
+        assert result['before']['image'].startswith('data:image/png')
+        assert result['canopy_presence']['state']=='inconclusive'
+        assert service.store.db.execute("SELECT used FROM quota WHERE operation='classifications'").fetchone()[0]==1
+        assert calls.count('https://api.openai.com/v1/decisions')==1
+        assert not any('anthropic.com' in url for url in calls)
+    finally:service.close()

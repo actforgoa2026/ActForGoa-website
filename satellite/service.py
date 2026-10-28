@@ -5,7 +5,8 @@ import httpx
 from .domain import CatalogRequest, CompareRequest, DomainError, Query, make_plan, change_interval
 from .eve_cdse import CDSE
 from .evidence import read_observation, compare_pixels, public_observation, classification_image
-from .providers import AnthropicPlanner, DecisionsClassifier
+from .providers import AnthropicPlanner, ImageClassifier
+from .summary import summarize_comparison, canopy_presence
 from .store import Store
 
 
@@ -15,7 +16,7 @@ class SatelliteService:
         self.store = Store(path)
         self.cdse = CDSE(self.http)
         self.planner = AnthropicPlanner(self.http)
-        self.classifier = DecisionsClassifier(self.http)
+        self.classifier = ImageClassifier(self.http)
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.capacity = threading.BoundedSemaphore(1)
 
@@ -67,10 +68,13 @@ class SatelliteService:
         classification = {'state':'skipped','answers':{},'message':'Insufficient common clear coverage for reliable image classification.'}
         if evidence['state'] == 'observable':
             try:
+                if self.classifier.selected_provider():
+                    self.store.reserve('classifications', 10)
                 common = before['clear'] & after['clear']
                 classification = self.classifier.classify(classification_image(before, common), classification_image(after, common), {
                     'before':before_source, 'after':after_source, 'spectral_metrics':evidence['metrics'],
-                    'common_usable_fraction':evidence['common_usable_fraction'], 'area_m2':grid['area_m2']})
+                    'common_usable_fraction':evidence['common_usable_fraction'], 'area_m2':grid['area_m2'],
+                    'numeric_vegetation_loss_candidates':len(evidence['candidates']['features'])})
             except (DomainError, httpx.HTTPError):
                 classification = {'state':'unavailable','answers':{},'message':'Image classification was unavailable. The measured imagery evidence is retained.'}
         interval = {'before':a['acquired_at'],'after':b['acquired_at'],'exact_event_date':None,'cause':'not_established'}
@@ -78,6 +82,8 @@ class SatelliteService:
             interval['query_window_relation'] = change_interval(a['acquired_at'], b['acquired_at'], request.window_start.isoformat(), request.window_end.isoformat())['relation']
         # No exact event time or cause is generated from image differences.
         return {'intent':request.intent.value,'evidence':evidence,'classification':classification,
+                'summary':summarize_comparison(request.intent.value,evidence,classification,interval),
+                'canopy_presence':canopy_presence(evidence,classification),
                 'before':public_observation(before,before_source),'after':public_observation(after,after_source),
                 'area':{'geometry':grid['wgs84_geometry'],'area_m2':round(grid['area_m2']),'clipped_to_goa':grid['clipped_to_goa']},
                 'observation_interval': interval,

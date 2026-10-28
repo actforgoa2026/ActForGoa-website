@@ -29,4 +29,5 @@
 .satellite-results summary{cursor:pointer;min-height:44px;padding-block:12px;font-weight:750}
 .satellite-page a{color:var(--green);text-underline-offset:4px}.satellite-context>a{display:inline-block;padding-block:12px;font-weight:750}
 .satellite-page fieldset:disabled .satellite-map{pointer-events:none}
+.satellite-answer{max-width:78ch}.satellite-evidence-links{display:inline-flex;gap:10px;flex-wrap:wrap;font-size:12px}.satellite-presence{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding-block:16px;border-block:1px solid var(--line)}.satellite-presence dt{font-size:14px;line-height:1.6}.satellite-presence dd{margin:8px 0 0;font-size:24px;font-weight:750}.satellite-results [id]{scroll-margin-top:100px}
 @media(max-width:620px){.satellite-page{padding-block:24px 48px}.satellite-map{height:320px}.satellite-coordinates{grid-template-columns:repeat(2,minmax(0,1fr))}.satellite-pair,.satellite-assessments{grid-template-columns:1fr}.satellite-dates{grid-template-columns:minmax(0,1fr)}.satellite-heading p{font-size:16px}}

@@ -6,7 +6,9 @@ export type SatelliteObservation = {catalog_scene_id:string; acquired_at:string[
 export type SatelliteResult = {
   before:SatelliteObservation; after:SatelliteObservation;
   evidence:{state:string;common_usable_fraction:number;metrics:Record<string,{before_median:number;after_median:number;median_paired_change:number}>;candidates:GeoJSON.FeatureCollection; candidates_truncated?:boolean};
-  classification:{state:string;message?:string;answers:Record<string,{choice:string}>};
+  classification:{state:string;message?:string;provider?:string;model?:string;validation?:string;answers:Record<string,{choice:string}>};
+  summary?:{state:string;headline:string;statements:{text:string;sources:('before'|'after'|'coverage'|'spectral'|'assessment')[]}[]};
+  canopy_presence?:{before:'yes'|'no'|'uncertain';after:'yes'|'no'|'uncertain';state:string;interpretation:string;scope:string};
   observation_interval:{before:string;after:string;query_window_relation?:string};
   limitations:string[]; fire_detections:{state:string;message:string};
 };
