@@ -16,7 +16,7 @@ from .domains import Domain
 from .embeddings import ROOT
 from .library import Library
 from .hosting import public_config, PublicLimits, RequestSizeLimit, UsageLedgerUnavailable
-from .chat import ChatRequest, answer_question, prepare_answer
+from .chat import ChatRequest, answer_question, prepare_answer, retrieval_query
 
 load_dotenv(ROOT/'.env.local')
 
@@ -157,8 +157,7 @@ def create_app(root=None, index_root=None, client=None):
         if not chat_slots.acquire(blocking=False):raise HTTPException(429,'Two answers are already being prepared. Please try again shortly.')
         try:
             # Include recent user context to resolve follow-ups, never treat model history as evidence.
-            previous=next((m.content for m in reversed(request.history) if m.role=='user'),'')
-            retrieval=request.question+(' '+previous[:500] if len(request.question.split())<8 else '')
+            retrieval=retrieval_query(request)
             evidence=retrieve(retrieval,10,request.document_id,request.generation,request.domain)
             if not evidence and not request.include_outside_context:
                 return {'status':'insufficient_evidence','paragraphs':[],'citations':[],'outside_context':None,

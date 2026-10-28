@@ -45,6 +45,16 @@ class ChatRequest(BaseModel):
     generation: str | None = Field(default=None, pattern=r'^[a-zA-Z0-9-]{1,80}$')
 
 
+FOLLOWUP_REFERENCE = re.compile(r'\b(?:it|its|that|those|they|their|them|these|same)\b', re.I)
+
+
+def retrieval_query(request: ChatRequest):
+    """Retain user context for short or referential follow-ups, never as evidence."""
+    previous = next((m.content for m in reversed(request.history) if m.role == 'user'), '')
+    needs_context = len(request.question.split()) < 8 or (previous and FOLLOWUP_REFERENCE.search(request.question))
+    return request.question + (' ' + previous[:500] if needs_context else '')
+
+
 class Support(BaseModel):
     model_config = ConfigDict(extra='forbid')
     citation_id: str

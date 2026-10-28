@@ -1,5 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Browser follow-up correction
+
+All71 frozen semantic cases passed on fe461dc; the first two browser journeys also passed. The third safely abstained because the eight-word question “How does that differ during the dry season?” lost its prior Mandovi/Zuari retrieval subject. The HTTP body carried the correct history, but the API only appended prior user context below eight words. Reservation154/$14.588499 remains charged and the journey remains failed. Referential follow-ups now retain the last user subject regardless of that length threshold; assistant history is never used as retrieval evidence. Verify the71 accepted request queries and two accepted browser queries remain unchanged before retaining their captures. Then rerun only the changed failed follow-up. Limits remain160/$15.30; four launch slots remain reserved.
+
+
 ## Final allowance approved and resumed
 
 The user answered all pending allowance questions and explicitly approved the final160 combined requests for the Oct28 UTC window and$15.30 total October hard reservation cap. This supersedes the earlier155/$15 and160/$15 responses. At resumption it is Oct29 locally but still Oct28 UTC. The dated opt-in expires to100daily on Oct29UTC and$5monthly on November1; every failed/unknown reservation remains charged. Starting checkpoint:a77966e,66/71 accepted,146requests/$13.694491 reserved. Resume only assessment-service-enabling-law, boundary4 and three distinct HTTP/browser journeys, preserving four launch slots. Other local agents remain paused; issue89 records sole local release ownership. No deployment or generated-answer activation has yet occurred.
