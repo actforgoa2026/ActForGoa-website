@@ -1,4 +1,4 @@
-"""Explicit v4/medium identity; no provider, keys, corpus or live ledgers."""
+"""Explicit v5/medium identity; no provider, keys, corpus or live ledgers."""
 import asyncio
 from copy import deepcopy
 from dataclasses import replace
@@ -13,7 +13,7 @@ from tests.research.test_answer_pipeline import setup
 
 
 @pytest.mark.parametrize('pipeline,effort',[
-    ('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
+    ('two_pass_v5','low'),('two_pass_v4','medium'),('two_pass_v4','low'),('two_pass_v3','low'),('two_pass_v3','medium'),
     ('two_pass_v2','medium'),('two_pass_v1','medium')])
 def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,monkeypatch,pipeline,effort):
     monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE',pipeline)
@@ -22,7 +22,7 @@ def test_environment_does_not_silently_upgrade_old_versions_or_low_effort(setup,
 
 
 @pytest.mark.parametrize('change',[
-    {'effort':'low'},{'pipeline':'two_pass_v3'},
+    {'effort':'low'},{'pipeline':'two_pass_v4'},{'pipeline':'two_pass_v3'},
     {'model':'claude-sonnet-5-5'},{'max_output_tokens':11999}])
 def test_every_two_phase_entry_rejects_mismatched_configuration_before_keys_or_sends(setup,monkeypatch,change):
     config,request,original,transport,limits,_,_,_=setup
@@ -44,7 +44,7 @@ def test_every_two_phase_entry_rejects_mismatched_configuration_before_keys_or_s
     assert not limits.receipts and not transport.requests
 
 
-def test_v4_cache_cannot_reuse_prior_v3_low_identity(setup,monkeypatch):
+def test_current_cache_cannot_reuse_prior_v3_low_identity(setup,monkeypatch):
     config,_,original,*_=setup
     cache=AnswerCache()
     # Source-neutral replay of the prior version's otherwise identical cache
@@ -59,14 +59,14 @@ def test_v4_cache_cannot_reuse_prior_v3_low_identity(setup,monkeypatch):
     with pytest.raises(ValueError):AnswerCache.key(replace(config,pipeline='two_pass_v3'),original)
 
 
-def test_medium_changes_only_effort_in_actual_configuration_and_preserves_caps(setup):
+def test_medium_configuration_and_caps_remain_fixed(setup):
     config,request,original,transport,limits,_,run,_=setup
     draft=span_draft_message_request(config,prepare_span_draft(request,original))
     correction=reconstruction_message_request(config,prepare_reconstruction(request,original,{'status':'insufficient_evidence','paragraphs':[]}))
     assert draft['output_config']['effort']==correction['output_config']['effort']=='medium'
     assert draft['max_tokens']==correction['max_tokens']==12000
     assert answer_pipeline.pair_maximum_costs(config)==[9424,10624]
-    assert answer_pipeline.PROVIDER_STAGE_SECONDS==30 and answer_pipeline.PROVIDER_DEADLINE_SECONDS==65
+    assert answer_pipeline.PROVIDER_STAGE_SECONDS==45 and answer_pipeline.PROVIDER_DEADLINE_SECONDS==65
     result=run()
     assert all(phase['request_shape']['effort']=='medium' for phase in result.trace['phases'])
     assert len(transport.requests)==len(limits.receipts)==2

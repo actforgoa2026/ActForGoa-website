@@ -4,7 +4,7 @@ Implementation for review; not a statement that AI answers are enabled or accept
 
 ## Explicit configuration
 
-`ANTHROPIC_ANSWER_PIPELINE=two_pass_v4` requires `RESEARCH_CHAT_PROVIDER=anthropic`, `ANTHROPIC_CHAT_MODEL=claude-haiku-5-5`, `ANTHROPIC_CHAT_EFFORT=medium` and the existing 12,000-token output limit. Omission retains the separate `single_pass` path. There is no automatic fallback, retry, third call or different model. Existing secure key/workspace provisioning remains server-only.
+`ANTHROPIC_ANSWER_PIPELINE=two_pass_v5` requires `RESEARCH_CHAT_PROVIDER=anthropic`, `ANTHROPIC_CHAT_MODEL=claude-haiku-5-5`, `ANTHROPIC_CHAT_EFFORT=medium` and the existing 12,000-token output limit. Omission retains the separate `single_pass` path. There is no automatic fallback, retry, third call or different model. Existing secure key/workspace provisioning remains server-only.
 
 The API and acceptance harness both call `backend.answer_pipeline.run_answer_pipeline`. The first call selects exact source spans in the paragraph-level draft shape. Resolved supports then pass the existing native/public draft guards. Invalid, refused or incomplete drafts stop. A mechanically valid insufficient-evidence draft still reaches reconstruction so supported requested content can be recovered.
 
@@ -20,7 +20,7 @@ These are mechanical guards, not an entailment judge. An exact quote can accompa
 
 ## Execution and accounting
 
-Each request owns its asynchronous provider transport. Each phase has a 30-second cancellation deadline and shares a 65-second provider/no-new-dispatch deadline measured from HTTP entry, including request-body, corpus retrieval and preparation time. Browser disconnect cancels active provider I/O, prevents the next phase and blocks final publication/cache. The existing 75-second UI timeout is unchanged.
+Each request owns its asynchronous provider transport. Each phase has a 45-second cancellation ceiling and shares one 65-second provider/no-new-dispatch deadline measured from HTTP entry, including request-body, corpus retrieval and preparation time. Its effective deadline is the earlier of phase start plus 45 seconds and original request start plus 65 seconds; reconstruction receives only the remaining allowance. HTTPX read timeout is aligned at 45 seconds, with connect/write/pool at 10 seconds. This transport setting does not extend the shared deadline. The actual request hook checks both deadlines before capture work and after synchronous observer persistence; a known-unsent phase expiration retains the committed receipt with zero sends. Browser disconnect cancels active provider I/O, prevents the next phase and blocks final publication/cache. The existing 75-second UI timeout is unchanged.
 
 The synchronous native corpus search cannot safely be forcibly cancelled. A cancelled request retains ownership and joins that worker before releasing its slot. It then rechecks deadline/disconnect before any provider work. This is not a hard 65-second total HTTP or native-work completion guarantee. Actual HTTP latency remains a separate live acceptance check; cancelling local I/O does not prove the provider stopped billable computation.
 
@@ -30,7 +30,7 @@ At the currently reviewed rates and fixed maximum bounds, draft reserves at most
 
 ## Capture v4 and frozen plans
 
-Historical single-pass and `two_pass_v1`/`two_pass_v2`/`two_pass_v3` artifacts remain unchanged and cannot authorize this candidate. New plans must contain `pipeline: "two_pass_v4"`, the exact shared `PIPELINE_SPEC` including `anchor_protocol: "lossless_source_spans_v2"` and capture version 4, and for each UTC-day stage separate `max_cases` (equal to selected packet count) and `max_attempts` (at least twice that count, at most 100). The environment must independently select the same pipeline/model/effort/output bound. Existing exact-head, generation, ledger and execution-authorization checks still run before key loading or native access. Planning only hashes question packets.
+Historical single-pass and `two_pass_v1`/`two_pass_v2`/`two_pass_v3`/`two_pass_v4` artifacts remain unchanged and cannot authorize this candidate. New plans must contain `pipeline: "two_pass_v5"`, the exact shared `PIPELINE_SPEC` including `anchor_protocol: "lossless_source_spans_v2"` and capture version 4, and for each UTC-day stage separate `max_cases` (equal to selected packet count) and `max_attempts` (at least twice that count, at most 100). The environment must independently select the same pipeline/model/effort/output bound. Existing exact-head, generation, ledger and execution-authorization checks still run before key loading or native access. Planning only hashes question packets.
 
 The harness starts no new pair within 65 seconds of UTC reset. Mid-pair rollover stops before the next dispatch, retaining receipts and unrun cases. Reports cannot resume or overwrite a prior path. Every phase records exact safe outgoing bytes/hash/config, parent/phase identity, receipt and counters, state, known dispatch initiation or transmission uncertainty, available usage/stop metadata and timings. Both phases add original-baseline/actual-wire equality proofs, registry ownership/hash, input bindings, safe raw selectors and separately labelled deterministic support resolution, including partial failures. The draft records its normalized result; reconstruction adds the exact compact draft, final assembly offsets and normalized answer. Raw thinking, credentials and arbitrary error bodies are excluded. A failed capture write stops further work.
 
@@ -51,3 +51,7 @@ The wire-only workflow first chooses directly requested points, reads the comple
 ## Medium-effort candidate
 
 `two_pass_v4` changes both phases from low to medium effort and rejects the old version or low-effort combination. The four reviewed prompt byte strings, schemas, original evidence selection, span protocol, capture format, receipts, output and timeout limits are unchanged. The parity record identifies the earlier v3 prompt review; v4 reuses those exact approved bytes. This change has no observed accuracy or latency pass yet. Fresh final-runtime outputs must satisfy the same independent acceptance gate; no old low-effort result transfers.
+
+## Shared stage allocation candidate
+
+`two_pass_v5` keeps the exact v4 medium-effort request bodies, prompts, schemas, evidence and output caps. It changes only the versioned stage ceiling from 30 to 45 seconds, aligns the transport read timeout, and checks the phase deadline at both pretransport observer boundaries. The total 65-second provider allowance and 75-second UI timeout remain unchanged. Old v4/spec30 plans and cache identities cannot authorize or supply this candidate. The observed v4 draft timed out without a response; it supplies no accuracy result. Fresh runtime diagnostics and the same final acceptance gate remain required.

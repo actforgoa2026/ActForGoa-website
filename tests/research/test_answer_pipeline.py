@@ -52,7 +52,7 @@ def setup(monkeypatch):
     monkeypatch.setenv('RESEARCH_CHAT_PROVIDER','anthropic')
     monkeypatch.setenv('ANTHROPIC_CHAT_MODEL','claude-haiku-5-5')
     monkeypatch.setenv('ANTHROPIC_CHAT_EFFORT','medium')
-    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v4')
+    monkeypatch.setenv('ANTHROPIC_ANSWER_PIPELINE','two_pass_v5')
     config=chat_config();request=ChatRequest(question='What do gates do?')
     prepared=prepare_answer(request,[{'id':'a','text':'Gates regulate tidal water. Design must follow Appendix C.'}],provider='anthropic')
     async def handler(actual,n):

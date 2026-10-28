@@ -4,6 +4,7 @@ import json
 import httpx
 
 from .anthropic_provider import ENDPOINT, API_VERSION, AnthropicAPIError, native_content
+from .reconstruction import PROVIDER_STAGE_SECONDS
 
 
 class AsyncAnthropicClient:
@@ -12,7 +13,7 @@ class AsyncAnthropicClient:
         if workspace_id:
             headers['anthropic-workspace-id'] = workspace_id
         self._request_observer = None
-        self._http = httpx.AsyncClient(headers=headers, timeout=httpx.Timeout(30, connect=10, write=10, pool=10),
+        self._http = httpx.AsyncClient(headers=headers, timeout=httpx.Timeout(PROVIDER_STAGE_SECONDS, connect=10, write=10, pool=10),
             follow_redirects=False, trust_env=False,
             transport=transport if transport is not None else httpx.AsyncHTTPTransport(retries=0),
             event_hooks={'request': [self._observe_request]})

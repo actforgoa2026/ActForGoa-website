@@ -66,7 +66,7 @@ class ChatConfig:
     def async_client(self):
         from .async_anthropic import AsyncAnthropicClient
         if (self.pipeline,self.provider,self.model,self.effort,self.max_output_tokens)!=(
-                'two_pass_v4','anthropic','claude-haiku-5-5','medium',12000):
+                'two_pass_v5','anthropic','claude-haiku-5-5','medium',12000):
             raise ValueError('Async reconstruction requires an explicit reviewed pipeline')
         key = os.getenv(self.key_name)
         if not key:
@@ -109,9 +109,9 @@ def chat_config():
         raise ValueError('RESEARCH_CHAT_PROVIDER must be openrouter, qwen, anthropic or openai')
     if (provider, config.model) not in PRICES:
         raise ValueError('This model needs a reviewed budget rate before it can be enabled')
-    if config.pipeline not in ('single_pass', 'two_pass_v4'):
+    if config.pipeline not in ('single_pass', 'two_pass_v5'):
         raise ValueError('This answer pipeline needs a reviewed configuration')
-    if config.pipeline == 'two_pass_v4' and (provider, config.model, config.effort, config.max_output_tokens) != (
+    if config.pipeline == 'two_pass_v5' and (provider, config.model, config.effort, config.max_output_tokens) != (
             'anthropic', 'claude-haiku-5-5', 'medium', 12000):
         raise ValueError('Two-pass answers require explicit Haiku medium with 12000 output tokens')
     return config
