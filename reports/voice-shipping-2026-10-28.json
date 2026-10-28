@@ -1,0 +1,85 @@
+{
+  "scope": "Voice PR #92 source landing; not hosted deployment or semantic acceptance",
+  "runtime_commit": "6016ba3e588c145aa0fe11cfaa0052d852c02d2e",
+  "runtime_sha256": "3f70ff379daffcf74d61bc4ed70928e95065d0707fdea89138cc8982c29e2129",
+  "research_tests": {
+    "passed": 119,
+    "command": ".venv/bin/python -m pytest tests/research -q",
+    "note": "Passed on unchanged runtime in preceding implementation turn; independent scoped reviewer reran23 section tests."
+  },
+  "node_tests": {
+    "passed": 178,
+    "command": "NODE_USE_ENV_PROXY=1 npm test"
+  },
+  "build": {
+    "result": "passed",
+    "command": "npm run build",
+    "advisory": "Existing lazy pdfmake chunk exceeds the Vite size advisory."
+  },
+  "browser": {
+    "source": "UI fixture only; no provider calls",
+    "checks": [
+      {
+        "domain": "legal",
+        "width": 1440,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      },
+      {
+        "domain": "ecology",
+        "width": 1440,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      },
+      {
+        "domain": "legal",
+        "width": 390,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      },
+      {
+        "domain": "ecology",
+        "width": 390,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      },
+      {
+        "domain": "legal",
+        "width": 320,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      },
+      {
+        "domain": "ecology",
+        "width": 320,
+        "library_words": 300,
+        "paragraphs": 5,
+        "citations": 5,
+        "overflow": false,
+        "provenance_sections": 2
+      }
+    ],
+    "pageErrors": []
+  },
+  "independent_review": "No actionable findings in voice diff7bf1965..6016ba3; no edits or provider calls.",
+  "limitations": [
+    "No paid provider call or live semantic/tone acceptance",
+    "Impeccable skill unavailable; actual cloud Chromium layout inspected",
+    "Existing live answer acceptance failure and legal extraction finding remain with release owner"
+  ]
+}

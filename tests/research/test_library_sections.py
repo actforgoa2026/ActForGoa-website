@@ -85,6 +85,40 @@ def test_answer_contract_rejects_provenance_mixing(corruption):
     with pytest.raises(ValueError):normalize_answer(raw,request,evidence)
 
 
+def test_step_by_step_explanation_has_room_without_losing_citations():
+    # A synthetic source and its four supported steps, not model-quality evidence.
+    steps = [
+        "1. Start by writing down what you want to do and where you plan to do it. Include a simple description of the site and the work you are considering. This helps the office understand your enquiry before deciding which procedure may apply to your situation.",
+        "2. Contact the responsible office with that description and ask it to confirm the current procedure. Ask which documents it needs from you and whether any permission is required before you begin. Keep the response with your notes so you can refer to the information later.",
+        "3. Gather the documents the office asks for and check that the details match your enquiry. If something is unclear, ask the office to explain it before submitting the application. A missing document or an unclear description may need to be corrected during the enquiry process.",
+        "4. Keep a copy of your submitted documents and the acknowledgement you receive. Use the reference on that acknowledgement when following up with the office. An acknowledgement records receipt of your enquiry or application; it does not by itself confirm that permission for the work has been granted.",
+    ]
+    assert 180 < sum(len(step.split()) for step in steps) < 300
+    evidence = [{'id': f'step-{i}', 'text': step} for i, step in enumerate(steps)]
+    raw = {'coverage': 'full', 'paragraphs': [
+        {'text': source['text'], 'citations': [source['id']],
+         'supports': [{'citation_id': source['id'], 'quote': source['text']}]}
+        for source in evidence
+    ]}
+    request = ChatRequest(question='Can you explain those steps in a little more detail?')
+    result = normalize_answer(raw, request, evidence)
+    assert [paragraph['text'] for paragraph in result['paragraphs']] == steps
+    assert [citation['id'] for citation in result['citations']] == [source['id'] for source in evidence]
+    assert result['outside_context'] is None
+    invalid = deepcopy(raw)
+    invalid['paragraphs'][-1]['supports'][0]['quote'] = 'Permission is automatically granted.'
+    with pytest.raises(ValueError, match='supporting quote'):
+        normalize_answer(invalid, request, evidence)
+    # Even fully quoted answers retain a finite size bound; they are not truncated.
+    oversized = deepcopy(raw)
+    oversized['paragraphs'].append({
+        'text': ' '.join(steps[:3]), 'citations': ['extra'],
+        'supports': [{'citation_id': 'extra', 'quote': ' '.join(steps[:3])}],
+    })
+    with pytest.raises(ValueError, match='too long'):
+        normalize_answer(oversized, request, evidence + [{'id': 'extra', 'text': ' '.join(steps[:3])}])
+
+
 def test_no_library_match_is_labeled_and_never_has_fake_citations():
     raw={'coverage':'none','paragraphs':[],'outside_context':'Start by describing the location and the activity you want help with.', 'limitation':'No matching information was found in our library.'}
     result=normalize_answer(raw,ChatRequest(question='An uncovered topic?',domain='legal'),[])

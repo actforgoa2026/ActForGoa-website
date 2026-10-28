@@ -44,3 +44,83 @@
 .research-answer-section .citation-link{min-height:32px;min-width:32px;text-align:center}
 @media(max-width:1050px){.research-community ul{grid-template-columns:minmax(0,1fr)}.research-community li{padding-block:14px}.research-community h4{font-size:16px}}
 @media(max-width:620px){.research-domains{gap:8px;margin-bottom:24px}.research-domains a{flex:1 1 100%;min-height:48px;padding:10px 14px}.research-community ul{gap:0}.research-answer-section h3,.research-community>h3{font-size:17px}.research-answer-section .answer-paragraph{font-size:16px;line-height:1.85}.research-community li>a{min-height:44px}}
+
+/* The research conversation uses the rounded chat treatment requested by the user. */
+.research-chat{max-width:960px;padding-block:36px 64px;min-height:calc(100svh - 100px)}
+.research-chat .research-heading{max-width:none;text-align:center;margin-bottom:24px;position:relative;padding-top:34px}
+.research-chat .research-heading .back-link{position:absolute;left:0;top:0;font-size:13px;margin:0}
+.chat-mark{display:grid;place-items:center;width:52px;height:52px;margin:12px auto 18px;background:var(--pale);border-radius:18px;color:var(--green)}
+.research-chat .research-heading h1{font-size:clamp(32px,4vw,46px);line-height:1.15;letter-spacing:-.04em}
+.research-chat .research-heading>p{font-size:15px;line-height:1.65;max-width:42ch;margin:14px auto 0;color:var(--muted)}
+.research-chat .research-domains{justify-content:center;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.research-chat .research-domains a{flex:0 1 auto;min-height:40px;border-radius:999px;padding:8px 14px;gap:7px;font-size:12px;line-height:1.4;background:transparent}
+.research-chat .research-domains a[aria-current=page]{background:var(--green);border-color:var(--green);color:var(--paper)}
+.research-chat .research-domains svg{width:15px;height:15px}
+.research-chat .research-layout{display:block;max-width:780px;margin-inline:auto}
+.research-chat .research-turn{border:0;padding-top:6px;margin-bottom:36px;scroll-margin-top:100px}
+.chat-user-message{display:flex;justify-content:flex-end;margin-bottom:26px}
+.chat-user-message h2{font-size:16px;line-height:1.65;letter-spacing:0;font-weight:550;max-width:85%;padding:14px 20px;background:var(--pale);border-radius:22px 22px 6px 22px;overflow-wrap:anywhere;white-space:pre-wrap}
+.chat-sr-only,.chat-input label{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+.research-chat .research-answer-section{padding-block:0 12px}
+.research-chat .research-answer-section h3{font-size:13px;gap:8px;color:var(--muted);margin-bottom:16px}
+.research-chat .research-answer-section h3 svg{width:16px;height:16px}
+.research-chat .answer-paragraph{font-size:16px;line-height:1.85;margin-bottom:16px;max-width:none}
+.research-chat .research-outside{margin-top:14px;padding-top:18px}
+.research-chat .research-sources{border:0;margin:4px 0 10px}
+.research-chat .research-sources>summary{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 12px;border:1px solid var(--line);border-radius:999px;font-size:12px;line-height:1.6;font-weight:650;list-style:none}
+.research-chat .research-sources>summary::before{content:'+';font-size:16px;line-height:1}
+.research-chat .research-sources[open]>summary::before{content:'−'}
+.research-chat .research-sources>summary::-webkit-details-marker{display:none}
+.research-chat .research-sources[open]{padding-bottom:8px}
+.research-chat .research-source{padding-inline:4px}
+.research-chat .research-message{border:0;background:var(--pale);border-radius:18px;padding:16px 18px;margin-block:12px}
+.chat-related{margin-top:8px;color:var(--muted);font-size:12px}
+.chat-related>summary{display:flex;align-items:center;gap:7px;cursor:pointer;min-height:38px;width:fit-content;list-style:none}
+.chat-related>summary::-webkit-details-marker{display:none}
+.chat-related .research-community{margin-top:14px;color:var(--green)}
+.research-chat .chat-composer{position:sticky;bottom:16px;z-index:5;border:1px solid var(--line);border-radius:26px;padding:18px 18px 12px;background:var(--white);box-shadow:0 6px 28px rgb(25 62 50 / 7%);margin-top:20px}
+.chat-input{position:relative}
+.research-chat .chat-input textarea{min-height:58px;max-height:180px;padding:4px 4px 12px;border:0;border-radius:14px;resize:none;font-size:17px;line-height:1.6;background:transparent;box-shadow:none;outline:none}
+.research-chat .chat-input textarea:hover,.research-chat .chat-input textarea:focus-visible{background:transparent;box-shadow:none;outline:none}
+.research-chat .chat-composer:focus-within{background:#fafbf5}
+.research-chat .chat-composer .composer-actions{border:0;padding:0;margin:2px 0 0;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:nowrap}
+.research-chat .research-mode-fieldset [role=group]{border-radius:999px;background:var(--pale);padding:3px}
+.research-chat .research-mode-fieldset button{font-size:12px;min-height:32px;padding:5px 12px;border-radius:999px}
+.research-chat .research-mode-fieldset button>span{border-radius:999px}
+.research-chat .chat-composer .research-submit{width:42px;height:42px;min-width:42px;min-height:42px;border-radius:50%;padding:0;margin:0;display:grid;place-items:center;flex-shrink:0}
+.chat-composer-status{font-size:12px;color:var(--muted);display:flex;align-items:center;gap:8px;margin:12px 4px 0}
+.chat-working-dot{width:7px;height:7px;border-radius:50%;background:var(--green);flex-shrink:0;animation:chat-breathe 1.3s ease-in-out infinite}
+.chat-composer-meta{display:flex;justify-content:space-between;gap:12px;padding:10px 8px 0;color:var(--muted);font-size:11px;line-height:1.6}
+.chat-availability{font-size:12px;line-height:1.65;color:var(--muted);padding:12px 8px 0}
+.chat-availability button{font-size:12px;margin-top:3px}
+.research-chat .research-starters{margin-top:28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.research-chat .research-starters h2{grid-column:1/-1;font-size:12px;font-weight:550;letter-spacing:0;text-align:center;color:var(--muted);margin-bottom:2px}
+.research-chat .research-starters>button{border:1px solid var(--line);border-radius:16px;padding:14px;min-height:80px;font-size:13px;line-height:1.6;gap:8px;background:transparent}
+.research-chat .research-starters>button:hover{background:var(--pale)}
+.research-chat .research-starters>button svg{width:15px;height:15px;flex-shrink:0}
+.research-chat .chat-library-info{border:0;padding:0;margin:28px auto 0;max-width:none;font-size:13px}
+.chat-library-info>summary{display:flex;justify-content:center;align-items:center;gap:8px;font-size:12px;color:var(--muted);min-height:44px;cursor:pointer;list-style:none}
+.chat-library-info>summary::-webkit-details-marker{display:none}
+.chat-library-body{padding:20px 8px 0;max-width:65ch;margin:auto}
+.research-chat .chat-library-body h2{font-size:15px}
+.research-chat .chat-library-body p{font-size:13px}
+.research-chat.has-conversation .research-heading{margin-bottom:18px}
+.research-chat.has-conversation .chat-mark{display:none}
+.research-chat.has-conversation .research-heading h1{font-size:30px;margin-top:18px}
+.research-chat.has-conversation .research-heading>p{display:none}
+@keyframes chat-breathe{50%{opacity:.35}}
+@media(prefers-reduced-motion:reduce){.chat-working-dot{animation:none}}
+@media(max-width:620px){
+ .research-chat{padding-block:24px 40px}
+ .research-chat .research-heading{padding-top:30px;margin-bottom:20px}
+ .research-chat .research-domains{gap:6px;margin-bottom:24px}
+ .research-chat .research-domains a{font-size:11px;padding:8px 10px;min-height:38px}
+ .research-chat .chat-composer{border-radius:24px;padding:15px 13px 11px;bottom:10px}
+ .research-chat .chat-input textarea{font-size:16px;min-height:56px}
+ .research-chat .research-starters{grid-template-columns:1fr;gap:8px;margin-top:24px}
+ .research-chat .research-starters>button{min-height:54px;padding:12px 15px;border-radius:15px}
+ .chat-composer-meta{justify-content:center;text-align:center;font-size:10px}
+ .chat-composer-meta>p:first-child{display:none}
+ .chat-user-message h2{font-size:15px;max-width:90%;padding:12px 16px;border-radius:20px 20px 6px 20px}
+ .research-chat .research-mode-fieldset button{padding:5px 10px}
+}
