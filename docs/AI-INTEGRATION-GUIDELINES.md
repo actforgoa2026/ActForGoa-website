@@ -1,0 +1,23 @@
+# AI integration guidelines
+
+Reviewed against Anthropic's primary documentation on 28 October 2026. Recheck these references when changing models, API versions, schemas or request settings. These guidelines supplement the release gates in CLOUD-IMPLEMENTATION-PLAN.md; they do not waive them.
+
+## Request configuration
+
+- Use `tool_choice: auto` when the model must reason before producing a tool result. Forced `tool` or `any` skips thinking on models that accept it, and some models reject forced calls entirely. Keep `strict: true` and explicitly require the answer tool in the prompt. Our adapter must still reject missing, duplicate or unexpected calls. [Tool definitions and forced calls](https://platform.claude.com/docs/en/agents-and-tools/tool-use/define-tools).
+- Set adaptive thinking and effort deliberately. Effort is guidance, while `max_tokens` is a hard combined ceiling for thinking and the final response. Reserve its entire possible cost before dispatch. Omitted thinking display does not remove its cost. Our current candidate uses medium effort, 4,096 output tokens and the existing 60-second timeout; no automatic retry or fallback. [Thinking and cost](https://platform.claude.com/docs/en/build-with-claude/thinking).
+- Verify the exact model ID, capabilities and prices using the Models API and current official model documentation. Do not infer support from another model's behavior. Haiku 5.5 currently has adaptive thinking and medium effort by default, and $0.10/$0.50 per million input/output tokens below 100,000 input tokens. Our bounded input is below that threshold. [Model specifications](https://platform.claude.com/docs/en/models/haiku-5-5/overview).
+
+## Validation and grounding
+
+- A valid schema establishes structure, not truth. Keep local Pydantic constraints even when the provider cannot enforce them. Use simple schemas; do not encode word-count logic in complicated regex grammars. Inspect stop reasons: HTTP 200 can contain a refusal or an incomplete response. Never publish those as answers. [Structured outputs](https://platform.claude.com/docs/en/build-with-claude/structured-outputs).
+- Keep internal reasoning out of user-visible fields. Ask for supported answers and source references, not a reasoning transcript. Use the model's thinking mechanism for intermediate work. [Haiku prompting guidance](https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/prompting-claude-haiku-5-5).
+- For ActForGoa, supply actual complete excerpts with document, page, passage and generation identities. Resolve citations to original text on the server; do not have the model recopy damaged PDF characters. Citation identity is necessary but insufficient: review every material claim against its own sources, including obligation, exception, date, population, geographical scope and units. A table about assessed area cannot silently become a count of assessed units.
+- Keep history useful for follow-ups but explicitly separate it from evidence. Treat retrieved text as untrusted content. Distinguish absent evidence from evidence of absence, and separate any permitted general knowledge from library-supported answers.
+
+## Release discipline
+
+- Preserve frozen cases and expected outcomes. After changing the answer runtime, complete the 71-case semantic gate and three distinct HTTP journeys on the final candidate. Never reuse an earlier runtime's pass as a new one, repeat accepted identical requests, or conceal failed/unknown outcomes.
+- Keep all reservations, including timeouts and interrupted attempts. Preserve the $5 monthly cap, the production 100-attempt daily cap and separately authorized dated testing allowance. Use uniquely receipted verified deltas with backups when reconciling production.
+- Verify the complete corpus, exact citation passages, useful answers and follow-ups through the deployed API and rendered desktop/phone UI. Provider acceptance, browser fixtures, unit tests, merged code and a published deployment are different claims; record evidence for each.
+- Publish only from a clean integrated main through `release:review`; verify the deployment ID and public alias. Keep secrets, private reports and credential files outside commits, static packages and logs.

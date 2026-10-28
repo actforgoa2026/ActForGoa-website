@@ -148,7 +148,11 @@ def prepare_answer(request, evidence):
     body = {'question': request.question, 'domain': request.domain,
             'include_outside_context': request.include_outside_context,
             'conversation_context_not_evidence': context, 'evidence': []}
-    payload = {'system': INSTRUCTIONS, 'tool_choice': {'type': 'tool', 'name': 'answer_library_question'},
+    # Forced tool choice skips adaptive thinking. Let the model compare source
+    # qualifications first; the adapter still requires exactly one strict call.
+    payload = {'system': INSTRUCTIONS, 'tool_choice': {'type': 'auto'},
+               'thinking': {'type': 'adaptive', 'display': 'omitted'},
+               'output_config': {'effort': 'medium'},
                'tools': [{'name': 'answer_library_question', 'strict': True, 'description': 'Answer with cited library information and separately labeled general context.', 'input_schema': provider_schema([])}],
                'messages': []}
     for item in evidence:

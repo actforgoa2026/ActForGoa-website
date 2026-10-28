@@ -107,7 +107,10 @@ def test_anthropic_citation_contract(collection):
         assert response.status_code==200,response.text
         answer=response.json();assert answer['status']=='answered'
         assert captured[0]['model']=='claude-haiku-5-5'
-        assert captured[0]['tool_choice']['name']=='answer_library_question'
+        assert captured[0]['tool_choice']=={'type':'auto'}
+        assert captured[0]['thinking']=={'type':'adaptive','display':'omitted'}
+        assert captured[0]['output_config']['effort']=='medium'
+        assert captured[0]['max_tokens']==4096
         assert answer['outside_context'] is None
         for cite in answer['citations']:
             meta=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']});assert meta.status_code==200

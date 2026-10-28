@@ -8,7 +8,7 @@ ENDPOINT = 'https://api.anthropic.com/v1/messages'
 # Preserves the model and reviewed standard price from the prior integration.
 MODEL_PRICES = {'claude-haiku-5-5': ('0.10', '0.50'), 'claude-sonnet-5-5': ('2.00', '10.00')}
 DEFAULT_MODEL = 'claude-haiku-5-5'
-MAX_OUTPUT_TOKENS = 1800
+MAX_OUTPUT_TOKENS = 4096
 MAX_PROMPT_BYTES = 28000
 
 

@@ -131,6 +131,26 @@ def test_provider_failures_are_not_retried_or_credential_leaked():
     client.close()
 
 
+@pytest.mark.parametrize('reason,content',[
+    ('max_tokens',[{'type':'tool_use','name':'answer_library_question','input':{}}]),
+    ('refusal',[{'type':'text','text':'Declined'}]),
+    ('end_turn',[{'type':'text','text':'Unstructured answer'}]),
+    ('tool_use',[]),
+    ('tool_use',[{'type':'tool_use','name':'unexpected','input':{}}]),
+    ('tool_use',[{'type':'tool_use','name':'answer_library_question','input':{}}]*2),
+])
+def test_successful_transport_does_not_bypass_answer_contract(reason,content):
+    calls=[]
+    def provider(request):
+        calls.append(request)
+        return httpx.Response(200,json={'stop_reason':reason,'content':content})
+    client=AnthropicAnswers('fixture',httpx.Client(transport=httpx.MockTransport(provider)))
+    try:
+        with pytest.raises(ValueError):client.answer('claude-haiku-5-5',{})
+        assert len(calls)==1
+    finally:client.close()
+
+
 def test_failed_provider_attempt_stays_reserved_and_daily_budget_survives_restart(section_library,monkeypatch):
     calls=[]
     class FailedProvider:
