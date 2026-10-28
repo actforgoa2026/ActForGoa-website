@@ -61,7 +61,12 @@ class CDSE:
 
     def post(self, url, payload, limit=16_000_000):
         # No redirect following: provider tokens cannot be sent to caller-selected hosts.
-        with self.http.stream('POST', url, headers={'Authorization': 'Bearer ' + self.token()}, json=payload) as r:
+        headers = {'Authorization': 'Bearer ' + self.token()}
+        # Multiple output responses alone do not select the bundle: without this
+        # Accept header Process can return only the TIFF, omitting provenance.
+        if url == PROCESS_URL:
+            headers['Accept'] = 'application/tar'
+        with self.http.stream('POST', url, headers=headers, json=payload) as r:
             if r.status_code != 200:
                 if r.status_code == 401:
                     self._expiry = 0

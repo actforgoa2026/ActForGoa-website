@@ -1,0 +1,353 @@
+{
+  "started_at": "2026-10-28T10:27:45.786176+00:00",
+  "source_commit": "f60597a5c51796cc9ac40697b169931b1bf0d840",
+  "source_sha256": {
+    "satellite/__init__.py": "6b85c3e1a1eb1a8b7e90fc1b7ad1ce23a01f8c61414a06624f830d3d46ebe2d3",
+    "satellite/app.py": "63eb55f942aa306edf2d8a2cfbe1edd3b3ecd1dec3e3aceed76a3216b8d0eeda",
+    "satellite/domain.py": "dfb0580e4fcad5ac77cb161a8c84d69b80f4ee811523a9f0dfff25ddacbd8f81",
+    "satellite/eve_cdse.py": "ed807d8eff57d8989938ee09ccde4a8bff52164c126538a7fed7f7deb5623dd9",
+    "satellite/evidence.py": "5e323aa2a450d115774e1ac55a1713c19223d01040b6eb1b0312cb29ed1ed92e",
+    "satellite/providers.py": "be975c3f50fb3ff48e394bf5436216e6adc7c1d35afe6adcc458ae3d3a0d0860",
+    "satellite/run.py": "ace344b6e3c500bc7334119569f6b407f08038ff7aeec97aa15f4617114a6c76",
+    "satellite/service.py": "981283d12f0b746b257b981ee537dd580f75a384dc1b16d8c56e7f08410e27c7",
+    "satellite/store.py": "5339ddbd19de4e9047abac85d364e9e698f6db90b7d185e9170d70d9c75d5221"
+  },
+  "request": {
+    "area": {
+      "bbox": [
+        73.82,
+        15.48,
+        73.83,
+        15.49
+      ]
+    },
+    "start_date": "2026-09-18",
+    "end_date": "2026-10-28"
+  },
+  "selected_scene_ids": [
+    "S2C_MSIL2A_20261010T052731_N0513_R105_T43PCT_20261010T102100.SAFE",
+    "S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE"
+  ],
+  "requests": [
+    {
+      "url": "https://identity.dataspace.copernicus.eu/auth/realms/CDSE/protocol/openid-connect/token",
+      "status": 200,
+      "content_type": "application/json",
+      "processing_units": null
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/catalog/v1/search",
+      "status": 200,
+      "content_type": "application/geo+json;charset=utf-8",
+      "processing_units": "0.02"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/process/v1",
+      "status": 200,
+      "content_type": "application/x-tar",
+      "processing_units": "0.2172546312722261"
+    },
+    {
+      "url": "https://sh.dataspace.copernicus.eu/process/v1",
+      "status": 200,
+      "content_type": "application/x-tar",
+      "processing_units": "0.2172546312722261"
+    }
+  ],
+  "bundles": [
+    {
+      "path": "process-1.bin",
+      "bytes": 173056,
+      "sha256": "368689dd7bd86f102b817e76bec559c8baca6559e39490c92613458fe82730de",
+      "members": [
+        {
+          "name": "spectral.tif",
+          "bytes": 171320
+        },
+        {
+          "name": "userdata.json",
+          "bytes": 493
+        }
+      ]
+    },
+    {
+      "path": "process-2.bin",
+      "bytes": 176640,
+      "sha256": "43c40da48bf5f384681f2e71dd3f5794b9d6143a0ec1a36d5326c6ad306447b6",
+      "members": [
+        {
+          "name": "spectral.tif",
+          "bytes": 175038
+        },
+        {
+          "name": "userdata.json",
+          "bytes": 493
+        }
+      ]
+    }
+  ],
+  "observations": [
+    {
+      "label": "before",
+      "provenance": {
+        "catalog_scene_id": "S2C_MSIL2A_20261010T052731_N0513_R105_T43PCT_20261010T102100.SAFE",
+        "catalog_acquired_at": "2026-10-10T05:44:41.348Z",
+        "acquired_at": [
+          "2026-10-10T05:44:41.348Z"
+        ],
+        "process_tiles": [
+          {
+            "date": "2026-10-10T05:44:41.348Z",
+            "shId": 61161499,
+            "dataPath": "creo://eodata/Sentinel-2/MSI/L2A/2026/10/10/S2C_MSIL2A_20261010T052731_N0513_R105_T43PCT_20261010T102100.SAFE/GRANULE/L2A_T43PCT_A010943_20261010T053741/IMG_DATA/RRESOLUTION/T43PCT_20261010T052731_TILEBAND_RESOLUTION"
+          }
+        ],
+        "collection": "sentinel-2-l2a",
+        "preset": "true_color",
+        "display_resolution_m": 10,
+        "swir_and_scene_classification_native_resolution_m": 20,
+        "retrieved_at": "2026-10-28T10:27:54.040961+00:00"
+      },
+      "quality": {
+        "usable_fraction": 1.0,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.0
+      },
+      "raster": {
+        "shape": [
+          8,
+          113,
+          108
+        ],
+        "crs": "EPSG:32643",
+        "transform": [
+          10.0,
+          0.0,
+          373420.0,
+          0.0,
+          -10.0,
+          1712880.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "dtypes": [
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32"
+        ],
+        "evalscript_band_order": [
+          "B04",
+          "B03",
+          "B02",
+          "B08",
+          "B11",
+          "B12",
+          "SCL",
+          "dataMask"
+        ],
+        "scl_values": [
+          0.0,
+          4.0,
+          5.0
+        ],
+        "data_mask_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "spectral_sha256": "05e3467c49c43cfe9ab460cf05851c0a4082b30923ba28573b059c4439f6ac11",
+      "png_sha256": "8eac429d84d3257e9fe0254eab5517711b138b2832383c49256ef21951592dea"
+    },
+    {
+      "label": "after",
+      "provenance": {
+        "catalog_scene_id": "S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE",
+        "catalog_acquired_at": "2026-10-20T05:44:40.053Z",
+        "acquired_at": [
+          "2026-10-20T05:44:40.053Z"
+        ],
+        "process_tiles": [
+          {
+            "date": "2026-10-20T05:44:40.053Z",
+            "shId": 61303409,
+            "dataPath": "creo://eodata/Sentinel-2/MSI/L2A/2026/10/20/S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE/GRANULE/L2A_T43PCT_A011086_20261020T053930/IMG_DATA/RRESOLUTION/T43PCT_20261020T052841_TILEBAND_RESOLUTION"
+          }
+        ],
+        "collection": "sentinel-2-l2a",
+        "preset": "true_color",
+        "display_resolution_m": 10,
+        "swir_and_scene_classification_native_resolution_m": 20,
+        "retrieved_at": "2026-10-28T10:27:55.498306+00:00"
+      },
+      "quality": {
+        "usable_fraction": 1.0,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.0
+      },
+      "raster": {
+        "shape": [
+          8,
+          113,
+          108
+        ],
+        "crs": "EPSG:32643",
+        "transform": [
+          10.0,
+          0.0,
+          373420.0,
+          0.0,
+          -10.0,
+          1712880.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "dtypes": [
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32",
+          "float32"
+        ],
+        "evalscript_band_order": [
+          "B04",
+          "B03",
+          "B02",
+          "B08",
+          "B11",
+          "B12",
+          "SCL",
+          "dataMask"
+        ],
+        "scl_values": [
+          0.0,
+          4.0,
+          5.0
+        ],
+        "data_mask_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "spectral_sha256": "6973678b4f3126ec339d3a4c70d423b7e72bc3aabfb967d85d408804bea4b3ee",
+      "png_sha256": "5786e93b2fd14a1fdf08230946c33119e388dcf502ded721b509a38ca757f913"
+    }
+  ],
+  "state": "passed",
+  "classification": "not_requested",
+  "catalog": {
+    "state": "available",
+    "count": 10,
+    "truncated": false
+  },
+  "grid": {
+    "bounds": [
+      373420,
+      1711750,
+      374500,
+      1712880
+    ],
+    "width": 108,
+    "height": 113,
+    "crs": "EPSG:32643",
+    "resolution_m": 10,
+    "geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            373420.8773784234,
+            1711765.1777287356
+          ],
+          [
+            373426.9612674903,
+            1712871.4723351651
+          ],
+          [
+            374499.74339334003,
+            1712865.5958975467
+          ],
+          [
+            374493.71109594416,
+            1711759.3047095924
+          ],
+          [
+            373420.8773784234,
+            1711765.1777287356
+          ]
+        ]
+      ]
+    },
+    "area_m2": 1186875.3734638852,
+    "wgs84_geometry": {
+      "type": "Polygon",
+      "coordinates": [
+        [
+          [
+            73.82,
+            15.48
+          ],
+          [
+            73.82,
+            15.49
+          ],
+          [
+            73.83,
+            15.49
+          ],
+          [
+            73.83,
+            15.48
+          ],
+          [
+            73.82,
+            15.48
+          ]
+        ]
+      ]
+    },
+    "clipped_to_goa": false
+  },
+  "comparison": {
+    "common_usable_fraction": 1.0,
+    "state": "observable",
+    "metrics": {
+      "ndvi": {
+        "before_median": 0.5838,
+        "after_median": 0.6657,
+        "median_paired_change": 0.0757,
+        "paired_pixels": 11925
+      },
+      "ndwi": {
+        "before_median": -0.5595,
+        "after_median": -0.6394,
+        "median_paired_change": -0.0712,
+        "paired_pixels": 11925
+      },
+      "nbr": {
+        "before_median": 0.3068,
+        "after_median": 0.2993,
+        "median_paired_change": -0.0075,
+        "paired_pixels": 11925
+      }
+    },
+    "candidates": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "method": "Exploratory reflectance changes; thresholds require Goa field validation. Vegetation is not necessarily tree canopy.",
+    "candidates_truncated": false
+  },
+  "finished_at": "2026-10-28T10:27:55.512504+00:00",
+  "processing_units_reported": 0.45450926254445223,
+  "processing_units_note": "Provider-reported usage for recorded responses only; not a currency charge or account balance."
+}

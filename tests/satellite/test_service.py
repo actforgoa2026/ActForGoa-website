@@ -65,6 +65,7 @@ def transport(calls, cloud=False, stale=False):
             assert data['collections']==['sentinel-2-l2a']
             return httpx.Response(200,json={'features':[{'id':s['id'],'geometry':s['geometry'],'properties':{'datetime':s['acquired_at'],'eo:cloud_cover':0}} for s in SCENES]})
         if str(request.url)==PROCESS_URL:
+            assert request.headers['Accept']=='application/tar'
             assert data['output']['responses'][0]['format']['type']=='image/tiff'
             assert data['input']['data'][0]['dataFilter']['mosaickingOrder']=='mostRecent'
             assert data['output']['width']==grid['width']
@@ -182,6 +183,14 @@ def test_acquisition_mismatch_fails_closed(tmp_path,credentials):
         with pytest.raises(DomainError,match='acquisition'):service.run_comparison(CompareRequest(**COMPARISON))
         assert not any('openai.com' in u for u in calls)
     finally:service.close()
+
+
+def test_unbundled_tiff_cannot_be_used_without_provenance(credentials):
+    grid=Area(**AREA).grid()
+    cdse=CDSE(httpx.Client(transport=httpx.MockTransport(lambda r:httpx.Response(200,content=raster(grid)))))
+    cdse.token=lambda:'test-only'
+    with pytest.raises(DomainError) as error:cdse.observation(SCENES[0],grid)
+    assert error.value.code=='invalid_provenance'
 
 
 def test_missing_credentials_and_empty_catalog_are_distinct(monkeypatch):
