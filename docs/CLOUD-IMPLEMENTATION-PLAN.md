@@ -2,6 +2,14 @@
 
 Feature development, tests, indexing and browser QA ran under `/workspace` in the cloud. CLOUD owns this implementation. The user subsequently appointed **Coordinate agent threads and PRs** (`01a181ad-56ba-70c2-93cd-1aa5185d007a`) as the continuing cloud release coordinator. Its durable inbox and release record is [issue #89](https://github.com/actforgoa2026/ActForGoa-website/issues/89). The earlier proposal to resume the local ORCHESTRATOR is superseded; keep local workers and their old heartbeat paused. The user then directly instructed CLOUD to “ship it”: CLOUD is completing the bounded PR #90 source landing; the primary coordinator retains live deployment ownership.
 
+## Focused Sonnet source review and acceptance checkpoint
+
+The sole focused release owner remains the local ORCHESTRATOR under direct user authorization. Fresh main includes PR97 offline recovery; those experiments are retained but are not integrated as runtime validators. PR93, PR94 and PR96 remain in the combined candidate. Other local chats and the old heartbeat remain paused.
+
+Candidate15492ba passed its two diagnostics but failed the critical RTI case: the official FAQ itself has ambiguous jurisdiction wording that became a definite rule. Ten critical responses and one interrupted unknown were reserved; all are retained. Canonical accounting is72attempts on2026-10-28UTC and5,455,733microUSD reserved for October. The original stage is rejected. The source review registry now excludes only the exact passage ID, document, URL and text hash from generated-answer context, with an explicit search warning. Corpus bytes, source search and original-document access remain unchanged; no wording is silently repaired. Regression tests cover changed-source identity and atomic table context.
+
+Fresh71cases plus3HTTP journeys require74attempts, ending at146 and leaving4launch slots within the approved150. Worst-case additional reservation is8,387,456microUSD, within the approved$15October cap. Sonnet uses high adaptive effort,4096tokens,60seconds and one strict call; no retries. Review each captured case before dispatching the next. Frozen expectations are unchanged. Any failed case stops the stage. No previous runtime pass transfers. No AI activation or alias promotion before acceptance and actual hosted browser checks. Named editorial account exists; do not reset it.
+
 ## Retrieval correction after first Sonnet acceptance
 
 The first Sonnet candidate failed the critical stage: ambiguous RTI wording became a definite rule, a farming deadline came from locator metadata rather than its cited passage, and exact/private-measurement cases did not abstain. All15Sonnet attempts remain charged. Canonical Oct28 is59attempts andOctoberreserved4,019,675microUSD. No remaining paid stage ran on that failed candidate.

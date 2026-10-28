@@ -20,6 +20,8 @@ Reviewed against Anthropic's primary documentation on 28 October 2026. Recheck t
 
 Preserve the reviewed passage-selection and source-context helpers when integrating another backend. Hybrid document ranking alone can return introductions instead of the requested fee or procedure. Select complementary actual passages within each document, carry real table headers with their rows atomically through prompt budgeting, and keep domain filtering on both retrieval channels. Reviewed locator summaries must not be presented to the model as substantive source evidence. Check actual full-corpus results as well as small fixtures.
 
+Reviewed source defects are tracked by passage identity and exact text hash in `backend/source_review.json`. Excluded passages remain searchable with a warning; generated answers omit the whole affected source/context group. Never silently repair source text, suppress a changed passage using a stale review, or add question-specific canned answers.
+
 ## Release discipline
 
 - Preserve frozen cases and expected outcomes. After changing the answer runtime, complete the 71-case semantic gate and three distinct HTTP journeys on the final candidate. Never reuse an earlier runtime's pass as a new one, repeat accepted identical requests, or conceal failed/unknown outcomes.
