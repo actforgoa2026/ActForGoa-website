@@ -2,7 +2,7 @@ import { DatabaseSync } from 'node:sqlite';
 import { createHash, randomBytes, randomUUID, scrypt, timingSafeEqual } from 'node:crypto';
 import { chmodSync, mkdirSync } from 'node:fs';
 import { dirname } from 'node:path';
-import { blogLimits, type AdminUser, type BlogInput, type BlogPost, type CuratedStar, type PublicBlogPost } from '../shared/admin.ts';
+import { blogLimits, type AdminUser, type BlogInput, type BlogPost, type CuratedStar, type PublicBlogPost, type AdminPostPage, type PublicPostPage } from '../shared/admin.ts';
 
 export class AdminError extends Error { constructor(public status: number, message: string) { super(message); } }
 const fail = (status: number, message: string): never => { throw new AdminError(status, message); };
@@ -23,6 +23,8 @@ async function passwordMatches(password: string, stored: string) {
 }
 type UserRow = AdminUser & { password_hash: string; active: number };
 type PostRow = { id: string; data: string; version: number; created_at: string; updated_at: string; author_name: string; published: string | null };
+export type PostPageOptions = { limit?: number; cursor?: { time: string; id: string }; q?: string; status?: 'draft' | 'published' | 'all' };
+const pageCursor = (time: string, id: string) => Buffer.from(JSON.stringify({ time, id })).toString('base64url');
 const visibleUser = (row: UserRow): AdminUser => ({ id: row.id, email: row.email, name: row.name, role: row.role });
 const normalEmail = (email: string) => email.trim().toLowerCase();
 
@@ -90,13 +92,15 @@ export class AdminStore {
       this.audit('account-cli', 'revoke-account', user!.id as string);
     });
   }
-  async login(email: string, password: string, client: string) {
+  async login(email: string, password: string, client: string | null) {
     email = normalEmail(email);
     if (!email || email.length > 254 || !password || password.length > 256) fail(401, 'Email or password is incorrect.');
     const cutoff = this.now() - 15 * 60 * 1000;
     this.db.prepare('DELETE FROM admin_login_attempts WHERE time < ?').run(cutoff);
-    const emailHash = hashToken(email), clientHash = hashToken(client);
-    const attempts = this.db.prepare('SELECT COUNT(*) AS n FROM admin_login_attempts WHERE client=? OR email=?').get(clientHash, emailHash) as { n: number };
+    const emailHash = hashToken(email), clientHash = client === null ? '' : hashToken(client);
+    // A frontend relay is not an end-user identity. In proxy mode only the
+    // account and aggregate controls apply; never trust an arbitrary XFF header.
+    const attempts = this.db.prepare("SELECT COUNT(*) AS n FROM admin_login_attempts WHERE (client!='' AND client=?) OR email=?").get(clientHash, emailHash) as { n: number };
     const global = this.db.prepare('SELECT COUNT(*) AS n FROM admin_login_attempts').get() as { n: number };
     if (attempts.n >= 12 || global.n >= 150) fail(429, 'Too many sign-in attempts. Try again in 15 minutes.');
     this.db.prepare('INSERT INTO admin_login_attempts VALUES (?, ?, ?)').run(clientHash, emailHash, this.now());
@@ -144,7 +148,21 @@ export class AdminStore {
     const publicInput = published ? { title: published.title, slug: published.slug, excerpt: published.excerpt, body: published.body, tags: published.tags } : null;
     return { ...data, id: row.id, status: published ? 'published' : 'draft', version: row.version, createdAt: row.created_at, updatedAt: row.updated_at, publishedAt: published?.publishedAt ?? null, publishedSlug: published?.slug ?? null, authorName: row.author_name, hasUnpublishedChanges: published ? JSON.stringify(data) !== JSON.stringify(publicInput) : false };
   }
-  posts() { return this.db.prepare('SELECT p.*, live.data AS published FROM admin_posts p LEFT JOIN admin_published_posts live ON live.post_id=p.id ORDER BY p.updated_at DESC, p.id').all().map(row => this.post(row as PostRow)); }
+  posts(options: PostPageOptions = {}): AdminPostPage {
+    const limit = options.limit ?? 50, query = options.q?.trim() ?? '', status = options.status ?? 'all';
+    const join = 'FROM admin_posts p LEFT JOIN admin_published_posts live ON live.post_id=p.id';
+    const filter = " WHERE (?='all' OR (?='draft' AND live.post_id IS NULL) OR (?='published' AND live.post_id IS NOT NULL)) AND instr(lower(json_extract(p.data,'$.title') || ' ' || json_extract(p.data,'$.excerpt') || ' ' || json_extract(p.data,'$.body')),lower(?))>0";
+    const args = [status, status, status, query];
+    const total = (this.db.prepare(`SELECT COUNT(*) AS n ${join}${filter}`).get(...args) as { n: number }).n;
+    const published = (this.db.prepare('SELECT COUNT(*) AS n FROM admin_published_posts').get() as { n: number }).n;
+    const all = (this.db.prepare('SELECT COUNT(*) AS n FROM admin_posts').get() as { n: number }).n;
+    const cursorWhere = options.cursor ? ' AND (p.updated_at<? OR (p.updated_at=? AND p.id<?))' : '';
+    const cursorArgs = options.cursor ? [options.cursor.time, options.cursor.time, options.cursor.id] : [];
+    const rows = this.db.prepare(`SELECT p.*, live.data AS published ${join}${filter}${cursorWhere} ORDER BY p.updated_at DESC, p.id DESC LIMIT ?`).all(...args, ...cursorArgs, limit + 1) as PostRow[];
+    const posts = rows.slice(0, limit).map(row => { const { body: _body, ...summary } = this.post(row); return summary; });
+    const last = posts.at(-1);
+    return { posts, nextCursor: rows.length > limit && last ? pageCursor(last.updatedAt, last.id) : null, total, counts: { draft: all - published, published } };
+  }
   getPost(id: string) { return this.post(this.row(id)); }
   private slugAvailable(slug: string, id?: string) {
     const conflict = this.db.prepare('SELECT id FROM admin_posts WHERE slug=? AND id!=? UNION SELECT post_id AS id FROM admin_published_posts WHERE slug=? AND post_id!=?').get(slug, id ?? '', slug, id ?? '');
@@ -193,8 +211,16 @@ export class AdminStore {
       this.db.prepare('DELETE FROM admin_posts WHERE id=?').run(id); this.audit(user.id, 'delete-post', id);
     });
   }
-  publicPosts(): PublicBlogPost[] {
-    return this.db.prepare('SELECT data FROM admin_published_posts ORDER BY json_extract(data,\'publishedAt\') DESC, post_id').all().map(row => JSON.parse(row.data as string) as PublicBlogPost);
+  publicPosts(options: PostPageOptions = {}): PublicPostPage {
+    const limit = options.limit ?? 50, query = options.q?.trim() ?? '';
+    const filter = " WHERE instr(lower(json_extract(data,'$.title') || ' ' || json_extract(data,'$.excerpt') || ' ' || json_extract(data,'$.body')),lower(?))>0";
+    const total = (this.db.prepare(`SELECT COUNT(*) AS n FROM admin_published_posts${filter}`).get(query) as { n: number }).n;
+    const cursorWhere = options.cursor ? " AND (json_extract(data,'$.publishedAt')<? OR (json_extract(data,'$.publishedAt')=? AND post_id<?))" : '';
+    const cursorArgs = options.cursor ? [options.cursor.time, options.cursor.time, options.cursor.id] : [];
+    const rows = this.db.prepare(`SELECT data FROM admin_published_posts${filter}${cursorWhere} ORDER BY json_extract(data,'$.publishedAt') DESC, post_id DESC LIMIT ?`).all(query, ...cursorArgs, limit + 1);
+    const posts = rows.slice(0, limit).map(row => { const { body: _body, ...summary } = JSON.parse(row.data as string) as PublicBlogPost; return summary; });
+    const last = posts.at(-1);
+    return { posts, nextCursor: rows.length > limit && last ? pageCursor(last.publishedAt, last.id) : null, total };
   }
   publicPost(slug: string): PublicBlogPost {
     const row = this.db.prepare('SELECT data FROM admin_published_posts WHERE slug=?').get(slug);

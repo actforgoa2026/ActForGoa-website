@@ -16,6 +16,7 @@ Configuration:
 | `ADMIN_PORT` / `PORT` | Service port, default 4188. |
 | `ADMIN_CATALOG_ROOT` | Root containing the packaged public snapshots, default working directory. |
 | `ADMIN_TRUST_RAILWAY_PROXY` | Set `true` only behind Railway's edge with `RAILWAY_PROJECT_ID` present to use its `X-Real-IP` for login throttling. |
+| `ADMIN_BEHIND_FRONTEND_PROXY` | Set `true` for the Vercel same-origin relay. Its shared egress address is not an end-user identity; this mode uses account and global login limits without the per-client bucket. |
 
 ## Provision and revoke individual accounts
 
@@ -28,7 +29,7 @@ node --import tsx server/admin-accounts.ts revoke curator@example.org
 
 The add/reset command prompts without echoing the password in an interactive terminal. For an automated secure session it reads a password from stdin. Never put passwords in shell arguments, source files, browser storage or command logs. `add` on an existing email resets its credentials and revokes all sessions. `revoke` immediately disables the account and its sessions. There is no public signup, email delivery or recovery service. Each provisioned editor/admin can curate and manage articles; account provisioning remains an operator CLI action. The role label reserves a future account-management UI and does not grant access to the separate incident inbox.
 
-Sessions expire after 12 hours; cookies are Secure in production, HttpOnly and SameSite=Strict. Authenticated writes require the session's `X-CSRF-Token`. State-changing cross-origin requests are rejected. Passwords use salted scrypt; persisted session tokens are SHA-256 hashes. Login attempts are limited across account and client in a 15-minute window, with a global cap and two concurrent password checks. No shared default password is created.
+Sessions expire after 12 hours; cookies are Secure in production, HttpOnly and SameSite=Strict. Authenticated writes require the session's `X-CSRF-Token`. State-changing cross-origin requests are rejected. Passwords use salted scrypt; persisted session tokens are SHA-256 hashes. Login attempts are limited to 12 per account in a 15-minute window, with a 150-attempt global cap and two concurrent password checks. Direct mode additionally limits the client address; set `ADMIN_BEHIND_FRONTEND_PROXY=true` behind Vercel so one client cannot consume a shared relay-address bucket for the whole team. Arbitrary forwarded-IP headers are never trusted. No shared default password is created.
 
 ## Editorial behavior
 
@@ -37,6 +38,7 @@ Sessions expire after 12 hours; cookies are Secure in production, HttpOnly and S
 - Saving an already published article does not replace its public version. Only the explicit publish endpoint replaces the published snapshot. The live URL remains reserved until republishing; unpublish removes public access immediately. A published article must be unpublished before deletion.
 - Body content is Markdown. The consuming UI must disable raw HTML and permit only safe link/image protocols. The service returns data, never executable article HTML.
 - Public `/api/blog` and `/api/blog/:slug` contain published snapshots only. Private author emails, audit trails, password hashes and drafts never appear in these responses.
+- Article list endpoints omit bodies and accept `q` (up to 200 characters), `limit` (default 50, maximum 100) and an opaque `cursor`. Admin lists additionally accept `status=all|draft|published`. Responses include `nextCursor` and filtered `total`; admin lists include global `counts: {draft, published}` for the overview. Reset the cursor when filters change. Fetch a full article by ID/slug before editing/reading it. This keeps list responses bounded even for large articles.
 
 ## Deploy
 

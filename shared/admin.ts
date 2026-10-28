@@ -9,6 +9,10 @@ export type BlogPost = BlogInput & {
   authorName: string; hasUnpublishedChanges: boolean;
 };
 export type PublicBlogPost = BlogInput & { id: string; authorName: string; publishedAt: string; updatedAt: string };
+export type BlogPostSummary = Omit<BlogPost, 'body'>;
+export type PublicBlogPostSummary = Omit<PublicBlogPost, 'body'>;
+export type AdminPostPage = { posts: BlogPostSummary[]; nextCursor: string | null; total: number; counts: { draft: number; published: number } };
+export type PublicPostPage = { posts: PublicBlogPostSummary[]; nextCursor: string | null; total: number };
 export const blogLimits = { title: 180, slug: 100, excerpt: 500, body: 100000, tags: 12, tag: 40 } as const;
 
 /** Apply ONLY after query matching and selected filters; this never adds a result. */

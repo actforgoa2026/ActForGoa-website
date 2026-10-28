@@ -4,7 +4,7 @@ import { isIP } from 'node:net';
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { AdminError, AdminStore } from './admin-store.ts';
+import { AdminError, AdminStore, type PostPageOptions } from './admin-store.ts';
 
 const cookieName = 'afg_admin_session';
 const fail = (status: number, message: string): never => { throw new AdminError(status, message); };
@@ -35,6 +35,19 @@ function csrfMatches(actual: unknown, expected: string) {
   const supplied = Buffer.from(actual), wanted = Buffer.from(expected);
   return supplied.length === wanted.length && timingSafeEqual(supplied, wanted);
 }
+function pageOptions(url: URL): PostPageOptions {
+  const limit = Number(url.searchParams.get('limit') ?? 50), q = url.searchParams.get('q') ?? '', status = url.searchParams.get('status') ?? 'all';
+  if (!Number.isSafeInteger(limit) || limit < 1 || limit > 100 || q.length > 200 || !['all', 'draft', 'published'].includes(status)) fail(400, 'Choose a valid page size, search and article status.');
+  let cursor: PostPageOptions['cursor'];
+  if (url.searchParams.has('cursor')) {
+    try {
+      const parsed = JSON.parse(Buffer.from(url.searchParams.get('cursor')!, 'base64url').toString());
+      if (!parsed || typeof parsed.time !== 'string' || !Number.isFinite(Date.parse(parsed.time)) || new Date(parsed.time).toISOString() !== parsed.time || typeof parsed.id !== 'string' || !/^[a-f0-9-]{36}$/.test(parsed.id)) throw new Error();
+      cursor = { time: parsed.time, id: parsed.id };
+    } catch { return fail(400, 'This page link is invalid. Reload the article list.'); }
+  }
+  return { limit, q, status: status as PostPageOptions['status'], cursor };
+}
 
 /** Only IDs from the exact deployed catalogues may be newly starred. */
 export function loadAdminRecordIds(root: string): Set<string> {
@@ -46,7 +59,7 @@ export function loadAdminRecordIds(root: string): Set<string> {
 
 export type AdminServerOptions = {
   databasePath: string; knownRecordIds: ReadonlySet<string>; publicOrigin: string;
-  local?: boolean; trustRailwayProxy?: boolean; now?: () => number;
+  local?: boolean; trustRailwayProxy?: boolean; behindFrontendProxy?: boolean; now?: () => number;
 };
 export function createAdminServer(options: AdminServerOptions) {
   const origin = new URL(options.publicOrigin);
@@ -61,7 +74,7 @@ export function createAdminServer(options: AdminServerOptions) {
     res.setHeader('Referrer-Policy', 'no-referrer');
     res.setHeader('Vary', 'Origin');
     try {
-      if ((req.url?.length ?? 0) > 1000) fail(414, 'Request URL is too long.');
+      if ((req.url?.length ?? 0) > 4096) fail(414, 'Request URL is too long.');
       const url = new URL(req.url ?? '/', 'http://localhost');
       const path = url.pathname, method = req.method ?? 'GET';
       const unsafe = !['GET', 'HEAD', 'OPTIONS'].includes(method);
@@ -70,7 +83,7 @@ export function createAdminServer(options: AdminServerOptions) {
       if (method === 'OPTIONS') { res.writeHead(204); return res.end(); }
       if (path === '/api/admin/config' && method === 'GET') return json(res, 200, { available: true });
       if (path === '/api/curation' && method === 'GET') return json(res, 200, { starredIds: store.publicStars() });
-      if (path === '/api/blog' && method === 'GET') return json(res, 200, { posts: store.publicPosts() });
+      if (path === '/api/blog' && method === 'GET') return json(res, 200, store.publicPosts(pageOptions(url)));
       const publicPost = path.match(/^\/api\/blog\/([a-z0-9]+(?:-[a-z0-9]+)*)$/);
       if (publicPost && method === 'GET') return json(res, 200, { post: store.publicPost(publicPost[1]) });
       if (!path.startsWith('/api/admin/')) fail(404, 'Endpoint not found.');
@@ -82,7 +95,7 @@ export function createAdminServer(options: AdminServerOptions) {
           if (typeof data.email !== 'string' || typeof data.password !== 'string') fail(400, 'Enter your email and password.');
           const real = req.headers['x-real-ip'];
           const address = options.trustRailwayProxy && typeof real === 'string' && isIP(real) ? real : req.socket.remoteAddress ?? 'unknown';
-          const session = await store.login(data.email as string, data.password as string, address);
+          const session = await store.login(data.email as string, data.password as string, options.behindFrontendProxy ? null : address);
           // Replace a previous session on login rather than retaining it indefinitely.
           if (sessionToken(req)) store.logout(sessionToken(req));
           res.setHeader('Set-Cookie', `${cookieName}=${session.token}; HttpOnly; SameSite=Strict; Path=/api/admin; Max-Age=43200${origin.protocol === 'https:' ? '; Secure' : ''}`);
@@ -103,7 +116,7 @@ export function createAdminServer(options: AdminServerOptions) {
         if (typeof data.recordId !== 'string' || typeof data.starred !== 'boolean') fail(400, 'Choose a record and whether to star it.');
         return json(res, 200, { stars: store.star(store.session(token).user, data.recordId as string, data.starred as boolean) });
       }
-      if (path === '/api/admin/posts' && method === 'GET') return json(res, 200, { posts: store.posts() });
+      if (path === '/api/admin/posts' && method === 'GET') return json(res, 200, store.posts(pageOptions(url)));
       if (path === '/api/admin/posts' && method === 'POST') {
         const data = await readJson(req);
         return json(res, 201, { post: store.createPost(store.session(token).user, data) });
@@ -145,6 +158,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     knownRecordIds: loadAdminRecordIds(resolve(process.env.ADMIN_CATALOG_ROOT ?? '.')),
     publicOrigin, local,
     trustRailwayProxy: process.env.ADMIN_TRUST_RAILWAY_PROXY === 'true' && Boolean(process.env.RAILWAY_PROJECT_ID),
+    behindFrontendProxy: process.env.ADMIN_BEHIND_FRONTEND_PROXY === 'true',
   });
   const port = Number(process.env.ADMIN_PORT ?? process.env.PORT ?? 4188);
   server.listen(port, process.env.ADMIN_HOST ?? '127.0.0.1', () => console.log(`Admin service listening on port ${port}.`));

@@ -65,13 +65,15 @@ test('drafts, concurrent edits and published snapshots preserve explicit editori
     const user = await store.provision('writer@example.test', 'Community team', password);
     let post = store.createPost(user, draft);
     assert.equal(post.version, 1);
-    assert.deepEqual(store.publicPosts(), []);
+    assert.deepEqual(store.publicPosts(), { posts: [], nextCursor: null, total: 0 });
     assert.throws(() => store.publicPost(draft.slug), status(404));
     assert.throws(() => store.updatePost(user, post.id, 0, draft), status(409));
     post = store.publishPost(user, post.id, post.version, true);
     assert.equal(post.status, 'published');
     assert.equal(post.version, 2);
     assert.equal(store.publicPost(draft.slug).title, draft.title);
+    assert.equal(store.publicPosts().posts[0].title, draft.title, 'nonempty public lists use a valid SQLite JSON ordering path');
+    assert.equal('body' in store.publicPosts().posts[0], false);
     assert.throws(() => store.createPost(user, draft), status(409));
     post = store.updatePost(user, post.id, post.version, { ...draft, title: 'A revised headline', slug: 'river-update', body: 'Unreviewed draft revision' });
     assert.equal(post.hasUnpublishedChanges, true);
@@ -89,7 +91,7 @@ test('drafts, concurrent edits and published snapshots preserve explicit editori
     assert.equal('version' in publicPost, false);
     assert.equal('email' in publicPost, false);
     post = store.publishPost(user, post.id, post.version, false);
-    assert.deepEqual(store.publicPosts(), []);
+    assert.deepEqual(store.publicPosts(), { posts: [], nextCursor: null, total: 0 });
     store.deletePost(user, post.id, post.version);
     assert.throws(() => store.getPost(post.id), status(404));
   } finally { store.close(); }
@@ -149,13 +151,60 @@ test('HTTP authentication, CSRF, origin protection, logout and public boundaries
     const publicCuration = await (await request('/api/curation')).json();
     assert.deepEqual(publicCuration, { starredIds: ['guide-water'] });
     const post = await (await request('/api/admin/posts', { method: 'POST', headers, body: JSON.stringify(draft) })).json() as { post: { id: string; version: number } };
-    assert.deepEqual(await (await request('/api/blog')).json(), { posts: [] });
+    assert.deepEqual(await (await request('/api/blog')).json(), { posts: [], nextCursor: null, total: 0 });
     const publish = await request(`/api/admin/posts/${post.post.id}/publish`, { method: 'POST', headers, body: JSON.stringify({ version: post.post.version }) });
     assert.equal(publish.status, 200);
     assert.equal((await request(`/api/blog/${draft.slug}`)).status, 200);
+    const publicList = await request('/api/blog');
+    assert.equal(publicList.status, 200);
+    const publicPage = await publicList.json() as { posts: Record<string, unknown>[]; total: number };
+    assert.equal(publicPage.total, 1);
+    assert.equal('body' in publicPage.posts[0], false);
+    assert.equal((await request('/api/blog?limit=101')).status, 400);
+    assert.equal((await request('/api/blog?cursor=not-a-cursor')).status, 400);
     assert.equal((await request('/api/admin/logout', { method: 'POST', headers })).status, 200);
     assert.equal((await request('/api/admin/session', { headers })).status, 401);
   } finally { await new Promise<void>(resolveClosed => server.close(() => resolveClosed())); }
+});
+
+test('article summaries paginate without duplicates and search all records, with global admin counts', async () => {
+  let now = Date.now();
+  const store = new AdminStore(':memory:', new Set(), () => now);
+  try {
+    const user = await store.provision('writer@example.test', 'Writer', password);
+    for (let index = 0; index < 4; index++) {
+      now += 1000;
+      const post = store.createPost(user, { ...draft, slug: `article-${index}`, title: `Article ${index}`, body: index === 0 ? 'Find this unique riverword in an older article.' : draft.body });
+      if (index !== 2) store.publishPost(user, post.id, post.version, true);
+    }
+    const first = store.posts({ limit: 2 });
+    assert.equal(first.posts.length, 2); assert.equal(first.total, 4);
+    assert.deepEqual(first.counts, { draft: 1, published: 3 });
+    assert.ok(first.nextCursor); assert.equal('body' in first.posts[0], false);
+    const second = store.posts({ limit: 2, cursor: JSON.parse(Buffer.from(first.nextCursor, 'base64url').toString()) });
+    assert.equal(second.posts.length, 2); assert.equal(second.nextCursor, null);
+    assert.equal(new Set([...first.posts, ...second.posts].map(post => post.id)).size, 4);
+    const search = store.posts({ q: 'riverword', status: 'published' });
+    assert.equal(search.total, 1); assert.equal(search.posts[0].slug, 'article-0');
+    assert.deepEqual(search.counts, { draft: 1, published: 3 });
+    assert.equal(store.posts({ status: 'draft' }).posts[0].slug, 'article-2');
+    const publicFirst = store.publicPosts({ limit: 2 });
+    assert.equal(publicFirst.total, 3); assert.ok(publicFirst.nextCursor);
+    const publicSecond = store.publicPosts({ limit: 2, cursor: JSON.parse(Buffer.from(publicFirst.nextCursor, 'base64url').toString()) });
+    assert.equal(publicSecond.posts.length, 1); assert.equal(publicSecond.nextCursor, null);
+    assert.equal(store.publicPosts({ q: 'riverword' }).total, 1);
+  } finally { store.close(); }
+});
+
+test('frontend-proxy mode does not mistake shared relay egress for one visitor', async () => {
+  const store = new AdminStore(':memory:', new Set());
+  try {
+    await store.provision('editor@example.test', 'Editor', password);
+    for (let index = 0; index < 12; index++) await assert.rejects(store.login('wrong@example.test', password, null), status(401));
+    const session = await store.login('editor@example.test', password, null);
+    assert.equal(session.user.email, 'editor@example.test');
+    await assert.rejects(store.login('wrong@example.test', password, null), status(429), 'account limit still applies');
+  } finally { store.close(); }
 });
 
 test('revoking an account while an update body is arriving prevents the pending write', async () => {
