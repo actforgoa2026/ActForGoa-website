@@ -1,3 +1,4 @@
+import {CurationStar} from './TeamAccess';
 import {useEffect} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
 import Markdown from 'react-markdown';
@@ -24,7 +25,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
    : <Link className="back-link" to="/library"><ArrowLeft size={16}/>Back to library</Link>}
   <div className="detail-layout">
    <article>
-    <h1>{guide.heading}</h1>
+    <div className="curation-heading"><h1>{guide.heading}</h1>{guide.listed && <CurationStar recordId={guide.id} title={guide.title}/>}</div>
     {guide.summary && <p className="guide-summary">{guide.summary}</p>}
     <p className="guide-status"><strong>Draft for review.</strong> Sources checked 23 October 2026. Legal review and live service checks remain open. <Link to="/read/guide-verification">See what needs verification</Link>.</p>
     <details className="guide-contents" key={guide.id}>

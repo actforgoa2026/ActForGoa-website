@@ -81,6 +81,7 @@ import SegmentedControl from "./components/arc/segmented-control/segmented-contr
 import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 import { useStarredIds } from './CurationProvider';
 import { prioritizeStarred } from './curation';
+import {CurationStar, TeamBrowsingBar} from './TeamAccess';
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
@@ -896,7 +897,7 @@ function Detail({ records }: { records: RecordItem[] }) {
             <span>{r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}</span>
             <span>{r.topics[0]}</span>
           </div>}
-          <h1>{r.title}</h1>
+          <div className="curation-heading"><h1>{r.title}</h1>{r.kind !== "page" && <CurationStar recordId={r.id} title={r.title}/>}</div>
           <div className="detail-byline">
             From ActForGoa
             {r.publishedAt && <> · Published {formatDate(r.publishedAt)}</>}
@@ -1369,7 +1370,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <Header />}
+      {!internal && <><Header /><TeamBrowsingBar /></>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (

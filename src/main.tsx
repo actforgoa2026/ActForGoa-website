@@ -7,6 +7,7 @@ import "./styles.css";
 import App from "./App";
 import { LanguageProvider } from "./language";
 import { CurationProvider } from "./CurationProvider";
+import {TeamAccessProvider} from './TeamAccess';
 import { createCatalogueLoader } from "./catalogue-loader";
 
 const loadCatalogue = createCatalogueLoader();
@@ -30,6 +31,6 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <LanguageProvider><CurationProvider><RouterProvider router={router} /></CurationProvider></LanguageProvider>
+    <LanguageProvider><CurationProvider><TeamAccessProvider><RouterProvider router={router} /></TeamAccessProvider></CurationProvider></LanguageProvider>
   </React.StrictMode>,
 );

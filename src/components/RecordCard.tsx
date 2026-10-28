@@ -3,6 +3,7 @@ import { Users, BookOpen, Leaf, FileText, ArrowUpRight, MapPin } from "lucide-re
 import { communityDescription } from "../public-record";
 import { kindLabel, type RecordItem } from "../types";
 import {DirectoryActions, DirectoryPhoto, DirectoryTags} from "../DirectoryInfo";
+import {CurationStar} from "../TeamAccess";
 const recordPath = (r: RecordItem) => "/read/" + r.id;
 const formatDate = (value: string) => {
   const date = new Date(value);
@@ -62,7 +63,7 @@ export function RecordCard({
           {r.publishedAt && <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>}
         </div>}
         {community && <div className="record-meta">{r.publishedAt && <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>}<span>Archived listing · availability unconfirmed</span></div>}
-        <h3>
+        <div className="curation-heading"><h3>
           <Link
             to={recordPath(r)}
             state={{ fromCatalogue, fromHome: location.pathname === "/" }}
@@ -70,7 +71,7 @@ export function RecordCard({
             {r.title}
             <ArrowUpRight size={19} />
           </Link>
-        </h3>
+        </h3>{r.kind !== "page" && <CurationStar recordId={r.id} title={r.title}/>}</div>
         {community && (r.locations[0] || r.locality) && <div className="directory-location"><MapPin size={15} aria-hidden="true" /><span>{r.locations[0] || r.locality}</span></div>}
         {description && description !== "Read the original resource from ActForGoa." && (
           <p>
