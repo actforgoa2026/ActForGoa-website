@@ -14,7 +14,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   callback.current=onArea;blocked.current=disabled;
   useEffect(()=>{
     if(!container.current)return;
-    const instance=L.map(container.current,{center:[15.4,74],zoom:10,preferCanvas:true,minZoom:8,maxZoom:19,maxBounds:[[14.7,73.5],[16,74.6]],maxBoundsViscosity:.8});map.current=instance;setMapInstance(instance);
+    const instance=L.map(container.current,{center:[15.4,74],zoom:10,preferCanvas:true,zoomAnimation:false,minZoom:8,maxZoom:19,maxBounds:[[14.7,73.5],[16,74.6]],maxBoundsViscosity:.8});map.current=instance;setMapInstance(instance);
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).on('tileerror',()=>setTileError(true)).addTo(instance);
     L.control.scale({imperial:false}).addTo(instance);
     instance.createPane('satellite-imagery');instance.getPane('satellite-imagery')!.style.zIndex='350';
@@ -30,8 +30,8 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   },[]);
   useEffect(()=>{
     if(!map.current)return;
-    selection.current?.remove();
-    if(area){const [w,s,e,n]=area.bbox;selection.current=L.rectangle([[s,w],[n,e]],{color:'#193e32',weight:2,fillOpacity:0,interactive:false}).addTo(map.current);map.current.fitBounds([[s,w],[n,e]],{maxZoom:16,padding:[24,24]});}
+    selection.current?.remove();map.current.stop();
+    if(area){const [w,s,e,n]=area.bbox;selection.current=L.rectangle([[s,w],[n,e]],{color:'#193e32',weight:2,fillOpacity:0,interactive:false}).addTo(map.current);map.current.fitBounds([[s,w],[n,e]],{maxZoom:16,padding:[24,24],animate:false});}
   },[area]);
   useEffect(()=>{if(map.current){features.current?.remove();features.current=null;if(candidates)features.current=L.geoJSON(candidates,{style:{color:'#8a391f',weight:2,fillOpacity:.22}}).addTo(map.current);}},[candidates]);
   useEffect(()=>{
