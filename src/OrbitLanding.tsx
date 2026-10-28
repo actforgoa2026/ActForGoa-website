@@ -1,4 +1,4 @@
-import {useState, type CSSProperties, type FormEvent} from 'react';
+import {useEffect, useRef, useState, type CSSProperties, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
 import {ArrowUp, ArrowUpRight, Leaf, Pause, Play, Search} from 'lucide-react';
 import photos from './content/orbit-photos.json';
@@ -11,6 +11,23 @@ const rings = [
 ];
 const suggestions = ['How can I protect a wetland?', 'Understand my village panchayat', 'Explore Goa’s ecosystems'];
 export default function OrbitLanding(){
+  const scene = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const animations = Array.from(scene.current?.querySelectorAll('.goa-photo-ring, .goa-photo-counter') || [])
+      .flatMap(element => element.getAnimations());
+    const started = performance.now();
+    let frame = 0;
+    const settle = (now: number) => {
+      const progress = Math.min(1, (now - started) / 3000);
+      // Matching ring/counter rates keep the photographs upright throughout.
+      const rate = 1 + 4 * (1 - progress) ** 2;
+      animations.forEach(animation => { animation.playbackRate = rate; });
+      if (progress < 1) frame = requestAnimationFrame(settle);
+    };
+    settle(started);
+    return () => { cancelAnimationFrame(frame); animations.forEach(animation => { animation.playbackRate = 1; }); };
+  }, []);
   const [question,setQuestion]=useState('');
   const [paused,setPaused]=useState(false);
   const navigate=useNavigate();
@@ -21,13 +38,12 @@ export default function OrbitLanding(){
       <nav aria-label="Main navigation"><Link to="/directory">Our community</Link><Link to="/library">The library</Link></nav>
       <Link className="goa-orbit-home" to="/">Explore the field guide <ArrowUpRight size={16}/></Link>
     </header>
-    <div className="goa-orbit-scene" aria-hidden="true">
+    <div ref={scene} className="goa-orbit-scene" aria-hidden="true">
       {rings.map((ring,ri)=><div key={ri} className={'goa-photo-ring goa-photo-ring-'+ri} style={{'--radius':ring.radius+'px','--duration':ring.duration+'s'} as CSSProperties}>
         {Array.from({length:ring.count},(_,i)=>{const photo=photos[(i*5+ri*3)%photos.length];const angle=360/ring.count*i+ring.start;return <div className="goa-photo-position" key={i} style={{'--angle':angle+'deg','--tilt':'0deg','--photo-size':(i%3===0?110:i%3===1?84:96)+'px'} as CSSProperties}><div className="goa-photo-counter"><img src={photo.src} alt="" draggable={false} width="120" height="120" loading="eager"/></div></div>;})}
       </div>)}
     </div>
     <section className="goa-orbit-center" aria-labelledby="orbit-title">
-      <p className="goa-orbit-eyebrow"><span/> A little curiosity. A better Goa.</p>
       <h1 id="orbit-title">For the Goa<br/>we <span>love.</span></h1>
       <p className="goa-orbit-intro">Big questions. Local knowledge. A place to begin.</p>
       <form className="goa-orbit-composer" onSubmit={ask} role="search" aria-label="Start a conversation about Goa">
