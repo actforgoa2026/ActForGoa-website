@@ -42,3 +42,9 @@
 
 .goa-orbit-center{translate:0 -30px}
 @media(max-width:700px){.goa-orbit-center{translate:0 -20px}}
+
+.goa-orbit-scroll{position:absolute;z-index:3;bottom:25px;left:50%;translate:-50% 0;display:grid;place-items:center;width:46px;height:46px;border:1px solid #d8ddd5;border-radius:50%;background:#f7f6f2eb;color:#172e27;transition:background-color .15s}
+.goa-orbit-scroll:hover{background:#fff}
+.goa-orbit-footer button{position:absolute;right:0;bottom:29px}
+#home-actions-heading{scroll-margin-top:120px}
+@media(max-width:700px){.goa-orbit-scroll{bottom:22px;width:44px;height:44px}.goa-orbit-footer button{bottom:28px}#home-actions-heading{scroll-margin-top:104px}}
