@@ -15,7 +15,9 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   useEffect(()=>{
     if(!container.current)return;
     const instance=L.map(container.current,{center:[15.4,74],zoom:10,preferCanvas:true,zoomAnimation:false,minZoom:8,maxZoom:19,maxBounds:[[14.7,73.5],[16,74.6]],maxBoundsViscosity:.8});map.current=instance;setMapInstance(instance);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).on('tileerror',()=>setTileError(true)).addTo(instance);
+    // OSM requires a referrer. Send only the public origin for tiles, while
+    // keeping the workspace's no-referrer policy for all other requests.
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,referrerPolicy:'strict-origin',attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).on('tileerror',()=>setTileError(true)).addTo(instance);
     L.control.scale({imperial:false}).addTo(instance);
     instance.createPane('satellite-imagery');instance.getPane('satellite-imagery')!.style.zIndex='350';
     instance.on('click',(event:L.LeafletMouseEvent)=>{
