@@ -6,6 +6,8 @@ import sqlite3
 import threading
 import uuid
 from .domain import DomainError
+from .evidence_query import spatial_match
+from shapely.geometry import shape
 
 
 class Store:
@@ -97,7 +99,7 @@ class Store:
         if query.intent:
             clauses.append("json_extract(request,'$.intent')=?"); values.append(query.intent.value)
         if query.query.strip():
-            clauses.append("(coalesce(json_extract(request,'$.question'),'') || ' ' || coalesce(json_extract(result,'$.summary.headline'),'')) LIKE ? ESCAPE '\\'")
+            clauses.append("(coalesce(json_extract(request,'$.question'),'') || ' ' || coalesce(json_extract(result,'$.summary.headline'),'') || ' ' || coalesce((SELECT group_concat(json_extract(value,'$.text'),' ') FROM json_each(jobs.result,'$.summary.statements')),'')) LIKE ? ESCAPE '\\'")
             term=query.query.strip().replace('\\','\\\\').replace('%','\\%').replace('_','\\_')
             values.append('%'+term+'%')
         # Filter the actual observation interval, not the date the job was run.
@@ -114,14 +116,65 @@ class Store:
         with self.lock:
             rows=self.db.execute('SELECT id,status,created,request,'+extracts+' FROM jobs WHERE '+
                 ' AND '.join(clauses)+' ORDER BY created DESC,id DESC LIMIT ? OFFSET ?',
-                [*values,query.limit+1,query.offset]).fetchall()
+                [*values,301 if query.area else query.limit+1,0 if query.area else query.offset]).fetchall()
         items=[]
-        for row in rows[:query.limit]:
+        scan_truncated = bool(query.area and len(rows) > 300)
+        selected = shape(query.area.grid()['geometry']) if query.area else None
+        for row in rows[:300] if query.area else rows:
             parsed=[json.loads(value) if value and index<4 else value for index,value in enumerate(row[4:])]
-            items.append({'id':row[0],'status':row[1],'created_at':row[2], 'request':json.loads(row[3]) if row[3] else None,
-                **dict(zip(columns,parsed))})
-        return {'items':items,'next_offset':query.offset+query.limit if len(rows)>query.limit else None,
+            item={'id':row[0],'status':row[1],'created_at':row[2], 'request':json.loads(row[3]) if row[3] else None,
+                **dict(zip(columns,parsed))}
+            if selected is not None:
+                match = spatial_match(selected, item['request'], item['area'])
+                if match is None:
+                    continue
+                item['spatial'] = match
+            items.append(item)
+        page = items[query.offset:query.offset+query.limit] if query.area else items[:query.limit]
+        has_more = len(items) > (query.offset+query.limit if query.area else query.limit)
+        return {'items':page,'next_offset':query.offset+query.limit if has_more else None,
+                'scan_truncated':scan_truncated,
                 'retention_days':30,'scope':'Your saved investigations only; not statewide monitoring coverage.'}
+
+    def evidence_rows(self, actor, query):
+        """Extract bounded metadata in SQLite; never deserialize image bodies."""
+        clauses = ['actor=?', "status='complete'", 'created>=?',
+                   "coalesce(json_extract(request,'$.kind'),'comparison')!='observation'",
+                   "julianday(json_extract(result,'$.observation_interval.after'))>=julianday(?)",
+                   "julianday(json_extract(result,'$.observation_interval.before'))<julianday(?)"]
+        values = [actor, (datetime.now(timezone.utc)-timedelta(days=30)).isoformat(),
+                  query.start_date.isoformat()+'T00:00:00+05:30',
+                  (query.end_date+timedelta(days=1)).isoformat()+'T00:00:00+05:30']
+        if query.intent:
+            clauses.append("json_extract(request,'$.intent')=?")
+            values.append(query.intent.value)
+        columns = {'summary':20000, 'observation_interval':2000, 'area':100000,
+                   'evidence.state':100, 'evidence.common_usable_fraction':40,
+                   'evidence.metrics':3000, 'evidence.water_change':3000, 'evidence.candidates_truncated':10,
+                   'canopy_presence':4000, 'classification.state':100, 'classification.provider':100,
+                   'classification.model':200, 'classification.answers':3000, 'classification.scope':4000,
+                   'before.catalog_scene_id':250, 'after.catalog_scene_id':250,
+                   'before.acquired_at':2000, 'after.acquired_at':2000}
+        extracts = []
+        for name, maximum in columns.items():
+            field = "json_extract(result,'$." + name + "')"
+            if name == 'area':
+                extracts.append(f'CASE WHEN {field} IS NULL THEN NULL WHEN length({field})<={maximum} THEN {field} ELSE \'{{"geometry":null}}\' END')
+            else:
+                extracts.append(f'CASE WHEN length({field})<={maximum} THEN {field} ELSE NULL END')
+        extracts.append("json_array_length(result,'$.evidence.candidates.features')")
+        object_fields = {'summary','observation_interval','area','evidence.metrics','evidence.water_change','canopy_presence',
+                         'classification.answers','classification.scope','before.acquired_at','after.acquired_at'}
+        with self.lock:
+            rows = self.db.execute('SELECT id,created,request,' + ','.join(extracts) +
+                ' FROM jobs WHERE ' + ' AND '.join(clauses) + ' ORDER BY created DESC,id DESC LIMIT 301', values).fetchall()
+        records = []
+        for row in rows[:300]:
+            data = {name: json.loads(value) if name in object_fields and value is not None else value
+                    for name, value in zip(columns, row[3:-1])}
+            records.append({'id':row[0], 'created_at':row[1], 'request':json.loads(row[2]) if row[2] else None,
+                            **data, 'vegetation_candidate_count':row[-1]})
+        return records, len(rows)>300
 
     def close(self):
         self.db.close()

@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Satellite query audit — 29 October 2026 (cloud)
+
+Active isolated checkout `/workspace/actforgoa-satellite`, branch `codex/satellite-query-audit`, starts from fresh main `f20fc25`. PR95 is already merged; this audit uses a new feature PR. User requested a deep audit and fixes for selected-area/time questions, Amche/CDSE history and OpenAI image decisions. [Full findings and remaining acceptance](SATELLITE-QUERY-AUDIT.md); [checks and package evidence](../reports/satellite-query-audit-2026-10-29/README.md).
+
+Implemented: actor-private spatial/time evidence retrieval, area-filtered history, pinned Amche intersections and cited ecology background, explicit map/workflow/readiness states, resumable existing jobs and improved scoped Decisions uncertainty. Current main review `/map` is an older frontend/API deployment; current standalone has working real CDSE but no configured OpenAI. These audit changes are source-only until both existing standalone packages are deployed. Combined alias/research ownership is unchanged. No new paid calls, credentials or deployments in this audit. Browser tools unavailable, so fresh desktop/phone acceptance remains outstanding; cloud Railway binding still covers `.app` rather than required `.com`. Runtime source/checkpoint and completed checks are tracked in the linked report.
+
 ## Satellite live imagery acceptance complete — 29 October 2026, 11:12 UTC
 
 The user supplied new CDSE credentials through protected local storage and explicitly authorized configuration. OAuth validation succeeded; both values were sent to the existing Railway satellite API via stdin without logging secrets. API deployment `9014df8b-69de-4178-8072-135f96239875` reuses the accepted `11582ac` image, with all 14 satellite runtime files hash-matching. The app remains `b0fadee`, deployment `4bd7fc4b-8d60-487b-8219-bc978d07324f`. Both services are successful at https://satellite-app-production.up.railway.app/map. This supersedes the earlier missing-CDSE blocker below.

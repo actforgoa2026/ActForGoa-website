@@ -24,7 +24,7 @@ class EcologyContext:
             local=origin.scheme=='http' and origin.hostname in {'localhost','127.0.0.1'} and os.getenv('SATELLITE_ALLOW_LOCAL_RESEARCH')=='true'
             if (origin.scheme!='https' and not local) or not origin.netloc or origin.username or origin.password or origin.path not in {'','/'} or origin.query or origin.fragment:
                 return unavailable
-            query=(question.strip()+' '+TOPICS[intent]).strip()[:1500]
+            query=(question.strip()+' '+TOPICS.get(intent,'Goa ecology environmental change')).strip()[:1500]
             with self.http.stream('GET',raw.rstrip('/')+'/api/search', params={'q':query,'domain':'ecology','limit':4},timeout=8,follow_redirects=False) as response:
                 if response.status_code!=200:return unavailable
                 chunks=[];size=0
@@ -42,7 +42,8 @@ class EcologyContext:
                 publisher=urlsplit(source['url']);reader=urlsplit(source['reader_url'])
                 if publisher.scheme not in {'https','http'} or not publisher.netloc or publisher.username or publisher.password:continue
                 if reader.scheme or reader.netloc or not re.fullmatch(r'/documents/[A-Za-z0-9_-]{1,200}',reader.path):continue
-                sources.append({key:source[key][:bound] for key,bound in [('id',300),('title',500),('text',1800),('url',2000),('reader_url',2000),('generation',200)]} |
+                sources.append({key:source[key][:bound] for key,bound in [('id',300),('title',500),('text',1800),('url',2000),('generation',200)]} |
+                    {'reader_url':raw.rstrip('/')+source['reader_url'][:2000]} |
                     {'label':str(source.get('label',''))[:120],'retrieved_at':str(source.get('retrieved_at',''))[:100],
                      'warning':str(source.get('warning',''))[:500],'excerpt_truncated':len(source['text'])>1800})
             return {'state':'available' if sources else 'no_matches','sources':sources,'query':query,

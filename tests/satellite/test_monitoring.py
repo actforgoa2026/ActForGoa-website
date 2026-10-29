@@ -70,7 +70,7 @@ def test_context_preserves_bounded_passages_and_citations(monkeypatch):
         result=EcologyContext(client).search('What changed in this river?','surface_water')
     assert result['state']=='available'
     assert result['sources'][0]['text']==SOURCE['text']
-    assert result['sources'][0]['reader_url']==SOURCE['reader_url']
+    assert result['sources'][0]['reader_url']=='https://research.fixture.test'+SOURCE['reader_url']
     assert len(result['sources'][1]['text'])==1800 and result['sources'][1]['excerpt_truncated']
     assert 'do not establish the cause' in result['message']
 

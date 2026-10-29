@@ -1,5 +1,15 @@
 # Satellite continuation handoff
 
+## Current state — query audit, 29 October 2026
+
+**This section supersedes deployment, credential and open-PR claims in the historical entries below.** PR95 is merged (`11582ac`); real hosted CDSE acceptance is merged in main `f20fc25`. The standalone map/timeline is live at https://satellite-app-production.up.railway.app/map and has successfully retrieved and compared new imagery. Do not reconfigure or replace its working CDSE secrets, accounts, volumes or service tokens. OpenAI Decisions, optional natural-language planning and standalone ecology integration remain unconfigured according to that hosted acceptance.
+
+Current work is branch `codex/satellite-query-audit`, created from main `f20fc25`, with a **new** PR for the audit fixes. Read [SATELLITE-QUERY-AUDIT.md](SATELLITE-QUERY-AUDIT.md) and [verification report](../reports/satellite-query-audit-2026-10-29/README.md). It connects selected-area/time evidence search, Amche intersections and saved history; improves job recovery, workflow and Decisions scope. These new changes are not deployed yet. Main review `/map` still serves an older frontend without the satellite route/API wiring; the combined release owner must resolve that deployment mismatch.
+
+The 120-day image-comparison limit, 30-day saved-history retention, individual-tree resolution and unvalidated AI accuracy remain explicit limits. The cloud Railway token is still bound only to the wrong `.app` API host; a local deployment executor or corrected `.com` binding is needed to update both existing standalone packages. The user chose manual OpenAI setup; never repeat the rejected in-app key-creation attempt automatically. Current research on the main review service is scoped and chat-ready; older research-hold notes below are historical.
+
+## Historical checkpoints
+
 ## Standalone Railway release, 28 October 2026
 
 The user authorized a separate satellite deployment and then deferred supplying local CDSE secrets. The standalone app is live at **https://satellite-app-production.up.railway.app/map**, with its own named-account authentication, admin proxy and persistent storage. The satellite API is a separate persistent Railway service. ORCHESTRATOR explicitly reserved the combined review-site release; no existing service, Vercel environment, review alias or actforgoa.org was changed.

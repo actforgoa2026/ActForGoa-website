@@ -14,7 +14,7 @@ def canopy_presence(evidence, classification):
     if before not in {'yes', 'no'}: before = 'uncertain'
     if after not in {'yes', 'no'}: after = 'uncertain'
     outcomes = {
-        ('yes', 'no'): ('possible_disappearance', 'Canopy was identified before and was not identified at the same location afterward. This suggests possible canopy loss; it does not establish cutting or loss of a particular tree.'),
+        ('yes', 'no'): ('possible_disappearance', 'The image model identified canopy before and did not identify it afterward within the same common usable footprint. This suggests possible canopy loss; it does not establish cutting or loss of a particular tree.'),
         ('no', 'yes'): ('possible_appearance', 'Canopy was identified only in the later observation. Growth, seasonal visibility or image differences need review; this does not establish planting.'),
         ('yes', 'yes'): ('visible_both', 'Canopy was identified in both observations. This does not mean every tree remained: partial loss within the selected area can still occur.'),
         ('no', 'no'): ('not_identified', 'Canopy was not identified in either observation. This does not establish that no trees were present.'),
@@ -23,7 +23,9 @@ def canopy_presence(evidence, classification):
     if state == 'possible_disappearance' and answers.get('canopy_change', {}).get('choice') == 'no_visible_loss':
         state, interpretation = 'conflicting_evidence', 'The presence decisions suggest disappearance, but the change assessment reports no visible loss. The disagreement needs review.'
     return {'before': before, 'after': after, 'state': state, 'interpretation': interpretation,
-            'scope': 'Same selected area and common usable pixels; not an individual-tree identification.'}
+            'scope': 'Same selected area and common usable pixels; not an individual-tree identification.',
+            'target_id': classification.get('scope', {}).get('target_id'),
+            'assessment_status': 'unvalidated_model_proposal' if answers else 'unavailable'}
 
 
 def summarize_comparison(intent, evidence, classification, interval):
@@ -63,19 +65,20 @@ def summarize_comparison(intent, evidence, classification, interval):
         if change == 'possible_loss':
             add('The image assessment suggests possible canopy loss. Its interpretation needs review and does not establish cutting.', 'assessment')
             headline, state = 'Possible canopy loss needs review alongside the images.', 'review_required'
-            if not count or choices.get('before_canopy') == 'no':
-                headline, state = 'The checks do not agree about possible canopy loss.', 'conflicting_evidence'
-                add('The image assessment and other checks do not give consistent support for canopy loss. Review both observations before drawing a conclusion.', 'spectral', 'assessment')
+            if choices.get('before_canopy') == 'no':
+                headline, state = 'The image decisions do not agree about possible canopy loss.', 'conflicting_evidence'
+                add('The model reports no resolvable canopy before, but also reports canopy loss in the same footprint. These image decisions conflict and need review.', 'assessment')
+            elif not count:
+                add('The numeric check does not corroborate this image proposal at its current thresholds. That is not a contradiction: smaller or spectrally different changes can miss those thresholds.', 'spectral', 'assessment')
         elif change == 'no_visible_loss':
             add('The image assessment did not identify visible canopy loss. That is not proof that no trees were removed.', 'assessment')
             if count:
-                headline, state = 'The numeric and visual checks do not agree.', 'conflicting_evidence'
+                headline, state = 'Numeric vegetation change needs review alongside the canopy assessment.', 'review_required'
+                add('Vegetation-loss candidates and tree-canopy loss measure different things. The candidates may involve other vegetation, while the model may also miss canopy changes; neither check settles the other.', 'spectral', 'assessment')
         else:
             add('The image assessment could not establish whether canopy was lost.' if answers else 'No image assessment is available; the result above is a numeric vegetation check.', 'assessment')
         if presence['state'] == 'possible_disappearance':
             headline, state = 'The presence decisions suggest possible canopy loss.', 'review_required'
-            if not count:
-                headline, state = 'The presence decisions and numeric check need review together.', 'conflicting_evidence'
         elif presence['state'] == 'conflicting_evidence':
             headline, state = 'The image decisions do not agree about canopy loss.', 'conflicting_evidence'
     else:
@@ -115,4 +118,4 @@ def summarize_comparison(intent, evidence, classification, interval):
     elif relation == 'within_window':
         add('Both observations fall within your requested period; an exact event date still cannot be determined.', 'before', 'after')
     add('These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.', 'before', 'after')
-    return {'state': state, 'headline': headline, 'statements': statements, 'method': 'checked-evidence-v1'}
+    return {'state': state, 'headline': headline, 'statements': statements, 'method': 'checked-evidence-v2'}

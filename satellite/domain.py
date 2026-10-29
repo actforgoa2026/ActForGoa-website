@@ -121,6 +121,7 @@ class ObservationRequest(CatalogRequest):
 
 
 class HistoryRequest(StrictModel):
+    area: Area | None = None
     query: str = Field(default='', max_length=300)
     intent: Intent | None = None
     start_date: date | None = None
@@ -132,6 +133,27 @@ class HistoryRequest(StrictModel):
     def ordered(self):
         if self.start_date and self.end_date and self.start_date > self.end_date:
             raise ValueError('Use an ordered observation period.')
+        for value in (self.start_date, self.end_date):
+            if value and not date(2017, 3, 28) <= value <= datetime.now(IST).date():
+                raise ValueError('Choose available historical dates from 28 March 2017 through today.')
+        return self
+
+
+class EvidenceRequest(StrictModel):
+    area: Area
+    start_date: date
+    end_date: date
+    intent: Intent | None = None
+    question: str = Field(default='', max_length=1000)
+    limit: int = Field(default=8, ge=1, le=8)
+    include_context: bool = False
+
+    @model_validator(mode='after')
+    def ordered(self):
+        # Evidence search reads retained metadata, not an unbounded CDSE catalog.
+        # It can cover distant acquisition dates without making provider calls.
+        if not date(2017, 3, 28) <= self.start_date <= self.end_date <= datetime.now(IST).date():
+            raise ValueError('Choose an ordered historical period from 28 March 2017 through today.')
         return self
 
 
