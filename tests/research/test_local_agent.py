@@ -124,7 +124,8 @@ def test_preserved_answer_exclusions_survive_page_retrieval(corpus):
     raw={'paragraphs':[{'text':'Claim','supports':[{'citation_id':evidence['id'],'quote':evidence['text'][:30]}]}],'clarification':None,'limitation':None,'followups':[]}
     with pytest.raises(ValueError):validate_answer(raw,r,'all')
 
-def test_http_search_read_budget_gate_and_private_origin():
+def test_http_search_read_budget_gate_and_private_origin(monkeypatch,tmp_path):
+    monkeypatch.setattr('backend.local_agent_app.budget',DevBudget(tmp_path))
     with TestClient(app) as client:
         assert client.get('/api/status').json()['chat_ready'] is False
         assert client.post('/api/chat',json={'question':'Building permission'}).status_code==503
@@ -136,3 +137,49 @@ def test_http_search_read_budget_gate_and_private_origin():
         assert client.get('/api/documents/'+doc+'/pages',params={'start':page,'limit':1}).json()['pages'][0]['page']==page
         assert client.get('/api/documents/'+doc+'/text').status_code==200
         assert client.get('/api/dev/crm/search?collection=community&limit=1').json()['total_matches']==499
+
+def test_expiry_preserves_visible_accounting_and_blocks_reservation(accounted):
+    gate,*_=accounted
+    path=gate.state/'reconciliation.json';receipt=json.loads(path.read_text())
+    receipt['expires_at']=(datetime.now(timezone.utc)-timedelta(seconds=1)).isoformat()
+    path.write_text(json.dumps(receipt))
+    status=gate.status()
+    assert not status['ready'] and status['reserved_usd']==.2 and status['remaining_usd']==1.8
+    assert 'expired' in status['reason']
+    with pytest.raises(BudgetUnavailable,match='expired'):gate.reserve(100)
+    assert gate.status()['reserved_usd']==.2
+
+def test_proxy_preserves_sdk_protocol_headers_and_reserves_before_dispatch(accounted,monkeypatch):
+    import httpx
+    from backend import local_agent_app as local
+    gate,*_=accounted;sent=[];events=[]
+    monkeypatch.setattr(local,'budget',gate)
+    monkeypatch.setenv('ANTHROPIC_API_KEY','synthetic-server-key')
+    monkeypatch.setattr(local,'provider_diagnostic',lambda **fields:events.append(fields))
+    class FakeUpstream:
+        def __init__(self,**kwargs):pass
+        def build_request(self,method,url,**kwargs):return httpx.Request(method,url,**kwargs)
+        async def send(self,request,**kwargs):
+            assert gate.status()['reserved_usd']>.2
+            sent.append(request)
+            return httpx.Response(200,content=b'{"ok":true}',headers={'content-type':'application/json','request-id':'synthetic-request','x-should-retry':'false'})
+        async def aclose(self):pass
+    monkeypatch.setattr(local.httpx,'AsyncClient',FakeUpstream)
+    with TestClient(app) as client:
+        response=client.post('/provider/v1/messages?beta=true',json={'model':MODEL,'max_tokens':100,'messages':[{'role':'user','content':'Synthetic test'}]},headers={'x-api-key':local.PROXY_TOKEN,'anthropic-beta':'context-management-2025-06-27','anthropic-version':'2023-06-01','cookie':'must-not-forward'})
+    assert response.status_code==200 and response.headers['request-id']=='synthetic-request'
+    assert len(sent)==1 and str(sent[0].url)=='https://api.anthropic.com/v1/messages'
+    assert sent[0].headers['anthropic-beta']=='context-management-2025-06-27'
+    assert sent[0].headers['anthropic-version']=='2023-06-01'
+    assert sent[0].headers['x-api-key']=='synthetic-server-key' and 'cookie' not in sent[0].headers
+    assert events[0]['event']=='provider_response' and events[0]['status']==200
+
+def test_proxy_missing_accounting_blocks_without_retry_or_provider(monkeypatch,tmp_path):
+    from backend import local_agent_app as local
+    monkeypatch.setattr(local,'budget',DevBudget(tmp_path))
+    monkeypatch.setattr(local,'provider_diagnostic',lambda **fields:None)
+    def never_provider(**kwargs):raise AssertionError('Must not create a provider client')
+    monkeypatch.setattr(local.httpx,'AsyncClient',never_provider)
+    with TestClient(app) as client:
+        response=client.post('/provider/v1/messages',json={'model':MODEL,'max_tokens':100,'messages':[]},headers={'x-api-key':local.PROXY_TOKEN})
+    assert response.status_code==429 and response.headers['x-should-retry']=='false'

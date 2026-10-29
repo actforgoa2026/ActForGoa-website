@@ -1,8 +1,10 @@
 """Claude Agent SDK with only corpus/CRM readers and a clarification tool."""
 import json
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
+from uuid import uuid4
 from claude_agent_sdk import ClaudeAgentOptions, ResultMessage, create_sdk_mcp_server, query, tool
 from pydantic import BaseModel, ConfigDict, Field
 from . import crm_store
@@ -105,8 +107,27 @@ async def run_agent(request, corpus, config, proxy_url, proxy_token, remaining):
     prompt=(ROOT/'dev/agent-prompt.txt').read_text()+'\nAdditional answer style instructions:\n'+config['answer_brief']
     options=agent_options(readers,prompt,proxy_url,proxy_token,remaining,config['effort'])
     incoming=json.dumps({'question':request.question,'history':[m.model_dump() for m in request.history],'domain':request.domain},ensure_ascii=False)
-    async for message in query(prompt=incoming,options=options):
-        if isinstance(message,ResultMessage):
-            if message.is_error or not message.structured_output:raise ValueError('The agent did not complete a structured answer')
-            return validate_answer(message.structured_output,readers,request.domain)
-    raise ValueError('No agent result')
+    run_id=uuid4().hex
+    diagnostic={'run_id':run_id,'started_at':datetime.now(timezone.utc).isoformat(),'status':'incomplete'}
+    try:
+        async for message in query(prompt=incoming,options=options):
+            if isinstance(message,ResultMessage):
+                diagnostic.update(sdk_subtype=message.subtype,sdk_is_error=message.is_error,sdk_reported_cost_usd=message.total_cost_usd,sdk_turns=message.num_turns)
+                if message.is_error or not message.structured_output:raise ValueError('The agent did not complete a structured answer')
+                diagnostic['status']='validating_citations'
+                answer=validate_answer(message.structured_output,readers,request.domain)
+                diagnostic['status']='verified_citations'
+                answer['_dev'].update(run_id=run_id,sdk_reported_cost_usd=message.total_cost_usd,sdk_turns=message.num_turns)
+                return answer
+        raise ValueError('No agent result')
+    except BaseException as error:
+        # Exception messages and SDK stderr may contain source text or credentials.
+        diagnostic['exception_type']=type(error).__name__
+        raise
+    finally:
+        diagnostic['finished_at']=datetime.now(timezone.utc).isoformat()
+        diagnostic['tool_calls']=[item['tool'] for item in readers.trace]
+        folder=STATE/'diagnostics';folder.mkdir(mode=0o700,exist_ok=True)
+        path=folder/('agent-'+run_id+'.json')
+        with path.open('x') as output:
+            path.chmod(0o600);json.dump(diagnostic,output,indent=2)

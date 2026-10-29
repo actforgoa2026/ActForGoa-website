@@ -19,14 +19,16 @@ class BudgetUnavailable(ValueError):pass
 class DevBudget:
     def __init__(self, state=STATE):self.state=Path(state)/'accounting'
 
-    def receipt(self):
+    def receipt(self, require_active=True):
         try:
             receipt=json.loads((self.state/'reconciliation.json').read_text())
             source=self.state/'cloud-dev.sqlite'
             if receipt['scope']!='additional-dev-2026-10-29' or receipt['cap_microusd']!=CAP or receipt['prior_workspace_stopped'] is not True:raise ValueError()
             if hashlib.sha256(source.read_bytes()).hexdigest()!=receipt['source_sha256']:raise ValueError()
-            if datetime.fromisoformat(receipt['expires_at'])<=datetime.now(timezone.utc):raise ValueError()
+            expired=datetime.fromisoformat(receipt['expires_at'])<=datetime.now(timezone.utc)
+            if require_active and expired:raise BudgetUnavailable('The original dev allowance has expired; paid calls are paused. Existing reservations are preserved.')
             return receipt
+        except BudgetUnavailable:raise
         except (OSError,KeyError,ValueError):raise BudgetUnavailable('Paid answers are paused: the existing cloud dev reservations have not been reconciled locally.') from None
 
     def connect(self):
@@ -35,12 +37,14 @@ class DevBudget:
 
     def status(self):
         try:
-            receipt=self.receipt()
+            receipt=self.receipt(require_active=False)
             with self.connect() as db:
                 spent=db.execute('SELECT coalesce(sum(reserved_microusd),0) FROM spend').fetchone()[0]
                 baseline=db.execute('SELECT source_sha256 FROM local_dev_baseline').fetchone()[0]
             if baseline!=receipt['source_sha256'] or spent<receipt['prior_reserved_microusd']:raise BudgetUnavailable('Dev accounting does not match its reconciled baseline.')
-            return {'ready':spent<CAP,'cap_usd':2,'reserved_usd':spent/1e6,'remaining_usd':max(0,CAP-spent)/1e6,'reason':None if spent<CAP else 'The $2 dev allowance is reserved.'}
+            expired=datetime.fromisoformat(receipt['expires_at'])<=datetime.now(timezone.utc)
+            reason='The original dev allowance has expired; paid calls are paused. Existing reservations are preserved.' if expired else (None if spent<CAP else 'The $2 dev allowance is reserved.')
+            return {'ready':not expired and spent<CAP,'cap_usd':2,'reserved_usd':spent/1e6,'remaining_usd':max(0,CAP-spent)/1e6,'expires_at':receipt['expires_at'],'reason':reason}
         except (BudgetUnavailable,sqlite3.Error,TypeError,KeyError) as error:
             return {'ready':False,'cap_usd':2,'reserved_usd':None,'remaining_usd':None,'reason':str(error) if isinstance(error,BudgetUnavailable) else 'Dev accounting is unavailable.'}
 

@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import secrets
+from datetime import datetime, timezone
 from urllib.parse import urlparse
 from typing import Literal
 import httpx
@@ -155,6 +156,14 @@ async def chat(request:ChatRequest):
 def authenticate_proxy(request):
     if not secrets.compare_digest(request.headers.get('x-api-key',''),PROXY_TOKEN) or request.headers.get('origin'):raise HTTPException(403,'SDK transport only')
 
+def provider_diagnostic(**fields):
+    # Intentionally excludes headers, keys, prompts, evidence and response text.
+    folder=STATE/'diagnostics';folder.mkdir(mode=0o700,exist_ok=True)
+    path=folder/'provider.jsonl'
+    with path.open('a') as output:
+        path.chmod(0o600)
+        output.write(json.dumps({'at':datetime.now(timezone.utc).isoformat(),**fields})+'\n')
+
 @app.post('/provider/v1/messages/count_tokens')
 async def count_tokens(request:Request):
     authenticate_proxy(request);raw=await request.body()
@@ -168,17 +177,26 @@ async def messages(request:Request):
     payload=json.loads(raw)
     # Fix output cap before reservation; every SDK retry is a new charged attempt.
     payload['max_tokens']=min(4096,payload.get('max_tokens',4096))
-    try:amount=request_bound(payload);budget.reserve(amount)
-    except (BudgetUnavailable,ValueError) as error:raise HTTPException(429,str(error)) from None
+    try:amount=request_bound(payload);reservation=budget.reserve(amount)
+    except (BudgetUnavailable,ValueError) as error:
+        provider_diagnostic(event='blocked_before_dispatch',reason=type(error).__name__)
+        raise HTTPException(429,str(error),headers={'x-should-retry':'false'}) from None
     key=os.getenv('ANTHROPIC_API_KEY')
     if not key:raise HTTPException(503,'Server credential unavailable')
     client=httpx.AsyncClient(timeout=90,follow_redirects=False)
+    headers={'x-api-key':key,'anthropic-version':request.headers.get('anthropic-version','2023-06-01'),'content-type':'application/json'}
+    # SDK body fields and their beta headers must travel together.
+    # https://code.claude.com/docs/en/llm-gateway-protocol
+    if request.headers.get('anthropic-beta'):headers['anthropic-beta']=request.headers['anthropic-beta']
     try:
-        upstream=await client.send(client.build_request('POST','https://api.anthropic.com/v1/messages',headers={'x-api-key':key,'anthropic-version':'2023-06-01','content-type':'application/json'},json=payload),stream=True)
+        upstream=await client.send(client.build_request('POST','https://api.anthropic.com/v1/messages',headers=headers,json=payload),stream=True)
     except Exception:
+        provider_diagnostic(event='connection_failed',reservation=reservation,reserved_microusd=amount)
         await client.aclose();raise HTTPException(502,'Provider connection failed; reservation retained.') from None
+    provider_diagnostic(event='provider_response',reservation=reservation,reserved_microusd=amount,status=upstream.status_code)
     async def stream():
         try:
             async for block in upstream.aiter_bytes():yield block
         finally:await upstream.aclose();await client.aclose()
-    return StreamingResponse(stream(),status_code=upstream.status_code,media_type=upstream.headers.get('content-type','application/json'))
+    response_headers={k:upstream.headers[k] for k in ('request-id','retry-after','x-should-retry') if k in upstream.headers}
+    return StreamingResponse(stream(),status_code=upstream.status_code,media_type=upstream.headers.get('content-type','application/json'),headers=response_headers)

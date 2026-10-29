@@ -20,7 +20,7 @@ backend={**common,**({'ANTHROPIC_API_KEY':key} if key else {})}
 processes=[]
 try:
     processes.append(subprocess.Popen([sys.executable,'-m','uvicorn','backend.local_agent_app:app','--host','127.0.0.1','--port','8093','--reload','--reload-dir','backend','--no-access-log'],cwd=ROOT,env=backend))
-    processes.append(subprocess.Popen(['npm','run','dev:web','--','--port','4276'],cwd=ROOT,env=frontend))
+    processes.append(subprocess.Popen(['npm','run','dev:web','--','--port','4276','--configLoader','runner'],cwd=ROOT,env=frontend))
     print('Local workspace: http://127.0.0.1:4276/ask | Corpus/CRM read-only. Paid calls require reconciled dev accounting.',flush=True)
     while all(p.poll() is None for p in processes):time.sleep(.5)
 except KeyboardInterrupt:pass
