@@ -1,0 +1,50 @@
+.research-chat.local-research{max-width:1400px}
+.local-research .research-heading{text-align:left;padding-top:32px;margin-bottom:20px}
+.local-research .research-heading h1{font-size:36px;letter-spacing:-.035em}
+.local-research .research-heading>p{max-width:none;margin:12px 0 0}
+.local-research .chat-mark{display:none}
+.local-research .research-domains{justify-content:flex-start}
+.research-chat.local-research .research-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);max-width:none;gap:48px;align-items:start}
+.local-research .research-main>h2,.local-research-tools>h2{font-size:24px;font-weight:750;line-height:1.3;letter-spacing:-.025em;margin-bottom:12px}
+.local-research .local-status{border-block:1px solid var(--line);padding-block:16px;margin-bottom:28px;line-height:1.7}
+.local-research .local-status p{margin:0}
+.local-research .local-status p+p{margin-top:8px}
+.local-research .local-status a{text-decoration:underline}
+.local-workspace-nav{display:flex;flex-wrap:wrap;gap:12px 28px;margin-bottom:24px}
+.local-workspace-nav a{display:inline-flex;align-items:center;gap:8px;min-height:44px;text-decoration:underline;text-underline-offset:4px}
+.local-research #research-question,.local-research #local-evidence{scroll-margin-top:110px}
+.local-return-question{display:none}
+.local-more-sources>summary{padding-block:16px;cursor:pointer;text-decoration:underline;text-underline-offset:4px;font-size:14px;min-height:44px}
+.local-research-tools{min-width:0}
+.local-research-tools>p{font-size:15px;margin-bottom:20px;max-width:65ch}
+.local-research-tools [role=group] svg{display:inline;vertical-align:middle;margin-right:6px}
+.local-evidence-search{margin-top:22px;display:grid;gap:16px}
+.local-evidence-search>button{justify-self:start}
+.local-crm-filters{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.local-research-tools label{font-size:14px;font-weight:700}
+.local-research-tools select{display:block;width:100%;min-height:48px;padding:10px 12px;margin-top:8px;border:1px solid var(--line);border-radius:4px;background:var(--white);color:var(--green);font:inherit}
+.local-research-tools select:focus-visible{background:var(--pale)}
+.local-results-count{font-size:14px;color:var(--muted);margin-block:22px 8px;font-variant-numeric:tabular-nums}
+.local-evidence-row{padding-block:20px;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+.local-evidence-row h3{font-size:18px;line-height:1.5;font-weight:750;letter-spacing:-.015em;margin-bottom:8px}
+.local-evidence-row h3 a:hover{text-decoration:underline}
+.local-evidence-row h3 svg{display:inline;vertical-align:middle;margin-left:6px}
+.local-evidence-row p{font-size:15px;line-height:1.7;margin-block:8px}
+.local-evidence-row .research-small{font-size:13px}
+.local-evidence-row details{margin-top:12px;font-size:14px}
+.local-evidence-row summary{cursor:pointer;min-height:36px;line-height:1.7}
+.local-evidence-row details a{text-decoration:underline;text-underline-offset:3px}
+.local-source-links{display:flex;flex-wrap:wrap;gap:16px;margin-block:16px}
+.local-pagination{display:flex;justify-content:space-between;margin-top:20px}
+.local-settings{display:grid;gap:20px;margin-top:24px}
+.local-settings h3{font-size:20px}
+.local-settings>button{justify-self:start}
+.local-research .research-starters{grid-template-columns:1fr}
+.local-research .research-starters>button{min-height:52px;border-radius:4px}
+.local-research .chat-library-info{grid-column:1/-1;width:100%;border-top:1px solid var(--line);padding-top:16px}
+.local-research .chat-library-info>summary{justify-content:flex-start;font-size:14px}
+.local-research .chat-library-body{margin:0}
+.local-research .chat-composer{position:static;box-shadow:none}
+.local-research .research-answer-section h3{font-size:16px}
+.local-research .local-clarification{margin-block:20px;font-weight:700;font-size:18px;line-height:1.6}
+@media(max-width:850px){.research-chat.local-research .research-layout{grid-template-columns:minmax(0,1fr);gap:36px}.local-research-tools{border-top:1px solid var(--line);padding-top:28px}.local-research .research-heading h1{font-size:32px}.local-crm-filters{grid-template-columns:1fr}.local-return-question{display:block;margin-top:12px;text-decoration:underline;min-height:44px}}

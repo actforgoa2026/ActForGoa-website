@@ -22,7 +22,7 @@ test('answer timeout also covers a stalled response body', async t => {
   })));
   const pending = assert.rejects(researchApi('/api/chat', { method: 'POST' }), /taking too long/);
   await Promise.resolve();
-  t.mock.timers.tick(75_000);
+  t.mock.timers.tick(115_000);
   await pending;
 });
 

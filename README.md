@@ -101,3 +101,11 @@ Verify and assign owners to contact records, especially the snake-rescue list fr
 ## Content and model rights
 
 ActForGoa content and photographs remain attributable to their original owners; this project does not relicense that material. The MiniLM model uses Apache 2.0; see its bundled NOTICE and LICENSE. Source asset URLs are recorded in `data/image-map.json` and image sidecars.
+
+### Rapid research development
+
+Use `npm run research:dev:live` for a Vite frontend against the existing live research API. This needs no production build, local corpus or provider credential. Open `http://127.0.0.1:4174/ask/legal` or `/ask/ecology`. A local Python bridge uses the environment's network proxy; calls retain the live service's budget and prompts. Local backend edits are **not** active in this mode.
+
+With the full index available, set `RESEARCH_DATA_ROOT` to its checkout and use `npm run research:dev`. Vite updates the interface immediately and Uvicorn reloads backend code on edits. That mode uses its configured server-side provider/accounting setup; never initialize a replacement production ledger. The launcher reports a missing index instead of starting a broken answer sandbox.
+
+During user-led iteration, use targeted smoke checks and direct answer testing; reserve the full test/build/browser release checklist for release candidates. A remote executor's localhost URL requires the app's preview/forwarding support; it is not a separately hosted public development site.

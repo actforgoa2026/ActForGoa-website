@@ -8,17 +8,19 @@ import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
 import {researchApi as api} from './research-api';
 import {citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
-import {researchCommunityMatches} from './research-community';
+import {researchCommunityMatches,needsBuildingAuthority,buildingAuthorityMatches} from './research-community';
 import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
 import {splitCodePointRange} from './text-range';
 import './research.css';
+import LocalResearchTools from './LocalResearchTools';
+const localAgent=import.meta.env.DEV&&import.meta.env.VITE_LOCAL_AGENT==='1';
 import {useStarredIds} from './CurationProvider';
 import {prioritizeStarred} from './curation';
 
 type Turn={id:string;question:string;answer?:Answer;results:Evidence[];error?:string;mode:'search'|'ask';pending?:'searching'|'answering';stopped?:boolean};
 type Session={question:string;turns:Turn[];mode:'search'|'ask'};
-const emptySession:Session={question:'',turns:[],mode:'ask'};
+const emptySession:Session={question:'',turns:[],mode:localAgent?'search':'ask'};
 type Memory={sessions:Record<string,Session>;update:(scope:string,change:Partial<Session>|((previous:Session)=>Partial<Session>))=>void};
 const ResearchMemory=createContext<Memory|null>(null);
 // App-lifetime memory only: source navigation preserves work, a reload clears it.
@@ -37,21 +39,42 @@ function Source({source,number,returnTo}:{source:Evidence;number?:number;returnT
   <h3><Link to={source.reader_url} state={{researchReturn:returnTo}}>{source.title}</Link></h3>
   <p className="source-excerpt">{source.text.slice(0,310)}{source.text.length>310?'…':''}</p>
   {source.warning&&<p className="extraction-note">{source.warning}</p>}
-  {researchSourceNotes(source).map(note=><p key={note.label} className="extraction-note"><strong>{note.label}:</strong> {note.text}</p>)}
+  {researchSourceNotes(source).map(note=><p key={note.label} className="extraction-note"><strong>{note.label}:</strong> {note.label==='Legal status'?words(note.text):note.text}</p>)}
   <details><summary>Read the cited passage</summary><p className="evidence-text">{source.text}</p><a href={source.url} target="_blank" rel="noreferrer">Publisher’s source <ArrowUpRight size={14}/></a><p className="research-small">Saved {date(source.retrieved_at)}. This is the retrieval date.</p></details>
-  <Link className="text-link" to={source.reader_url} state={{researchReturn:returnTo}}>Open full document <BookOpen size={16}/></Link>
+  <Link className="text-link" to={source.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}}>{source.format==='crm'?'Open registry record':'Open full document'} <BookOpen size={16}/></Link>
  </article>
+}
+function Sources({sources,turn,returnTo}:{sources:Evidence[];turn:Turn;returnTo:string}){
+ const previewCount=localAgent?2:sources.length;
+ return <details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>
+  {sources.slice(0,previewCount).map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}
+  {sources.length>previewCount&&<details className="local-more-sources"><summary>View {sources.length-previewCount} more source passages</summary>{sources.slice(previewCount).map((source,n)=><Source key={source.id} source={source} number={n+previewCount+1} returnTo={returnTo}/>)}</details>}
+ </details>;
 }
 function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
  const paragraphs=citedLibraryParagraphs(answer);
  const outside=answer.outside_context?.provenance==='model_knowledge'?answer.outside_context:null;
  return <div className="research-answer">
   <section className="research-answer-section" aria-label="From our library"><h3><BookOpen size={18}/>From our library</h3>
-   {paragraphs.length?paragraphs.map((paragraph,index)=><p className="answer-paragraph" key={index}>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</p>):<p className="answer-paragraph">We did not find enough evidence in this collection to answer your question.</p>}
+   {paragraphs.length?paragraphs.map((paragraph,index)=>{
+    const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
+    return answer.summary_first&&index===0?<ul key={index} aria-label="Key takeaway"><li className="answer-paragraph">{content}</li></ul>:<div key={index}>{answer.summary_first&&index===1&&<h4>More detail</h4>}<p className="answer-paragraph">{content}</p></div>;
+   }):!answer.clarification&&<p className="answer-paragraph">The passages retrieved for this question did not provide enough evidence to answer it yet.</p>}
+   {answer.clarification&&<p className="answer-paragraph">{answer.clarification}</p>}
    {(answer.library_notice||answer.notice)&&<p className="research-small">{answer.library_notice||answer.notice}</p>}
   </section>
   {outside?.text&&<section className="research-answer-section research-outside" aria-label="Outside our library"><h3>Outside our library</h3><p className="research-provenance">AI general knowledge · not checked against external sources</p><p className="answer-paragraph">{outside.text}</p></section>}
  </div>;
+}
+function BuildingAuthority({data,question,loading,error}:{data:CRMSnapshot|null;question:string;loading:boolean;error:boolean}){
+ const [location,setLocation]=useState('');const [submitted,setSubmitted]=useState(false);
+ const matches=useMemo(()=>buildingAuthorityMatches(data?.records||[],location),[data,location]);
+ if(!needsBuildingAuthority(question))return null;
+ return <section className="research-community" aria-label="Find your local authority"><h3>Find the right local office</h3>
+  <p>Which village or town is the structure in? I can look up the local authority in the ActForGoa directory.</p>
+  <form onSubmit={event=>{event.preventDefault();setSubmitted(true);}}><Input label="Village or town" value={location} maxLength={120} required onChange={event=>{setLocation(event.target.value);setSubmitted(false);}} placeholder="For example, Panaji or Agonda"/><Button type="submit" disabled={location.trim().length<3}>Find the office</Button></form>
+  {submitted&&(loading?<p role="status">Looking up the government directory…</p>:error?<p role="alert">The directory could not load. <Link to="/directory">Open the directory</Link>.</p>:matches.length?<><p>These CRM listings match the place you entered. Confirm the property's jurisdiction with the office; other approvals may also apply.</p><ul>{matches.map(({record,source,verification})=><li key={record.record_id}><h4><Link to={'/directory/'+encodeURIComponent(record.record_id)} target="_blank" rel="noopener noreferrer">{record.name}</Link></h4><p><a href={source} target="_blank" rel="noreferrer">Open government office website or listing <ArrowUpRight size={14}/></a></p><p className="research-small">{verification}</p></li>)}</ul></>:<p>I couldn't identify a local-body office for that place in our CRM. Please enter the village or town rather than just the district or taluka. <Link to={'/directory?'+new URLSearchParams({q:location,collection:'government'})}>Search government listings</Link>.</p>)}
+ </section>;
 }
 function CommunitySuggestions({data,question,loading,error}:{data:CRMSnapshot|null;question:string;loading:boolean;error:boolean}){
  const starredIds=useStarredIds();
@@ -110,7 +133,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
    if(domain!=='all'&&result.domain!==domain)throw Error('This section is not available on the research service yet. Use All research to explore the current collection.');
    patchTurn(id,{results:result.results,pending:requested==='ask'?'answering':undefined});
    if(requested==='ask'){
-    const answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:true,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:citedLibraryParagraphs(t.answer!).map(p=>p.text).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)})});
+    const answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:true,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer).flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:[...citedLibraryParagraphs(t.answer!).map(p=>p.text),t.answer?.clarification].filter(Boolean).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)})});
     patchTurn(id,{answer,pending:undefined});
    }
   }catch(e){patchTurn(id,(e as Error).name==='AbortError'?{pending:undefined,stopped:true}:{pending:undefined,error:(e as Error).message});}
@@ -129,6 +152,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
     {turn.stopped&&<p className="research-small">Response stopped. You can ask again when you’re ready.</p>}
     {turn.error&&<div role="alert" className="research-message"><p>{turn.error}</p><Button variant="secondary" size="sm" disabled={busy} onClick={()=>void run(turn.question,turn.mode)}>Try again</Button></div>}
     {turn.answer&&<AnswerSections answer={turn.answer} returnTo={returnTo}/>}
+    {!!turn.answer?.followups?.length&&<div className="research-starters" aria-label="Suggested follow-ups">{turn.answer.followups.map(value=><Button wrap variant="secondary" size="sm" key={value} disabled={busy} onClick={()=>void run(value,'ask')}>{value}</Button>)}</div>}
     {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.pending&&!turn.stopped&&!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
     {!turn.pending&&<details className="chat-related"><summary><Users size={15}/>Related people and organisations</summary><CommunitySuggestions data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/></details>}
    </section>;})}
@@ -140,12 +164,13 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
    <div className="chat-composer-meta"><p>{busy?'': 'Enter to send · Shift + Enter for a new line'}</p><p>Grounded in our library. Check the sources.</p></div>
    {mode==='ask'&&!canAsk&&domainSupported&&(status||statusError)&&<div className="chat-availability" role="status"><p>Answers are unavailable right now. Choose “Find sources” to browse the library while we restore them.</p><Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button></div>}
    {!turns.length&&<div className="research-starters"><h2>Start with a question</h2>{content.starters.map(question=><Button wrap variant="secondary" key={question} type="button" disabled={busy||!domainSupported||(mode==='ask'&&!canAsk)} onClick={()=>void run(question)}><span className="chat-starter-label">{question}</span></Button>)}</div>}
-  </div><details className="research-aside chat-library-info"><summary><BookOpen size={16}/>About the library and your chat</summary><div className="chat-library-body"><h2>Our library comes first.</h2><p>Answers start with evidence from this collection. Source links let you check the passage and the full document.</p><p>When the library cannot fully answer, any extra AI context appears under <strong>Outside our library</strong>. It is not verified web research.</p><p>{mode==='ask'&&canAsk?'Your question, recent chat and selected passages go to Anthropic. General knowledge, when needed, is labelled separately.':'Source search uses our library and does not send your question to an AI provider.'} Your chat stays in this tab’s memory and clears on reload.</p>
+  </div><details className="research-aside chat-library-info"><summary><BookOpen size={16}/>About the library and your chat</summary><div className="chat-library-body"><h2>Our library comes first.</h2><p>Answers start with evidence from this collection. Source links let you check the passage and the full document.</p><p>The research assistant can search the collection, read full pages and look up public directory records. It asks for missing details when they matter.</p><p>{mode==='ask'&&canAsk?'Your question, recent chat and source passages read during the investigation go to Anthropic. Answers cite the sources used.':'Source search uses our library and does not send your question to an AI provider.'} Your chat stays in this tab’s memory and clears on reload.</p>
    <p className="research-service-status" role="status">{statusText}</p>{(statusError||status&&!canAsk)&&<Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button>}
-   {status?.search_ready&&<p className="research-coverage">{domain==='all'?`${status.stats.documents?.toLocaleString()||'Available'} documents in the collection`:status.domain_counts?.[domain]!==undefined?`${status.domain_counts[domain].toLocaleString()} documents in this section`:'Coverage is limited to the indexed collection.'}<br/>Matched by meaning and keywords.</p>}
+   {status?.search_ready&&<p className="research-coverage">{domain==='all'?`${status.stats.documents?.toLocaleString()||'Available'} documents in the collection`:status.domain_counts?.[domain]!==undefined?`${status.domain_counts[domain].toLocaleString()} documents in this section`:'Coverage is limited to the indexed collection.'}<br/>{localAgent?"Keyword search across all extracted pages. Original semantic index preserved separately.":"Matched by meaning and keywords."}</p>}
    {docId&&<p>Searching within one document. <Link to={content.path}>Search this collection</Link></p>}
    <h2>{domain==='legal'?'Check current requirements.':'Read with context.'}</h2><p>{domain==='legal'?'Legal documents and draft guides may be historical or incomplete. Confirm current rules with the responsible authority before acting.':'Sources can include older research and incomplete scans. Dates, extraction notes and original documents help you judge the evidence.'}</p>
   </div></details></div>
+  {localAgent&&<LocalResearchTools/>}
  </main>;
 }
 export function ResearchDocument(){

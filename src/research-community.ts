@@ -1,5 +1,6 @@
 import {activityLabel, normalize, safeUrl, split, verification, verificationLabels, type CRMRecord} from './crm-model';
 import {crmDirectoryTags} from './crm-directory';
+import {premisesIntent} from './research-intent';
 import {directoryIdentity} from './directory-quality';
 
 export type CommunityMatch = {record: CRMRecord; reason: string; activity: string; verification: string; source: string};
@@ -60,4 +61,32 @@ export function researchCommunityMatches(records: CRMRecord[], question: string,
     if (seen.has(identity)) return false;
     seen.add(identity); return true;
   }).slice(0, Math.max(0, Math.min(limit, 6))).map(({score: _score, ...match}) => match);
+}
+
+/** Building questions need a local-body location before a specific office referral. */
+export function needsBuildingAuthority(question: string): boolean {
+  return !!premisesIntent(question) || /\b(structur\w*|buildings?|construction|demoli\w*|rebuild\w*|renovat\w*)\b/i.test(question);
+}
+
+/** Match named local bodies, never a person or a broad district tag as jurisdiction proof. */
+export function buildingAuthorityMatches(records: CRMRecord[], location: string): CommunityMatch[] {
+  const query = ` ${words(location).join(' ')} `;
+  if (query.trim().length < 3) return [];
+  const candidates = records.flatMap(record => {
+    if (record.collection !== 'government' || record.record_type !== 'government_office') return [];
+    const status = verification(record);
+    if (status === 'historical' || status === 'unresolved' || record.activity_status?.startsWith('historical')) return [];
+    const name = words(record.name).join(' ');
+    const place = name.startsWith('village panchayat ') ? name.slice(18) : name.endsWith(' municipal council') ? name.slice(0, -18) : /^corporation of (the )?city of panaji$/.test(name) ? 'panaji' : '';
+    if (!place || !query.includes(` ${place} `)) return [];
+    const source = safeUrl(record.website_url) || split(record.source_urls).map(safeUrl).find(Boolean);
+    if (!source) return [];
+    return [{record, source, reason: `CRM listing for ${record.name}. Confirm that this office covers the property's exact location.`, activity:activityLabel(record), verification:verificationLabels[status], place}];
+  });
+  const seen = new Set<string>();
+  return candidates.filter(match => {
+    const key = match.place;
+    if (seen.has(key)) return false;
+    seen.add(key);return true;
+  }).slice(0,3).map(({place: _place,...match})=>match);
 }
