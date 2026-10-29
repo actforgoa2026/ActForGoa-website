@@ -40,13 +40,16 @@ export function articlePhoto(record: RecordItem): ArticlePhoto | undefined {
   if (record.image) return { src: record.image, alt: record.images?.[0]?.alt || record.title, source: record.imageSource };
   if (record.images?.[0]?.src) return { src: record.images[0].src, alt: record.images[0].alt, source: record.images[0].source };
   if (record.kind === 'organisation' || record.kind === 'contact' || record.directory?.photo) return undefined;
-  return supplementalPhoto(record.title, record.topics);
+  return undefined;
 }
 
-export function supplementalPhoto(title: string, topics: string[] = []): ArticlePhoto {
-  const subject = `${title} ${topics.join(' ')}`.toLowerCase();
-  if (/farm|food|compost|agricultur|garden/.test(subject)) return fields;
-  if (/water|river|forest|wildlife|nature|biodiversity|mangrove/.test(subject)) return wetland;
-  if (/cultur|heritage|planning|mobility|community|rights|health|education/.test(subject)) return street;
-  return coast;
+export function supplementalPhoto(title: string): ArticlePhoto | undefined {
+  // Only use a landscape when the title describes that landscape. Broad topic
+  // tags must never turn unrelated animal, civic and health stories into one photo.
+  const subject = title.toLowerCase();
+  if (/paddy|rice field/.test(subject)) return fields;
+  if (/mangrove|wetland/.test(subject)) return wetland;
+  if (/panaji|fontainhas/.test(subject)) return street;
+  if (/beach|coast|vagator/.test(subject)) return coast;
+  return undefined;
 }

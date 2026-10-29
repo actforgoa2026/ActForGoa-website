@@ -13,6 +13,9 @@ from mcp.server.transport_security import TransportSecuritySettings
 from .domain import CatalogRequest, CompareRequest, ObservationRequest, EvidenceRequest, Query, DomainError, HistoryRequest
 from .service import SatelliteService
 from .providers import ImageClassifier
+from .earth_engine import EarthEngine
+from .google_maps import GoogleMaps
+from .domain import AreaRequest
 
 
 def create_app(service=None):
@@ -108,7 +111,9 @@ def create_app(service=None):
 
     @app.get('/status')
     def status():
-        return {'imagery_ready':bool(os.getenv('CDSE_CLIENT_ID') and os.getenv('CDSE_CLIENT_SECRET')),
+        provider = os.getenv('SATELLITE_IMAGERY_PROVIDER', 'cdse')
+        return {'imagery_ready':EarthEngine.configured() if provider == 'earth-engine' else bool(os.getenv('CDSE_CLIENT_ID') and os.getenv('CDSE_CLIENT_SECRET')),
+                'imagery_provider':provider, 'google_maps_ready':bool(os.getenv('GOOGLE_MAPS_API_KEY')),
                 'planner_ready':bool(os.getenv('ANTHROPIC_API_KEY')),'decisions_ready':bool(os.getenv('OPENAI_API_KEY')),
                 'classification_ready':ImageClassifier.selected_provider() is not None,
                 'classification_provider':ImageClassifier.selected_provider(),
@@ -121,6 +126,11 @@ def create_app(service=None):
     @app.post('/catalog')
     def catalog(query:CatalogRequest):
         return service.catalog(query)
+
+    @app.post('/environment')
+    def environment(query:AreaRequest):
+        service.store.reserve('google_environment', 50)
+        return GoogleMaps(service.http).current(query.area)
 
     @app.post('/compare',status_code=202)
     def compare(query:CompareRequest,request:Request):

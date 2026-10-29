@@ -1,5 +1,21 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Design release authorized — 30 October 2026
+
+The user explicitly requested pushing all updates to production. This chat owns the focused release of the reviewed design/function iteration, targeting the existing field-guide Vercel alias and existing satellite frontend. The previous issue89 checkpoint says release ownership is clear; no earlier promotion remains active. The original WordPress site at actforgoa.org remains a separate migration decision.
+
+Fresh origin/main is 1b16b87. The satellite Google release is already live from committed branch source ddbea28, so it must be reconciled before packaging the new frontend. Preserve the newer Google map/Places integration, image dates and attribution, existing hosted API, credentials, volumes, accounts and provider accounting. The dirty satellite-google working tree belongs to another ongoing task and is excluded. No model, corpus, quota or credential changes are part of this release.
+
+Next: reconcile committed live source, check the exact combined tree on desktop and phone, merge the reviewed source and deploy through release:review. Final deployment identities and public verification will be recorded under reports/design-release-2026-10-30/.
+
+## Local design and function iteration — 29 October 2026
+
+Active checkout: `/Users/zakkrevitt/.codex/worktrees/actforgoa-design-iteration`, branch `codex/design-iteration`, based on main `1b16b87`. The primary dirty checkout remains preserved. All changes stay local and uncommitted. No push, merge or deployment is authorized for this iteration.
+
+`npm run dev:full` serves the full local environment at `http://127.0.0.1:4173`. Research uses the existing hosted corpus; reporting, editorial/admin and satellite API services run locally. See [local development](LOCAL-DEVELOPMENT.md) for startup and health checks and [the completed notes](design/local-iteration-2026-10-29.md) for the design/function scope and verification boundaries.
+
+Current verification: all 238 Node tests pass; production build passes with an existing large-chunk warning. TypeScript and diff checks pass. Rendered desktop and phone checks cover the changed public surfaces. Source scans found no italic/oblique declarations or decorative side stripes in changed UI files. The final Impeccable review and updated design documentation accompany the local package. Earlier detector output is advisory evidence from the initial scope, not a final quality verdict.
+
 ## Satellite query audit — 29 October 2026 (cloud)
 
 Active isolated checkout `/workspace/actforgoa-satellite`, branch `codex/satellite-query-audit`, starts from fresh main `f20fc25`. PR95 is already merged; this audit uses [PR109](https://github.com/actforgoa2026/ActForGoa-website/pull/109). Concurrent map-controls main `05720cb` is reconciled, preserving PR108 and its place/search/drawing improvements. User requested a deep audit and fixes for selected-area/time questions, Amche/CDSE history and OpenAI image decisions. [Full findings and remaining acceptance](SATELLITE-QUERY-AUDIT.md); [checks and package evidence](../reports/satellite-query-audit-2026-10-29/README.md).

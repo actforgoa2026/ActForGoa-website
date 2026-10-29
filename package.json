@@ -21,9 +21,12 @@
     "dev:reports": "node --import tsx server/reporting.ts",
     "start:reports": "node --import tsx server/reporting.ts",
     "dev:web": "vite --host 127.0.0.1",
-    "release:review": "node scripts/deploy-review.mjs"
+    "release:review": "node scripts/deploy-review.mjs",
+    "dev:full": "node scripts/dev-full.mjs",
+    "dev:check": "node scripts/check-dev.mjs"
   },
   "dependencies": {
+    "@fontsource-variable/figtree": "^5.3.0",
     "@fontsource-variable/manrope": "^5.3.0",
     "@huggingface/transformers": "^4.3.1",
     "@modelcontextprotocol/sdk": "^1.32.2",

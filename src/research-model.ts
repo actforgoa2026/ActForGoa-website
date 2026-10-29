@@ -14,7 +14,7 @@ export function researchDomain(pathname: string): ResearchDomain {
   return pathname === '/ask/legal' ? 'legal' : pathname === '/ask/ecology' ? 'ecology' : 'all';
 }
 export function researchReturnPath(value: unknown): string {
-  return typeof value === 'string' && /^\/ask(?:\/(?:legal|ecology))?(?:\?[^#]*)?$/.test(value) ? value : '/ask';
+  return typeof value === 'string' && /^\/(?:ask(?:\/(?:legal|ecology))?|research-library)(?:\?[^#]*)?$/.test(value) ? value : '/ask';
 }
 export function supportsResearchDomain(status: ResearchStatus|null, domain: ResearchDomain): boolean {
   return domain === 'all' || !!status?.domains?.includes(domain);
@@ -28,8 +28,9 @@ export function citedLibraryParagraphs(answer: ResearchAnswer): ResearchParagrap
 /** Review and retrieval dates do not establish that a law is current. */
 export function researchSourceNotes(source: ResearchEvidence): {label:string;text:string}[] {
   const notes: {label:string;text:string}[] = [];
-  const legal = source.legal_currency?.trim();
-  if (legal && legal !== source.warning?.trim()) notes.push({label:'Legal status',text:legal});
+  const rawLegal = source.legal_currency?.trim();
+  const legal = rawLegal === 'not_consolidated_or_legally_verified' ? 'Not verified as consolidated or current law.' : rawLegal?.replaceAll('_', ' ');
+  if (legal && rawLegal !== source.warning?.trim()) notes.push({label:'Legal status',text:legal});
   const limitation = source.guide_verification?.limitations?.trim();
   if (limitation && ![source.warning, legal].some(text => text?.includes(limitation))) {
     notes.push({label:source.guide_verification?.source_file?'Draft guide limitations':'Review limitations',text:limitation});

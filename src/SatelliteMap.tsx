@@ -1,3 +1,4 @@
+import {Slider} from './components/arc/slider/slider';
 import {useEffect,useRef,useState,type FormEvent,type PointerEvent as ReactPointerEvent} from 'react';
 import L from 'leaflet';
 import {LocateFixed,Maximize2,Minimize2,Minus,Plus,Scan,SquareDashed,X,MapPin,Search} from 'lucide-react';
@@ -147,6 +148,6 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     <AmcheLayers map={mapInstance}/>
     {tileError&&<p className="satellite-note">Some street-map tiles could not load. Selected areas and loaded satellite images remain available.</p>}
     {observation&&<div className="satellite-map-caption"><p><strong>{dateLabel(observation.acquired_at[0])}</strong> · Sentinel-2, 10 m grid{!observation.map_layer?' · This saved observation predates map overlays; see its image below.':''}</p>
-      {observation.map_layer&&<label>Imagery opacity <input type="range" min="0" max="100" value={opacity} onChange={e=>setOpacity(Number(e.target.value))}/><span>{opacity}%</span></label>}</div>}
+      {observation.map_layer&&<Slider label="Imagery opacity" min={0} max={100} value={opacity} onValueChange={setOpacity} format={value=>`${value}%`}/>}</div>}
   </div>;
 }

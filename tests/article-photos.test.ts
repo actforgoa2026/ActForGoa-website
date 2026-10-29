@@ -5,21 +5,19 @@ import {articlePhoto, supplementalPhoto} from '../src/article-photos';
 import type {RecordItem} from '../src/types';
 
 const catalogue = JSON.parse(readFileSync(new URL('../public/data/catalog.json', import.meta.url), 'utf8')) as RecordItem[];
-test('every archived article has a local cover while original images retain precedence', () => {
-  for (const record of catalogue.filter(r => ['story', 'resource', 'page'].includes(r.kind))) {
-    const photo = articlePhoto(record);
-    assert.ok(photo, record.id);
-    if (record.image) assert.equal(photo.src, record.image);
-    else {
-      assert.ok(existsSync(new URL('../public' + photo.src, import.meta.url)), photo.src);
-      assert.ok(photo.credit && photo.license && photo.licenseUrl && photo.source);
-    }
-  }
+test('article covers retain original imagery without filling missing covers with generic photos', () => {
+ for (const record of catalogue) {
+  const photo = articlePhoto(record);
+  if (record.image) assert.equal(photo?.src, record.image, record.id);
+  else if (record.images?.[0]?.src) assert.equal(photo?.src, record.images[0].src, record.id);
+  else assert.equal(photo, undefined, record.id);
+ }
 });
-test('supplemental covers match topics and never impersonate a directory organisation', () => {
-  assert.match(supplementalPhoto('Composting food waste').src, /paddy/);
-  assert.match(supplementalPhoto('Goa mangroves').src, /mangrove/);
-  assert.match(supplementalPhoto('Goan heritage').src, /panaji/);
-  const organisation = catalogue.find(r => r.kind === 'organisation')!;
-  assert.equal(articlePhoto({...organisation, image:'', images:[], directory:undefined}), undefined);
+test('supplemental landscapes are limited to named subjects, never broad tags or animal stories', () => {
+ for (const title of ['Animal welfare in Goa', 'Environmental protection in Goa', 'Snake Rescue Volunteers in Goa', 'Composting food waste']) assert.equal(supplementalPhoto(title), undefined);
+ for (const title of ['Goa mangroves', 'Paddy fields', 'Panaji streets', 'Vagator beach']) {
+  const photo = supplementalPhoto(title)!;
+  assert.ok(existsSync(new URL('../public' + photo.src, import.meta.url)), photo.src);
+  assert.ok(photo.credit && photo.license && photo.licenseUrl && photo.source);
+ }
 });

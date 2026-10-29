@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { ButtonLink } from "./components/arc/button/button-link";
 import { Ambulance, ArrowLeft, ArrowUpRight, Baby, Flame, HeartHandshake, Phone, Shield, Siren, Users, Zap } from "lucide-react";
 import "./emergency-services.css";
 import { useLanguage } from "./language";
@@ -22,21 +23,21 @@ export default function EmergencyServices() {
       <Link className="text-link" to="/"><ArrowLeft size={17} aria-hidden="true" /> <span lang={language}>{t("Back")}</span></Link>
       <h1 lang={language}>{t("Emergency services")}</h1>
       <p className="emergency-intro"><span lang={language}>{t("Goa helplines. Tap a number to call.")}</span></p>
-      <a className="emergency-number emergency-primary" href="tel:112" aria-label="Call all emergencies on 112">
+      <ButtonLink wrap className="emergency-number" href="tel:112" aria-label="Call all emergencies on 112">
         <Siren size={24} aria-hidden="true" />
         <span lang={language}>{t("All emergencies")}</span>
         <strong>112</strong>
         <Phone size={20} aria-hidden="true" />
-      </a>
+      </ButtonLink>
       <ul className="emergency-services" aria-label="Emergency phone numbers">
         {services.map(({ name, number, icon: Icon }) => (
           <li key={name}>
-            <a className="emergency-number" href={`tel:${number}`} aria-label={`Call ${name.toLowerCase()} on ${number}`}>
+            <ButtonLink wrap variant="secondary" className="emergency-number" href={`tel:${number}`} aria-label={`Call ${name.toLowerCase()} on ${number}`}>
               <Icon size={23} aria-hidden="true" />
               <span lang={language}>{t(name)}</span>
               <strong>{number}</strong>
               <Phone size={18} aria-hidden="true" />
-            </a>
+            </ButtonLink>
           </li>
         ))}
       </ul>

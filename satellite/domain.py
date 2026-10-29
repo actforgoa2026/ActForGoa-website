@@ -68,6 +68,10 @@ class Area(StrictModel):
                 'wgs84_geometry': mapping(polygon), 'clipped_to_goa': not GOA.covers(box(*self.bbox))}
 
 
+class AreaRequest(StrictModel):
+    area: Area
+
+
 class Query(StrictModel):
     question: str = Field(min_length=3, max_length=1000)
     area: Area | None = None

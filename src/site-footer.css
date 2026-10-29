@@ -1,0 +1,31 @@
+.site-footer { margin-top: 40px; padding-bottom: 28px; background: var(--paper); color: var(--green); }
+.site-footer-landscape { width: 100%; overflow: hidden; }
+.site-footer-landscape img { display: block; width: 100%; height: clamp(220px, 30vw, 480px); object-fit: cover; object-position: center bottom; }
+.site-footer-content { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.25fr; gap: 40px; padding-block: 12px 44px; }
+.site-footer-intro .wordmark { display: inline-block; margin-bottom: 12px; font-size: 30px; }
+.site-footer p { margin: 0 0 16px; max-width: 30ch; font-size: 15px; line-height: 1.6; color: var(--muted); }
+.site-footer nav { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+.site-footer h2 { margin: 0 0 10px; font-size: 15px; line-height: 1.5; font-weight: 650; }
+.site-footer a { min-height: 32px; display: inline-flex; align-items: center; font-size: 14px; }
+.site-footer a:hover { text-decoration: underline; text-underline-offset: 4px; }
+.site-footer .wordmark { text-decoration: none; }
+.site-footer-note { padding-top: 1px; }
+.site-footer-note a { text-decoration: underline; text-underline-offset: 4px; }
+.site-footer-bottom { display: flex; justify-content: space-between; gap: 24px; align-items: center; border-top: 1px solid var(--line); padding-top: 20px; font-size: 12px; color: var(--muted); }
+.site-footer-bottom nav { flex-direction: row; flex-wrap: wrap; gap: 8px 20px; }
+.site-footer-bottom a { font-size: 12px; }
+@media(max-width:900px) {
+ .site-footer-content { grid-template-columns: 1.4fr 1fr 1fr; gap: 28px; }
+ .site-footer-note { grid-column: 1 / -1; }
+ .site-footer-note p { max-width: none; margin-bottom: 4px; }
+ .site-footer-bottom { align-items: flex-start; flex-direction: column; gap: 12px; }
+}
+@media(max-width:620px) {
+ .site-footer { margin-top: 24px; }
+ .site-footer-landscape img { height: 210px; width: 150%; max-width: none; margin-left: -25%; }
+ .site-footer-content { grid-template-columns: 1fr 1fr; gap: 28px; padding-block: 8px 28px; }
+ .site-footer-intro,.site-footer-note { grid-column: 1 / -1; }
+ .site-footer-intro p { max-width: 36ch; }
+ .site-footer a { min-height: 40px; }
+ .site-footer-bottom nav { gap: 4px 18px; }
+}

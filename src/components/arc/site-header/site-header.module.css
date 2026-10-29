@@ -104,35 +104,35 @@
 
 /* ActForGoa: open paper navigation, original sections, larger hit targets. */
 .header, .header[data-scrolled] { background: var(--paper); box-shadow: none; }
-.inner { max-width: 1320px; width: calc(100% - 96px); padding: 0; }
-.bar { height: 96px; gap: 16px; }
-.brand { font-size: 28px; font-weight: 800; letter-spacing: -.04em; border-radius: 0; }
-.nav { margin-left: auto; }
-.navItem { height: 44px; padding: 0 8px; font-size: 13px; font-weight: 750; border-radius: 4px; }
-.action { height: 44px; font-weight: 750; }
+.inner { max-width: 1720px; width: calc(100% - 64px); padding: 0; }
+.bar { height: 80px; gap: 16px; }
+.brand { font-size: 28px; font-weight: 700; letter-spacing: -.04em; border-radius: 12px; }
+.nav { flex: 1; display: flex; justify-content: center; margin-left: 0; }
+.navItem { height: 44px; padding: 0 8px; font-size: 14px; font-weight: 500; border-radius: var(--radius-control); }
+.action { height: 44px; font-weight: 600; }
 .actions { margin-left: 0; }
 .brandSlot, .actions { flex-shrink: 0; }
 .extraAction { display: flex; }
 .compactExtraAction { display: none; }
-.menuButton { width: 44px; height: 44px; border-radius: 4px; }
-.panel { left: 0; right: auto; width: min(336px, 100%); overflow-y: auto; overscroll-behavior: contain; border-radius: 4px; box-shadow: 0 16px 32px #193e3214; transform-origin: 0 0; }
+.menuButton { width: 44px; height: 44px; border-radius: var(--radius-control); }
+.panel { left: 0; right: auto; width: min(336px, 100%); overflow-y: auto; overscroll-behavior: contain; border-radius: var(--radius-control); box-shadow: 0 16px 32px #193e3214; transform-origin: 0 0; }
 .face { padding: var(--space-2); }
 .panelLinks { grid-template-columns: minmax(0, 1fr); }
-.panelLink { border-radius: 4px; padding: var(--space-2) var(--space-3); min-height: 44px; gap: var(--space-2); }
+.panelLink { border-radius: var(--radius-control); padding: var(--space-2) var(--space-3); min-height: 44px; gap: var(--space-2); }
 .panelLinks[data-with-icons] .panelLink { display: grid; grid-template-columns: 20px minmax(0, 1fr); }
 .panelLinks[data-with-icons] .panelText { grid-column: 2; }
 .panelIcon { grid-column: 1; grid-row: 1; margin-top: 1px; }
 .panelIcon svg { width: 20px; height: 20px; }
 .panelText { gap: 2px; line-height: 1.5; }
-.panelText > span:first-child { font-size: 15px; font-weight: 750; }
+.panelText > span:first-child { font-size: 15px; font-weight: 600; }
 .panelText > span:last-child:not(:first-child) { font-size: 13px; }
 .sheetInner { max-height: calc(100dvh - 81px); }
-.sheetRow { font-weight: 750; }
+.sheetRow { font-weight: 600; }
 .sheetLink { font-weight: 650; }
 @container site-header (max-width: 1399px) {
   .inner { width: calc(100% - 64px); padding: 0; }
   .actions { margin-left: auto; }
-  .bar { height: 80px; }
+  .bar { height: 72px; }
 }
 @container site-header (max-width: 620px) {
   .inner { width: calc(100% - 40px); }
@@ -140,3 +140,11 @@
   .extraAction { display: none; }
   .compactExtraAction { display: flex; padding-block: 8px 16px; }
 }
+
+/* The investigation canvas gets the height otherwise used by navigation. */
+:global(body:has(.satellite-page)) .bar { height: 64px; }
+:global(body:has(.satellite-page)) .inner { max-width: none; width: calc(100% - 40px); }
+:global(body:has(.satellite-page)) .brand { font-size: 24px; }
+:global(body:has(.satellite-page)) .sheetInner { max-height: calc(100dvh - 65px); }
+
+@container site-header (max-width: 1399px) { .nav { display: none; } }

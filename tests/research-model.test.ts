@@ -37,3 +37,9 @@ test('authored guide caveats do not repeat an identical extraction note',()=>{
  source.guide_verification!.limitations='Local service availability has not been verified.';
  assert.deepEqual(researchSourceNotes(source),[{label:'Draft guide limitations',text:'Local service availability has not been verified.'}]);
 });
+
+test('library status enums render as readable caveats without altering source text',()=>{
+ const source={warning:'',legal_currency:'not_consolidated_or_legally_verified'} as ResearchEvidence;
+ assert.deepEqual(researchSourceNotes(source),[{label:'Legal status',text:'Not verified as consolidated or current law.'}]);
+ assert.equal(source.legal_currency,'not_consolidated_or_legally_verified');
+});

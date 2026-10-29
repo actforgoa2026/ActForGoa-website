@@ -2,10 +2,12 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 import threading
 import httpx
 from .domain import CatalogRequest, CompareRequest, ObservationRequest, EvidenceRequest, DomainError, Query, make_plan, change_interval
 from .eve_cdse import CDSE
+from .earth_engine import EarthEngine
 from .evidence import read_observation, compare_pixels, public_observation, classification_image
 from .providers import AnthropicPlanner, ImageClassifier
 from .summary import summarize_comparison, canopy_presence
@@ -18,7 +20,10 @@ class SatelliteService:
     def __init__(self, path, client=None):
         self.http = client or httpx.Client(timeout=45, follow_redirects=False)
         self.store = Store(path)
-        self.cdse = CDSE(self.http)
+        self.imagery_provider = os.getenv('SATELLITE_IMAGERY_PROVIDER', 'cdse')
+        if self.imagery_provider not in {'cdse', 'earth-engine'}:
+            raise ValueError('Unknown SATELLITE_IMAGERY_PROVIDER')
+        self.cdse = EarthEngine(self.http) if self.imagery_provider == 'earth-engine' else CDSE(self.http)
         self.planner = AnthropicPlanner(self.http)
         self.classifier = ImageClassifier(self.http)
         self.context = EcologyContext(self.http)

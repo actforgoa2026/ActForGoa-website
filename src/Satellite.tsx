@@ -1,3 +1,4 @@
+import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {Button} from './components/arc/button/button';
@@ -8,15 +9,17 @@ import {satelliteApi,SatelliteApiError,type SatelliteArea,type SatelliteScene,ty
 import {SatelliteHistory,satelliteIntents as intents,observationDate as dateLabel} from './SatelliteHistory';
 import {SatelliteContext} from './SatelliteContext';
 import {SatelliteMap} from './SatelliteMap';
+import {SatelliteEnvironment} from './SatelliteEnvironment';
 import {SatelliteEvidence} from './SatelliteEvidence';
 import {pollSatelliteJob,pendingJobKey,validJobId,sameImageryContext,cacheObservations} from './satellite-jobs';
 import {SatelliteTimeline} from './SatelliteTimeline';
 import {areaError,orderedPair,orderedScenes} from './satellite-timeline';
 import './satellite.css';
+import './satellite-layout.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-type Readiness={imagery_ready:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null};
+type Readiness={imagery_ready:boolean;imagery_provider?:string;google_maps_ready?:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null};
 type SavedJob={id:string;status:string;request:(SatelliteRequest&{kind?:string;scene_id?:string})|null;result:(SatelliteResult&{observation?:SatelliteObservation;error?:string})|null};
 const evidenceLabels={before:'Before image',after:'After image',coverage:'Visibility',spectral:'Numeric evidence',assessment:'Image decisions'};
 const decisionLabel=(value:string)=>value==='yes'?'Yes':value==='no'?'No':'Uncertain';
@@ -154,19 +157,21 @@ export default function Satellite(){
       <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
       <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
       <div className="satellite-dates"><Input label="Search from" type="date" value={start} max={end} min="2017-03-28" onChange={e=>{setStart(e.target.value);setPlan(null);clearResults();}}/><Input label="Search until" type="date" value={end} min={start} max={today()} onChange={e=>{setEnd(e.target.value);setPlan(null);clearResults();}}/>
-        <label>Investigate<select value={intent} onChange={e=>{setIntent(e.target.value as SatelliteIntent);setResult(null);setPlan(null);}}>{Object.entries(intents).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label></div>
+        <MorphSelect label="Investigate" value={intent} disabled={!!busy} onValueChange={value=>{setIntent(value as SatelliteIntent);setResult(null);setPlan(null);}} items={Object.entries(intents).map(([value,label])=>({value,label}))}/></div>
       <Button type="button" disabled={!!findReason||!!busy} aria-describedby={findReason?"satellite-find-reason":undefined} onClick={findScenes}>Find dated observations</Button>
       {findReason&&<p id="satellite-find-reason" role="status">{findReason}</p>}
       <p className="satellite-note">Searches use the acquisition dates, not today’s street-map tiles. The time slider steps through returned acquisitions; load an image to inspect it.</p>
+      {readiness?.imagery_provider==='earth-engine'&&<p className="satellite-note">Sentinel-2 acquisitions supplied by Google Earth Engine.</p>}
       {notice&&<p role="status">{notice}</p>}
       {catalogFreshness?.latest_acquired_at&&<p className="satellite-freshness">Latest acquisition found in this search: <strong>{dateLabel(catalogFreshness.latest_acquired_at)}</strong>. Catalog checked {dateLabel(catalogFreshness.searched_at)}. Availability does not guarantee clear local visibility.</p>}
-      {!!scenes.length&&<><h3>3. Compare two observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><label key={label}>{label} observation<select value={label==='Before'?before:after} onChange={e=>{(label==='Before'?setBefore:setAfter)(e.target.value);setResult(null);}}><option value="">Choose an acquisition</option>{scenes.map(s=><option key={s.id} value={s.id}>{dateLabel(s.acquired_at)} · scene cloud {s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}</option>)}</select></label>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      {!!scenes.length&&<><h3>3. Compare two observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${dateLabel(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
     </fieldset>
     <details className="satellite-planner"><summary>Optional: prepare dates and topic from a question</summary>    <form className="satellite-question" onSubmit={ask}><Textarea label="Describe the investigation to prepare" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Compare canopy here during the last month"/>
       <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
       {session&&readiness&&!readiness.planner_ready&&<p className="satellite-note">Question interpretation is unavailable on this server. Use the date and topic controls above to compare imagery.</p>}</form>
     {plan&&<div className="satellite-plan" role="status"><p>{plan.message}</p>{plan.window_start&&<p>Requested period: {dateLabel(plan.window_start)} to {dateLabel(plan.window_end!)}.</p>}{plan.place_name&&<p>Requested place: {plan.place_name}. Select it on the map, then ask about “this area”.</p>}{plan.warnings?.map(w=><p key={w}>{w}</p>)}</div>}
 </details>
+    <SatelliteEnvironment area={area} csrfToken={session?.csrfToken||''} ready={!!readiness?.google_maps_ready}/>
     <SatelliteEvidence csrfToken={session?.csrfToken||''} area={area} startDate={start} endDate={end} intent={intent} question={question} onQuestion={setQuestion} onOpen={openSaved} busy={!!busy} revision={historyRevision}/>
     {result&&<section className="satellite-results"><h2>{result.summary?.headline??'What these observations show'}</h2>
       {result.recorded_example&&<p className="satellite-recorded"><strong>Recorded real comparison.</strong> Retrieved {dateLabel(result.recorded_example.retrieved_at)}. {result.recorded_example.note}{' '}<a href={result.recorded_example.source_url} target="_blank" rel="noreferrer">View the original verification</a></p>}

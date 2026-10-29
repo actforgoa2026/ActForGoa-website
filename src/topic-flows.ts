@@ -29,10 +29,10 @@ const reading = (label: string): ActionLink => ({label,href:'#topic-reading',ico
 const form = (label: string, file: string, purpose?: 'support' | 'damage'): ActionLink => ({label,href:templatePath(file)+(purpose ? `?purpose=${purpose}` : ''),icon:'file'});
 const serviceEnquiry = form('Write a service enquiry','18-service-enquiry.txt');
 const inspection = form('Request an inspection','16-environment-records-and-inspection.txt');
-const agriculture: ActionLink = {label:'Find the agriculture office',href:'https://www.goa.gov.in/department/agriculture/',icon:'grow'};
+const agriculture: ActionLink = {label:'Find the agriculture office',href:'/contacts/agriculture',icon:'grow'};
 const buildingEnquiry = form('Ask about building permissions','06-project-enquiry.txt');
-const vets: ActionLink = {label:'Find a government veterinary service',href:'https://ahvs.goa.gov.in/emergency-contact/',icon:'animal'};
-const forest: ActionLink = {label:'Find Forest Department contacts',href:'https://forest.goa.gov.in/contact-us',icon:'nature'};
+const vets: ActionLink = {label:'Find a government veterinary service',href:'/contacts/veterinary',icon:'animal'};
+const forest: ActionLink = {label:'Find Forest Department contacts',href:'/contacts/forest',icon:'nature'};
 const animalSteps = ['Note the location, the animal’s condition and any nearby hazards without putting yourself at risk.','Ask the service whether it can attend or receive the animal, and how to arrange safe transport.'];
 const wildlifeSteps = ['Keep a safe distance and keep people and pets away. Do not try to catch or move the animal.','Tell the Forest Department the location and what you can see. Ask for an authorised response.'];
 const volunteer = (id: string, label: string, icon: TopicIconName, query: string, peopleIds: string[]): TopicAction => ({

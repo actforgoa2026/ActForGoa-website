@@ -1,22 +1,22 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-26T09:17:45.699992Z",
+  "generatedAt": "2026-10-29T17:14:20.931570+00:00",
   "title": "Design System: ActForGoa",
   "extensions": {
     "colorMeta": {
       "paper": {
         "role": "neutral",
-        "displayName": "Warm paper",
+        "displayName": "Warm cream",
         "canonical": "#f7f6ee",
         "tonalRamp": [
-          "oklch(15% 0.01062 100.82)",
-          "oklch(26% 0.01062 100.82)",
-          "oklch(38% 0.01062 100.82)",
-          "oklch(49% 0.01062 100.82)",
-          "oklch(61% 0.01062 100.82)",
-          "oklch(72% 0.01062 100.82)",
-          "oklch(84% 0.01062 100.82)",
-          "oklch(95% 0.01062 100.82)"
+          "oklch(15% 0.0106 100.82)",
+          "oklch(26.43% 0.0106 100.82)",
+          "oklch(37.86% 0.0106 100.82)",
+          "oklch(49.29% 0.0106 100.82)",
+          "oklch(60.71% 0.0106 100.82)",
+          "oklch(72.14% 0.0106 100.82)",
+          "oklch(83.57% 0.0106 100.82)",
+          "oklch(95% 0.0106 100.82)"
         ]
       },
       "green": {
@@ -24,14 +24,14 @@
         "displayName": "Forest green",
         "canonical": "#193e32",
         "tonalRamp": [
-          "oklch(15% 0.04794 169.59)",
-          "oklch(26% 0.04794 169.59)",
-          "oklch(38% 0.04794 169.59)",
-          "oklch(49% 0.04794 169.59)",
-          "oklch(61% 0.04794 169.59)",
-          "oklch(72% 0.04794 169.59)",
-          "oklch(84% 0.04794 169.59)",
-          "oklch(95% 0.04794 169.59)"
+          "oklch(15% 0.0479 169.59)",
+          "oklch(26.43% 0.0479 169.59)",
+          "oklch(37.86% 0.0479 169.59)",
+          "oklch(49.29% 0.0479 169.59)",
+          "oklch(60.71% 0.0479 169.59)",
+          "oklch(72.14% 0.0479 169.59)",
+          "oklch(83.57% 0.0479 169.59)",
+          "oklch(95% 0.0479 169.59)"
         ]
       },
       "muted": {
@@ -39,14 +39,14 @@
         "displayName": "Quiet green",
         "canonical": "#56675c",
         "tonalRamp": [
-          "oklch(15% 0.02696 156.91)",
-          "oklch(26% 0.02696 156.91)",
-          "oklch(38% 0.02696 156.91)",
-          "oklch(49% 0.02696 156.91)",
-          "oklch(61% 0.02696 156.91)",
-          "oklch(72% 0.02696 156.91)",
-          "oklch(84% 0.02696 156.91)",
-          "oklch(95% 0.02696 156.91)"
+          "oklch(15% 0.0270 156.91)",
+          "oklch(26.43% 0.0270 156.91)",
+          "oklch(37.86% 0.0270 156.91)",
+          "oklch(49.29% 0.0270 156.91)",
+          "oklch(60.71% 0.0270 156.91)",
+          "oklch(72.14% 0.0270 156.91)",
+          "oklch(83.57% 0.0270 156.91)",
+          "oklch(95% 0.0270 156.91)"
         ]
       },
       "line": {
@@ -54,14 +54,14 @@
         "displayName": "Soft rule",
         "canonical": "#d0d8ca",
         "tonalRamp": [
-          "oklch(15% 0.02082 131.47)",
-          "oklch(26% 0.02082 131.47)",
-          "oklch(38% 0.02082 131.47)",
-          "oklch(49% 0.02082 131.47)",
-          "oklch(61% 0.02082 131.47)",
-          "oklch(72% 0.02082 131.47)",
-          "oklch(84% 0.02082 131.47)",
-          "oklch(95% 0.02082 131.47)"
+          "oklch(15% 0.0208 131.47)",
+          "oklch(26.43% 0.0208 131.47)",
+          "oklch(37.86% 0.0208 131.47)",
+          "oklch(49.29% 0.0208 131.47)",
+          "oklch(60.71% 0.0208 131.47)",
+          "oklch(72.14% 0.0208 131.47)",
+          "oklch(83.57% 0.0208 131.47)",
+          "oklch(95% 0.0208 131.47)"
         ]
       },
       "pale": {
@@ -69,530 +69,278 @@
         "displayName": "Pale leaf",
         "canonical": "#e9eddf",
         "tonalRamp": [
-          "oklch(15% 0.01906 119.76)",
-          "oklch(26% 0.01906 119.76)",
-          "oklch(38% 0.01906 119.76)",
-          "oklch(49% 0.01906 119.76)",
-          "oklch(61% 0.01906 119.76)",
-          "oklch(72% 0.01906 119.76)",
-          "oklch(84% 0.01906 119.76)",
-          "oklch(95% 0.01906 119.76)"
+          "oklch(15% 0.0191 119.76)",
+          "oklch(26.43% 0.0191 119.76)",
+          "oklch(37.86% 0.0191 119.76)",
+          "oklch(49.29% 0.0191 119.76)",
+          "oklch(60.71% 0.0191 119.76)",
+          "oklch(72.14% 0.0191 119.76)",
+          "oklch(83.57% 0.0191 119.76)",
+          "oklch(95% 0.0191 119.76)"
         ]
       },
       "white": {
         "role": "neutral",
-        "displayName": "Control paper",
+        "displayName": "Control cream",
         "canonical": "#fffef8",
         "tonalRamp": [
-          "oklch(15% 0.00796 98.87)",
-          "oklch(26% 0.00796 98.87)",
-          "oklch(38% 0.00796 98.87)",
-          "oklch(49% 0.00796 98.87)",
-          "oklch(61% 0.00796 98.87)",
-          "oklch(72% 0.00796 98.87)",
-          "oklch(84% 0.00796 98.87)",
-          "oklch(95% 0.00796 98.87)"
+          "oklch(15% 0.0080 98.87)",
+          "oklch(26.43% 0.0080 98.87)",
+          "oklch(37.86% 0.0080 98.87)",
+          "oklch(49.29% 0.0080 98.87)",
+          "oklch(60.71% 0.0080 98.87)",
+          "oklch(72.14% 0.0080 98.87)",
+          "oklch(83.57% 0.0080 98.87)",
+          "oklch(95% 0.0080 98.87)"
         ]
       },
       "search-focus": {
         "role": "neutral",
-        "displayName": "Search focus leaf",
+        "displayName": "Selection leaf",
         "canonical": "#dae3cf",
         "tonalRamp": [
-          "oklch(15% 0.02846 126.84)",
-          "oklch(26% 0.02846 126.84)",
-          "oklch(38% 0.02846 126.84)",
-          "oklch(49% 0.02846 126.84)",
-          "oklch(61% 0.02846 126.84)",
-          "oklch(72% 0.02846 126.84)",
-          "oklch(84% 0.02846 126.84)",
-          "oklch(95% 0.02846 126.84)"
-        ]
-      },
-      "link-button-hover": {
-        "role": "primary",
-        "displayName": "Link-action hover",
-        "canonical": "#29523e",
-        "tonalRamp": [
-          "oklch(15% 0.05791 161.01)",
-          "oklch(26% 0.05791 161.01)",
-          "oklch(38% 0.05791 161.01)",
-          "oklch(49% 0.05791 161.01)",
-          "oklch(61% 0.05791 161.01)",
-          "oklch(72% 0.05791 161.01)",
-          "oklch(84% 0.05791 161.01)",
-          "oklch(95% 0.05791 161.01)"
-        ]
-      },
-      "choice-border": {
-        "role": "neutral",
-        "displayName": "Choice outline",
-        "canonical": "#9faea5",
-        "tonalRamp": [
-          "oklch(15% 0.02109 159.56)",
-          "oklch(26% 0.02109 159.56)",
-          "oklch(38% 0.02109 159.56)",
-          "oklch(49% 0.02109 159.56)",
-          "oklch(61% 0.02109 159.56)",
-          "oklch(72% 0.02109 159.56)",
-          "oklch(84% 0.02109 159.56)",
-          "oklch(95% 0.02109 159.56)"
+          "oklch(15% 0.0285 126.84)",
+          "oklch(26.43% 0.0285 126.84)",
+          "oklch(37.86% 0.0285 126.84)",
+          "oklch(49.29% 0.0285 126.84)",
+          "oklch(60.71% 0.0285 126.84)",
+          "oklch(72.14% 0.0285 126.84)",
+          "oklch(83.57% 0.0285 126.84)",
+          "oklch(95% 0.0285 126.84)"
         ]
       }
     },
     "typographyMeta": {
       "display": {
-        "displayName": "Display",
-        "purpose": "Homepage word wheel and its fixed in Goa text."
+        "displayName": "Orbit display",
+        "purpose": "Fluid homepage headline."
       },
       "headline": {
-        "displayName": "Headline"
+        "displayName": "Page headline",
+        "purpose": "Catalogue and detail headings."
       },
       "title": {
-        "displayName": "Title"
-      },
-      "record-title": {
-        "displayName": "Record Title"
-      },
-      "topic": {
-        "displayName": "Homepage topic",
-        "purpose": "Restored top-level choice title."
-      },
-      "topic-phone": {
-        "displayName": "Homepage topic on phones",
-        "purpose": "Phone title in a restored topic choice."
+        "displayName": "Section title",
+        "purpose": "Shared section headings."
       },
       "body": {
-        "displayName": "Body"
+        "displayName": "Body",
+        "purpose": "General upright interface prose."
       },
       "reading": {
-        "displayName": "Reading"
-      },
-      "summary": {
-        "displayName": "Summary"
+        "displayName": "Article reading",
+        "purpose": "Article prose; newsletters use their own 1.7 leading."
       },
       "control": {
-        "displayName": "Control"
-      },
-      "field": {
-        "displayName": "Field"
-      },
-      "metadata": {
-        "displayName": "Metadata",
-        "purpose": "Record type, date, and topic metadata; hero captions remain a 12px exception."
+        "displayName": "Arc label",
+        "purpose": "Shared Arc labels and desktop form text."
       },
       "search": {
-        "displayName": "Search",
-        "purpose": "Search input inherits the page line-height; contact fields retain Arc leading."
-      },
-      "feed-lead": {
-        "displayName": "Feed lead",
-        "purpose": "Lead title in mixed discovery batches."
-      },
-      "header-label": {
-        "displayName": "Header label",
-        "purpose": "Nine-category desktop SiteHeader labels."
-      },
-      "hero-question": {
-        "displayName": "Hero question",
-        "purpose": "Text entry over the homepage photograph."
-      },
-      "home-action": {
-        "displayName": "Home action",
-        "purpose": "Topic-heading row immediately below the homepage photograph."
-      },
-      "topic-description": {
-        "displayName": "Topic description",
-        "purpose": "Supporting description within a homepage topic choice."
-      },
-      "topic-description-phone": {
-        "displayName": "Topic description on phones",
-        "purpose": "Compact 12px phone description inside an 82px-minimum choice."
-      },
-      "guided-choice": {
-        "displayName": "Guided choice",
-        "purpose": "Action and destination navigation."
-      },
-      "guided-choice-phone": {
-        "displayName": "Guided choice on phones",
-        "purpose": "Single-column phone action and destination navigation."
+        "displayName": "Search text",
+        "purpose": "Arc SearchField text."
       }
     },
     "shadows": [
       {
-        "name": "arc-button-hover",
-        "value": "0 1px 2px oklch(0% 0 0 / .035)",
-        "purpose": "Subtle Arc primary-button hover response; no page panel elevation."
+        "name": "shadow-resting",
+        "value": "0 2px 4px rgb(25 62 50 / 5%), 0 5px 14px rgb(25 62 50 / 7%)",
+        "purpose": "Primary/secondary controls and selected segments."
+      },
+      {
+        "name": "shadow-field",
+        "value": "0 2px 4px rgb(25 62 50 / 4%), 0 5px 14px rgb(25 62 50 / 3%)",
+        "purpose": "Installed Arc fields."
+      },
+      {
+        "name": "shadow-floating",
+        "value": "0 12px 36px rgb(25 62 50 / 12%), 0 2px 6px rgb(25 62 50 / 5%)",
+        "purpose": "Floating selections and map tools."
       },
       {
         "name": "header-dropdown",
         "value": "0 16px 32px #193e3214",
-        "purpose": "Functional desktop navigation layer; not a content-card treatment."
+        "purpose": "Header dropdown separation."
       }
     ],
     "motion": [
       {
-        "name": "arc-fast",
-        "value": "160ms cubic-bezier(.22,1,.36,1)",
-        "purpose": "Arc control colour and opacity transitions."
+        "name": "ease-standard",
+        "value": "cubic-bezier(.22,1,.36,1)",
+        "purpose": "Arc state colour transitions."
       },
       {
-        "name": "search-focus-fill",
-        "value": "background-color 120ms ease-out",
-        "purpose": "Search form focus fill."
+        "name": "duration-fast",
+        "value": "160ms",
+        "purpose": "Arc short state feedback."
       },
       {
-        "name": "arc-morph",
-        "value": "spring, visualDuration:0.42, bounce:0",
-        "purpose": "Segmented selection and button width changes; keyboard or reduced-motion selection is immediate."
+        "name": "spring-snappy",
+        "value": "spring: visualDuration 0.26s, bounce 0",
+        "purpose": "Installed Button and ButtonLink press handling."
       },
       {
-        "name": "site-header-panels",
-        "value": "Arc physical springs: grow .44s, shrink .34s, glide .3s, slide .4s; reduced motion uses opacity or immediate transitions",
-        "purpose": "Desktop dropdown changes and compact navigation sheet."
-      },
-      {
-        "name": "hero-beat",
-        "value": "4000ms",
-        "purpose": "Shared clock; words each beat and photographs every second beat."
-      },
-      {
-        "name": "hero-word-roll",
-        "value": "620ms cubic-bezier(.76,0,.24,1)",
-        "purpose": "Vertical word roll and measured slot-width transition; immediate under reduced motion."
-      },
-      {
-        "name": "hero-photo-fade",
-        "value": "opacity 900ms ease-in-out",
-        "purpose": "Photo transition on every second beat; no transition under reduced motion."
-      },
-      {
-        "name": "topic-choice-state",
-        "value": "background-color 120ms ease-out, border-color 120ms ease-out",
-        "purpose": "Hover and press on restored topic choices; removed under reduced motion."
+        "name": "spring-morph",
+        "value": "spring: visualDuration 0.42s, bounce 0",
+        "purpose": "Native Arc shape and shared-layout changes."
       }
     ],
     "breakpoints": [
       {
-        "name": "compact-desktop-max",
-        "value": "1150px"
-      },
-      {
-        "name": "tablet-max",
-        "value": "850px"
-      },
-      {
-        "name": "phone-max",
+        "name": "phone",
         "value": "620px"
       },
       {
-        "name": "small-segment-padding-max",
-        "value": "380px"
+        "name": "orbit-phone",
+        "value": "700px"
       },
       {
-        "name": "header-compact-container-max",
-        "value": "1199px"
+        "name": "catalogue-compact",
+        "value": "850px"
+      },
+      {
+        "name": "shell-compact",
+        "value": "1150px"
+      },
+      {
+        "name": "header-menu-container",
+        "value": "1399px"
       }
-    ],
-    "focus": {
-      "actions": "2px solid var(--green), offset 3px, keyboard focus only",
-      "textEntry": "Fill and caret; existing borders stay unchanged. No new border or visible ring.",
-      "searchFill": "#dae3cf",
-      "inputTextareaFill": "var(--pale)",
-      "heroActions": "2px white outline, offset 3px, on photo controls and caption links"
-    },
-    "controlHeights": {
-      "sm": "44px",
-      "md": "48px",
-      "lg": "52px"
-    },
-    "provenance": {
-      "library": "Official Arc components installed in src/components/arc; local project foundation overrides in src/styles.css",
-      "files": [
-        "src/App.tsx",
-        "src/styles.css",
-        "src/main.tsx",
-        "src/components/arc/foundation.css",
-        "src/components/arc/button/button.tsx",
-        "src/components/arc/search-field/search-field.tsx",
-        "src/components/arc/input/input.tsx",
-        "src/components/arc/textarea/textarea.tsx",
-        "src/components/arc/segmented-control/segmented-control.tsx",
-        "src/components/arc/site-header/site-header.tsx",
-        "src/components/arc/site-header/site-header.module.css",
-        "src/public-record.ts",
-        "src/discovery.ts",
-        "src/browsing-state.ts",
-        "scripts/restore_article_images.py",
-        "src/HomeCarousel.tsx",
-        "src/HomeHeroWordWheel.tsx",
-        "src/home-hero.css",
-        "src/content/hero-photos.json",
-        "public/assets/hero/provenance.json",
-        "src/TopicPage.tsx",
-        "src/topic-flows.ts",
-        "src/topic-records.ts",
-        "src/topic-navigation.css",
-        "src/components/TopicIcon.tsx",
-        "src/components/RecordCard.tsx"
-      ],
-      "captures": [
-        ".impeccable/review/restored-topics/desktop-home.png",
-        ".impeccable/review/restored-topics/mobile-home.png",
-        ".impeccable/review/restored-topics/small-phone-home.png",
-        ".impeccable/review/restored-topics/tablet-home.png",
-        ".impeccable/review/restored-topics/desktop-waste.png",
-        ".impeccable/review/restored-topics/desktop-report.png",
-        ".impeccable/review/restored-topics/mobile-waste.png",
-        ".impeccable/review/restored-topics/mobile-collection.png",
-        ".impeccable/review/restored-topics/mobile-household.png"
-      ],
-      "limits": "All nine supplied restored-topics captures were inspected for the original palette, stronger type, photo-overlay hero, restored choices, and guided menus. Parent evidence reports 62 automated tests and browser journeys passing; menu-checks.json records seven non-waste menus without overflow and detector.json has zero primary findings. reports/TOPIC-RESTORATION-HANDOFF.md confirms the parent’s final TypeScript/Vite build passed with index-CaOemWGg.js and index-BHzalREE.css; runtime/test hashes match the frozen snapshot at .reports/topic-restoration-2026-10-26. This pass did not rerun the tests or build. Deployment is held during release coordination. Specimens are structurally checked, not separately browser-rendered."
-    },
-    "tonalRampPolicy": "Synthesised inspection aids; exact source colours in DESIGN.md remain normative.",
-    "discovery": {
-      "snapshotEntries": 528,
-      "batchSize": 12,
-      "automaticRootMargin": "0px 0px 400px 0px",
-      "historyState": [
-        "limit",
-        "kind",
-        "automatic"
-      ],
-      "source": "src/discovery.ts and DiscoveryFeed in src/App.tsx"
-    },
-    "recordPresentation": {
-      "source": "src/public-record.ts",
-      "policy": "Preserve originals; sanitize displayed record phone fields, recognised number-bearing prose, and phone/WhatsApp actions. Use source organisation descriptions and an explicit missing-bio fallback.",
-      "scope": "Presentation only; original catalogue data is still retained."
-    },
-    "articleImages": {
-      "source": "scripts/restore_article_images.py",
-      "provenance": "data/article-image-map.json",
-      "report": "reports/article-image-restoration.json",
-      "gallery": "Two columns, 24px gap, natural-height images; one column at 620px."
-    },
-    "hero": {
-      "sources": [
-        "src/HomeCarousel.tsx",
-        "src/HomeHeroWordWheel.tsx",
-        "src/home-hero.css",
-        "src/content/hero-photos.json",
-        "public/assets/hero/provenance.json"
-      ],
-      "words": [
-        "Volunteer",
-        "Build",
-        "Create",
-        "Recycle",
-        "Culture",
-        "Health"
-      ],
-      "suffix": "in Goa",
-      "beatMs": 4000,
-      "wordRollMs": 620,
-      "photoFadeMs": 900,
-      "photoEveryBeats": 2,
-      "composerMaxWidth": "720px",
-      "photoScrim": "linear-gradient(180deg, rgb(10 28 20 / 25%), rgb(10 28 20 / 12%) 55%, rgb(10 28 20 / 70%)), rgb(10 28 20 / 50%)",
-      "autoplay": "Requires enabled playback, visible document, hero intersection through a 25%-threshold observer, no control hover, and a loaded next photo. Interactive focus (except rotation control), manual navigation, and touch swipe pause persistently. Programmatic heading focus does not pause. Reduced motion disables autoplay, movement, and transitions, hides Play, and preserves manual navigation. Failed images are excluded.",
-      "responsive": "Photo fills the shell and becomes viewport-wide at 620px. Content padding is 18px 24px 62px on desktop, 14px 20px 72px on phones, with the short-phone rule at 18px top and 66px bottom. The emergency action shares the topic-heading row, then becomes full-width on phones. Eight bordered topic choices follow in four columns, two at 850px, at minimum 82px height. Captions remain over the bottom scrim."
-    },
-    "topicNavigation": {
-      "sources": [
-        "src/TopicPage.tsx",
-        "src/topic-flows.ts",
-        "src/topic-records.ts",
-        "src/topic-navigation.css",
-        "src/components/TopicIcon.tsx",
-        "src/components/RecordCard.tsx"
-      ],
-      "route": "/topics/:slug/:actionId?/:choiceId?",
-      "restoration": "Earlier guided topic menus restored; no new concept seed. Original paper/green palette and neutral choice border retained.",
-      "home": "Four columns with 8px gaps; two at 850px. Minimum height 82px; padding 12px, 10px on phones. Icons 26px, hidden at 620px; arrows hidden at 1150px.",
-      "guided": "Three columns, two for two/four choices; two at 850px and one at 620px. Minimum height 120px and padding 24px; 100px and 20px on phones. Icons 40px. Breadcrumbs and explicit back links preserve the route hierarchy.",
-      "states": "Neutral 1px full border, paper resting surface, pale hover with green border, line-colour active fill, shared keyboard outline, 120ms transitions removed for reduced motion.",
-      "evidence": {
-        "captures": [
-          ".impeccable/review/restored-topics/desktop-home.png",
-          ".impeccable/review/restored-topics/mobile-home.png",
-          ".impeccable/review/restored-topics/small-phone-home.png",
-          ".impeccable/review/restored-topics/tablet-home.png",
-          ".impeccable/review/restored-topics/desktop-waste.png",
-          ".impeccable/review/restored-topics/desktop-report.png",
-          ".impeccable/review/restored-topics/mobile-waste.png",
-          ".impeccable/review/restored-topics/mobile-collection.png",
-          ".impeccable/review/restored-topics/mobile-household.png"
-        ],
-        "menuChecks": ".impeccable/review/restored-topics/menu-checks.json",
-        "detector": ".impeccable/review/restored-topics/detector.json",
-        "reportedTests": 62,
-        "reportedBy": "Parent agent",
-        "build": "Parent handoff confirms TypeScript/Vite production build passed: index-CaOemWGg.js and index-BHzalREE.css.",
-        "deployment": "Held during release coordination.",
-        "handoff": "reports/TOPIC-RESTORATION-HANDOFF.md",
-        "snapshot": ".reports/topic-restoration-2026-10-26",
-        "snapshotIntegrity": "Parent compared runtime/test SHA256 values and confirmed no changes since capture."
-      }
-    }
+    ]
   },
   "components": [
     {
-      "name": "Arc primary button",
+      "name": "Arc Button primary",
       "kind": "button",
       "refersTo": "button-primary",
-      "description": "Default Arc Button with project colours and medium sizing.",
-      "html": "<button class=\"ds-primary\" type=\"button\">Prepare email <svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
-      "css": ".ds-primary{font-family:'Manrope Variable',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border:1px solid transparent;border-radius:4px;padding:0 16px;font-size:14px;font-weight:700;line-height:1.4;white-space:nowrap;cursor:pointer;transition:color 160ms cubic-bezier(.22,1,.36,1),background 160ms cubic-bezier(.22,1,.36,1),opacity 160ms cubic-bezier(.22,1,.36,1),box-shadow 160ms cubic-bezier(.22,1,.36,1);background:var(--green,#193e32);color:var(--paper,#f7f6ee);border-color:var(--green,#193e32)}.ds-primary:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}.ds-primary:active:not(:disabled){opacity:.84}.ds-primary:disabled{opacity:.52;cursor:not-allowed}@media(hover:hover) and (pointer:fine){.ds-primary:hover:not(:disabled){opacity:.91;box-shadow:0 1px 2px oklch(0% 0 0 / .035)}}@media(prefers-reduced-motion:reduce){.ds-primary{transition:none}}"
+      "description": "Installed Arc Button visual specimen. The React component owns press springs and animated labels; ButtonLink shares this appearance with anchor semantics.",
+      "html": "<button type=\"button\" class=\"ds-button\">Search</button>",
+      "css": ".ds-button{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-flex;min-height:var(--control-height-md,48px);align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--radius-control,12px);padding:0 16px;font-size:14px;font-weight:var(--weight-label,500);line-height:1.4;white-space:nowrap;cursor:pointer;transition:background-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),opacity var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-button:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}.ds-button:disabled{cursor:not-allowed;opacity:.52}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}.ds-button{color:var(--background,#f7f6ee);background:var(--foreground,#193e32);border-color:var(--foreground,#193e32);box-shadow:var(--shadow-resting,0 2px 4px rgb(25 62 50 / 5%),0 5px 14px rgb(25 62 50 / 7%))}.ds-button:active:not(:disabled){opacity:.84}@media(hover:hover) and (pointer:fine){.ds-button:hover:not(:disabled){opacity:.91}}"
     },
     {
-      "name": "Arc ghost button",
-      "kind": "button",
-      "refersTo": "button-ghost",
-      "description": "Unfilled action used for secondary actions and topic filters.",
-      "html": "<button class=\"ds-ghost\" type=\"button\">All topics</button>",
-      "css": ".ds-ghost{font-family:'Manrope Variable',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border:1px solid transparent;border-radius:4px;padding:0 16px;font-size:14px;font-weight:700;line-height:1.4;white-space:nowrap;cursor:pointer;transition:color 160ms cubic-bezier(.22,1,.36,1),background 160ms cubic-bezier(.22,1,.36,1),opacity 160ms cubic-bezier(.22,1,.36,1),box-shadow 160ms cubic-bezier(.22,1,.36,1);background:transparent;color:var(--muted,#56675c)}.ds-ghost:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}.ds-ghost:active:not(:disabled){color:var(--green,#193e32);background:var(--pale,#e9eddf)}.ds-ghost:disabled{color:var(--muted,#56675c);cursor:not-allowed}@media(hover:hover) and (pointer:fine){.ds-ghost:hover:not(:disabled){color:var(--green,#193e32);background:var(--pale,#e9eddf)}}@media(prefers-reduced-motion:reduce){.ds-ghost{transition:none}}"
-    },
-    {
-      "name": "Arc secondary button",
+      "name": "Arc Button secondary",
       "kind": "button",
       "refersTo": "button-secondary",
-      "description": "Large manual-load action for the mixed discovery feed.",
-      "html": "<button class=\"ds-secondary\" type=\"button\">Show more to explore <svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button>",
-      "css": ".ds-secondary{font-family:'Manrope Variable',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:52px;padding:0 20px;border:1px solid var(--line,#d0d8ca);border-radius:4px;background:var(--white,#fffef8);color:var(--green,#193e32);font-size:14px;font-weight:700;line-height:1.4;white-space:nowrap;cursor:pointer;transition:background 160ms cubic-bezier(.22,1,.36,1),box-shadow 160ms cubic-bezier(.22,1,.36,1)}.ds-secondary:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}.ds-secondary:active{background:var(--pale,#e9eddf)}@media(hover:hover) and (pointer:fine){.ds-secondary:hover{background:var(--pale,#e9eddf);box-shadow:0 1px 2px oklch(0% 0 0 / .035)}}@media(prefers-reduced-motion:reduce){.ds-secondary{transition:none}}"
+      "description": "Installed Arc Button visual specimen. The React component owns press springs and animated labels; ButtonLink shares this appearance with anchor semantics.",
+      "html": "<button type=\"button\" class=\"ds-button\">Show more</button>",
+      "css": ".ds-button{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-flex;min-height:var(--control-height-md,48px);align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--radius-control,12px);padding:0 16px;font-size:14px;font-weight:var(--weight-label,500);line-height:1.4;white-space:nowrap;cursor:pointer;transition:background-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),opacity var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-button:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}.ds-button:disabled{cursor:not-allowed;opacity:.52}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}.ds-button{color:var(--foreground,#193e32);background:var(--surface,#fffef8);border-color:var(--border,#d0d8ca);box-shadow:var(--shadow-resting,0 2px 4px rgb(25 62 50 / 5%),0 5px 14px rgb(25 62 50 / 7%))}.ds-button:active:not(:disabled){background:var(--surface-muted,#e9eddf)}.ds-button:disabled{opacity:1;color:var(--text-muted,#56675c);background:var(--surface-muted,#e9eddf);box-shadow:none}@media(hover:hover) and (pointer:fine){.ds-button:hover:not(:disabled){background:var(--surface-muted,#e9eddf)}}"
     },
     {
-      "name": "Arc search composition",
-      "kind": "input",
-      "refersTo": "search-field",
-      "description": "Borderless field, reserved clear slot, and large submit action; focus changes the whole form fill.",
-      "html": "<form class=\"ds-search\" role=\"search\" action=\"/search\"><label class=\"ds-sr\" for=\"ds-query\">Search ActForGoa</label><div class=\"ds-search-shell\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.34-4.34\"/></svg><input id=\"ds-query\" name=\"q\" type=\"search\" placeholder=\"Find local help\" autocomplete=\"off\"/><span class=\"ds-clear-slot\" aria-hidden=\"true\"></span></div><button type=\"submit\" aria-label=\"Search the field guide\"><span class=\"ds-submit-label\">Search</span><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14\"/><path d=\"m12 5 7 7-7 7\"/></svg></button></form>",
-      "css": ".ds-search{font-family:'Manrope Variable',sans-serif;display:flex;align-items:center;gap:8px;padding:8px;background:var(--pale,#e9eddf);border-radius:4px;transition:background-color 120ms ease-out;color:var(--green,#193e32)}.ds-search:focus-within{background:#dae3cf}.ds-sr{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}.ds-search-shell{display:flex;flex:1;min-width:0;align-items:center;gap:8px;min-height:48px;padding:0 12px}.ds-search-shell>svg{flex-shrink:0;color:var(--muted,#56675c)}.ds-search-shell:focus-within>svg{color:var(--green,#193e32)}.ds-search input{font-family:'Manrope Variable',sans-serif;width:100%;min-width:0;border:0;background:transparent;color:var(--green,#193e32);font-size:16px;font-weight:550;line-height:1.6;letter-spacing:-.01em;outline:0;caret-color:var(--green,#193e32)}.ds-search input:focus-visible{outline:0}.ds-search input::placeholder{color:var(--muted,#56675c)}.ds-clear-slot{display:grid;width:44px;height:44px;flex:0 0 auto}.ds-search button{font-family:'Manrope Variable',sans-serif;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;border:1px solid transparent;border-radius:4px;padding:0 16px;font-size:14px;font-weight:700;line-height:1.4;white-space:nowrap;cursor:pointer;transition:color 160ms cubic-bezier(.22,1,.36,1),background 160ms cubic-bezier(.22,1,.36,1),opacity 160ms cubic-bezier(.22,1,.36,1),box-shadow 160ms cubic-bezier(.22,1,.36,1);flex-shrink:0;min-height:52px;padding:0 20px;gap:12px;font-size:16px;font-weight:750;background:var(--green,#193e32);color:var(--paper,#f7f6ee);border-color:var(--green,#193e32)}.ds-search button:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}.ds-search button:active{opacity:.84}@media(hover:hover) and (pointer:fine){.ds-search button:hover{opacity:.91;box-shadow:0 1px 2px oklch(0% 0 0 / .035)}}@media(max-width:620px){.ds-search{padding:6px;gap:0}.ds-search button{padding-inline:14px;min-width:48px}.ds-submit-label{display:none}}@media(prefers-reduced-motion:reduce){.ds-search,.ds-search button{transition:none}}"
+      "name": "Arc Button ghost",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Installed Arc Button visual specimen. The React component owns press springs and animated labels; ButtonLink shares this appearance with anchor semantics.",
+      "html": "<button type=\"button\" class=\"ds-button\">All topics</button>",
+      "css": ".ds-button{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-flex;min-height:var(--control-height-md,48px);align-items:center;justify-content:center;gap:8px;border:1px solid transparent;border-radius:var(--radius-control,12px);padding:0 16px;font-size:14px;font-weight:var(--weight-label,500);line-height:1.4;white-space:nowrap;cursor:pointer;transition:background-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),opacity var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-button:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}.ds-button:disabled{cursor:not-allowed;opacity:.52}@media(prefers-reduced-motion:reduce){.ds-button{transition:none}}.ds-button{color:var(--text-secondary,#56675c);background:transparent}.ds-button:active:not(:disabled){color:var(--foreground,#193e32);background:var(--surface-muted,#e9eddf)}@media(hover:hover) and (pointer:fine){.ds-button:hover:not(:disabled){color:var(--foreground,#193e32);background:var(--surface-muted,#e9eddf)}}"
     },
     {
-      "name": "Arc contact input",
+      "name": "Arc Input",
       "kind": "input",
       "refersTo": "input",
-      "description": "Existing border remains stable; only the fill changes on focus.",
-      "html": "<label class=\"ds-field\" for=\"ds-name\">Your name</label><input class=\"ds-input\" id=\"ds-name\" name=\"name\" autocomplete=\"name\" required maxlength=\"100\"/>",
-      "css": ".ds-field{font-family:'Manrope Variable',sans-serif;display:block;margin-bottom:8px;color:var(--green,#193e32);font-size:14px;font-weight:750;line-height:1.4}.ds-input{font-family:'Manrope Variable',sans-serif;box-sizing:border-box;width:100%;border:1px solid var(--line,#d0d8ca);border-radius:4px;background:var(--white,#fffef8);color:var(--green,#193e32);font-size:16px;font-weight:550;line-height:1.4;letter-spacing:-.01em;outline:none;caret-color:var(--green,#193e32);transition:background-color 160ms cubic-bezier(.22,1,.36,1);min-height:48px;padding:0 12px}.ds-input:focus-visible{outline:none;background:var(--pale,#e9eddf)}.ds-input::placeholder{color:var(--muted,#56675c)}.ds-input:disabled{cursor:not-allowed;opacity:.5;background:var(--pale,#e9eddf)}@media(hover:hover) and (pointer:fine){.ds-input:hover:not(:disabled){background:var(--pale,#e9eddf)}}@media(prefers-reduced-motion:reduce){.ds-input{transition:none}}"
+      "description": "Rounded field with an existing border that darkens on focus; no outer container skin.",
+      "html": "<label class=\"ds-field\">Village or area<input class=\"ds-input\" placeholder=\"e.g. Canacona\" /></label>",
+      "css": ".ds-field{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:grid;gap:8px;color:var(--foreground,#193e32);font-size:14px;font-weight:var(--weight-label,500)}.ds-input{min-width:0;width:100%;min-height:var(--control-height-md,48px);padding:0 12px;border:1px solid var(--border-strong,#d0d8ca);border-radius:var(--radius-control,12px);background:var(--surface,#fffef8);color:var(--foreground,#193e32);font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;font-size:14px;font-weight:var(--weight-body,450);line-height:1.4;letter-spacing:-.01em;box-shadow:var(--shadow-field,0 2px 4px rgb(25 62 50 / 4%),0 5px 14px rgb(25 62 50 / 3%));transition:border-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1)),background-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-input::placeholder{color:var(--text-muted,#56675c)}.ds-input:focus-visible{outline:none;border-color:var(--foreground,#193e32);background:var(--surface,#fffef8)}.ds-input:disabled{opacity:.5;cursor:not-allowed;background:var(--surface-muted,#e9eddf)}.ds-input[aria-invalid=\"true\"]{border-color:var(--danger,oklch(54% .21 25))}@media(hover:hover) and (pointer:fine){.ds-input:hover:not(:disabled):not(:focus-visible){background:var(--surface-muted,#e9eddf)}}@media(max-width:620px){.ds-input{font-size:16px}}@media(prefers-reduced-motion:reduce){.ds-input{transition:none}}"
     },
     {
-      "name": "Arc contact textarea",
+      "name": "Arc SearchField",
       "kind": "input",
-      "refersTo": "textarea",
-      "description": "A vertically resizable field with the same fill-based focus.",
-      "html": "<label class=\"ds-textarea-label\" for=\"ds-message\">Your message</label><textarea class=\"ds-textarea\" id=\"ds-message\" name=\"message\" rows=\"6\" required maxlength=\"4000\" placeholder=\"Tell us a little about it. Include useful links if you have them.\"></textarea>",
-      "css": ".ds-textarea-label{font-family:'Manrope Variable',sans-serif;display:block;margin-bottom:8px;color:var(--green,#193e32);font-size:14px;font-weight:750}.ds-textarea{font-family:'Manrope Variable',sans-serif;box-sizing:border-box;width:100%;border:1px solid var(--line,#d0d8ca);border-radius:4px;background:var(--white,#fffef8);color:var(--green,#193e32);font-size:16px;font-weight:550;line-height:1.4;letter-spacing:-.01em;outline:none;caret-color:var(--green,#193e32);transition:background-color 160ms cubic-bezier(.22,1,.36,1);min-height:110px;padding:12px;resize:vertical}.ds-textarea:focus-visible{outline:none;background:var(--pale,#e9eddf);box-shadow:none}.ds-textarea::placeholder{color:var(--muted,#56675c)}.ds-textarea:disabled{cursor:not-allowed;opacity:.6;background:var(--pale,#e9eddf)}@media(hover:hover) and (pointer:fine){.ds-textarea:hover:not(:disabled){background:var(--pale,#e9eddf)}}@media(prefers-reduced-motion:reduce){.ds-textarea{transition:none}}"
+      "refersTo": "search-field",
+      "description": "SearchField owns its one visible shell. The parent only constrains width and arranges a separate submit button.",
+      "html": "<label class=\"ds-search-label\" for=\"ds-search\">Search the directory</label><div class=\"ds-search\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" aria-hidden=\"true\"><circle cx=\"11\" cy=\"11\" r=\"8\"/><path d=\"m21 21-4.35-4.35\"/></svg><input id=\"ds-search\" type=\"search\" placeholder=\"Name, place or area of work\" /></div>",
+      "css": ".ds-search-label{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:block;margin-bottom:8px;color:var(--foreground,#193e32);font-size:14px;font-weight:500}.ds-search{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:flex;align-items:center;gap:8px;min-height:var(--control-height-md,48px);max-width:520px;padding:0 16px;border:1px solid var(--border,#d0d8ca);border-radius:var(--radius-control,12px);background:var(--surface,#fffef8);box-shadow:var(--shadow-field,0 2px 4px rgb(25 62 50 / 4%),0 5px 14px rgb(25 62 50 / 3%));transition:border-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-search:focus-within{border-color:var(--foreground,#193e32)}.ds-search>svg{flex:none;color:var(--text-muted,#56675c)}.ds-search:focus-within>svg{color:var(--foreground,#193e32)}.ds-search input{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;width:100%;min-width:0;border:0;background:transparent;color:var(--foreground,#193e32);font-size:16px;font-weight:450;letter-spacing:-.01em}.ds-search input:focus-visible{outline:none}.ds-search input::placeholder{color:var(--text-muted,#56675c)}@media(hover:hover) and (pointer:fine){.ds-search:hover:not(:focus-within){border-color:var(--border-strong,#d0d8ca)}}@media(prefers-reduced-motion:reduce){.ds-search{transition:none}}"
     },
     {
-      "name": "Arc segmented control",
+      "name": "Arc SegmentedControl",
       "kind": "custom",
       "refersTo": "segmented-control",
-      "description": "Static selected-state specimen of the actual keyboard-operated, scrolling Arc control.",
-      "html": "<div class=\"ds-segments\" role=\"group\" aria-label=\"Result type\"><div class=\"ds-segment-track\"><button type=\"button\" aria-pressed=\"true\">Everything</button><button type=\"button\" aria-pressed=\"false\" tabindex=\"-1\">People</button><button type=\"button\" aria-pressed=\"false\" tabindex=\"-1\">Guides</button><button type=\"button\" aria-pressed=\"false\" tabindex=\"-1\">Stories</button><button type=\"button\" aria-pressed=\"false\" tabindex=\"-1\">About</button></div></div>",
-      "css": ".ds-segments{display:inline-flex;min-width:0;max-width:100%;border:0;border-radius:4px;background:transparent}.ds-segment-track{display:flex;min-width:0;gap:2px;overflow-x:auto;overscroll-behavior-x:contain;padding:3px;scrollbar-width:none}.ds-segment-track button{font-family:'Manrope Variable',sans-serif;flex:0 0 auto;min-height:44px;border:0;border-radius:0;padding:0 12px;background:transparent;color:var(--muted,#56675c);font-size:14px;font-weight:700;line-height:1.6;white-space:nowrap;cursor:pointer;transition:color 160ms cubic-bezier(.22,1,.36,1)}.ds-segment-track button[aria-pressed=true]{background:var(--pale,#e9eddf);color:var(--green,#193e32)}.ds-segment-track button:active{color:var(--green,#193e32)}.ds-segment-track button:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}@media(hover:hover) and (pointer:fine){.ds-segment-track button:hover{color:var(--green,#193e32)}}@media(max-width:380px){.ds-segment-track button{padding-inline:10px}}@media(prefers-reduced-motion:reduce){.ds-segment-track button{transition:none}}"
+      "description": "Pale track and raised cream selected item. This static specimen shows the state; the source component owns selection and keyboard behavior.",
+      "html": "<div class=\"ds-segment\" role=\"group\" aria-label=\"Result layout\"><button type=\"button\" aria-pressed=\"true\">Grid</button><button type=\"button\" aria-pressed=\"false\" tabindex=\"-1\">List</button></div>",
+      "css": ".ds-segment{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-flex;gap:2px;padding:5px;border-radius:var(--radius-control,12px);background:var(--surface-muted,#e9eddf)}.ds-segment button{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;min-height:var(--control-height-sm,44px);padding:0 12px;border:0;border-radius:calc(var(--radius-control,12px) - 4px);background:transparent;color:var(--text-muted,#56675c);font-size:14px;font-weight:var(--weight-label,500);cursor:pointer}.ds-segment button[aria-pressed=\"true\"]{color:var(--foreground,#193e32);background:var(--surface,#fffef8);box-shadow:var(--shadow-resting,0 2px 4px rgb(25 62 50 / 5%),0 5px 14px rgb(25 62 50 / 7%))}.ds-segment button:hover,.ds-segment button:active{color:var(--foreground,#193e32)}.ds-segment button:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}"
     },
     {
-      "name": "Arc SiteHeader",
+      "name": "Arc navigation item",
       "kind": "nav",
       "refersTo": "navigation",
-      "description": "Framework-free specimen of the paper SiteHeader with its compact single-column Take action panel. Actual positioning, dropdown, keyboard, sticky, and mobile-sheet behavior belongs to SiteHeader.",
-      "html": "<header class=\"ds-header\"><div class=\"ds-header-bar\"><a class=\"ds-brand\" href=\"/\">actforgoa.</a><nav class=\"ds-header-nav\" aria-label=\"Main navigation\"><a href=\"/\" aria-current=\"page\">Home</a><button type=\"button\" aria-expanded=\"true\">Take action <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button><a href=\"/blog\">Blog</a><a href=\"/stories\">Inspiring stories</a><a href=\"/library\">Resources</a><button type=\"button\" aria-expanded=\"false\">About <svg width=\"14\" height=\"14\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button><a href=\"/contact?reason=Work%20with%20ActForGoa\">Work with us</a><a href=\"/read/wp-2249\">Volunteer</a><a href=\"/directory\">Community</a></nav><a class=\"ds-header-search\" href=\"/search\">Search</a></div><div class=\"ds-header-panel\" aria-label=\"Take action\"><a href=\"/report\"><strong>Report an infraction</strong><span>Record a concern with photos and a location.</span></a><a href=\"/emergency\"><strong>Emergency services</strong><span>Police, ambulance, fire and other helplines.</span></a><a href=\"/get-involved\"><strong>Take action</strong><span>Find your way to contribute to Goa.</span></a><a href=\"/read/wp-9389\"><strong>Green Viksit Goa</strong><span>Read the archived 2025 consultation.</span></a><a href=\"/read/wp-6263\"><strong>Amche Mollem</strong><span>Learn about the campaign for Mollem.</span></a><a href=\"https://actforgoa.org/donation-form/\"><strong>Donations</strong><span>Support ActForGoa through the original site.</span></a></div></header>",
-      "css": ".ds-header{font-weight:550;font-family:'Manrope Variable',sans-serif;color:var(--green,#193e32);background:var(--paper,#f7f6ee);letter-spacing:-.01em;max-width:1320px}.ds-header-bar{display:flex;min-height:96px;align-items:center;gap:16px}.ds-brand{color:inherit;text-decoration:none;font-size:28px;font-weight:800;letter-spacing:-.04em;white-space:nowrap}.ds-header-nav{display:flex;align-items:center;margin-left:auto;gap:2px}.ds-header-nav>a,.ds-header-nav>button{font-family:'Manrope Variable',sans-serif;position:relative;display:inline-flex;align-items:center;gap:4px;height:44px;padding:0 8px;border:0;border-radius:4px;background:transparent;color:var(--muted,#56675c);font-size:13px;font-weight:750;white-space:nowrap;text-decoration:none;cursor:pointer}.ds-header-nav>a[aria-current=page],.ds-header-nav>button[aria-expanded=true]{color:var(--green,#193e32)}.ds-header-nav>a[aria-current=page]:after{content:\"\";position:absolute;left:12px;right:12px;bottom:4px;height:2px;background:var(--green,#193e32)}.ds-header-search{display:inline-flex;height:44px;align-items:center;justify-content:center;padding:0 14px;background:var(--green,#193e32);color:var(--paper,#f7f6ee);font-size:14px;font-weight:750;border:1px solid transparent;border-radius:4px;text-decoration:none}.ds-header-panel{display:grid;grid-template-columns:minmax(0,1fr);gap:2px;width:min(336px,100%);margin-left:180px;padding:8px;border:1px solid var(--line,#d0d8ca);border-radius:4px;background:var(--white,#fffef8);box-shadow:0 16px 32px #193e3214}.ds-header-panel>a{display:grid;align-content:start;gap:2px;min-height:44px;padding:8px 12px;border-radius:4px;text-decoration:none;color:var(--green,#193e32)}.ds-header-panel strong{font-size:15px;font-weight:750}.ds-header-panel span{font-size:13px;color:var(--muted,#56675c)}.ds-header a:focus-visible,.ds-header button:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}@media(hover:hover) and (pointer:fine){.ds-header-nav>a:hover,.ds-header-nav>button:hover,.ds-header-panel>a:hover{background:var(--pale,#e9eddf);color:var(--green,#193e32)}.ds-header-search:hover{opacity:.9}}"
+      "description": "Plain upright desktop navigation with the current-page underline. The actual SiteHeader centers the navigation column and owns its responsive menu.",
+      "html": "<nav class=\"ds-nav\" aria-label=\"Example navigation\"><a href=\"/\" aria-current=\"page\">Home</a><a href=\"/library\">Resources</a><a href=\"/directory\">Directory</a></nav>",
+      "css": ".ds-nav{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:flex;gap:2px;align-items:center}.ds-nav a{position:relative;display:inline-flex;align-items:center;height:44px;padding:0 8px;border-radius:var(--radius-control,12px);color:var(--text-secondary,#56675c);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap}.ds-nav a[aria-current]{color:var(--foreground,#193e32)}.ds-nav a[aria-current]:after{content:\"\";position:absolute;bottom:4px;left:12px;right:12px;height:2px;background:var(--accent,#193e32);border-radius:2px}.ds-nav a:hover,.ds-nav a:active{color:var(--foreground,#193e32);background:var(--surface-muted,#e9eddf)}.ds-nav a:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}"
     },
     {
-      "name": "Homepage topic choice",
-      "kind": "custom",
-      "refersTo": "topic-link",
-      "description": "Restored bordered topic navigation with a title, description, topic icon, and route into the guided menus.",
-      "html": "<a class=\"ds-home-topic\" href=\"/topics/waste\"><svg class=\"ds-topic-icon\" width=\"26\" height=\"26\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6\"/></svg><span><strong>Waste &amp; recycling</strong><small>Collection, recycling &amp; dumping</small></span><svg class=\"ds-choice-arrow\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
-      "css": ".ds-home-topic{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:center;min-height:82px;padding:12px;gap:10px;border:1px solid #9faea5;border-radius:4px;color:var(--green,#193e32);text-decoration:none;transition:background-color 120ms ease-out,border-color 120ms ease-out}.ds-home-topic>span{flex:1;min-width:0}.ds-home-topic .ds-topic-icon{width:26px;height:26px;flex-shrink:0}.ds-home-topic .ds-choice-arrow{flex-shrink:0}.ds-home-topic strong{display:block;font-size:16px;font-weight:800;line-height:1.35}.ds-home-topic small{display:block;margin-top:4px;font-size:13px;font-weight:650;line-height:1.4;color:var(--muted,#56675c)}.ds-home-topic:active{background:var(--line,#d0d8ca)}.ds-home-topic:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px}@media(hover:hover) and (pointer:fine){.ds-home-topic:hover{background:var(--pale,#e9eddf);border-color:var(--green,#193e32);text-decoration:none}}@media(max-width:1150px){.ds-home-topic{gap:8px}.ds-home-topic .ds-choice-arrow{display:none}}@media(max-width:620px){.ds-home-topic{padding:10px;gap:8px}.ds-home-topic .ds-topic-icon{display:none}.ds-home-topic strong{font-size:15px}.ds-home-topic small{font-size:12px}}@media(prefers-reduced-motion:reduce){.ds-home-topic{transition:none}}"
+      "name": "Directory topic tag",
+      "kind": "chip",
+      "refersTo": "directory-tag",
+      "description": "Pale inline topic link inside an open record.",
+      "html": "<a class=\"ds-tag\" href=\"/directory\">Biodiversity</a>",
+      "css": ".ds-tag{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-flex;align-items:center;min-height:32px;padding:4px 10px;border-radius:8px;background:var(--pale,#e9eddf);color:var(--green,#193e32);font-size:14px;font-weight:500;line-height:1.5;text-decoration:none}.ds-tag:hover{text-decoration:underline;text-underline-offset:4px}.ds-tag:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}@media(max-width:620px){.ds-tag{min-height:36px}}"
     },
     {
       "name": "Open record row",
       "kind": "card",
       "refersTo": "record-row",
-      "description": "The resource component is an open ruled row rather than a card panel.",
-      "html": "<article class=\"ds-record\"><div class=\"ds-meta\">Guide &amp; resource</div><h3><a href=\"/read/resource-590480849c\">Snake Rescue Volunteers in Goa <svg width=\"19\" height=\"19\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.7\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M7 7h10v10\"/><path d=\"M7 17 17 7\"/></svg></a></h3><p>A locality-by-locality list of snake rescue volunteers, published in 2018. Contact details need current confirmation.</p><div class=\"ds-record-topic\">Nature &amp; wildlife</div></article>",
-      "css": ".ds-record{font-family:'Manrope Variable',sans-serif;min-width:0;border-top:1px solid var(--line,#d0d8ca);padding:24px 0;color:var(--green,#193e32)}.ds-meta{font-size:13px;font-weight:650;line-height:1.6;color:var(--muted,#56675c)}.ds-record h3{font-size:24px;letter-spacing:-.025em;line-height:1.35;font-weight:750;margin:12px 0;text-wrap:balance}.ds-record h3 a{display:flex;align-items:start;justify-content:space-between;gap:16px;color:inherit;text-decoration:none;text-underline-offset:5px}.ds-record h3 svg{margin-top:6px;flex-shrink:0}.ds-record p{color:var(--muted,#56675c);font-size:16px;font-weight:550;line-height:1.8;margin:0;max-width:72ch;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}.ds-record-topic{color:var(--muted,#56675c);font-size:13px;font-weight:650;line-height:1.6;margin-top:12px}.ds-record a:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px;}@media(hover:hover) and (pointer:fine){.ds-record h3 a:hover{text-decoration:underline}}"
+      "description": "A structural top rule, linked title, and source-qualified summary on the page ground.",
+      "html": "<article class=\"ds-record\"><div class=\"ds-record-meta\">Practical guide · Draft</div><h3><a href=\"/library\">Farming in Goa</a></h3><p>Land checks, Krishi Card registration, soil advice, schemes and damage records.</p></article>",
+      "css": ".ds-record{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;min-width:0;border-top:1px solid var(--line,#d0d8ca);padding-top:24px;color:var(--green,#193e32)}.ds-record-meta{font-size:13px;font-weight:650;color:var(--muted,#56675c)}.ds-record h3{margin:12px 0;font-size:24px;font-weight:650;line-height:1.35;letter-spacing:-.025em}.ds-record a{color:inherit;text-decoration:none;text-underline-offset:5px}.ds-record a:hover{text-decoration:underline}.ds-record a:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}.ds-record p{max-width:58ch;margin:0;color:var(--muted,#56675c);font-size:16px;font-weight:450;line-height:1.8}"
     },
     {
-      "name": "Homepage question composer",
-      "kind": "input",
-      "refersTo": "question-entry",
-      "description": "The rounded search composer that sits over the photo hero. The real React form owns keyboard submission and search routing.",
-      "html": "<form class=\"ds-ask\" role=\"search\" aria-label=\"Ask ActForGoa\"><label class=\"ds-ask-label\" for=\"ds-home-question\">What would you like help with in Goa?</label><textarea id=\"ds-home-question\" rows=\"2\" placeholder=\"What would you like help with in Goa?\">How can I volunteer in Goa?</textarea><div class=\"ds-ask-toolbar\"><span>Find people, guides &amp; local knowledge</span><button type=\"button\" aria-label=\"Ask ActForGoa\"><svg width=\"21\" height=\"21\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m5 12 7-7 7 7M12 19V5\"/></svg></button></div></form>",
-      "css": ".ds-ask{width:min(100%,720px);padding:12px 12px 8px 20px;border:1px solid var(--line,#d0d8ca);border-radius:24px;background:var(--white,#fffef8);color:var(--green,#193e32);font-family:\"Manrope Variable\",sans-serif;text-align:left;transition:background-color 120ms ease-out}.ds-ask:focus-within{background:var(--pale,#e9eddf)}.ds-ask-label{position:absolute;width:1px;height:1px;clip-path:inset(50%);overflow:hidden}.ds-ask textarea{display:block;width:100%;min-height:48px;height:48px;max-height:160px;padding:0;border:0;border-radius:0;background:transparent;color:inherit;font-family:inherit;font-size:16px;font-weight:650;line-height:1.5;resize:vertical;caret-color:var(--green,#193e32)}.ds-ask textarea:focus-visible{outline:none;box-shadow:none}.ds-ask textarea::placeholder{color:var(--muted,#56675c)}.ds-ask-toolbar{display:flex;align-items:center;justify-content:space-between;gap:8px}.ds-ask-toolbar>span{color:var(--muted,#56675c);font-size:12px;font-weight:650;line-height:1.4}.ds-ask button{display:inline-flex;align-items:center;justify-content:center;width:44px;height:44px;flex-shrink:0;padding:0;border:1px solid var(--green,#193e32);border-radius:50%;background:var(--green,#193e32);color:var(--paper,#f7f6ee);cursor:pointer}.ds-ask button:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px}.ds-ask button:active{opacity:.84}.ds-ask button:disabled{opacity:.52;cursor:not-allowed}@media(hover:hover) and (pointer:fine){.ds-ask button:hover:not(:disabled){opacity:.91;box-shadow:0 1px 2px oklch(0% 0 0 / .035)}}@media(max-width:620px){.ds-ask{padding:10px 10px 6px 16px}.ds-ask-toolbar>span{max-width:24ch}}@media(prefers-reduced-motion:reduce){.ds-ask{transition:none}}"
-    },
-    {
-      "name": "Guided action choice",
-      "kind": "nav",
-      "refersTo": "guided-choice",
-      "description": "Large, bordered choice used for topic actions, follow-up options, and destination links.",
-      "html": "<a class=\"ds-guided-choice\" href=\"/topics/waste/report-dumping\"><svg class=\"ds-guided-icon\" width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 22V3m0 0s1-1 4-1 5 2 8 2 4-1 4-1v12s-1 1-4 1-5-2-8-2-4 1-4 1\"/></svg><span>Report illegal dumping</span><svg class=\"ds-choice-arrow\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
-      "css": ".ds-guided-choice{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:center;gap:20px;min-height:120px;padding:24px;border:1px solid #9faea5;border-radius:4px;color:var(--green,#193e32);font-size:20px;font-weight:750;line-height:1.4;text-decoration:none;transition:background-color 120ms ease-out,border-color 120ms ease-out}.ds-guided-choice>span{flex:1;min-width:0}.ds-guided-choice .ds-guided-icon{width:40px;height:40px;flex-shrink:0}.ds-guided-choice .ds-choice-arrow{width:22px;height:22px;flex-shrink:0}.ds-guided-choice:active{background:var(--line,#d0d8ca)}.ds-guided-choice:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px}@media(hover:hover) and (pointer:fine){.ds-guided-choice:hover{background:var(--pale,#e9eddf);border-color:var(--green,#193e32);text-decoration:none}}@media(max-width:620px){.ds-guided-choice{min-height:100px;padding:20px;font-size:18px;gap:16px}}@media(prefers-reduced-motion:reduce){.ds-guided-choice{transition:none}}"
+      "name": "Arc MorphSelect trigger",
+      "kind": "custom",
+      "refersTo": "morph-select",
+      "description": "Closed trigger specimen only. The installed source owns the expanding list, search, measurement, live announcements, and keyboard semantics.",
+      "html": "<div class=\"ds-select\"><span id=\"ds-select-label\" class=\"ds-select-label\">Record type</span><button type=\"button\" aria-labelledby=\"ds-select-label ds-select-value\"><span id=\"ds-select-value\">All types</span><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"m6 9 6 6 6-6\"/></svg></button></div>",
+      "css": ".ds-select{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;display:inline-grid;gap:8px;justify-items:start;color:var(--foreground,#193e32);font-size:14px;letter-spacing:-.01em}.ds-select-label{color:var(--text-secondary,#56675c);font-weight:500}.ds-select button{font-family:var(--font-sans,'Figtree Variable',sans-serif);font-style:normal;position:relative;min-height:var(--control-height-md,48px);display:flex;align-items:center;gap:8px;padding:0 36px 0 14px;border:1px solid var(--border,#d0d8ca);border-radius:calc(var(--control-height-md,48px) / 2);background:var(--surface,#fffef8);color:inherit;font-size:14px;font-weight:500;box-shadow:var(--shadow-resting,0 2px 4px rgb(25 62 50 / 5%),0 5px 14px rgb(25 62 50 / 7%));cursor:pointer;transition:background-color var(--duration-fast,160ms) var(--ease-standard,cubic-bezier(.22,1,.36,1))}.ds-select button svg{position:absolute;right:12px;color:var(--text-muted,#56675c)}.ds-select button:hover{background:var(--surface-muted,#e9eddf)}.ds-select button:focus-visible{outline:var(--focus-outline-width,2px) solid var(--focus-outline,#193e32);outline-offset:var(--focus-outline-offset,3px)}.ds-select button:disabled{opacity:.55;cursor:not-allowed}@media(prefers-reduced-motion:reduce){.ds-select button{transition:none}}"
     }
   ],
   "narrative": {
     "northStar": "The Open Goan Field Guide",
-    "overview": "ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.\n\nThe approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.",
+    "overview": "ActForGoa is a calm field guide rooted in local knowledge. Warm cream carries green text, upright Figtree, original photographs, and readable open records. Rounded controls and gentle shadows make actions easy to recognise without enclosing the content in another layer of panels.\n\nThe current local refinement uses the actual Arc UI sources from uiArc.dev. The shared theme changes their colour and typography while preserving component structure, semantics, states, and motion. The circular photograph homepage and the decorative stippled footer provide expression; reading, searching, and practical tasks remain restrained.",
     "keyCharacteristics": [
-      "Continuous warm paper and forest-green text.",
-      "Strong upright Manrope throughout, including mission, article, and feed headings.",
-      "Bordered topic choices with strong labels and helpful descriptions; open resource rows.",
-      "Real local photographs with square crops.",
-      "Shared Arc control behavior with fill-based text-field focus."
+      "Warm cream, forest-green text, and pale green selection states.",
+      "Upright self-hosted Figtree with moderate weights and clear hierarchy.",
+      "Actual Arc controls, rounded corners, and gentle control shadows.",
+      "Compact searches and open records with nearby source context.",
+      "Original photography and a separately documented decorative footer illustration."
     ],
     "rules": [
       {
         "name": "The Upright Type Rule",
-        "body": "Use upright text throughout, including the wordmark, quotations, labels, and numerals. Emphasis comes from size, weight, and space.",
+        "body": "Use upright type everywhere. Emphasis comes from weight, size, spacing, and position; never italic or oblique styling.",
         "section": "typography"
       },
       {
         "name": "The Open Page Rule",
-        "body": "Keep the introduction, editorial pairings, records, and source context on the page ground. Use spacing and structural rules instead of enclosing them in panels.",
+        "body": "Use spacing and structural rules to organise content. Compose the installed Arc controls directly; do not wrap them in a second decorative container or add a competing control skin.",
         "section": "layout"
       },
       {
         "name": "The Structural Line Rule",
-        "body": "Horizontal rules may separate records or sections; existing control borders may define inputs. Never add decorative side stripes to content containers.",
+        "body": "Full control borders and horizontal section rules convey structure. Never use a decorative accent stripe along one side of a content block.",
         "section": "shapes"
       },
       {
         "name": "The Stable Focus Rule",
-        "body": "Text-entry focus changes the fill and caret without adding a new border, visible ring, or size change. Links and buttons retain the shared Arc keyboard outline.",
+        "body": "Change the existing field border colour on focus without changing its size. Preserve visible keyboard focus for actions and the native component's accessibility behavior.",
         "section": "components"
       },
       {
         "name": "The Source Proximity Rule",
-        "body": "Keep historical dates, original-source links, and contact caveats close to the records they qualify. A prepared email is not a sent message.",
-        "section": "components"
-      },
-      {
-        "name": "The Browsing Continuity Rule",
-        "body": "Preserve scroll position when filtering or resubmitting a query on search. Returning to a catalogue history entry restores its expanded results and chosen layout.",
+        "body": "Keep original-source links and availability caveats near their claims. A prepared email is not a sent message, and decorative artwork is not documentary evidence.",
         "section": "components"
       }
     ],
     "dos": [
-      "Do preserve the open paper ground, green ink, and real local photographs.",
-      "Do use Manrope throughout and the installed Arc components, including SiteHeader, with project overrides.",
-      "Do preserve the feed’s automatic, paused, manual, and restored states.",
-      "Do keep the stronger type hierarchy, readable record titles, and text fields at 16px.",
-      "Do keep text-entry focus stable and preserve shared keyboard focus on actions.",
-      "Do preserve browsing position, expanded results, and the selected layout through history navigation.",
-      "Do keep source context and contact caveats visible, while keeping phone data out of record presentation."
+      "Do use upright Figtree, green and cream, and the existing semantic theme aliases.",
+      "Do use actual Arc source components and preserve their provenance, semantics, and motion.",
+      "Do compose compact fields and separate actions without a second visual wrapper.",
+      "Do keep open records, readable source context, and browser-local data ownership clear.",
+      "Do preserve visible keyboard focus, reduced motion, routing, and browsing restoration.",
+      "Do distinguish original photographs and source documents from decorative generated artwork."
     ],
     "donts": [
-      "Don't restore the boxed green introduction, filled record cards, or pale story panel.",
-      "Don't reintroduce the withdrawn brown, pink, and yellow palette, colourful filled topic tiles, a dark header, yellow search buttons, or ochre focus outlines.",
-      "Don't add a new focus border, visible ring, or layout shift to text fields.",
-      "Don't use serif, italic, or oblique type anywhere.",
-      "Don't add decorative side stripes, eyebrow labels, or fabricated local imagery.",
-      "Don't invent organisation biographies or replace missing original photographs with fabricated images.",
-      "Don't imply current contact verification or successful message delivery without evidence."
+      "Don't restore Manrope, the wireframe control theme, or the old photo-background composer.",
+      "Don't add custom control skins, oversized search containers, or filled panels around ordinary reading content.",
+      "Don't use italic or oblique text, decorative side stripes, or eyebrow labels.",
+      "Don't turn Arc's unused demo themes and gradients into the project palette.",
+      "Don't fabricate source content, biographies, photographs, contact verification, or service availability.",
+      "Don't treat local screenshots or this documentation refresh as deployment or live-service acceptance."
     ]
   }
 }
