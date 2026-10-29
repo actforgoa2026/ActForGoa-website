@@ -4,7 +4,7 @@ import { climatePlanRecord } from './climate-plan';
 
 export function needsCatalogue(pathname: string): boolean {
   const path = pathname.replace(/\/$/, '') || '/';
-  return ['/', '/search', '/directory/archive', '/library', '/stories', '/blog', '/blog/archive', '/about'].includes(path)
+  return ['/', '/explore', '/search', '/directory/archive', '/library', '/stories', '/blog', '/blog/archive', '/about'].includes(path)
     || path.startsWith('/topics/')
     || (path !== '/read/goa-sapcc' && /^\/read\/(?!guide-)[^/]+$/.test(path));
 }

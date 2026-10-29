@@ -47,6 +47,18 @@ test('catalogue request is shared and sanitised, and is reused after an independ
   assert.equal(calls, 1);
 });
 
+test('opening explore directly loads the same collection as the homepage', async () => {
+  let calls = 0;
+  const raw = JSON.parse(readFileSync('public/data/catalog.json', 'utf8')).slice(0, 2);
+  const loader = createCatalogueLoader((async () => { calls++; return new Response(JSON.stringify(raw)); }) as typeof fetch);
+  const explored = await loader('/explore/');
+  assert.equal(explored.error, false);
+  assert(explored.records.length >= raw.length);
+  assert.equal(calls, 1);
+  assert.equal(await loader('/'), explored);
+  assert.equal(calls, 1);
+});
+
 test('a failed catalogue request can recover on a later route', async () => {
   let calls = 0;
   const loader = createCatalogueLoader((async () => ++calls === 1 ? new Response('', { status: 503 }) : new Response('[]')) as typeof fetch);
