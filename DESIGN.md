@@ -142,9 +142,37 @@ typography:
     fontSize: "18px"
     fontWeight: 750
     lineHeight: 1.4
+  satellite-body:
+    fontFamily: "'Figtree Variable', sans-serif"
+    fontSize: "16px"
+    fontWeight: 450
+    lineHeight: 1.6
+  satellite-title:
+    fontFamily: "'Figtree Variable', sans-serif"
+    fontSize: "24px"
+    fontWeight: 650
+    lineHeight: 1.25
+    letterSpacing: "-0.025em"
+  satellite-control:
+    fontFamily: "'Figtree Variable', sans-serif"
+    fontSize: "14px"
+    fontWeight: 600
+  satellite-search:
+    fontFamily: "'Figtree Variable', sans-serif"
+    fontSize: "15px"
+    fontWeight: 450
+  satellite-provider-credit:
+    fontFamily: "Arial, sans-serif"
+    fontSize: "14px"
+    fontWeight: 500
 rounded:
   control: "4px"
   question-entry: "24px"
+  satellite-control: "14px"
+  satellite-status: "16px"
+  satellite-results: "20px"
+  satellite-map: "24px"
+  satellite-search: "999px"
 spacing:
   space-2: "0.5rem"
   space-3: "0.75rem"
@@ -231,6 +259,23 @@ components:
     width: "min(100%, 720px)"
   question-entry-focus:
     backgroundColor: "{colors.pale}"
+  satellite-map-action:
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.green}"
+    typography: "{typography.satellite-control}"
+    rounded: "{rounded.satellite-control}"
+    padding: "0 12px"
+    height: "44px"
+  satellite-map-action-selected:
+    backgroundColor: "{colors.green}"
+    textColor: "{colors.white}"
+  satellite-search:
+    backgroundColor: "{colors.white}"
+    textColor: "{colors.green}"
+    typography: "{typography.satellite-search}"
+    rounded: "{rounded.satellite-search}"
+    padding: "6px"
+    width: "min(100%, 460px)"
 ---
 
 # Design System: ActForGoa
@@ -243,10 +288,12 @@ ActForGoa is an open, calm field guide. Warm paper carries green ink, large upri
 
 The approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.
 
+The satellite investigation surface has an expressly approved exception to the guide defaults: upright Figtree, rounded floating map controls, soft functional shadows, and a map that occupies most of the viewport. It retains the same green and cream palette, installed Arc behavior, source proximity, and bans on italic type and decorative side stripes. This exception applies only while the satellite map surface is mounted; other guide surfaces keep their existing system.
+
 **Key Characteristics:**
 
 - Continuous warm paper and forest-green text.
-- Strong upright Manrope throughout, including mission, article, and feed headings.
+- Strong upright Manrope across guide surfaces, including mission, article, and feed headings; upright Figtree in the scoped satellite surface.
 - Bordered topic choices with strong labels and helpful descriptions; open resource rows.
 - Real local photographs with square crops.
 - Shared Arc control behavior with fill-based text-field focus.
@@ -274,7 +321,7 @@ Project aliases map Arc `background` to paper, `foreground` and `accent` to gree
 
 ## Typography
 
-Manrope Variable is the only implemented font family, with a generic sans-serif fallback. It supplies mission and article headings, the header, topic links, records, controls, and body text. The serif import has been removed. Body copy uses weight 550, most explicit page, record, and feed headings use 750, and the homepage hero and action headings use 800. The global heading fallback is also 800. Control labels use 700 and header navigation uses 750. Font synthesis is disabled.
+Manrope Variable is the default guide font family, with a generic sans-serif fallback; the satellite exception below is separately scoped. It supplies mission and article headings, the header, topic links, records, controls, and body text. The serif import has been removed. Body copy uses weight 550, most explicit page, record, and feed headings use 750, and the homepage hero and action headings use 800. The global heading fallback is also 800. Control labels use 700 and header navigation uses 750. Font synthesis is disabled.
 
 | Role | Implemented use |
 | --- | --- |
@@ -292,6 +339,10 @@ Manrope Variable is the only implemented font family, with a generic sans-serif 
 
 The Arc header wordmark is the single upright string “actforgoa.” in Manrope at weight 800, 28px, with -0.04em tracking. It becomes 26px when the header container is at most 620px. The footer retains its separate wordmark styling.
 
+### Satellite type exception
+
+The mounted satellite surface uses the self-hosted Figtree Variable family from `@fontsource-variable/figtree`. Its body, title, control, and search roles are prefixed `satellite-` in frontmatter. The compact page title becomes 22px at 620px; evidence and history headings use 26px at weight 650. The header wordmark uses 24px at weight 700, with navigation and action labels at weight 600. Search entry becomes 16px on phones. The map status uses 14px text, reducing to 12px on phones; an acquisition date uses weight 650 within that existing bubble. Google attribution is a provider exception: the app-owned credit remains upright Arial at 14px and weight 500, while map-rendered branding and attribution retain the provider's treatment. These exceptions do not change guide typography.
+
 **The Upright Type Rule.** Use upright text throughout, including the wordmark, quotations, labels, and numerals. Emphasis comes from size, weight, and space.
 
 ## Layout
@@ -306,6 +357,10 @@ Guided action choices use three columns and 16px gaps, with two columns when the
 
 The catalogue has a 236px sticky filter rail, offset 120px below the sticky header, and a flexible results column with a 48px gap. At 850px the rail becomes a horizontal scroller and the layout becomes one column. Grouped answers retain headings, total match counts, and 48px between groups. Empty groups disappear; each group and its members follow retrieval ranking. Reading details allow up to 760px for the article and a separate aside; the aside follows the article on smaller screens.
 
+### Satellite layout exception
+
+The satellite map shell has 16px side gutters, reducing to 8px at 620px, with a compact 64px Arc header above it. The map height is `calc(100svh - 140px)` with a 480px minimum and no maximum; below 760px it becomes `calc(100svh - 170px)`. Search floats at the upper left and drawing, location, expansion, and zoom controls at the right. At 760px the search spans the available width and the tools move to a second row. The floating place list scrolls within `min(400px, 55svh)`. Supporting investigation sections retain a 1120px maximum width below the map. Expanded mode uses the viewport and keeps imagery captions, opacity controls, and provider attribution available. The surface brief owns the route-specific sequence and environmental-context placement.
+
 **The Open Page Rule.** Keep the introduction, editorial pairings, records, and source context on the page ground. Use spacing and structural rules instead of enclosing them in panels.
 
 ## Elevation & Depth
@@ -316,13 +371,27 @@ Arc primary buttons retain the foundation’s subtle hover shadow (`0 1px 2px ok
 
 Motion follows Arc’s shared presets: short colour transitions, width-aware button press feedback, a moving segmented selection, search-clear entry/exit, and the SiteHeader’s dropdown and sheet transitions. CSS fast transitions use 160ms with `cubic-bezier(.22,1,.36,1)`; the outer search fill changes in 120ms ease-out. Components honour reduced motion, and the page disables CSS transitions, animations, and smooth scrolling under that preference. The homepage uses one shared 4000ms beat: words roll over 620ms with `cubic-bezier(.76,0,.24,1)`, and photographs crossfade over 900ms ease-in-out on every second beat. The carousel behavior is specified below. Reduced motion disables autoplay, word movement, width transitions, and photo fades. Do not add photograph zoom or decorative page entrances.
 
+### Satellite elevation exception
+
+Satellite controls use soft shadows to separate actions from map detail. The scoped resting shadow is `0 2px 6px rgb(25 62 50 / 6%)`; the floating search and results surface use `0 12px 36px rgb(25 62 50 / 12%), 0 2px 6px rgb(25 62 50 / 5%)`. Existing map zoom controls and the status bubble use `0 2px 8px #193e3214`. These shadows are functional map layers and do not expand the guide's content-panel vocabulary. Arc state transitions and reduced-motion handling remain in force.
+
 ## Shapes
 
 Controls share the project’s 4px radius, except the user-requested conversational homepage composer, which uses 24px corners and a circular send button. Photograph crops and editorial structures are square. Topic and guided action choices use a full 1px neutral border and the shared 4px control corners; their resting fill stays on the paper ground. Records have a top rule and 24px top space; they have no filled card shell, surrounding border, or internal panel padding. List rows use 24px vertical space. Segmented items resolve to square corners inside a borderless control because their source radius is the control radius minus 4px.
 
+The satellite exception uses its scoped corner tokens for controls, status, place results, and the map frame. The map frame reduces to the results radius on phones. The floating search is a pill with a circular 44px submit action; drawing, location, expansion, and zoom actions use the satellite control radius. The investigation fieldset below the map shares the map radius, a full line-colour border, and control-paper fill. No rounded treatment is applied to the geographic imagery itself or provider attribution.
+
 **The Structural Line Rule.** Horizontal rules may separate records or sections; existing control borders may define inputs. Never add decorative side stripes to content containers.
 
 ## Components
+
+### Satellite investigation controls
+
+The satellite surface keeps installed Arc buttons and SearchField. Floating search has a stable full line-colour border, control-paper fill, 6px padding, and a 460px maximum width on larger screens. Drawing, location, and expansion controls use 44px targets, control-paper fill, and green text; active drawing reverses to green with control-paper text. The existing keyboard outline and field focus behavior remain. The selected-area status bubble also carries the acquisition date whenever a dated overlay is present; the full source caption and opacity control remain below the map. Preserve Google map branding and attribution during drawing and in expanded mode. The app-owned Google credit uses only the provider typography exception recorded above.
+
+**The Satellite Scope Rule.** Keep Figtree, the enlarged map, rounded floating controls, and soft map-control shadows scoped to the satellite investigation surface. Preserve the shared palette, upright text, Arc behavior, dated imagery context, and visible provider attribution.
+
+Evidence for this scoped exception: `src/satellite-layout.css`, `src/satellite.css`, `src/Satellite.tsx`, `src/SatelliteMap.tsx`, `src/satellite-main.tsx`, and the satellite selectors in `src/components/arc/site-header/site-header.module.css`; approval is recorded in `.impeccable/surfaces/src-satellite-tsx.md`. Supplied desktop and phone captures under `/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/` (`google-map-desktop-final.jpg` and `google-map-phone-final.jpg`) were inspected for this documentation. They show the map layout, typography, palette, floating controls, visible acquisition date, and unobscured Google attribution on desktop and phone. This documentation pass makes no deployment claim.
 
 ### Arc buttons and navigation
 
@@ -417,7 +486,8 @@ The sidecar specimens are framework-free visual translations of the actual compo
 ### Do
 
 - Do preserve the open paper ground, green ink, and real local photographs.
-- Do use Manrope throughout and the installed Arc components, including SiteHeader, with project overrides.
+- Do use Manrope across guide surfaces and the installed Arc components, including SiteHeader, with project overrides; apply the documented Figtree exception only to the satellite surface.
+- Do keep satellite map controls, dated-overlay context, and provider attribution readable over imagery.
 - Do preserve the feed’s automatic, paused, manual, and restored states.
 - Do keep the stronger type hierarchy, readable record titles, and text fields at 16px.
 - Do keep text-entry focus stable and preserve shared keyboard focus on actions.

@@ -140,3 +140,10 @@
   .extraAction { display: none; }
   .compactExtraAction { display: flex; padding-block: 8px 16px; }
 }
+
+/* Map viewport refinement, shared with the design iteration checkout. */
+:global(body:has(.satellite-page)) .bar { height: 64px; }
+:global(body:has(.satellite-page)) .inner { max-width: none; width: calc(100% - 40px); }
+:global(body:has(.satellite-page)) .brand { font-size: 24px; font-weight: 700; }
+:global(body:has(.satellite-page)) .navItem, :global(body:has(.satellite-page)) .action { font-weight: 600; }
+:global(body:has(.satellite-page)) .sheetInner { max-height: calc(100dvh - 65px); }

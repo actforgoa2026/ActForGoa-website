@@ -14,6 +14,8 @@ import {pollSatelliteJob,pendingJobKey,validJobId,sameImageryContext,cacheObserv
 import {SatelliteTimeline} from './SatelliteTimeline';
 import {areaError,orderedPair,orderedScenes} from './satellite-timeline';
 import './satellite.css';
+import '@fontsource-variable/figtree';
+import './satellite-layout.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
@@ -148,7 +150,7 @@ export default function Satellite(){
       <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready&&!pendingJob} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
     </section>
     {authChecked&&!session&&!accessError&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
-    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">Place search sends only your submitted search terms to Photon. Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
+    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">Place search sends your submitted search terms and the Goa search boundary to Google Maps. Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
     {pendingJob&&<div className="satellite-job" role="status"><p>Imagery job reference: <code>{pendingJob}</code>. Checking resumes this job without submitting new imagery or AI work.</p><Button type="button" variant="secondary" disabled={!!busy||!session} onClick={resumeJob}>Check job</Button><Button type="button" variant="ghost" disabled={!!busy} onClick={()=>trackJob('')}>Stop tracking</Button><p className="satellite-note">Stopping tracking does not cancel the server job. Completed comparisons remain in your history.</p></div>}
     {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
     <fieldset className="satellite-controls" disabled={!!busy}><legend>2. Choose a period and find imagery</legend>

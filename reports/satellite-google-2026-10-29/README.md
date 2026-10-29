@@ -33,3 +33,14 @@ Automated checks: 140 Python satellite tests, 221 Node tests, production TypeScr
 Private logs/manifests are under the isolated checkout's ignored `.reports/google-integration/`. Browser captures are local under the task visualization directory, including `hosted-earth-engine.jpg`, `hosted-earth-engine-mobile.jpg` and `hosted-google-conditions.jpg`.
 
 The combined review alias, research runtime and actforgoa.org were not deployed. This runtime is live from the committed branch; merging its source is a separate repository action. OpenAI credential setup remains pending the user's key choice. Earth Engine currently uses the authorized read-only user credential; a dedicated hosted service identity is not provisioned by this change.
+
+
+## Follow-up: Google map and OpenAI Decisions
+
+The user approved Google street maps and place search, creation of a separate website-restricted browser key, and then supplied an existing OpenAI key and resumed Decisions activation. This supersedes the initial deferral above. `OPENAI_API_KEY` was saved privately outside the repository, verified against model access, and configured only on the hosted satellite API. Deployment `124d02d2-e583-47a0-82bc-fc5e9796b2fa` reuses runtime `df57d1b` and is successful.
+
+One fresh hosted comparison reused the two retained Earth Engine rasters, returned all seven Decisions answers from `gpt-6-luna`, and reported 2,433 input tokens. Common usable coverage remained 94.11%. The website reopened this saved result and displayed the model, area scope, uncertain answers and uncalibrated-confidence qualification. This is an integration check, not a field accuracy assessment. API runtime hashes still match the original package, and all original jobs and rasters remain unchanged. The follow-up added one catalog search, one comparison and one classification reservation.
+
+Google map implementation uses a separate browser configuration endpoint with no private-key fallback. Local acceptance verified a real Panaji Places search, geographic centering, pointer-drawn bounds, both Amche reference layers (3,854 water-body and 849 forest records), exact retained Earth Engine overlay alignment, opacity, timeline switching and mobile expansion/Escape. A reviewer requested keeping the acquisition date visible on the large map; it is now inside the existing status treatment. The user-approved larger map and Figtree refinement from the concurrent design chat are preserved. Browser captures use 1440×1000 and verified390×844 viewports, with no horizontal overflow or italic authored text.
+
+Automated validation now passes223 Node tests and both main and standalone production builds; the prior140 satellite Python tests remain applicable because no Python source changed. Private Google, Earth Engine, OpenAI and service-token values are absent from browser artifacts. Frontend release identification and final restriction/cleanup verification will be added after deployment.

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-26T09:17:45.699992Z",
+  "generatedAt": "2026-10-29T15:55:19.023081Z",
   "title": "Design System: ActForGoa",
   "extensions": {
     "colorMeta": {
@@ -216,6 +216,26 @@
       "guided-choice-phone": {
         "displayName": "Guided choice on phones",
         "purpose": "Single-column phone action and destination navigation."
+      },
+      "satellite-body": {
+        "displayName": "Satellite body",
+        "purpose": "Figtree body text only while the satellite map surface is mounted."
+      },
+      "satellite-title": {
+        "displayName": "Satellite title",
+        "purpose": "Compact map-page heading; 22px at 620px."
+      },
+      "satellite-control": {
+        "displayName": "Satellite control",
+        "purpose": "Arc labels for the scoped floating map actions."
+      },
+      "satellite-search": {
+        "displayName": "Satellite search",
+        "purpose": "Floating map search; 16px on phones."
+      },
+      "satellite-provider-credit": {
+        "displayName": "Satellite provider credit",
+        "purpose": "App-owned Google Maps attribution only; provider-rendered map branding retains its own treatment."
       }
     },
     "shadows": [
@@ -228,6 +248,21 @@
         "name": "header-dropdown",
         "value": "0 16px 32px #193e3214",
         "purpose": "Functional desktop navigation layer; not a content-card treatment."
+      },
+      {
+        "name": "satellite-resting",
+        "value": "0 2px 6px rgb(25 62 50 / 6%)",
+        "purpose": "Satellite drawing, location, and expansion controls only."
+      },
+      {
+        "name": "satellite-floating",
+        "value": "0 12px 36px rgb(25 62 50 / 12%), 0 2px 6px rgb(25 62 50 / 5%)",
+        "purpose": "Satellite floating search and place results only."
+      },
+      {
+        "name": "satellite-map-overlay",
+        "value": "0 2px 8px #193e3214",
+        "purpose": "Existing satellite zoom controls and selected-area status bubble only."
       }
     ],
     "motion": [
@@ -292,6 +327,10 @@
       {
         "name": "header-compact-container-max",
         "value": "1199px"
+      },
+      {
+        "name": "satellite-tools-stack-max",
+        "value": "760px"
       }
     ],
     "focus": {
@@ -532,14 +571,22 @@
       "description": "Large, bordered choice used for topic actions, follow-up options, and destination links.",
       "html": "<a class=\"ds-guided-choice\" href=\"/topics/waste/report-dumping\"><svg class=\"ds-guided-icon\" width=\"40\" height=\"40\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 22V3m0 0s1-1 4-1 5 2 8 2 4-1 4-1v12s-1 1-4 1-5-2-8-2-4 1-4 1\"/></svg><span>Report illegal dumping</span><svg class=\"ds-choice-arrow\" width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 12h14m-6-6 6 6-6 6\"/></svg></a>",
       "css": ".ds-guided-choice{font-family:\"Manrope Variable\",sans-serif;display:flex;align-items:center;gap:20px;min-height:120px;padding:24px;border:1px solid #9faea5;border-radius:4px;color:var(--green,#193e32);font-size:20px;font-weight:750;line-height:1.4;text-decoration:none;transition:background-color 120ms ease-out,border-color 120ms ease-out}.ds-guided-choice>span{flex:1;min-width:0}.ds-guided-choice .ds-guided-icon{width:40px;height:40px;flex-shrink:0}.ds-guided-choice .ds-choice-arrow{width:22px;height:22px;flex-shrink:0}.ds-guided-choice:active{background:var(--line,#d0d8ca)}.ds-guided-choice:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px}@media(hover:hover) and (pointer:fine){.ds-guided-choice:hover{background:var(--pale,#e9eddf);border-color:var(--green,#193e32);text-decoration:none}}@media(max-width:620px){.ds-guided-choice{min-height:100px;padding:20px;font-size:18px;gap:16px}}@media(prefers-reduced-motion:reduce){.ds-guided-choice{transition:none}}"
+    },
+    {
+      "name": "Satellite floating map action",
+      "kind": "button",
+      "refersTo": "satellite-map-action",
+      "description": "Scoped Figtree and rounded Arc action over imagery. The actual React control owns drawing state and Arc Motion behavior.",
+      "html": "<button class=\"ds-satellite-action\" type=\"button\" aria-pressed=\"false\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M5 3a2 2 0 0 0-2 2m16-2a2 2 0 0 1 2 2M3 19a2 2 0 0 0 2 2m14 0a2 2 0 0 0 2-2M9 3h1m4 0h1M9 21h1m4 0h1M3 9v1m0 4v1m18-6v1m0 4v1\"/></svg><span>Draw area</span></button>",
+      "css": ".ds-satellite-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:44px;padding:0 12px;border:1px solid var(--line,#d0d8ca);border-radius:14px;background:var(--white,#fffef8);color:var(--green,#193e32);font-family:\"Figtree Variable\",sans-serif;font-style:normal;font-size:14px;font-weight:600;line-height:1.5;box-shadow:0 2px 6px rgb(25 62 50 / 6%);cursor:pointer;transition:background-color 160ms cubic-bezier(.22,1,.36,1),opacity 160ms cubic-bezier(.22,1,.36,1)}.ds-satellite-action svg{flex-shrink:0}.ds-satellite-action[aria-pressed=\"true\"]{background:var(--green,#193e32);color:var(--white,#fffef8)}.ds-satellite-action:focus-visible{outline:2px solid var(--green,#193e32);outline-offset:3px}.ds-satellite-action:active{opacity:.84}.ds-satellite-action:disabled{opacity:.5;cursor:not-allowed}@media(hover:hover) and (pointer:fine){.ds-satellite-action:hover:not(:disabled){background:var(--pale,#e9eddf)}.ds-satellite-action[aria-pressed=\"true\"]:hover:not(:disabled){background:var(--green,#193e32);opacity:.91}}@media(prefers-reduced-motion:reduce){.ds-satellite-action{transition:none}}"
     }
   ],
   "narrative": {
     "northStar": "The Open Goan Field Guide",
-    "overview": "ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.\n\nThe approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.",
+    "overview": "ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.\n\nThe approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.\n\nThe satellite investigation surface has an expressly approved exception to the guide defaults: upright Figtree, rounded floating map controls, soft functional shadows, and a map that occupies most of the viewport. It retains the same green and cream palette, installed Arc behavior, source proximity, and bans on italic type and decorative side stripes. This exception applies only while the satellite map surface is mounted; other guide surfaces keep their existing system.",
     "keyCharacteristics": [
       "Continuous warm paper and forest-green text.",
-      "Strong upright Manrope throughout, including mission, article, and feed headings.",
+      "Strong upright Manrope across guide surfaces, including mission, article, and feed headings; upright Figtree in the scoped satellite surface.",
       "Bordered topic choices with strong labels and helpful descriptions; open resource rows.",
       "Real local photographs with square crops.",
       "Shared Arc control behavior with fill-based text-field focus."
@@ -574,11 +621,17 @@
         "name": "The Browsing Continuity Rule",
         "body": "Preserve scroll position when filtering or resubmitting a query on search. Returning to a catalogue history entry restores its expanded results and chosen layout.",
         "section": "components"
+      },
+      {
+        "name": "The Satellite Scope Rule",
+        "body": "Keep Figtree, the enlarged map, rounded floating controls, and soft map-control shadows scoped to the satellite investigation surface. Preserve the shared palette, upright text, Arc behavior, dated imagery context, and visible provider attribution.",
+        "section": "components"
       }
     ],
     "dos": [
       "Do preserve the open paper ground, green ink, and real local photographs.",
-      "Do use Manrope throughout and the installed Arc components, including SiteHeader, with project overrides.",
+      "Do use Manrope across guide surfaces and the installed Arc components, including SiteHeader, with project overrides; apply the documented Figtree exception only to the satellite surface.",
+      "Do keep satellite map controls, dated-overlay context, and provider attribution readable over imagery.",
       "Do preserve the feed’s automatic, paused, manual, and restored states.",
       "Do keep the stronger type hierarchy, readable record titles, and text fields at 16px.",
       "Do keep text-entry focus stable and preserve shared keyboard focus on actions.",

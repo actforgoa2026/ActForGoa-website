@@ -4,6 +4,7 @@ import {extname, resolve, sep} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createAdminServer} from './admin.ts';
 import {createPlaceSearch,serveMapPlaces} from './map-places.ts';
+import {serveMapConfig} from './map-config.ts';
 
 /** Standalone satellite frontend, using the same named-account auth and proxy. */
 export function createSatelliteWeb(options:{publicOrigin:string;databasePath:string;staticRoot:string;local?:boolean}){
@@ -13,11 +14,12 @@ export function createSatelliteWeb(options:{publicOrigin:string;databasePath:str
   const searchPlaces=createPlaceSearch();
   server.removeAllListeners('request');
   server.on('request',async(req,res)=>{
-    res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');
+    res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Frame-Options','DENY');
     res.setHeader('X-Robots-Tag','noindex, nofollow');
     let pathname:string;
     try{pathname=decodeURIComponent(new URL(req.url||'/','http://localhost').pathname);}catch{res.writeHead(400);return res.end();}
     if(pathname.startsWith('/api/')){
+      if(pathname==='/api/map-config')return serveMapConfig(req,res);
       if(pathname==='/api/map-places')return serveMapPlaces(req,res,searchPlaces);
       if(!/^\/api\/admin\/(?:config|login|logout|session|satellite\/.+)$/.test(pathname)){res.writeHead(404);return res.end();}
       return admin(req,res);
