@@ -20,3 +20,13 @@ export function areaError(bbox: number[]): string|null {
   if(km2<.0009)return 'Select an area of at least 900 m². Individual trees may be too small to resolve.';
   return null;
 }
+
+/** Scene-wide cloud cover is a suggestion, never a claim about local visibility. */
+export function suggestedPair(scenes: SatelliteScene[]): [string,string]|null {
+  const ranked=orderedScenes(scenes).filter(s=>s.scene_cloud_percent!==null&&Number.isFinite(s.scene_cloud_percent))
+    .sort((a,b)=>a.scene_cloud_percent!-b.scene_cloud_percent!||Date.parse(b.acquired_at)-Date.parse(a.acquired_at));
+  const first=ranked[0],second=ranked.find(s=>s.acquired_at.slice(0,10)!==first?.acquired_at.slice(0,10));
+  if(first&&second)return orderedScenes([first,second]).map(s=>s.id) as [string,string];
+  const ordered=orderedScenes(scenes);
+  return ordered.length>1&&Date.parse(ordered[0].acquired_at)<Date.parse(ordered.at(-1)!.acquired_at)?[ordered[0].id,ordered.at(-1)!.id]:null;
+}

@@ -4,7 +4,7 @@ export async function forwardSatellite(path: string, method: string, actor: stri
   options: {origin?: string; token?: string; local?: boolean; fetcher?: typeof fetch} = {}) {
   const fail = (status: number, error: string) => { res.writeHead(status, {'Content-Type':'application/json'}); res.end(JSON.stringify({error})); };
   const route = path.replace('/api/admin/satellite', '');
-  if (!((method === 'GET' && /^\/(?:status|jobs\/[a-f0-9-]{36})$/.test(route)) || (method === 'POST' && /^\/(?:plan|catalog|compare|history|observation|evidence|environment)$/.test(route)))) return fail(404,'Satellite route not found.');
+  if (!((method === 'GET' && /^\/(?:status|jobs\/[a-f0-9-]{36})$/.test(route)) || (method === 'POST' && /^\/(?:plan|catalog|compare|history|observation|evidence|environment|preview)$/.test(route)))) return fail(404,'Satellite route not found.');
   const raw = options.origin ?? process.env.SATELLITE_API_ORIGIN;
   const token = options.token ?? process.env.SATELLITE_SERVICE_TOKEN;
   let origin: URL;

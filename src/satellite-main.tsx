@@ -10,7 +10,7 @@ import {SiteHeader} from './components/arc/site-header/site-header';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {adminApi, type AdminSession} from './admin-api';
-import Satellite from './Satellite';
+import Satellite from './SatelliteWorkspace';
 
 function Account(){
   const navigate=useNavigate();
