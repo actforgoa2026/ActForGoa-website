@@ -31,3 +31,13 @@ If a release process crashes, inspect the owner record in the shared Git `actfor
 The approved orbit homepage was published through project routing overrides while its source PR was separate. Preserve that source in the integrated release and verify both `/` and `/explore`. Record `vercel routes list --production --expand --project actforgoa-field-guide` and the production routing version alongside the deployment ID. Confirm no unexpected staged routing changes before editing. Alias identity alone cannot detect a rewrite serving another deployment.
 
 After the accepted integrated deployment has been published by `release:review`, verify its immutable URL serves the native homepage and assets correctly. Only then retire the exact review-host overrides for root and `/explore`, preserving unrelated routes. Retire the old `/orbit-assets` proxy after confirming no active page depends on it; preserve it temporarily for open old tabs if necessary. Review the staged routing diff before publishing, save the previous version for rollback, and verify the public alias's HTML/assets, topic routing and desktop/phone UI after cutover. Do not remove an override while the alias still depends on it, change the original domain, or call an old asset deployment the integrated release.
+
+## Root-only deployment exclusions
+
+Keep backend-only exclusions anchored to the repository root (for example,
+`/satellite/`). An unanchored `satellite/` also excludes
+`api/admin/satellite/` from Vercel's upload, even when local entrypoint tests
+pass. Inspect the deployed function inventory and probe every new route depth.
+The release wrapper now requires authenticated-service 401 JSON responses for
+all satellite actions and the job route before alias promotion. A SPA response
+or platform 404 must fail this gate; no provider operation is performed.

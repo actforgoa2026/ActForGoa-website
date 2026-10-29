@@ -42,3 +42,15 @@ Impeccable context, Operate guidance, craft floor and source detector were used.
 One observed presentation issue was fixed: positive sub-one-percent intersections display `<1%`, never a rounded zero. The retained pair remains inconclusive at 41.1% common usable coverage. Real read-only Amche and scoped ecology queries returned cited references; these are background evidence, not field verification. Screenshots and private replay data stay in ignored `.reports/satellite-query-release-20261029/`.
 
 Predeployment readiness found hosted CDSE configured, OpenAI/planning absent, and ecology origin unset. The existing combined-site editorial service also lacked the satellite upstream/token; its new proxy and explicit Vercel handlers must ship together. Issue89 comment6496808456 records focused local ownership; other agents remain paused. Hosted deployment identities and final checks will be recorded separately after promotion.
+
+### Hosted upload regression caught before release completion
+
+The first combined promotion from `a5355bc` still returned platform404 for
+satellite handlers. Its deployed function inventory omitted the entire new
+folder: `.vercelignore` had an unanchored `satellite/` exclusion intended only
+for Python source. The standalone API/app/editorial deployments succeeded.
+The focused follow-up anchors that exclusion to `/satellite/` and adds staged
+401 authentication probes for every satellite action/job depth to
+`release:review`. This prevents a successful local handler test from being
+mistaken for an uploaded, reachable function. No frontend, API research/runtime,
+accounting or provider changes are included in this upload correction.

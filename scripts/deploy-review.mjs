@@ -88,6 +88,19 @@ try {
           throw new Error('Staged article routing or authentication is unavailable. Nothing promoted.');
         }
       }
+      if (existsSync('api/admin/satellite/[action].ts')) {
+        // Check the deployed upload/router as well as the source handlers.
+        // A directory ignore can otherwise omit every satellite function.
+        for (const action of ['status', 'plan', 'catalog', 'compare', 'history', 'observation', 'evidence', `jobs/${probeId}`]) {
+          const result = run('vercel', ['curl', `/api/admin/satellite/${action}`, '--deployment', deploymentUrl,
+            '--', '--silent', '--show-error', '--max-time', '30', '--write-out', '\n%{http_code}']);
+          const separator = result.lastIndexOf('\n');
+          if (result.slice(separator + 1) !== '401'
+              || JSON.parse(result.slice(0, separator)).error !== 'Sign in to continue.') {
+            throw new Error('Staged satellite routing or authentication is unavailable. Nothing promoted.');
+          }
+        }
+      }
       const blog = JSON.parse(run('vercel', ['curl', '/api/blog', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');
