@@ -19,3 +19,16 @@ Validation is offline unless identified otherwise. The satellite Python suite an
 - `git diff --check`: passed.
 
 Initial implementation checkpoint `150db3e` passed both clean packagers and isolated app/API container checks. Final reconciled source and package evidence are recorded below. Containers use synthetic service tokens and no provider credentials; local cloud builds mount the supplied CA only for dependency installation, preserving TLS verification. Browser visual/interaction checks are not available in this executor and remain outstanding. OpenAI is unconfigured here; this report makes no live classification or accuracy claim. Neither the new query UI nor its endpoint has been deployed by this task.
+
+
+## Final reconciled package checkpoint
+
+Runtime source: `97cde8be5cd79e1a2e1e620a216a3f9f7c133048`, incorporating current main `05720cb` and the explicit Vercel satellite handlers. [PR109](https://github.com/actforgoa2026/ActForGoa-website/pull/109) contains this source plus the final verification documentation.
+
+Both packagers pass from a clean committed checkout: [API manifest](api-manifest.json) and [app manifest](app-manifest.json). The API includes the new `amche.py` and `evidence_query.py`; the app includes the current map-place gateway. No credentials, private accounts, image caches or research corpus are packaged.
+
+[Container checks](container-checks.json) pass for both packages, running with network disabled. API health, authenticated evidence/no-match behavior, missing-actor and anonymous rejection, invalid-history-date validation, zero provider reservations and private SQLite permissions pass. The app delivers its evidence/job-recovery bundle, requires authentication and refuses private-file/unrelated-API paths. Temporary containers and synthetic token files were removed.
+
+The first ordinary Docker dependency builds could not trust the managed-cloud HTTPS proxy. Local validation used build-only secret CA mounts (`PIP_CERT` / `NODE_EXTRA_CA_CERTS`), with TLS verification retained and the supplied CA excluded from image layers. Production Dockerfiles and packaged runtime files were unchanged by this trust adapter. These are container/API checks, not a rendered browser audit or hosted deployment.
+
+Final status: implemented, committed, tested and packaged; **not merged or deployed by this task**. Complete rendered desktop/phone and hosted API acceptance after deploying both existing standalone services. Cloud Railway credentials remain bound to `.app`, not the required `.com` endpoint; no OpenAI binding exists in this executor. No paid satellite/model operations ran in this audit. Existing live imagery remains available on the standalone service.

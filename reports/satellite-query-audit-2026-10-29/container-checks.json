@@ -1,0 +1,41 @@
+{
+  "source_commit": "97cde8be5cd79e1a2e1e620a216a3f9f7c133048",
+  "network": "none; loopback checks inside each container",
+  "provider_calls": 0,
+  "api": {
+    "health_status": 200,
+    "unauthenticated_evidence_status": 401,
+    "missing_actor_status": 403,
+    "authorized_evidence_status": 200,
+    "empty_state": "no_matches",
+    "method": "saved-evidence-v1",
+    "invalid_history_date_status": 422,
+    "provider_readiness": {
+      "imagery_ready": false,
+      "planner_ready": false,
+      "decisions_ready": false,
+      "classification_ready": false,
+      "classification_provider": null,
+      "statewide_ready": false,
+      "validation": "pending",
+      "scope": "Goa only",
+      "max_area_km2": 25
+    },
+    "reserved_provider_operations": 0,
+    "database_mode": "0o600"
+  },
+  "app": {
+    "GET /map": 200,
+    "bundle": "/assets/satellite-B8YSoWbe.js",
+    "evidence_ui_delivered": true,
+    "GET /api/admin/session": 401,
+    "POST /api/admin/satellite/evidence": 401,
+    "GET /.env": 404,
+    "GET /api/status": 404
+  },
+  "rendered_browser_acceptance": false,
+  "images": {
+    "api": "sha256:a5598fc0c8ba46bdac8654694155eb25eae516b42d761dba3721fd9833a7e0af",
+    "app": "sha256:fc6e6bf6f433e4d3478b0fbef2bbbde8756d196ff7f927f16fbb203c7aab34cf"
+  }
+}
