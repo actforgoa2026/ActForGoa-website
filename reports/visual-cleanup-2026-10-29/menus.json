@@ -1,0 +1,23 @@
+[
+  {
+    "width": 1440,
+    "menu": true,
+    "compactContacts": true,
+    "actionRoute": true,
+    "overflow": false
+  },
+  {
+    "width": 390,
+    "menu": true,
+    "compactContacts": true,
+    "actionRoute": true,
+    "overflow": false
+  },
+  {
+    "width": 320,
+    "menu": true,
+    "compactContacts": true,
+    "actionRoute": true,
+    "overflow": false
+  }
+]
