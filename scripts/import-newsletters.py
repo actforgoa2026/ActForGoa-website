@@ -10,8 +10,8 @@ from hashlib import sha256
 import json, re
 
 ROOT = Path(__file__).resolve().parents[1]
-PUBLIC = ROOT / 'public' / 'newsletters'
-PUBLIC.mkdir(exist_ok=True)
+PUBLIC = ROOT / 'public' / 'assets' / 'newsletters'
+PUBLIC.mkdir(parents=True,exist_ok=True)
 ISSUES = [
  ('2025-year-end', 'Year-end newsletter 2024–2025', '2025', 'A four-page illustrated review of Act for Goa’s work in 2024 and 2025.', 'https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf'),
  ('2022-december', 'Taking action for Goa', 'December 2022', 'Community recognition, the Goa Climate Series and projects supporting the environment.', 'https://mailchi.mp/eb66242be2b6/k7ncfe5st3'),
@@ -58,8 +58,8 @@ def convert(node,issue,images):
   ext={'image/png':'.png','image/jpeg':'.jpg','image/webp':'.webp','image/gif':'.gif'}.get(kind)
   if not ext:return ''
   filename=issue+'-'+image_id+ext;(PUBLIC/filename).write_bytes(data)
-  images.append({'path':'/newsletters/'+filename,'source':src,'sha256':sha256(data).hexdigest(),'copyright':'Original ActForGoa newsletter image; retained with its source.'})
-  return '\n\n!['+(alt or 'Illustration from the original newsletter')+'](/newsletters/'+filename+')\n\n'
+  images.append({'path':'/assets/newsletters/'+filename,'source':src,'sha256':sha256(data).hexdigest(),'copyright':'Original ActForGoa newsletter image; retained with its source.'})
+  return '\n\n!['+(alt or 'Illustration from the original newsletter')+'](/assets/newsletters/'+filename+')\n\n'
  text=''.join(convert(c,issue,images) for c in node.children)
  if node.tag=='a':
   href=clean_url(node.attrs.get('href',''))
@@ -81,7 +81,7 @@ def main():
   raw=cached.read_bytes() if cached.exists() else fetch(url)[0]
   record={'id':issue,'title':title,'date':date,'year':date[-4:],'summary':summary,'source':url,'checkedOn':'2026-10-29'}
   if suffix=='.pdf':
-   (PUBLIC/(issue+suffix)).write_bytes(raw);record['pdf']='/newsletters/'+issue+suffix
+   (PUBLIC/(issue+suffix)).write_bytes(raw);record['pdf']='/assets/newsletters/'+issue+suffix
    transcription=ROOT/'src/content/newsletter-text'/(issue+'.md')
    if transcription.exists():record['markdown']=transcription.read_text()
   else:
@@ -98,7 +98,7 @@ def main():
    record['markdown']=markdown
    manifest.extend(images)
   records.append(record)
-  manifest.append({'path':'/newsletters/'+issue+suffix if suffix=='.pdf' else 'src/content/newsletters.json#'+issue,'source':url,'sha256':sha256(raw).hexdigest(),'retrievedOn':'2026-10-29','status':200})
+  manifest.append({'path':'/assets/newsletters/'+issue+suffix if suffix=='.pdf' else 'src/content/newsletters.json#'+issue,'source':url,'sha256':sha256(raw).hexdigest(),'retrievedOn':'2026-10-29','status':200})
  (ROOT/'src/content/newsletters.json').write_text(json.dumps(records,ensure_ascii=False,indent=2)+'\n')
  previous_manifest=PUBLIC/'provenance.json'
  if previous_manifest.exists():

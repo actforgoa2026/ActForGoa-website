@@ -25,7 +25,7 @@ export default function Newsletters() {
     h1: ({children}) => <h2>{children}</h2>,
    }}>{issue.markdown || ''}</Markdown></div>
    {issue.pdf && <details className="newsletter-original-layout"><summary>View the original layout and illustrations</summary><div className="newsletter-pdf-pages">
-    {[1,2,3,4].map(page => <figure key={page}><img src={`/newsletters/2025-year-end-page-${page}.webp`} alt={`Original year-end newsletter 2024–2025, page ${page} of 4. Article text is transcribed above.`} loading="lazy" width={1132} height={1600}/><figcaption>Page {page} of 4</figcaption></figure>)}
+    {[1,2,3,4].map(page => <figure key={page}><img src={`/assets/newsletters/2025-year-end-page-${page}.webp`} alt={`Original year-end newsletter 2024–2025, page ${page} of 4. Article text is transcribed above.`} loading="lazy" width={1132} height={1600}/><figcaption>Page {page} of 4</figcaption></figure>)}
    </div></details>}
    <div className="newsletter-end"><p>Original issue checked 29 October 2026. {issue.pdf ? 'The text was transcribed and checked against all four pages; original spellings and historical wording are retained.' : 'The web edition preserves the published content with email controls removed and the greeting made generic.'}</p><Link to="/newsletters">Browse another issue</Link></div>
   </article> : <>

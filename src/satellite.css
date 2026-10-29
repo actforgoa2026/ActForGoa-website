@@ -53,7 +53,7 @@
 .satellite-map-tools button span span,.satellite-map-bottom button span span{display:flex;gap:8px;align-items:center}
 .satellite-map-canvas{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--line);isolation:isolate}
 .satellite-workbench .satellite-map{height:calc(100svh - 290px);min-height:420px;max-height:1000px;border:0}
-.satellite-draw-surface{position:absolute;inset:0;z-index:450;touch-action:none;cursor:crosshair;outline-offset:-4px}
+.satellite-draw-surface{position:absolute;inset:0 0 26px;z-index:450;touch-action:none;cursor:crosshair;outline-offset:-4px}
 .satellite-map-zoom{position:absolute;top:16px;right:16px;z-index:500;display:grid;gap:6px}
 .satellite-map-bottom{position:absolute;bottom:32px;left:16px;right:16px;z-index:500;display:flex;gap:16px;justify-content:space-between;align-items:flex-end;pointer-events:none}
 .satellite-map-bottom p{margin:0;background:var(--paper,#f8f7ef);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px;max-width:58ch;line-height:1.5;box-shadow:0 2px 8px #193e3214}
@@ -102,3 +102,6 @@
 .satellite-environment-readings dd{margin:0}
 .satellite-environment-readings small{display:block;margin-top:.4rem}
 .satellite-google-credit{font-family:Arial,sans-serif;font-size:14px;font-weight:500;color:#1f1f1f;white-space:nowrap}
+
+.satellite-map-loading{position:absolute;inset:0;z-index:501;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;background:var(--paper);text-align:center}.satellite-map-loading p{max-width:45ch;line-height:1.6;margin:0}
+.satellite-map-date{display:block;margin-bottom:4px;font-weight:650}
