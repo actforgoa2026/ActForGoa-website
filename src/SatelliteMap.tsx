@@ -10,7 +10,7 @@ const ProviderMap = import.meta.env.MODE === 'satellite'
 
 export type SatelliteMapProps = {
   area: SatelliteArea | null;
-  onArea: (area: SatelliteArea) => boolean;
+  onArea: (area: SatelliteArea) => boolean | void;
   observation?: SatelliteObservation;
   candidates?: GeoJSON.FeatureCollection;
   disabled?: boolean;

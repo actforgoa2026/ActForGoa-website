@@ -27,3 +27,5 @@ SiteHeader uses React Router Links for local destinations and ordinary images in
 `ButtonLink` is the local anchor variant of the installed Arc Button. It directly reuses the Button CSS variants, sizes, wrapping token and Motion press spring; it adds no alternate visual skin. Internal destinations use React Router Link and external/download destinations use a native anchor, preserving href, target, modifier-click and download semantics. Topic navigation uses this variant with layout-only sizing for the large homepage choices.
 
 The satellite timeline and opacity controls use the actual [Slider](https://uiarc.dev/r/slider.json) source, retrieved 29 October 2026. Keyboard interaction, pointer capture, value formatting and reduced-motion handling are preserved.
+
+The standalone Earth Engine workspace retains the accepted registry-derived date picker as `date-picker/inline-date-picker.tsx` with its companion CSS. The guide uses the portalled variant added in PR #115. Both reuse the same Arc Calendar and motion tokens; this keeps independently approved layouts intact during release reconciliation.

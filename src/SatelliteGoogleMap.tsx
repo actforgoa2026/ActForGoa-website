@@ -11,7 +11,7 @@ import {areaError} from './satellite-timeline';
 import {observationDate as dateLabel} from './SatelliteHistory';
 
 type Place={id:string;name:string;detail:string;longitude:number;latitude:number};
-export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=false,preview=null,previewBusy=false,previewError='',onRetryPreview,progress='',error='',accessMessage=''}:{area:SatelliteArea|null;onArea:(area:SatelliteArea)=>boolean;observation?:SatelliteObservation;candidates?:GeoJSON.FeatureCollection;disabled?:boolean;preview?:SatellitePreview|null;previewBusy?:boolean;previewError?:string;onRetryPreview?:()=>void;progress?:string;error?:string;accessMessage?:string}) {
+export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=false,preview=null,previewBusy=false,previewError='',onRetryPreview,progress='',error='',accessMessage=''}:{area:SatelliteArea|null;onArea:(area:SatelliteArea)=>boolean|void;observation?:SatelliteObservation;candidates?:GeoJSON.FeatureCollection;disabled?:boolean;preview?:SatellitePreview|null;previewBusy?:boolean;previewError?:string;onRetryPreview?:()=>void;progress?:string;error?:string;accessMessage?:string}) {
   const container=useRef<HTMLDivElement>(null),workspace=useRef<HTMLDivElement>(null),map=useRef<google.maps.Map|null>(null),selection=useRef<google.maps.Rectangle|null>(null),features=useRef<google.maps.Data|null>(null),overlay=useRef<google.maps.GroundOverlay|null>(null);
   const draftRectangle=useRef<google.maps.Rectangle|null>(null),pin=useRef<google.maps.Circle|null>(null),anchor=useRef<google.maps.LatLng|null>(null),cornerPin=useRef<google.maps.Circle|null>(null),projection=useRef<google.maps.OverlayView|null>(null);
   const skipSelectionFit=useRef(false);
@@ -117,7 +117,7 @@ export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=
     const bbox=boundsBbox(bounds),error=areaError(bbox);
     if(error){if(anchor.current)showDraft(bounds);else setSelectionError(error);return false;}
     skipSelectionFit.current=true;
-    if(!onArea({bbox})){skipSelectionFit.current=false;setSelectionError('Finish the current imagery request, then draw again.');return false;}
+    if(onArea({bbox})===false){skipSelectionFit.current=false;setSelectionError('Finish the current imagery request, then draw again.');return false;}
     clearDraft();setDrawing(false);setSelectionError('');setMessage('');return true;
   }
   function pointerPosition(event:ReactPointerEvent<HTMLDivElement>){

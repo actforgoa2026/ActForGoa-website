@@ -30,5 +30,5 @@
 .footer button:disabled { cursor: not-allowed; opacity: .4; }
 .description { color: var(--text-muted); font-size: var(--text-xs); line-height: var(--leading-body); transition: opacity var(--duration-fast) var(--ease-standard); }
 /* The open calendar covers the hint; fading it keeps its first letters from peeking past the popover's rounded corner. */
-.anchor:has(.popover) + .description { opacity: 0; }
+.anchor[data-open="true"] + .description { opacity: 0; }
 @media (prefers-reduced-motion: reduce) { .trigger, .chevron, .footer button, .description { transition: none; } .footer button:active:not(:disabled) { transform: none; } }

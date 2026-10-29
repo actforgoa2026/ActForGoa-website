@@ -1,8 +1,9 @@
+import {DatePicker} from './components/arc/date-picker/date-picker';
+import {calendarDate,calendarValue} from './satellite-calendar';
 import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
-import {SatelliteDatePicker} from './SatelliteDatePicker';
 import {satelliteApi,type SatelliteHistory as History,type SatelliteIntent,type SatelliteArea} from './satellite-api';
 
 export const satelliteIntents:Record<SatelliteIntent,string>={canopy_loss:'Tree canopy',surface_water:'Rivers and wetlands',waste:'Waste and material accumulation',land_change:'Clearing and construction',fire:'Fire evidence'};
@@ -38,7 +39,7 @@ export function SatelliteHistory({csrfToken,revision,busy,onOpen,area=null}:{csr
     <p>Revisit comparisons by topic and observation period. Results are private to your account and retained for 30 days. These selected areas do not represent monitoring coverage across Goa.</p>
     <form onSubmit={search}><div className="satellite-dates"><Input label="Search saved questions and findings" value={query} maxLength={300} onChange={e=>setQuery(e.target.value)}/>
       <MorphSelect label="Topic" value={intent} onValueChange={setIntent} items={[{value:'',label:'All topics'},...Object.entries(satelliteIntents).map(([value,label])=>({value,label}))]}/>
-      <SatelliteDatePicker label="Observation period from" value={start} max={end||undefined} onChange={setStart}/><SatelliteDatePicker label="Observation period until" value={end} min={start||undefined} onChange={setEnd} alignEnd/></div>
+      <DatePicker label="Observation period from" value={calendarDate(start)} maxDate={calendarDate(end)} onChange={date=>setStart(calendarValue(date))}/><DatePicker label="Observation period until" value={calendarDate(end)} minDate={calendarDate(start)} onChange={date=>setEnd(calendarValue(date))}/></div>
       <Button type="submit" variant="secondary" disabled={loading}>Search investigations</Button></form>
     {loading&&<p role="status">Loading saved investigations{area?' for this area':''}…</p>}{error&&<p role="alert">{error}</p>}
     {data&&!data.items.length&&<p>No saved investigations match these filters{area?' in the selected area':''}. Start a comparison above or broaden the filters. This does not establish that no environmental change occurred.</p>}

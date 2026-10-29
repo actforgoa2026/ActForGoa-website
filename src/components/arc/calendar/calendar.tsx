@@ -187,7 +187,7 @@ export function Calendar({
   const previousDisabled = Boolean(previousMonth && minDate && previousMonth.getTime() < monthStart(minDate).getTime());
   const nextDisabled = Boolean(nextMonth && maxDate && nextMonth.getTime() > monthStart(maxDate).getTime());
   const todaySelectable = Boolean(today && !isDisabled(today) && onChange);
-  const todayIdle = Boolean(today && sameMonth(month, today) && (!todaySelectable || sameDay(value, today)));
+  const todayIdle = Boolean(today && (isDisabled(today) || sameMonth(month, today) && (!todaySelectable || sameDay(value, today))));
   // Roving tab stop: the day last focused, else the selection, else today, else the first open day of the month.
   const tabbableKey = (() => {
     const open = (date?: Date) => (date && sameMonth(date, month) && !isDisabled(date) ? dateKey(date) : "");

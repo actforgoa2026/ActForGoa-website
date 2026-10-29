@@ -1,6 +1,14 @@
 # Cloud implementation and landing plan — 28 October 2026
 
 
+## Satellite workspace reconciliation and hosted acceptance — 30 October 2026
+
+[PR #116](https://github.com/actforgoa2026/ActForGoa-website/pull/116) preserves concurrent PR #115 exactly in the integrated guide's `Satellite.tsx`, `SatelliteHistory.tsx` and `satellite-layout.css`. The standalone entry now owns `SatelliteWorkspace.tsx`, `SatelliteWorkspaceHistory.tsx` and `satellite-workspace.css`. Its accepted inline Arc picker coexists with the guide's new portalled picker; shared Calendar retains the valid-date Today fix. No integrated website deployment is performed by this release.
+
+Reconciled checks pass: 254 Node tests, both production builds and desktop/390px browser captures. Satellite API source remains hash-identical to the 142-test verified package. Impeccable's bounded preservation review is `ship`; documentation records both source boundaries.
+
+API deployment `2454a251-1b10-4deb-82c3-b3113243ba03` is healthy. First app deployment `aa08c8be-bf52-44b0-ae56-94727ca8bf60` passed hosted real Earth Engine tile/cache, rectangle-to-acquisition, actual Arc calendar and saved completed AI synopsis checks. The final frontend upload carries only the reconciled source boundary. Original staff, eight existing jobs, four cached observations and raster bytes are unchanged. Verification used two preview generations, two catalog reservations and one observation; no new AI call. Temporary verification account and sessions are revoked. See the release report for final runtime identities and source hashes.
+
 ## Satellite workspace release authorized — 30 October 2026
 
 The user said “ship it” for the locally verified Earth Engine workspace. This supersedes the local-only release boundary below. Isolated branch `codex/satellite-earth-engine-workspace` carries implementation `71722ca` and reconciles fresh main `4d0f497`, preserving its Arc MorphSelect/Slider controls, Google-only standalone map, Leaflet main-site map, SAPCC and unrelated features. Scope is the existing Railway satellite API and satellite app only. The main Vercel alias and original domain are outside this release.
@@ -10,6 +18,16 @@ Current release checks: 251 Node tests, 142 satellite Python tests, both product
 ## Local satellite interaction follow-up — 29 October 2026
 
 User superseded deployment iteration with local-only work and explicitly approved restoring the browser key's `http://127.0.0.1:4176` referrer. At that checkpoint, uncommitted work in `/Users/zakkrevitt/.codex/worktrees/satellite-google/ActForGoa` on `codex/satellite-google`: isolated hot-reload launcher, real Earth Engine navigation preview, automatic exact-acquisition load after drawing, real Arc date pickers and a two-column map/analysis workspace with explicit AI synopsis status. Saved hosted release above remains unchanged. Local actual comparison on the user's footprint, 10/20 October, completed OpenAI Decisions `gpt-6-luna` with 100% common clear coverage; the earlier cloudy pair correctly skipped AI. Checks: 142 satellite Python tests, 226 Node tests, production build, desktop/phone/browser workflow and local auth boundary. See [local workflow and verification](SATELLITE-LOCAL.md). No push, merge, deployment or hosted data mutation in this follow-up. Local work remains reviewable and uncommitted; next iteration stays local unless the user authorizes release.
+
+## Map and landscape release authorized — 30 October 2026
+
+The user's latest explicit “SHIP IT” authorizes publishing this follow-up to the existing field-guide alias and satellite frontend. This supersedes the local-only instruction below for this release. The original WordPress domain, hosted Python API, corpus, credentials, quotas and persistent data are unchanged. Reconcile the newer Goa SAPCC work from origin/main before the exact-tree browser checks. Use the existing release guard and an allowlisted satellite frontend package. Record final deployment identities and live checks under ignored `.reports/map-workspace-release-2026-10-30/`.
+
+## Local follow-up — 30 October 2026
+
+The user has explicitly returned this chat to local-only work after the earlier design release. No further commit, push, merge or production deployment is authorized. Active source remains `/Users/zakkrevitt/.codex/worktrees/actforgoa-design-iteration`.
+
+Implemented locally: larger submenu labels, reuse of the approved stippled landscape, and a two-column satellite workspace with actual Arc calendar pickers. The running local satellite API is configured for Google Earth Engine. A bounded fresh catalogue/image check succeeded through the authenticated local app route; optional image classification remains unconfigured locally. `npm run dev:check -- --satellite-only` now verifies local readiness without depending on the hosted corpus AI service. Main and standalone builds, 11 targeted Node tests, desktop/phone renders, and a real Earth Engine numeric comparison pass. See [local follow-up](design/local-followup-2026-10-30.md).
 
 ## Goa SAPCC live and verified · 30 October 2026
 

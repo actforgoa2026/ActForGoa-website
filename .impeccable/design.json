@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T19:45:43.541430Z",
+  "generatedAt": "2026-10-29T20:01:36.953480Z",
   "title": "Design System: ActForGoa",
   "extensions": {
     "colorMeta": {
@@ -231,35 +231,40 @@
     ],
     "satellite": {
       "sources": [
-        "src/satellite-layout.css",
+        "src/satellite-workspace.css",
         "src/satellite.css",
-        "src/Satellite.tsx",
+        "src/SatelliteWorkspace.tsx",
         "src/SatelliteMap.tsx",
         "src/SatelliteGoogleMap.tsx",
         "src/SatelliteTimeline.tsx",
         "src/SatelliteDatePicker.tsx",
-        "src/components/arc/date-picker/date-picker.tsx",
-        "src/components/arc/date-picker/date-picker.module.css",
+        "src/components/arc/date-picker/inline-date-picker.tsx",
+        "src/components/arc/date-picker/inline-date-picker.module.css",
         "src/components/arc/calendar/calendar.tsx",
         "src/components/arc/morph-select/morph-select.tsx",
-        "src/components/arc/slider/slider.tsx"
+        "src/components/arc/slider/slider.tsx",
+        "src/SatelliteWorkspaceHistory.tsx",
+        "src/satellite-main.tsx",
+        "src/components/arc/PROVENANCE.md"
       ],
       "desktopLayout": "Above 1000px: flexible map and 400px analysis column with a 24px gap. Both are sticky at 80px; analysis scrolls independently within calc(100svh - 100px). Non-expanded map height is calc(100svh - 390px), minimum 380px.",
       "compactLayout": "At 1000px and below, map and analysis stack with ordinary page scrolling. Non-expanded map height is calc(100svh - 280px), minimum 460px; at 620px it is 60svh with the same minimum. Existing 760px map-tool stacking remains.",
       "analysisSurface": "Controls and synopsis use open paper with horizontal rules. The synopsis has a 22px heading at weight 650, an 18px outcome heading at weight 600, and 14px body text with 1.6 leading.",
-      "dateControls": "Installed Arc DatePicker and Calendar; 44px minimum triggers, 16px date values, 14px visible labels, existing satellite control corners and 20px popover corners. End-date popover aligns right; phone maximum is calc(100vw - 48px). Arc owns keyboard navigation, dismissal, focus return, date bounds and reduced motion.",
+      "dateControls": "Accepted registry-derived inline Arc DatePicker and shared Calendar; 44px minimum triggers, 16px date values, 14px visible labels, existing satellite control corners and 20px popover corners. End-date popover aligns right; phone maximum is calc(100vw - 48px). Arc owns keyboard navigation, dismissal, focus return, date bounds and reduced motion. Shared Calendar prevents Today from selecting outside the permitted range.",
       "imageryContext": "Default Earth Engine view labels its period and cloud-masked median overview. A retained selection shows the exact dated acquisition, with provider attribution and acquisition source caption. Streets remains a separate navigation choice.",
       "outcome": "Visible AI complete, skipped or unavailable state; completion scrolls the synopsis into view and retains the desktop map. Detailed images, AI decisions and measurements remain in an adjacent disclosure. Reduced motion makes the result scroll immediate.",
       "captures": [
-        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-local-calendar-desktop.jpg",
-        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-local-synopsis-desktop.jpg",
-        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-local-map-phone.jpg",
-        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-local-calendar-phone.jpg"
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-final-local-calendar-desktop.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-final-local-synopsis-desktop.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-final-local-map-phone.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/release-final-local-calendar-phone.jpg"
       ],
       "review": ".reports/satellite-release-20261030/finish-review.md",
       "limits": "All four supplied release-candidate captures were inspected; synopsis and phone-calendar views are intentionally scrolled. Independent finish review returned ship with no material fixes and recorded a reported 3px phone-width excess without certifying zero overflow. User approved deployment of this completed iteration to the existing standalone Railway app/API on 30 October 2026, retaining localhost at port 4176. This documentation pass did not rerun application tests; deployment outcome is recorded separately by the release process.",
       "typography": "Shares the global self-hosted upright Figtree and shared typography roles. Satellite heading and map-label sizes are local metrics, not separate frontmatter roles. Provider attribution retains its stated typography exception.",
-      "providerBoundary": "The standalone satellite build uses Google/Earth Engine; the integrated guide build retains Leaflet."
+      "providerBoundary": "The standalone satellite build uses Google/Earth Engine; the integrated guide build retains Leaflet.",
+      "surfaceBrief": ".impeccable/surfaces/src-satellite-workspace-tsx.md",
+      "implementationBoundary": "Standalone satellite-main imports SatelliteWorkspace.tsx with SatelliteWorkspaceHistory.tsx and satellite-workspace.css. Integrated Satellite.tsx, SatelliteHistory.tsx and satellite-layout.css retain PR #115 Analyse/Results/Saved evidence panels. Standalone SatelliteDatePicker imports the registry-derived inline-date-picker variant; the integrated guide retains the portalled date-picker variant. Both reuse shared Calendar and motion tokens; provenance is recorded in src/components/arc/PROVENANCE.md."
     }
   },
   "components": [
