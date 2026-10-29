@@ -1,3 +1,4 @@
+import {supplementalPhoto} from './article-photos';
 import {CurationStar} from './TeamAccess';
 import {useEffect} from 'react';
 import {Link, useLocation, useNavigate} from 'react-router-dom';
@@ -11,6 +12,7 @@ import {guideForReaders} from './guide-presentation';
 
 export function PracticalGuide({guide}: {guide: GuideDocument}) {
  const location = useLocation();
+ const cover = supplementalPhoto(guide.title);
  const navigate = useNavigate();
  const markdown = guide.listed ? guideForReaders(guide.markdown) : guide.markdown;
  const headings = [...markdown.matchAll(/^## (.+)$/gm)].map(m => m[1]);
@@ -26,6 +28,7 @@ export function PracticalGuide({guide}: {guide: GuideDocument}) {
   <div className="detail-layout">
    <article>
     <div className="curation-heading"><h1>{guide.heading}</h1>{guide.listed && <CurationStar recordId={guide.id} title={guide.title}/>}</div>
+    <figure className="article-cover"><img className="detail-image" src={cover.src} alt={cover.alt}/><figcaption>Illustrative photo · <a href={cover.source}>{cover.credit}</a> · <a href={cover.licenseUrl}>{cover.license}</a> · resized & cropped</figcaption></figure>
     {guide.summary && <p className="guide-summary">{guide.summary}</p>}
     <p className="guide-status"><strong>Draft for review.</strong> Sources checked 23 October 2026. Legal review and live service checks remain open. <Link to="/read/guide-verification">See what needs verification</Link>.</p>
     <details className="guide-contents" key={guide.id}>

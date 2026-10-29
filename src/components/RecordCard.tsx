@@ -1,7 +1,8 @@
+import { articlePhoto } from "../article-photos";
 import { Link, useLocation } from "react-router-dom";
-import { Users, BookOpen, Leaf, FileText, ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight, MapPin } from "lucide-react";
 import { communityDescription } from "../public-record";
-import { kindLabel, type RecordItem } from "../types";
+import { type RecordItem } from "../types";
 import {DirectoryActions, DirectoryPhoto, DirectoryTags} from "../DirectoryInfo";
 import {CurationStar} from "../TeamAccess";
 const recordPath = (r: RecordItem) => "/read/" + r.id;
@@ -14,10 +15,12 @@ export function RecordCard({
   record: r,
   list = false,
   showImage = true,
+  compact = false,
 }: {
   record: RecordItem;
   list?: boolean;
   showImage?: boolean;
+  compact?: boolean;
 }) {
   const location = useLocation();
   const fromCatalogue = [
@@ -30,19 +33,16 @@ export function RecordCard({
     "/blog",
   ].includes(location.pathname) || location.pathname.startsWith("/topics/");
   const community = r.kind === "organisation" || r.kind === "contact";
-  const description = community ? communityDescription(r) : r.summary;
-  const Icon =
-    r.kind === "organisation" || r.kind === "contact"
-      ? Users
-      : r.kind === "resource"
-        ? BookOpen
-        : r.kind === "story"
-          ? Leaf
-          : FileText;
+  const description = community ? communityDescription(r) : "";
+  const photo = articlePhoto(r);
+  if (community && compact) return <article data-record-id={r.id} className="record-card compact-contact">
+    <h3><Link to={recordPath(r)} state={{fromCatalogue:true}}>{r.title}<ArrowUpRight size={18}/></Link></h3>
+    {(r.locality || r.locations[0]) && <span className="directory-location"><MapPin size={15} aria-hidden="true"/>{r.locality || r.locations[0]}</span>}
+  </article>;
   return (
     <article data-record-id={r.id} className={"record-card " + (list ? "list-card " : "") + (community ? "community-entry" : "")}>
       {showImage && r.directory?.photo && <DirectoryPhoto key={r.id} record={r} />}
-      {showImage && !list && r.image && !r.directory?.photo && (
+      {showImage && !list && photo && !r.directory?.photo && (
         <Link
           to={recordPath(r)}
           state={{ fromCatalogue, fromHome: location.pathname === "/" }}
@@ -50,18 +50,12 @@ export function RecordCard({
           aria-hidden="true"
           className="card-image"
         >
-          <img src={r.image} alt="" loading="lazy" />
+          <img src={photo!.src} alt="" loading="lazy" width={800} height={500} />
         </Link>
       )}
       <div className="card-content">
-        {community ? <DirectoryTags record={r} /> : <div className="record-meta">
-          <span>
-            <Icon size={15} />
-            {r.editorialStatus === "authored-practical-guide" ? "Practical guide · Draft" : kindLabel[r.kind]}
-          </span>
-          {r.locality && <span>{r.locality}</span>}
-          {r.publishedAt && <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>}
-        </div>}
+        {showImage && !list && photo?.credit && <div className="card-photo-credit"><a href={photo.source}>{photo.credit}</a> · <a href={photo.licenseUrl}>{photo.license}</a></div>}
+        {community ? <DirectoryTags record={r} /> : r.editorialStatus === "authored-practical-guide" ? <div className="record-meta"><span>Practical guide · Draft</span></div> : null}
         {community && <div className="record-meta">{r.publishedAt && <time dateTime={r.publishedAt}>{formatDate(r.publishedAt)}</time>}<span>Archived listing · availability unconfirmed</span></div>}
         <div className="curation-heading"><h3>
           <Link
@@ -80,9 +74,7 @@ export function RecordCard({
               : description}
           </p>
         )}
-        {community ? <DirectoryActions record={r} /> : <div className="card-bottom">
-          <span>{r.topics[0]}</span>
-        </div>}
+        {community ? <DirectoryActions record={r} /> : null}
 
       </div>
     </article>

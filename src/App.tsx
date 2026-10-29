@@ -1,3 +1,4 @@
+import { articlePhoto } from "./article-photos";
 import {
   lazy,
   Suspense,
@@ -53,7 +54,7 @@ import { translatePriority } from "./priority-translations";
 import { RecordCard } from "./components/RecordCard";
 import { TopicIcon } from "./components/TopicIcon";
 import { TopicPage, TopicChoices } from "./TopicPage";
-import { topicFlows, topicFor, topicHref, topicDescriptions } from "./topic-flows";
+import { topicFlows, topicFor, topicHref } from "./topic-flows";
 import "./topic-navigation.css";
 import "./home-hero.css";
 import { communityDescription } from "./public-record";
@@ -69,7 +70,6 @@ import { catalogueFilters, searchDestination, showEmergencyShortcut } from "./se
 import { homeSearchDestination } from "./home-search";
 import EmergencyServices from "./EmergencyServices";
 import { buildDiscoverySections } from "./discovery";
-import { DiscoveryLinks, DiscoveryTopics } from "./DiscoveryLinks";
 import "./discovery.css";
 import { Research, ResearchDocument, ResearchMemoryProvider } from "./Research";
 import { Button } from "./components/arc/button/button";
@@ -197,30 +197,30 @@ function SearchBox({
 const navigation = [
   { value: "home", label: "Home", href: "/" },
   { value: "action", label: "Take action", links: [
-    { label: "Report an infraction", description: "Record a concern with photos and a location.", href: "/report", icon: <MapPin size={21} aria-hidden="true" /> },
-    { label: "Emergency services", description: "Police, ambulance, fire and other helplines.", href: "/emergency", icon: <Siren size={21} aria-hidden="true" /> },
-    { label: "Take action", description: "Find your way to contribute to Goa.", href: "/get-involved" },
-    { label: "Green Viksit Goa", description: "Read the archived 2025 consultation.", href: "/read/wp-9389" },
-    { label: "Amche Mollem", description: "Learn about the campaign for Mollem.", href: "/read/wp-6263" },
-    { label: "Donations", description: "Support ActForGoa through the original site.", href: "https://actforgoa.org/donation-form/" },
+    { label: "Report an infraction", href: "/report", icon: <MapPin size={21} aria-hidden="true" /> },
+    { label: "Emergency services", href: "/emergency", icon: <Siren size={21} aria-hidden="true" /> },
+    { label: "Get involved", href: "/get-involved" },
+    { label: "Green Viksit Goa", href: "/read/wp-9389" },
+    { label: "Amche Mollem", href: "/read/wp-6263" },
+    { label: "Work with us", href: "/contact?reason=Work%20with%20ActForGoa" },
+    { label: "Volunteer", href: "/read/wp-2249" },
+    { label: "Donations", href: "https://actforgoa.org/donation-form/" },
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", links: [{ label: "Legal questions", description: "Find guidance in our legal framework and source documents.", href: "/ask/legal" }, { label: "Environment & ecosystems", description: "Ask about Goa’s environment and explore the research.", href: "/ask/ecology" }, { label: "Explore changes on the map", description: "Compare dated satellite observations in Goa.", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
+  { value: "resources", label: "Resources", links: [{ label: "Legal questions", href: "/ask/legal" }, { label: "Environment & ecosystems", href: "/ask/ecology" }, { label: "Explore changes on the map", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
   { value: "about", label: "About", links: [
-    { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
-    { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/read/wp-8905" },
-    { label: "Annual reports", description: "Read about the work over the years.", href: "/read/wp-8903" },
-    { label: "Press coverage", description: "ActForGoa in the news.", href: "/read/wp-7377" },
+    { label: "About ActForGoa", href: "/about" },
+    { label: "Newsletters", href: "/read/wp-8905" },
+    { label: "Annual reports", href: "/read/wp-8903" },
+    { label: "Press coverage", href: "/read/wp-7377" },
   ] },
-  { value: "work", label: "Work with us", href: "/contact?reason=Work%20with%20ActForGoa" },
-  { value: "volunteer", label: "Volunteer", href: "/read/wp-2249" },
   { value: "community", label: "Community", href: "/directory" },
 ];
 function Header() {
   const { pathname } = useLocation();
   const { language } = useLanguage();
-  const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "हमारे साथ काम करें", "स्वयंसेवा", "समुदाय"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "आमचे वांगडा काम करात", "स्वयंसेवा", "समुदाय"] : [];
+  const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "समुदाय"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "समुदाय"] : [];
   const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
   const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
   return <SiteHeader
@@ -239,11 +239,6 @@ function Footer() {
           </Link>
           <p>Enabling people to care for Goa.</p>
         </div>
-        <p>
-          A platform belonging to everyone who loves Goa.
-          <br />
-          Built on the collective work of people who care.
-        </p>
         <Link to="/contact">
           Let’s stay connected <ArrowUpRight size={18} />
         </Link>
@@ -280,7 +275,7 @@ function Home({ records }: { records: RecordItem[] }) {
           {topicFlows.map(flow => (
             <Link key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
               <TopicIcon name={flow.icon} />
-              <span><strong lang={translatePriority(flow.label, language) === flow.label ? "en" : language}>{translatePriority(flow.label, language)}</strong><small>{topicDescriptions[flow.slug]}</small></span>
+              <span><strong lang={translatePriority(flow.label, language) === flow.label ? "en" : language}>{translatePriority(flow.label, language)}</strong></span>
               <ArrowRight size={18} aria-hidden="true" />
             </Link>
           ))}
@@ -357,7 +352,6 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
       <div className="section-heading">
         <div>
           <h2 id="discovery-heading">Explore the field guide</h2>
-          <p>Practical help first. Then people, stories and more ways to take part.</p>
         </div>
       </div>
       <div className="discovery-controls">
@@ -388,7 +382,6 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
               <div className="discovery-section-heading">
                 <div>
                   <h2 id={`discovery-${section.id}`}>{section.title}</h2>
-                  <p>{section.description}</p>
                 </div>
                 <Link className="text-link" to={section.href}>
                   {section.linkLabel} <ArrowRight size={18} aria-hidden="true" />
@@ -397,17 +390,11 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
               <div className={section.type === "people" ? "discovery-people-list" : "discovery-grid"}>
                 {section.records.map((record, index) => (
                   <div data-feed-index={section.start + index} key={record.id}>
-                    <RecordCard record={record} showImage={section.type === "stories"} />
+                    <RecordCard record={record} showImage={section.type !== "people"} />
                   </div>
                 ))}
               </div>
             </section>
-            {kind === "all" && section.type === "people" && section.round < 2 && (
-              <DiscoveryTopics records={records} second={section.round === 1} />
-            )}
-            {section.type === "people" && section.round === 0 && kind === "all" && <DiscoveryLinks group="tools" />}
-            {section.type === "documents" && section.round === 0 && kind === "all" && <DiscoveryLinks group="participate" />}
-            {section.type === "documents" && section.round === 1 && kind === "all" && <DiscoveryLinks group="checklists" />}
           </div>
         ))}
       </div>
@@ -607,28 +594,7 @@ function Catalogue({
   const moreAvailable = grouped
     ? groups.some((group) => group.items.length > perGroup)
     : limit < results.length;
-  const [title, description] =
-    mode === "directory"
-      ? [
-          "People who care.",
-          "Find organisations, local initiatives, and people working for a better Goa.",
-        ]
-      : mode === "library"
-        ? [
-            "A library for everyday action.",
-            "Practical guides, civic information, and ideas worth putting into practice.",
-          ]
-        : mode === "blog"
-          ? ["Notes from Goa.", "Articles, updates, and ideas from ActForGoa."]
-          : mode === "stories"
-          ? [
-              "Good things start with people.",
-              "Stories of local action, shared effort, and a Goa worth caring for.",
-            ]
-          : [
-              "Find your next step.",
-              "Local people, practical resources, and community knowledge, all in one place.",
-            ];
+  const title = mode === "directory" ? "Community directory" : mode === "library" ? "Library" : mode === "blog" ? "Blog" : mode === "stories" ? "Stories" : "Search";
   const change = (key: string, value: string) => {
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
@@ -638,7 +604,6 @@ function Catalogue({
     <main className="catalogue shell">
       <div className="catalogue-heading">
         <h1>{title}</h1>
-        <p>{description}</p>
       </div>
       <SearchBox initial={query} />
       {topic && !query && topicFor(topic) && <TopicChoices flow={topicFor(topic)!} />}
@@ -857,6 +822,7 @@ function Detail({ records }: { records: RecordItem[] }) {
     )
     .slice(0, 3);
   const content = storyContent(r);
+  const cover = articlePhoto(r);
   const externalLinks = content.links.filter(
     (l) => !l.url.startsWith("mailto:") && !l.url.startsWith("tel:"),
   );
@@ -904,9 +870,10 @@ function Detail({ records }: { records: RecordItem[] }) {
             {r.publishedAt && <> · Published {formatDate(r.publishedAt)}</>}
           </div>
           {r.directory?.photo && <DirectoryPhoto key={r.id} record={r} detail />}
-          {r.image && !r.directory?.photo && (
-            <img className="detail-image" src={r.image} alt={r.title} />
-          )}
+          {!r.directory?.photo && cover && <figure className="article-cover">
+            <img className="detail-image" src={cover!.src} alt={cover!.alt} />
+            {cover!.credit && <figcaption>Illustrative photo · <a href={cover!.source}>{cover!.credit}</a> · <a href={cover!.licenseUrl}>{cover!.license}</a> · resized & cropped</figcaption>}
+          </figure>}
           {(r.kind === "contact" || r.kind === "organisation" || r.id === "resource-590480849c") && (
             <div className="verification-note">
               This is an archived source listing. Contact details and service

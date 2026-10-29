@@ -1,0 +1,56 @@
+[
+  {
+    "route": "/blog",
+    "width": 1440,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/blog/visual-fixture",
+    "width": 1440,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/read/guide-reporting",
+    "width": 1440,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/blog",
+    "width": 390,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/blog/visual-fixture",
+    "width": 390,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/read/guide-reporting",
+    "width": 390,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/blog",
+    "width": 320,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/blog/visual-fixture",
+    "width": 320,
+    "overflow": false,
+    "images": 1
+  },
+  {
+    "route": "/read/guide-reporting",
+    "width": 320,
+    "overflow": false,
+    "images": 1
+  }
+]
