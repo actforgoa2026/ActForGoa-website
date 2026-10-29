@@ -19,3 +19,5 @@ The former local **ORCHESTRATOR** (`01a17774-6d09-7751-915c-3fbf3a8994c4`), LAW,
 ## User design preference
 
 Never add eyebrow labels above headings. Do not use uppercase eyebrow text. The user explicitly requires no eyebrows, including on the orbit landing page.
+
+Use the actual installed Arc UI and shadcn components for new or changed buttons and controls, including map tools. Preserve their accessible behavior and provenance; do not imitate their appearance with unrelated custom controls.

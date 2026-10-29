@@ -3,12 +3,14 @@ import {stat} from 'node:fs/promises';
 import {extname, resolve, sep} from 'node:path';
 import {pathToFileURL} from 'node:url';
 import {createAdminServer} from './admin.ts';
+import {createPlaceSearch,serveMapPlaces} from './map-places.ts';
 
 /** Standalone satellite frontend, using the same named-account auth and proxy. */
 export function createSatelliteWeb(options:{publicOrigin:string;databasePath:string;staticRoot:string;local?:boolean}){
   const {server,store}=createAdminServer({...options,knownRecordIds:new Set<string>(),trustRailwayProxy:Boolean(process.env.RAILWAY_PROJECT_ID)});
   const admin=server.listeners('request')[0] as (req:import('node:http').IncomingMessage,res:import('node:http').ServerResponse)=>void;
   const root=resolve(options.staticRoot);
+  const searchPlaces=createPlaceSearch();
   server.removeAllListeners('request');
   server.on('request',async(req,res)=>{
     res.setHeader('X-Content-Type-Options','nosniff');res.setHeader('Referrer-Policy','no-referrer');res.setHeader('X-Frame-Options','DENY');
@@ -16,6 +18,7 @@ export function createSatelliteWeb(options:{publicOrigin:string;databasePath:str
     let pathname:string;
     try{pathname=decodeURIComponent(new URL(req.url||'/','http://localhost').pathname);}catch{res.writeHead(400);return res.end();}
     if(pathname.startsWith('/api/')){
+      if(pathname==='/api/map-places')return serveMapPlaces(req,res,searchPlaces);
       if(!/^\/api\/admin\/(?:config|login|logout|session|satellite\/.+)$/.test(pathname)){res.writeHead(404);return res.end();}
       return admin(req,res);
     }

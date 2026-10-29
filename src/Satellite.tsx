@@ -93,17 +93,18 @@ export default function Satellite(){
     requestAnimationFrame(()=>document.querySelector('.satellite-results')?.scrollIntoView({behavior:'smooth',block:'start'}));
   });}
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
-  return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Choose a place on the map. Browse dated satellite imagery, compare what changed, and investigate trees, water and land use.</p></header>
-    <p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p>
-    {authChecked&&!session&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
+  return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Find a place. Draw an area. Explore what changed.</p></header>
+
     {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until Copernicus is connected. You can explore the map and open saved results.</p>}
-    {session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. You can still inspect dated imagery and numeric comparisons.</p>}
+
     <section className="satellite-workbench" aria-label="Map and timeline">
       <SatelliteMap area={area} onArea={chooseArea} disabled={!!busy} observation={observations[activeId]} candidates={result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)?result.intent==='surface_water'?result.evidence.water_candidates:result.intent==='canopy_loss'?result.evidence.candidates:undefined:undefined}/>
       {result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)&&<p className="satellite-note">Any change outlines compare {dateLabel(result.before.acquired_at[0])} with {dateLabel(result.after.acquired_at[0])}. They are exploratory candidates.</p>}
       {!scenes.length&&<p className="satellite-note">Select an area, then find observations for the dates below. Satellite imagery will appear over this map.</p>}
       <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
     </section>
+    {authChecked&&!session&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
+    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">Place search sends only your submitted search terms to Photon. Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
     {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
     <form className="satellite-question" onSubmit={ask}><Textarea label="Ask about this area" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Has tree canopy disappeared here in the last 10 days?"/>
       <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
