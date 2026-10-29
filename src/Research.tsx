@@ -34,12 +34,12 @@ type Page={page:number;label:string;text:string;origin:string;warning:string};
 const date=(value:string)=>value?new Date(value).toLocaleDateString('en-GB',{day:'numeric',month:'short',year:'numeric'}):'Date unavailable';
 function Source({source,number,returnTo}:{source:Evidence;number?:number;returnTo:string}){
  return <article className="research-source"><div className="research-source-meta">{number&&<span>Source {number}</span>}<span>{source.label}</span><span>{source.format==='pdf'?'PDF':source.format==='html'?'Webpage':source.format.toUpperCase()}</span>{source.publisher_class==='actforgoa_authored_guide'&&<span>Authored draft guide</span>}</div>
-  <h3><Link to={source.reader_url} state={{researchReturn:returnTo}}>{source.title}<ArrowUpRight size={17}/></Link></h3>
+  <h3><Link to={source.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}}>{source.title}<ArrowUpRight size={17}/></Link></h3>
   <p className="source-excerpt">{source.text.slice(0,310)}{source.text.length>310?'…':''}</p>
   {source.warning&&<p className="extraction-note">{source.warning}</p>}
   {researchSourceNotes(source).map(note=><p key={note.label} className="extraction-note"><strong>{note.label}:</strong> {note.text}</p>)}
   <details><summary>Read the cited passage</summary><p className="evidence-text">{source.text}</p><a href={source.url} target="_blank" rel="noreferrer">Publisher’s source <ArrowUpRight size={14}/></a><p className="research-small">Saved {date(source.retrieved_at)}. This is the retrieval date.</p></details>
-  <Link className="text-link" to={source.reader_url} state={{researchReturn:returnTo}}>Open full document <BookOpen size={16}/></Link>
+  <Link className="text-link" to={source.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}}>Open full document <BookOpen size={16}/></Link>
  </article>
 }
 function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
@@ -48,7 +48,7 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
  return <div className="research-answer">
   <section className="research-answer-section" aria-label="From our library"><h3><BookOpen size={18}/>From our library</h3>
    {paragraphs.length?paragraphs.map((paragraph,index)=>{
-    const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
+    const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
     return answer.summary_first&&index===0?<ul key={index} aria-label="Key takeaway"><li className="answer-paragraph">{content}</li></ul>:<div key={index}>{answer.summary_first&&index===1&&<h4>More detail</h4>}<p className="answer-paragraph">{content}</p></div>;
    }):<p className="answer-paragraph">The passages retrieved for this question did not provide enough evidence to answer it yet.</p>}
    {(answer.library_notice||answer.notice)&&<p className="research-small">{answer.library_notice||answer.notice}</p>}
