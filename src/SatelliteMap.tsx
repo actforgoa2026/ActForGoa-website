@@ -39,7 +39,19 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     const escape=(event:KeyboardEvent)=>{if(event.key==='Escape'){cancelDraw();setExpanded(false);setPlaces([]);}};
     document.addEventListener('keydown',escape);return()=>document.removeEventListener('keydown',escape);
   },[]);
-  useEffect(()=>{if(!expanded)return;const previous=document.body.style.overflow;document.body.style.overflow='hidden';return()=>{document.body.style.overflow=previous;};},[expanded]);
+  useEffect(()=>{
+    if(!expanded)return;
+    const previous=document.body.style.overflow;document.body.style.overflow='hidden';
+    const keepFocus=(event:KeyboardEvent)=>{
+      if(event.key!=='Tab'||!workspace.current)return;
+      const controls=[...workspace.current.querySelectorAll<HTMLElement>('button:not(:disabled),input:not(:disabled),a[href],summary,[tabindex="0"]')].filter(el=>el.getBoundingClientRect().width>0);
+      const first=controls[0],last=controls.at(-1);if(!first||!last)return;
+      if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}
+      else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}
+    };
+    document.addEventListener('keydown',keepFocus);
+    return()=>{document.body.style.overflow=previous;document.removeEventListener('keydown',keepFocus);};
+  },[expanded]);
   useEffect(()=>{
     if(!map.current)return;
     selection.current?.remove();selection.current=null;map.current.stop();
@@ -65,12 +77,13 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     if(!anchor.current){anchor.current=map.current.mouseEventToLatLng(event.nativeEvent);cornerPin.current=L.circleMarker(anchor.current,{radius:5,color:'#193e32',fillColor:'#fff',fillOpacity:1,interactive:false}).addTo(map.current);setCorner(true);}
   }
   function pointerMove(event:ReactPointerEvent<HTMLDivElement>){
-    if(!anchor.current||!map.current)return;
+    if(!event.isPrimary||!anchor.current||!map.current)return;
     const bounds=L.latLngBounds(anchor.current,map.current.mouseEventToLatLng(event.nativeEvent));
     if(preview.current)preview.current.setBounds(bounds);
     else preview.current=L.rectangle(bounds,{color:'#193e32',weight:2,dashArray:'6 4',fillOpacity:.16,interactive:false}).addTo(map.current);
   }
   function pointerUp(event:ReactPointerEvent<HTMLDivElement>){
+    if(!event.isPrimary)return;
     const start=press.current;press.current=null;
     if(event.currentTarget.hasPointerCapture(event.pointerId))event.currentTarget.releasePointerCapture(event.pointerId);
     if(!start||!anchor.current||!map.current)return;
@@ -116,7 +129,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
       <div ref={container} className="satellite-map" aria-label="Goa investigation map. Pan and zoom, then draw an area. Coordinate fields below provide a keyboard alternative." />
       {drawing&&<div className="satellite-draw-surface" role="group" tabIndex={0} aria-label="Draw a rectangle by dragging or tapping two opposite corners. Escape cancels." onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={clearDraft} onLostPointerCapture={()=>{if(press.current)clearDraft();}}/>}
       <div className="satellite-map-zoom"><Button type="button" size="sm" variant="secondary" aria-label="Zoom in" disabled={drawing} onClick={()=>map.current?.zoomIn()}><Plus size={20}/></Button><Button type="button" size="sm" variant="secondary" aria-label="Zoom out" disabled={drawing} onClick={()=>map.current?.zoomOut()}><Minus size={20}/></Button></div>
-      <div className="satellite-map-bottom"><p role="status">{selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):message||'Find a place, then draw the area you want to explore.')}</p><Button type="button" variant="secondary" size="sm" disabled={disabled||drawing} onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title="Select the visible map" aria-label="Use visible map area"><Scan size={18}/><span>Use view</span></Button></div>
+      <div className="satellite-map-bottom"><p role="status">{selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):message||'Find a place, then draw the area you want to explore.')}</p><Button type="button" variant="secondary" size="sm" disabled={disabled||drawing} onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title="Select the visible map" aria-label="Use visible map area"><Scan size={18}/><span className="satellite-use-view-label">Use view</span></Button></div>
     </div>
     <AmcheLayers map={mapInstance}/>
     {tileError&&<p className="satellite-note">Some street-map tiles could not load. Selected areas and loaded satellite images remain available.</p>}

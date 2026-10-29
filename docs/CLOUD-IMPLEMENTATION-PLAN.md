@@ -429,3 +429,9 @@ User requested substantially less repeated text/components and more imagery. Iso
 211 Node tests pass, production build passes, Chromium 1440/390/320 checks pass for main browsing routes, compact topic sections and action/menu navigation. Blog list/detail and original-inline-image retention use explicitly local API fixtures; no hosted editorial acceptance is claimed. All tested images load; no horizontal overflow or page errors. Final screenshot evidence and limitations: `reports/visual-cleanup-2026-10-29/`. Impeccable is unavailable in this executor; no detector pass is claimed.
 
 Implemented/tested only; source landing and deployment remain pending with the release coordinator. No alias promotion, backend/service/account change or paid inference. Next: review this branch/PR and include the accepted change through `release:review` under existing coordinator ownership.
+
+## Local map control follow-up — 29 October 2026
+
+Direct user requests extend the focused local shipping authorization: fix map drawing, add area/business search and current-location access, and make the map larger with actual Arc/shadcn controls. Other local agents stay paused. PR105 was published through `release:review` at `f20fc25b88681fc7228002a4ca63b8a1dbab2230`, deployment `dpl_D3RkM62YFcnLXRy1Me9ZMbRU2h84`, with live desktop/phone checks. See issue #89 comment 6495781299.
+
+Map implementation/acceptance is in `reports/map-controls-2026-10-29/README.md`. Local gates pass; deploy the allowlisted standalone app package to existing Railway service `aea6b770-cd6d-4165-9802-7ce46fa0fd4a`, preserving `/data/admin`, then verify saved imagery/history and the new controls. Promote the combined main frontend through `release:review`. No satellite API/corpus/accounting migration or paid AI revalidation is required by this frontend/gateway change. Record final identities in issue #89.

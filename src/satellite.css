@@ -81,10 +81,10 @@
  .satellite-heading{gap:8px;margin-bottom:16px}.satellite-heading h1{font-size:24px}.satellite-heading p{font-size:14px}
  .satellite-map-search{display:block}.satellite-map-search form{max-width:none;margin-bottom:10px}.satellite-map-tools{justify-content:flex-end}
  .satellite-map-tools>button:first-child{margin-right:auto}
- .satellite-workbench .satellite-map{height:calc(100svh - 300px);min-height:400px}
+ .satellite-workbench .satellite-map{height:calc(100svh - 340px);min-height:400px}
  .satellite-map-canvas{border-radius:12px}.satellite-map-zoom{top:12px;right:12px}
  .satellite-map-bottom{left:8px;right:8px;bottom:30px;gap:8px}.satellite-map-bottom p{font-size:12px;padding:8px;max-width:calc(100% - 56px)}
- .satellite-map-bottom button span span>span{display:none}
+ .satellite-map-bottom .satellite-use-view-label{display:none}.satellite-map-bottom button{width:44px;min-width:44px;padding:0}
  .satellite-place-results ul{grid-template-columns:minmax(0,1fr)}
  .satellite-map-expanded{padding:12px}.satellite-map-expanded .satellite-map{height:100%;min-height:280px}
  .satellite-map-caption p{font-size:13px}

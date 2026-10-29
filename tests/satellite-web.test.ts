@@ -19,6 +19,8 @@ test('standalone satellite serves only its frontend and authenticated API surfac
     const asset=await fetch(origin+'/assets/app.js');assert.equal(asset.status,200);assert.match(asset.headers.get('content-type')||'',/javascript/);
     for(const path of ['/private.json','/.env.local','/assets/%2e%2e%2f%2e%2e%2fprivate.json','/api/admin/posts','/api/blog','/api/curation'])assert.equal((await fetch(origin+path)).status,404,path);
     assert.equal((await fetch(origin+'/api/admin/config')).status,200);
+    assert.equal((await fetch(origin+'/api/map-places?q=a')).status,400);
+    assert.equal((await fetch(origin+'/api/map-places?q=Panaji',{method:'POST'})).status,405);
     assert.equal((await fetch(origin+'/api/admin/satellite/status')).status,401);
     assert.equal((await fetch(origin+'/api/admin/session')).status,401);
     assert.equal((await fetch(origin+'/map',{method:'POST'})).status,405);
