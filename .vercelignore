@@ -19,7 +19,7 @@ DESIGN.md
 README.md
 
 backend/
-satellite/
+/satellite/
 .research-index/
 .research-usage/
 .research-release/
