@@ -53,7 +53,13 @@ class ResearchTools:
         return self.corpus.catalogue(args.get('query',''),self.domain,args.get('offset',0),min(20,args.get('limit',10)))
     def search(self,args):
         result=self.record(self.corpus.search((args['query']+' '+self.extra_terms).strip(),min(12,args.get('limit',8)),self.document_id,self.domain,args.get('offset',0)))
-        return {**result,'results':[self.evidence_for_agent(e) for e in result['results']]}
+        discoveries=[self.evidence_for_agent(e) for e in result['results']]
+        if self.document_id:
+            # Discovery snippets cannot be cited. Only a full source read
+            # exposes citation IDs, so the agent must inspect its context.
+            discoveries=[{key:value for key,value in hit.items() if key not in ('id','reader_url')}
+                         for hit in discoveries]
+        return {**result,'results':discoveries}
     def read(self,args):
         if self.document_id and args['document_id']!=self.document_id:raise ValueError('This conversation is scoped to one document')
         if self.domain!='all' and self.domain not in self.corpus.document(args['document_id'])['domains']:raise ValueError('Document is outside this collection')
