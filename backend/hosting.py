@@ -138,16 +138,21 @@ def public_config():
 
 class PublicLimits:
     """Single-instance aggregate limits. No client identifiers are collected."""
-    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5', require_existing=False, release_allowance=False):
+    def __init__(self, root, search_per_minute=120, chats_per_day=100, monthly_usd='5', require_existing=False, release_allowance=False, hackathon_allowance=False):
         self.root=Path(root);self.search_limit=search_per_minute;self.chat_limit=chats_per_day
         self.require_existing=require_existing
         amount=Decimal(str(monthly_usd))
         if not amount.is_finite() or amount<0:raise ValueError('Monthly answer budget must be non-negative')
         self.monthly_limit=int(amount*1_000_000)
         self.release_allowance=release_allowance
+        self.hackathon_allowance=hackathon_allowance
         self.searches=deque();self.lock=threading.Lock()
 
     def effective_limits(self, day):
+        # User-approved October 29-31 public hackathon allowance. The monthly
+        # limit includes every earlier reservation; this never resets accounting.
+        if self.hackathon_allowance and '2026-10-29' <= day <= '2026-10-31':
+            return 500, 50_000_000
         # Explicit user authorization for this launch only. Evaluate against the
         # transaction's UTC date so an already-running service expires correctly.
         daily = 160 if self.release_allowance and day == '2026-10-28' else self.chat_limit

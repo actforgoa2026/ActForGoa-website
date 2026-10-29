@@ -27,7 +27,8 @@ def create_app(root=None, index_root=None, client=None):
     # Keep the same durable ledger path across releases; never reset production usage.
     limits=PublicLimits(root/'.research-usage',chats_per_day=min(100,int(os.getenv('RESEARCH_DAILY_ANSWER_LIMIT','100'))),
                         monthly_usd=min(5,float(os.getenv('RESEARCH_MONTHLY_BUDGET_USD','5'))),require_existing=ledger_required,
-                        release_allowance=os.getenv('RESEARCH_RELEASE_ALLOWANCE_20261028')=='1')
+                        release_allowance=os.getenv('RESEARCH_RELEASE_ALLOWANCE_20261028')=='1',
+                        hackathon_allowance=os.getenv('RESEARCH_HACKATHON_ALLOWANCE_20261029')=='1')
     model=configured_model()
     @asynccontextmanager
     async def lifespan(app):
