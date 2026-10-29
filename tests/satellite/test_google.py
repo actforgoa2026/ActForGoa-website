@@ -65,3 +65,46 @@ def test_google_environment_authenticated_and_bounded(monkeypatch,tmp_path):
         for _ in range(50):
             assert client.post('/environment',headers=headers,json={'area':AREA}).status_code == 200
         assert client.post('/environment',headers=headers,json={'area':AREA}).status_code == 429
+
+
+def test_preview_requires_authentication_and_bounded_dates(monkeypatch, tmp_path):
+    monkeypatch.setenv('SATELLITE_SERVICE_TOKEN', 't'*40)
+    service = SatelliteService(tmp_path/'preview.sqlite', httpx.Client())
+    service.imagery_provider = 'earth-engine'
+    calls=[]
+    class PreviewProvider:
+        def preview(self, request, on_generate):
+            on_generate()
+            calls.append(request)
+            return {'provider':'earth-engine','scope':'navigation only'}
+    service.cdse = PreviewProvider()
+    headers={'Authorization':'Bearer '+'t'*40,'X-Actor-ID':'preview-test'}
+    query={'start_date':'2026-01-01','end_date':'2026-01-31'}
+    with TestClient(create_app(service)) as client:
+        assert client.post('/preview',json=query).status_code == 401
+        for dates in [('2026-02-01','2026-01-01'),('2025-01-01','2026-01-01'),('2016-01-01','2016-01-02'),('2099-01-01','2099-01-02')]:
+            assert client.post('/preview',headers=headers,json=dict(zip(query,dates))).status_code == 422
+        assert not calls
+        assert client.post('/preview',headers=headers,json=query).status_code == 200
+        assert len(calls) == 1
+
+
+def test_preview_cache_keeps_navigation_separate_and_does_not_charge_again(monkeypatch):
+    from types import SimpleNamespace
+    from unittest.mock import MagicMock
+    from satellite.domain import PreviewRequest
+    provider=EarthEngine(httpx.Client())
+    ee=MagicMock();images=ee.ImageCollection.return_value
+    images.filterBounds.return_value=images;images.filterDate.return_value=images
+    images.sort.return_value=images;images.limit.return_value=images
+    ee.Dictionary.return_value.getInfo.return_value={'count':2,'first':1767225600000,'last':1768089600000}
+    images.map.return_value.median.return_value.clip.return_value.getMapId.return_value={'tile_fetcher':SimpleNamespace(url_format='https://earthengine.googleapis.com/maps/test/tiles/{z}/{x}/{y}')}
+    monkeypatch.setattr(provider,'_ee',lambda:ee)
+    charged=[]
+    query=PreviewRequest(start_date='2026-01-01',end_date='2026-01-31')
+    first=provider.preview(query,lambda:charged.append(True));second=provider.preview(query,lambda:charged.append(True))
+    assert first['method']=='cloud-masked median' and 'not an exact acquisition' in first['scope']
+    assert not first['cache_hit'] and second['cache_hit'] and len(charged)==1
+    assert first['tile_url']==second['tile_url']
+    ee.ImageCollection.assert_called_once_with(COLLECTION)
+    images.filterDate.assert_called_once_with('2026-01-01','2026-02-01')

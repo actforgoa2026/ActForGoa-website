@@ -88,8 +88,7 @@ class Interpretation(StrictModel):
     individual_tree: bool
 
 
-class CatalogRequest(StrictModel):
-    area: Area
+class PreviewRequest(StrictModel):
     start_date: date
     end_date: date
 
@@ -100,6 +99,10 @@ class CatalogRequest(StrictModel):
         if self.start_date < date(2017, 3, 28) or self.end_date > datetime.now(IST).date():
             raise ValueError('Choose available historical dates from 28 March 2017 onwards.')
         return self
+
+
+class CatalogRequest(PreviewRequest):
+    area: Area
 
 
 class CompareRequest(CatalogRequest):

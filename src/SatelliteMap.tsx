@@ -1,5 +1,5 @@
 import {lazy, Suspense} from 'react';
-import type {SatelliteArea, SatelliteObservation} from './satellite-api';
+import type {SatelliteArea, SatelliteObservation, SatellitePreview} from './satellite-api';
 
 // Each deployment keeps its deliberately configured provider. This build-time
 // branch removes the other provider's import; no browser key probing or fallback.
@@ -10,10 +10,17 @@ const ProviderMap = import.meta.env.MODE === 'satellite'
 
 export type SatelliteMapProps = {
   area: SatelliteArea | null;
-  onArea: (area: SatelliteArea) => void;
+  onArea: (area: SatelliteArea) => boolean | void;
   observation?: SatelliteObservation;
   candidates?: GeoJSON.FeatureCollection;
   disabled?: boolean;
+  preview?: SatellitePreview|null;
+  previewBusy?: boolean;
+  previewError?: string;
+  onRetryPreview?: ()=>void;
+  progress?: string;
+  error?: string;
+  accessMessage?: string;
 };
 
 export function SatelliteMap(props: SatelliteMapProps) {
