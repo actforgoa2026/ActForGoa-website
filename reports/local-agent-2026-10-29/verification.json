@@ -1,0 +1,85 @@
+{
+  "checked_at": "2026-10-29T17:23:29.742959+00:00",
+  "workspace": "/Users/zakkrevitt/.codex/worktrees/research-agent-local/ActForGoa",
+  "branch": "codex/research-agent-local",
+  "base_commit": "2f73438295f0e1186267626f59ad642a2ade7d9b",
+  "localhost_url": "http://127.0.0.1:4276/ask",
+  "corpus": {
+    "generation": "20261027T065155-law-5bc5619b",
+    "documents": 1174,
+    "pages": 21534,
+    "originals_verified": 1174,
+    "all_documents_exported": true,
+    "source_database_sha256": "c6d80208581f3776d2cfaa2cfe3ff08e026bd055be1c2a574461934fa52d870f",
+    "copied_database_sha256": "c6d80208581f3776d2cfaa2cfe3ff08e026bd055be1c2a574461934fa52d870f",
+    "scope": "Complete selected generation, indexed originals and all extracted page text. No usage ledger, credentials or private reports.",
+    "manifest_stats": {
+      "pages": 21534,
+      "low_text_pages": 2379,
+      "ocr_pages": 153,
+      "chunks": 79564,
+      "documents": 1174,
+      "duplicate_urls": 25,
+      "corrupt_pages_excluded_from_search": 56
+    },
+    "index_files_verified": 16,
+    "source_root": "/Users/zakkrevitt/.codex/worktrees/research-accounting/ActForGoa/.reports/anthropic-acceptance-20261027/data",
+    "warnings_preserved": true,
+    "all_pages_searchable": true
+  },
+  "public_crm": {
+    "version": "directory-2026-10-23",
+    "sha256": "838df16f19bf43bd3b9929b70e5e2a7ab6242254c707dc6c4aa3af45b2e5013e",
+    "source_url": "https://actforgoa-field-guide.vercel.app/data/crm.json",
+    "records": 3267,
+    "community": 499,
+    "government": 2768
+  },
+  "original_archive": {
+    "path": "/Users/zakkrevitt/.local/share/actforgoa-research-dev/original-archive",
+    "files_verified": 4782,
+    "checksums": "ARCHIVE-SHA256.json"
+  },
+  "accounting": {
+    "ready": false,
+    "remaining_usd": null,
+    "new_paid_calls": 0,
+    "reason": "Paid answers are paused: the existing cloud dev reservations have not been reconciled locally.",
+    "production_accounting_copied": false
+  },
+  "checks": {
+    "focused_python_passed": 12,
+    "focused_node_passed": 18,
+    "typescript": "passed",
+    "browser_widths": [
+      1440,
+      390,
+      320
+    ],
+    "horizontal_overflow": false,
+    "computed_italic_elements": 0,
+    "original_pdf_rendered": true,
+    "settings_save_restore": "passed",
+    "location_lookup": "Village Panchayat Agonda; provenance caveat retained",
+    "links_open_new_tabs": true,
+    "impeccable_detector_findings": [],
+    "finish_review": {
+      "disposition": "ship",
+      "scope": "Both material fixes resolved in verdict pass",
+      "fixes": [
+        "Shortened initial source disclosure and direct workspace navigation",
+        "Readable legal-status qualification"
+      ]
+    },
+    "hot_reload_modules_and_api_ready": true,
+    "design_documentation": "design-review.md; incumbent system preserved, pre-existing sidecar drift recorded"
+  },
+  "limitations": [
+    "Actual paid Claude SDK generation blocked pending existing cloud dev ledger reconciliation.",
+    "Local search is FTS5 across all extracted pages; original vector index preserved but inactive.",
+    "Exact quote validation establishes traceability, not semantic correctness."
+  ],
+  "production_changes": false,
+  "deployment": false,
+  "full_release_checklist": false
+}

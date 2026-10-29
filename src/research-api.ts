@@ -12,7 +12,7 @@ export async function researchApi<T>(url: string, init?: RequestInit): Promise<T
   const timer = setTimeout(() => {
     timedOut = true;
     controller.abort();
-  }, url === '/api/chat' ? 75_000 : 30_000);
+  }, url === '/api/chat' ? (import.meta.env?.VITE_LOCAL_AGENT==='1'?195_000:75_000) : 30_000);
   try {
     const response = await fetch(url, { ...init, signal: controller.signal });
     const data = await response.json().catch(error => {

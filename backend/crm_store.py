@@ -4,8 +4,9 @@ import json
 from pathlib import Path
 import re
 import sqlite3
+import os
 
-STATE=Path('/workspace/.research-private/crm')
+STATE=Path(os.getenv('ACTFORGOA_CRM_STATE','/workspace/.research-private/crm'))
 STOP=set('a an and are at can do for from help how i in is me of on or please the to us what where which who with'.split())
 
 def build_index(snapshot=STATE/'snapshot.json',destination=STATE/'crm.sqlite'):
@@ -36,6 +37,7 @@ def connect():
     if not (STATE/'crm.sqlite').is_file():raise FileNotFoundError('Full CRM index is not restored')
     db=sqlite3.connect((STATE/'crm.sqlite').resolve().as_uri()+'?mode=ro',uri=True)
     db.row_factory=sqlite3.Row
+    db.create_function('place_match',2,lambda value,place:bool(re.search(r'(?<!\w)'+re.escape(place)+r'(?!\w)',value or '',re.I)))
     return db
 
 def stats():
@@ -49,7 +51,7 @@ def search_records(query='',collection='community',location='',limit=20,offset=0
     clauses=[];parameters=[]
     if match:clauses.append('search MATCH ?');parameters.append(match)
     if collection!='all':clauses.append('r.collection=?');parameters.append(collection)
-    if location:clauses.append('(lower(r.location) LIKE ? OR lower(r.name) LIKE ?)');parameters.extend(['%'+location.lower()+'%']*2)
+    if location:clauses.append('(place_match(r.location,?) OR place_match(r.name,?))');parameters.extend([location.strip()]*2)
     where=' WHERE '+' AND '.join(clauses) if clauses else ''
     join='records r JOIN search ON search.id=r.id' if match else 'records r'
     order='bm25(search,0,6,4,2,4,1),r.name' if match else 'r.name'
