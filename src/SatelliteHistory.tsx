@@ -1,3 +1,4 @@
+import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
@@ -36,7 +37,7 @@ export function SatelliteHistory({csrfToken,revision,busy,onOpen,area=null}:{csr
     <p>{area?'Showing your saved comparisons that overlap the selected map area. Their measurements describe each original comparison footprint.':'Showing your private history across all saved areas. Select an area on the map to narrow this list.'}</p>
     <p>Revisit comparisons by topic and observation period. Results are private to your account and retained for 30 days. These selected areas do not represent monitoring coverage across Goa.</p>
     <form onSubmit={search}><div className="satellite-dates"><Input label="Search saved questions and findings" value={query} maxLength={300} onChange={e=>setQuery(e.target.value)}/>
-      <label>Topic<select value={intent} onChange={e=>setIntent(e.target.value)}><option value="">All topics</option>{Object.entries(satelliteIntents).map(([value,label])=><option key={value} value={value}>{label}</option>)}</select></label>
+      <MorphSelect label="Topic" value={intent} onValueChange={setIntent} items={[{value:'',label:'All topics'},...Object.entries(satelliteIntents).map(([value,label])=>({value,label}))]}/>
       <SatelliteDatePicker label="Observation period from" value={start} max={end||undefined} onChange={setStart}/><SatelliteDatePicker label="Observation period until" value={end} min={start||undefined} onChange={setEnd} alignEnd/></div>
       <Button type="submit" variant="secondary" disabled={loading}>Search investigations</Button></form>
     {loading&&<p role="status">Loading saved investigations{area?' for this area':''}…</p>}{error&&<p role="alert">{error}</p>}

@@ -84,6 +84,10 @@ The archive is resumable. Its manifest reuses prior successful responses, so beg
 
 After editing `corpus/guides/`, run `python3 scripts/publish_guides.py`, then `npm test` and `npm run build`. Commit the generated content with its source. The Vercel build uses the generated files and does not upload or depend on the local raw research corpus. The five new guides participate in keyword search; the semantic index remains the original 600-entry archive.
 
+## Goa climate action plan
+
+The resident guide at `/climate-plan` explains the Goa SAPCC 2023–2033 through 13 everyday topics, 26 selected measures, questions residents can take forward, and a complete chapter index. It is linked from the resource library and keyword search. See [the documentation and original PDF](docs/climate/README.md) for source provenance, version differences, page mapping and extraction limitations. After updating `src/content/climate-plan.json`, run `python3 scripts/publish_climate_plan.py` to regenerate the downloadable reading guide. Implementation progress is not independently verified.
+
 ## Deployment
 
 Vercel serves the Vite `dist/` directory. `vercel.json` supplies route fallbacks and keeps the preview out of search engines. Deployment is a client-review preview; a production cutover requires an explicit decision. The model and runtime are lazily loaded, with a roughly 50 MB uncompressed first-use semantic payload; keyword search remains usable during loading or failure.

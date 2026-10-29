@@ -2,8 +2,9 @@ import {useEffect} from 'react';
 import {useLanguage} from './language';
 import {translatePriority} from './priority-translations';
 import {Link, useLocation, useParams} from 'react-router-dom';
-import {ArrowRight, ArrowUpRight, Download} from 'lucide-react';
+import {ArrowRight, Download} from 'lucide-react';
 import {topicFlows, actionHref, type TopicFlow, type TopicAction} from './topic-flows';
+import {ButtonLink} from './components/arc/button/button-link';
 import {TopicIcon} from './components/TopicIcon';
 import {RecordCard} from './components/RecordCard';
 import {hybridSearch} from './search';
@@ -18,9 +19,9 @@ export function TopicChoices({flow, parent}: {flow:TopicFlow; parent?:TopicActio
  return <section className="topic-choices" aria-label={parent?.question || flow.label}>
   {parent?.question && <h2>{translatePriority(parent.question, language)}</h2>}
   <nav className={"choice-grid"+(choices.length===2 || choices.length===4 ? " choice-grid-pairs" : "")} aria-label={parent?.question || 'Choose what you need'}>
-   {choices.map(action => <Link className="choice-link" key={action.id} to={actionHref(flow,action,parent)}>
-    <TopicIcon name={action.icon}/><span lang={translatePriority(action.label, language) === action.label ? "en" : language}>{translatePriority(action.label, language)}</span><ArrowRight size={22}/>
-   </Link>)}
+   {choices.map(action => <ButtonLink wrap variant="secondary" className="choice-link" key={action.id} to={actionHref(flow,action,parent)}>
+    <TopicIcon name={action.icon}/><span lang={translatePriority(action.label, language) === action.label ? "en" : language}>{translatePriority(action.label, language)}</span>
+   </ButtonLink>)}
   </nav>
  </section>;
 }
@@ -57,8 +58,8 @@ export function TopicPage({records}: {records:RecordItem[]}) {
   {!action ? <TopicChoices flow={flow}/> : action.choices ? <TopicChoices flow={flow} parent={action}/> : <>
    {!!action.links?.length && <section className="action-destinations" aria-label="Take your next step"><div className="choice-grid">
     {action.links.map(link => link.href.startsWith('#') || link.href.startsWith('/read/') || (link.href.startsWith('/') && !link.download)
-     ? <Link className="choice-link" key={link.href} to={link.href} state={{fromCatalogue:true,...(link.href.startsWith('/templates/') ? {returnTo:location.pathname} : {})}}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span><ArrowRight size={24}/></Link>
-     : <a className="choice-link" key={link.href} href={link.href} download={link.download || undefined}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span>{link.download ? <Download size={24}/> : <ArrowUpRight size={24}/>}</a>)}
+     ? <ButtonLink wrap variant="secondary" className="choice-link" key={link.href} to={link.href} state={{fromCatalogue:true,...(link.href.startsWith('/templates/') ? {returnTo:location.pathname} : {})}}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span></ButtonLink>
+     : <ButtonLink wrap variant="secondary" className="choice-link" key={link.href} href={link.href} download={link.download || undefined}><TopicIcon name={link.icon || action.icon}/><span lang={translatePriority(link.label, language) === link.label ? "en" : language}>{translatePriority(link.label, language)}</span>{link.download && <Download size={20}/>}</ButtonLink>)}
    </div></section>}
    {!!action.steps?.length && <section className="action-steps"><h2 lang={language}>{translatePriority('How to get started', language)}</h2><ol>{action.steps.map(step=><li key={step} lang={translatePriority(step, language) === step ? "en" : language}>{translatePriority(step, language)}</li>)}</ol></section>}
   </>}

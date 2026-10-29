@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 
-import {Checkbox} from './components/ui/checkbox';
+import {Checkbox} from './components/arc/checkbox/checkbox';
 import {AMCHE_LAYERS, amcheFeatureLabel, loadAmcheLayer, type AmcheLayerId} from './amche-layers';
 import './amche-layers.css';
 
@@ -10,7 +10,7 @@ const initial = (): Record<AmcheLayerId, LayerState> => ({
   'private-forests': {checked: false, loading: false, message: ''},
 });
 
-export function AmcheLayers({map}: {map: google.maps.Map | null}) {
+export function AmcheGoogleLayers({map}: {map: google.maps.Map | null}) {
   const [state, setState] = useState(initial);
   const active = useRef(new Map<AmcheLayerId, google.maps.Data>());
   const popups = useRef(new Map<AmcheLayerId, google.maps.InfoWindow>());
@@ -63,7 +63,7 @@ export function AmcheLayers({map}: {map: google.maps.Map | null}) {
   return <details className="amche-layers"><summary>Local context from Amche Atlas</summary>
     <p>Show reference records on this map. Their dates are separate from the satellite observations.</p>
     <div className="amche-layer-options">{AMCHE_LAYERS.map(source => <div className="amche-layer-option" key={source.id}>
-      <label><Checkbox checked={state[source.id].checked} disabled={!map} onCheckedChange={checked => void toggle(source.id, checked===true)}/><span>{source.title}<small>{source.date}</small></span></label>
+      <Checkbox label={source.title} description={source.date} checked={state[source.id].checked} disabled={!map} onCheckedChange={checked => void toggle(source.id, checked===true)}/>
       <p className="amche-layer-status" role="status">{state[source.id].loading ? 'Loading mapped records…' : state[source.id].message}</p>
       <p>{source.note} <a href={source.sourceUrl} target="_blank" rel="noreferrer">Source records</a></p>
     </div>)}</div>

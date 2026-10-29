@@ -79,8 +79,7 @@
 .home-actions { padding-block: 16px 40px; }
 .home-actions .section-heading { align-items: center; margin-bottom: 10px; gap: 16px; }
 .home-actions .section-heading h2 { font-size: 28px; font-weight: 800; scroll-margin-top: 112px; }
-.home-actions a.button.emergency-entry { min-height: 44px; margin: 0; padding: 8px 14px; gap: 10px; }
-.home-actions .emergency-entry strong { font-size: 14px; }
+.home-actions .emergency-entry { flex-shrink: 0; margin: 0; }
 .home-actions .topic-index { column-gap: 24px; }
 .home-actions .topic-index > a { min-height: 68px; gap: 10px; font-size: 17px; font-weight: 800; }
 @media (hover: hover) and (pointer: fine) {
@@ -112,7 +111,7 @@
   .home-actions { padding-block: 16px 32px; }
   .home-actions .section-heading { flex-wrap: wrap; gap: 12px; margin-bottom: 12px; }
   .home-actions .section-heading h2 { font-size: 24px; width: 100%; }
-  .home-actions a.button.emergency-entry { width: 100%; }
+  .home-actions .emergency-entry { width: 100%; }
   .home-actions .topic-index { column-gap: 16px; }
   .home-actions .topic-index > a { min-height: 48px; gap: 8px; font-size: 14px; }
   .home-actions .topic-index > a > svg:first-child { width: 19px; height: 19px; flex-shrink: 0; }

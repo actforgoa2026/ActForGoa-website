@@ -1,11 +1,11 @@
-.report-page { padding-block: 56px 80px; }
-.report-heading { margin-bottom: 40px; max-width: 760px; }
-.report-heading h1 { font-size: 48px; line-height: 1.2; font-weight: 750; letter-spacing: -.035em; scroll-margin-top: 120px; }
-.report-heading > p { font-size: 18px; color: var(--muted); margin-top: 16px; max-width: 64ch; }
+.report-page { padding-block: 24px 64px; }
+.report-heading { margin-bottom: 24px; max-width: 760px; }
+.report-heading h1 { font-size: 36px; line-height: 1.2; font-weight: 650; letter-spacing: -.035em; scroll-margin-top: 120px; }
+.report-heading > p { font-size: 16px; color: var(--muted); margin-top: 10px; max-width: 64ch; }
 .report-heading > .report-privacy { font-size: 14px; margin-top: 10px; }
 .report-layout { display: grid; grid-template-columns: minmax(0, 720px) minmax(220px, 310px); justify-content: space-between; gap: 64px; }
 .report-layout > *, .report-form > * { min-width: 0; }
-.report-steps { list-style: none; padding: 0 0 24px; margin: 0 0 32px; display: flex; gap: 24px; border-bottom: 1px solid var(--line); }
+.report-steps { list-style: none; padding: 0 0 16px; margin: 0 0 20px; display: flex; gap: 24px; border-bottom: 1px solid var(--line); }
 .report-steps li { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--muted); }
 .report-steps li > span { display: grid; place-items: center; width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 50%; flex-shrink: 0; }
 .report-steps [aria-current] { color: var(--green); font-weight: 700; }
@@ -16,19 +16,19 @@
 .report-categories legend { margin-bottom: 8px; }
 .report-help { font-size: 14px; color: var(--muted); line-height: 1.65; }
 .report-categories > p { margin-bottom: 16px; }
-/* Large single-choice buttons: the entire surface is the target. */
-.report-category { width: 100%; min-height: 88px; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px; border: 1px solid var(--line); border-radius: var(--radius-control); color: var(--green); background: var(--white); font: inherit; text-align: left; cursor: pointer; }
-.report-category + .report-category { margin-top: 12px; }
-.report-category > span { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
-.report-category strong { font-size: 18px; line-height: 1.4; font-weight: 750; }
-.report-category span span { font-size: 14px; line-height: 1.6; color: var(--muted); }
-.report-category > svg { flex: 0 0 24px; }
-.report-category[aria-pressed="true"] { color: var(--paper); background: var(--green); border-color: var(--green); }
-.report-category[aria-pressed="true"] span span { color: inherit; }
-.report-category:hover:not([aria-pressed="true"]):not(:disabled) { border-color: var(--green); background: var(--pale); }
-.report-category:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
-.report-category:disabled { cursor: not-allowed; opacity: .6; }
-.report-consent input { width: 20px; height: 20px; flex: 0 0 20px; accent-color: var(--green); margin: 3px 0 0; }
+/* Arc buttons retain their native behavior; this layout accommodates descriptive choices. */
+.report-category {justify-content:flex-start;width:100%;height:auto;min-height:72px;padding:14px 16px;text-align:left;}
+.report-category + .report-category {margin-top:10px;}
+.report-category-content {display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;white-space:normal;}
+.report-category-copy {display:grid;gap:3px;}
+.report-category-copy strong {font-size:16px;line-height:1.4;font-weight:600;}
+.report-category-copy > span {font-size:13px;line-height:1.5;color:var(--muted);font-weight:400;}
+.report-category[aria-pressed="true"] .report-category-copy > span {color:inherit;}
+.report-category-content > svg {flex-shrink:0;}
+.report-description {scroll-margin-top:112px;}
+.report-dictation {display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:12px;}
+.report-dictation > .report-help {flex:1;min-width:220px;font-size:12px;line-height:1.5;}
+.report-dictation-status {flex-basis:100%;font-size:14px;line-height:1.5;color:var(--green);}
 .report-service { font-size: 14px; margin: -8px 0 24px; color: var(--muted); }
 .report-aside { border-top: 1px solid var(--line); padding-top: 24px; }
 .report-aside h2 { font-size: 24px; line-height: 1.4; font-weight: 750; }
@@ -42,7 +42,8 @@
 .report-file-input { position: absolute; width: 1px; height: 1px; clip-path: inset(50%); overflow: hidden; }
 .report-honeypot { display: none; }
 .report-photo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
-.report-photo-open { display: block; text-decoration: underline; text-underline-offset: 4px; font-size: 14px; min-height: 44px; padding-top: 10px; }
+.report-photo-content { display: grid; gap: 8px; min-width: 0; width: 100%; }
+.report-photo-open { display: block; }
 .report-photo-grid:empty { display: none; }
 .report-photo-grid figure { margin: 16px 0 0; min-width: 0; }
 .report-photo-grid img { width: 100%; height: 180px; object-fit: contain; background: var(--pale); }
@@ -59,7 +60,6 @@
 .report-summary dt { color: var(--muted); font-size: 14px; margin-bottom: 4px; }
 .report-summary dd { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .report-coordinate-value { display: flex; gap: 6px; align-items: center; margin-top: 8px; font-size: 14px; }
-.report-consent { display: flex; gap: 12px; font-size: 14px; line-height: 1.7; align-items: start; }
 .report-receipt { max-width: 720px; display: flex; flex-direction: column; gap: 24px; }
 .report-receipt h2 { font-size: 32px; }
 .report-reference { font-weight: 750; overflow-wrap: anywhere; }
@@ -94,7 +94,7 @@
   .report-actions { gap: 10px; }
 }
 
-.report-photo-button { display: block; width: 100%; min-width: 0; text-align: left; border: 0; padding: 0; color: var(--green); background: transparent; }
+.report-photo-button { width: 100%; min-width: 0; }
 .report-photo-dialog { width: min(1000px, calc(100% - 32px)); max-height: 90vh; padding: 20px; border: 1px solid var(--line); border-radius: var(--radius-control); color: var(--green); background: var(--paper); }
 .report-photo-dialog::backdrop { background: rgb(0 0 0 / .4); }
 .report-photo-dialog h2 { font-size: 24px; }

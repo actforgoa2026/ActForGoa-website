@@ -1,0 +1,11 @@
+{
+  "asset": "goa-stippled-landscape.webp",
+  "kind": "generated decorative illustration",
+  "createdOn": "2026-10-29",
+  "tool": "OpenAI built-in image_gen",
+  "sourceOutput": "/Users/zakkrevitt/.codex/generated_images/01a18873-45cb-7063-8333-934e97568132/exec-3ed2878c-71f0-4f75-b3ae-e1f61b9eeffd.png",
+  "userDirection": "Reinterpret the original ActForGoa footer landscape in an elegant stippled style.",
+  "prompt": "Use case: illustration-story. Asset: a very wide ornamental landscape illustration for the footer of the ActForGoa community website. Create an elegant hand-drawn Indian ink stippling and fine pointillist engraving of a Goan village and countryside, a low panoramic horizon with rolling land, native tropical trees, a modest white Goan church, a small mosque and a small Hindu temple with village houses between, two grazing cows, coastal coconut palms and a sailboat near the shore. Reinterpret the old solid silhouette as refined, airy, delicate stippled illustration. Forest-green ink only (#193e32), on a completely flat warm cream background (#f7f6ee). The panorama should stretch nearly edge-to-edge across a wide 3:1 canvas, with landscape occupying the lower middle band and generous empty cream sky. Finely drawn, organic, calm and mature editorial illustration. No words, no lettering, no border, no UI, no gradient, no logos, no people close-ups. The bottom of the illustration must dissolve into sparse dots then the same cream paper; no hard rectangular frame. This is a decorative cultural landscape, not a map.",
+  "processing": "Converted to WebP at quality 88; original composition retained.",
+  "usage": "Decorative footer panorama; not documentary evidence or a representation of one actual place."
+}

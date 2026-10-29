@@ -22,6 +22,8 @@
     "start:reports": "node --import tsx server/reporting.ts",
     "dev:web": "vite --host 127.0.0.1",
     "release:review": "node scripts/deploy-review.mjs",
+    "dev:full": "node scripts/dev-full.mjs",
+    "dev:check": "node scripts/check-dev.mjs",
     "dev:satellite": "node --import tsx scripts/dev-satellite.mjs"
   },
   "dependencies": {

@@ -1,0 +1,112 @@
+{
+  "checks": [
+    {
+      "label": "desktop overview",
+      "width": 1440,
+      "scroll": 1440,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "desktop chapters",
+      "width": 1440,
+      "scroll": 1440,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "desktop detail",
+      "width": 1440,
+      "scroll": 1440,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "source details",
+      "width": 1440,
+      "scroll": 1440,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "390 overview",
+      "width": 390,
+      "scroll": 390,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "390 detail",
+      "width": 390,
+      "scroll": 390,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "mobile health",
+      "width": 390,
+      "scroll": 390,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "320 overview",
+      "width": 320,
+      "scroll": 320,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "320 detail",
+      "width": 320,
+      "scroll": 320,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "768 overview",
+      "width": 768,
+      "scroll": 768,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "768 detail",
+      "width": 768,
+      "scroll": 768,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "mobile chapters",
+      "width": 390,
+      "scroll": 390,
+      "italics": [],
+      "sideflags": []
+    },
+    {
+      "label": "mobile source",
+      "width": 390,
+      "scroll": 390,
+      "italics": [],
+      "sideflags": []
+    }
+  ],
+  "errors": [],
+  "journeys": [
+    "topic search and clear",
+    "shared query URL",
+    "back restores search",
+    "clipboard copies question and source",
+    "chapter search and expansion",
+    "exact source page anchor",
+    "records template opens",
+    "library entry",
+    "catalogue SAPCC search",
+    "unavailable topic",
+    "mobile topic navigation",
+    "keyboard search clear",
+    "PDF-independent route with failed catalogue"
+  ],
+  "passed": true
+}

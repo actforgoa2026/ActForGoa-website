@@ -6,7 +6,7 @@
 .satellite-question{display:grid;gap:16px;margin-block:28px;justify-items:start}
 .satellite-question>div{width:100%}
 .satellite-controls{border:0;padding:0;margin:32px 0;min-width:0;display:grid;gap:20px}
-.satellite-controls legend{font-size:24px;font-weight:750;margin-bottom:20px}
+.satellite-controls legend{font-size:24px;font-weight:650;margin-bottom:20px}
 .satellite-map{height:390px;background:var(--pale);z-index:0;border:1px solid var(--line);font-family:inherit}
 .satellite-map-toolbar{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px}
 .satellite-map-toolbar p{font-size:14px;margin:0;flex:1;min-width:180px}
@@ -24,19 +24,19 @@
 .satellite-pair figcaption{display:grid;gap:6px;font-size:14px;padding-top:12px;overflow-wrap:anywhere}
 .satellite-pair figcaption strong{font-size:18px}
 .satellite-assessments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
-.satellite-assessments dt{text-transform:capitalize;font-weight:750}.satellite-assessments dd{margin:6px 0 0}
+.satellite-assessments dt{text-transform:capitalize;font-weight:650}.satellite-assessments dd{margin:6px 0 0}
 .satellite-table{overflow-x:auto}.satellite-table table{border-collapse:collapse;width:100%;font-size:14px;margin-top:16px}.satellite-table th,.satellite-table td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}
-.satellite-results summary{cursor:pointer;min-height:44px;padding-block:12px;font-weight:750}
-.satellite-page a{color:var(--green);text-underline-offset:4px}.satellite-context>a{display:inline-block;padding-block:12px;font-weight:750}
+.satellite-results summary{cursor:pointer;min-height:44px;padding-block:12px;font-weight:650}
+.satellite-page a{color:var(--green);text-underline-offset:4px}.satellite-context>a{display:inline-block;padding-block:12px;font-weight:650}
 .satellite-page fieldset:disabled .satellite-map{pointer-events:none}
 .satellite-history{margin-block:32px;padding-block:24px;border-block:1px solid var(--line)}.satellite-history h2{font-size:28px;margin-top:0}.satellite-history p{line-height:1.7}.satellite-history form{display:grid;gap:16px;justify-items:start}.satellite-history form>.satellite-dates{width:100%}.satellite-history-list{padding:0;list-style:none;margin:24px 0 0}.satellite-history-list li{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:20px;border-top:1px solid var(--line)}.satellite-history-list li>div{min-width:0;overflow-wrap:anywhere}.satellite-history-list h3{font-size:18px;line-height:1.5;margin:4px 0}.satellite-history-list p{margin:4px 0;font-size:14px}.satellite-history-list button{flex-shrink:0}.satellite-history-topic{color:var(--muted)}.satellite-history-pages{display:flex;gap:16px;flex-wrap:wrap}.satellite-library{margin-top:32px}.satellite-library article{padding-block:20px;border-top:1px solid var(--line)}.satellite-library h4{font-size:18px;line-height:1.5;margin:0}.satellite-excerpt{white-space:pre-line;overflow-wrap:anywhere}.satellite-freshness{background:var(--pale);padding:16px;font-size:14px;line-height:1.7}.satellite-freshness p{margin:0 0 8px}.satellite-results{scroll-margin-top:100px}
 @media(max-width:620px){.satellite-history-list li{align-items:flex-start;flex-direction:column;gap:12px}.satellite-history h2{font-size:24px}}
-.satellite-answer{max-width:78ch}.satellite-evidence-links{display:inline-flex;gap:10px;flex-wrap:wrap;font-size:12px}.satellite-presence{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding-block:16px;border-block:1px solid var(--line)}.satellite-presence dt{font-size:14px;line-height:1.6}.satellite-presence dd{margin:8px 0 0;font-size:24px;font-weight:750}.satellite-results [id]{scroll-margin-top:100px}
+.satellite-answer{max-width:78ch}.satellite-evidence-links{display:inline-flex;gap:10px;flex-wrap:wrap;font-size:12px}.satellite-presence{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding-block:16px;border-block:1px solid var(--line)}.satellite-presence dt{font-size:14px;line-height:1.6}.satellite-presence dd{margin:8px 0 0;font-size:24px;font-weight:650}.satellite-results [id]{scroll-margin-top:100px}
 @media(max-width:620px){.satellite-page{padding-block:24px 48px}.satellite-map{height:320px}.satellite-coordinates{grid-template-columns:repeat(2,minmax(0,1fr))}.satellite-pair,.satellite-assessments{grid-template-columns:1fr}.satellite-dates{grid-template-columns:minmax(0,1fr)}.satellite-heading p{font-size:16px}}
 
-.satellite-workbench{margin-block:28px;border-block:1px solid var(--line);padding-block:20px}.satellite-workbench .satellite-map{height:min(60vh,600px);min-height:340px}.satellite-workbench .satellite-map-toolbar{margin:0 0 16px}.satellite-map-caption{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;justify-content:space-between}.satellite-map-caption label{display:flex;align-items:center;gap:12px;font-size:14px}.satellite-map-caption input{width:100px;min-height:44px;accent-color:var(--green)}.satellite-timeline{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}.satellite-timeline-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.satellite-timeline-title h3{font-size:22px;margin:0 0 12px}.satellite-timeline-title span{font-size:13px;color:var(--muted)}.satellite-timeline>label{font-size:18px;font-weight:750;display:block}.satellite-timeline>input{width:100%;min-height:44px;accent-color:var(--green)}.satellite-timeline-ends{display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted)}.satellite-timeline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.satellite-timeline p{font-size:14px;line-height:1.6}.satellite-coordinate-details summary{cursor:pointer;min-height:44px;font-weight:650}.satellite-coordinate-details .satellite-coordinates{margin-bottom:16px}.satellite-workbench .leaflet-container{font-family:inherit}.satellite-workbench .leaflet-control-attribution{font-size:10px;max-width:100%;white-space:normal}@media(max-width:620px){.satellite-workbench .satellite-map{height:430px;min-height:300px}.satellite-map-toolbar{gap:12px}.satellite-timeline-ends span{max-width:45%}.satellite-timeline-ends span:last-child{text-align:right}.satellite-map-caption label{width:100%}.satellite-map-caption input{flex:1}.satellite-timeline-title{align-items:baseline}}
+.satellite-workbench{margin-block:28px;border-block:1px solid var(--line);padding-block:20px}.satellite-workbench .satellite-map{height:min(60vh,600px);min-height:340px}.satellite-workbench .satellite-map-toolbar{margin:0 0 16px}.satellite-map-caption{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;justify-content:space-between}.satellite-map-caption label{display:flex;align-items:center;gap:12px;font-size:14px}.satellite-map-caption input{width:100px;min-height:44px;accent-color:var(--green)}.satellite-timeline{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}.satellite-timeline-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.satellite-timeline-title h3{font-size:22px;margin:0 0 12px}.satellite-timeline-title span{font-size:13px;color:var(--muted)}.satellite-timeline>label{font-size:18px;font-weight:650;display:block}.satellite-timeline>input{width:100%;min-height:44px;accent-color:var(--green)}.satellite-timeline-ends{display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted)}.satellite-timeline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.satellite-timeline p{font-size:14px;line-height:1.6}.satellite-coordinate-details summary{cursor:pointer;min-height:44px;font-weight:650}.satellite-coordinate-details .satellite-coordinates{margin-bottom:16px}.satellite-workbench .leaflet-container{font-family:inherit}.satellite-workbench .leaflet-control-attribution{font-size:10px;max-width:100%;white-space:normal}@media(max-width:620px){.satellite-workbench .satellite-map{height:430px;min-height:300px}.satellite-map-toolbar{gap:12px}.satellite-timeline-ends span{max-width:45%}.satellite-timeline-ends span:last-child{text-align:right}.satellite-map-caption label{width:100%}.satellite-map-caption input{flex:1}.satellite-timeline-title{align-items:baseline}}
 
-/* Map-first workspace. Arc controls and shadcn context switches share the site's tokens. */
+/* Map-first workspace. Arc controls and context switches share the site's tokens. */
 .satellite-page.shell{max-width:none;width:calc(100% - 48px);padding-block:24px 48px}
 .satellite-heading{display:flex;align-items:baseline;gap:24px;flex-wrap:wrap;margin-bottom:20px}
 .satellite-heading h1{font-size:28px;margin:0;line-height:1.25}
@@ -55,7 +55,6 @@
 .satellite-workbench .satellite-map{height:calc(100svh - 290px);min-height:420px;max-height:1000px;border:0}
 .satellite-draw-surface{position:absolute;inset:0 0 26px;z-index:450;touch-action:none;cursor:crosshair;outline-offset:-4px}
 .satellite-map-zoom{position:absolute;top:16px;right:16px;z-index:500;display:grid;gap:6px}
-.satellite-map-zoom button{background:var(--paper,#f8f7ef);box-shadow:0 2px 8px #193e3214}
 .satellite-map-bottom{position:absolute;bottom:32px;left:16px;right:16px;z-index:500;display:flex;gap:16px;justify-content:space-between;align-items:flex-end;pointer-events:none}
 .satellite-map-bottom p{margin:0;background:var(--paper,#f8f7ef);border:1px solid var(--line);border-radius:10px;padding:10px 14px;font-size:14px;max-width:58ch;line-height:1.5;box-shadow:0 2px 8px #193e3214}
 .satellite-map-bottom button{pointer-events:auto;flex-shrink:0;background:var(--paper,#f8f7ef)}
@@ -68,7 +67,6 @@
 .satellite-place-results button span{max-width:100%;white-space:normal;overflow-wrap:anywhere}
 .satellite-search-credit{color:var(--muted);margin-top:12px!important}
 .satellite-map-section .amche-layers{margin-block:8px 0;border:0;padding-block:0}
-.satellite-map-section .amche-layer-option .ui-checkbox{margin-top:3px;flex-shrink:0;border-radius:4px}
 .satellite-map-expanded{position:fixed;inset:0;z-index:1000;background:var(--paper,#f8f7ef);padding:16px;display:flex;flex-direction:column;overflow:auto}
 .satellite-map-expanded .satellite-map-canvas{flex:1;min-height:300px}
 .satellite-map-expanded .satellite-map{height:100%;min-height:300px;max-height:none}
@@ -93,17 +91,17 @@
 .satellite-workbench h2{margin-top:0;font-size:24px}.satellite-job{padding:20px;background:var(--pale);margin-block:20px;overflow-wrap:anywhere}.satellite-job button{margin:0 12px 8px 0}.satellite-planner{margin-block:24px}.satellite-planner>summary{min-height:44px;padding-block:12px;cursor:pointer;font-weight:650}.satellite-score{display:block;margin-top:8px;font-size:13px;color:var(--muted);line-height:1.6}.satellite-page code{overflow-wrap:anywhere}
 
 .satellite-page>.satellite-evidence,.satellite-page>.satellite-planner,.satellite-page>.satellite-job,.satellite-page>.satellite-limitations{max-width:1120px;margin-inline:auto}
+
 .satellite-environment{margin-block:2rem;padding-block:1rem;border-block:1px solid var(--line,#d9ded5)}
-.satellite-environment summary{cursor:pointer;font-weight:750;padding-block:.5rem}
+.satellite-environment summary{cursor:pointer;font-weight:650;padding-block:.5rem}
 .satellite-environment p{max-width:72ch}
 .satellite-environment-actions{display:flex;align-items:center;flex-wrap:wrap;gap:1rem}
 .satellite-environment-actions a{padding-block:.75rem}
 .satellite-environment-readings{display:flex;flex-wrap:wrap;gap:1.5rem 3rem;margin-block:1.5rem}
-.satellite-environment-readings dt{font-weight:750;margin-bottom:.35rem}
+.satellite-environment-readings dt{font-weight:650;margin-bottom:.35rem}
 .satellite-environment-readings dd{margin:0}
 .satellite-environment-readings small{display:block;margin-top:.4rem}
 .satellite-google-credit{font-family:Arial,sans-serif;font-size:14px;font-weight:500;color:#1f1f1f;white-space:nowrap}
 
 .satellite-map-loading{position:absolute;inset:0;z-index:501;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:32px;background:var(--paper);text-align:center}.satellite-map-loading p{max-width:45ch;line-height:1.6;margin:0}
-
 .satellite-map-date{display:block;margin-bottom:4px;font-weight:650}

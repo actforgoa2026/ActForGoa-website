@@ -1,7 +1,8 @@
+import {installExternalLinks} from './external-links';
 import React from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import "@fontsource-variable/manrope";
+import "@fontsource-variable/figtree";
 import "./components/arc/foundation.css";
 import "./styles.css";
 import App from "./App";
@@ -34,3 +35,6 @@ createRoot(document.getElementById("root")!).render(
     <LanguageProvider><CurationProvider><TeamAccessProvider><RouterProvider router={router} /></TeamAccessProvider></CurationProvider></LanguageProvider>
   </React.StrictMode>,
 );
+
+const stopExternalLinks = installExternalLinks(document.getElementById('root')!);
+if (import.meta.hot) import.meta.hot.dispose(stopExternalLinks);

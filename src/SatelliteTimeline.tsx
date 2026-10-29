@@ -1,3 +1,4 @@
+import {Slider} from './components/arc/slider/slider';
 import {Button} from './components/arc/button/button';
 import type {SatelliteObservation,SatelliteScene} from './satellite-api';
 import {observationDate as dateLabel} from './SatelliteHistory';
@@ -10,9 +11,8 @@ export function SatelliteTimeline({scenes,activeId,onSelect,observations,onLoad,
   const index=Math.max(0,scenes.findIndex(s=>s.id===activeId)),scene=scenes[index],observation=observations[scene.id];
   return <section className="satellite-timeline" aria-label="Observation timeline">
     <div className="satellite-timeline-title"><h3>Move through time</h3><span>{index+1} of {scenes.length} acquisitions</span></div>
-    <label htmlFor="observation-time">{dateLabel(scene.acquired_at)}</label>
-    <input id="observation-time" type="range" min="0" max={Math.max(0,scenes.length-1)} step="1" value={index} disabled={busy||scenes.length<2}
-      aria-valuetext={dateLabel(scene.acquired_at)} onChange={e=>onSelect(scenes[Number(e.target.value)].id)}/>
+    <Slider label="Observation date" min={0} max={Math.max(1,scenes.length-1)} step={1} value={index} disabled={busy||scenes.length<2}
+      format={value=>dateLabel(scenes[Math.min(value,scenes.length-1)].acquired_at)} onValueChange={value=>onSelect(scenes[value].id)}/>
     <div className="satellite-timeline-ends"><span>{dateLabel(scenes[0].acquired_at)}</span><span>{dateLabel(scenes.at(-1)!.acquired_at)}</span></div>
     <div className="satellite-timeline-actions">
       <Button type="button" variant="secondary" disabled={busy||index===0} onClick={()=>onSelect(scenes[index-1].id)}>Earlier</Button>

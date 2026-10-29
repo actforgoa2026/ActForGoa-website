@@ -34,7 +34,7 @@ const adminHandler=admin.listeners('request')[0];
 const email='local-satellite@localhost.test',password=randomBytes(32).toString('hex');
 await store.provision(email,'Local satellite workspace',password,'editor');
 let session=await store.login(email,password,null);
-const vite=await createViteServer({configFile:resolve(root,'vite.satellite.config.ts'),server:{host:'127.0.0.1',middlewareMode:true,watch:{ignored:['**/dist/**','**/dist-server/**','**/dist-api/**','**/.reports/**']},hmr:{port:4177,host:'127.0.0.1'}},appType:'custom'});
+const vite=await createViteServer({mode:'satellite',configFile:resolve(root,'vite.satellite.config.ts'),server:{host:'127.0.0.1',middlewareMode:true,watch:{ignored:['**/dist/**','**/dist-server/**','**/dist-api/**','**/.reports/**']},hmr:{port:4177,host:'127.0.0.1'}},appType:'custom'});
 const server=createHttpServer(async(req,res)=>{
   const path=new URL(req.url||'/',origin).pathname;
   const navigation=req.method==='GET'&&req.headers['sec-fetch-mode']==='navigate'&&['/','/map','/admin'].includes(path);

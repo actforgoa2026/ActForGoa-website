@@ -5,11 +5,12 @@ import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
-import {Switch} from './components/ui/switch';
-import {Checkbox} from './components/ui/checkbox';
+import {Switch} from './components/arc/switch/switch';
+import {Checkbox} from './components/arc/checkbox/checkbox';
 import {templates} from './template-catalogue';
 import {templatePurpose} from './template-path';
 import {blockVisible, emptyDraft, fillTemplate, restoreDraft, tableFields, tableRowIds, templateNote, visibleFields, type Draft, type Field, type TableBlock, type Template} from './template-model';
+import RecipientGuide from './RecipientGuide';
 import './template-editor.css';
 
 const draftsInThisTab = new Map<string, Draft>();
@@ -104,8 +105,10 @@ function Editor({template}: {template: (typeof templates)[number]}) {
   setSaveOnDevice(enabled);
  }
  function fieldControl(field: Field) {
-  const common = {id: field.id, label: field.label, value: draft.values[field.id] || '', onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => updateField(field.id, event.target.value), description: field.hint || undefined, maxLength: 30000};
-  return field.multiline ? <Textarea key={field.id} {...common} rows={3} /> : <Input key={field.id} {...common} type={field.date ? 'date' : 'text'} />;
+  const common = {id: field.id, label: field.label, value: draft.values[field.id] || '', onChange: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => updateField(field.id, event.target.value), description: field.label === 'To' ? undefined : field.hint || undefined, maxLength: 30000};
+  const control = field.multiline ? <Textarea {...common} rows={3} /> : <Input {...common} type={field.date ? 'date' : 'text'} />;
+  const recipient = field.label === 'To' || (/^0[34]-/.test(template.id) && field.hint === 'Public authority and address');
+  return <div className="template-field" key={field.id}>{control}{recipient && <RecipientGuide templateId={template.id} onChoose={value => updateField(field.id, value)}/>}</div>;
  }
  function addRow(block: TableBlock) {
   const rowId = crypto.randomUUID();
@@ -134,7 +137,7 @@ function Editor({template}: {template: (typeof templates)[number]}) {
      <summary><span>{title}</span><span className="entry-count">{completed} of {rowFields.length} filled</span></summary>
      <div className="template-fields">
       {rowFields.map(field => <div key={field.id}>
-       {/Status or not applicable/.test(field.label) && <label className="template-choice"><Checkbox checked={draft.values[field.id] === 'Confirmed'} onCheckedChange={checked => updateField(field.id, checked === true ? 'Confirmed' : '')}/><span>Confirmed with supporting evidence</span></label>}
+       {/Status or not applicable/.test(field.label) && <div className="template-choice"><Checkbox label="Confirmed with supporting evidence" checked={draft.values[field.id] === 'Confirmed'} onCheckedChange={checked => updateField(field.id, checked === true ? 'Confirmed' : '')}/></div>}
        {fieldControl(field)}
       </div>)}
       {block.repeatable && ids.length > 1 && <Button type="button" variant="ghost" onClick={() => removeRow(block, rowId)} aria-label={`Remove entry ${index + 1}`}><Trash2 size={16}/>Remove entry</Button>}
@@ -191,24 +194,24 @@ function Editor({template}: {template: (typeof templates)[number]}) {
   <Link className="back-link" to={returnTo || (back ? `/read/${back}` : '/library')}><ArrowLeft size={16}/>Back to {returnTo ? 'your next step' : back ? 'guide' : 'library'}</Link>
   <header className="template-heading">
    <h1>{template.label}</h1>
-   <p>Fill in this form here. Review it, then save a PDF when you need a copy.</p>
-   <p className="template-context">This is an ActForGoa draft, not an official application. Check the receiving office’s requirements before submitting.</p>
+   <p>Fill in the details, review your document, then save a PDF.</p>
+   <details className="template-context"><summary>About this draft</summary><p>This is an ActForGoa draft, not an official application. Check the receiving office’s requirements before submitting. Blank fields appear as “Not provided” in your document.</p></details>
   </header>
   <div className="template-toolbar">
-   <label className="template-toggle"><Switch checked={saveOnDevice} onCheckedChange={setSaving} aria-describedby="draft-storage-hint"/><span>Save draft on this device</span></label>
-   <p id="draft-storage-hint">{saveOnDevice && !storageError ? 'Saved in this browser. Anyone using this browser may be able to open it.' : 'Your entries stay in this tab until you close or refresh it. They are not sent to a server.'}</p>
+   <Switch label="Save draft locally" checked={saveOnDevice} onCheckedChange={setSaving} aria-describedby="draft-storage-hint"/>
+   <details className="template-storage"><summary>Privacy & storage</summary><p id="draft-storage-hint">{saveOnDevice && !storageError ? 'Saved in this browser. Anyone using this browser may be able to open it.' : 'Your entries stay in this tab until you close or refresh it. They are not sent to a server.'}</p></details>
    {storageError && <p role="alert">{storageError}</p>}
   </div>
   <div className="template-mobile-view"><SegmentedControl label="Template view" value={view} onValueChange={setView} options={[{value:'fill',label:'Fill in details'},{value:'preview',label:'Review & save'}]}/></div>
   <div className="template-layout" data-view={view}>
    <div className="template-form" ref={formRef}>
     <div className="template-section-title"><h2>Your details</h2><span>{answered} of {fields.length} fields filled</span></div>
-    <p className="template-help">Leave anything you do not know blank. It will appear as “Not provided”.</p>
+    <p className="template-help">Leave unknown details blank.</p>
     {template.blocks.some(b => b.group === 'support') && <div className="template-purpose"><h3>What is this enquiry about?</h3><SegmentedControl label="Enquiry purpose" value={draft.purpose} onValueChange={value => setDraft(d => ({...d, purpose:value as Draft['purpose']}))} options={[{value:'support',label:'Support before spending'},{value:'damage',label:'Report damage'}]}/></div>}
     <div className="template-fields">
      {template.blocks.map(block => {
-      if (block.kind === 'heading' && block.group === 'handover') return <Fragment key={block.id}><label className="template-toggle option-toggle"><Switch checked={draft.handover} onCheckedChange={value => setDraft(d => ({...d, handover:value}))}/><span>Include a handover record<small>For an animal accepted into someone’s care.</small></span></label>{draft.handover && <h3 className="template-subheading">{block.text}</h3>}</Fragment>;
-      if (block.kind === 'heading' && block.group === 'secondPoint') return <Fragment key={block.id}><label className="template-toggle option-toggle"><Switch checked={draft.secondPoint} onCheckedChange={value => setDraft(d => ({...d, secondPoint:value}))}/><span>Include a second consultation point</span></label>{draft.secondPoint && <h3 className="template-subheading">{block.text}</h3>}</Fragment>;
+      if (block.kind === 'heading' && block.group === 'handover') return <Fragment key={block.id}><div className="option-toggle"><Switch label="Include a handover record" checked={draft.handover} onCheckedChange={value => setDraft(d => ({...d, handover:value}))} aria-describedby="handover-help"/><p id="handover-help" className="template-help">For an animal accepted into someone’s care.</p></div>{draft.handover && <h3 className="template-subheading">{block.text}</h3>}</Fragment>;
+      if (block.kind === 'heading' && block.group === 'secondPoint') return <Fragment key={block.id}><div className="option-toggle"><Switch label="Include a second consultation point" checked={draft.secondPoint} onCheckedChange={value => setDraft(d => ({...d, secondPoint:value}))}/></div>{draft.secondPoint && <h3 className="template-subheading">{block.text}</h3>}</Fragment>;
       if (!blockVisible(block, draft)) return null;
       if (block.kind === 'table') return tableEditor(block);
       if (block.kind === 'heading') return <h3 className="template-subheading" key={block.id}>{block.text}</h3>;
@@ -216,7 +219,7 @@ function Editor({template}: {template: (typeof templates)[number]}) {
        const index = choices.findIndex(b => b.id === block.id);
        return <section className="template-record-choice" key={block.id}>
         {index === 0 && <><h3>Which records do you need?</h3><p className="template-help">Select the requests that apply to your case.</p></>}
-        <label className="template-choice"><Checkbox checked={draft.choices[block.choice] || false} onCheckedChange={checked => setDraft(d => ({...d, choices:{...d.choices, [block.choice!]:checked === true}}))}/><span>{recordLabels[index]}</span></label>
+        <div className="template-choice"><Checkbox label={recordLabels[index]} checked={draft.choices[block.choice] || false} onCheckedChange={checked => setDraft(d => ({...d, choices:{...d.choices, [block.choice!]:checked === true}}))}/></div>
         {draft.choices[block.choice] && <div className="template-fields"><p className="template-help">{block.text.replace(/\[[^\]]*\]/g, '…')}</p>{block.fields.map(fieldControl)}</div>}
        </section>;
       }

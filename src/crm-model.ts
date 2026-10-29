@@ -37,7 +37,7 @@ export function safeUrl(value: string) {
 export function today() { return new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Kolkata', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date()); }
 export function isDue(note: CRMNote | undefined, date = today()) { return !!note?.followUp && note.followUp <= date && !['closed', 'do_not_contact'].includes(note.stage); }
 export type Filters = { q: string; collection: string; type: string; focus: string; location: string; activity: string; verification: string; contact: string; stage: string; due: boolean; sort: string };
-export const collections = { community: 'Community', government: 'Government', opportunities: 'Participation', all: 'All records' };
+export const collections = { community: 'People & groups', government: 'Government', opportunities: 'Participation', all: 'All records' };
 export const contactLabels = { phone: 'Has a phone', email: 'Has an email', missing: 'No phone or email' };
 export function filtersFrom(params: URLSearchParams): Filters {
   const choice = (key: string, values: Record<string, unknown>, fallback = '') => {

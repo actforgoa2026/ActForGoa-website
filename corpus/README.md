@@ -8,6 +8,8 @@ This is an evidence collection. It is not a consolidated statement of current la
 
 ## Start here
 
+- `../docs/climate/README.md`: Goa SAPCC 2023–2033 original PDF, provenance, resident reading guide and source map behind `/climate-plan`. Added 29 October 2026; the earlier snapshot counts are unchanged. Scanned committee minutes remain flagged for visual/OCR review.
+
 - `guides/README.md`: five practical guides covering reporting, building, farming, animal welfare and environmental protection, 17 reusable templates, sources and a verification register.
 
 - `research/GAP_ANALYSIS.md`: comparison with the fuller Act for Goa website archive, ranked practical-guide gaps and an editorial work plan.

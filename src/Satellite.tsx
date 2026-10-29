@@ -1,3 +1,4 @@
+import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Link} from 'react-router-dom';
 import {Button} from './components/arc/button/button';
@@ -7,7 +8,7 @@ import {adminApi,AdminApiError,type AdminSession} from './admin-api';
 import {satelliteApi,SatelliteApiError,type SatelliteArea,type SatelliteScene,type SatellitePlan,type SatelliteResult,type SatelliteIntent,type SatelliteRequest,type SatelliteObservation} from './satellite-api';
 import {SatelliteHistory,satelliteIntents as intents,observationDate as dateLabel} from './SatelliteHistory';
 import {SatelliteContext} from './SatelliteContext';
-import {SatelliteMap} from './SatelliteMap';
+import {SatelliteMap,satelliteMapProvider} from './SatelliteMap';
 import {SatelliteEnvironment} from './SatelliteEnvironment';
 import {SatelliteEvidence} from './SatelliteEvidence';
 import {pollSatelliteJob,pendingJobKey,validJobId,sameImageryContext,cacheObservations} from './satellite-jobs';
@@ -16,7 +17,6 @@ import {SatelliteDatePicker} from './SatelliteDatePicker';
 import type {SatellitePreview} from './satellite-api';
 import {areaError,orderedPair,orderedScenes,suggestedPair} from './satellite-timeline';
 import './satellite.css';
-import '@fontsource-variable/figtree';
 import './satellite-layout.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
@@ -50,7 +50,7 @@ export default function Satellite(){
   const [preview,setPreview]=useState<SatellitePreview|null>(null),[previewBusy,setPreviewBusy]=useState(false),[previewError,setPreviewError]=useState('');
   const [previewPeriod,setPreviewPeriod]=useState(()=>({start,end,revision:0}));
   useEffect(()=>{
-    if(!session||!readiness?.imagery_ready||readiness.imagery_provider!=='earth-engine'){setPreview(null);return;}
+    if(satelliteMapProvider!=='google'||!session||!readiness?.imagery_ready||readiness.imagery_provider!=='earth-engine'){setPreview(null);return;}
     const abort=new AbortController();setPreviewBusy(true);setPreviewError('');
     satelliteApi<SatellitePreview>('/preview',session.csrfToken,{start_date:previewPeriod.start,end_date:previewPeriod.end},abort.signal)
       .then(value=>{if(!abort.signal.aborted)setPreview(value);})
@@ -190,7 +190,7 @@ export default function Satellite(){
   const periodError=!start||!end||!Number.isFinite(periodDays)||periodDays<0?'Choose an ordered start and end date.':start<'2017-03-28'||end>today()?'Choose dates from 28 March 2017 through today.':periodDays>120?'New imagery searches cover up to 120 days. Use a shorter period; saved-evidence search below can span longer periods.':'';
   const findReason=!authChecked?'Checking your access…':accessError?'Retry the access check to enable imagery.':!session?'Sign in to retrieve imagery.':!readiness?.imagery_ready?'Earth Engine imagery is not available on this server.':!area?'Select an area on the map first.':periodError;
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
-  return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa with Earth Engine</h1><p>Choose a period. Draw an area to load its satellite imagery.</p></header>
+  return <main className="satellite-page shell"><header className="satellite-heading"><h1>{satelliteMapProvider==='google'?'Explore Goa with Earth Engine':'Explore Goa through time'}</h1><p>Choose a period. Draw an area to load its satellite imagery.</p></header>
     {!authChecked&&<p role="status">Checking satellite access…</p>}
     {accessError&&<div className="satellite-access" role="alert"><p>{accessError}</p><Button type="button" variant="secondary" disabled={!authChecked} onClick={()=>setAccessRevision(v=>v+1)}>Retry access check</Button><p><a href="https://satellite-app-production.up.railway.app/map">Open the standalone satellite workspace</a></p></div>}
     {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until the imagery provider is connected. You can explore the map and open saved results.</p>}
@@ -215,8 +215,8 @@ export default function Satellite(){
     <fieldset className="satellite-controls" disabled={!!busy||!!pendingJob}><legend>Analyse change</legend>
       <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
       <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
-      <div className="satellite-dates"><label>Investigate<select value={intent} onChange={e=>{setIntent(e.target.value as SatelliteIntent);setResult(null);setPlan(null);}}>{Object.entries(intents).map(([v,l])=><option value={v} key={v}>{l}</option>)}</select></label></div>
-      {!!scenes.length&&<><div className="satellite-dates">{(['Before','After'] as const).map(label=><label key={label}>{label} observation<select value={label==='Before'?before:after} onChange={e=>{(label==='Before'?setBefore:setAfter)(e.target.value);setResult(null);}}><option value="">Choose an acquisition</option>{scenes.map(s=><option key={s.id} value={s.id}>{dateLabel(s.acquired_at)} · scene cloud {s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}</option>)}</select></label>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse change with AI</Button><Button type="button" variant="ghost" disabled={!suggestedPair(scenes)} onClick={()=>{const pair=suggestedPair(scenes);if(pair){setBefore(pair[0]);setAfter(pair[1]);setResult(null);}}}>Suggest clearer pair</Button><p className="satellite-note">Suggestions use scene cloud cover; AI runs only when the selected area is clear enough on both dates.</p>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      <div className="satellite-dates"><MorphSelect label="Investigate" value={intent} disabled={!!busy||!!pendingJob} onValueChange={value=>{setIntent(value as SatelliteIntent);setResult(null);setPlan(null);}} items={Object.entries(intents).map(([value,label])=>({value,label}))}/></div>
+      {!!scenes.length&&<><div className="satellite-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy||!!pendingJob} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${dateLabel(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse change with AI</Button><Button type="button" variant="ghost" disabled={!suggestedPair(scenes)} onClick={()=>{const pair=suggestedPair(scenes);if(pair){setBefore(pair[0]);setAfter(pair[1]);setResult(null);}}}>Suggest clearer pair</Button><p className="satellite-note">Suggestions use scene cloud cover; AI runs only when the selected area is clear enough on both dates.</p>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
       <Button type="button" variant="ghost" onClick={()=>findScenes()} disabled={!!findReason||!!pendingJob}>Reload area imagery</Button>{findReason&&<p role="status">{findReason}</p>}
 
       <details className="satellite-catalog-notes"><summary>Acquisition availability</summary>{notice&&<p role="status">{notice}</p>}
@@ -243,7 +243,7 @@ export default function Satellite(){
       </aside>
     </div>
     {authChecked&&!session&&!accessError&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
-    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">Place search sends your submitted search terms and the Goa search boundary to Google Maps. Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
+    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">{satelliteMapProvider==='google'?'Place search sends your submitted search terms and the Goa search boundary to Google Maps.':'Place search sends your submitted search terms to Photon, an OpenStreetMap search service.'} Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
     <details className="satellite-planner"><summary>Optional: prepare dates and topic from a question</summary>    <form className="satellite-question" onSubmit={ask}><Textarea label="Describe the investigation to prepare" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Compare canopy here during the last month"/>
       <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
       {session&&readiness&&!readiness.planner_ready&&<p className="satellite-note">Question interpretation is unavailable on this server. Use the date and topic controls above to compare imagery.</p>}</form>

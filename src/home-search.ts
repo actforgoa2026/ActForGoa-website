@@ -60,6 +60,8 @@ export function homeSearchDestination(query: string): string | null {
   // A bite or emergency request must not disappear into wildlife browsing.
   if (showEmergencyShortcut(q)) return '/emergency';
 
+  if (/\b(sapcc|climate (?:action )?plan|state action plan (?:on|for) climate change)\b/.test(q)) return '/climate-plan';
+
   const exact = topicFlows.find(flow => [flow.label, flow.topic].some(label => normalize(label) === q));
   if (exact) return topicHref(exact.topic);
 

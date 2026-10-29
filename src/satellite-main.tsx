@@ -1,7 +1,8 @@
+import {installExternalLinks} from './external-links';
 import {StrictMode, useEffect, useState, type FormEvent} from 'react';
 import {createRoot} from 'react-dom/client';
 import {BrowserRouter, Link, Navigate, Route, Routes, useLocation, useNavigate} from 'react-router-dom';
-import '@fontsource-variable/manrope';
+import '@fontsource-variable/figtree';
 import './components/arc/foundation.css';
 import './styles.css';
 import './satellite-standalone.css';
@@ -25,3 +26,6 @@ function Account(){
 }
 function App(){const location=useLocation();return <><SiteHeader variant="simple" brand={{name:'actforgoa.',href:'/map'}} items={[{value:'map',label:'Satellite map',href:'/map'}]} current={location.pathname==='/map'?'map':''} secondaryAction={{label:'Account',href:'/admin'}} primaryAction={null}/><Routes><Route path="/map" element={<Satellite/>}/><Route path="/admin" element={<Account/>}/><Route path="*" element={<Navigate to="/map" replace/>}/></Routes><footer className="satellite-standalone-footer shell"><p>ActForGoa satellite workspace · Experimental selected-area investigations.</p></footer></>;}
 createRoot(document.getElementById('root')!).render(<StrictMode><BrowserRouter><App/></BrowserRouter></StrictMode>);
+
+const stopExternalLinks = installExternalLinks(document.getElementById('root')!);
+if (import.meta.hot) import.meta.hot.dispose(stopExternalLinks);

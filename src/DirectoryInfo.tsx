@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import './directory.css';
 import { Link, useLocation } from 'react-router-dom';
+import { ButtonLink } from './components/arc/button/button-link';
 import { ListingIcon, ListingLink, listingLinkKind } from './ListingLink';
 import { directoryLinks, directoryMapUrl, directoryTags } from './directory';
 import type { DirectoryDetails, RecordItem } from './types';
 
 export function DirectoryTags({ record }: { record: RecordItem }) {
   return <div className="directory-tags" aria-label="Areas of work">
-    {directoryTags(record).slice(0, 3).map(tag => <Link key={tag} to={`/directory/archive?tag=${encodeURIComponent(tag)}`}>{tag}</Link>)}
+    {directoryTags(record).slice(0, 3).map(tag => <ButtonLink wrap variant="secondary" size="sm" key={tag} to={`/directory/archive?tag=${encodeURIComponent(tag)}`}>{tag}</ButtonLink>)}
   </div>;
 }
 

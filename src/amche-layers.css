@@ -2,8 +2,6 @@
 .amche-layers summary{cursor:pointer;font-weight:750;min-height:36px;display:list-item;padding-block:6px}
 .amche-layers p{margin:8px 0;overflow-wrap:anywhere}
 .amche-layer-options{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-block:16px}
-.amche-layer-option{min-width:0}.amche-layer-option label{display:flex;align-items:flex-start;gap:10px;cursor:pointer;font-weight:700;min-height:44px}
-.amche-layer-option input{width:20px;height:20px;flex:0 0 20px;margin:3px 0 0;accent-color:var(--green,#193e32)}
-.amche-layer-option small{display:block;font-size:12px;font-weight:400;color:var(--muted,#5d6b60)}
+.amche-layer-option{min-width:0}
 .amche-layer-status:empty{display:none}.amche-layer-status{font-weight:650}.amche-layer-credit{color:var(--muted,#5d6b60)}
 @media(max-width:620px){.amche-layer-options{grid-template-columns:minmax(0,1fr);gap:16px}}

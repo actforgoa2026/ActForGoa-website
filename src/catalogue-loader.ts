@@ -1,11 +1,12 @@
 import type { RecordItem } from './types';
 import { publicCatalogue } from './public-record';
+import { climatePlanRecord } from './climate-plan';
 
 export function needsCatalogue(pathname: string): boolean {
   const path = pathname.replace(/\/$/, '') || '/';
   return ['/', '/search', '/directory/archive', '/library', '/stories', '/blog', '/blog/archive', '/about'].includes(path)
     || path.startsWith('/topics/')
-    || /^\/read\/(?!guide-)[^/]+$/.test(path);
+    || (path !== '/read/goa-sapcc' && /^\/read\/(?!guide-)[^/]+$/.test(path));
 }
 
 /** Cache successful loads; failed and timed-out requests remain retryable. */
@@ -25,7 +26,7 @@ export function createCatalogueLoader(fetcher: typeof fetch = fetch, timeoutMs =
           if (!response.ok) throw new Error('Catalogue unavailable');
           const records = await response.json() as RecordItem[];
           if (!Array.isArray(records)) throw new Error('Invalid catalogue');
-          return { records: publicCatalogue([...practicalGuideRecords, ...records]), error: false };
+          return { records: publicCatalogue([climatePlanRecord, ...practicalGuideRecords, ...records]), error: false };
         } catch {
           cached = undefined;
           return { records: [], error: true };
