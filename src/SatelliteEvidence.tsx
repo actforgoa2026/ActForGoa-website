@@ -43,7 +43,8 @@ export type SatelliteEvidenceResponse = {
   retention_days: number; method: 'saved-evidence-v1'; library_context?: SatelliteContext; amche_context?: AmcheContext;
 };
 
-const fraction = (value: number|null|undefined) => typeof value === 'number' && Number.isFinite(value) ? `${Math.round(value*100)}%` : 'Not recorded';
+const fraction = (value: number|null|undefined) => typeof value === 'number' && Number.isFinite(value)
+  ? value > 0 && value < 0.01 ? '<1%' : `${Math.round(value*100)}%` : 'Not recorded';
 const date = (value: string) => Number.isFinite(Date.parse(value)) ? observationDate(value) : 'Date not recorded';
 const day = (value: string) => /^\d{4}-\d{2}-\d{2}$/.test(value) && Number.isFinite(Date.parse(value))
   ? new Date(value+'T00:00:00+05:30').toLocaleDateString('en-IN', {timeZone:'Asia/Kolkata', dateStyle:'medium'}) : 'Choose a date';
