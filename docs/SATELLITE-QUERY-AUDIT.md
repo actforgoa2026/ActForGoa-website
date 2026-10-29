@@ -1,8 +1,8 @@
 # Goa map investigation audit — 29 October 2026
 
-The live product has real satellite retrieval, but the investigation workflow is incomplete. Selecting a place, seeing imagery, asking a question and searching previous evidence were disconnected. The main review site's `/map` also serves an older application without the satellite route. The standalone workspace is the current working entry: https://satellite-app-production.up.railway.app/map.
+The live product has real satellite retrieval, but the investigation workflow is incomplete. Selecting a place, seeing imagery, asking a question and searching previous evidence were disconnected. At the first audit check, the main review site also served an older application without the satellite route. During this task, PR108 and a newer frontend landed; a timestamped follow-up now finds the map route, but its nested satellite API still returns 404. The standalone workspace is the current working entry: https://satellite-app-production.up.railway.app/map.
 
-This audit adds a practical first connection: selected-area evidence retrieval with dated citations, Amche intersections, explicit analysis controls and recovery for interrupted jobs. It improves the existing Decisions integration. It does **not** establish live OpenAI accuracy, individual-tree tracking, continuous monitoring or multi-year image comparison.
+This audit preserves the concurrent PR108 place search, current-location access, larger Arc map controls and pointer drawing. It adds a practical first connection: selected-area evidence retrieval with dated citations, Amche intersections, explicit analysis controls and recovery for interrupted jobs. It improves the existing Decisions integration and adds explicit nested Vercel API handlers to address the known catch-all routing depth issue. It does **not** establish live OpenAI accuracy, individual-tree tracking, continuous monitoring or multi-year image comparison.
 
 ## Scope and evidence
 
@@ -18,7 +18,7 @@ Severity: P0 blocks the intended journey; P1 can mislead or prevent reliable ana
 
 | Step | Baseline health and evidence | Change or remaining action |
 | --- | --- | --- |
-| 1. Enter the map | P0 on main review: `/map` returns generic SPA 200 but its bundle lacks the satellite route; satellite status 404. Standalone serves the actual map/timeline bundle. | Show a standalone destination when API routes fail. Combined-site release owner must promote current application and API wiring together. |
+| 1. Enter the map | P0 at the first main review check: SPA 200 without the satellite route, satellite status 404. A newer frontend landed during the audit; the route now exists but API status still 404. Standalone serves the actual map/timeline. | Add explicit nested satellite API handlers and a standalone destination when access fails. Combined-site release owner must promote frontend and API wiring together. |
 | 2. Understand access | P1: a swallowed session/status error leaves controls silently disabled. Unconfigured natural-language planning is prominent. | Separate sign-in, loading and service failure; retry access. Keep manual dates/topic primary and question planning optional. A verified account is not discarded for an upstream satellite authorization failure. |
 | 3. Select a footprint | P1: whole-Goa viewport is offered despite the 25 km² limit; first drawing corner has no visible marker. | Validate viewport on movement; explain zoom/size restrictions. Show first corner, draft rectangle, invalid bounds and cancellation. Coordinates remain a keyboard alternative. |
 | 4. Choose dates | P1: default question refers to 10 days while controls use 40 days; 120-day limit is not explained. | Remove the inconsistent question. Validate the ordered period and explain catalog limits before submission. Cross-year comparison remains a follow-up. |
@@ -77,6 +77,12 @@ Water and waste model choices describe **later presence**, not when a change occ
 Numeric vegetation candidates and model judgments are different evidence types. Zero thresholded patches does not contradict a visual loss proposal. Conversely, vegetation reflectance loss can occur without canopy loss. These cases now require review; mutually inconsistent model answers remain explicit conflicts. Because the model sees numeric statistics, agreement is not independent corroboration.
 
 For stronger spatial answers, introduce stable canopy-patch targets, matched before/after crops and masks, registration checks, seasonal comparators and subsequent-acquisition persistence. Preserve “last clear presence / first clear absence” intervals rather than inventing an event date. Freeze representative field-labelled Goa cases before tuning: harvest, dry-season change, clouds/shadows, river/tidal movement, construction, ambiguous dumps and unresolved small trees. Hold out places and dates; measure precision, misses, abstention and temporal correctness by class/season, including image-only/numeric-only/combined comparisons.
+
+## Concurrent map update
+
+PR108 merged while this audit was being completed. Its main commit `05720cb97e7a752a7a7555956d9d870f164a4f97` is reconciled into this branch, preserving Photon place search, user-requested location, drag/two-corner drawing, expansion/focus behavior and the larger map. New controls use the installed Arc/shadcn components as required by the updated AGENTS instructions. Its earlier screenshots establish that PR's checks, not rendered acceptance of this combined patch.
+
+At 11:58 UTC, the main review frontend did include `/map`, while `/api/admin/satellite/status` still returned404. Existing release documentation identifies plain-Node Vercel catch-all depth behavior; this patch adds explicit satellite action/job handlers using the same proxy pattern as existing posts routes. Hosting configuration and upstream service readiness still need validation after deployment. The standalone also received a newer controls bundle during the task, without this patch's evidence-query UI. The report preserves both initial and follow-up snapshots rather than treating older deployment findings as current.
 
 ## Remaining implementation and acceptance
 

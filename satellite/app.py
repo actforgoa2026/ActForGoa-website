@@ -95,7 +95,8 @@ def create_app(service=None):
     @app.exception_handler(RequestValidationError)
     async def invalid(request,error):
         # Pydantic input/context can contain user prompts; do not echo whole bodies.
-        return JSONResponse({'error':'Check the Goa area, dates and selected observations. Areas must be at most 25 km² and date ranges at most 120 days.','code':'invalid_request'},status_code=422)
+        period = 'Use historical dates from 28 March 2017 through today.' if request.url.path in {'/history','/evidence'} else 'Imagery search ranges must be at most 120 days.'
+        return JSONResponse({'error':'Check the Goa area, dates and selected observations. Areas must be at most 25 km². '+period,'code':'invalid_request'},status_code=422)
 
     @app.exception_handler(httpx.HTTPError)
     async def upstream_error(request,error):

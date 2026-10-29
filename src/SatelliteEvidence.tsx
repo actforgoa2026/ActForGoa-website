@@ -1,5 +1,6 @@
 import {useEffect, useId, useRef, useState, type FormEvent, type ReactNode} from 'react';
 import {Button} from './components/arc/button/button';
+import {Checkbox} from './components/ui/checkbox';
 import {Textarea} from './components/arc/textarea/textarea';
 import {satelliteApi, type SatelliteArea, type SatelliteContext, type SatelliteIntent, type SatelliteResult} from './satellite-api';
 import {observationDate, satelliteIntents} from './SatelliteHistory';
@@ -158,7 +159,7 @@ export function SatelliteEvidence({csrfToken,area,startDate,endDate,intent,quest
       <p>{area?`Selected bounds: ${area.bbox.map(n=>n.toFixed(5)).join(', ')} (west, south, east, north).`:'No area selected.'}</p></div>
     <form onSubmit={event=>void search(event)}>
       <Textarea label="Question for this area and period" value={question} maxLength={1000} rows={3} onChange={event=>onQuestion(event.target.value)} placeholder="What evidence do we have of water or canopy changes here?" description="Your words rank relevant saved findings. They do not become a new model-generated conclusion."/>
-      <label className="satellite-evidence-context-toggle"><input type="checkbox" checked={includeContext} onChange={event=>setIncludeContext(event.target.checked)}/><span>Include Amche and ecology context</span></label>
+      <label className="satellite-evidence-context-toggle" htmlFor={id+'-context'}><Checkbox id={id+'-context'} checked={includeContext} onCheckedChange={value=>setIncludeContext(value===true)}/><span>Include Amche and ecology context</span></label>
       <p className="satellite-evidence-muted">Reference context is read-only and has separate source dates. It does not run AI analysis.</p>
       <div className="satellite-evidence-actions"><Button type="submit" loading={pending} disabled={!!reason} aria-describedby={reason?id+'-reason':undefined}>Search evidence for this area</Button>{pending&&<Button type="button" variant="ghost" onClick={cancel}>Cancel search</Button>}</div>
       {reason&&<p id={id+'-reason'}>{reason}</p>}

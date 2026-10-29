@@ -9,7 +9,7 @@
 .satellite-evidence form{display:grid;gap:14px;min-width:0}
 .satellite-evidence form>p{margin:0}
 .satellite-evidence-context-toggle{display:flex;align-items:center;gap:12px;min-height:44px;font-size:15px;font-weight:650;cursor:pointer}
-.satellite-evidence-context-toggle input{width:20px;height:20px;flex-shrink:0;accent-color:var(--green)}
+.satellite-evidence-context-toggle .ui-checkbox{width:20px;height:20px;flex-shrink:0;accent-color:var(--green)}
 .satellite-evidence-actions{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
 .satellite-evidence-actions button{max-width:100%;white-space:normal}
 .satellite-evidence-muted{color:var(--muted);font-size:14px}
