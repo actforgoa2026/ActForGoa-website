@@ -129,3 +129,21 @@ def document(path:str,request:Request):
     with httpx.Client(timeout=30) as client:
         response=client.get(UPSTREAM+'/api/documents/'+path,params=request.query_params)
     return Response(response.content,status_code=response.status_code,headers={k:v for k,v in response.headers.items() if k in ('content-type','content-disposition')})
+
+
+@app.get('/api/dev/crm/stats')
+def crm_stats():
+    from .crm_store import stats
+    return stats()
+
+@app.get('/api/dev/crm/search')
+def crm_search(q:str='',collection:str='community',location:str='',limit:int=20,offset:int=0):
+    from .crm_store import search_records
+    try:return search_records(q,collection,location,limit,offset)
+    except ValueError as error:raise HTTPException(422,str(error)) from error
+
+@app.get('/api/dev/crm/records/{record_id}')
+def crm_record(record_id:str):
+    from .crm_store import read_record
+    try:return read_record(record_id)
+    except KeyError as error:raise HTTPException(404,'CRM record not found') from error
