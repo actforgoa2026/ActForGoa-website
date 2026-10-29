@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 import L from 'leaflet';
+import {Checkbox} from './components/ui/checkbox';
 import {AMCHE_LAYERS, amcheFeatureLabel, loadAmcheLayer, type AmcheLayerId} from './amche-layers';
 import './amche-layers.css';
 
@@ -60,7 +61,7 @@ export function AmcheLayers({map}: {map: L.Map | null}) {
   return <details className="amche-layers"><summary>Local context from Amche Atlas</summary>
     <p>Show reference records on this map. Their dates are separate from the satellite observations.</p>
     <div className="amche-layer-options">{AMCHE_LAYERS.map(source => <div className="amche-layer-option" key={source.id}>
-      <label><input type="checkbox" checked={state[source.id].checked} disabled={!map} onChange={event => void toggle(source.id, event.target.checked)}/><span>{source.title}<small>{source.date}</small></span></label>
+      <label><Checkbox checked={state[source.id].checked} disabled={!map} onCheckedChange={checked => void toggle(source.id, checked===true)}/><span>{source.title}<small>{source.date}</small></span></label>
       <p className="amche-layer-status" role="status">{state[source.id].loading ? 'Loading mapped records…' : state[source.id].message}</p>
       <p>{source.note} <a href={source.sourceUrl} target="_blank" rel="noreferrer">Source records ↗</a></p>
     </div>)}</div>
