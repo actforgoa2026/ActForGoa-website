@@ -171,7 +171,7 @@ Figtree Variable is imported locally through `@fontsource-variable/figtree` and 
 | --- | --- |
 | Display | Orbit headline uses the fluid display token, changing to `clamp(28px, 8vw, 46px)` below 700px. |
 | Headline | Catalogue and detail headings use the headline token; compact layouts reduce them. AI and research-library titles use 36px; the map title uses 24px. |
-| Title | Shared section headings use the title token. Record titles use 24px; inner topic choices inherit Arc label styling with larger layout dimensions. |
+| Title | Shared section headings use the title token. Record titles use 24px; topic choice links use 24px at weight 600 with 1.35 leading, reducing to 20px on phones. Their Arc link structure and states remain intact. |
 | Body | General copy uses the body token. Metadata and compact supporting copy commonly use 13–14px. |
 | Reading | Article prose uses the reading token within 70ch. Newsletter prose uses 17px with 1.7 leading; both become 16px on phones. Practical action steps use 18px with 1.7 leading. |
 | Controls | Arc labels use the control token; SearchField text is 16px. Input and Textarea use 14px on desktop and 16px at 620px and below. The chat textarea explicitly remains 16px. |
@@ -247,6 +247,8 @@ Records remain open rows or open grid items with a top rule, linked title, reada
 ### Footer and newsletters
 
 `SiteFooter` places the stippled panorama above open link columns and a final structural rule. The landscape is generated decorative artwork, recorded in `public/assets/footer/goa-stippled-landscape.webp.json`; it is not a depiction of one verified place. It is hidden from assistive technology and contains no text. Original article photographs retain their own provenance.
+
+`GoaLandscape` reuses that same artwork as an open transition after the circular homepage hero and as a small vignette beside catalogue headings. The heading treatment occupies existing whitespace without moving search or results down. Keep text and controls clear of the artwork; do not turn it into wallpaper or a new card surface. Crop the panorama responsively instead of shrinking its fine detail beyond recognition. Forms, reporting, chat, and the map do not gain decorative top blocks; the map workspace has no shared footer.
 
 Newsletter reading is a single restrained column with issue date, historical-context note, original-issue/PDF actions, and prose before optional original-layout imagery. Transcription notes and source links remain visible. Original documents are evidence assets, not examples of the interface's typography rules.
 

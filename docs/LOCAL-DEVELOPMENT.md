@@ -32,6 +32,8 @@ Private `.reports/dev/config.json` holds paths and service origins. It reference
 
 The committed launcher expects these configuration keys: `researchOrigin`, `researchBrowserOrigin`, `satellitePython`, `earthEngineProject`, `earthEngineCredentials`; optional `googleMapsKeychainService` and `anthropicEnvFile`. The latter enables only the satellite question planner; corpus AI continues to use the hosted service selected by the user. No new provider account or credential is created.
 
+`npm run dev:check -- --satellite-only` checks local sign-in, Earth Engine readiness and saved history without depending on hosted corpus AI. It writes `.reports/dev/satellite-readiness.json` and does not dispatch imagery or AI jobs.
+
 `npm run dev:check` verifies hosted research readiness, real corpus retrieval, local sign-in, satellite readiness, saved history and chat input validation without paid dispatch. Results are in `.reports/dev/readiness.json`. Service logs and owned process IDs are in `.reports/dev/`. `npm run build`, `npm test`, and the satellite Python suite cover code checks.
 
 The local admin and satellite databases were snapshotted with SQLite's backup API. They are independent of both hosted storage and the port-4176 workspace. The startup command reuses them on later runs; it never resets usage or saved records. Provider secrets and account details remain ignored and private.
