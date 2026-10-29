@@ -1,6 +1,7 @@
 import {ButtonLink} from './components/arc/button/button-link';
 import {MorphSelect} from './components/arc/morph-select/morph-select';
 import SiteFooter from './SiteFooter';
+import GoaLandscape from './GoaLandscape';
 import { articlePhoto } from "./article-photos";
 import {
   lazy,
@@ -241,6 +242,7 @@ function Home({ records }: { records: RecordItem[] }) {
   return (
     <main>
       <OrbitLanding embedded />
+      <GoaLandscape placement="horizon" />
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
           <h2 id="home-actions-heading" tabIndex={-1} lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
@@ -585,8 +587,9 @@ function Catalogue({
   };
   return (
     <main className="catalogue shell">
-      <div className="catalogue-heading">
+      <div className="catalogue-heading catalogue-heading--landscape">
         <h1>{title}</h1>
+        <GoaLandscape placement="heading" />
       </div>
       <SearchBox initial={query} />
       {topic && !query && topicFor(topic) && (mode === "stories" || mode === "blog" ? <details className="topic-reading-help"><summary>Looking for practical help with this topic?</summary><TopicChoices flow={topicFor(topic)!} /></details> : <TopicChoices flow={topicFor(topic)!} />)}
@@ -1387,8 +1390,8 @@ export default function App() {
         )}
       </div>
       <ScrollRestoration />
-      {!internal && !orbitLanding && <SiteFooter />}
-      {!internal && !orbitLanding && <div className="preview-note">
+      {!internal && !orbitLanding && pathname !== "/map" && <SiteFooter />}
+      {!internal && !orbitLanding && pathname !== "/map" && <div className="preview-note">
         A new field guide, in progress.{" "}
         <a href="https://actforgoa.org/">
           Visit the original site

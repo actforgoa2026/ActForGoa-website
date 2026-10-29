@@ -10,7 +10,9 @@
 .home-topic-choice strong { display: block; font-size: clamp(18px, 1.6vw, 24px); font-weight: 600; line-height: 1.3; }
 .home-topic-choice small { display: block; margin-top: 8px; font-size: 14px; line-height: 1.45; color: var(--muted); }
 .choice-link { display: flex; align-items: center; gap: 20px; min-height: 120px; padding: 24px; text-align: left; justify-content: flex-start; }
-.choice-link > span { flex: 1; min-width: 0; }
+/* Large navigation choices need their own readable label scale within Arc links. */
+.choice-grid .choice-link { font-size: 1.5rem; font-weight: 600; line-height: 1.35; }
+.choice-link > span { flex: 1; min-width: 0; text-wrap: pretty; }
 .choice-link > svg:last-child:not(.topic-icon) { width: 22px; height: 22px; flex-shrink: 0; }
 .topic-choices > h2 { font-size: 24px; line-height: 1.35; font-weight: 600; margin-bottom: 24px; letter-spacing: -.02em; }
 .choice-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
@@ -53,6 +55,7 @@
  .home-topic-choice strong { font-size: 17px; }
  .home-topic-choice > .topic-icon { display: block; width: 36px; height: 36px; }
  .choice-grid { grid-template-columns: 1fr; gap: 12px; }
+ .choice-grid .choice-link { font-size: 1.25rem; }
  .choice-link { min-height: 100px; padding: 20px; gap: 16px; }
  .topic-page-heading { gap: 16px; margin-block: 24px 32px; }
  .topic-page-heading .topic-icon { width: 52px; height: 52px; padding: 12px; border-radius: 16px; }

@@ -1,5 +1,15 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Map and landscape release authorized — 30 October 2026
+
+The user's latest explicit “SHIP IT” authorizes publishing this follow-up to the existing field-guide alias and satellite frontend. This supersedes the local-only instruction below for this release. The original WordPress domain, hosted Python API, corpus, credentials, quotas and persistent data are unchanged. Reconcile the newer Goa SAPCC work from origin/main before the exact-tree browser checks. Use the existing release guard and an allowlisted satellite frontend package. Record final deployment identities and live checks under ignored `.reports/map-workspace-release-2026-10-30/`.
+
+## Local follow-up — 30 October 2026
+
+The user has explicitly returned this chat to local-only work after the earlier design release. No further commit, push, merge or production deployment is authorized. Active source remains `/Users/zakkrevitt/.codex/worktrees/actforgoa-design-iteration`.
+
+Implemented locally: larger submenu labels, reuse of the approved stippled landscape, and a two-column satellite workspace with actual Arc calendar pickers. The running local satellite API is configured for Google Earth Engine. A bounded fresh catalogue/image check succeeded through the authenticated local app route; optional image classification remains unconfigured locally. `npm run dev:check -- --satellite-only` now verifies local readiness without depending on the hosted corpus AI service. Main and standalone builds, 11 targeted Node tests, desktop/phone renders, and a real Earth Engine numeric comparison pass. See [local follow-up](design/local-followup-2026-10-30.md).
+
 ## Design release authorized — 30 October 2026
 
 The user explicitly requested pushing all updates to production. This chat owns the focused release of the reviewed design/function iteration, targeting the existing field-guide Vercel alias and existing satellite frontend. The previous issue89 checkpoint says release ownership is clear; no earlier promotion remains active. The original WordPress site at actforgoa.org remains a separate migration decision.
