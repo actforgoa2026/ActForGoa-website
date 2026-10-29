@@ -283,7 +283,7 @@ def normalize_answer(raw, request, evidence):
         raise ValueError('Outside context must be short and cannot invent source links')
     result = validate_answer(GroundedAnswer(status='answered' if answer.paragraphs else 'insufficient_evidence',
         paragraphs=[Paragraph(text=paragraph.text, citations=list(dict.fromkeys(support.citation_id for support in paragraph.supports))) for paragraph in answer.paragraphs]), evidence)
-    result.update(domain=request.domain, coverage=answer.coverage,
+    result.update(domain=request.domain, coverage=answer.coverage, summary_first=True,
         outside_context={'text': outside, 'provenance': 'model_knowledge', 'notice': OUTSIDE_NOTICE} if outside else None,
         library_notice=answer.limitation or (result.get('notice') if not answer.paragraphs else None))
     return result

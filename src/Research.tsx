@@ -15,7 +15,7 @@ import './research.css';
 import {useStarredIds} from './CurationProvider';
 import {prioritizeStarred} from './curation';
 
-type Turn={question:string;answer?:Answer;results:Evidence[];error?:string;mode:'search'|'ask'};
+type Turn={question:string;answer?:Answer;results:Evidence[];error?:string;mode:'search'|'ask';pending?:boolean};
 type Session={question:string;turns:Turn[];mode:'search'|'ask'};
 const emptySession:Session={question:'',turns:[],mode:'ask'};
 type Memory={sessions:Record<string,Session>;update:(scope:string,change:Partial<Session>|((previous:Session)=>Partial<Session>))=>void};
@@ -46,7 +46,10 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
  const outside=answer.outside_context?.provenance==='model_knowledge'?answer.outside_context:null;
  return <div className="research-answer">
   <section className="research-answer-section" aria-label="From our library"><h3><BookOpen size={18}/>From our library</h3>
-   {paragraphs.length?paragraphs.map((paragraph,index)=><p className="answer-paragraph" key={index}>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</p>):<p className="answer-paragraph">We did not find enough evidence in this collection to answer your question.</p>}
+   {paragraphs.length?paragraphs.map((paragraph,index)=>{
+    const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
+    return answer.summary_first&&index===0?<ul key={index} aria-label="Key takeaway"><li className="answer-paragraph">{content}</li></ul>:<div key={index}>{answer.summary_first&&index===1&&<h4>More detail</h4>}<p className="answer-paragraph">{content}</p></div>;
+   }):<p className="answer-paragraph">We did not find enough evidence in this collection to answer your question.</p>}
    {(answer.library_notice||answer.notice)&&<p className="research-small">{answer.library_notice||answer.notice}</p>}
   </section>
   {outside?.text&&<section className="research-answer-section research-outside" aria-label="Outside our library"><h3>Outside our library</h3><p className="research-provenance">AI general knowledge · not checked against external sources</p><p className="answer-paragraph">{outside.text}</p></section>}
@@ -95,19 +98,23 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
  useEffect(()=>{const input=questionInput.current;if(input){input.style.height='auto';input.style.height=`${Math.min(input.scrollHeight,180)}px`;}},[question]);
  useEffect(()=>{const previous=document.title;document.title=`${content.label} | ActForGoa`;return()=>{document.title=previous;};},[content.label]);
  async function run(value=question,requested=mode){
-  const clean=value.trim();if(clean.length<2||busy||!domainSupported||(requested==='ask'&&!canAsk))return;
-  const action=requested;setBusy(true);setQuestion(clean);const controller=new AbortController();request.current=controller;
-  try{
-   const results=await api<{results:Evidence[];domain?:ResearchDomain}>('/api/search?'+new URLSearchParams({q:clean,domain,...(docId?{document_id:docId}:{}),...(sourceGeneration?{generation:sourceGeneration}:{})}),{signal:controller.signal});
+  const clean=value.trim();if(clean.length<2||busy||request.current||!domainSupported||(requested==='ask'&&!canAsk))return;
+  const action=requested;const index=turns.length;const history=turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:citedLibraryParagraphs(t.answer!).map(p=>p.text).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8);
+  setBusy(true);setQuestion('');const controller=new AbortController();request.current=controller;
+  setTurns(current=>[...current,{question:clean,results:[],mode:action,pending:true}]);
+  const update=(patch:Partial<Turn>)=>setTurns(current=>current.map((turn,n)=>n===index?{...turn,...patch}:turn));
+  // Chat retrieves its own evidence. Start it immediately rather than waiting
+  // for the independent source preview, and render each response as it arrives.
+  const search=api<{results:Evidence[];domain?:ResearchDomain}>('/api/search?'+new URLSearchParams({q:clean,domain,...(docId?{document_id:docId}:{}),...(sourceGeneration?{generation:sourceGeneration}:{})}),{signal:controller.signal}).then(results=>{
    if(domain!=='all'&&results.domain!==domain)throw Error('This section is not available on the research service yet. Use All research to explore the current collection.');
-   const turn:Turn={question:clean,results:results.results,mode:action};
-   if(action==='ask'){
-    try{turn.answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:true,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:citedLibraryParagraphs(t.answer!).map(p=>p.text).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)})});}
-    catch(e){if((e as Error).name==='AbortError')throw e;turn.error=(e as Error).message;}
-   }
-   setTurns(current=>[...current,turn]);if(!turn.error)setQuestion('');
-  }catch(e){if((e as Error).name!=='AbortError')setTurns(current=>[...current,{question:clean,results:[],error:(e as Error).message,mode:action}]);}
-  finally{if(!controller.signal.aborted)setBusy(false);}
+   update({results:results.results});
+  }).catch(e=>{if(e.name!=='AbortError'&&action==='search')update({error:e.message});});
+  const chat=action==='ask'?api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:true,document_id:docId,generation:sourceGeneration,history})}).then(answer=>update({answer})).catch(e=>{if(e.name!=='AbortError')update({error:e.message});}):Promise.resolve();
+  try{await Promise.all([search,chat]);}
+  finally{
+   update({pending:false,...(controller.signal.aborted?{error:'Request cancelled. Send your question again to continue.'}:{})});
+   request.current=null;setBusy(false);
+  }
  }
  const submit=(event:FormEvent)=>{event.preventDefault();void run();};
  const statusText=statusError||(!status?'Connecting to the library…':!status.search_ready?'The research library is not ready yet.':!domainSupported?'This collection is not available on the research service yet.':!canAsk?'Source search is ready. AI answers are not available yet.':'Library search and AI answers are available.');
@@ -117,8 +124,9 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
    {!domainSupported&&<div className="research-message" role="status"><p>{statusText}</p>{status&&<Link className="text-link" to="/ask">Explore all available research<ArrowRight size={16}/></Link>}</div>}
    {turns.map((turn,index)=>{const sources=turn.answer?.citations.length?turn.answer.citations:turn.results;return <section className="research-turn" ref={index===turns.length-1?latestTurn:undefined} tabIndex={-1} key={index} aria-label={'Question '+(index+1)}><div className="chat-user-message"><span className="chat-sr-only">You asked</span><h2>{turn.question}</h2></div>
     {turn.error&&<p role="alert" className="research-message">{turn.error}</p>}
+    {turn.pending&&!turn.answer&&!turn.error&&<p role="status" className="chat-composer-status"><span className="chat-working-dot"/>{turn.mode==='ask'?'Preparing your answer. You can browse matching sources as they arrive.':'Finding matching passages…'}</p>}
     {turn.answer&&<AnswerSections answer={turn.answer} returnTo={returnTo}/>}
-    {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
+    {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.pending&&!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
     <details className="chat-related"><summary><Users size={15}/>Related people and organisations</summary><CommunitySuggestions data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/></details>
    </section>;})}
    <form className="research-composer chat-composer" onSubmit={submit}>

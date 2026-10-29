@@ -1,5 +1,14 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Research clarity and early feedback — 29 October 2026
+
+Branch `fix/research-clarity-latency`, based on `origin/main` at `1c4ac7c`, prepares the user's requested short top-level takeaway with deeper information below. The answer brief makes the first existing cited paragraph the takeaway; the API marks the new presentation with `summary_first` so older API responses retain their layout. All existing citation, qualification, word-limit and outside-context checks remain in place. No extra model call, provider/model change or budget change.
+
+The frontend immediately appends the submitted question and pending status, starts source preview and chat concurrently (chat already retrieves its own evidence), and displays source matches before generation finishes. A failed source preview does not discard a successful answer. Existing conversation history excludes unfinished turns. Cancellation and AI failure remain explicit. This removes the sequential preview wait; it is not streaming and does not establish a measured improvement in provider latency.
+
+Validation: 209 Node tests, production build, 180 research tests plus the added citation-preservation test passed. Delayed fixture browser checks at 1440/390 verify immediate feedback, concurrent request dispatch, sources before answer and cited takeaway/detail. Existing fixture journeys at 1440/390/320 passed, including citations, follow-ups, unavailable answers and failure states. Screenshots: ignored `.reports/clarity/`. No paid calls or live semantic acceptance performed. The referenced installed Impeccable skill was not found in this executor; manual rendered inspection completed. Implementation is local/PR-ready only, not merged or deployed. The release coordinator must review the prompt change and perform required live acceptance before coordinated backend/frontend deployment; no alias was promoted.
+
+
 ## Current local satellite rollout — 29 October 2026 (IST)
 
 The user explicitly authorized the local ORCHESTRATOR to reconcile PR95 with current main and deploy both existing standalone Railway services. PR95 merged as `11582ac`; PR103 fixes the hosted OpenStreetMap referrer failure and merged as `b0fadee`. Both satellite services are deployed, retaining existing volumes and account/history data. Real Copernicus credentials remain absent; recorded comparisons must remain labelled as such.

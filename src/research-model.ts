@@ -1,7 +1,7 @@
 export type ResearchDomain = 'all' | 'legal' | 'ecology';
 export type ResearchEvidence = {id:string;document_id:string;page:number;label:string;title:string;url:string;text:string;origin:string;warning:string;retrieved_at:string;format:string;matches:string[];reader_url:string;generation:string;domains?:string[];legal_currency?:string;publisher_class?:string;guide_verification?:{limitations?:string;source_file?:string;citation?:string;location?:string;review_date_local?:string;review_timezone?:string}};
 export type ResearchParagraph = {text:string;citations:string[]};
-export type ResearchAnswer = {status:'answered'|'insufficient_evidence';paragraphs:ResearchParagraph[];citations:ResearchEvidence[];notice?:string;library_notice?:string|null;outside_context?:{text:string;provenance:'model_knowledge';notice:string}|null;domain?:ResearchDomain};
+export type ResearchAnswer = {summary_first?:boolean;status:'answered'|'insufficient_evidence';paragraphs:ResearchParagraph[];citations:ResearchEvidence[];notice?:string;library_notice?:string|null;outside_context?:{text:string;provenance:'model_knowledge';notice:string}|null;domain?:ResearchDomain};
 export type ResearchStatus = {search_ready:boolean;chat_ready:boolean;stats:{documents?:number;pages?:number;chunks?:number};domains?:string[];domain_counts?:Partial<Record<ResearchDomain,number>>;provider?:string;outside_context_supported?:boolean};
 
 export const researchDomains = {
