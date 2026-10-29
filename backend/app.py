@@ -1,4 +1,6 @@
 """Local research API with explicit, bounded public-host configuration."""
+import asyncio
+import re
 from contextlib import asynccontextmanager
 from datetime import datetime, timezone
 from functools import lru_cache
@@ -30,6 +32,7 @@ def create_app(root=None, index_root=None, client=None):
                         release_allowance=os.getenv('RESEARCH_RELEASE_ALLOWANCE_20261028')=='1',
                         hackathon_allowance=os.getenv('RESEARCH_HACKATHON_ALLOWANCE_20261029')=='1')
     model=configured_model()
+    agent_enabled=os.getenv('RESEARCH_AGENT_ENABLED')=='1'
     @asynccontextmanager
     async def lifespan(app):
         try:app.state.library=Library(root,index_root)
@@ -38,6 +41,10 @@ def create_app(root=None, index_root=None, client=None):
         # a new allowance because a volume or data-root selector was misplaced.
         ledger_ready=limits.existing_ledger_ready()
         app.state.client=(client or (AnthropicAnswers(os.environ['ANTHROPIC_API_KEY']) if os.getenv('ANTHROPIC_API_KEY') and os.getenv('RESEARCH_CHAT_ENABLED')=='1' else None)) if ledger_ready else None
+        app.state.agent=None
+        if agent_enabled and app.state.client and app.state.library:
+            from .production_agent import ProductionAgent
+            app.state.agent=ProductionAgent(app.state.library,limits,root/'.research-agent',os.environ['ANTHROPIC_API_KEY'])
         yield
         if app.state.client and client is None:app.state.client.close()
         app.state.library=None
@@ -81,6 +88,7 @@ def create_app(root=None, index_root=None, client=None):
     def chat_unavailable_reason():
         if not limits.existing_ledger_ready():
             return 'usage_ledger_unavailable' if (root/'.research-usage/answer-usage.sqlite').is_file() else 'usage_ledger_missing'
+        if agent_enabled and not app.state.agent:return 'agent_not_configured'
         return None if app.state.client else 'not_configured'
 
     @app.get('/api/status')
@@ -89,13 +97,15 @@ def create_app(root=None, index_root=None, client=None):
         reason=chat_unavailable_reason()
         if reason is None:
             try:
-                capacity=limits.preflight_single(maximum_request_cost(model),datetime.now(timezone.utc).date().isoformat())
+                from .agent_protocol import MAX_REQUEST_MICROUSD
+                capacity=limits.preflight_single(MAX_REQUEST_MICROUSD if agent_enabled else maximum_request_cost(model),datetime.now(timezone.utc).date().isoformat())
                 if not capacity['allowed']:reason=capacity['reason']
             except UsageLedgerUnavailable:reason='usage_ledger_unavailable'
         return {'search_ready':lib is not None,'chat_ready':bool(lib and reason is None),'generation':lib.generation if lib else None,
                 'stats':lib.manifest['stats'] if lib else {},'model':model,'provider':'anthropic',
                 'domains':['legal','ecology'],'domain_counts':lib.domain_counts() if lib else {'legal':0,'ecology':0},
-                'outside_context_supported':True,'answer_mode':'library_first',
+                'outside_context_supported':not agent_enabled,'answer_mode':'agent_library_first' if agent_enabled else 'library_first',
+                'agent':{'engine':'claude-agent-sdk','tools':['browse_catalogue','search_documents','read_document','query_crm','read_crm_record','ask_clarifying_question']} if app.state.agent else None,
                 'chat_unavailable_reason':reason,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 
@@ -113,6 +123,13 @@ def create_app(root=None, index_root=None, client=None):
     @app.get('/api/documents/{doc_id}/passages/{passage_id}')
     def passage(doc_id:str,passage_id:str,generation:str|None=None):
         """start/end are zero-based Python Unicode code-point offsets; end is exclusive."""
+        if passage_id.startswith(doc_id+':p'):
+            match=re.fullmatch(re.escape(doc_id)+r':p(\d+):(\d+):(\d+)',passage_id)
+            if not match:raise KeyError('Passage not found')
+            page,start,end=map(int,match.groups())
+            rows=library().pages(doc_id,generation,page,1)
+            if not rows or rows[0]['page']!=page or not 0<=start<end<=len(rows[0]['text']):raise KeyError('Passage not found')
+            return {'page':page,'start':start,'end':end,'text':rows[0]['text'][start:end]}
         with library().connect(generation) as db:
             row=db.execute('SELECT page,start,end,text FROM chunks WHERE id=? AND doc_id=?',(passage_id,doc_id)).fetchone()
         if not row:raise KeyError('Passage not found')
@@ -150,8 +167,7 @@ def create_app(root=None, index_root=None, client=None):
         body='\n\n'.join(f'=== {p["label"]} ===\n'+(f'[Extraction note: {p["warning"]}]\n' if p['warning'] else '')+p['text'] for p in rows)
         return PlainTextResponse(doc['title']+'\n'+doc['url']+'\n\n'+body,headers={'Content-Disposition':f'attachment; filename="{doc_id}.txt"'})
 
-    @app.post('/api/chat')
-    def chat(request:ChatRequest):
+    def legacy_chat(request:ChatRequest):
         lib=library()
         if chat_unavailable_reason():raise HTTPException(503,'Answers are currently unavailable. You can still search and read the full sources.')
         if not request.question.strip():raise HTTPException(422,'Enter a question.')
@@ -178,6 +194,28 @@ def create_app(root=None, index_root=None, client=None):
             raise HTTPException(502,detail) from None
         except ValueError:
             raise HTTPException(502,'The answer could not be verified against its citations. Try again or read the sources.') from None
+        finally:chat_slots.release()
+    @app.post('/internal-agent/v1/messages/count_tokens')
+    async def agent_count_tokens(request:Request):
+        if not app.state.agent:raise HTTPException(404)
+        return await app.state.agent.count_tokens(request)
+
+    @app.post('/internal-agent/v1/messages')
+    async def agent_messages(request:Request):
+        if not app.state.agent:raise HTTPException(404)
+        return await app.state.agent.messages(request)
+
+    @app.post('/api/chat')
+    async def chat(request:ChatRequest):
+        if not agent_enabled:return await asyncio.to_thread(legacy_chat,request)
+        library()
+        if chat_unavailable_reason():raise HTTPException(503,'Answers are currently unavailable. Search and full documents still work.')
+        if not request.question.strip():raise HTTPException(422,'Enter a question.')
+        if not chat_slots.acquire(blocking=False):raise HTTPException(429,'Two investigations are already running. Please try again shortly.')
+        try:return await app.state.agent.answer(request)
+        except HTTPException:raise
+        except UsageLedgerUnavailable:raise HTTPException(503,'Production accounting is unavailable. Search and full documents still work.') from None
+        except Exception:raise HTTPException(502,'The investigation could not finish a verified answer. Any model attempts remain counted. Read the sources or refine your question.') from None
         finally:chat_slots.release()
     return app
 

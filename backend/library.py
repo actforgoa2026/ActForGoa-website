@@ -6,6 +6,7 @@ import threading
 from urllib.parse import urlencode
 import zvec
 from .embeddings import Encoder, ROOT
+from .retrieval_intent import expand_retrieval_query
 from .extraction import safe_path
 from .domains import document_domains, legal_authority_multiplier
 from .passage_selection import document_focus, retrieval_focus, select_passages
@@ -92,7 +93,7 @@ class Library:
 
     def search(self, query, limit=8, doc_id=None, generation=None, domain='all'):
         if domain not in ('all','legal','ecology'):raise ValueError('Unknown library section')
-        query=query.strip()
+        query=expand_retrieval_query(query.strip())
         if not query:return []
         generation=generation or self.generation
         if doc_id:self.document(doc_id,generation)

@@ -7,12 +7,12 @@ export async function researchApi<T>(url: string, init?: RequestInit): Promise<T
   const cancel = () => controller.abort();
   parent?.addEventListener('abort', cancel, { once: true });
   let timedOut = false;
-  // Answers may need the provider's full 60-second window. Source requests
+  // Agent investigations have a bounded 110-second server window. Source requests
   // should recover sooner, including when the response body never finishes.
   const timer = setTimeout(() => {
     timedOut = true;
     controller.abort();
-  }, url === '/api/chat' ? 75_000 : 30_000);
+  }, url === '/api/chat' ? (import.meta.env?.VITE_LOCAL_AGENT==='1'?195_000:115_000) : 30_000);
   try {
     const response = await fetch(url, { ...init, signal: controller.signal });
     const data = await response.json().catch(error => {
