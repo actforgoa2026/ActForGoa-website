@@ -1,31 +1,54 @@
-# Goa SAPCC research integration · 30 October 2026
+# Goa SAPCC research assistant
 
-The user requested SAPCC questions with source links in the resident research assistant. The hosted library already contained the exact retained government PDF, but its two-page and sideways-table extraction contained excessive whitespace and interleaved text. A baseline rooftop-solar question returned no evidence. The source refresh and document-focused budget fix address that failure.
+The resident question flow is live at [Ask about Goa’s climate plan](https://actforgoa-field-guide.vercel.app/ask/ecology?document=d1b64d562f93c9cbabc39e1d-dc16e9345778&generation=20261030-sapcc-native-v2). The climate-plan overview, individual topics and general research assistant link to it. Topic links prepare a draft; they do not submit a model request automatically.
 
-## Source and answer behavior
+## Release identities
 
-- Original SHA-256: `d1b64d562f93c9cbabc39e1d4be65f0515a06734792cfa5ea4eebf9544ff3cc6`, 111 physical PDF pages.
-- New generation: `20261030-sapcc-native-v2`; document `d1b64d562f93c9cbabc39e1d-dc16e9345778`.
-- The extractor reads each printed half independently, corrects native sideways orientation and retains table-cell positions. All 111 pages passed a non-whitespace character-multiset audit against the original native PDF text, with no missing or extra characters. This verifies preservation, not semantic completeness; rendered health and power pages were also inspected.
-- Scanned committee minutes on physical pages 99–110 remain in the reader and original PDF but are excluded from answer evidence. No OCR or reconstructed cross-page rows are claimed.
-- All 1,173 other documents, 21,423 pages and 78,987 chunks/FTS rows remain byte-equivalent in their SQL values. Both local and hosted staging checks preserve the original generation files; prior published citations remain available.
-- The retained fallback budgets each complete passage plus its required context independently, preventing one overfull document group from discarding every passage. The current Claude Agent SDK reads full native pages, keeps document-scoped catalogue/search/read tools within the selected edition, blocks CRM citations in those conversations and rejects explicitly excluded scanned minutes. General research retains its catalogue and CRM tools; model, system prompt, provider and production quotas are preserved.
-- Plan conversations disable outside-library AI context. Topic drafts require a user action to send. Source links open a separate tab and preserve the conversation. Returning from the full-plan reader preserves an edited follow-up, and clarifications remain in subsequent question history.
+PRs #119, #121 and #122 are merged. Final runtime source is `977c55a4ebbef9d1a609c24ca6c260fdff213ef5`, tree `9267959833fe3ff7e14a31bb388868528fedd28e`. The prior SDK release and newer map, Explore and satellite source remain integrated.
 
-## Validation and release
+- Research backend: `986679ef-46fd-4a65-9086-01085913e051`, with all 23 packaged backend files verified against the running service.
+- Frontend: `dpl_ENfoDDJTZrG7wAmJQvsC2Qo8AR4f`, promoted through `release:review` to the existing field-guide alias.
+- Immutable frontend: `https://actforgoa-field-guide-eh36is5sb-zakkrevitt-gmailcoms-projects.vercel.app`.
+- Active generation: `20261030-sapcc-native-v2`; document `d1b64d562f93c9cbabc39e1d-dc16e9345778`.
 
-The reconciled SDK source passes 219 backend tests and 255 frontend tests, including native table/character regression checks and a whole-context budgeting test. The local index passes six scoped fallback preparation cases, three general SAPCC searches and three retained research searches. The SDK additionally passes six full-page scoped searches and rejects all 12 incomplete minute pages as citation evidence. Frontend checks cover plan entry points, correct document/version payloads, no automatic model submission, citation navigation, draft preservation and source-only mode at 320, 390, 768 and 1440 CSS pixels. Model calls are mocked in those repeatable UI checks; actual hosted answer acceptance is recorded separately.
+The original domain and satellite deployments are outside this release. This record changes documentation only and requires no further deployment.
 
-The source retains the current Figtree/Arc design. Desktop and phone captures were inspected; the one detector pass found 16 pre-existing advisory token findings in climate-plan styles and no new material defect. Required retained-route checks passed on desktop and phone, including template PDF export. No Device Hub was used.
+## Sources and behavior
 
-Detailed evidence, staged-index preservation hashes, character audit, screenshots and live acceptance are retained under ignored `.reports/sapcc-research/`. Two baseline paid attempts used the existing production ledger: heat/health answered with citations; solar exposed the defect above. They remain counted. No accepted historical research cases were repeated. Final runtime, frontend deployment, ledger counters and public answer results will be recorded after release.
+The government PDF was already present in the hosted corpus. Its original SHA-256 remains `d1b64d562f93c9cbabc39e1d4be65f0515a06734792cfa5ea4eebf9544ff3cc6`: 9,222,768 bytes, 111 physical PDF pages. The public download matches that checksum, and the previous edition remains accessible at its original document ID and generation.
 
-PR #119 contains the SAPCC integration. The parallel SDK release in PR #118 is reconciled into this isolated branch for compatibility checks. Its owner has completed the SDK release and cleared ownership in issue #89. Final main b905a5e is reconciled; SAPCC activation and hosted acceptance can now proceed. The old service package is superseded and must not be deployed.
+The native extractor separates printed spreads and rotated table cells. Every non-whitespace native character on all 111 pages passed a multiset preservation audit. This establishes character preservation, not universal semantic correctness. Original power and water table pages were also rendered and inspected. Scanned committee minutes on physical pages 99–110 remain available in the reader and PDF but cannot support generated answers. No OCR, reconstructed cross-page rows or corrected financial totals are claimed.
 
-## Hosted source-context correction
+The Claude Agent SDK reads complete native SAPCC spreads and bounded adjacent original table pages within its existing 24,000-character tool limit. Original headers and surrounding table evidence stay attached to citations, including after subsequent reads. Document-scoped catalogue, search and read tools stay within the chosen edition; CRM tools remain available in general research. Discovery snippets omit citation IDs until a source read. The strict read-source validator remains enabled. The retained fallback also budgets complete passage/context groups independently within its original input bound.
 
-Runtime ebb35bf and generation 20261030-sapcc-native-v2 were activated after a WAL-safe production ledger backup, preserving the completed SDK release. The first two scoped SDK questions returned exact source links but failed manual semantic review: solar labelled a barriers/gaps cell as a success indicator without its preceding header page; water cited page 49 for a budget printed on page 50. Both responses and all ten model-call reservations remain retained and rejected. Frontend promotion is held.
+Plan questions disable outside-library context, distinguish proposals from evidence of delivery, and offer rainwater, heat/health and solar starters. Citations open source readers in a separate tab. Conversations, edited follow-up drafts and clarifications are preserved while navigating; reloading clears the existing app-memory conversation store.
 
-The reader now supplies complete native SAPCC spreads and bounded adjacent original table pages within the existing 24,000-character tool limit. It does not reconstruct rows or edit source text. Required read context remains attached to citations, including after another page read, so headers and adjacent table values cannot lose their source links. Other document extractions retain their existing paging behavior. The two changed source-context questions require fresh hosted acceptance; prior attempts are not overwritten.
+## Verification
 
-The corrected solar question passed source review on runtime d594ddc in 14.86 seconds, with four model calls and original pages 12/41–43 attached. The corrected water attempt was safely rejected by citation validation: diagnostics identify a page-69 search-snippet ID absent from the read-source set. No invalid answer reached the interface. Document-scoped discovery now withholds citation IDs and passage URLs until a full read; the validator remains strict. This follow-up changes discovery metadata, not source passages, accounting or the accepted solar table context. The failed water attempt remains charged and retained.
+All 255 frontend tests, 221 research tests and the production build pass. `release:review` repeated the frontend suite/build and checked staged API routing before promotion. Six scoped SDK searches, six fallback preparation checks, three general SAPCC searches and three retained research searches passed without model calls.
+
+Browser checks cover SAPCC entry points, correct source/version payloads, no automatic submissions, source-only mode, citation navigation, draft preservation and clarification history at 320, 390, 768 and 1440 CSS pixels. Repeatable transport checks use mocked model responses and real source APIs. The current Figtree/Arc interface was inspected on desktop and phone, with no overflow, italic styling or decorative side stripes. Impeccable’s one detector pass found only existing advisory token findings. No Device Hub was used.
+
+Hosted semantic acceptance:
+
+- Solar: 14.86 seconds, four SDK model calls, original pages 12 and 41–43. The answer correctly identifies the barriers/gaps column and retains proposal/status caveats.
+- Rainwater: 25.10 seconds, six SDK model calls. The answer links its INR25 crore/three-year salinity entry to page 50, distinguishes government measures from a household rule, and states its limited coverage.
+- Heat/health delivery: a real question submitted through the public browser composer, four SDK model calls. It distinguishes proposed, planned and ongoing entries from completed work. Desktop/390px captures, the cited reader and preservation of an edited follow-up passed.
+
+All 14 returned citation passages match the public passage API exactly. The full original download and old-edition reader pass. After promotion, all 20 retained routes passed on desktop and phone, including local template PDF export, with no browser errors. These are bounded acceptance cases, not a guarantee that every generated answer is semantically correct.
+
+## Failed attempts and accounting
+
+Two initial baseline calls used the original extraction: heat/health answered; rooftop solar exposed the fallback’s evidence-budget defect. During the SDK release, two responses failed manual review: a table gap was called a success indicator without the preceding header, and a budget was cited to the wrong page. A later water attempt was correctly rejected because it cited an unread discovery snippet. All failed responses and reservations remain retained; only changed source-context/discovery inputs were retried. Historical accepted research cases were not repeated.
+
+The activation backup is `/data/research/.research-usage/backups/sapcc-20261029T203306Z`. All 20 prior usage imports and 42 pre-activation stage receipts remain identical, and historical daily counters are unchanged. This activation/release added 30 SDK model reservations, including 16 belonging to failed or rejected attempts. Together with the two earlier baseline requests, this task used 32 model reservations. Final UTC October29 total: 69 attempts; October conservative reservations: $32.664589 of the approved $50 cap; 72 stage receipts. These are conservative reservations, not invoiced spend. No development ledger was imported or reset; the dated limits and credentials are unchanged. Temporary SAPCC SSH access was revoked and its local key removed.
+
+## Preservation and rollback
+
+All 1,173 unrelated documents, 21,423 pages and 78,987 chunk/FTS rows match the pre-refresh canonical SQL hash `232e62f2b12f5ae3f2a7d24c51a76ac12a8499a90a356bb613aa001a96bb15db`. The complete active corpus has 1,174 documents, 21,534 pages and 79,548 chunks. Original source SQL and the other old-generation index files remain unchanged.
+
+The derived old-generation ANN file `zvec/3/embedding.index.1.proxima` changed its hash at the first deployment handoff. Comparison with the matching retained local baseline finds only ten differing bytes in one 256KiB block: two stored timestamp values match the hosted file’s 2026-10-29 20:33:43 UTC modification time, plus a four-byte value. All other 601 blocks are identical. The audit therefore does not claim byte identity for that derived cache file. Source SQL, original PDF bytes, old citations and all unrelated source rows pass independently; no cache file was overwritten to conceal the difference.
+
+Rollback frontend: `dpl_47zN5Y9MpUzWmeMkY8FyJzWhhX2g`. Pre-SAPCC SDK backend: `274f19ca-335a-4b39-8988-49ae195b6fac`; previous generation: `20261027T065155-law-5bc5619b`. Retain both generations and the production ledger during any rollback. Application rollback must never restore old usage counters. Runtime-only packages exclude source data, credentials and accounting.
+
+Detailed transcripts, exact source checks, screenshots, package manifests, preservation hashes and failed attempts are retained under ignored `.reports/sapcc-research/`.
