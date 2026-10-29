@@ -64,3 +64,24 @@ def test_supported_answer_retains_exact_passage_and_edition(corpus):
     assert citation['generation'] == 'retained-edition'
     assert 'generation=retained-edition' in citation['reader_url']
     assert 'passage=' in citation['reader_url']
+
+
+def test_native_spread_carries_original_headers_into_read_and_citations(corpus):
+    corpus.documents['plan']['extraction_version'] = 'goa-sapcc-native-spreads-v1'
+    header = 'Intervention\tStatus\tAgency\tBarriers and gaps\tBudget\tTime frame'
+    row = 'Rural rooftop solar\tproposed\tGEDA\tun-electrified houses identified\tRs. 1 crore\t2 years'
+    # A longer spread must remain complete even if the SDK asks for a short
+    # excerpt, with exact adjacent headers inside the existing total tool cap.
+    text = row + '\n' + 'Original source context. ' * 80
+    with sqlite3.connect(corpus.index / 'library.sqlite') as db:
+        db.execute('UPDATE pages SET text=? WHERE doc_id=? AND page=1', (header, 'plan'))
+        db.execute('UPDATE pages SET text=?,warning=? WHERE doc_id=? AND page=2', (text, '', 'plan'))
+    tools = ResearchTools(corpus, 'ecology', 'plan')
+    pages = tools.read({'document_id': 'plan', 'page': 2, 'max_chars': 1000})['pages']
+    assert pages[0]['text'] == text
+    assert pages[1]['text'] == header
+    assert sum(len(p['text']) for p in pages) <= 24000
+    tools.read({'document_id': 'plan', 'page': 1})
+    result = validate_answer(answer(pages[0]), tools, 'ecology')
+    assert [c['page'] for c in result['citations']] == [2, 1]
+    assert result['paragraphs'][0]['citations'] == [pages[0]['id'], pages[1]['id']]
