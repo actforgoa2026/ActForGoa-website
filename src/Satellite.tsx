@@ -94,9 +94,9 @@ export default function Satellite(){
   });}
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
   return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Find a place. Draw an area. Explore what changed.</p></header>
-    
+
     {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until Copernicus is connected. You can explore the map and open saved results.</p>}
-    
+
     <section className="satellite-workbench" aria-label="Map and timeline">
       <SatelliteMap area={area} onArea={chooseArea} disabled={!!busy} observation={observations[activeId]} candidates={result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)?result.intent==='surface_water'?result.evidence.water_candidates:result.intent==='canopy_loss'?result.evidence.candidates:undefined:undefined}/>
       {result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)&&<p className="satellite-note">Any change outlines compare {dateLabel(result.before.acquired_at[0])} with {dateLabel(result.after.acquired_at[0])}. They are exploratory candidates.</p>}

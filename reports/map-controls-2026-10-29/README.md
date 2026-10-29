@@ -8,7 +8,7 @@ The workspace uses the actual existing Arc Button/SearchField components and sha
 
 ## Verification before hosting
 
-- 215 Node tests passed, including four new geocoder tests: Goa-only normalized results, cached duplicate requests, single-flight/rate bounds, oversized-response rejection and UTC daily reset.
+- 215 Node tests passed, including four new geocoder tests: results bounded around Goa, cached duplicate requests, single-flight/rate bounds, oversized-response rejection and UTC daily reset.
 - Integrated TypeScript/build and standalone Vite build passed. Existing bundle-size warning remains.
 - Actual CUA browser checks at 1440×1000 and 390×844: drag selection; two-corner selection; Escape cancellation; oversized area feedback; expand/exit; map zoom; Panaji area lookup; real Artjuna business matches; no horizontal overflow.
 - Phone toolbar clipping discovered during verification was fixed and checked again. Screenshots show the final selection and controls.
