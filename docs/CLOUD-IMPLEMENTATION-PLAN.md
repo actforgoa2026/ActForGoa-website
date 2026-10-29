@@ -1,5 +1,9 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Local satellite interaction follow-up — 29 October 2026
+
+User superseded deployment iteration with local-only work and explicitly approved restoring the browser key's `http://127.0.0.1:4176` referrer. Current uncommitted work in `/Users/zakkrevitt/.codex/worktrees/satellite-google/ActForGoa` on `codex/satellite-google`: isolated hot-reload launcher, real Earth Engine navigation preview, automatic exact-acquisition load after drawing, real Arc date pickers and a two-column map/analysis workspace with explicit AI synopsis status. Saved hosted release above remains unchanged. Local actual comparison on the user's footprint, 10/20 October, completed OpenAI Decisions `gpt-6-luna` with 100% common clear coverage; the earlier cloudy pair correctly skipped AI. Checks: 142 satellite Python tests, 226 Node tests, production build, desktop/phone/browser workflow and local auth boundary. See [local workflow and verification](SATELLITE-LOCAL.md). No push, merge, deployment or hosted data mutation in this follow-up. Local work remains reviewable and uncommitted; next iteration stays local unless the user authorizes release.
+
 ## Satellite Google integration — 29 October 2026 (local)
 
 User explicitly requested connecting Earth Engine and Google Maps APIs to the existing hosted standalone satellite app and testing them there. Isolated branch `codex/satellite-google` starts at fresh main `1b16b87`; the active hosted Python source hash-matches that base. Existing deployments before this change: API `8e598615-7b63-497b-8cd8-608486e98a85`, app `393c446c-2fa6-4b8b-b1e9-0a35bb5c9a77`. Both private databases were backed up before configuration. Main/research aliases and paused chats are outside this work.

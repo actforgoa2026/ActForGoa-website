@@ -1,12 +1,14 @@
 """Read-only, exact-acquisition Sentinel-2 retrieval through Earth Engine.
 
-No mosaics, exports, or asset writes. Credentials remain on the API service.
+Analysis uses exact acquisitions. A separate cloud-masked median supplies navigation
+only. No exports or asset writes; credentials remain on the API service.
 """
 from datetime import datetime, timedelta, timezone
 import json
 import os
 import re
 import threading
+import time
 from urllib.parse import urlparse
 from .domain import DomainError
 
@@ -21,6 +23,8 @@ class EarthEngine:
         self.http = client
         self._initialized = False
         self._lock = threading.Lock()
+        self._preview_lock = threading.Lock()
+        self._previews = {}
 
     @staticmethod
     def configured():
@@ -45,6 +49,55 @@ class EarthEngine:
                 except Exception:
                     raise DomainError('imagery_authentication', 'Earth Engine could not authenticate. Reconnect its read-only credential on the server.', 502) from None
         return ee
+
+    def preview(self, request, on_generate=None):
+        """A dated navigation composite. Never used as an analysis observation."""
+        from .domain import GOA
+        from shapely.geometry import mapping
+        key = (request.start_date.isoformat(), request.end_date.isoformat())
+        with self._preview_lock:
+            cached = self._previews.get(key)
+            if cached and cached[0] > time.monotonic():
+                return {**cached[1], 'cache_hit': True}
+            if on_generate:
+                on_generate()
+            ee = self._ee()
+            try:
+                roi = ee.Geometry(mapping(GOA))
+                images = (ee.ImageCollection(COLLECTION).filterBounds(roi)
+                          .filterDate(key[0], (request.end_date + timedelta(days=1)).isoformat())
+                          .sort('system:time_start', False).limit(160))
+                metadata = ee.Dictionary({'count': images.size(),
+                    'first': images.aggregate_min('system:time_start'),
+                    'last': images.aggregate_max('system:time_start')}).getInfo()
+                if not metadata['count']:
+                    raise DomainError('no_imagery', 'Earth Engine has no Sentinel-2 imagery in this period. Choose another date range.', 404)
+                def clear_pixels(image):
+                    image = ee.Image(image)
+                    scl = image.select('SCL')
+                    return image.select(['B4', 'B3', 'B2']).updateMask(scl.gte(4).And(scl.lte(6)))
+                composite = images.map(clear_pixels).median().clip(roi)
+                descriptor = composite.getMapId({'bands': ['B4', 'B3', 'B2'], 'min': 0, 'max': 3000, 'gamma': 1.25})
+                tile_url = descriptor['tile_fetcher'].url_format
+                parsed = urlparse(tile_url)
+                if parsed.scheme != 'https' or parsed.hostname != 'earthengine.googleapis.com' or parsed.username or parsed.password:
+                    raise ValueError('Unexpected tile destination')
+                result = {'provider': 'earth-engine', 'collection': COLLECTION,
+                    'tile_url': tile_url, 'start_date': key[0], 'end_date': key[1],
+                    'first_acquired_at': datetime.fromtimestamp(metadata['first']/1000, timezone.utc).isoformat(),
+                    'last_acquired_at': datetime.fromtimestamp(metadata['last']/1000, timezone.utc).isoformat(),
+                    'scene_count': metadata['count'], 'method': 'cloud-masked median',
+                    'scope': 'Goa navigation overview; not an exact acquisition or change measurement.',
+                    'cache_hit': False}
+                self._previews = {k:v for k,v in self._previews.items() if v[0] > time.monotonic()}
+                if len(self._previews) >= 8:
+                    self._previews.pop(next(iter(self._previews)))
+                self._previews[key] = (time.monotonic()+2700, result)
+                return result
+            except DomainError:
+                raise
+            except Exception:
+                raise DomainError('imagery_provider_error', 'The Earth Engine overview could not load. Retry or choose another period.', 502) from None
 
     @staticmethod
     def scene(feature, request):

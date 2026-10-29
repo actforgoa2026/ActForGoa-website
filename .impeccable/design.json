@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-29T15:55:19.023081Z",
+  "generatedAt": "2026-10-29T17:25:39.376745Z",
   "title": "Design System: ActForGoa",
   "extensions": {
     "colorMeta": {
@@ -257,7 +257,7 @@
       {
         "name": "satellite-floating",
         "value": "0 12px 36px rgb(25 62 50 / 12%), 0 2px 6px rgb(25 62 50 / 5%)",
-        "purpose": "Satellite floating search and place results only."
+        "purpose": "Satellite floating search, place results, and Arc calendar popover only."
       },
       {
         "name": "satellite-map-overlay",
@@ -331,6 +331,10 @@
       {
         "name": "satellite-tools-stack-max",
         "value": "760px"
+      },
+      {
+        "name": "satellite-workspace-stack-max",
+        "value": "1000px"
       }
     ],
     "focus": {
@@ -473,6 +477,32 @@
         "snapshot": ".reports/topic-restoration-2026-10-26",
         "snapshotIntegrity": "Parent compared runtime/test SHA256 values and confirmed no changes since capture."
       }
+    },
+    "satellite": {
+      "sources": [
+        "src/satellite-layout.css",
+        "src/satellite.css",
+        "src/Satellite.tsx",
+        "src/SatelliteMap.tsx",
+        "src/SatelliteDatePicker.tsx",
+        "src/components/arc/date-picker/date-picker.tsx",
+        "src/components/arc/date-picker/date-picker.module.css",
+        "src/components/arc/calendar/calendar.tsx"
+      ],
+      "desktopLayout": "Above 1000px: flexible map and 400px analysis column with a 24px gap. Both are sticky at 80px; analysis scrolls independently within calc(100svh - 100px). Non-expanded map height is calc(100svh - 390px), minimum 380px.",
+      "compactLayout": "At 1000px and below, map and analysis stack with ordinary page scrolling. Non-expanded map height is calc(100svh - 280px), minimum 460px; at 620px it is 60svh with the same minimum. Existing 760px map-tool stacking remains.",
+      "analysisSurface": "Controls and synopsis use open paper with horizontal rules. The synopsis has a 22px heading at weight 650, an 18px outcome heading at weight 600, and 14px body text with 1.6 leading.",
+      "dateControls": "Installed Arc DatePicker and Calendar; 44px minimum triggers, 16px date values, 14px visible labels, existing satellite control corners and 20px popover corners. End-date popover aligns right; phone maximum is calc(100vw - 48px). Arc owns keyboard navigation, dismissal, focus return, date bounds and reduced motion.",
+      "imageryContext": "Default Earth Engine view labels its period and cloud-masked median overview. A retained selection shows the exact dated acquisition, with provider attribution and acquisition source caption. Streets remains a separate navigation choice.",
+      "outcome": "Visible AI complete, skipped or unavailable state; completion scrolls the synopsis into view and retains the desktop map. Detailed images, AI decisions and measurements remain in an adjacent disclosure. Reduced motion makes the result scroll immediate.",
+      "captures": [
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/local-ai-synopsis-desktop.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/local-draw-loaded-desktop.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/local-earth-engine-phone.jpg",
+        "/Users/zakkrevitt/.codex/visualizations/2026/10/29/01a187dd-561f-78f3-a682-18ae44896002/local-arc-calendar-phone.jpg"
+      ],
+      "review": ".reports/satellite-local/finish-review.md",
+      "limits": "All four supplied local captures were inspected; desktop outcomes are scrolled states. Independent local finish review returned ship with no material fixes. This documentation pass did not rerun application tests or claim deployment."
     }
   },
   "components": [
@@ -583,7 +613,7 @@
   ],
   "narrative": {
     "northStar": "The Open Goan Field Guide",
-    "overview": "ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.\n\nThe approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.\n\nThe satellite investigation surface has an expressly approved exception to the guide defaults: upright Figtree, rounded floating map controls, soft functional shadows, and a map that occupies most of the viewport. It retains the same green and cream palette, installed Arc behavior, source proximity, and bans on italic type and decorative side stripes. This exception applies only while the satellite map surface is mounted; other guide surfaces keep their existing system.",
+    "overview": "ActForGoa is an open, calm field guide. Warm paper carries green ink, large upright headings, useful local information, and real photographs. The page earns its structure through typography, generous space, and horizontal rules.\n\nThe approved refinement keeps the original warm-paper and green palette, with stronger upright typography. Topic browsing, reading, and contact actions share one continuous page ground. On the homepage, the heading and question composer sit over real local photography. Official Arc components provide consistent controls and interaction behavior, with the project’s colours, type, and modest corner radius applied through the foundation tokens.\n\nThe satellite investigation surface has an expressly approved exception to the guide defaults: upright Figtree, rounded floating map controls, soft functional shadows, and a map-led investigation workspace. It retains the same green and cream palette, installed Arc behavior, source proximity, and bans on italic type and decorative side stripes. This exception applies only while the satellite map surface is mounted; other guide surfaces keep their existing system.",
     "keyCharacteristics": [
       "Continuous warm paper and forest-green text.",
       "Strong upright Manrope across guide surfaces, including mission, article, and feed headings; upright Figtree in the scoped satellite surface.",
