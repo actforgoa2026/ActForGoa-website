@@ -1,5 +1,15 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Map and landscape release authorized — 30 October 2026
+
+The user's latest explicit “SHIP IT” authorizes publishing this follow-up to the existing field-guide alias and satellite frontend. This supersedes the local-only instruction below for this release. The original WordPress domain, hosted Python API, corpus, credentials, quotas and persistent data are unchanged. Reconcile the newer Goa SAPCC work from origin/main before the exact-tree browser checks. Use the existing release guard and an allowlisted satellite frontend package. Record final deployment identities and live checks under ignored `.reports/map-workspace-release-2026-10-30/`.
+
+## Local follow-up — 30 October 2026
+
+The user has explicitly returned this chat to local-only work after the earlier design release. No further commit, push, merge or production deployment is authorized. Active source remains `/Users/zakkrevitt/.codex/worktrees/actforgoa-design-iteration`.
+
+Implemented locally: larger submenu labels, reuse of the approved stippled landscape, and a two-column satellite workspace with actual Arc calendar pickers. The running local satellite API is configured for Google Earth Engine. A bounded fresh catalogue/image check succeeded through the authenticated local app route; optional image classification remains unconfigured locally. `npm run dev:check -- --satellite-only` now verifies local readiness without depending on the hosted corpus AI service. Main and standalone builds, 11 targeted Node tests, desktop/phone renders, and a real Earth Engine numeric comparison pass. See [local follow-up](design/local-followup-2026-10-30.md).
+
 ## Goa SAPCC live and verified · 30 October 2026
 
 The user explicitly said “ship it” for the downloaded Goa SAPCC and resident navigator. The focused release uses isolated branch `codex/goa-sapcc-release` from fresh main `60844a3`, preserving the shared dirty checkout and the newer Arc/Figtree release. The target is the existing field-guide review alias; the original WordPress domain is outside this change. The preceding design promotion has completed and its shared release lock has cleared.

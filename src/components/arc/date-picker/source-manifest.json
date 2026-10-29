@@ -1,0 +1,36 @@
+{
+  "retrievedOn": "2026-10-30",
+  "verification": "Official public registry opened in Chrome; each displayed source matched the cached source by length and FNV-1a before import. SHA-256 below hashes each exact original source.",
+  "files": [
+    {
+      "registry": "https://uiarc.dev/r/date-picker.json",
+      "sourcePath": "registry/components/date-picker/date-picker.tsx",
+      "localPath": "src/components/arc/date-picker/date-picker.tsx",
+      "sourceSha256": "996d6b6703f7478c9ce286a3bbcd49a10aac0cb489b0d8915dfd89dad9c4efb8"
+    },
+    {
+      "registry": "https://uiarc.dev/r/date-picker.json",
+      "sourcePath": "registry/components/date-picker/date-picker.module.css",
+      "localPath": "src/components/arc/date-picker/date-picker.module.css",
+      "sourceSha256": "fc3907dc484832ef441b367dd16135bf081ec77894ea1ae7c9c59508a2abe95a"
+    },
+    {
+      "registry": "https://uiarc.dev/r/calendar.json",
+      "sourcePath": "registry/components/calendar/calendar.tsx",
+      "localPath": "src/components/arc/calendar/calendar.tsx",
+      "sourceSha256": "cf09873e5d895e46129159e62f7e494f448cfd247aaddd6c9a54de45a5d6c108"
+    },
+    {
+      "registry": "https://uiarc.dev/r/calendar.json",
+      "sourcePath": "lib/use-today.ts",
+      "localPath": "src/components/arc/lib/use-today.ts",
+      "sourceSha256": "069a833b34cb103040013346c07ad453d235da1096ea011d2c50bd148029a3af"
+    },
+    {
+      "registry": "https://uiarc.dev/r/calendar.json",
+      "sourcePath": "registry/components/calendar/calendar.module.css",
+      "localPath": "src/components/arc/calendar/calendar.module.css",
+      "sourceSha256": "2e019a6ca658f124c7ea0303aac46aa615a4e6bb3bc485c57d3b85acb0d26adc"
+    }
+  ]
+}

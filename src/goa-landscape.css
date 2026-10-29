@@ -1,0 +1,65 @@
+.goa-landscape {
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+}
+
+.goa-landscape img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 68%;
+  mix-blend-mode: multiply;
+}
+
+/* An open horizon between the circular introduction and the topic choices. */
+.goa-landscape--horizon {
+  height: clamp(150px, 18vw, 260px);
+  margin-top: 16px;
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
+}
+
+/* Use the existing heading space, so the search and results do not move down. */
+.catalogue .catalogue-heading--landscape {
+  position: relative;
+  max-width: none;
+}
+
+.catalogue-heading--landscape h1 {
+  max-width: 52%;
+}
+
+.goa-landscape--heading {
+  position: absolute;
+  right: 0;
+  top: -40px;
+  width: min(44%, 560px);
+  height: 128px;
+  mask-image: linear-gradient(to right, transparent, #000 12%, #000 94%, transparent),
+    linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
+  mask-composite: intersect;
+}
+
+@media (max-width: 700px) {
+  .goa-landscape--horizon {
+    height: 144px;
+    margin-top: 0;
+  }
+
+  .goa-landscape--horizon img {
+    width: 165%;
+    max-width: none;
+    margin-left: -32.5%;
+  }
+
+  .goa-landscape--heading {
+    top: -14px;
+    width: 42%;
+    height: 76px;
+  }
+}
+
+@media print {
+  .goa-landscape { display: none; }
+}

@@ -1,3 +1,6 @@
+import SegmentedControl from './components/arc/segmented-control/segmented-control';
+import {DatePicker} from './components/arc/date-picker/date-picker';
+import {calendarDate,calendarValue} from './satellite-calendar';
 import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
 import {Link} from 'react-router-dom';
@@ -35,6 +38,9 @@ function ImageDecisions({result}:{result:SatelliteResult}){
 }
 
 export default function Satellite(){
+  const [panel,setPanel]=useState('analyse');
+  const panelScroll=useRef<HTMLDivElement>(null);
+  useEffect(()=>{panelScroll.current?.scrollTo({top:0});},[panel]);
   const [session,setSession]=useState<AdminSession|null>(null),[authChecked,setAuthChecked]=useState(false),[accessError,setAccessError]=useState(''),[accessRevision,setAccessRevision]=useState(0),[pendingJob,setPendingJob]=useState('');
   const [area,setArea]=useState<SatelliteArea|null>(null),[coords,setCoords]=useState(['73.82','15.48','73.83','15.49']);
   const [question,setQuestion]=useState('');
@@ -71,7 +77,7 @@ export default function Satellite(){
     setPendingJob(id);
     if(session)try{if(id)sessionStorage.setItem(pendingJobKey(session.user.id),id);else sessionStorage.removeItem(pendingJobKey(session.user.id));}catch{/* Retain the visible reference when storage is unavailable. */}
   }
-  function clearResults(){setActiveId('');setObservations({});setScenes([]);setBefore('');setAfter('');setResult(null);setNotice('');setError('');setCatalogFreshness(null);}
+  function clearResults(){setPanel('analyse');setActiveId('');setObservations({});setScenes([]);setBefore('');setAfter('');setResult(null);setNotice('');setError('');setCatalogFreshness(null);}
   function chooseArea(value:SatelliteArea){if(lock.current)return;const message=areaError(value.bbox);if(message){setError(message);return;}setArea(value);setCoords(value.bbox.map(v=>v.toFixed(5)));setPlan(null);clearResults();}
   async function run(label:string,action:(signal:AbortSignal)=>Promise<void>){
     if(lock.current)return;lock.current=true;const abort=new AbortController();controller.current=abort;setBusy(label);setError('');
@@ -92,10 +98,11 @@ export default function Satellite(){
     const preserve=preserveTimeline&&job.request&&sameImageryContext(job.request,{area,start_date:start,end_date:end})&&scenes.length>0;
     if(!preserve)clearResults();setPlan(null);
     if(job.request){const r=job.request;setArea(r.area);setCoords(r.area.bbox.map(String));setStart(r.start_date);setEnd(r.end_date);setIntent(r.intent);setQuestion(r.question||'');}else{setArea(null);setCoords(['','','','']);}
-    const value=job.result;setResult(value);
+    const value=job.result;setResult(value);setPanel('results');
     const pair=[value.before,value.after];setObservations(previous=>cacheObservations(preserve?previous:{},pair));
     if(!preserve)setScenes(orderedScenes(pair.map(o=>({id:o.catalog_scene_id,acquired_at:o.acquired_at[0],scene_cloud_percent:null}))));
     setBefore(pair[0].catalog_scene_id);setAfter(pair[1].catalog_scene_id);setActiveId(pair[1].catalog_scene_id);
+    requestAnimationFrame(()=>{panelScroll.current?.scrollTo({top:0});panelScroll.current?.focus({preventScroll:true});});
   }
   async function finishJob(id:string,signal:AbortSignal){
     if(!session)return;
@@ -133,38 +140,42 @@ export default function Satellite(){
     const job=await satelliteApi<SavedJob>('/jobs/'+id,session.csrfToken,undefined,signal);
     if(job.status!=='complete')throw new Error('This investigation has not completed.');
     restoreComparison(job);
-    requestAnimationFrame(()=>document.querySelector('.satellite-results')?.scrollIntoView({behavior:'smooth',block:'start'}));
+
   });}
   const periodDays=(Date.parse(end)-Date.parse(start))/86400000;
-  const periodError=!start||!end||!Number.isFinite(periodDays)||periodDays<0?'Choose an ordered start and end date.':start<'2017-03-28'||end>today()?'Choose dates from 28 March 2017 through today.':periodDays>120?'New imagery searches cover up to 120 days. Use a shorter period; saved-evidence search below can span longer periods.':'';
-  const findReason=!authChecked?'Checking your access…':accessError?'Retry the access check to enable imagery.':!session?'Sign in to retrieve imagery.':!readiness?.imagery_ready?'Copernicus retrieval is not configured on this server.':!area?'Select an area on the map first.':periodError;
+  const periodError=!start||!end||!Number.isFinite(periodDays)||periodDays<0?'Choose an ordered start and end date.':start<'2017-03-28'||end>today()?'Choose dates from 28 March 2017 through today.':periodDays>120?'New imagery searches cover up to 120 days. Use a shorter period; saved-evidence search can span longer periods.':'';
+  const findReason=!authChecked?'Checking your access…':accessError?'Retry the access check to enable imagery.':!session?'Sign in to retrieve imagery.':!readiness?.imagery_ready?'Satellite imagery retrieval is not configured on this server.':!area?'Select an area on the map first.':periodError;
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
   return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Find a place. Draw an area. Explore what changed.</p></header>
+    <div className="satellite-workspace">
+    <section className="satellite-workbench" aria-label="Investigation map"><h2>Select your area</h2>
+      <SatelliteMap area={area} onArea={chooseArea} disabled={!!busy} observation={observations[activeId]} candidates={result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)?result.intent==='surface_water'?result.evidence.water_candidates:result.intent==='canopy_loss'?result.evidence.candidates:undefined:undefined}/>
+    </section>
+    <aside className="satellite-analysis" aria-label="Satellite analysis tools">
+      <SegmentedControl fullWidth label="Investigation view" value={panel} onValueChange={setPanel} options={[{value:'analyse',label:'Analyse'},{value:'results',label:'Results'},{value:'evidence',label:'Saved evidence'}]}/>
+      <div ref={panelScroll} className="satellite-panel-scroll" role="region" tabIndex={0} aria-label="Analysis panel">
     {!authChecked&&<p role="status">Checking satellite access…</p>}
     {accessError&&<div className="satellite-access" role="alert"><p>{accessError}</p><Button type="button" variant="secondary" disabled={!authChecked} onClick={()=>setAccessRevision(v=>v+1)}>Retry access check</Button><p><a href="https://satellite-app-production.up.railway.app/map">Open the standalone satellite workspace</a></p></div>}
-    {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until Copernicus is connected. You can explore the map and open saved results.</p>}
-    <section className="satellite-workbench" aria-label="Map and timeline"><h2>1. Select your area</h2>
-      <SatelliteMap area={area} onArea={chooseArea} disabled={!!busy} observation={observations[activeId]} candidates={result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)?result.intent==='surface_water'?result.evidence.water_candidates:result.intent==='canopy_loss'?result.evidence.candidates:undefined:undefined}/>
-      {result&&[result.before.catalog_scene_id,result.after.catalog_scene_id].includes(activeId)&&<p className="satellite-note">Any change outlines compare {dateLabel(result.before.acquired_at[0])} with {dateLabel(result.after.acquired_at[0])}. They are exploratory candidates.</p>}
-      {!scenes.length&&<p className="satellite-note">Select an area, then find observations for the dates below. Satellite imagery will appear over this map.</p>}
-      <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready&&!pendingJob} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
-    </section>
+    {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until the imagery service is connected. You can explore the map and open saved results.</p>}
     {authChecked&&!session&&!accessError&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
-    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">{satelliteMapProvider==='google'?'Place search sends your submitted search terms and the Goa search boundary to Google Maps.':'Place search sends your submitted search terms to Photon, an OpenStreetMap search service.'} Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
     {pendingJob&&<div className="satellite-job" role="status"><p>Imagery job reference: <code>{pendingJob}</code>. Checking resumes this job without submitting new imagery or AI work.</p><Button type="button" variant="secondary" disabled={!!busy||!session} onClick={resumeJob}>Check job</Button><Button type="button" variant="ghost" disabled={!!busy} onClick={()=>trackJob('')}>Stop tracking</Button><p className="satellite-note">Stopping tracking does not cancel the server job. Completed comparisons remain in your history.</p></div>}
     {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
-    <fieldset className="satellite-controls" disabled={!!busy}><legend>2. Choose a period and find imagery</legend>
-      <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
-      <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
-      <div className="satellite-dates"><Input label="Search from" type="date" value={start} max={end} min="2017-03-28" onChange={e=>{setStart(e.target.value);setPlan(null);clearResults();}}/><Input label="Search until" type="date" value={end} min={start} max={today()} onChange={e=>{setEnd(e.target.value);setPlan(null);clearResults();}}/>
-        <MorphSelect label="Investigate" value={intent} disabled={!!busy} onValueChange={value=>{setIntent(value as SatelliteIntent);setResult(null);setPlan(null);}} items={Object.entries(intents).map(([value,label])=>({value,label}))}/></div>
+      <div hidden={panel!=='analyse'}>
+        <p className="satellite-area-summary">{area?'Area selected. Choose your dates and topic.':'Find a place on the map, then draw your area.'}</p>
+    <fieldset className="satellite-controls" disabled={!!busy}><legend>Find satellite imagery</legend>
+
+      <div className="satellite-dates"><DatePicker label="From" value={calendarDate(start)} minDate={calendarDate("2017-03-28")} maxDate={calendarDate(end)} disabled={!!busy} onChange={date=>{setStart(calendarValue(date));setPlan(null);clearResults();}}/><DatePicker label="Until" value={calendarDate(end)} minDate={calendarDate(start)} maxDate={calendarDate(today())} disabled={!!busy} onChange={date=>{setEnd(calendarValue(date));setPlan(null);clearResults();}}/>
+      </div><div className="satellite-investigation-topic"><MorphSelect label="Investigate" value={intent} disabled={!!busy} onValueChange={value=>{setIntent(value as SatelliteIntent);setResult(null);setPlan(null);}} items={Object.entries(intents).map(([value,label])=>({value,label}))}/></div>
       <Button type="button" disabled={!!findReason||!!busy} aria-describedby={findReason?"satellite-find-reason":undefined} onClick={findScenes}>Find dated observations</Button>
       {findReason&&<p id="satellite-find-reason" role="status">{findReason}</p>}
-      <p className="satellite-note">Searches use the acquisition dates, not today’s street-map tiles. The time slider steps through returned acquisitions; load an image to inspect it.</p>
+      <p className="satellite-note">Search up to 120 days of dated Sentinel-2 imagery.</p>
       {readiness?.imagery_provider==='earth-engine'&&<p className="satellite-note">Sentinel-2 acquisitions supplied by Google Earth Engine.</p>}
       {notice&&<p role="status">{notice}</p>}
       {catalogFreshness?.latest_acquired_at&&<p className="satellite-freshness">Latest acquisition found in this search: <strong>{dateLabel(catalogFreshness.latest_acquired_at)}</strong>. Catalog checked {dateLabel(catalogFreshness.searched_at)}. Availability does not guarantee clear local visibility.</p>}
-      {!!scenes.length&&<><h3>3. Compare two observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${dateLabel(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready&&!pendingJob} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
+      {!!scenes.length&&<><h3>Compare observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${dateLabel(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
+      <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
     </fieldset>
     <details className="satellite-planner"><summary>Optional: prepare dates and topic from a question</summary>    <form className="satellite-question" onSubmit={ask}><Textarea label="Describe the investigation to prepare" value={question} maxLength={1000} rows={3} onChange={e=>setQuestion(e.target.value)} placeholder="Compare canopy here during the last month"/>
       <Button type="submit" disabled={!session||!!busy||!readiness?.planner_ready||question.trim().length<3}>Prepare investigation</Button>
@@ -172,10 +183,15 @@ export default function Satellite(){
     {plan&&<div className="satellite-plan" role="status"><p>{plan.message}</p>{plan.window_start&&<p>Requested period: {dateLabel(plan.window_start)} to {dateLabel(plan.window_end!)}.</p>}{plan.place_name&&<p>Requested place: {plan.place_name}. Select it on the map, then ask about “this area”.</p>}{plan.warnings?.map(w=><p key={w}>{w}</p>)}</div>}
 </details>
     <SatelliteEnvironment area={area} csrfToken={session?.csrfToken||''} ready={!!readiness?.google_maps_ready}/>
-    <SatelliteEvidence csrfToken={session?.csrfToken||''} area={area} startDate={start} endDate={end} intent={intent} question={question} onQuestion={setQuestion} onOpen={openSaved} busy={!!busy} revision={historyRevision}/>
+    <details className="satellite-limitations"><summary>About the imagery and location search</summary><p className="satellite-qualification">Experimental area investigations. Clear imagery can lag behind today, especially during monsoon. Small litter and individual trees may not be resolvable; construction legality requires planning records.</p><p className="satellite-note">{satelliteMapProvider==='google'?'Place search sends your submitted search terms and the Goa search boundary to Google Maps.':'Place search sends your submitted search terms to Photon, an OpenStreetMap search service.'} Avoid private information. Your location is requested only when you press the location button and is not saved. Map tiles are requested for the area you view.</p>{session&&readiness&&!(readiness.classification_ready??readiness.decisions_ready)&&<p>Image decisions are awaiting server configuration. Dated imagery and numeric comparisons are available.</p>}</details>
+      </div>
+      <div hidden={panel!=='results'}>
+        {!result&&<div className="satellite-empty-result"><h2>Your comparison</h2><p>Select an area and load two observations to see measured changes here. The map stays alongside your findings.</p><Button variant="secondary" onClick={()=>setPanel('analyse')}>Choose observations</Button></div>}
     {result&&<section className="satellite-results"><h2>{result.summary?.headline??'What these observations show'}</h2>
+      <SegmentedControl fullWidth label="Image shown on map" value={activeId} onValueChange={setActiveId} options={[{value:result.before.catalog_scene_id,label:'Before image'},{value:result.after.catalog_scene_id,label:'After image'}]}/>
+      <p className="satellite-note">Change outlines compare this pair of observations. They are exploratory candidates, not confirmed changes.</p>
       {result.recorded_example&&<p className="satellite-recorded"><strong>Recorded real comparison.</strong> Retrieved {dateLabel(result.recorded_example.retrieved_at)}. {result.recorded_example.note}{' '}<a href={result.recorded_example.source_url} target="_blank" rel="noreferrer">View the original verification</a></p>}
-      <ImageDecisions result={result}/>
+      <details><summary>Image assessment</summary><ImageDecisions result={result}/></details>
       {result.freshness&&<div className="satellite-freshness"><p>Latest acquisition found in the saved search: <strong>{dateLabel(result.freshness.latest_acquired_at_in_search)}</strong>. Catalog checked {dateLabel(result.freshness.catalog_searched_at)}.</p>
         <p>{result.freshness.newer_acquisitions_in_search?`${result.freshness.newer_acquisitions_in_search} newer acquisition(s) were available than the selected after image.`:'The selected after image was the newest acquisition returned by this search.'} {result.freshness.note}{result.freshness.catalog_truncated?' This was a partial catalog; newer matches may be missing.':''}</p></div>}
       {result.summary&&<div className="satellite-answer" aria-label="Evidence-based interpretation">{result.summary.statements.map((statement,i)=><p key={i}>{statement.text}{' '}<span className="satellite-evidence-links">{statement.sources.map(source=><a href={'#satellite-'+source} key={source}>{evidenceLabels[source]}</a>)}</span></p>)}</div>}
@@ -190,10 +206,17 @@ export default function Satellite(){
       <details><summary>What these observations cannot establish</summary><p>{result.fire_detections.message}</p>{result.intent==='land_change'&&<p>{result.planning_context?.message}</p>}{result.limitations.map(l=><p className="satellite-note" key={l}>{l}</p>)}</details>
       {result.library_context&&<SatelliteContext context={result.library_context}/>}
     </section>}
+      </div>
+      <div hidden={panel!=='evidence'}>
+    <SatelliteEvidence csrfToken={session?.csrfToken||''} area={area} startDate={start} endDate={end} intent={intent} question={question} onQuestion={setQuestion} onOpen={openSaved} busy={!!busy} revision={historyRevision}/>
     {session&&<SatelliteHistory area={area} csrfToken={session.csrfToken} revision={historyRevision} busy={!!busy} onOpen={openSaved}/>}
     <section className="satellite-context"><h2>Understand the local context</h2><p>Amche Atlas brings together Goa’s survey plots, forests, wetlands, water bodies and planning maps. Check each layer’s date and source alongside the satellite observations.</p>
       <a href={`https://amche.in/?atlas=goa#14/${centre[1].toFixed(5)}/${centre[0].toFixed(5)}`} target="_blank" rel="noreferrer">Open this location in Amche Atlas ↗</a>
       <p>Water-body and private-forest records from Amche are available in the map’s context controls. Use evidence search to find reference records that intersect your selected area, with source dates and citations. Reference records do not establish a change’s cause or legality.</p>
     </section>
+      </div>
+      </div>
+    </aside>
+    </div>
   </main>;
 }
