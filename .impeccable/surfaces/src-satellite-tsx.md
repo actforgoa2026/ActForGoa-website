@@ -14,7 +14,7 @@ FIRST VIEWPORT: Desktop uses two columns: a large sticky map on the left and dat
 
 FORM: Earth Engine cloud-masked Sentinel-2 median is the default navigation overview, labelled with its period and kept separate from exact-acquisition analysis. Google Streets remains optional and Google Places supplies search. Drawing retains its rectangle and shows progress/errors beside it. Suggested dates use scene-wide clouds, with local visibility still checked before analysis. Existing saved investigations, sources, Amche and environmental context remain available below the core workspace. Detailed imagery, model decisions and spectral measurements sit behind a disclosure next to the synopsis.
 
-LOCAL SCOPE: User explicitly requested local-only iteration. `npm run dev:satellite` serves `http://127.0.0.1:4176/map`, with a separate authenticated local account/data, loopback-only API and normal CSRF. No deployment, push or merge is authorized for this pass. The browser key's localhost referrer was explicitly approved.
+RELEASE SCOPE: The user approved shipping the completed local iteration on 30 October 2026. Deploy only the existing standalone Railway satellite API and app. Keep the local environment for ongoing iteration. `npm run dev:satellite` serves `http://127.0.0.1:4176/map`, with a separate authenticated local account/data, loopback-only API and normal CSRF. The main-site Vercel deployment and original domain remain outside this release. The browser key's localhost referrer was explicitly approved.
 
 ANTI-REFERENCE: User rejected native browser date pickers (attached screenshot), controls below a full-height map, and invisible/buried analysis. Prior approval does not override that rejection.
 
