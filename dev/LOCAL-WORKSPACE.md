@@ -38,9 +38,27 @@ The complete public CRM snapshot and read-only index are in `/Users/zakkrevitt/.
 
 `dev/agent-prompt.txt` is read on every answer. The Tune pane saves answer style, extra search terms and effort for the next request. Backend retrieval edits reload through Uvicorn; frontend edits update through Vite. Source text and original indexes remain immutable. Local retrieval searches every extracted page using FTS5 plus the existing premises-query expansion. The original vector index is preserved but not activated here; this runtime does not claim production hybrid-search parity.
 
-Evidence retains generation, document ID, page, exact character span, source URL and warnings. The original manual source-review exclusions and corrupt-page warnings prevent those spans being used in answers. Every returned citation must identify retrieved/read evidence and include an exact quote from it. This validates traceability, not semantic correctness. Existing takeaway/deeper-detail rendering, follow-ups, document readers, new-tab references and location-based authority lookup remain available.
+Evidence retains generation, document ID, page, exact character span, source URL and warnings. The original manual source-review exclusions and corrupt-page warnings prevent those spans being used in answers. Every returned citation must identify evidence from `read_document` or `read_crm_record` in that conversation; discovery-only search hits cannot be cited. As in the existing production normalizer, the application resolves the selected IDs to complete, unchanged source text instead of asking the model to retype damaged PDF glyphs. This validates traceability, not semantic correctness. Existing takeaway/deeper-detail rendering, follow-ups, document readers, new-tab references and location-based authority lookup remain available.
 
-## Dev accounting reconciled; original allowance expired
+## Current status: renewed allowance and successful live answer
+
+The user explicitly approved up to $2 more on 30 October 2026 IST. Runtime `2cf9738` records this once as an additive grant in the existing dev database, increasing the lifetime cap from $2 to $4. The original reconciliation file, its expired allowance and sealed cloud baseline remain byte-for-byte unchanged. A separate pre-renewal backup is retained. The renewal is limited by money, with no new time expiry requested or invented; there is no calendar reset. Running `dev/renew_dev_budget.py` again is rejected rather than granting another $2.
+
+Two browser requests were made after renewal. The first completed the SDK but failed the old retyped-quotation validation. The second, after adopting exact source-ID resolution and requiring source reads, completed successfully in about 18 seconds. Its SDK result is `success`, seven SDK turns, with four provider HTTP responses all 200. It searched the documents and government CRM, read two full document pages and the complete Agonda record, and displayed five cited paragraphs, source qualifications, a clarifying question and three related follow-up buttons. The source links opened separate tabs at PDF page 40 and the exact public CRM record; the location lookup returned Village Panchayat Agonda. This is a focused functional acceptance, not renewed legal-currency review or a full release acceptance suite.
+
+| Dev accounting after renewal testing | Amount |
+| --- | ---: |
+| Lifetime approved cap | $4.000000 |
+| Carried forward before renewal | $1.723585 |
+| Eight additional provider-attempt reservations | $1.529455 |
+| Total reserved, 19 attempts | $3.253040 |
+| Remaining allowance | $0.746960 |
+
+All four original cloud receipts and seven earlier local reservations are preserved. The two new SDK runs reported estimated costs of $0.0442266 and $0.0651322; those estimates do not replace or refund the conservative ledger. The backend remains enabled within the remaining cap. Seventeen focused Python checks and TypeScript checking pass, including additive/duplicate renewal, exact source resolution, unread-source rejection, original source exclusions, proxy headers and concurrent cap enforcement. No deployment or production build ran.
+
+Private evidence is in `.reports/sdk-local-e2e/renewed-success.json`, `renewed-accounting-audit.json`, and `renewed-live-answer.jpg`. The state directory's `diagnostics/` records SDK status, source IDs and structured answer for local diagnosis; provider diagnostics omit credentials, prompts, response text and raw stderr. The rendered result was checked with the Impeccable context workflow in the existing app panel. No visual source changes were needed.
+
+## Historical transfer and first expired allowance
 
 On 30 October 2026 IST, the user authorized obtaining the existing dev accounting from the cloud chat “AI.” Its dev backend/relay were already stopped, with no in-flight requests. It exported a complete SQLite backup of `/workspace/.research-private/usage/answer-usage.sqlite`, together with the original `/workspace/.research-private/allowance.json`. No production accounting was involved. The export preserved four attempts and $0.441196 reserved, leaving $1.558804 under the original $2 cap. Every receipt and the gzip/SQLite hashes were verified before the explicit import.
 
@@ -48,13 +66,13 @@ The sealed imported baseline is `~/.local/share/actforgoa-research-dev/accountin
 
 One live local end-to-end request through Vite → backend → Claude Agent SDK → the bounded Anthropic proxy returned HTTP 502 after 20.59 seconds, without a verified answer. It reserved seven provider attempts totaling $1.282389. Total accounting is now 11 attempts and **$1.723585 reserved**, leaving **$0.276415**. These are conservative reservations, not a claim of actual invoiced cost. Failed/unknown attempts have not been refunded. No paid retry followed.
 
-The imported allowance expired at **2026-10-29 18:54:01 UTC / 30 October 00:24:01 IST**. Its expiry and $2 cap were not extended. Status now explicitly reports expiry while retaining the exact balance, and chat rejects requests before dispatch. A successful live generated answer remains unverified; the remaining allowance is not currently authorized for dispatch under the preserved expiry.
+The imported allowance expired at **2026-10-29 18:54:01 UTC / 30 October 00:24:01 IST**. At that checkpoint its expiry and $2 cap were not extended, and chat correctly rejected requests before dispatch. The later explicit additive renewal and successful answer above supersede that paused state without rewriting it.
 
-`backend/local_budget.py` fails closed unless a reconciled ledger and checksum-bound receipt exist. When enabled, it enforces one lifetime $2 total across all months, without resets/refunds; each actual provider HTTP attempt, including SDK retries, must reserve its conservative input/output cost atomically before dispatch. Failed attempts retain their reservation. The SDK's own session budget is a second guard, not the authoritative accounting mechanism. The backend alone holds the real key; the SDK receives a temporary localhost proxy capability.
+`backend/local_budget.py` fails closed unless a reconciled ledger and checksum-bound receipt exist. It enforces the lifetime cap across all months, now $4 only when the approved additive grant and its original-receipt hashes match, without resets/refunds. Each actual provider HTTP attempt, including SDK retries, must reserve its conservative input/output cost atomically before dispatch. Failed attempts retain their reservation. The SDK's own session budget is a second guard, not the authoritative accounting mechanism. The backend alone holds the real key; the SDK receives a temporary localhost proxy capability.
 
-Do not run the importer again: the local accounting directory already exists and must never be overwritten. Further paid testing requires explicit renewed authorization with an adequate remaining allowance; carry forward every existing reservation. The cloud export envelope, original backup, live failure response and accounting audit are retained privately in `.reports/sdk-local-e2e/`. Export provenance also lives beside the ledger. No accounting, credentials or raw research data is tracked in Git.
+Do not run the importer or additive renewal again: the local accounting and grant already exist and must never be overwritten or duplicated. Further paid use may consume the remaining approved balance; any later increase requires explicit authorization and must carry forward every reservation. The cloud export envelope, original backup, initial live failure and accounting audit remain private in `.reports/sdk-local-e2e/`. Export provenance also lives beside the ledger. No accounting, credentials or raw research data is tracked in Git.
 
-## Focused validation and state
+## Earlier focused validation and retained state
 
 Runtime correction `bf00575` forwards the SDK's `anthropic-beta` and `anthropic-version` headers together with its body, following [Anthropic's gateway contract](https://code.claude.com/docs/en/llm-gateway-protocol). The initial proxy omitted those headers. This was a real compatibility defect; without the missing original per-attempt response trace, it is not proven to be the sole cause of the live failure. Safe local diagnostics now retain provider status/reservation IDs and SDK result subtype/tool names without credentials, prompts or source text. SDK-reported cost, when available, is an estimate separate from the conservative ledger.
 

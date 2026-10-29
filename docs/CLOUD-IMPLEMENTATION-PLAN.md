@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Local SDK working after explicit renewal — 30 October 2026 IST
+
+The user explicitly renewed the dev allowance with up to $2 more, preserving all accounting and prohibiting deployment. Local commit `2cf9738` appends one checksum-bound grant to the existing dev ledger: $4 lifetime cap, no calendar reset, and the original expired receipt and sealed cloud baseline unchanged. A pre-renewal backup remains private. Duplicate renewal is rejected.
+
+The renewed browser test now completes end to end through the actual Claude Agent SDK and Anthropic. An initial citation-validation failure remains counted. The corrected run resolves model-selected IDs to complete original source text, as the existing production normalizer does, and only permits document/CRM evidence actually read in that conversation. Search snippets alone cannot become citations; source exclusions remain enforced. The successful run displays a cited takeaway, deeper detail, Agonda CRM provenance/caveats, a clarifying question and related follow-ups. Exact PDF-page and CRM references opened in separate tabs, and the location authority lookup works.
+
+Accounting after both renewed runs: 19 attempts, $3.253040 reserved, $0.746960 remaining under the $4 cap. The additional eight provider attempts reserved $1.529455; all four cloud receipts and seven earlier SDK reservations remain identical. SDK-reported costs are estimates, not replacements for reserved accounting. Seventeen focused Python tests and TypeScript checking pass. The 1,174-document / 21,534-page corpus and 499 + 2,768 public CRM records remain unchanged. See [current local workspace handoff](../dev/LOCAL-WORKSPACE.md). UI: <http://127.0.0.1:4276/ask>. No deployment, production-accounting change, paused-agent activation or full release checklist.
+
 ## Local SDK accounting handoff — 30 October 2026 IST
 
 Under the user's explicit local-development instruction, the isolated `codex/research-agent-local` checkout contains the full immutable 1,174-document / 21,534-page corpus and public CRM snapshot (499 community + 2,768 government records). Local runtime `55121d0`, handoff `734b31f`, and SDK/accounting follow-up `bf00575` are local commits only. The live-reloading UI remains at <http://127.0.0.1:4276/ask>. Shared unfinished work and production are untouched.
