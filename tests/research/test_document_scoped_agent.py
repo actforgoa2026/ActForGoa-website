@@ -66,6 +66,20 @@ def test_supported_answer_retains_exact_passage_and_edition(corpus):
     assert 'passage=' in citation['reader_url']
 
 
+def test_scoped_discovery_requires_a_read_before_exposing_citation_ids(corpus, monkeypatch):
+    evidence = corpus.evidence('plan', 1)
+    monkeypatch.setattr(corpus, 'search', lambda *args: {'results': [evidence]})
+    tools = ResearchTools(corpus, 'ecology', 'plan')
+    discovery = tools.search({'query': 'solar'})['results'][0]
+    assert discovery['document_id'] == 'plan' and discovery['page'] == 1
+    assert 'id' not in discovery and 'reader_url' not in discovery
+    with pytest.raises(ValueError, match='source read'):
+        validate_answer(answer(evidence), tools, 'ecology')
+    read = tools.read({'document_id': 'plan', 'page': 1})['pages'][0]
+    assert validate_answer(answer(read), tools, 'ecology')['citations']
+    assert ResearchTools(corpus).search({'query': 'solar'})['results'][0]['id'] == evidence['id']
+
+
 def test_native_spread_carries_original_headers_into_read_and_citations(corpus):
     corpus.documents['plan']['extraction_version'] = 'goa-sapcc-native-spreads-v1'
     header = 'Intervention\tStatus\tAgency\tBarriers and gaps\tBudget\tTime frame'
