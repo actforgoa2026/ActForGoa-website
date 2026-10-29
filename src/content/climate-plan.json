@@ -1,0 +1,986 @@
+{
+  "source": {
+    "title": "State Action Plan for Climate Change for the State of Goa",
+    "period": "2023–2033",
+    "publisher": "Goa State Biodiversity Board",
+    "preparedWith": "NABARD Consultancy Services (NABCONS)",
+    "host": "NITI for States",
+    "url": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+    "originalUrl": "https://gsbb.goa.gov.in/wp-content/uploads/2024/11/SAPCC8Aug2023.pdf",
+    "assemblyUrl": "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8364a593-520a-4c6f-afb3-e202c84b26d1.pdf",
+    "publishedAt": "2023-04-26",
+    "checkedAt": "2026-10-29",
+    "retrievedAt": "2026-10-29T15:59:44.467111+00:00",
+    "pdfPages": 111,
+    "bytes": 9222768,
+    "sha256": "d1b64d562f93c9cbabc39e1d4be65f0515a06734792cfa5ea4eebf9544ff3cc6",
+    "corpusId": "3710c85a419254abd7347c52"
+  },
+  "topics": [
+    {
+      "id": "water",
+      "title": "Water, flooding & coasts",
+      "summary": "Find the proposals for water security, sewage, flooding and saltwater entering coastal areas.",
+      "keywords": [
+        "rain",
+        "rainfall",
+        "monsoon",
+        "salinity",
+        "salt water",
+        "drinking water",
+        "groundwater",
+        "wells",
+        "river",
+        "drainage",
+        "drought",
+        "sea level",
+        "khazan",
+        "mangrove",
+        "PWD",
+        "WRD"
+      ],
+      "references": [
+        {
+          "label": "7.1 Water",
+          "start": 91,
+          "end": 101
+        },
+        {
+          "label": "7.7 Habitat",
+          "start": 144,
+          "end": 161
+        }
+      ],
+      "actions": [
+        {
+          "title": "Make water infrastructure ready for climate risks",
+          "description": "Assess water facilities and build climate checks into new projects.",
+          "agencies": "Water Resources Department and Climate Secretariat",
+          "reference": {
+            "label": "Table 22, water measures",
+            "start": 96,
+            "end": 97
+          }
+        },
+        {
+          "title": "Prepare low-lying neighbourhoods for flooding",
+          "description": "Assess vulnerable areas and plan protection for khazan lands and coastal settlements.",
+          "agencies": "Town and Country Planning, Water Resources and disaster management agencies; see individual rows",
+          "reference": {
+            "label": "Table 33, habitat measures",
+            "start": 150,
+            "end": 152
+          }
+        }
+      ],
+      "question": "Has our water supply, drainage or flood-protection project been assessed against the climate risks in the SAPCC?",
+      "related": [
+        "homes",
+        "forests",
+        "farming"
+      ]
+    },
+    {
+      "id": "farming",
+      "title": "Farming, fishing & livestock",
+      "summary": "Explore crop, fisheries and livestock measures, including weather information and support for khazan livelihoods.",
+      "keywords": [
+        "agriculture",
+        "farmers",
+        "fish",
+        "aquaculture",
+        "cattle",
+        "crops",
+        "seeds",
+        "soil",
+        "khazan",
+        "livestock",
+        "irrigation",
+        "ICAR",
+        "insurance"
+      ],
+      "references": [
+        {
+          "label": "6.2.3 Agriculture mitigation",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "label": "7.4 Agriculture and allied sectors",
+          "start": 114,
+          "end": 125
+        }
+      ],
+      "actions": [
+        {
+          "title": "Improve local weather information for farming",
+          "description": "Strengthen weather data collection, analysis and prediction with research and water agencies.",
+          "agencies": "ICAR, Water Resources Department and agencies such as IMD",
+          "reference": {
+            "label": "Table 26, action 7",
+            "start": 123,
+            "end": 123
+          }
+        },
+        {
+          "title": "Prepare livestock for heat and flooding",
+          "description": "Plan livestock evacuation and heat relief in cattle sheds.",
+          "agencies": "Disaster management cell and Animal Husbandry and Veterinary Services",
+          "reference": {
+            "label": "Table 26, actions 1–3",
+            "start": 122,
+            "end": 122
+          }
+        }
+      ],
+      "question": "Which climate-related farm and livestock measures are being delivered in our village, and who can provide the current eligibility and progress records?",
+      "related": [
+        "water",
+        "forests",
+        "funding"
+      ]
+    },
+    {
+      "id": "health",
+      "title": "Heat & health",
+      "summary": "Read the plan’s proposals for heat preparedness, disease alerts and more resilient health services.",
+      "keywords": [
+        "heatwave",
+        "heat wave",
+        "temperature",
+        "public health",
+        "hospital",
+        "disease",
+        "dengue",
+        "malaria",
+        "health workers",
+        "PHE"
+      ],
+      "references": [
+        {
+          "label": "7.6 Human health",
+          "start": 138,
+          "end": 143
+        }
+      ],
+      "actions": [
+        {
+          "title": "Prepare for extreme heat",
+          "description": "The plan proposes a heatwave action plan, with support from climate specialists.",
+          "agencies": "PHE and the Climate Secretariat, as named in the plan",
+          "reference": {
+            "label": "Table 31, action 4",
+            "start": 141,
+            "end": 141
+          }
+        },
+        {
+          "title": "Give communities earlier disease information",
+          "description": "Develop public alerts and prediction systems for disease outbreaks.",
+          "agencies": "PHE, with IT, media and Goa Medical College support identified in the table",
+          "reference": {
+            "label": "Table 31, actions 2 and 5",
+            "start": 141,
+            "end": 141
+          }
+        }
+      ],
+      "question": "Where can residents find the current heat action plan and official local health alerts?",
+      "related": [
+        "risks",
+        "homes"
+      ],
+      "note": "This is the health chapter of the statewide SAPCC. Goa’s separate State Action Plan on Climate Change and Human Health is a different document. These summaries are planning information, not medical advice."
+    },
+    {
+      "id": "waste",
+      "title": "Waste & sanitation",
+      "summary": "Find waste-treatment proposals, village material recovery and plans for sewage systems.",
+      "keywords": [
+        "garbage",
+        "rubbish",
+        "recycling",
+        "recycle",
+        "segregation",
+        "compost",
+        "plastic",
+        "e-waste",
+        "sewage",
+        "sanitation",
+        "landfill",
+        "GWMC"
+      ],
+      "references": [
+        {
+          "label": "6.2.4 Waste management",
+          "start": 86,
+          "end": 90
+        },
+        {
+          "label": "Habitat and solid waste measures",
+          "start": 150,
+          "end": 161
+        },
+        {
+          "label": "Annexure II: treatment facilities",
+          "start": 177,
+          "end": 183
+        }
+      ],
+      "actions": [
+        {
+          "title": "Recover materials closer to home",
+          "description": "The plan proposes a village-level material recovery facility where land is available.",
+          "agencies": "Panchayat Raj Department",
+          "reference": {
+            "label": "Table 33, action 11",
+            "start": 153,
+            "end": 153
+          }
+        },
+        {
+          "title": "Check the plans for waste-treatment facilities",
+          "description": "Use the project tables to identify proposed facilities, funding and the status recorded when the document was prepared.",
+          "agencies": "Goa Waste Management Corporation and agencies listed for each project",
+          "reference": {
+            "label": "Table 34, solid waste measures",
+            "start": 154,
+            "end": 159
+          }
+        }
+      ],
+      "question": "What is the current collection and segregation plan for our village, and which proposed facilities now have approvals and operating records?",
+      "related": [
+        "homes",
+        "water"
+      ]
+    },
+    {
+      "id": "transport",
+      "title": "Getting around",
+      "summary": "See proposals for public transport, walking, cycling and lower-emission vehicles.",
+      "keywords": [
+        "bus",
+        "buses",
+        "public transport",
+        "cycle",
+        "cycling",
+        "walk",
+        "walking",
+        "mobility",
+        "electric vehicle",
+        "EV",
+        "ferry",
+        "charging",
+        "traffic"
+      ],
+      "references": [
+        {
+          "label": "6.2.1 Transportation",
+          "start": 71,
+          "end": 77
+        }
+      ],
+      "actions": [
+        {
+          "title": "Connect public transport with walking and cycling",
+          "description": "Provide non-motorised travel options and connected public transport for complete journeys.",
+          "agencies": "Transport Department; responsibility for some linked actions is still marked to be determined in the plan",
+          "reference": {
+            "label": "Table 18, actions 2 and 10",
+            "start": 76,
+            "end": 77
+          }
+        },
+        {
+          "title": "Plan for cleaner transport",
+          "description": "Develop electric mobility and a broader low-emission transport policy.",
+          "agencies": "Transport Department",
+          "reference": {
+            "label": "Table 18, actions 1 and 3",
+            "start": 76,
+            "end": 76
+          }
+        }
+      ],
+      "question": "How do local transport plans connect buses, safe walking and cycling, and which SAPCC measures have been funded?",
+      "related": [
+        "energy",
+        "homes"
+      ]
+    },
+    {
+      "id": "energy",
+      "title": "Energy & solar power",
+      "summary": "Find renewable-energy proposals, energy-saving measures and skills development.",
+      "keywords": [
+        "electricity",
+        "solar",
+        "roof",
+        "rooftop",
+        "renewable",
+        "power",
+        "energy efficiency",
+        "LED",
+        "pumps",
+        "GEDA",
+        "energy audit"
+      ],
+      "references": [
+        {
+          "label": "6.2.2 Power sector",
+          "start": 78,
+          "end": 84
+        }
+      ],
+      "actions": [
+        {
+          "title": "Find the renewable-energy measures",
+          "description": "Browse the supply-side table for the plan’s renewable-energy interventions and agencies.",
+          "agencies": "Goa Energy Development Agency and Electricity Department; see each row",
+          "reference": {
+            "label": "Table 20a, energy supply",
+            "start": 79,
+            "end": 81
+          }
+        },
+        {
+          "title": "Build skills for cleaner energy",
+          "description": "Train people to install and maintain renewable-energy systems and carry out energy audits.",
+          "agencies": "Goa Energy Development Agency",
+          "reference": {
+            "label": "Table 20b, action 9",
+            "start": 84,
+            "end": 84
+          }
+        }
+      ],
+      "question": "Which energy-saving or solar programmes are currently available, and where are their official eligibility rules?",
+      "related": [
+        "transport",
+        "farming",
+        "funding"
+      ]
+    },
+    {
+      "id": "homes",
+      "title": "Homes, villages & towns",
+      "summary": "Explore flood preparedness, more resilient housing and the capacity of villages to support development.",
+      "keywords": [
+        "habitat",
+        "housing",
+        "building",
+        "buildings",
+        "construction",
+        "town planning",
+        "panchayat",
+        "neighbourhood",
+        "neighborhood",
+        "village",
+        "drainage",
+        "khazan",
+        "TCP"
+      ],
+      "references": [
+        {
+          "label": "7.7 Habitat",
+          "start": 144,
+          "end": 161
+        }
+      ],
+      "actions": [
+        {
+          "title": "Include village capacity in development decisions",
+          "description": "The plan proposes considering how much development each village can support.",
+          "agencies": "Panchayat Raj Department",
+          "reference": {
+            "label": "Table 33, action 10",
+            "start": 153,
+            "end": 153
+          }
+        },
+        {
+          "title": "Plan housing for a changing climate",
+          "description": "Develop affordable, climate-resilient homes using green-building concepts.",
+          "agencies": "Rural Development Agency, Town and Country Planning and local bodies",
+          "reference": {
+            "label": "Table 33, action 12",
+            "start": 153,
+            "end": 153
+          }
+        }
+      ],
+      "question": "How does our village or town’s development plan account for water, waste, flooding and the people most exposed to climate risks?",
+      "related": [
+        "water",
+        "waste",
+        "risks"
+      ]
+    },
+    {
+      "id": "forests",
+      "title": "Forests, wildlife & mangroves",
+      "summary": "Look up measures for healthier forests, coastal vegetation and forest-fire preparedness.",
+      "keywords": [
+        "nature",
+        "biodiversity",
+        "wildlife",
+        "trees",
+        "forest",
+        "fire",
+        "mangrove",
+        "coastal protection",
+        "conservation",
+        "habitat",
+        "plantation"
+      ],
+      "references": [
+        {
+          "label": "7.5 Forest",
+          "start": 126,
+          "end": 137
+        }
+      ],
+      "actions": [
+        {
+          "title": "Restore natural coastal protection",
+          "description": "Restore damaged mangrove areas and strengthen coastal vegetation, including community livelihood support.",
+          "agencies": "Goa Forest Department",
+          "reference": {
+            "label": "Table 28, action 2",
+            "start": 132,
+            "end": 132
+          }
+        },
+        {
+          "title": "Improve forest-fire preparedness",
+          "description": "Combine fire planning, staff training, equipment and community awareness before the fire season.",
+          "agencies": "Goa Forest Department",
+          "reference": {
+            "label": "Table 28, action 3",
+            "start": 133,
+            "end": 133
+          }
+        }
+      ],
+      "question": "What forest-fire preparation and habitat-restoration work is planned locally, and how can residents participate through the responsible department?",
+      "related": [
+        "water",
+        "farming",
+        "participation"
+      ]
+    },
+    {
+      "id": "tourism",
+      "title": "Tourism & local livelihoods",
+      "summary": "Find the plan’s approach to community tourism and climate risks to tourism infrastructure.",
+      "keywords": [
+        "hotel",
+        "hotels",
+        "beach",
+        "beaches",
+        "tourists",
+        "visitors",
+        "livelihood",
+        "homestay",
+        "agro tourism",
+        "ecotourism",
+        "tourism"
+      ],
+      "references": [
+        {
+          "label": "7.2 Tourism",
+          "start": 102,
+          "end": 111
+        }
+      ],
+      "actions": [
+        {
+          "title": "Explore community-based tourism",
+          "description": "The plan includes village and agro-tourism involving residents, self-help groups and panchayats.",
+          "agencies": "Agriculture Department and Tourism Department",
+          "reference": {
+            "label": "Table 24, action 1",
+            "start": 105,
+            "end": 105
+          }
+        },
+        {
+          "title": "Assess risks to tourism infrastructure",
+          "description": "Include climate vulnerability and disaster preparedness when planning tourism facilities.",
+          "agencies": "Tourism Department, with related planning and disaster agencies",
+          "reference": {
+            "label": "Table 24, actions 3–5",
+            "start": 106,
+            "end": 107
+          }
+        }
+      ],
+      "question": "How are residents involved in tourism plans, and what water, waste and climate-risk assessments are available for proposed projects?",
+      "related": [
+        "water",
+        "waste",
+        "homes"
+      ]
+    },
+    {
+      "id": "mining",
+      "title": "Mining & water resources",
+      "summary": "Read the measures addressing groundwater, mining audits and reducing pressure on sand resources.",
+      "keywords": [
+        "mine",
+        "mines",
+        "mining",
+        "sand",
+        "iron ore",
+        "groundwater",
+        "wells",
+        "audit",
+        "circular economy",
+        "construction",
+        "resource efficiency"
+      ],
+      "references": [
+        {
+          "label": "7.3 Mining",
+          "start": 112,
+          "end": 113
+        }
+      ],
+      "actions": [
+        {
+          "title": "Understand groundwater around mining areas",
+          "description": "The plan proposes a comprehensive hydrogeological study.",
+          "agencies": "Water Resources Department",
+          "reference": {
+            "label": "Table 25, action 1",
+            "start": 113,
+            "end": 113
+          }
+        },
+        {
+          "title": "Review mining compliance",
+          "description": "Use independent audits to check environmental assessment and clearance requirements.",
+          "agencies": "Climate Secretariat or other institutes, as named in the plan",
+          "reference": {
+            "label": "Table 25, action 2",
+            "start": 113,
+            "end": 113
+          }
+        }
+      ],
+      "question": "Are recent groundwater studies and environmental-compliance audit reports available for mining activity affecting our area?",
+      "related": [
+        "water",
+        "homes",
+        "participation"
+      ]
+    },
+    {
+      "id": "risks",
+      "title": "Understand the risks in Goa",
+      "summary": "Find observed climate trends, future scenarios and assessments of vulnerable places and communities.",
+      "keywords": [
+        "climate",
+        "science",
+        "projections",
+        "forecast",
+        "model",
+        "maps",
+        "sea level rise",
+        "heat",
+        "rain",
+        "flood",
+        "vulnerable",
+        "vulnerability",
+        "taluka",
+        "Bardez",
+        "Tiswadi",
+        "Mormugao",
+        "Salcete"
+      ],
+      "references": [
+        {
+          "label": "4 Climate observations and projections",
+          "start": 41,
+          "end": 66
+        },
+        {
+          "label": "5 Climate vulnerability assessment",
+          "start": 67,
+          "end": 70
+        },
+        {
+          "label": "Appendix I: Submergence of Goa",
+          "start": 218,
+          "end": 218
+        }
+      ],
+      "actions": [
+        {
+          "title": "Start with the climate evidence",
+          "description": "Read the observations, model assumptions and future scenarios together. A projection is conditional on its scenario.",
+          "agencies": "Climate research sources cited in Chapter 4",
+          "reference": {
+            "label": "Climate modelling and observations",
+            "start": 45,
+            "end": 66
+          }
+        },
+        {
+          "title": "Look at who needs extra support",
+          "description": "The vulnerability chapter discusses low-lying communities and people whose circumstances increase their exposure.",
+          "agencies": "Planning and implementation agencies discussed in Chapters 5 and 7",
+          "reference": {
+            "label": "Climate vulnerability assessment",
+            "start": 67,
+            "end": 70
+          }
+        }
+      ],
+      "question": "Which up-to-date local assessments support the risk information being used for our village or neighbourhood?",
+      "related": [
+        "water",
+        "health",
+        "homes"
+      ],
+      "note": "The maps support state-level planning. They do not establish the risk, boundary or permission status of an individual plot. Read the map legend, scenario and limitations in the original PDF."
+    },
+    {
+      "id": "funding",
+      "title": "Funding & progress",
+      "summary": "Understand the proposed financing and how the plan says implementation should be reviewed.",
+      "keywords": [
+        "budget",
+        "money",
+        "funds",
+        "finance",
+        "spending",
+        "investment",
+        "monitoring",
+        "evaluation",
+        "indicators",
+        "implementation",
+        "progress",
+        "2341",
+        "465"
+      ],
+      "references": [
+        {
+          "label": "8 Financing",
+          "start": 162,
+          "end": 166
+        },
+        {
+          "label": "10 Monitoring and evaluation",
+          "start": 172,
+          "end": 174
+        }
+      ],
+      "actions": [
+        {
+          "title": "Separate budget estimates from actual spending",
+          "description": "The plan discusses state funding and other financing routes. Its estimates do not establish amounts sanctioned or spent.",
+          "agencies": "State departments and climate coordination bodies",
+          "reference": {
+            "label": "Chapter 8, financing",
+            "start": 162,
+            "end": 166
+          }
+        },
+        {
+          "title": "Ask for implementation reports",
+          "description": "The plan proposes quarterly coordination and annual reporting before budget preparation, with sector indicators.",
+          "agencies": "Climate Secretariat, department representatives and State Level Steering Committee",
+          "reference": {
+            "label": "Chapter 10, monitoring and evaluation",
+            "start": 172,
+            "end": 174
+          }
+        }
+      ],
+      "question": "Can the responsible department share the latest SAPCC progress report, sanctioned budget, expenditure and results for this action?",
+      "related": [
+        "participation",
+        "energy"
+      ],
+      "note": "The source contains conflicting totals: printed p. 162 mentions ₹465 crore, while p. 163 and its budget table give ₹2,341.06 crore over ten years. Neither figure is verified current expenditure. The plan also retains older timeline references; do not calculate present-day deadlines from them."
+    },
+    {
+      "id": "participation",
+      "title": "Have a say & follow up",
+      "summary": "Find the plan’s ideas for public participation, local awareness and coordination between departments.",
+      "keywords": [
+        "community",
+        "participation",
+        "youth",
+        "schools",
+        "education",
+        "awareness",
+        "gram sabha",
+        "residents",
+        "citizen",
+        "NGO",
+        "rights",
+        "governance",
+        "RTI",
+        "records",
+        "GSBB",
+        "GSCCC"
+      ],
+      "references": [
+        {
+          "label": "9 Implementation and institutions",
+          "start": 167,
+          "end": 171
+        },
+        {
+          "label": "9.3 People’s participation",
+          "start": 170,
+          "end": 171
+        }
+      ],
+      "actions": [
+        {
+          "title": "Bring climate questions into community discussions",
+          "description": "The plan proposes school learning, youth involvement and community task forces.",
+          "agencies": "Climate Secretariat with communities and institutions",
+          "reference": {
+            "label": "9.3 Capacity building and participation",
+            "start": 170,
+            "end": 171
+          }
+        },
+        {
+          "title": "Find the coordinating responsibilities",
+          "description": "Each department is to nominate a climate officer, while the secretariat supports knowledge, coordination and monitoring.",
+          "agencies": "Department nodal officers and Climate Secretariat",
+          "reference": {
+            "label": "9.1 Institutional framework",
+            "start": 167,
+            "end": 169
+          }
+        }
+      ],
+      "question": "Who is the current climate nodal officer for this department, and where can residents access updates or contribute local evidence?",
+      "related": [
+        "funding",
+        "risks"
+      ]
+    }
+  ],
+  "chapters": [
+    {
+      "id": "summary",
+      "title": "Executive summary",
+      "description": "A first overview of the risks, sectors and institutional proposals.",
+      "label": "Executive summary",
+      "start": 19,
+      "end": 24
+    },
+    {
+      "id": "1",
+      "title": "1. Introduction",
+      "description": "Why Goa needs a climate action plan.",
+      "label": "1. Introduction",
+      "start": 25,
+      "end": 27
+    },
+    {
+      "id": "2",
+      "title": "2. Goa state profile",
+      "description": "Geography, population, economy and development context.",
+      "label": "2. Goa state profile",
+      "start": 28,
+      "end": 33
+    },
+    {
+      "id": "3",
+      "title": "3. How the plan was developed",
+      "description": "Guiding principles, consultations and stakeholder feedback.",
+      "label": "3. How the plan was developed",
+      "start": 34,
+      "end": 40
+    },
+    {
+      "id": "4",
+      "title": "4. Climate observations & projections",
+      "description": "Evidence, methods and future climate scenarios.",
+      "label": "4. Climate observations & projections",
+      "start": 41,
+      "end": 66
+    },
+    {
+      "id": "5",
+      "title": "5. Climate vulnerability",
+      "description": "Exposure, vulnerable groups and sector priorities.",
+      "label": "5. Climate vulnerability",
+      "start": 67,
+      "end": 70
+    },
+    {
+      "id": "6",
+      "title": "6. Reducing emissions",
+      "description": "The mitigation measures across four sectors.",
+      "label": "6. Reducing emissions",
+      "start": 71,
+      "end": 90,
+      "children": [
+        {
+          "label": "6.2.1 Transportation",
+          "start": 71,
+          "end": 77
+        },
+        {
+          "label": "6.2.2 Power",
+          "start": 78,
+          "end": 84
+        },
+        {
+          "label": "6.2.3 Agriculture and allied sectors",
+          "start": 84,
+          "end": 86
+        },
+        {
+          "label": "6.2.4 Waste management",
+          "start": 86,
+          "end": 90
+        }
+      ]
+    },
+    {
+      "id": "7",
+      "title": "7. Adapting to climate change",
+      "description": "Sector risks, action tables and responsible agencies.",
+      "label": "7. Adapting to climate change",
+      "start": 91,
+      "end": 161,
+      "children": [
+        {
+          "label": "7.1 Water",
+          "start": 91,
+          "end": 101
+        },
+        {
+          "label": "7.2 Tourism",
+          "start": 102,
+          "end": 111
+        },
+        {
+          "label": "7.3 Mining",
+          "start": 112,
+          "end": 113
+        },
+        {
+          "label": "7.4 Agriculture and allied sectors",
+          "start": 114,
+          "end": 125
+        },
+        {
+          "label": "7.5 Forest",
+          "start": 126,
+          "end": 137
+        },
+        {
+          "label": "7.6 Human health",
+          "start": 138,
+          "end": 143
+        },
+        {
+          "label": "7.7 Habitat",
+          "start": 144,
+          "end": 161
+        }
+      ]
+    },
+    {
+      "id": "8",
+      "title": "8. Financing the plan",
+      "description": "Indicative budgets and proposed funding mechanisms.",
+      "label": "8. Financing the plan",
+      "start": 162,
+      "end": 166
+    },
+    {
+      "id": "9",
+      "title": "9. Who carries it out",
+      "description": "Institutional roles, shared knowledge and public participation.",
+      "label": "9. Who carries it out",
+      "start": 167,
+      "end": 171
+    },
+    {
+      "id": "10",
+      "title": "10. Monitoring & evaluation",
+      "description": "Reporting, review and proposed indicators.",
+      "label": "10. Monitoring & evaluation",
+      "start": 172,
+      "end": 174
+    },
+    {
+      "id": "annex-i",
+      "title": "Annexure I: Contributors",
+      "description": "Acknowledgements to individuals involved in the plan.",
+      "label": "Annexure I: Contributors",
+      "start": 175,
+      "end": 176
+    },
+    {
+      "id": "annex-ii",
+      "title": "Annexure II: Waste-treatment facilities",
+      "description": "Project descriptions and status recorded in the source.",
+      "label": "Annexure II: Waste-treatment facilities",
+      "start": 177,
+      "end": 183
+    },
+    {
+      "id": "annex-iii",
+      "title": "Annexure III: Water supply",
+      "description": "Regional supply schemes and proposed projects.",
+      "label": "Annexure III: Water supply",
+      "start": 184,
+      "end": 186
+    },
+    {
+      "id": "annex-iv",
+      "title": "Annexure IV: Soils",
+      "description": "Soil classification and soil series.",
+      "label": "Annexure IV: Soils",
+      "start": 187,
+      "end": 188
+    },
+    {
+      "id": "annex-v",
+      "title": "Annexure V: Sewerage & treatment",
+      "description": "Sewerage schemes and sewage-treatment plants.",
+      "label": "Annexure V: Sewerage & treatment",
+      "start": 189,
+      "end": 191
+    },
+    {
+      "id": "annex-vi",
+      "title": "Annexure VI: References",
+      "description": "The plan’s research and documentary sources.",
+      "label": "Annexure VI: References",
+      "start": 192,
+      "end": 193
+    },
+    {
+      "id": "annex-vii",
+      "title": "Annexure VII: Steering committee minutes",
+      "description": "Minutes of the national committee meeting on 24 August 2022. Scanned pages need visual reading.",
+      "label": "Annexure VII: Steering committee minutes",
+      "start": 194,
+      "end": 217,
+      "scanned": true
+    },
+    {
+      "id": "appendix",
+      "title": "Appendix I: Submergence of Goa",
+      "description": "Read the original map and its legend, rather than treating it as a property-level assessment.",
+      "label": "Appendix I: Submergence of Goa",
+      "start": 218,
+      "end": 218
+    }
+  ]
+}
