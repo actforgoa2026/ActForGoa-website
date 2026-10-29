@@ -25,3 +25,20 @@ Private SQLite backups precede the release. Final hosted deployment identities, 
 PR #115 landed while the standalone release was being verified. Its integrated `Satellite.tsx`, history and layout stylesheet are preserved byte-for-byte. The standalone entry imports `SatelliteWorkspace.tsx`, its history and stylesheet, retaining the approved Earth Engine overview and open synopsis. The guide keeps its portalled Arc DatePicker; standalone keeps its accepted registry-derived inline variant. Both use the shared Calendar with the corrected disabled-Today state for bounded dates. The final preservation review is `ship`, and four new desktop/phone captures confirm the retained layout.
 
 The runtime packages use explicit allowlists. Railway app uploads require `--path-as-root --no-gitignore` so compiled `dist-satellite` assets are included. An initial upload omitted that directory and failed before replacing the prior app; the corrected upload succeeded.
+
+## Live release
+
+[Open the satellite workspace](https://satellite-app-production.up.railway.app/map).
+
+| Service | Successful deployment | Packaged source |
+| --- | --- | --- |
+| Satellite API | `2454a251-1b10-4deb-82c3-b3113243ba03` | `1642dead8036b73f83f8bfc277e6868fae01811f` |
+| Satellite app | `1beec385-cb3a-4a58-be91-374d234ebd3e` | `3a7326a551d92761a116a27bc33a283092551c30` |
+
+The final app package includes the reconciliation through PR #117. Source is recorded in [PR #116](https://github.com/actforgoa2026/ActForGoa-website/pull/116). All 19 API runtime files and 17 app runtime/static files hash-match their package manifests. Current API source still matches its tested deployed package.
+
+Hosted acceptance passed on the first successful frontend candidate, followed by local desktop/phone preservation checks and final hosted runtime/hash verification after source isolation. Earth Engine returned a real PNG tile (HTTP 200, 14,942 bytes), a 40-scene overview and a cache hit. A newly drawn footprint retained its outline, returned four acquisitions and automatically loaded the exact 13 January image. The existing 8/13 January comparison reopened with completed `gpt-6-luna` decisions and 94.11% common usable coverage; no new AI inference was submitted. Actual Arc calendars and the map/synopsis split were inspected on desktop and phone, with no captured browser console errors.
+
+Original staff data, eight pre-existing jobs, four cached observations and original raster bytes remain unchanged. The verification account is inactive with zero sessions. Additional service reservations were two Earth Engine previews, two catalog searches and one observation; no comparison or classification reservation. The private credential values and normal account authorization remain unchanged.
+
+Temporary deployment SSH access is removed after the final runtime audit. The local hot-reload workspace remains running and separate from hosted data. The pre-existing first-load imagery latency and experimental interpretation limits remain; this release does not claim a performance optimization or field validation.
