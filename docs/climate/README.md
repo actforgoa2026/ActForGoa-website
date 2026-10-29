@@ -39,3 +39,9 @@ python3 scripts/publish_climate_plan.py
 The downloader reuses existing results. A deliberate refresh uses `--retry`; inspect the new source before changing the shared index or page mapping. Publishing checks the PDF checksum if the original is present. Keep the manually identified scanned-page flags in provenance when re-extracting.
 
 The public build contains the authored index and reading guide; it links to the government PDF. The original is stored locally under docs and the content-addressed corpus, outside Vite's public directory. The publisher asserts copyright and no public redistribution licence has been established. Changes here do not update the hosted MCP service or deploy the site.
+
+## Questions with source links
+
+The resident navigator now has an “Ask about this plan” entry point, and topic pages can draft a question without sending it. The dedicated conversation uses the saved SAPCC edition and links answers to exact passages and original PDF pages. Its limitations remain visible: the plan describes proposals and historical conditions, not verified current delivery.
+
+The hosted library already held this same PDF. The research integration refreshes its extraction rather than adding a duplicate. `scripts/extract_sapcc.py` separates the two printed pages, turns sideways tables, preserves native characters and cell positions, and flags the scanned minutes. `scripts/refresh_sapcc_index.py` stages a new immutable full-corpus generation while checking that every unrelated record and every base-generation file remains unchanged. It never switches `CURRENT.json` or changes usage accounting. See [research integration and acceptance](../../reports/sapcc/RESEARCH.md).

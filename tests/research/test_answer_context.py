@@ -84,3 +84,28 @@ def test_complementary_document_passages_are_budgeted_together():
     ids={item['id'] for item in selected}
     assert ('first' in ids)==('last' in ids)
     assert 'other' in ids
+
+
+def test_document_conversation_keeps_complete_context_when_all_passages_do_not_fit():
+    doc = 'a' * 24 + '-' + 'b' * 12
+    generation = 'fixture-version'
+    header = {'id': 'header', 'document_id': doc, 'generation': generation, 'page': 4,
+              'start': 0, 'end': 500, 'text': 'Conditions and exceptions. ' + 'h' * 500}
+    evidence = [{'id': f'passage-{i}', 'document_id': doc, 'generation': generation, 'page': 4,
+                 'text': f'Complete passage {i}. ' + 'x' * 3200, 'supporting_context': [header]}
+                for i in range(4)]
+    before = deepcopy(evidence)
+    request = ChatRequest(question='What does this document propose?', document_id=doc, generation=generation)
+    payload, selected = prepare_answer(request, evidence)
+    ids = {item['id'] for item in selected}
+    assert 'passage-0' in ids and 'header' in ids
+    assert 1 <= len(ids - {'header'}) < 4
+    assert all('header' in item['context_ids'] for item in selected if item['id'] != 'header')
+    originals = {item['id']: item['text'] for item in [*evidence, header]}
+    assert all(item['text'] == originals[item['id']] for item in selected)
+    assert evidence == before
+    from backend.anthropic_answers import MAX_PROMPT_BYTES
+    assert len(json.dumps(payload, ensure_ascii=False).encode()) <= MAX_PROMPT_BYTES
+    # Collection-wide grouping still keeps complementary passages together.
+    _, general = prepare_answer(ChatRequest(question=request.question), evidence)
+    assert general == []

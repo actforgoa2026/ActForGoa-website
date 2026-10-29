@@ -5,6 +5,20 @@ import { createHash } from 'node:crypto';
 import { climatePlan, planTopics, planChapters, planPdfPage, planPageHref, searchPlanTopics, searchPlanChapters } from '../src/climate-plan';
 import { createCatalogueLoader, needsCatalogue } from '../src/catalogue-loader';
 import { homeSearchDestination } from '../src/home-search';
+import { climatePlanResearch, climatePlanResearchPath, climatePlanReaderPath, isClimatePlanResearch } from '../src/climate-plan-research';
+
+test('SAPCC questions and reading pin the same verified source edition', () => {
+  assert.equal(climatePlanResearch.sha256, climatePlan.source.sha256);
+  const ask = new URL(climatePlanResearchPath, 'https://example.test');
+  const reader = new URL(climatePlanReaderPath, 'https://example.test');
+  assert.equal(ask.pathname, '/ask/ecology');
+  assert.equal(reader.pathname, `/documents/${ask.searchParams.get('document')}`);
+  assert.equal(ask.searchParams.get('generation'), reader.searchParams.get('generation'));
+  assert(isClimatePlanResearch(ask.searchParams.get('document')!, ask.searchParams.get('generation')!));
+  assert(!isClimatePlanResearch(climatePlanResearch.documentId, 'another-generation'));
+  assert(!isClimatePlanResearch('another-document', climatePlanResearch.generation));
+  assert(!isClimatePlanResearch());
+});
 
 test('source PDF remains the reviewed 111-page spread edition and guide copies stay in sync', () => {
   const bytes = readFileSync('docs/climate/goa-sapcc-2023-2033.pdf');

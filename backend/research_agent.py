@@ -42,7 +42,11 @@ class ResearchTools:
         fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded')
         return {k:evidence[k] for k in fields if k in evidence}
 
-    def catalogue(self, args):return self.corpus.catalogue(args.get('query',''),self.domain,args.get('offset',0),min(20,args.get('limit',10)))
+    def catalogue(self, args):
+        if self.document_id:
+            document=self.corpus.document(self.document_id)
+            return {'documents':[document] if args.get('offset',0)<=0 else [],'total_matches':1,'next_offset':None,'generation':self.corpus.generation}
+        return self.corpus.catalogue(args.get('query',''),self.domain,args.get('offset',0),min(20,args.get('limit',10)))
     def search(self,args):
         result=self.record(self.corpus.search((args['query']+' '+self.extra_terms).strip(),min(12,args.get('limit',8)),self.document_id,self.domain,args.get('offset',0)))
         return {**result,'results':[self.evidence_for_agent(e) for e in result['results']]}
@@ -52,8 +56,11 @@ class ResearchTools:
         result=self.record(self.corpus.read_document(args['document_id'],args.get('page',1),args.get('offset',0),args.get('max_chars',18000)))
         self.citable_ids.update(e['id'] for e in result['pages'])
         return {**result,'pages':[self.evidence_for_agent(e) for e in result['pages']]}
-    def crm_search(self,args):return crm_store.search_records(args.get('query',''),args.get('collection','all'),args.get('location',''),min(20,args.get('limit',10)),args.get('offset',0))
+    def crm_search(self,args):
+        if self.document_id:raise ValueError('This conversation uses only the selected document. Open all research to investigate directory records.')
+        return crm_store.search_records(args.get('query',''),args.get('collection','all'),args.get('location',''),min(20,args.get('limit',10)),args.get('offset',0))
     def crm_read(self,args):
+        if self.document_id:raise ValueError('This conversation uses only the selected document. Open all research to investigate directory records.')
         result=crm_store.read_record(args['record_id']);r=result['record'];identifier='crm:'+r['record_id']
         text=json.dumps(r,ensure_ascii=False,sort_keys=True)
         self.evidence[identifier]={'id':identifier,'document_id':r['record_id'],'title':r['name'],'page':1,'label':'Public CRM record','text':text,'url':result['snapshot']['source_url'],'reader_url':result['crm_url'],'format':'crm','origin':'public_snapshot','warning':r.get('verification_status',''),'retrieved_at':r.get('checked_on',''),'generation':result['snapshot']['version'],'matches':['crm']}
@@ -119,7 +126,7 @@ async def run_agent(request, corpus, config, proxy_url, proxy_token, remaining, 
     # Mandatory trust/citation rules remain outside the editable voice brief.
     prompt=Path(__file__).with_name('agent-prompt.txt').read_text()+'\nAdditional answer style instructions:\n'+config['answer_brief']
     options=agent_options(readers,prompt,proxy_url,proxy_token,remaining,config['effort'],state=state)
-    incoming=json.dumps({'question':request.question,'history':[m.model_dump() for m in request.history],'domain':request.domain},ensure_ascii=False)
+    incoming=json.dumps({'question':request.question,'history':[m.model_dump() for m in request.history],'domain':request.domain,**({'document_id':request.document_id} if request.document_id else {})},ensure_ascii=False)
     run_id=uuid4().hex
     diagnostic={'run_id':run_id,'started_at':datetime.now(timezone.utc).isoformat(),'status':'incomplete'}
     try:

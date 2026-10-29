@@ -193,6 +193,11 @@ def prepare_answer(request, evidence):
         # document. Budget them together so an earlier fee paragraph cannot
         # crowd out the same manual's application step at the end of the list.
         key = (hit.get('document_id') or hit['id'], hit.get('generation'))
+        # A document-focused search returns more passages from its one source.
+        # Budget each complete passage/context group so an overfull document
+        # cannot discard all evidence. General collection grouping is unchanged.
+        if request.document_id and hit.get('document_id') == request.document_id:
+            key += (hit['id'],)
         document_groups.setdefault(key, []).append(hit)
     for hits in document_groups.values():
         group=[item for item in with_source_context(hits) if item['id'] not in {old['id'] for old in selected}]

@@ -67,7 +67,7 @@ class AgentCorpus:
         exclusions=[reason for a,b,reason in self.exclusions.get((doc_id,page),[]) if start<b and end>a]
         return {**meta,**row,'id':identifier,'document_id':doc_id,'text':row['text'][start:end],
                 'start':start,'end':end,'matches':['keyword'],
-                'answer_excluded':bool(exclusions) or 'Corrupted character extraction' in (row['warning'] or ''),'warning':' '.join(filter(None,[row['warning'],*exclusions])),
+                'answer_excluded':bool(exclusions) or any(note in (row['warning'] or '') for note in ('Corrupted character extraction', 'not answer evidence')),'warning':' '.join(filter(None,[row['warning'],*exclusions])),
                 'reader_url':f'/documents/{doc_id}?'+urlencode({'generation':self.generation,'page':page,'passage':identifier})}
 
     def read_document(self, doc_id, page=1, offset=0, max_chars=18000):
