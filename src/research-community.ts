@@ -1,5 +1,6 @@
 import {activityLabel, normalize, safeUrl, split, verification, verificationLabels, type CRMRecord} from './crm-model';
 import {crmDirectoryTags} from './crm-directory';
+import {premisesIntent} from './research-intent';
 import {directoryIdentity} from './directory-quality';
 
 export type CommunityMatch = {record: CRMRecord; reason: string; activity: string; verification: string; source: string};
@@ -64,7 +65,7 @@ export function researchCommunityMatches(records: CRMRecord[], question: string,
 
 /** Building questions need a local-body location before a specific office referral. */
 export function needsBuildingAuthority(question: string): boolean {
-  return /\b(structur\w*|buildings?|construction|demoli\w*|rebuild\w*|renovat\w*)\b/i.test(question);
+  return !!premisesIntent(question) || /\b(structur\w*|buildings?|construction|demoli\w*|rebuild\w*|renovat\w*)\b/i.test(question);
 }
 
 /** Match named local bodies, never a person or a broad district tag as jurisdiction proof. */

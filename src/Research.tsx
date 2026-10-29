@@ -12,6 +12,7 @@ import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
 import {splitCodePointRange} from './text-range';
 import './research.css';
+import {relatedResearchFollowups} from './research-intent';
 import {useStarredIds} from './CurationProvider';
 import {prioritizeStarred} from './curation';
 
@@ -49,7 +50,7 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
    {paragraphs.length?paragraphs.map((paragraph,index)=>{
     const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
     return answer.summary_first&&index===0?<ul key={index} aria-label="Key takeaway"><li className="answer-paragraph">{content}</li></ul>:<div key={index}>{answer.summary_first&&index===1&&<h4>More detail</h4>}<p className="answer-paragraph">{content}</p></div>;
-   }):<p className="answer-paragraph">We did not find enough evidence in this collection to answer your question.</p>}
+   }):<p className="answer-paragraph">The passages retrieved for this question did not provide enough evidence to answer it yet.</p>}
    {(answer.library_notice||answer.notice)&&<p className="research-small">{answer.library_notice||answer.notice}</p>}
   </section>
   {outside?.text&&<section className="research-answer-section research-outside" aria-label="Outside our library"><h3>Outside our library</h3><p className="research-provenance">AI general knowledge · not checked against external sources</p><p className="answer-paragraph">{outside.text}</p></section>}
@@ -109,7 +110,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
  useEffect(()=>{const previous=document.title;document.title=`${content.label} | ActForGoa`;return()=>{document.title=previous;};},[content.label]);
  async function run(value=question,requested=mode){
   const clean=value.trim();if(clean.length<2||busy||request.current||!domainSupported||(requested==='ask'&&!canAsk))return;
-  const action=requested;const index=turns.length;const history=turns.filter(t=>t.answer?.status==='answered').flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:citedLibraryParagraphs(t.answer!).map(p=>p.text).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8);
+  const action=requested;const index=turns.length;const history=turns.filter(t=>!t.pending&&!t.error).flatMap(t=>[{role:'user',content:t.question},...(t.answer?.status==='answered'?[{role:'assistant',content:citedLibraryParagraphs(t.answer).map(p=>p.text).join('\n').slice(0,4000)}]:[])]).filter(message=>message.content).slice(-8);
   setBusy(true);setQuestion('');const controller=new AbortController();request.current=controller;
   setTurns(current=>[...current,{question:clean,results:[],mode:action,pending:true}]);
   const update=(patch:Partial<Turn>)=>setTurns(current=>current.map((turn,n)=>n===index?{...turn,...patch}:turn));
@@ -138,6 +139,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
     {turn.answer&&<AnswerSections answer={turn.answer} returnTo={returnTo}/>}
     {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.pending&&!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
     {!turn.pending&&turn.answer&&<BuildingAuthority data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/>}
+    {!turn.pending&&<div className="research-starters" aria-label="Related follow-up questions">{relatedResearchFollowups(turn.question).map(followup=><Button variant="ghost" key={followup.label} type="button" disabled={busy||!domainSupported||(mode==='ask'&&!canAsk)} onClick={()=>void run(followup.question)}>{followup.label}<ArrowRight size={15}/></Button>)}</div>}
     <details className="chat-related"><summary><Users size={15}/>Related people and organisations</summary><CommunitySuggestions data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/></details>
    </section>;})}
    <form className="research-composer chat-composer" onSubmit={submit}>
