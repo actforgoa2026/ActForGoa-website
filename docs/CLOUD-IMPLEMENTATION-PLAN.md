@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Satellite Google integration — 29 October 2026 (local)
+
+User explicitly requested connecting Earth Engine and Google Maps APIs to the existing hosted standalone satellite app and testing them there. Isolated branch `codex/satellite-google` starts at fresh main `1b16b87`; the active hosted Python source hash-matches that base. Existing deployments before this change: API `8e598615-7b63-497b-8cd8-608486e98a85`, app `393c446c-2fa6-4b8b-b1e9-0a35bb5c9a77`. Both private databases were backed up before configuration. Main/research aliases and paused chats are outside this work.
+
+Implemented explicit Earth Engine retrieval, preserved spectral/cloud/actor-cache checks, on-demand current Google weather/air quality and a directions link. Credentials were transferred privately to the existing Python service with deployment suppressed until committed source is ready. Google browser map replacement and OpenAI key setup remain unselected; the current map is preserved and no AI request ran. Local validation: 140 Python satellite tests, 221 Node tests, production build, real aligned Earth Engine raster and Google environmental readings. [Configuration and provenance](SATELLITE-GOOGLE.md). Hosted acceptance will update this entry after deployment.
+
 ## Satellite query audit — 29 October 2026 (cloud)
 
 Active isolated checkout `/workspace/actforgoa-satellite`, branch `codex/satellite-query-audit`, starts from fresh main `f20fc25`. PR95 is already merged; this audit uses [PR109](https://github.com/actforgoa2026/ActForGoa-website/pull/109). Concurrent map-controls main `05720cb` is reconciled, preserving PR108 and its place/search/drawing improvements. User requested a deep audit and fixes for selected-area/time questions, Amche/CDSE history and OpenAI image decisions. [Full findings and remaining acceptance](SATELLITE-QUERY-AUDIT.md); [checks and package evidence](../reports/satellite-query-audit-2026-10-29/README.md).

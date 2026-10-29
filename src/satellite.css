@@ -93,3 +93,13 @@
 .satellite-workbench h2{margin-top:0;font-size:24px}.satellite-job{padding:20px;background:var(--pale);margin-block:20px;overflow-wrap:anywhere}.satellite-job button{margin:0 12px 8px 0}.satellite-planner{margin-block:24px}.satellite-planner>summary{min-height:44px;padding-block:12px;cursor:pointer;font-weight:650}.satellite-score{display:block;margin-top:8px;font-size:13px;color:var(--muted);line-height:1.6}.satellite-page code{overflow-wrap:anywhere}
 
 .satellite-page>.satellite-evidence,.satellite-page>.satellite-planner,.satellite-page>.satellite-job,.satellite-page>.satellite-limitations{max-width:1120px;margin-inline:auto}
+.satellite-environment{margin-block:2rem;padding-block:1rem;border-block:1px solid var(--line,#d9ded5)}
+.satellite-environment summary{cursor:pointer;font-weight:750;padding-block:.5rem}
+.satellite-environment p{max-width:72ch}
+.satellite-environment-actions{display:flex;align-items:center;flex-wrap:wrap;gap:1rem}
+.satellite-environment-actions a{padding-block:.75rem}
+.satellite-environment-readings{display:flex;flex-wrap:wrap;gap:1.5rem 3rem;margin-block:1.5rem}
+.satellite-environment-readings dt{font-weight:750;margin-bottom:.35rem}
+.satellite-environment-readings dd{margin:0}
+.satellite-environment-readings small{display:block;margin-top:.4rem}
+.satellite-google-credit{font-family:Arial,sans-serif;font-size:14px;font-weight:500;color:#1f1f1f;white-space:nowrap}

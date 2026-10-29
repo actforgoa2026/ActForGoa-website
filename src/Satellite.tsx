@@ -8,6 +8,7 @@ import {satelliteApi,SatelliteApiError,type SatelliteArea,type SatelliteScene,ty
 import {SatelliteHistory,satelliteIntents as intents,observationDate as dateLabel} from './SatelliteHistory';
 import {SatelliteContext} from './SatelliteContext';
 import {SatelliteMap} from './SatelliteMap';
+import {SatelliteEnvironment} from './SatelliteEnvironment';
 import {SatelliteEvidence} from './SatelliteEvidence';
 import {pollSatelliteJob,pendingJobKey,validJobId,sameImageryContext,cacheObservations} from './satellite-jobs';
 import {SatelliteTimeline} from './SatelliteTimeline';
@@ -16,7 +17,7 @@ import './satellite.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
-type Readiness={imagery_ready:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null};
+type Readiness={imagery_ready:boolean;imagery_provider?:string;google_maps_ready?:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null};
 type SavedJob={id:string;status:string;request:(SatelliteRequest&{kind?:string;scene_id?:string})|null;result:(SatelliteResult&{observation?:SatelliteObservation;error?:string})|null};
 const evidenceLabels={before:'Before image',after:'After image',coverage:'Visibility',spectral:'Numeric evidence',assessment:'Image decisions'};
 const decisionLabel=(value:string)=>value==='yes'?'Yes':value==='no'?'No':'Uncertain';
@@ -158,6 +159,7 @@ export default function Satellite(){
       <Button type="button" disabled={!!findReason||!!busy} aria-describedby={findReason?"satellite-find-reason":undefined} onClick={findScenes}>Find dated observations</Button>
       {findReason&&<p id="satellite-find-reason" role="status">{findReason}</p>}
       <p className="satellite-note">Searches use the acquisition dates, not today’s street-map tiles. The time slider steps through returned acquisitions; load an image to inspect it.</p>
+      {readiness?.imagery_provider==='earth-engine'&&<p className="satellite-note">Sentinel-2 acquisitions supplied by Google Earth Engine.</p>}
       {notice&&<p role="status">{notice}</p>}
       {catalogFreshness?.latest_acquired_at&&<p className="satellite-freshness">Latest acquisition found in this search: <strong>{dateLabel(catalogFreshness.latest_acquired_at)}</strong>. Catalog checked {dateLabel(catalogFreshness.searched_at)}. Availability does not guarantee clear local visibility.</p>}
       {!!scenes.length&&<><h3>3. Compare two observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><label key={label}>{label} observation<select value={label==='Before'?before:after} onChange={e=>{(label==='Before'?setBefore:setAfter)(e.target.value);setResult(null);}}><option value="">Choose an acquisition</option>{scenes.map(s=><option key={s.id} value={s.id}>{dateLabel(s.acquired_at)} · scene cloud {s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}</option>)}</select></label>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
@@ -167,6 +169,7 @@ export default function Satellite(){
       {session&&readiness&&!readiness.planner_ready&&<p className="satellite-note">Question interpretation is unavailable on this server. Use the date and topic controls above to compare imagery.</p>}</form>
     {plan&&<div className="satellite-plan" role="status"><p>{plan.message}</p>{plan.window_start&&<p>Requested period: {dateLabel(plan.window_start)} to {dateLabel(plan.window_end!)}.</p>}{plan.place_name&&<p>Requested place: {plan.place_name}. Select it on the map, then ask about “this area”.</p>}{plan.warnings?.map(w=><p key={w}>{w}</p>)}</div>}
 </details>
+    <SatelliteEnvironment area={area} csrfToken={session?.csrfToken||''} ready={!!readiness?.google_maps_ready}/>
     <SatelliteEvidence csrfToken={session?.csrfToken||''} area={area} startDate={start} endDate={end} intent={intent} question={question} onQuestion={setQuestion} onOpen={openSaved} busy={!!busy} revision={historyRevision}/>
     {result&&<section className="satellite-results"><h2>{result.summary?.headline??'What these observations show'}</h2>
       {result.recorded_example&&<p className="satellite-recorded"><strong>Recorded real comparison.</strong> Retrieved {dateLabel(result.recorded_example.retrieved_at)}. {result.recorded_example.note}{' '}<a href={result.recorded_example.source_url} target="_blank" rel="noreferrer">View the original verification</a></p>}

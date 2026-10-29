@@ -146,7 +146,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     </div>
     <AmcheLayers map={mapInstance}/>
     {tileError&&<p className="satellite-note">Some street-map tiles could not load. Selected areas and loaded satellite images remain available.</p>}
-    {observation&&<div className="satellite-map-caption"><p><strong>{dateLabel(observation.acquired_at[0])}</strong> · Sentinel-2, 10 m grid{!observation.map_layer?' · This saved observation predates map overlays; see its image below.':''}</p>
+    {observation&&<div className="satellite-map-caption"><p><strong>{dateLabel(observation.acquired_at[0])}</strong> · Sentinel-2, 10 m grid · {observation.provider==='earth-engine'?'Google Earth Engine':'Copernicus Data Space'}{!observation.map_layer?' · This saved observation predates map overlays; see its image below.':''}</p>
       {observation.map_layer&&<label>Imagery opacity <input type="range" min="0" max="100" value={opacity} onChange={e=>setOpacity(Number(e.target.value))}/><span>{opacity}%</span></label>}</div>}
   </div>;
 }
