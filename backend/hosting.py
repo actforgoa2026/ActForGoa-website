@@ -108,12 +108,16 @@ class RequestSizeLimit:
     async def __call__(self, scope, receive, send):
         if scope['type']!='http' or scope['method'] not in ('POST','PUT','PATCH'):
             return await self.app(scope,receive,send)
+        # The authenticated SDK transport is local and carries full source pages.
+        # Public request limits remain unchanged. Authentication is also required by the route.
+        internal=(scope.get('path','').startswith('/internal-agent/') and (scope.get('client') or ('',))[0] in ('127.0.0.1','::1'))
+        maximum=180000 if internal else self.maximum
         messages=[];size=0
         while True:
             message=await receive()
             if message['type']=='http.disconnect':return
             size+=len(message.get('body',b''))
-            if size>self.maximum:
+            if size>maximum:
                 return await JSONResponse({'detail':'Request is too large.'},status_code=413)(scope,receive,send)
             messages.append(message)
             if not message.get('more_body',False):break

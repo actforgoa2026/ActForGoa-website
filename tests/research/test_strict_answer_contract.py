@@ -79,3 +79,11 @@ def test_model_reference_limit_does_not_discard_required_context():
     result=normalize_answer(raw,REQUEST,evidence)
     assert len(result['paragraphs'][0]['citations'])==12
     assert len(result['citations'])==12
+
+
+def test_takeaway_presentation_preserves_full_citations_and_qualifications():
+    text = 'Only the surveyed herbaceous subset is described; this does not establish a wider range.'
+    result = normalize_answer(answer(text), REQUEST, EVIDENCE)
+    assert result['summary_first'] is True
+    assert result['paragraphs'][0] == {'text': text, 'citations': [EVIDENCE[0]['id']]}
+    assert result['citations'] == EVIDENCE

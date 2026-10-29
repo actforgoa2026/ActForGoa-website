@@ -16,6 +16,7 @@
     "research:index": ".venv/bin/python scripts/build_research_index.py",
     "research:api": ".venv/bin/python -m uvicorn backend.app:app --host 127.0.0.1 --port 8091",
     "research:dev": ".venv/bin/python scripts/serve_research.py",
+    "research:dev:live": ".venv/bin/python scripts/serve_research.py --live-api",
     "research:test": ".venv/bin/python -m pytest tests/research -q",
     "research:evaluate": ".venv/bin/python scripts/evaluate_research.py",
     "dev:reports": "node --import tsx server/reporting.ts",
