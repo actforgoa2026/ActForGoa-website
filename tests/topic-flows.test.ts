@@ -57,7 +57,7 @@ test('every menu outcome has usable destinations, valid records, anchors and for
     const [, ,slug,actionId,choiceId]=url.pathname.split('/');
     const target=topicFlows.find(f=>f.slug===slug)?.actions.find(a=>a.id===actionId);
     assert(target && (!choiceId || target.choices?.some(c=>c.id===choiceId)),href);
-   } else if(href.startsWith('/')) assert(['/directory','/search','/library','/stories','/get-involved','/contact'].includes(url.pathname),href);
+   } else if(href.startsWith('/')) assert(['/directory','/search','/library','/stories','/get-involved','/contact','/contacts/forest','/contacts/agriculture','/contacts/veterinary'].includes(url.pathname),href);
    else if(url.protocol==='mailto:') assert(records.some((r:RecordItem)=>r.emails.includes(url.pathname)),`Email absent from source catalogue: ${href}`);
    else assert.equal(url.protocol,'https:');
   }

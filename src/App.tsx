@@ -1,3 +1,6 @@
+import {ButtonLink} from './components/arc/button/button-link';
+import {MorphSelect} from './components/arc/morph-select/morph-select';
+import SiteFooter from './SiteFooter';
 import { articlePhoto } from "./article-photos";
 import {
   lazy,
@@ -20,10 +23,10 @@ import {
   useLoaderData,
   useNavigationType,
   ScrollRestoration,
+  Navigate,
 } from "react-router-dom";
 import {
   ArrowRight,
-  ArrowUpRight,
   ArrowUp,
   Search,
   Leaf,
@@ -91,6 +94,9 @@ const ReportInbox = lazy(() => import("./ReportInbox"));
 const Satellite = lazy(() => import('./Satellite'));
 const AdminDashboard = lazy(() => import('./AdminDashboard'));
 const Blog = lazy(() => import('./Blog'));
+const Newsletters = lazy(() => import('./Newsletters'));
+const ResearchLibrary = lazy(() => import('./ResearchLibrary'));
+const GovernmentContacts = lazy(() => import('./GovernmentContacts'));
 
 const topicIcons = [
   Recycle,
@@ -184,12 +190,11 @@ function SearchBox({
         id={large ? "home-search" : "guide-search"}
         value={value}
         onValueChange={setValue}
-        placeholder="Find local help"
+        placeholder={location.pathname === "/library" ? "Search articles and guides" : location.pathname === "/stories" ? "Search stories" : "Find local help"}
         autoComplete="off"
       />
-      <Button size="lg" type="submit" aria-label="Search the field guide">
+      <Button type="submit" aria-label="Search the field guide">
         <span className="search-submit-label">Search</span>
-        <ArrowRight size={20} />
       </Button>
     </form>
   );
@@ -208,53 +213,27 @@ const navigation = [
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", links: [{ label: "Legal questions", href: "/ask/legal" }, { label: "Environment & ecosystems", href: "/ask/ecology" }, { label: "Explore changes on the map", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
+  { value: "resources", label: "Resources", links: [{ label: "Legal questions", href: "/ask/legal" }, { label: "Environment & ecosystems", href: "/ask/ecology" }, { label: "Explore changes on the map", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "Browse research library", href: "/research-library" }] },
   { value: "about", label: "About", links: [
     { label: "About ActForGoa", href: "/about" },
-    { label: "Newsletters", href: "/read/wp-8905" },
+    { label: "Newsletters", href: "/newsletters" },
     { label: "Annual reports", href: "/read/wp-8903" },
     { label: "Press coverage", href: "/read/wp-7377" },
   ] },
-  { value: "community", label: "Community", href: "/directory" },
+  { value: "directory", label: "Directory", href: "/directory" },
 ];
 function Header() {
   const { pathname } = useLocation();
   const { language } = useLanguage();
-  const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "समुदाय"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "समुदाय"] : [];
+  const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "निर्देशिका"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "निर्देशिका"] : [];
   const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
-  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "community" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/")) ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "directory" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/") || pathname === "/research-library") ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={items} current={current} label="Main navigation" extraAction={<LanguageSwitcher />}
     secondaryAction={null} primaryAction={{ label: "Search", href: "/search" }}
+    onNavigate={({href}) => { if (href === "/" && pathname === "/") window.scrollTo({top: 0, behavior: "instant"}); }}
   />;
-}
-function Footer() {
-  return (
-    <footer className="footer">
-      <div className="footer-top">
-        <div>
-          <Link to="/" className="wordmark">
-            act<span>for</span>goa.
-          </Link>
-          <p>Enabling people to care for Goa.</p>
-        </div>
-        <Link to="/contact">
-          Let’s stay connected <ArrowUpRight size={18} />
-        </Link>
-      </div>
-      <div className="footer-bottom">
-        <span>Kokum Trust is the legal managing entity for Act for Goa.</span>
-        <div>
-          <a href="https://actforgoa.org/privacy-policy/">Privacy</a>
-          <a href="https://actforgoa.org/terms-and-conditions/">Terms</a>
-          <Link to="/about#sources">About this guide</Link>
-          <Link to="/mcp">MCP for AI assistants</Link>
-          <Link to="/admin">Team dashboard</Link>
-        </div>
-      </div>
-    </footer>
-  );
 }
 
 function Home({ records }: { records: RecordItem[] }) {
@@ -265,19 +244,17 @@ function Home({ records }: { records: RecordItem[] }) {
       <section className="home-actions shell" aria-labelledby="home-actions-heading">
         <div className="section-heading">
           <h2 id="home-actions-heading" tabIndex={-1} lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
-          <Link to="/emergency" className="button green emergency-entry">
+          <ButtonLink to="/emergency" className="emergency-entry">
             <Siren size={20} aria-hidden="true" />
-            <span lang={language}><strong>{translatePriority("Emergency services", language)}</strong></span>
-            <ArrowRight size={18} aria-hidden="true" />
-          </Link>
+            <span lang={language}>{translatePriority("Emergency services", language)}</span>
+          </ButtonLink>
         </div>
         <nav className="home-topic-choices" aria-label="Choose a topic">
           {topicFlows.map(flow => (
-            <Link key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
+            <ButtonLink wrap variant="secondary" key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
               <TopicIcon name={flow.icon} />
               <span><strong lang={translatePriority(flow.label, language) === flow.label ? "en" : language}>{translatePriority(flow.label, language)}</strong></span>
-              <ArrowRight size={18} aria-hidden="true" />
-            </Link>
+            </ButtonLink>
           ))}
         </nav>
       </section>
@@ -416,12 +393,12 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
           <>
             <h3>You’ve explored the collection.</h3>
             <Link className="text-link" to="/contact">
-              Know something we should add? <ArrowUpRight size={18} />
+              Know something we should add?
             </Link>
           </>
         )}
         <Link className="subtle-link" to="/get-involved">
-          Take part in ActForGoa <ArrowUpRight size={16} />
+          Take part in ActForGoa
         </Link>
       </div>
     </section>
@@ -453,11 +430,12 @@ function Catalogue({
     setPage({
       key: location.key,
       view: saved?.view ?? page.view,
-      limit: saved?.limit ?? 24,
+      limit: saved?.limit ?? (mode === "stories" || mode === "blog" || mode === "library" ? page.limit : 24),
     });
   }
   const { view, limit } = page;
   const resultsRoot = useRef<HTMLDivElement>(null);
+  const filterScroll = useRef<number | null>(null);
   const nextResultFocus = useRef<string | null>(null);
   const [resultAnnouncement, setResultAnnouncement] = useState("");
   const setView = (view: "grid" | "list") =>
@@ -472,6 +450,10 @@ function Catalogue({
   >(semantic ? "ready" : "idle");
   useLayoutEffect(() => {
     browsingState.set(location.key, { view, limit });
+    if (filterScroll.current !== null) {
+      window.scrollTo({top: filterScroll.current, behavior: "instant"});
+      filterScroll.current = null;
+    }
     if (nextResultFocus.current) {
       resultsRoot.current?.querySelector<HTMLAnchorElement>(`[data-record-id="${CSS.escape(nextResultFocus.current)}"] h3 a`)?.focus();
       nextResultFocus.current = null;
@@ -594,8 +576,9 @@ function Catalogue({
   const moreAvailable = grouped
     ? groups.some((group) => group.items.length > perGroup)
     : limit < results.length;
-  const title = mode === "directory" ? "Community directory" : mode === "library" ? "Library" : mode === "blog" ? "Blog" : mode === "stories" ? "Stories" : "Search";
+  const title = mode === "directory" ? "Directory" : mode === "library" ? "Library" : mode === "blog" ? "Blog" : mode === "stories" ? "Stories" : "Search";
   const change = (key: string, value: string) => {
+    filterScroll.current = window.scrollY;
     const next = new URLSearchParams(params);
     value ? next.set(key, value) : next.delete(key);
     setParams(next, { preventScrollReset: true });
@@ -606,7 +589,7 @@ function Catalogue({
         <h1>{title}</h1>
       </div>
       <SearchBox initial={query} />
-      {topic && !query && topicFor(topic) && <TopicChoices flow={topicFor(topic)!} />}
+      {topic && !query && topicFor(topic) && (mode === "stories" || mode === "blog" ? <details className="topic-reading-help"><summary>Looking for practical help with this topic?</summary><TopicChoices flow={topicFor(topic)!} /></details> : <TopicChoices flow={topicFor(topic)!} />)}
       {showEmergencyShortcut(query) && <section className="search-emergency" aria-labelledby="emergency-search-heading">
         <h2 id="emergency-search-heading">Need urgent help?</h2>
         <p>For a police, fire or medical emergency, call <a href="tel:112">112</a>. Archived directory entries do not confirm live availability.</p>
@@ -702,9 +685,9 @@ function Catalogue({
           {canFocus && focusedResults.length > 0 && (
             <div className="search-focus-options">
               {intent.id === "snake-rescue" && (
-                <p>Start with the <a className="text-link" href="https://forest.goa.gov.in/contact-us">Goa Forest Department contact directory <ArrowUpRight size={15} /></a>. Volunteer listings below date to 2018; availability needs confirmation.</p>
+                <p>Start with the <Link className="text-link" to="/contacts/forest">Goa Forest Department contacts</Link>. Volunteer listings below date to 2018; availability needs confirmation.</p>
               )}
-              {intent.id === "animal-rescue" && <p>Check the <a className="text-link" href="https://ahvs.goa.gov.in/emergency-contact/">official veterinary directory <ArrowUpRight size={15} /></a> and confirm which service can help.</p>}
+              {intent.id === "animal-rescue" && <p>Check the <a className="text-link" href="https://ahvs.goa.gov.in/emergency-contact/">official veterinary directory</a> and confirm which service can help.</p>}
               <Button variant="ghost" onClick={() => change("scope", focused ? "all" : "")}>
                 {focused ? `See all related results (${relatedResults.length})` : "Back to best matches"}
                 <ArrowRight size={16} />
@@ -791,9 +774,7 @@ function Catalogue({
                 Try a broader phrase such as “waste”, “wildlife” or “panchayat”,
                 or remove a filter.
               </p>
-              <Link className="button green" to="/search">
-                Browse all resources <ArrowRight size={17} />
-              </Link>
+              <ButtonLink to="/search">Browse all resources</ButtonLink>
               <Link to="/contact">Ask ActForGoa for help</Link>
             </div>
           )}
@@ -982,7 +963,7 @@ function Detail({ records }: { records: RecordItem[] }) {
               target="_blank"
               rel="noreferrer"
             >
-              Original ActForGoa page <ArrowUpRight size={16} />
+              Original ActForGoa page
             </a>}
             {r.sourceApi && (
               listing ? <ListingLink href={r.sourceApi} kind="source">Public directory record</ListingLink> : <a
@@ -1068,7 +1049,7 @@ function About() {
             influence, premises or other resources.
           </p>
           <a className="text-link" href="https://actforgoa.org/about-2/">
-            Read the original About page <ArrowUpRight size={16} />
+            Read the original About page
           </a>
         </div>
         <aside>
@@ -1077,16 +1058,16 @@ function About() {
             Find useful knowledge <ArrowRight size={17} />
           </Link>
           <Link to="/directory">
-            Meet the community <ArrowRight size={17} />
+            Explore the directory <ArrowRight size={17} />
           </Link>
           <Link to="/get-involved">
             Take your next step <ArrowRight size={17} />
           </Link>
           <a href="https://actforgoa.org/about-2/annual-reports/">
-            Annual reports <ArrowUpRight size={17} />
+            Annual reports
           </a>
           <a href="https://actforgoa.org/press-coverage/">
-            Press coverage <ArrowUpRight size={17} />
+            Press coverage
           </a>
         </aside>
       </div>
@@ -1152,19 +1133,16 @@ function Contact({ involve = false }: { involve?: boolean }) {
             <Heart size={24} />
             <h2>Give your time</h2>
             <p>Explore volunteering with ActForGoa.</p>
-            <ArrowUpRight size={21} />
           </a>
           <Link to="/directory">
             <Users size={24} />
             <h2>Find your people</h2>
             <p>Connect with an organisation near you.</p>
-            <ArrowUpRight size={21} />
           </Link>
           <a href="https://actforgoa.org/greenviksitgoa/">
             <Leaf size={24} />
             <h2>Explore Goa’s future</h2>
             <p>Read the archived Green Viksit Goa consultation.</p>
-            <ArrowUpRight size={21} />
           </a>
         </div>
       )}
@@ -1201,27 +1179,11 @@ function Contact({ involve = false }: { involve?: boolean }) {
                 maxLength={160}
               />
             </div>
-            <label>
-              I’d like to
-              <select
-                name="reason"
-                defaultValue={
-                  params.get("entry")
-                    ? "Suggest a correction"
-                    : params.get("reason") === "Work with ActForGoa" ? "Work with ActForGoa"
-                    : involve
-                      ? "Volunteer with ActForGoa"
-                      : "Ask a question"
-                }
-              >
-                <option>Ask a question</option>
-                <option>Work with ActForGoa</option>
-                <option>Suggest a correction</option>
-                <option>List an organisation</option>
-                <option>Share a story or resource</option>
-                <option>Volunteer with ActForGoa</option>
-              </select>
-            </label>
+            <MorphSelect label="I’d like to" name="reason"
+              defaultValue={params.get("entry") ? "Suggest a correction" : params.get("reason") === "Work with ActForGoa" ? "Work with ActForGoa" : involve ? "Volunteer with ActForGoa" : "Ask a question"}
+              onValueChange={() => setPrepared(false)}
+              items={["Ask a question", "Work with ActForGoa", "Suggest a correction", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].map(value => ({value, label: value}))}
+            />
             {params.get("entry") && (
               <p className="entry-reference">About: {params.get("entry")}</p>
             )}
@@ -1243,7 +1205,7 @@ function Contact({ involve = false }: { involve?: boolean }) {
                   <strong>Your email is ready to review.</strong>
                   <p>Nothing has been sent yet.</p>
                   <a href={mailUrl}>
-                    Open your email app <ArrowUpRight size={16} />
+                    Open your email app
                   </a>
                 </div>
               </div>
@@ -1281,17 +1243,39 @@ function NotFound() {
         That entry isn’t in this guide. Search the collection or head back to
         the start.
       </p>
-      <Link className="button green" to="/">
-        Explore ActForGoa <ArrowRight size={18} />
-      </Link>
+      <ButtonLink to="/">Explore ActForGoa</ButtonLink>
     </main>
   );
 }
 export default function App() {
   const { language } = useLanguage();
-  const { pathname, search } = useLocation();
+  const { pathname, search, hash } = useLocation();
   const navigationType = useNavigationType();
   const previousPath = useRef(pathname);
+  const scrollPath = useRef(pathname);
+  useLayoutEffect(() => {
+    const moved = scrollPath.current !== pathname;
+    scrollPath.current = pathname;
+    if (moved && navigationType === "PUSH" && !window.location.hash) window.scrollTo({top: 0, behavior: "instant"});
+  }, [pathname, navigationType]);
+  useEffect(() => {
+    if (!hash) return;
+    let id: string;
+    try { id = decodeURIComponent(hash.slice(1)); } catch { return; }
+    let frame = 0;
+    const jump = () => {
+      const target = document.getElementById(id);
+      if (!target) return;
+      observer.disconnect();
+      frame = requestAnimationFrame(() => target.scrollIntoView({block: "start", behavior: "instant"}));
+    };
+    // Hash destinations can arrive after the lazy page or catalogue has mounted.
+    const observer = new MutationObserver(jump);
+    observer.observe(document.getElementById("content") || document.body, {childList: true, subtree: true});
+    jump();
+    const timeout = window.setTimeout(() => observer.disconnect(), 5000);
+    return () => { observer.disconnect(); cancelAnimationFrame(frame); clearTimeout(timeout); };
+  }, [pathname, hash]);
   const orbitLanding = pathname.replace(/\/$/, "") === "/explore";
   const internal = pathname === "/admin" || pathname.startsWith("/admin/");
   const { records, error } = useLoaderData() as {
@@ -1327,7 +1311,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <>{pathname === "/" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}<TeamBrowsingBar /></>}
+      {!internal && <>{pathname === "/" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}{pathname !== "/" && !orbitLanding && pathname !== "/map" && !pathname.startsWith("/ask") && !pathname.startsWith("/templates/") && pathname !== "/report" && pathname !== "/research-library" && !pathname.startsWith("/documents/") && <TeamBrowsingBar />}</>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
@@ -1355,6 +1339,8 @@ export default function App() {
             <Route path="/ask/legal" element={<Research domain="legal" />} />
             <Route path="/ask/ecology" element={<Research domain="ecology" />} />
             <Route path="/documents/:id" element={<ResearchDocument />} />
+            <Route path="/research-library" element={<ResearchLibrary />} />
+            <Route path="/contacts/:department" element={<GovernmentContacts />} />
             <Route path="/" element={<Home records={records} />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
             <Route path="/search" element={<Catalogue records={records} />} />
@@ -1385,6 +1371,9 @@ export default function App() {
             <Route path="/blog/:slug" element={<Blog />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
             <Route path="/map" element={<Satellite />} />
+            <Route path="/read/wp-8905" element={<Navigate to="/newsletters" replace />} />
+            <Route path="/newsletters" element={<Newsletters />} />
+            <Route path="/newsletters/:issueId" element={<Newsletters />} />
             <Route path="/read/:id" element={<Detail records={records} />} />
             <Route path="/templates/:id" element={<TemplateEditor />} />
             <Route path="/about" element={<About />} />
@@ -1398,11 +1387,11 @@ export default function App() {
         )}
       </div>
       <ScrollRestoration />
-      {!internal && !orbitLanding && <Footer />}
+      {!internal && !orbitLanding && <SiteFooter />}
       {!internal && !orbitLanding && <div className="preview-note">
         A new field guide, in progress.{" "}
         <a href="https://actforgoa.org/">
-          Visit the original site <ArrowUpRight size={12} />
+          Visit the original site
         </a>
       </div>}
     </ResearchMemoryProvider>

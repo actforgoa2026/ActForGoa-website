@@ -14,9 +14,10 @@ export interface SegmentedControlProps {
   /** Called when the pointer or focus reaches an option, before it is chosen. Use it to start loading what that option shows. */
   onOptionIntent?: (value: string) => void;
   className?: string;
+  fullWidth?: boolean;
 }
 
-export default function SegmentedControl({ options, value, onValueChange, label, onOptionIntent, className }: SegmentedControlProps) {
+export default function SegmentedControl({ options, value, onValueChange, label, onOptionIntent, className, fullWidth = false }: SegmentedControlProps) {
   const id = useId();
   const reduced = useReducedMotion();
   const keyboard = useRef(false);
@@ -64,7 +65,7 @@ export default function SegmentedControl({ options, value, onValueChange, label,
     track.current?.querySelector<HTMLElement>(`[data-value="${CSS.escape(options[target].value)}"]`)?.focus({ preventScroll: true });
   };
 
-  return <div className={`${styles.root} ${className ?? ""}`} role="group" aria-label={label}>
+  return <div className={`${styles.root} ${className ?? ""}`} data-full-width={fullWidth || undefined} role="group" aria-label={label}>
     <LayoutGroup id={id}><motion.div ref={track} layoutScroll className={styles.track}>
       {options.map((option, index) => <button key={option.value} id={`${id}-${option.value}`} className={styles.button} type="button" data-value={option.value} aria-pressed={value === option.value} tabIndex={index === selectedIndex ? 0 : -1} onPointerDown={() => { keyboard.current = false; }} onClick={() => onValueChange(option.value)} onKeyDown={onKeyDown} onPointerEnter={onOptionIntent ? () => onOptionIntent(option.value) : undefined} onFocus={onOptionIntent ? () => onOptionIntent(option.value) : undefined}>
         {value === option.value && <motion.span className={styles.selection} layoutId="selection" layoutDependency={value} transition={reduced || keyboard.current ? { duration: 0 } : motionTokens.spring.morph} aria-hidden="true" />}

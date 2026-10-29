@@ -1,3 +1,4 @@
+import {Button} from './components/arc/button/button';
 import {createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode} from 'react';
 import {Link} from 'react-router-dom';
 import {Star, ArrowRight} from 'lucide-react';
@@ -70,7 +71,7 @@ export function CurationStar({recordId, title}: {recordId: string; title: string
   }
   if (!session && !error) return null;
   return <div className="curation-control">
-    {session && <button type="button" className="curation-star" aria-label={`${starred ? 'Unstar' : 'Star'} ${title}`} aria-pressed={starred} title={starred ? 'Remove from team picks' : 'Add to team picks'} disabled={pending} onClick={() => void toggle()}><Star size={20} fill={starred ? 'currentColor' : 'none'} aria-hidden="true"/></button>}
+    {session && <Button variant="secondary" type="button" className="curation-star" aria-label={`${starred ? 'Unstar' : 'Star'} ${title}`} aria-pressed={starred} title={starred ? 'Remove from team picks' : 'Add to team picks'} disabled={pending} onClick={() => void toggle()}><Star size={20} fill={starred ? 'currentColor' : 'none'} aria-hidden="true"/></Button>}
     {error && <span className="curation-error" role="alert">{error} {!session && <Link to="/admin">Sign in</Link>}</span>}
     <span className="sr-only" role="status">{notice}</span>
   </div>;

@@ -1,0 +1,171 @@
+{
+  "archiveSource": "https://actforgoa.org/newsletters/",
+  "retrievedOn": "2026-10-29",
+  "note": "Public ActForGoa archive. Original historical wording and article links retained; mailing-list controls and tracking pixels omitted. Images kept from the original newsletter; copyright remains with original creators. Email merge placeholders rendered as reader; text casing normalized for standalone headings. The 2025 PDF page images are faithful raster previews; the original PDF has no embedded link annotations.",
+  "assets": [
+    {
+      "path": "/assets/newsletters/2025-year-end.pdf",
+      "source": "https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf",
+      "sha256": "09616b4491fcd02d1009197b03ccae37eb1c33b357c824fea968456a8201d132",
+      "retrievedOn": "2026-10-29",
+      "status": 200
+    },
+    {
+      "path": "/assets/newsletters/2022-december-0036e5abc5ab3d38.jpg",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/8f270135-8572-2bf1-0043-9572cc105e30.jpeg?w=564&dpr=2",
+      "sha256": "a163c69dda50b162559d164f9fd433eb86becdd7e86e9af061ab9dadfa0506eb",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-december-e67a5d9b9a1eb68f.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/b944528e-62d6-3a27-2398-7efe85940f0f.png?w=564&dpr=2",
+      "sha256": "df3e21ad42d7c088d68265bb4c83e5343c8177b4fe3e7a12589e20ac6f089f47",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-december-494912d60a41f7d5.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/b60fd8a2-2f89-f369-528f-cada703c6c39.png?w=564&dpr=2",
+      "sha256": "f97f1bf2233fdb7252855f3b7779a70909255cbacf69629670f861306582058d",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-december-670975a22f498d1c.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/925d96c7-e72e-a134-c317-bbc7c8f175ff.png?w=1080&dpr=2",
+      "sha256": "992d70e4f5987bb53e87bb324d97b423b6977ecaca4eb40bec058255194995d0",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "src/content/newsletters.json#2022-december",
+      "source": "https://mailchi.mp/eb66242be2b6/k7ncfe5st3",
+      "sha256": "efc1d978533354fa661369b28100eb25d734adc7bf7ed15654d70e7f58b1e65a",
+      "retrievedOn": "2026-10-29",
+      "status": 200
+    },
+    {
+      "path": "/assets/newsletters/2022-august-44ac562e2922a9dd.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/eccd0ace-6486-304c-9d0d-59969dba8649.png?w=564&dpr=2",
+      "sha256": "01db5c288194065f8e1b999d3bb99a31b39eb083f30c44fb98e87d4c29a21a21",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-august-13403b6fe6941ab1.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/4f8b0018-6a50-7ce0-beab-70335cac5d4a.png?w=564&dpr=2",
+      "sha256": "b83a0672c5ccba3ec1a20cd6edd7c7eca7a3e472ebb76dfccd1cf88cf745cf52",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "src/content/newsletters.json#2022-august",
+      "source": "https://mailchi.mp/4f827fac9f80/panchayat-elections-are-this-wednesday-heres-what-you-need-to-know-16519023",
+      "sha256": "b448329e6e1e4ff08b3ffa7b4c7913539cf6ccc25d84c87b906d69dc7dc31b65",
+      "retrievedOn": "2026-10-29",
+      "status": 200
+    },
+    {
+      "path": "/assets/newsletters/2022-july-227a1b839112e18e.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/1113d3e3-2969-f74d-00b2-4eec087ad695.png?w=564&dpr=2",
+      "sha256": "697c592c4b1dc4b43b5c886bcead9d448c335bd00e79b74b2257d955c48cd76c",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-july-f5115f7f23ea927c.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/41976e3c-4491-f4a8-3fcd-811cf18bcd8f.png?w=564&dpr=2",
+      "sha256": "6c5e66f8c55f5a9e609e57a7fbf8bcf8144596f7a31b257da87ddcfb9404565d",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-july-2a32d298847c73d1.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/6df42fcc-6a01-730d-c43f-3a58bc0999c1.png?w=564&dpr=2",
+      "sha256": "af2c2bfe77693beba6d407dbfff4f7473e0c13826f99de51deb7ed725d7edf97",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-july-92e5c75152c08d51.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/5f67acea-d8ab-bfef-babb-6261dfffc19e.png?w=252&dpr=2&rect=36%2C0%2C1003%2C659",
+      "sha256": "8c9117b26ebb4e2a4c812b210cd839043316f73797111feeceed6804c4469776",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-july-108d967085cc47eb.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/84140877-7e14-5c55-60c2-8078412d8d63.png?w=250&dpr=2&rect=34%2C5%2C866%2C575",
+      "sha256": "3f4949d9736e6868214bfa0518e97c8c05d9a9d00ec650dd04e508d836e005af",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "src/content/newsletters.json#2022-july",
+      "source": "https://mailchi.mp/17f3965c491d/act-for-goa-stay-informed-take-action-16513439",
+      "sha256": "7d7cf4e396460541642381bb6d08f2eb02f9de53434020bed41c9aa0b67d22cf",
+      "retrievedOn": "2026-10-29",
+      "status": 200
+    },
+    {
+      "path": "/assets/newsletters/2022-april-b3f6953eccee4d94.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/21eae0b9-cec7-9c24-93b4-6270cbe5eb1d.png?w=564&dpr=2",
+      "sha256": "e5c702d1b1cccca8f41b87445f63a9a161744dd3d06ecd10e01c3809f7fa6344",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-april-199a416eb6cf9bc5.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/f3f2bd86-05c0-b008-73ca-0dc58e03182a.png?w=564&dpr=2",
+      "sha256": "f33f25d882060772dbe6b6a2087be910e826c80c831b2d4859c04e2d52b2abe0",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-april-260701ac8c3e7613.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/4c8b01c3-b54e-42b9-99d6-c1f238ff93fd.png?w=1080&dpr=2",
+      "sha256": "bf2279c30110a1e56f6e3f9ca8ec2f8ab506eb780bf6934a15443de1f4cf9dd4",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-april-283f229c91ad9f30.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/6b64e8ef-02c3-d5c3-41f3-416ead78c389.png?w=1080&dpr=2",
+      "sha256": "9feffefb451024e99375c9917f446ec06f765167731ec79a8c6bfd1f7c0ad95e",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "/assets/newsletters/2022-april-5ca1e955dd70950f.png",
+      "source": "https://dim.mcusercontent.com/cs/4f14e8bf73a2b4568e3f9314c/images/58bb79b2-9a9c-2af5-d3bc-6051de1dc085.png?w=1080&dpr=2",
+      "sha256": "06170c4e2258b54faed38dbe277f3cfae4ffef100ae80f6d7002cdcb0527df24",
+      "copyright": "Original ActForGoa newsletter image; retained with its source."
+    },
+    {
+      "path": "src/content/newsletters.json#2022-april",
+      "source": "https://mailchi.mp/56c61bdf0566/actforgoas-first-newsletter-16099003",
+      "sha256": "13bdc3082d16e356192e7f8016343ef0ef00746c8ec00e37d487fe3f66d7d325",
+      "retrievedOn": "2026-10-29",
+      "status": 200
+    },
+    {
+      "path": "/assets/newsletters/2025-year-end-page-1.webp",
+      "source": "https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf",
+      "page": 1,
+      "processing": "Poppler rasterization at 1600 pixels, WebP quality 92; no content edits.",
+      "sha256": "d192470c6a0b15c8a4a765172e664b4a6190c1c28db5f84b6097ce1cbb6df645"
+    },
+    {
+      "path": "/assets/newsletters/2025-year-end-page-2.webp",
+      "source": "https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf",
+      "page": 2,
+      "processing": "Poppler rasterization at 1600 pixels, WebP quality 92; no content edits.",
+      "sha256": "ef1c392e396e69f67b1b47c65233e6634a296d2de4f05d9a13b87638a23b0f67"
+    },
+    {
+      "path": "/assets/newsletters/2025-year-end-page-3.webp",
+      "source": "https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf",
+      "page": 3,
+      "processing": "Poppler rasterization at 1600 pixels, WebP quality 92; no content edits.",
+      "sha256": "1ee0ebfdd89cbb50b38688ae8c7546d1881cf37f952b31b734691f28bcab4257"
+    },
+    {
+      "path": "/assets/newsletters/2025-year-end-page-4.webp",
+      "source": "https://actforgoa.org/wp-content/uploads/2026/03/2024-2025-Act-for-Goa-Year-End-Newsletter.pdf",
+      "page": 4,
+      "processing": "Poppler rasterization at 1600 pixels, WebP quality 92; no content edits.",
+      "sha256": "a867a407a8669721c9a2466660245b2482145afa1c7291ab1e0c00a9f0827545"
+    }
+  ],
+  "transcription": {
+    "path": "src/content/newsletter-text/2025-year-end.md",
+    "method": "Transcribed from all four rendered source PDF pages and checked visually. Reading order and heading case normalized; historical wording and original spellings retained. Illustrations and their embedded handwriting remain available in the original-layout disclosure.",
+    "checkedOn": "2026-10-29"
+  }
+}

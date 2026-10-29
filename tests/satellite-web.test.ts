@@ -15,7 +15,7 @@ test('standalone satellite serves only its frontend and authenticated API surfac
   await new Promise<void>(r=>server.listen(0,'127.0.0.1',r));
   const address=server.address();assert(address&&typeof address==='object');const origin=`http://127.0.0.1:${address.port}`;
   try{
-    for(const path of ['/','/map','/admin']){const r=await fetch(origin+path);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-cache');assert.equal(r.headers.get('x-frame-options'),'DENY');assert.match(await r.text(),/Satellite/);}
+    for(const path of ['/','/map','/admin']){const r=await fetch(origin+path);assert.equal(r.status,200);assert.equal(r.headers.get('cache-control'),'no-cache');assert.equal(r.headers.get('x-frame-options'),'DENY');assert.equal(r.headers.get('referrer-policy'),'strict-origin-when-cross-origin');assert.match(await r.text(),/Satellite/);}
     const asset=await fetch(origin+'/assets/app.js');assert.equal(asset.status,200);assert.match(asset.headers.get('content-type')||'',/javascript/);
     for(const path of ['/private.json','/.env.local','/assets/%2e%2e%2f%2e%2e%2fprivate.json','/api/admin/posts','/api/blog','/api/curation'])assert.equal((await fetch(origin+path)).status,404,path);
     assert.equal((await fetch(origin+'/api/admin/config')).status,200);

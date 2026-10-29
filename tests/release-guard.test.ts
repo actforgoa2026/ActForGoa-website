@@ -31,6 +31,10 @@ if(tool==='vercel') {
    const path=args[1];
    const missing=scenario==='article-route-missing'&&!path.endsWith('publish')||scenario==='publish-route-missing'&&path.endsWith('/publish')||scenario==='unpublish-route-missing'&&path.endsWith('/unpublish');
    process.stdout.write(missing?'NOT_FOUND\\n404':scenario==='article-auth-missing'?'{}\\n200':'{"error":"Sign in to continue."}\\n401');
+  } else if(args[1]?.startsWith('/api/admin/satellite/')) {
+   process.stdout.write(scenario==='satellite-environment-missing'&&args[1].endsWith('/environment')?'NOT_FOUND\\n404':'{"error":"Sign in to continue."}\\n401');
+  } else if(args[1]?.startsWith('/assets/newsletters/')) {
+   process.stdout.write('HTTP/2 200\\ncontent-type: '+(scenario==='newsletter-spa-rewrite'?'text/html':args[1].endsWith('.pdf')?'application/pdf':'image/webp'));
   } else if(args.includes('/api/admin/config')) process.stdout.write(JSON.stringify({available:scenario!=='admin-unavailable'}));
   else if(args.includes('/api/blog')) process.stdout.write(JSON.stringify(scenario==='blog-unavailable'?{error:'unavailable'}:{posts:[]}));
   else process.stdout.write(JSON.stringify({search_ready:scenario!=='research-unavailable',chat_ready:scenario!=='answers-unavailable',domains:scenario==='research-unscoped'?[]:['legal','ecology'],domain_counts:{legal:3,ecology:5}}));
@@ -52,6 +56,7 @@ function runRelease(scenario:string, check=false) {
  try {
   mkdirSync(join(root,'bin')); mkdirSync(join(root,'.git')); mkdirSync(join(root,'api')); writeFileSync(join(root,'api','mcp.ts'),'');
   mkdirSync(join(root,'api','admin')); writeFileSync(join(root,'api','admin','[...path].ts'),'');
+  mkdirSync(join(root,'api','admin','satellite')); writeFileSync(join(root,'api','admin','satellite','[action].ts'),'');
   const executable=join(root,'bin','mock.cjs');
   writeFileSync(executable,mock,{mode:0o755});
   for(const command of ['git','npm','vercel']) symlinkSync(executable,join(root,'bin',command));
@@ -69,7 +74,7 @@ test('release preflight checks evidence without building or promoting',()=>{
  assert(!result.calls.some(x=>x.tool==='npm'||x.args[0]==='deploy'||x.args[0]==='promote'));
 });
 
-for(const scenario of ['dirty','stale','wrong-tree','missing-explore','main-during-build','alias-during-build','failed-build','research-unavailable','answers-unavailable','research-unscoped','admin-unavailable','article-route-missing','publish-route-missing','unpublish-route-missing','article-auth-missing','blog-unavailable','wrong-deployment','mcp-error','mcp-empty']) {
+for(const scenario of ['dirty','stale','wrong-tree','missing-explore','main-during-build','alias-during-build','failed-build','research-unavailable','answers-unavailable','research-unscoped','admin-unavailable','article-route-missing','publish-route-missing','unpublish-route-missing','article-auth-missing','blog-unavailable','wrong-deployment','mcp-error','mcp-empty','satellite-environment-missing','newsletter-spa-rewrite']) {
  test(`release refuses ${scenario} without changing the public alias`,()=>{
   const result=runRelease(scenario);
   assert.notEqual(result.status,0);

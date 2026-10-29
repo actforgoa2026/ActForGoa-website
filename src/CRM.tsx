@@ -1,3 +1,5 @@
+import {Checkbox} from './components/arc/checkbox/checkbox';
+import {MorphSelect} from './components/arc/morph-select/morph-select';
 import { reviewPolytechnicSnapshot } from './polytechnic-directory';
 import { duplicateGroup } from './directory-quality';
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type ReactNode } from 'react';
@@ -5,6 +7,7 @@ import { Link, useParams, useSearchParams } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Download, Upload, X, Check, ArrowDown } from 'lucide-react';
 import { Button } from './components/arc/button/button';
 import { SearchField } from './components/arc/search-field/search-field';
+import SegmentedControl from './components/arc/segmented-control/segmented-control';
 import { Input } from './components/arc/input/input';
 import { Textarea } from './components/arc/textarea/textarea';
 import { activityLabel, activityLabels, backupJSON, collections, contactLabels, directoryFacets, emptyNote, exportCSV, filterRecords, filtersFrom, isDue, mergeBackup, parseBackup, safeUrl, split, stages, storageKey, verification, verificationLabels, words, type CRMNote, type CRMRecord, type CRMSnapshot, type Stage, type Workspace } from './crm-model';
@@ -24,9 +27,7 @@ function download(name: string, text: string, type = 'application/json') {
 }
 function readWorkspace(): Workspace { const raw = localStorage.getItem(storageKey); return raw ? parseBackup(raw) : {}; }
 function Select({ label, value, onChange, options, all, disabled }: { label: string; value: string; onChange: (value: string) => void; options: Record<string, string>; all?: string; disabled?: boolean }) {
-  return <label className="crm-select"><span>{label}</span><select value={value} onChange={e => onChange(e.target.value)} disabled={disabled}>
-    {all && <option value="">{all}</option>}{Object.entries(options).map(([key, text]) => <option key={key} value={key}>{text}</option>)}
-  </select></label>;
+  return <MorphSelect className="crm-select" label={label} value={value} onValueChange={onChange} disabled={disabled} items={[...(all ? [{value: '', label: all}] : []), ...Object.entries(options).map(([value, label]) => ({value, label}))]} />;
 }
 function External({ href, children }: { href: string; children: ReactNode }) {
   const url = safeUrl(href); return url ? <ListingLink href={url} kind="source">{children}</ListingLink> : null;
@@ -152,23 +153,21 @@ export default function CRM() {
     } catch (e) { setImportError(e instanceof Error ? e.message : 'Could not save the imported backup.'); }
   }
   return <main className={`crm shell${recordId ? " crm-record-page" : ""}`}>
-    <header className="crm-heading"><div><h1>Goa community CRM</h1><p>Find the people, organisations and public offices working across Goa.</p></div>
+    <header className="crm-heading"><div><h1>Goa directory</h1><p>Find the people, organisations and public offices working across Goa.</p></div>
       <div className="crm-actions"><Button variant="secondary" onClick={exportBackup}><Download size={16} aria-hidden="true" />Export backup</Button><Button variant="secondary" onClick={() => chooser.current?.click()}><Upload size={16} aria-hidden="true" />Import backup</Button><input className="crm-file" type="file" accept=".json,application/json" ref={chooser} aria-label="Import CRM backup file" onChange={e => { void importFile(e.target.files?.[0]); e.target.value = ''; }} /></div>
     </header>
     <p className="crm-context">Notes stay in this browser. Export a backup to move or keep them. Research snapshot: 22–23 October 2026.</p>
     {storageError && <p className="crm-notice" role="alert">{storageError}</p>}
     <p className={feedback ? 'crm-feedback' : 'crm-feedback-empty'} role="status">{feedback}</p>
     {importError && <p role="alert" className="crm-notice">{importError}</p>}
-    {pending && <section className="crm-import" aria-label="Review backup import"><h2>Review backup</h2><p>{Object.keys(pending).length} saved records. {Object.keys(pending).filter(id => workspace[id]).length} already have notes in this browser. Existing notes are kept by default. Records outside this snapshot remain in the backup.</p><label><input type="checkbox" checked={replace} onChange={e => setReplace(e.target.checked)} />Replace matching notes with the imported version</label><div className="crm-actions"><Button onClick={applyImport}>Import notes</Button><Button variant="ghost" onClick={() => setPending(null)}>Cancel</Button></div></section>}
+    {pending && <section className="crm-import" aria-label="Review backup import"><h2>Review backup</h2><p>{Object.keys(pending).length} saved records. {Object.keys(pending).filter(id => workspace[id]).length} already have notes in this browser. Existing notes are kept by default. Records outside this snapshot remain in the backup.</p><Checkbox label="Replace matching notes with the imported version" checked={replace} onCheckedChange={value => setReplace(value === true)} /><div className="crm-actions"><Button onClick={applyImport}>Import notes</Button><Button variant="ghost" onClick={() => setPending(null)}>Cancel</Button></div></section>}
     {loadError ? <section className="crm-empty"><h2>The directory couldn’t load.</h2><p>Your browser notes are still stored separately.</p><Button onClick={() => setRetry(retry + 1)}>Try again</Button></section> : !data ? <p role="status" className="crm-empty">Loading the research directory…</p> : recordId ? <>
       <Link className="crm-back" to={'/directory' + query}><ArrowLeft size={17} aria-hidden="true" />Back to results</Link>
       {selected ? <RecordDetail key={selected.record_id} record={selected} note={workspace[selected.record_id] || emptyNote(selected)} save={save} byId={byId} recordLink={recordLink} opportunities={data.opportunities.filter(o => split(o.related_record_ids).includes(selected.record_id))} /> : <section className="crm-empty"><h2>Record not found</h2><p>This record isn’t in the current research snapshot. Return to the directory to search again.</p></section>}
     </> : <>
-      <div className="crm-search"><SearchField ref={searchInput} label="Search CRM" value={filters.q} onValueChange={value => change('q', value, true)} placeholder="Search a name, place, area of work or contact" aria-describedby="crm-search-hint" /></div>
+      <div className="crm-search"><SearchField ref={searchInput} label="Search the directory" value={filters.q} onValueChange={value => change('q', value, true)} placeholder="Name, place or area of work" aria-describedby="crm-search-hint" /></div>
       <p id="crm-search-hint" className="crm-search-hint">Use a few words, such as “waste Panaji”. Counts update as you filter.</p>
-      <div className="crm-collections" role="group" aria-label="Directory collection">
-        {Object.entries(collections).map(([value, label]) => <Button key={value} variant={filters.collection === value ? 'primary' : 'secondary'} size="lg" aria-pressed={filters.collection === value} onClick={() => change('collection', value)}>{label}<span className="crm-count">{(facets.collection[value] || 0).toLocaleString('en-IN')}</span></Button>)}
-      </div>
+      <SegmentedControl className="crm-collections" fullWidth label="Directory collection" value={filters.collection} onValueChange={value => change('collection', value)} options={Object.entries(collections).map(([value, label]) => ({value, label, accessory: <span className="crm-count">{(facets.collection[value] || 0).toLocaleString('en-IN')}</span>}))} />
       <Button className="crm-jump" variant="ghost" onClick={() => { resultStart.current?.focus({ preventScroll: true }); resultStart.current?.scrollIntoView({ block: 'start' }); }}>View {results.length.toLocaleString('en-IN')} {results.length === 1 ? 'record' : 'records'}<ArrowDown size={16} aria-hidden="true" /></Button>
       {filters.collection === 'opportunities'  && <p className="crm-context">Participation routes include enquiries, courses and past intakes. Check each record’s dates and availability.</p>}
       <div className="crm-primary-filters">
@@ -193,7 +192,7 @@ export default function CRM() {
       <div className="crm-result-tools"><p ref={resultStart} tabIndex={-1} className="crm-result-start" role="status"><strong>{results.length.toLocaleString('en-IN')} {results.length === 1 ? 'record' : 'records'}</strong>{results.length > 0 && <span> · Showing {(page - 1) * 25 + 1}–{Math.min(page * 25, results.length)}</span>}{filters.q.trim() && <span className="crm-query-context">Matching “{filters.q.trim()}” in {collections[filters.collection as keyof typeof collections].toLowerCase()}</span>}</p><div className="crm-actions"><Select label="Sort by" value={filters.sort} onChange={v => change('sort', v)} options={{ relevance: 'Best match', name: 'Name', activity: 'Latest evidence date', followup: 'Follow-up date' }} /><Button variant="ghost" disabled={!results.length} onClick={() => download('actforgoa-filtered-contacts.csv', exportCSV(results, workspace), 'text/csv;charset=utf-8')}>Export results</Button></div></div>
       {shown.length ? <table className="crm-table"><thead><tr><th>People & organisations</th><th>Activity & verification</th><th>Public contact</th><th>Your next step</th></tr></thead><tbody>{shown.map(r => {
         const note = workspace[r.record_id] || emptyNote(r);
-        return <tr key={r.record_id} data-record-id={r.record_id}><td><CRMDirectoryPhoto record={r} href={recordLink(r.record_id)} /><CRMDirectoryTags record={r} /><span className="crm-meta">{words(r.record_type)}{r.goa_location && ' · ' + r.goa_location}</span><div className="curation-heading"><Link className="crm-name" to={recordLink(r.record_id)}>{r.name}<ArrowRight size={18} aria-hidden="true" /></Link><CurationStar recordId={r.record_id} title={r.name}/></div><p className="crm-summary">{r.summary}</p>{crmDirectoryDetails(r)?.address && <p className="crm-context">{crmDirectoryDetails(r)!.address}</p>}<CRMDirectoryActions record={r} /></td>
+        return <tr key={r.record_id} data-record-id={r.record_id}><td><CRMDirectoryPhoto record={r} href={recordLink(r.record_id)} /><CRMDirectoryTags record={r} /><span className="crm-meta">{words(r.record_type)}{r.goa_location && ' · ' + r.goa_location}</span><div className="curation-heading"><Link className="crm-name" to={recordLink(r.record_id)}>{r.name}</Link><CurationStar recordId={r.record_id} title={r.name}/></div><p className="crm-summary">{r.summary}</p>{crmDirectoryDetails(r)?.address && <p className="crm-context">{crmDirectoryDetails(r)!.address}</p>}<CRMDirectoryActions record={r} /></td>
           <td><span className="crm-mobile-label">Activity & verification</span><strong>{activityLabel(r)}</strong>{r.activity_evidence_date && <span className="crm-meta">Evidence: {r.activity_evidence_date}</span>}<span className="crm-verification">{verificationLabels[verification(r)]}</span></td>
           <td><span className="crm-mobile-label">Public contact</span>{r.activity_status === 'deceased_historical_record' ? <span>Historical record</span> : <><span>{r.public_phone ? 'Phone listed' : 'No phone listed'}</span><span>{r.public_email ? 'Email listed' : 'No email listed'}</span></>}<span className="crm-meta">{r.public_phone || r.public_email ? 'Contact delivery untested' : 'See referral routes'}</span></td>
           <td><span className="crm-mobile-label">Your next step</span><span>{stages[note.stage]}</span>{note.followUp && <span className={isDue(note) ? 'crm-due' : 'crm-meta'}>{isDue(note) ? 'Due' : 'Follow up'} {note.followUp}</span>}</td></tr>;

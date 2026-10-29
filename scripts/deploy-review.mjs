@@ -91,7 +91,7 @@ try {
       if (existsSync('api/admin/satellite/[action].ts')) {
         // Check the deployed upload/router as well as the source handlers.
         // A directory ignore can otherwise omit every satellite function.
-        for (const action of ['status', 'plan', 'catalog', 'compare', 'history', 'observation', 'evidence', `jobs/${probeId}`]) {
+        for (const action of ['status', 'plan', 'catalog', 'compare', 'history', 'observation', 'evidence', 'environment', `jobs/${probeId}`]) {
           const result = run('vercel', ['curl', `/api/admin/satellite/${action}`, '--deployment', deploymentUrl,
             '--', '--silent', '--show-error', '--max-time', '30', '--write-out', '\n%{http_code}']);
           const separator = result.lastIndexOf('\n');
@@ -104,6 +104,16 @@ try {
       const blog = JSON.parse(run('vercel', ['curl', '/api/blog', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');
+    }
+    for (const [asset, contentType] of [
+      ['/assets/newsletters/2025-year-end.pdf', 'application/pdf'],
+      ['/assets/newsletters/2025-year-end-page-1.webp', 'image/webp'],
+    ]) {
+      const headers = run('vercel', ['curl', asset, '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--head', '--max-time', '30']);
+      if (!headers.toLowerCase().includes(`content-type: ${contentType}`)) {
+        throw new Error(`Staged newsletter asset is unavailable: ${asset}. Nothing promoted.`);
+      }
     }
     if (existsSync('api/mcp.ts')) smokeMcp(deploymentUrl);
     // Remote builds take time too. Check the release boundary again before promotion.

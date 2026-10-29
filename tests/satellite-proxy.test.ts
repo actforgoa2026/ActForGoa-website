@@ -49,6 +49,10 @@ test('satellite route uses named-session authentication, CSRF and verified actor
     assert.equal((await fetch(base+'/api/admin/satellite/evidence',{method:'POST',headers:{Cookie:headers.Cookie,'Content-Type':'application/json'},body:'{}'})).status,403);
     assert.equal((await fetch(base+'/api/admin/satellite/evidence',{method:'POST',headers,body:'{}'})).status,200);
     assert.deepEqual(calls[3],{path:'/evidence',actor:user.id,token:'Bearer '+process.env.SATELLITE_SERVICE_TOKEN});
+    assert.equal((await fetch(base+'/api/admin/satellite/environment',{method:'POST',body:'{}'})).status,401);
+    assert.equal((await fetch(base+'/api/admin/satellite/environment',{method:'POST',headers:{Cookie:headers.Cookie,'Content-Type':'application/json'},body:'{}'})).status,403);
+    assert.equal((await fetch(base+'/api/admin/satellite/environment',{method:'POST',headers,body:'{}'})).status,200);
+    assert.deepEqual(calls[4],{path:'/environment',actor:user.id,token:'Bearer '+process.env.SATELLITE_SERVICE_TOKEN});
     store.logout(login.token);
     assert.equal((await fetch(base+'/api/admin/satellite/status',{headers})).status,401);
   } finally {
@@ -84,7 +88,8 @@ test('frontend proxy permits satellite endpoints while rejecting invented paths'
     assert.equal((await fetch(base+'/api/admin/satellite/history',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
     assert.equal((await fetch(base+'/api/admin/satellite/observation',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
     assert.equal((await fetch(base+'/api/admin/satellite/evidence',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
-    assert.equal(paths.length,5);
+    assert.equal((await fetch(base+'/api/admin/satellite/environment',{method:'POST',headers:{'Content-Type':'application/json'},body:'{}'})).status,200);
+    assert.equal(paths.length,6);
   }finally{await close(server);}
 });
 

@@ -2,12 +2,14 @@ import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, ArrowRight, Check, LocateFixed, MapPin, Upload, X } from 'lucide-react';
 import { Button } from './components/arc/button/button';
+import { Checkbox } from './components/arc/checkbox/checkbox';
 import { Input } from './components/arc/input/input';
 import { Textarea } from './components/arc/textarea/textarea';
 import { categories, emptyDraft, MAX_PHOTOS, MAX_PHOTO_BYTES, validateReport, type ReportDraft } from '../shared/reporting';
 import { reportApi } from './report-api';
 import { createSubmissionIdentity } from '../shared/submission-identity';
 import { useReportDraftGuard } from './use-report-draft-guard';
+import DictateButton from './DictateButton';
 import './reporting.css';
 
 type Photo = { file: File; url: string };
@@ -41,6 +43,15 @@ export default function ReportIncident() {
   const guard = useReportDraftGuard(() => changed.current && !receipt, busy);
   const heading = useRef<HTMLHeadingElement>(null);
   const fileInput = useRef<HTMLInputElement>(null);
+  const descriptionInput = useRef<HTMLTextAreaElement>(null);
+  function chooseCategory(category: string) {
+    update('category', category);
+    requestAnimationFrame(() => {
+      const input = descriptionInput.current;
+      input?.focus({preventScroll:true});
+      input?.closest('.report-description')?.scrollIntoView({block:'start', behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+    });
+  }
   const [website, setWebsite] = useState('');
   const update = <K extends keyof ReportDraft>(key: K, value: ReportDraft[K]) => { changed.current = true; setDraft(d => ({ ...d, [key]: value })); setError(''); };
   function checkService() {
@@ -145,12 +156,12 @@ export default function ReportIncident() {
         <div className="report-honeypot" aria-hidden="true"><label>Website<input tabIndex={-1} autoComplete="off" value={website} onChange={e => setWebsite(e.target.value)} /></label></div>
         {step === 0 && <>
           <fieldset className="report-categories"><legend>What did you see?</legend><p className="report-help">Choose the closest category. A report records a concern, not a confirmed violation.</p>
-            {categories.map(c => <button key={c.id} type="button" className="report-category" aria-pressed={draft.category === c.id} onClick={() => update('category', c.id)}><span><strong>{c.label}</strong><span>{c.description}</span></span>{draft.category === c.id && <Check size={24} aria-hidden="true" />}</button>)}
+            {categories.map(c => <Button key={c.id} type="button" wrap variant={draft.category === c.id ? 'primary' : 'secondary'} className="report-category" aria-pressed={draft.category === c.id} onClick={() => chooseCategory(c.id)}><span className="report-category-content"><span className="report-category-copy"><strong>{c.label}</strong><span>{c.description}</span></span>{draft.category === c.id && <Check size={20} aria-hidden="true" />}</span></Button>)}
           </fieldset>
-          <Textarea label="What happened?" required minLength={10} maxLength={3000} rows={4} value={draft.description} onChange={e => update('description', e.target.value)} placeholder="Describe what you saw, how much, and whether it is still happening." description="Stick to what you observed. Avoid names or identifying people unnecessarily." />
+          <div className="report-description"><Textarea ref={descriptionInput} label="What happened?" required minLength={10} maxLength={3000} rows={4} value={draft.description} onChange={e => update('description', e.target.value)} placeholder="Describe what you saw, how much, and whether it is still happening." description="Stick to what you observed. Avoid names or identifying people unnecessarily." /><DictateButton value={draft.description} onChange={value => update('description', value)} maxLength={3000}/></div>
           <section className="report-upload" aria-labelledby="photo-label"><h2 id="photo-label">Photos <span>(optional)</span></h2><p className="report-help">Up to 3 photos. JPG, PNG or WebP, 8 MB each.</p>
             <input ref={fileInput} id="report-photos" className="report-file-input" type="file" accept="image/jpeg,image/png,image/webp" multiple aria-label="Add photos" onChange={e => { void addPhotos(e.target.files); e.target.value = ''; }} />
-            <div className="report-photo-grid">{photos.map((p, i) => <figure key={p.url}><button type="button" className="report-photo-button" onClick={() => setViewPhoto(p)} aria-label={`View selected photo ${i + 1} at full size`}><img src={p.url} alt={`Selected photo ${i + 1}`} /><span className="report-photo-open">View full photo</span></button><figcaption><span>{p.file.name}</span><Button type="button" size="sm" variant="ghost" aria-label={`Remove photo ${i + 1}`} onClick={() => removePhoto(i)}><X size={18} /></Button></figcaption></figure>)}</div>
+            <div className="report-photo-grid">{photos.map((p, i) => <figure key={p.url}><Button type="button" wrap variant="ghost" className="report-photo-button" onClick={() => setViewPhoto(p)} aria-label={`View selected photo ${i + 1} at full size`}><span className="report-photo-content"><img src={p.url} alt={`Selected photo ${i + 1}`} /><span className="report-photo-open">View full photo</span></span></Button><figcaption><span>{p.file.name}</span><Button type="button" size="sm" variant="ghost" aria-label={`Remove photo ${i + 1}`} onClick={() => removePhoto(i)}><X size={18} /></Button></figcaption></figure>)}</div>
             <Button type="button" variant="secondary" disabled={addingPhotos || photos.length >= MAX_PHOTOS} onClick={() => fileInput.current?.click()}><Upload size={18} aria-hidden="true" />{addingPhotos ? 'Preparing photos…' : photos.length ? 'Add another photo' : 'Add photos'}</Button>
             {photoError && <p className="report-error" role="alert">{photoError}</p>}
             <p className="report-help">Photograph only from a safe place. Photos are resized and embedded metadata is removed; keep the originals for an official complaint.</p>
@@ -168,8 +179,8 @@ export default function ReportIncident() {
         {step === 2 && <>
           <div className="report-section-title"><h2>Check your report</h2><Button type="button" variant="ghost" onClick={() => go(0)}>Edit details</Button></div>
           <dl className="report-summary"><div><dt>Category</dt><dd>{categories.find(c => c.id === draft.category)?.label}</dd></div><div><dt>What happened</dt><dd>{draft.description}</dd></div><div><dt>Location</dt><dd>{draft.location}{draft.coordinates && <span className="report-coordinate-value"><MapPin size={16} />{draft.coordinates.latitude.toFixed(6)}, {draft.coordinates.longitude.toFixed(6)}{draft.coordinates.accuracy !== undefined ? ` (±${Math.round(draft.coordinates.accuracy)} m)` : ''}</span>}</dd></div><div><dt>Observed</dt><dd>{new Date(draft.observedAt).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}</dd></div><div><dt>Contact</dt><dd>{draft.email || 'No contact details provided'}</dd></div></dl>
-          {photos.length > 0 ? <div className="report-photo-grid">{photos.map((p, i) => <button key={p.url} type="button" className="report-photo-button" onClick={() => setViewPhoto(p)} aria-label={`View report photo ${i + 1} at full size`}><img src={p.url} alt={`Report photo ${i + 1}`} /><span className="report-photo-open">View full photo {i + 1}</span></button>)}</div> : <p className="report-help">No photos attached.</p>}
-          <label className="report-consent"><input type="checkbox" required checked={draft.consent} onChange={e => update('consent', e.target.checked)} /><span>I want to send these details and photos to the private ActForGoa review inbox. They describe what I observed to the best of my knowledge.</span></label>
+          {photos.length > 0 ? <div className="report-photo-grid">{photos.map((p, i) => <Button key={p.url} type="button" wrap variant="ghost" className="report-photo-button" onClick={() => setViewPhoto(p)} aria-label={`View report photo ${i + 1} at full size`}><span className="report-photo-content"><img src={p.url} alt={`Report photo ${i + 1}`} /><span className="report-photo-open">View full photo {i + 1}</span></span></Button>)}</div> : <p className="report-help">No photos attached.</p>}
+          <div className="report-consent"><Checkbox required checked={draft.consent} onCheckedChange={checked => update('consent', checked === true)} label="I want to send these details and photos to the private ActForGoa review inbox." description="They describe what I observed to the best of my knowledge."/></div>
         </>}
         {error && <p className="report-error" role="alert">{error}</p>}
         <div className="report-actions">{step > 0 && <Button type="button" variant="ghost" disabled={busy} onClick={() => go(step - 1)}><ArrowLeft size={17} />Back</Button>}<Button type="submit" disabled={busy || addingPhotos || (step === 2 && service !== 'ready' && service !== 'local')}>{busy ? 'Saving report…' : step === 2 ? 'Send report' : step === 1 ? 'Review report' : 'Continue'}{!busy && <ArrowRight size={17} />}</Button><span className="report-help">{step === 2 ? 'Your report stays private.' : `${step + 1} of 3`}</span></div>

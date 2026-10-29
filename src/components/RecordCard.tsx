@@ -1,6 +1,6 @@
 import { articlePhoto } from "../article-photos";
 import { Link, useLocation } from "react-router-dom";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { communityDescription } from "../public-record";
 import { type RecordItem } from "../types";
 import {DirectoryActions, DirectoryPhoto, DirectoryTags} from "../DirectoryInfo";
@@ -33,10 +33,10 @@ export function RecordCard({
     "/blog",
   ].includes(location.pathname) || location.pathname.startsWith("/topics/");
   const community = r.kind === "organisation" || r.kind === "contact";
-  const description = community ? communityDescription(r) : "";
+  const description = community ? communityDescription(r) : (!articlePhoto(r) ? r.summary : "");
   const photo = articlePhoto(r);
   if (community && compact) return <article data-record-id={r.id} className="record-card compact-contact">
-    <h3><Link to={recordPath(r)} state={{fromCatalogue:true}}>{r.title}<ArrowUpRight size={18}/></Link></h3>
+    <h3><Link to={recordPath(r)} state={{fromCatalogue:true}}>{r.title}</Link></h3>
     {(r.locality || r.locations[0]) && <span className="directory-location"><MapPin size={15} aria-hidden="true"/>{r.locality || r.locations[0]}</span>}
   </article>;
   return (
@@ -63,7 +63,6 @@ export function RecordCard({
             state={{ fromCatalogue, fromHome: location.pathname === "/" }}
           >
             {r.title}
-            <ArrowUpRight size={19} />
           </Link>
         </h3>{r.kind !== "page" && <CurationStar recordId={r.id} title={r.title}/>}</div>
         {community && (r.locations[0] || r.locality) && <div className="directory-location"><MapPin size={15} aria-hidden="true" /><span>{r.locations[0] || r.locality}</span></div>}

@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { ButtonLink } from './components/arc/button/button-link';
 import { ListingLink, listingLinkKind } from './ListingLink';
 import { CreditedPhoto } from './DirectoryInfo';
 import { crmDirectoryDetails, crmDirectoryLinks, crmDirectoryMapUrl, crmDirectoryTags } from './crm-directory';
@@ -8,7 +8,7 @@ import { safeUrl, type CRMRecord } from './crm-model';
 export function CRMDirectoryTags({ record, full = false }: { record: CRMRecord; full?: boolean }) {
   const tags = crmDirectoryTags(record);
   return <div className="directory-tags" aria-label="Areas of work">
-    {(full ? tags : tags.slice(0, 3)).map(tag => <Link key={tag} to={`/directory?collection=all&q=${encodeURIComponent(tag)}`}>{tag}</Link>)}
+    {(full ? tags : tags.slice(0, 3)).map(tag => <ButtonLink wrap variant="secondary" size="sm" key={tag} to={`/directory?collection=all&q=${encodeURIComponent(tag)}`}>{tag}</ButtonLink>)}
   </div>;
 }
 

@@ -1,3 +1,4 @@
+import {MorphSelect} from './components/arc/morph-select/morph-select';
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 export type Language = 'en' | 'hi' | 'gom-Deva';
@@ -16,7 +17,5 @@ export const useLanguage = () => useContext(LanguageContext);
 
 export function LanguageSwitcher() {
   const { language, setLanguage } = useLanguage();
-  return <label className="language-control"><span className="language-control-label"><span lang="en">Language</span> / <span lang="hi">भाषा</span> / <span lang="gom-Deva">भास</span></span><select className="language-switcher" aria-label="Language / भाषा / भास" value={language} onChange={event => { if (valid(event.target.value)) setLanguage(event.target.value); }}>
-    <option value="en">English</option><option value="hi">हिन्दी</option><option value="gom-Deva">कोंकणी (देवनागरी)</option>
-  </select></label>;
+  return <MorphSelect className="language-control" label="Language / भाषा / भास" hideLabel value={language} onValueChange={value => {if (valid(value)) setLanguage(value);}} align="end" items={[{value:'en',label:'English'},{value:'hi',label:'हिन्दी'},{value:'gom-Deva',label:'कोंकणी (देवनागरी)'}]}/>;
 }
