@@ -7,6 +7,7 @@
 .plan-intro { max-width: 65ch; font-size: 18px; line-height: 1.8; margin: 0 0 18px; }
 .plan-edition { color: var(--muted); font-size: 14px; margin: 0; }
 .plan-original { display: grid; gap: 12px; }
+.plan-chat-link { margin-top: 16px; }
 .plan-original > span { font-size: 13px; color: var(--muted); line-height: 1.7; }
 .plan-original .plan-pdf-button { gap: 10px; }
 .plan-view-nav { display: flex; gap: 32px; border-bottom: 1px solid var(--line); margin-bottom: 28px; }

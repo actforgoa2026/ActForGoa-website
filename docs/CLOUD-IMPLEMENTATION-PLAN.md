@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## SAPCC research assistant integration · 30 October 2026
+
+The user requested SAPCC questions with links to original sources in the existing research assistant. Isolated branch `codex/sapcc-research-assistant` starts from `4d0f497`; the primary dirty checkout remains untouched. The government PDF was already hosted, but its native two-page/table extraction and whole-document budgeting could discard answer evidence. The focused change refreshes only SAPCC, adds direct plan/topic conversation entry points and corrects budgeting only for explicit document conversations. [Source and acceptance record](../reports/sapcc/RESEARCH.md).
+
+The new immutable generation `20261030-sapcc-native-v2` is staged locally and on the existing research volume. Its 1,173 unrelated documents and all prior generation files pass preservation checks. `CURRENT.json` and production accounting are still unchanged. The only live-runtime source difference is `backend/chat.py`; provider/model, prompts, limits and credentials are preserved. Next: merge the tested source, activate the staged generation with an accounting backup, deploy the bounded runtime change, verify real SAPCC answers/citation pages, then promote the frontend through `release:review`. No original-domain or satellite deployment is included.
+
 ## Goa SAPCC live and verified · 30 October 2026
 
 The user explicitly said “ship it” for the downloaded Goa SAPCC and resident navigator. The focused release uses isolated branch `codex/goa-sapcc-release` from fresh main `60844a3`, preserving the shared dirty checkout and the newer Arc/Figtree release. The target is the existing field-guide review alias; the original WordPress domain is outside this change. The preceding design promotion has completed and its shared release lock has cleared.

@@ -9,6 +9,7 @@ import {
   searchPlanTopics, searchPlanChapters, type PlanReference, type PlanTopic,
 } from './climate-plan';
 import './climate-plan.css';
+import { climatePlanResearchPath } from './climate-plan-research';
 
 const source = climatePlan.source;
 const viewNames = { topics: 'By topic', chapters: 'Chapter index', source: 'About the source' };
@@ -52,6 +53,8 @@ function TopicDetail({ topic, search }: { topic: PlanTopic; search: string }) {
           <h1>{topic.title}</h1>
           <p className="plan-intro">{topic.summary}</p>
           <p className="plan-edition">Goa SAPCC 2023–2033 · Published April 2023</p>
+          <ButtonLink className="plan-chat-link" variant="secondary" size="sm" to={climatePlanResearchPath}
+            state={{draftQuestion: `What does Goa’s SAPCC propose for ${topic.title.toLowerCase()}?`}}>Ask about this topic<ArrowRight size={17} aria-hidden="true" /></ButtonLink>
         </header>
         <details className="plan-mobile-topics"><summary>Choose another topic</summary><TopicNavigation topicId={topic.id} search={search} /></details>
         <section className="plan-actions" aria-labelledby="plan-actions-heading">
@@ -158,6 +161,7 @@ export default function ClimatePlan() {
         <h1>Goa’s climate action plan</h1>
         <p className="plan-intro">Find proposals for everyday life.</p>
         <p className="plan-edition">State Action Plan for Climate Change (SAPCC) · 2023–2033</p>
+        <ButtonLink className="plan-chat-link" variant="secondary" size="sm" to={climatePlanResearchPath}>Ask about this plan<ArrowRight size={17} aria-hidden="true" /></ButtonLink>
       </div>
       <div className="plan-original">
         <ButtonLink href={source.url} className="plan-pdf-button" target="_blank" rel="noreferrer"><BookOpen size={19} aria-hidden="true" />Open full plan<ArrowUpRight size={17} aria-hidden="true" /></ButtonLink>

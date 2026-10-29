@@ -10,13 +10,17 @@ import sys
 import tarfile
 
 ROOT=Path(__file__).resolve().parents[1]
-p=argparse.ArgumentParser();p.add_argument('--data-root',type=Path,default=ROOT);p.add_argument('--output',type=Path,default=ROOT/'.research-release');p.add_argument('--stage-data',action='store_true',help='Stage a directory for volume upload instead of a compressed archive; use APFS clones on macOS.');args=p.parse_args()
+p=argparse.ArgumentParser();p.add_argument('--data-root',type=Path,default=ROOT);p.add_argument('--output',type=Path,default=ROOT/'.research-release');p.add_argument('--stage-data',action='store_true',help='Stage a directory for volume upload instead of a compressed archive; use APFS clones on macOS.');p.add_argument('--service-only',action='store_true',help='Package runtime only, preserving the already-staged hosted data and usage ledger.');args=p.parse_args()
 source=args.data_root.resolve();output=args.output.resolve();output.mkdir(parents=True,exist_ok=True)
 service=output/'service';service.mkdir(exist_ok=True)
 for name in ['backend','public/models/all-MiniLM-L6-v2']:
     shutil.copytree(ROOT/name,service/name,dirs_exist_ok=True,ignore=shutil.ignore_patterns('__pycache__'))
 for name in ['Dockerfile','railway.json','requirements-runtime.txt']:shutil.copy2(ROOT/'deploy/research'/name,service/name)
 (service/'.dockerignore').write_text('.env*\n__pycache__/\n')
+if args.service_only:
+    report={'service':str(service),'scope':'Runtime only. No source data, CURRENT.json, usage ledger or credentials copied.'}
+    (output/'manifest.json').write_text(json.dumps(report,indent=2)+'\n')
+    print(json.dumps(report,indent=2));sys.exit(0)
 generation=json.loads((source/'.research-index/CURRENT.json').read_text())['generation']
 if not generation.replace('-','').isalnum():raise ValueError('Invalid generation')
 gen=source/'.research-index/generations'/generation
