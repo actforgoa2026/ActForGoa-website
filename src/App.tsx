@@ -88,6 +88,7 @@ const OrbitLanding = lazy(() => import("./OrbitLanding"));
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
 const GuideRoute = lazy(() => import("./GuideRoute"));
+const ClimatePlan = lazy(() => import("./ClimatePlan"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
 const ReportInbox = lazy(() => import("./ReportInbox"));
@@ -227,7 +228,7 @@ function Header() {
   const { language } = useLanguage();
   const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "निर्देशिका"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "निर्देशिका"] : [];
   const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
-  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "directory" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/") || pathname === "/research-library") ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "directory" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/") || pathname === "/research-library" || pathname.startsWith("/climate-plan") || pathname === "/read/goa-sapcc") ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
   return <SiteHeader
     variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
     items={items} current={current} label="Main navigation" extraAction={<LanguageSwitcher />}
@@ -587,6 +588,7 @@ function Catalogue({
     <main className="catalogue shell">
       <div className="catalogue-heading">
         <h1>{title}</h1>
+        {mode === "library" && <Link className="text-link" to="/climate-plan">Explore Goa’s climate action plan<ArrowRight size={18} aria-hidden="true" /></Link>}
       </div>
       <SearchBox initial={query} />
       {topic && !query && topicFor(topic) && (mode === "stories" || mode === "blog" ? <details className="topic-reading-help"><summary>Looking for practical help with this topic?</summary><TopicChoices flow={topicFor(topic)!} /></details> : <TopicChoices flow={topicFor(topic)!} />)}
@@ -1344,6 +1346,8 @@ export default function App() {
             <Route path="/" element={<Home records={records} />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
             <Route path="/search" element={<Catalogue records={records} />} />
+            <Route path="/climate-plan/:topicId?" element={<ClimatePlan />} />
+            <Route path="/read/goa-sapcc" element={<ClimatePlan />} />
             <Route path="/directory" element={<CRM />} />
             <Route path="/directory/:recordId" element={<CRM />} />
             <Route path="/crm" element={<CRM />} />

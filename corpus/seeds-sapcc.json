@@ -1,0 +1,35 @@
+[
+  {
+    "url": "https://gsbb.goa.gov.in/wp-content/uploads/2024/11/SAPCC8Aug2023.pdf",
+    "title_hint": "Goa State Action Plan for Climate Change 2023\u20132033",
+    "discovered_from": "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8364a593-520a-4c6f-afb3-e202c84b26d1.pdf",
+    "discovery_context": "Official GSBB-hosted plan, explicitly linked by Goa Legislative Assembly LAQ 168 answered 8 August 2025. Download requested for ActForGoa documentation on 29 October 2026.",
+    "topics": [
+      "pollution_waste_climate",
+      "coasts_wetlands_water",
+      "agriculture_food",
+      "forests_trees_biodiversity"
+    ]
+  },
+  {
+    "url": "https://static.goavidhansabha.gov.in/goalpub/docs/question_docs/file_8364a593-520a-4c6f-afb3-e202c84b26d1.pdf",
+    "title_hint": "Goa Assembly LAQ 168: Action Plan for Climate Change, 8 August 2025",
+    "discovered_from": "Official Goa Legislative Assembly",
+    "topics": [
+      "pollution_waste_climate",
+      "reporting_rights_governance"
+    ]
+  },
+  {
+    "url": "https://www.nitiforstates.gov.in/public-assets/Policy/policy_files/GSSNAD000283.pdf",
+    "title_hint": "Goa State Action Plan for Climate Change 2023\u20132033 (NITI for States copy)",
+    "discovered_from": "https://www.nitiforstates.gov.in/",
+    "discovery_context": "Government NITI for States repository. GSBB URL returned HTTP 404 on 29 October 2026. Verify cover, full contents and page map before use.",
+    "topics": [
+      "pollution_waste_climate",
+      "coasts_wetlands_water",
+      "agriculture_food",
+      "forests_trees_biodiversity"
+    ]
+  }
+]
