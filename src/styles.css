@@ -1571,3 +1571,14 @@ a.button.green {
 
 .language-control { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
 .language-control-label { font-size: 12px; line-height: 1.4; white-space: nowrap; }
+
+/* Keep collection cards focused on the cover and title. */
+.article-cover { margin: 24px 0; }
+.article-cover .detail-image { margin: 0; width: 100%; }
+.article-cover figcaption, .card-photo-credit { color: var(--muted); font-size: 12px; line-height: 1.5; }
+.article-cover figcaption { margin-top: 8px; }
+.article-cover figcaption a, .card-photo-credit a { text-decoration: underline; }
+.card-photo-credit { margin: -10px 0 16px; }
+.record-card:not(.community-entry) .card-image { aspect-ratio: 1.6; overflow: hidden; border-radius: 8px; }
+.record-card .card-image img { width: 100%; height: 100%; object-fit: cover; }
+.community-entry .card-content > p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }

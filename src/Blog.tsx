@@ -1,3 +1,4 @@
+import {supplementalPhoto} from './article-photos';
 import {useEffect, useState} from 'react';
 import {Link, useParams} from 'react-router-dom';
 import Markdown from 'react-markdown';
@@ -6,6 +7,11 @@ import {ArrowLeft, ArrowRight} from 'lucide-react';
 import {adminApi, AdminApiError, type PublicBlogPost, type PublicBlogPostSummary} from './admin-api';
 import {Button} from './components/arc/button/button';
 import './admin.css';
+
+function BlogCover({title, tags, card = false}: {title: string; tags: string[]; card?: boolean}) {
+  const photo = supplementalPhoto(title, tags);
+  return <figure className={card ? "blog-cover blog-cover-card" : "blog-cover"}><img src={photo.src} alt={photo.alt} loading="lazy" width={1400} height={875}/><figcaption>Illustrative photo · <a href={photo.source}>{photo.credit}</a> · <a href={photo.licenseUrl}>{photo.license}</a> · resized & cropped</figcaption></figure>;
+}
 
 export function StoryBody({body}: {body: string}) {
   return <div className="blog-prose"><Markdown remarkPlugins={[remarkGfm]} skipHtml components={{
@@ -45,7 +51,7 @@ export default function Blog() {
     {!slug && <Link className="admin-text-link blog-archive-link" to="/blog/archive">Original story archive <ArrowRight size={16}/></Link>}
     {loading ? <p role="status" className="admin-state">Loading stories…</p> : missing ? <section className="admin-state"><h1>Story not available</h1><p>It may have moved or is no longer published.</p><Link className="admin-text-link" to="/blog">Browse the journal <ArrowRight size={16}/></Link></section>
       : error ? <div className="admin-state"><p role="alert">{error}</p><Button variant="secondary" onClick={() => setRetry(value => value + 1)}>Try again</Button></div>
-      : post ? <article className="blog-article"><h1>{post.title}</h1><p className="blog-deck">{post.excerpt}</p><p className="blog-byline">{post.authorName}{post.publishedAt ? ` · ${blogDate(post.publishedAt)}` : ''}</p><StoryBody body={post.body}/>{post.tags.length > 0 && <ul className="admin-tags" aria-label="Story topics">{post.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>}</article>
-      : <><header className="blog-heading"><h1>Good work, shared.</h1><p>People, ideas and practical progress from across Goa.</p></header>{posts.length ? <div className="blog-grid">{posts.map(story => <article className="blog-card" key={story.id}><h2><Link to={`/blog/${encodeURIComponent(story.slug)}`}>{story.title}</Link></h2><p>{story.excerpt}</p><span className="blog-byline">{story.authorName} · {blogDate(story.publishedAt)}</span><Link className="admin-text-link" to={`/blog/${encodeURIComponent(story.slug)}`}>Read story <ArrowRight size={16}/></Link></article>)}</div> : <div className="admin-state"><h2>Our next chapter is taking shape.</h2><p>New stories will appear here when the team publishes them.</p></div>}{moreError && <p className="admin-error" role="alert">{moreError}</p>}{nextCursor && <div className="admin-load-more"><Button variant="secondary" loading={morePending} onClick={loadMore}>More stories</Button></div>}</>}
+      : post ? <article className="blog-article"><h1>{post.title}</h1><p className="blog-byline">{post.authorName}{post.publishedAt ? ` · ${blogDate(post.publishedAt)}` : ''}</p>{!/!\[[^\]]*\]\(/.test(post.body) && <BlogCover title={post.title} tags={post.tags}/>}<StoryBody body={post.body}/>{post.tags.length > 0 && <ul className="admin-tags" aria-label="Story topics">{post.tags.map(tag => <li key={tag}>{tag}</li>)}</ul>}</article>
+      : <><header className="blog-heading"><h1>Blog</h1></header>{posts.length ? <div className="blog-grid">{posts.map(story => <article className="blog-card" key={story.id}><BlogCover title={story.title} tags={story.tags} card/><h2><Link to={`/blog/${encodeURIComponent(story.slug)}`}>{story.title}</Link></h2><span className="blog-byline">{story.authorName} · {blogDate(story.publishedAt)}</span></article>)}</div> : <div className="admin-state"><h2>Our next chapter is taking shape.</h2><p>New stories will appear here when the team publishes them.</p></div>}{moreError && <p className="admin-error" role="alert">{moreError}</p>}{nextCursor && <div className="admin-load-more"><Button variant="secondary" loading={morePending} onClick={loadMore}>More stories</Button></div>}</>}
   </main>;
 }
