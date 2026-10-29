@@ -29,11 +29,10 @@ def test_provider_receives_exact_excerpts_and_locations_not_just_search_metadata
         assert context['conversation_context_not_evidence'] == []
         return httpx.Response(200, json={'stop_reason': 'tool_use', 'content': [{
             'type': 'tool_use', 'name': 'answer_library_question', 'input': {
-                'coverage': 'partial', 'paragraphs': [{
+                'coverage': 'partial', 'paragraph_1': {
                     'text': 'Juvenile fish were observed at Site A; the second survey did not measure them at Site B.',
-                    'citations': ['passage-first', 'passage-second'],
-                    'supports': [{'citation_id': item['id'], 'quote': item['text']} for item in excerpts],
-                }], 'limitation': 'The excerpts do not establish the presence or absence of juvenile fish at Site B.',
+                    'supports': [item['id'] for item in excerpts],
+                }, 'paragraph_2': None, 'paragraph_3': None, 'paragraph_4': None, 'paragraph_5': None, 'limitation': 'The excerpts do not establish the presence or absence of juvenile fish at Site B.',
             },
         }]})
 
@@ -63,3 +62,25 @@ def test_context_budget_preserves_whole_excerpts_and_followup_is_not_evidence():
     assert selected == [small] and evidence == before
     assert context['conversation_context_not_evidence'][0]['content'] == 'Which permissions apply?'
     assert all('Earlier model output' not in item['text'] for item in context['evidence'])
+
+
+def test_reviewed_locator_claims_cannot_substitute_for_source_passages():
+    item={'id':'x','text':'The actual source excerpt.',
+          'source_date_metadata':{'publication_date':'2020-06-01','reviewed_locator_and_dates':'A factual claim absent from the excerpt.'},
+          'guide_verification':{'location':'Page4: unsupported procedural summary','limitations':'Check later amendments.'}}
+    payload,selected=prepare_answer(ChatRequest(question='What does this establish?'),[item])
+    wire=json.loads(payload['messages'][0]['content'])['evidence'][0]
+    assert wire['text']==item['text']
+    assert wire['source_date_metadata']=={'publication_date':'2020-06-01'}
+    assert wire['guide_verification']=={'limitations':'Check later amendments.'}
+    assert selected[0]['source_date_metadata']==item['source_date_metadata']
+
+
+def test_complementary_document_passages_are_budgeted_together():
+    first={'id':'first','document_id':'manual','text':'Application step. '+('x'*6000)}
+    last={'id':'last','document_id':'manual','text':'Required fee and exemption. '+('y'*6000)}
+    independent={'id':'other','document_id':'other','text':'A separate short source.'}
+    _, selected=prepare_answer(ChatRequest(question='How can I apply?'),[first,independent,last])
+    ids={item['id'] for item in selected}
+    assert ('first' in ids)==('last' in ids)
+    assert 'other' in ids

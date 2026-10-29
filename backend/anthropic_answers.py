@@ -8,8 +8,8 @@ ENDPOINT = 'https://api.anthropic.com/v1/messages'
 # Preserves the model and reviewed standard price from the prior integration.
 MODEL_PRICES = {'claude-haiku-5-5': ('0.10', '0.50'), 'claude-sonnet-5-5': ('2.00', '10.00')}
 DEFAULT_MODEL = 'claude-haiku-5-5'
-MAX_OUTPUT_TOKENS = 1800
-MAX_PROMPT_BYTES = 28000
+MAX_OUTPUT_TOKENS = 5632
+MAX_PROMPT_BYTES = 20000
 
 
 class AnthropicAPIError(Exception):
@@ -32,6 +32,11 @@ def maximum_cost(model, payload):
         raise ValueError('The answer prompt exceeds its bounded input allowance.')
     input_rate, output_rate = map(Decimal, MODEL_PRICES[model])
     return int(((size + 8192) * input_rate + MAX_OUTPUT_TOKENS * output_rate).to_integral_value(rounding=ROUND_CEILING))
+
+
+def maximum_request_cost(model):
+    input_rate, output_rate = map(Decimal, MODEL_PRICES[model])
+    return int(((MAX_PROMPT_BYTES + 8192) * input_rate + MAX_OUTPUT_TOKENS * output_rate).to_integral_value(rounding=ROUND_CEILING))
 
 
 class AnthropicAnswers:

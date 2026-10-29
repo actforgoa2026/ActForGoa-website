@@ -81,3 +81,8 @@ test('record search within catalogues keeps its query and selected filters', () 
   assert.equal(searchDestination('/search', '?topic=Nature+%26+wildlife', 'snake in my garden'), '/search?topic=Nature+%26+wildlife&q=snake+in+my+garden');
   assert.equal(searchDestination('/library', '?type=resource', 'compost'), '/library?type=resource&q=compost');
 });
+
+
+test('homepage ecosystem suggestion enters the nature topic', () => {
+  assert.equal(homeSearchDestination('Explore Goa’s ecosystems'), '/topics/nature');
+});

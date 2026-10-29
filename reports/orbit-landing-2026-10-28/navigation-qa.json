@@ -1,0 +1,26 @@
+[
+  {
+    "width": 1440,
+    "compact": false,
+    "legalHref": "/ask/legal",
+    "overflow": false,
+    "headerCount": 1,
+    "heading": "A place to find local help, protect nature, know your rights and take local action in Goa."
+  },
+  {
+    "width": 390,
+    "compact": true,
+    "legalHref": "/ask/legal",
+    "overflow": false,
+    "headerCount": 1,
+    "heading": "A place to find local help, protect nature, know your rights and take local action in Goa."
+  },
+  {
+    "width": 320,
+    "compact": true,
+    "legalHref": "/ask/legal",
+    "overflow": false,
+    "headerCount": 1,
+    "heading": "A place to find local help, protect nature, know your rights and take local action in Goa."
+  }
+]

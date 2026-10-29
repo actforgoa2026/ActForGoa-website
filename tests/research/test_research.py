@@ -94,20 +94,34 @@ def test_missing_credential_keeps_search_working(collection,monkeypatch):
         assert client.post('/api/chat',json={'question':'How do sluice gates work?'}).status_code==503
         assert client.get('/api/search',params={'q':'sluice'}).json()['results']
 
-def test_anthropic_citation_contract(collection):
+def test_status_marks_exhausted_answers_unavailable_without_calling_provider(collection,monkeypatch):
+    from backend.hosting import PublicLimits
+    monkeypatch.setattr(PublicLimits,'preflight_single',lambda *args,**kwargs:{'allowed':False,'reason':'daily_limit'})
+    with TestClient(create_app(collection[0],client=object())) as client:
+        status=client.get('/api/status').json()
+        assert status['search_ready'] is True
+        assert status['chat_ready'] is False
+        assert status['chat_unavailable_reason']=='daily_limit'
+
+@pytest.mark.parametrize('model_id',['claude-haiku-5-5','claude-sonnet-5-5'])
+def test_anthropic_citation_contract(collection,monkeypatch,model_id):
+    monkeypatch.setenv('ANTHROPIC_CHAT_MODEL',model_id)
     captured=[]
     def provider(request):
         body=json.loads(request.content);captured.append(body)
         payload=json.loads(body['messages'][-1]['content']);evidence=payload['evidence'][0]
-        output={'coverage':'full','paragraphs':[{'text':evidence['text'],'citations':[evidence['id']],'supports':[{'citation_id':evidence['id'],'quote':evidence['text']}]}],'outside_context':None,'limitation':None}
+        output={'coverage':'full','paragraph_1':{'text':evidence['text'],'supports':[evidence['id']]},'paragraph_2':None,'paragraph_3':None,'paragraph_4':None,'paragraph_5':None,'outside_context':None,'limitation':None}
         return httpx.Response(200,json={'id':'msg_test','stop_reason':'tool_use','content':[{'type':'tool_use','name':'answer_library_question','input':output}]})
     model=AnthropicAnswers('test-fixture-only',http_client=httpx.Client(transport=httpx.MockTransport(provider)))
     with TestClient(create_app(collection[0],client=model)) as client:
         response=client.post('/api/chat',json={'question':'How do khazan sluice gates manage saline water?'})
         assert response.status_code==200,response.text
         answer=response.json();assert answer['status']=='answered'
-        assert captured[0]['model']=='claude-haiku-5-5'
-        assert captured[0]['tool_choice']['name']=='answer_library_question'
+        assert captured[0]['model']==model_id
+        assert captured[0]['tool_choice']=={'type':'auto','disable_parallel_tool_use':True}
+        assert captured[0]['thinking']=={'type':'adaptive','display':'omitted'}
+        assert captured[0]['output_config']['effort']=='xhigh'
+        assert captured[0]['max_tokens']==5632
         assert answer['outside_context'] is None
         for cite in answer['citations']:
             meta=client.get('/api/documents/'+cite['document_id'],params={'generation':cite['generation']});assert meta.status_code==200

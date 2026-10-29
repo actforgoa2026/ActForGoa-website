@@ -1,0 +1,73 @@
+"""Requested details should beat repeated headings without source-specific rules."""
+from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
+
+from backend.passage_selection import document_focus, retrieval_focus, select_passages
+
+STOP=set('what are the and for is who must about a to'.split())
+
+
+def pool(texts, title='Beacon register'):
+    return {f'p{i}':({'doc_id':'doc','text':text},{'title':title}) for i,text in enumerate(texts)}
+
+
+def test_two_slots_cover_two_requested_details_instead_of_cover_and_intro():
+    candidates=pool(['Beacon register handbook.', 'An introduction to the Beacon register.',
+                     'The registration price is five units.', 'The required signature is that of the applicant.'])
+    before=deepcopy(candidates)
+    scores={'p0':.09,'p1':.08,'p2':.05,'p3':.05}
+    selected=select_passages('What are the price and signature requirements for the Beacon register?',
+                             candidates,['p0','p1'],scores,STOP)
+    assert set(selected)=={'p2','p3'}
+    assert candidates==before
+
+
+def test_inflections_match_without_notify_notification_prefix_collision():
+    candidates=pool(['Notifications publish the date of the amendment.',
+                     'The farmer notifies the office about damage.'],title='Assistance scheme')
+    result=select_passages('Who must notify the office about damage?',candidates,['p0'],
+                           {'p0':.05,'p1':.04},STOP)
+    assert result==['p1']
+
+
+def test_concurrent_searches_do_not_share_mutable_stemming_state():
+    candidates=pool(['An introduction to the Beacon register.',
+                     'The registration price is five units.', 'The signature is provided by the applicant.'])
+    scores={'p0':.08,'p1':.05,'p2':.05}
+    questions=['What is the price for the Beacon register?', 'Who provides the signature for the Beacon register?']*12
+    def select(q):return select_passages(q,candidates,['p0'],scores,STOP)
+    expected=[select(q) for q in questions]
+    with ThreadPoolExecutor(max_workers=4) as executor:
+        assert list(executor.map(select,questions))==expected
+
+
+def test_comparison_alternative_does_not_displace_requested_measurement():
+    candidates=pool(['Annual tourism revenue and visitor numbers are recorded.',
+                     'Seasonal shoreline erosion is measured along the coast.'],title='Coastal records')
+    original=deepcopy(candidates)
+    query='Which records measure seasonal shoreline erosion rather than annual tourism revenue and visitor numbers?'
+    assert select_passages(query,candidates,['p0'],{'p0':.05,'p1':.05},STOP)==['p1']
+    assert candidates==original
+
+
+def test_focus_keeps_noncomparative_and_empty_subject_queries_intact():
+    assert retrieval_focus('Compare rainfall and runoff')=='Compare rainfall and runoff'
+    assert retrieval_focus('instead of rainfall')=='instead of rainfall'
+    assert retrieval_focus('Measure runoff RATHER THAN rainfall')=='Measure runoff'
+
+
+def test_document_focus_preserves_subject_without_losing_passage_condition():
+    query = 'What does the vessel registration form require when ownership changes?'
+    assert document_focus(query) == 'What does the vessel registration form require'
+    candidates = pool(['Vessel registration form. An introduction.',
+                       'When ownership changes, attach a signed transfer record.'],
+                      title='Vessel registration form')
+    assert select_passages(query, candidates, ['p0'], {'p0': .05, 'p1': .04}, STOP) == ['p1']
+
+
+def test_document_focus_does_not_discard_ordinary_or_leading_conditions():
+    for query in ['What happens when ownership changes?',
+                  'When ownership changes, which form is needed?',
+                  'Can a reef form when water warms?',
+                  'What does the vessel registration manual require?']:
+        assert document_focus(query) == query

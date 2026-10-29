@@ -20,7 +20,7 @@ const tree = git('rev-parse', 'HEAD^{tree}');
 if (commit !== git('rev-parse', 'origin/main')) {
   throw new Error('Release HEAD must equal freshly fetched origin/main. Integrate and merge first.');
 }
-const requiredRoutes = ['/', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask', '/ask/legal', '/ask/ecology', '/admin', '/blog', '/blog/archive'];
+const requiredRoutes = ['/', '/explore', '/topics/waste', '/directory', '/directory/archive', '/emergency', '/report', '/read/guide-farming', '/templates/18-service-enquiry', '/ask', '/ask/legal', '/ask/ecology', '/admin', '/blog', '/blog/archive'];
 if (evidence.treeSha !== tree || evidence.desktop !== true || evidence.mobile !== true
     || !requiredRoutes.every(route => evidence.routes?.includes(route))
     || !evidence.routes?.some(route => route.startsWith('/documents/'))) {
@@ -67,6 +67,7 @@ try {
     const research = JSON.parse(run('vercel', ['curl', '/api/status', '--deployment', deploymentUrl,
       '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
     if (research.search_ready !== true) throw new Error('Staged research routing or service is unavailable. Nothing promoted.');
+    if (research.chat_ready !== true) throw new Error('Staged AI answers are unavailable or exhausted. Nothing promoted.');
     if (!['legal', 'ecology'].every(domain => research.domains?.includes(domain) && research.domain_counts?.[domain] > 0)) {
       throw new Error('Staged legal/ecology collections are not ready. Restore and verify the complete corpus before promotion.');
     }
@@ -74,6 +75,19 @@ try {
       const admin = JSON.parse(run('vercel', ['curl', '/api/admin/config', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (admin.available !== true) throw new Error('Staged team tools service is unavailable. Nothing promoted.');
+      // Plain Vercel Node functions do not give [...path].ts Next.js catch-all
+      // semantics. Probe every article depth through the deployed router.
+      // Anonymous GETs must reach authentication without reading or changing data.
+      const probeId = '00000000-0000-0000-0000-000000000000';
+      for (const suffix of ['', '/publish', '/unpublish']) {
+        const result = run('vercel', ['curl', `/api/admin/posts/${probeId}${suffix}`, '--deployment', deploymentUrl,
+          '--', '--silent', '--show-error', '--max-time', '30', '--write-out', '\n%{http_code}']);
+        const separator = result.lastIndexOf('\n');
+        if (result.slice(separator + 1) !== '401'
+            || JSON.parse(result.slice(0, separator)).error !== 'Sign in to continue.') {
+          throw new Error('Staged article routing or authentication is unavailable. Nothing promoted.');
+        }
+      }
       const blog = JSON.parse(run('vercel', ['curl', '/api/blog', '--deployment', deploymentUrl,
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');

@@ -66,7 +66,9 @@ function CommunitySuggestions({data,question,loading,error}:{data:CRMSnapshot|nu
  </section>;
 }
 export function Research({domain:providedDomain}:{domain?:ResearchDomain}={}){
- const location=useLocation();const domain=providedDomain||researchDomain(location.pathname);
+ const location=useLocation();const memory=useContext(ResearchMemory);
+ useEffect(()=>{const draft=(location.state as {draftQuestion?:string}|null)?.draftQuestion;if(draft?.trim())memory?.update(researchDomains[providedDomain||researchDomain(location.pathname)].path,{question:draft});},[location.key]);
+ const domain=providedDomain||researchDomain(location.pathname);
  const [params]=useSearchParams();const docId=params.get('document')||undefined;const sourceGeneration=params.get('generation')||undefined;
  const query=docId?'?'+new URLSearchParams({document:docId,...(sourceGeneration?{generation:sourceGeneration}:{})}):'';
  const scope=researchDomains[domain].path+query;
