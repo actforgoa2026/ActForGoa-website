@@ -1,12 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Goa SAPCC release authorized · 30 October 2026
+## Goa SAPCC live and verified · 30 October 2026
 
 The user explicitly said “ship it” for the downloaded Goa SAPCC and resident navigator. The focused release uses isolated branch `codex/goa-sapcc-release` from fresh main `60844a3`, preserving the shared dirty checkout and the newer Arc/Figtree release. The target is the existing field-guide review alias; the original WordPress domain is outside this change. The preceding design promotion has completed and its shared release lock has cleared.
 
-Prepared scope: original government PDF and provenance in docs, 13 resident topics and 26 selected measures, chapter/source navigation, exact spread references, library/catalogue and homepage routing. Hosted research corpus, backend services, accounts, provider configuration and accounting are unchanged. Validation: 248 Node tests, production build, SAPCC browser journeys and required retained routes on desktop/phone, including local PDF export. Impeccable release-integration verdict is `ship`; source research limitations remain explicit. See [release preparation](../reports/sapcc/RELEASE.md).
+Shipped scope: original government PDF and provenance in docs, 13 resident topics and 26 selected measures, chapter/source navigation, exact spread references, library/catalogue and homepage routing. Hosted research corpus, backend services, accounts, provider configuration and accounting are unchanged. Validation: 248 Node tests, production build, SAPCC browser journeys and required retained routes on desktop/phone, including local PDF export. Impeccable release-integration verdict is `ship`; source research limitations remain explicit. See [release evidence](../reports/sapcc/RELEASE.md).
 
-Next: merge the reviewed source and promote through `release:review`, then verify the public alias and save exact commit, tree, deployment ID and live checks under `.reports/sapcc-release/`. No earlier source-only result is claimed live.
+[PR #113](https://github.com/actforgoa2026/ActForGoa-website/pull/113) merged as `a08277b5f5ccaa5cf32e75eebfdf6731ac31c7c2`, tree `db7aaaca64f84db00664e77649b4f778caa766ad`. The guarded `release:review` workflow promoted deployment `dpl_BHVXg7q6p7YtbqgKkN3h84MbgNN6`; [the resident navigator is live](https://actforgoa-field-guide.vercel.app/climate-plan). Public SAPCC journeys and all 20 retained routes passed at desktop and phone sizes, with no browser errors; rendered source, overview, topic and retained-route captures were inspected. Read-only service readiness, nested admin authorization, newsletter media and MCP gates passed. Zero paid AI requests ran. Exact evidence is saved under `.reports/sapcc-release/`. This documentation follow-up records the deployed runtime; it requires no further deployment because both changed paths are excluded from Vercel uploads.
 
 ## Design release authorized — 30 October 2026
 
