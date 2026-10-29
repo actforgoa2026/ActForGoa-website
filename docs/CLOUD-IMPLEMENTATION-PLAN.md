@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Goa SAPCC release authorized · 30 October 2026
+
+The user explicitly said “ship it” for the downloaded Goa SAPCC and resident navigator. The focused release uses isolated branch `codex/goa-sapcc-release` from fresh main `60844a3`, preserving the shared dirty checkout and the newer Arc/Figtree release. The target is the existing field-guide review alias; the original WordPress domain is outside this change. The preceding design promotion has completed and its shared release lock has cleared.
+
+Prepared scope: original government PDF and provenance in docs, 13 resident topics and 26 selected measures, chapter/source navigation, exact spread references, library/catalogue and homepage routing. Hosted research corpus, backend services, accounts, provider configuration and accounting are unchanged. Validation: 248 Node tests, production build, SAPCC browser journeys and required retained routes on desktop/phone, including local PDF export. Impeccable release-integration verdict is `ship`; source research limitations remain explicit. See [release preparation](../reports/sapcc/RELEASE.md).
+
+Next: merge the reviewed source and promote through `release:review`, then verify the public alias and save exact commit, tree, deployment ID and live checks under `.reports/sapcc-release/`. No earlier source-only result is claimed live.
+
 ## Design release authorized — 30 October 2026
 
 The user explicitly requested pushing all updates to production. This chat owns the focused release of the reviewed design/function iteration, targeting the existing field-guide Vercel alias and existing satellite frontend. The previous issue89 checkpoint says release ownership is clear; no earlier promotion remains active. The original WordPress site at actforgoa.org remains a separate migration decision.
