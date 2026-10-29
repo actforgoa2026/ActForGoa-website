@@ -13,15 +13,10 @@ from .local_corpus import STATE
 
 ROOT=Path(__file__).resolve().parents[1]
 
-class Support(BaseModel):
-    model_config=ConfigDict(extra='forbid')
-    citation_id:str
-    quote:str=Field(min_length=1,max_length=3000)
-
 class Paragraph(BaseModel):
     model_config=ConfigDict(extra='forbid')
     text:str=Field(min_length=1,max_length=2000)
-    supports:list[Support]=Field(min_length=1,max_length=6)
+    supports:list[str]=Field(min_length=1,max_length=6)
 
 class AgentAnswer(BaseModel):
     model_config=ConfigDict(extra='forbid')
@@ -33,23 +28,35 @@ class AgentAnswer(BaseModel):
 class ResearchTools:
     def __init__(self, corpus, domain='all', document_id=None, extra_terms=''):
         self.corpus=corpus;self.domain=domain;self.document_id=document_id
-        self.extra_terms=extra_terms;self.evidence={};self.trace=[];self.questions=[]
+        self.extra_terms=extra_terms;self.evidence={};self.citable_ids=set();self.trace=[];self.questions=[]
 
     def record(self, result):
         for evidence in result.get('results',[])+result.get('pages',[]):self.evidence[evidence['id']]=evidence
         return result
 
+    @staticmethod
+    def evidence_for_agent(evidence):
+        # Full metadata stays in the immutable corpus and read_document result.
+        # Avoid repeating PDF metadata and file paths with every search/page hit.
+        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded')
+        return {k:evidence[k] for k in fields if k in evidence}
+
     def catalogue(self, args):return self.corpus.catalogue(args.get('query',''),self.domain,args.get('offset',0),min(20,args.get('limit',10)))
-    def search(self,args):return self.record(self.corpus.search((args['query']+' '+self.extra_terms).strip(),min(12,args.get('limit',8)),self.document_id,self.domain,args.get('offset',0)))
+    def search(self,args):
+        result=self.record(self.corpus.search((args['query']+' '+self.extra_terms).strip(),min(12,args.get('limit',8)),self.document_id,self.domain,args.get('offset',0)))
+        return {**result,'results':[self.evidence_for_agent(e) for e in result['results']]}
     def read(self,args):
         if self.document_id and args['document_id']!=self.document_id:raise ValueError('This conversation is scoped to one document')
-        return self.record(self.corpus.read_document(args['document_id'],args.get('page',1),args.get('offset',0),args.get('max_chars',18000)))
+        result=self.record(self.corpus.read_document(args['document_id'],args.get('page',1),args.get('offset',0),args.get('max_chars',18000)))
+        self.citable_ids.update(e['id'] for e in result['pages'])
+        return {**result,'pages':[self.evidence_for_agent(e) for e in result['pages']]}
     def crm_search(self,args):return crm_store.search_records(args.get('query',''),args.get('collection','all'),args.get('location',''),min(20,args.get('limit',10)),args.get('offset',0))
     def crm_read(self,args):
         result=crm_store.read_record(args['record_id']);r=result['record'];identifier='crm:'+r['record_id']
         text=json.dumps(r,ensure_ascii=False,sort_keys=True)
         self.evidence[identifier]={'id':identifier,'document_id':r['record_id'],'title':r['name'],'page':1,'label':'Public CRM record','text':text,'url':result['snapshot']['source_url'],'reader_url':result['crm_url'],'format':'crm','origin':'public_snapshot','warning':r.get('verification_status',''),'retrieved_at':r.get('checked_on',''),'generation':result['snapshot']['version'],'matches':['crm']}
-        return {**result,'citation_id':identifier,'citable_text':text}
+        self.citable_ids.add(identifier)
+        return {'snapshot':result['snapshot'],'crm_url':result['crm_url'],'citation_id':identifier,'citable_text':text}
     def clarify(self,args):self.questions.append(args['question']);return {'question':args['question'],'instruction':'Return this question in clarification and wait for the user in the next conversation turn.'}
 
     def server(self):
@@ -77,14 +84,16 @@ def validate_answer(raw, readers, domain):
     result=AgentAnswer.model_validate(raw);paragraphs=[];cited={}
     for p in result.paragraphs:
         ids=[]
-        for s in p.supports:
-            evidence=readers.evidence.get(s.citation_id)
-            if not evidence or s.quote not in evidence['text']:raise ValueError('Unverified source or quotation')
+        for identifier in p.supports:
+            evidence=readers.evidence.get(identifier)
+            if not evidence or identifier not in readers.citable_ids or not evidence['text'].strip():raise ValueError('Citation must identify a source read in this conversation')
             if evidence.get('answer_excluded'):raise ValueError('This source span has a preserved answer exclusion')
-            if s.citation_id not in ids:ids.append(s.citation_id)
-            cited[s.citation_id]=evidence
+            if identifier not in ids:ids.append(identifier)
+            # Resolve the complete, exact source text like backend.chat does.
+            # The model selects IDs; it never has to retype damaged PDF glyphs.
+            cited[identifier]=evidence
         paragraphs.append({'text':p.text,'citations':ids})
-    return {'status':'answered' if paragraphs else 'insufficient_evidence','summary_first':True,'paragraphs':paragraphs,'citations':list(cited.values()),'clarification':result.clarification or (readers.questions[-1] if readers.questions else None),'followups':result.followups,'library_notice':result.limitation,'outside_context':None,'domain':domain,'_dev':{'tool_calls':readers.trace,'citation_check':'Evidence ID and exact quote validation; not automatic semantic acceptance.'}}
+    return {'status':'answered' if paragraphs else 'insufficient_evidence','summary_first':True,'paragraphs':paragraphs,'citations':list(cited.values()),'clarification':result.clarification or (readers.questions[-1] if readers.questions else None),'followups':result.followups,'library_notice':result.limitation,'outside_context':None,'domain':domain,'_dev':{'tool_calls':readers.trace,'citation_check':'Read-source ID validation and exact original text resolution; not automatic semantic acceptance.'}}
 
 def agent_options(readers, prompt, proxy_url, proxy_token, budget_usd, effort='medium'):
     server=readers.server();cwd=STATE/'sdk-session';cwd.mkdir(exist_ok=True)
@@ -115,6 +124,9 @@ async def run_agent(request, corpus, config, proxy_url, proxy_token, remaining):
                 diagnostic.update(sdk_subtype=message.subtype,sdk_is_error=message.is_error,sdk_reported_cost_usd=message.total_cost_usd,sdk_turns=message.num_turns)
                 if message.is_error or not message.structured_output:raise ValueError('The agent did not complete a structured answer')
                 diagnostic['status']='validating_citations'
+                diagnostic['structured_answer']=message.structured_output
+                diagnostic['citation_ids']=[p.get('supports') for p in message.structured_output.get('paragraphs',[])]
+                diagnostic['read_source_ids']=sorted(readers.citable_ids)
                 answer=validate_answer(message.structured_output,readers,request.domain)
                 diagnostic['status']='verified_citations'
                 answer['_dev'].update(run_id=run_id,sdk_reported_cost_usd=message.total_cost_usd,sdk_turns=message.num_turns)

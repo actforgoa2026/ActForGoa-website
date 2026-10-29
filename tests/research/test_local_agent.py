@@ -16,6 +16,7 @@ from backend.research_agent import ResearchTools, validate_answer, agent_options
 from backend import crm_store
 from backend.local_agent_app import app
 from dev.reconcile_dev_budget import reconcile
+from dev.renew_dev_budget import renew
 
 @pytest.fixture(scope='module')
 def corpus():return LocalCorpus()
@@ -100,15 +101,19 @@ def test_provider_bound_and_unpriced_features():
     for changed in ({'model':'other'},{'speed':'fast'},{'tools':[{'type':'web_search_20250305'}]},{'max_tokens':5000}):
         with pytest.raises(ValueError):request_bound({**payload,**changed})
 
-def test_sdk_readers_multi_search_and_exact_quote_validation(corpus):
+def test_sdk_readers_multi_search_and_exact_source_resolution(corpus):
     r=ResearchTools(corpus)
     r.search({'query':'building permission','limit':3})
     second=r.search({'query':'change of use','limit':3})
-    e=second['results'][0];r.read({'document_id':e['document_id'],'page':e['page'],'max_chars':5000})
-    raw={'paragraphs':[{'text':'A bounded test statement.','supports':[{'citation_id':e['id'],'quote':e['text'][:40]}]}],'clarification':'Which village or town?','limitation':None,'followups':['What documents are needed?']}
+    search_e=second['results'][0];e=r.read({'document_id':search_e['document_id'],'page':search_e['page'],'max_chars':5000})['pages'][0]
+    raw={'paragraphs':[{'text':'A bounded test statement.','supports':[e['id']]}],'clarification':'Which village or town?','limitation':None,'followups':['What documents are needed?']}
     assert validate_answer(raw,r,'all')['clarification']=='Which village or town?'
-    raw['paragraphs'][0]['supports'][0]['quote']='A fabricated quotation that is not present.'
+    assert validate_answer(raw,r,'all')['citations'][0]['text']==r.evidence[e['id']]['text']
+    raw['paragraphs'][0]['supports']=['invented-source-id']
     with pytest.raises(ValueError):validate_answer(raw,r,'all')
+    raw['paragraphs'][0]['supports']=[search_e['id']]
+    if search_e['id'] not in r.citable_ids:
+        with pytest.raises(ValueError):validate_answer(raw,r,'all')
     o=agent_options(r,'Test prompt','http://127.0.0.1:8093/provider','local-capability',0)
     assert o.tools==[] and o.setting_sources==[] and len(o.allowed_tools)==6
     assert o.env['ANTHROPIC_API_KEY']=='local-capability'
@@ -121,7 +126,7 @@ def test_preserved_answer_exclusions_survive_page_retrieval(corpus):
     r=ResearchTools(corpus);(doc,page),spans=next(iter(corpus.exclusions.items()))
     evidence=r.read({'document_id':doc,'page':page})['pages'][0]
     assert evidence['answer_excluded'] and spans[0][2] in evidence['warning']
-    raw={'paragraphs':[{'text':'Claim','supports':[{'citation_id':evidence['id'],'quote':evidence['text'][:30]}]}],'clarification':None,'limitation':None,'followups':[]}
+    raw={'paragraphs':[{'text':'Claim','supports':[evidence['id']]}],'clarification':None,'limitation':None,'followups':[]}
     with pytest.raises(ValueError):validate_answer(raw,r,'all')
 
 def test_http_search_read_budget_gate_and_private_origin(monkeypatch,tmp_path):
@@ -148,6 +153,33 @@ def test_expiry_preserves_visible_accounting_and_blocks_reservation(accounted):
     assert 'expired' in status['reason']
     with pytest.raises(BudgetUnavailable,match='expired'):gate.reserve(100)
     assert gate.status()['reserved_usd']==.2
+
+def test_additive_renewal_keeps_every_reservation_and_original_receipt(accounted):
+    gate,*_=accounted
+    gate.reserve(123456)
+    receipt_path=gate.state/'reconciliation.json';receipt=json.loads(receipt_path.read_text())
+    receipt['expires_at']=(datetime.now(timezone.utc)-timedelta(seconds=1)).isoformat()
+    receipt_path.write_text(json.dumps(receipt))
+    assert not gate.status()['ready']
+    original=(gate.state/'reconciliation.json').read_bytes()
+    status=renew(gate.state.parent)
+    assert status['ready'] and status['cap_usd']==4 and status['reserved_usd']==.323456
+    assert status['remaining_usd']==3.676544 and status['expires_at'] is None
+    assert (gate.state/'reconciliation.json').read_bytes()==original
+    with gate.connect() as db,sqlite3.connect(gate.state/'before-renewal-2026-10-30.sqlite') as before:
+        for table in ('spend','usage','stage_reservations','sdk_reservations','local_dev_baseline'):
+            assert db.execute('SELECT * FROM '+table).fetchall()==before.execute('SELECT * FROM '+table).fetchall()
+    with pytest.raises(ValueError,match='already'):renew(gate.state.parent)
+    gate.reserve(3_000_000)
+    with pytest.raises(BudgetUnavailable):gate.reserve(700000)
+    assert gate.status()['reserved_usd']==3.323456
+
+def test_search_only_evidence_cannot_be_cited_before_reading(corpus):
+    readers=ResearchTools(corpus);e=readers.search({'query':'building permission','limit':1})['results'][0]
+    raw={'paragraphs':[{'text':'Discovery is not a source read.','supports':[e['id']]}],'clarification':None,'limitation':None,'followups':[]}
+    with pytest.raises(ValueError,match='read in this conversation'):validate_answer(raw,readers,'all')
+    assert e['warning']==readers.evidence[e['id']]['warning']
+    assert e['answer_excluded']==readers.evidence[e['id']]['answer_excluded']
 
 def test_proxy_preserves_sdk_protocol_headers_and_reserves_before_dispatch(accounted,monkeypatch):
     import httpx
