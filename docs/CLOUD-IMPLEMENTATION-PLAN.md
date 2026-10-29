@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Satellite live imagery acceptance complete — 29 October 2026, 11:12 UTC
+
+The user supplied new CDSE credentials through protected local storage and explicitly authorized configuration. OAuth validation succeeded; both values were sent to the existing Railway satellite API via stdin without logging secrets. API deployment `9014df8b-69de-4178-8072-135f96239875` reuses the accepted `11582ac` image, with all 14 satellite runtime files hash-matching. The app remains `b0fadee`, deployment `4bd7fc4b-8d60-487b-8219-bc978d07324f`. Both services are successful at https://satellite-app-production.up.railway.app/map. This supersedes the earlier missing-CDSE blocker below.
+
+Fresh hosted acceptance passed: a new small Ribandar/Chimbel footprint returned ten acquisitions; explicit October 20 and 25 loads produced real georeferenced imagery. Desktop 1440×1000 and phone-sized browser 390×844 checks covered dated overlays, keyboard/button timeline switching, fresh named-account sign-in, saved comparison search/reopening and server-side cache reuse. The comparison correctly remains inconclusive because only 41.1% of this area is usable in both images. This is functional verification, not Goa field validation; optional AI interpretation/classification remains unconfigured and was not called.
+
+Total new service reservations: five catalog searches, two image retrievals and one comparison. Both cached rasters remained byte-identical through comparison and phone reload; no third Process retrieval or duplicate observation job occurred. No AI request ran. The hosted runtime does not retain provider processing-unit headers, so no exact PU or currency charge is asserted. Original account access, saved recorded comparison, volumes and service tokens remain intact; a fresh SQLite backup precedes configuration. Temporary SSH verification access was revoked. Research accounting, the review Vercel alias and actforgoa.org were unchanged. Other agents and heartbeat remain paused. See `reports/satellite-cdse-2026-10-29/README.md` and the ignored `.reports/satellite-cdse-20261029/` evidence.
+
 ## Current local satellite rollout — 29 October 2026 (IST)
 
 The user explicitly authorized the local ORCHESTRATOR to reconcile PR95 with current main and deploy both existing standalone Railway services. PR95 merged as `11582ac`; PR103 fixes the hosted OpenStreetMap referrer failure and merged as `b0fadee`. Both satellite services are deployed, retaining existing volumes and account/history data. Real Copernicus credentials remain absent; recorded comparisons must remain labelled as such.
