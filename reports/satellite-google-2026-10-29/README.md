@@ -2,7 +2,7 @@
 
 Live: https://satellite-app-production.up.railway.app/map
 
-Runtime source: `df57d1b81a78fb2f25dfadb03fb389583e6ad3eb`, branch `codex/satellite-google`, based on main `1b16b874187027cb6b0d7d88b19ea0f0acdf2052`.
+Initial release runtime source (superseded by the follow-up below): `df57d1b81a78fb2f25dfadb03fb389583e6ad3eb`, branch `codex/satellite-google`, based on main `1b16b874187027cb6b0d7d88b19ea0f0acdf2052`.
 
 Both existing Railway services completed successfully:
 
@@ -41,6 +41,19 @@ The user approved Google street maps and place search, creation of a separate we
 
 One fresh hosted comparison reused the two retained Earth Engine rasters, returned all seven Decisions answers from `gpt-6-luna`, and reported 2,433 input tokens. Common usable coverage remained 94.11%. The website reopened this saved result and displayed the model, area scope, uncertain answers and uncalibrated-confidence qualification. This is an integration check, not a field accuracy assessment. API runtime hashes still match the original package, and all original jobs and rasters remain unchanged. The follow-up added one catalog search, one comparison and one classification reservation.
 
-Google map implementation uses a separate browser configuration endpoint with no private-key fallback. Local acceptance verified a real Panaji Places search, geographic centering, pointer-drawn bounds, both Amche reference layers (3,854 water-body and 849 forest records), exact retained Earth Engine overlay alignment, opacity, timeline switching and mobile expansion/Escape. A reviewer requested keeping the acquisition date visible on the large map; it is now inside the existing status treatment. The user-approved larger map and Figtree refinement from the concurrent design chat are preserved. Browser captures use 1440×1000 and verified390×844 viewports, with no horizontal overflow or italic authored text.
+Google map implementation uses a separate browser configuration endpoint with no private-key fallback. Local acceptance verified a real Panaji Places search, geographic centering, pointer-drawn bounds, both Amche reference layers (3,854 water-body and 849 forest records), exact retained Earth Engine overlay alignment, opacity, timeline switching and mobile expansion/Escape. A reviewer requested keeping the acquisition date visible on the large map; it is now inside the existing status treatment. The user-approved larger map and Figtree refinement from the concurrent design chat are preserved. Browser captures use 1440×1000 and verified 390×844 viewports, with no horizontal overflow or italic authored text.
 
-Automated validation now passes223 Node tests and both main and standalone production builds; the prior140 satellite Python tests remain applicable because no Python source changed. Private Google, Earth Engine, OpenAI and service-token values are absent from browser artifacts. Frontend release identification and final restriction/cleanup verification will be added after deployment.
+Automated validation now passes 223 Node tests and both main and standalone production builds; the prior 140 satellite Python tests remain applicable because no Python source changed. Private Google, Earth Engine, OpenAI and service-token values are absent from browser artifacts. Final frontend release and cleanup are recorded below.
+
+
+## Final hosted acceptance
+
+The frontend is live from `b28902ddcb9111f0694c1d895eb206484b1451c4`, Railway app deployment `eeccb3e7-4938-49af-9d56-7ced40baf378` (`SUCCESS`). This supersedes the initial OSM/Photon frontend and the intermediate Google map deployment. The API remains successful deployment `124d02d2-e583-47a0-82bc-fc5e9796b2fa`, runtime `df57d1b` with OpenAI Decisions configured. Source is pushed on PR #111 and is not merged to main.
+
+All 20 copied frontend/auth/static files match the clean committed package. The public map configuration returns only the separate browser key with no-store caching; anonymous imagery access returns 401. Map HTML uses the required origin-only cross-origin referrer policy. The original staff row is unchanged against the pre-release backup.
+
+Hosted acceptance verified Google street tiles and a real Panaji Places result, correct place centering, reopening the retained Earth Engine/OpenAI comparison at its original footprint, 8/13 January timeline switching, 0–100% opacity and rendered model provenance. Reopening after a place search initially exposed stale place guidance; the final revision clears it and passed the same hosted sequence. A verified 390×844 phone viewport has no horizontal overflow or authored italic text, with acquisition date and Google attribution visible. No additional imagery retrieval or model request was needed for frontend acceptance.
+
+The browser key is restricted to Maps JavaScript API and Places API (New), with only `https://satellite-app-production.up.railway.app` allowed. Temporary localhost access was removed and the saved settings were verified. A request from an unapproved website was rejected with `API_KEY_HTTP_REFERRER_BLOCKED`. The temporary verification account is inactive with zero sessions, the temporary Railway SSH key was revoked and removed locally, and both temporary test servers were stopped. Saved provider credentials remain private outside the repository. Other Railway SSH keys and the user's staff account were preserved.
+
+Final proof: `hosted-google-map-desktop.jpg`, `hosted-google-map-phone.jpg`, `hosted-google-openai-decisions.jpg` and `google-browser-key-hosted-only.jpg` in the task's visualization directory. Private audit files are `hosted-google-map-app-audit.json`, `hosted-runtime-maps-decisions-audit.json` and `maps-verification-cleanup.json` under ignored `.reports/google-integration/`. The visual reviewer approved shipping after the on-map date fix, and DESIGN.md documents only the approved satellite styling exception. Main/research deployment aliases remain unchanged.
