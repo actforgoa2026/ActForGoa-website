@@ -7,7 +7,7 @@ import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
 import {researchApi as api} from './research-api';
 import {citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
-import {researchCommunityMatches} from './research-community';
+import {researchCommunityMatches,needsBuildingAuthority,buildingAuthorityMatches} from './research-community';
 import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
 import {splitCodePointRange} from './text-range';
@@ -54,6 +54,16 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
   </section>
   {outside?.text&&<section className="research-answer-section research-outside" aria-label="Outside our library"><h3>Outside our library</h3><p className="research-provenance">AI general knowledge · not checked against external sources</p><p className="answer-paragraph">{outside.text}</p></section>}
  </div>;
+}
+function BuildingAuthority({data,question,loading,error}:{data:CRMSnapshot|null;question:string;loading:boolean;error:boolean}){
+ const [location,setLocation]=useState('');const [submitted,setSubmitted]=useState(false);
+ const matches=useMemo(()=>buildingAuthorityMatches(data?.records||[],location),[data,location]);
+ if(!needsBuildingAuthority(question))return null;
+ return <section className="research-community" aria-label="Find your local authority"><h3>Find the right local office</h3>
+  <p>Which village or town is the structure in? I can look up the local authority in the ActForGoa directory.</p>
+  <form onSubmit={event=>{event.preventDefault();setSubmitted(true);}}><Input label="Village or town" value={location} maxLength={120} required onChange={event=>{setLocation(event.target.value);setSubmitted(false);}} placeholder="For example, Panaji or Agonda"/><Button type="submit" disabled={location.trim().length<3}>Find the office</Button></form>
+  {submitted&&(loading?<p role="status">Looking up the government directory…</p>:error?<p role="alert">The directory could not load. <Link to="/directory">Open the directory</Link>.</p>:matches.length?<><p>These CRM listings match the place you entered. Confirm the property's jurisdiction with the office; other approvals may also apply.</p><ul>{matches.map(({record,source,verification})=><li key={record.record_id}><h4><Link to={'/directory/'+encodeURIComponent(record.record_id)}>{record.name}</Link></h4><p><a href={source} target="_blank" rel="noreferrer">Open government office website or listing <ArrowUpRight size={14}/></a></p><p className="research-small">{verification}</p></li>)}</ul></>:<p>I couldn't identify a local-body office for that place in our CRM. Please enter the village or town rather than just the district or taluka. <Link to={'/directory?'+new URLSearchParams({q:location,collection:'government'})}>Search government listings</Link>.</p>)}
+ </section>;
 }
 function CommunitySuggestions({data,question,loading,error}:{data:CRMSnapshot|null;question:string;loading:boolean;error:boolean}){
  const starredIds=useStarredIds();
@@ -127,6 +137,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
     {turn.pending&&!turn.answer&&!turn.error&&<p role="status" className="chat-composer-status"><span className="chat-working-dot"/>{turn.mode==='ask'?'Preparing your answer. You can browse matching sources as they arrive.':'Finding matching passages…'}</p>}
     {turn.answer&&<AnswerSections answer={turn.answer} returnTo={returnTo}/>}
     {sources.length?<details className="research-sources" open={turn.mode==='search'||undefined}><summary>{turn.answer?'View sources':turn.mode==='ask'?'View matching sources':'Matching sources'} <span>({sources.length})</span></summary>{sources.map((source,n)=><Source key={source.id} source={source} number={n+1} returnTo={returnTo}/>)}</details>:!turn.pending&&!turn.error&&!turn.answer&&<p>No matching passages. Try a place, an official term or a broader topic.</p>}
+    {!turn.pending&&turn.answer&&<BuildingAuthority data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/>}
     <details className="chat-related"><summary><Users size={15}/>Related people and organisations</summary><CommunitySuggestions data={community} question={turn.question} loading={!community&&!communityError} error={communityError}/></details>
    </section>;})}
    <form className="research-composer chat-composer" onSubmit={submit}>
