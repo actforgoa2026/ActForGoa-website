@@ -2,9 +2,19 @@
 
 ## SAPCC research assistant integration · 30 October 2026
 
-The user requested SAPCC questions with links to original sources in the existing research assistant. Isolated branch `codex/sapcc-research-assistant` starts from `4d0f497`; the primary dirty checkout remains untouched. The government PDF was already hosted, but its native two-page/table extraction and whole-document budgeting could discard answer evidence. The focused change refreshes only SAPCC, adds direct plan/topic conversation entry points and corrects budgeting only for explicit document conversations. [Source and acceptance record](../reports/sapcc/RESEARCH.md).
+The user requested SAPCC questions with links to original sources in the existing research assistant. Isolated branch `codex/sapcc-research-assistant` starts from `4d0f497` and reconciles newer map/Explore main `a94d192`; the primary dirty checkout remains untouched. The government PDF was already hosted, but its native two-page/table extraction and whole-document budgeting could discard answer evidence. The focused change refreshes only SAPCC, adds direct plan/topic conversation entry points and corrects budgeting only for explicit document conversations. [Source and acceptance record](../reports/sapcc/RESEARCH.md).
 
 The new immutable generation `20261030-sapcc-native-v2` is staged locally and on the existing research volume. Its 1,173 unrelated documents and all prior generation files pass preservation checks. `CURRENT.json` and production accounting are still unchanged. The only live-runtime source difference is `backend/chat.py`; provider/model, prompts, limits and credentials are preserved. Next: merge the tested source, activate the staged generation with an accounting backup, deploy the bounded runtime change, verify real SAPCC answers/citation pages, then promote the frontend through `release:review`. No original-domain or satellite deployment is included.
+
+## Map and landscape release authorized — 30 October 2026
+
+The user's latest explicit “SHIP IT” authorizes publishing this follow-up to the existing field-guide alias and satellite frontend. This supersedes the local-only instruction below for this release. The original WordPress domain, hosted Python API, corpus, credentials, quotas and persistent data are unchanged. Reconcile the newer Goa SAPCC work from origin/main before the exact-tree browser checks. Use the existing release guard and an allowlisted satellite frontend package. Record final deployment identities and live checks under ignored `.reports/map-workspace-release-2026-10-30/`.
+
+## Local follow-up — 30 October 2026
+
+The user has explicitly returned this chat to local-only work after the earlier design release. No further commit, push, merge or production deployment is authorized. Active source remains `/Users/zakkrevitt/.codex/worktrees/actforgoa-design-iteration`.
+
+Implemented locally: larger submenu labels, reuse of the approved stippled landscape, and a two-column satellite workspace with actual Arc calendar pickers. The running local satellite API is configured for Google Earth Engine. A bounded fresh catalogue/image check succeeded through the authenticated local app route; optional image classification remains unconfigured locally. `npm run dev:check -- --satellite-only` now verifies local readiness without depending on the hosted corpus AI service. Main and standalone builds, 11 targeted Node tests, desktop/phone renders, and a real Earth Engine numeric comparison pass. See [local follow-up](design/local-followup-2026-10-30.md).
 
 ## Goa SAPCC live and verified · 30 October 2026
 
