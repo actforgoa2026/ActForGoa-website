@@ -1,5 +1,18 @@
 # Latest map/timeline update — 29 October 2026 (IST)
 
+## Current continuation — 29 October 2026 query audit
+
+The existing standalone map/timeline and real CDSE retrieval are already live. PR95 merged as `11582ac`; hosted CDSE acceptance is on main `f20fc25`. Earlier setup/credential/PR95 instructions below are historical and must not override this state.
+
+Fetch `codex/satellite-query-audit` and [PR109](https://github.com/actforgoa2026/ActForGoa-website/pull/109); read [the query audit](SATELLITE-QUERY-AUDIT.md) and [verification](../reports/satellite-query-audit-2026-10-29/README.md). Concurrent PR108 map controls are preserved. Main review API404 also requires the explicit nested Vercel handlers in this branch. Update **both existing** standalone Railway services from the same reviewed source to add `/evidence`, area-scoped history, Amche references and UI recovery. Validated runtime checkpoint: `97cde8be5cd79e1a2e1e620a216a3f9f7c133048`; see committed manifests/container checks in the verification report. Package only clean committed source with the existing scripts. Keep current named accounts, private data volumes, CDSE credentials and service tokens. Do not create another service or example site. The project/service identifiers below remain current.
+
+Before promotion, inspect desktop and phone: area draw/viewport bounds, ordered dates, real acquisition slider, clear/obscured comparison, same/partial-area evidence results, context outage, account isolation and resuming a known job after network interruption. Reuse retained imagery for routine acceptance to avoid duplicate provider costs. Queries must never imply that missing records mean no change. Record deployed source and any provider usage separately.
+
+OpenAI remains optional for shipping these usability/retrieval fixes. Use the user's chosen manual project-key setup if configuring Decisions; do not repeat the failed in-app key creation. Standalone ecology context requires the configured scoped research origin; current main research is chat-ready, so obsolete research-hold notes do not apply. Combined review-site alias promotion remains coordinator-owned.
+
+## Earlier deployment instructions (historical)
+
+
 Continue the existing standalone deployment; do not create another example site. Fetch the current `codex/satellite-monitoring` head, read `docs/SATELLITE-HANDOFF.md` and `reports/satellite-map-2026-10-29/README.md`, then package and deploy **both** the satellite API and satellite app. The frontend uses new authenticated `/observation` jobs, cached single acquisitions, reprojected imagery and a time slider. Keep the existing named account, SQLite data, imported recorded comparison, volumes and separate service tokens.
 
 Existing Railway project `e119f1f6-f1c7-4a58-a33c-0ea536dcfdce`, production environment `178f97df-ed3d-4d66-94ac-f86797aa736c`; API service `2a16820e-393c-4385-b4f3-82d8d922c4d2`; app service `aea6b770-cd6d-4165-9802-7ce46fa0fd4a`. App URL: https://satellite-app-production.up.railway.app/map.

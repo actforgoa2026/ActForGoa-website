@@ -4,13 +4,14 @@ import hashlib
 import json
 import threading
 import httpx
-from .domain import CatalogRequest, CompareRequest, ObservationRequest, DomainError, Query, make_plan, change_interval
+from .domain import CatalogRequest, CompareRequest, ObservationRequest, EvidenceRequest, DomainError, Query, make_plan, change_interval
 from .eve_cdse import CDSE
 from .evidence import read_observation, compare_pixels, public_observation, classification_image
 from .providers import AnthropicPlanner, ImageClassifier
 from .summary import summarize_comparison, canopy_presence
 from .context import EcologyContext
 from .store import Store
+from .evidence_query import build_evidence
 
 
 class SatelliteService:
@@ -31,6 +32,25 @@ class SatelliteService:
     def catalog(self, request: CatalogRequest):
         self.store.reserve('catalog', 100)
         return self.cdse.catalog(request)
+
+    def evidence(self, request: EvidenceRequest, actor: str):
+        rows, truncated = self.store.evidence_rows(actor, request)
+        result = build_evidence(request, rows, truncated)
+        if request.include_context:
+            from .amche import AmcheContext
+            try:
+                result['amche_context'] = AmcheContext(self.http).search(request.area.grid())
+            except Exception:
+                # Optional reference sources must never erase saved evidence.
+                result['amche_context'] = {'state':'unavailable','layers':[],'matched_records':0,
+                    'coverage':'not_established','checked_at':datetime.now(timezone.utc).isoformat(),
+                    'message':'Map context could not be checked. Saved satellite evidence is retained; no absence of mapped records is inferred.'}
+            try:
+                result['library_context'] = self.context.search(request.question, request.intent.value if request.intent else None)
+            except Exception:
+                result['library_context'] = {'state':'unavailable','sources':[],
+                    'message':'Ecology background could not be checked. Saved satellite evidence is retained.'}
+        return result
 
     @staticmethod
     def _observation_key(scene_id, grid):
@@ -147,6 +167,11 @@ class SatelliteService:
         before, before_source = self._load_observation(a, grid, actor)
         after, after_source = self._load_observation(b, grid, actor)
         evidence = compare_pixels(before, after, grid)
+        identity = {'geometry':grid['wgs84_geometry'],'crs':grid['crs'],'bounds':grid['bounds'],'resolution_m':10}
+        target = {'id':'area-'+hashlib.sha256(json.dumps(identity,sort_keys=True,separators=(',',':')).encode()).hexdigest()[:24],
+                  'geometry':grid['wgs84_geometry'],'bounds':grid['bounds'],'crs':grid['crs'],'geometry_crs':'EPSG:4326',
+                  'area_m2':round(grid['area_m2']),'grid_resolution_m':10,'native_swir_scl_resolution_m':20,
+                  'granularity':'area_canopy','common_usable_fraction':evidence['common_usable_fraction']}
         classification = {'state':'skipped','answers':{},'message':'Insufficient common clear coverage for reliable image classification.'}
         if evidence['state'] == 'observable':
             try:
@@ -155,6 +180,7 @@ class SatelliteService:
                 common = before['clear'] & after['clear']
                 classification = self.classifier.classify(classification_image(before, common), classification_image(after, common), {
                     'before':before_source, 'after':after_source, 'spectral_metrics':evidence['metrics'],
+                    'target':target,
                     'common_usable_fraction':evidence['common_usable_fraction'], 'area_m2':grid['area_m2'],
                     'intent':request.intent.value,'water_change':evidence['water_change'],
                     'numeric_vegetation_loss_candidates':len(evidence['candidates']['features'])})
@@ -170,7 +196,7 @@ class SatelliteService:
             'search_start':request.start_date.isoformat(),'search_end':request.end_date.isoformat(),'catalog_truncated':catalog['truncated'],
             'note':'Acquisition availability is not clear-sky coverage. Newer scenes have not necessarily been checked for local visibility.'}
         # No exact event time or cause is generated from image differences.
-        return {'intent':request.intent.value,'evidence':evidence,'classification':classification,
+        return {'intent':request.intent.value,'target':target,'evidence':evidence,'classification':classification,
                 'summary':summarize_comparison(request.intent.value,evidence,classification,interval),
                 'canopy_presence':canopy_presence(evidence,classification),
                 'freshness':freshness,'library_context':self.context.search(request.question,request.intent.value),

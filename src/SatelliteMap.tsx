@@ -10,6 +10,7 @@ import {areaError} from './satellite-timeline';
 import {observationDate as dateLabel} from './SatelliteHistory';
 
 type Place={id:string;name:string;detail:string;longitude:number;latitude:number};
+const boundsBbox=(bounds:L.LatLngBounds):SatelliteArea['bbox']=>[bounds.getWest(),bounds.getSouth(),bounds.getEast(),bounds.getNorth()];
 export function SatelliteMap({area,onArea,observation,candidates,disabled=false}:{area:SatelliteArea|null;onArea:(area:SatelliteArea)=>void;observation?:SatelliteObservation;candidates?:GeoJSON.FeatureCollection;disabled?:boolean}) {
   const container=useRef<HTMLDivElement>(null),workspace=useRef<HTMLDivElement>(null),map=useRef<L.Map|null>(null),selection=useRef<L.Rectangle|null>(null),features=useRef<L.GeoJSON|null>(null),overlay=useRef<L.ImageOverlay|null>(null);
   const preview=useRef<L.Rectangle|null>(null),pin=useRef<L.CircleMarker|null>(null),anchor=useRef<L.LatLng|null>(null),cornerPin=useRef<L.CircleMarker|null>(null);
@@ -17,6 +18,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   const [mapInstance,setMapInstance]=useState<L.Map|null>(null);
   const [drawing,setDrawing]=useState(false),[corner,setCorner]=useState(false),[expanded,setExpanded]=useState(false),[opacity,setOpacity]=useState(100),[tileError,setTileError]=useState(false);
   const [message,setMessage]=useState(''),[selectionError,setSelectionError]=useState(''),[locating,setLocating]=useState(false);
+  const [viewport,setViewport]=useState<SatelliteArea['bbox']|null>(null);
   const [query,setQuery]=useState(''),[places,setPlaces]=useState<Place[]>([]),[searching,setSearching]=useState(false),[searchMessage,setSearchMessage]=useState('');
   function clearDraft(){preview.current?.remove();preview.current=null;cornerPin.current?.remove();cornerPin.current=null;anchor.current=null;press.current=null;setCorner(false);}
   function cancelDraw(){clearDraft();setDrawing(false);setSelectionError('');}
@@ -26,8 +28,10 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,referrerPolicy:'strict-origin',attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).on('tileerror',()=>setTileError(true)).addTo(instance);
     L.control.scale({imperial:false}).addTo(instance);
     instance.createPane('satellite-imagery');instance.getPane('satellite-imagery')!.style.zIndex='350';
-    const resize=new ResizeObserver(()=>instance.invalidateSize());resize.observe(container.current);
-    return()=>{resize.disconnect();searchRequest.current?.abort();locationAttempt.current++;instance.remove();map.current=null;setMapInstance(null);};
+    const updateViewport=()=>setViewport(boundsBbox(instance.getBounds()));
+    instance.on('moveend',updateViewport);updateViewport();
+    const resize=new ResizeObserver(()=>{instance.invalidateSize();updateViewport();});resize.observe(container.current);
+    return()=>{resize.disconnect();instance.off('moveend',updateViewport);clearDraft();searchRequest.current?.abort();locationAttempt.current++;instance.remove();map.current=null;setMapInstance(null);};
   },[]);
   useEffect(()=>{if(disabled)cancelDraw();},[disabled]);
   useEffect(()=>{
@@ -54,6 +58,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   },[expanded]);
   useEffect(()=>{
     if(!map.current)return;
+    cancelDraw();
     selection.current?.remove();selection.current=null;map.current.stop();
     if(area){const [w,s,e,n]=area.bbox;selection.current=L.rectangle([[s,w],[n,e]],{color:'#193e32',weight:3,fillOpacity:.06,interactive:false}).addTo(map.current);map.current.fitBounds([[s,w],[n,e]],{maxZoom:16,padding:[48,48],animate:false});}
   },[area]);
@@ -64,10 +69,20 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
     if(map.current&&layer){const [w,s,e,n]=layer.bbox;overlay.current=L.imageOverlay(observation.image,[[s,w],[n,e]],{pane:'satellite-imagery',attribution:'Contains modified Copernicus Sentinel data',alt:`Sentinel-2 acquisition ${observation.acquired_at.join(', ')}`}).addTo(map.current);}
   },[observation]);
   useEffect(()=>{overlay.current?.setOpacity(opacity/100);},[opacity,observation]);
+  const viewportError=viewport?areaError(viewport):'The map is loading.';
+  const viewportGuidance=viewportError==='Choose a valid area around Goa.'?'Zoom in within Goa, or draw a smaller area up to 25 km².':viewportError;
+  function showDraft(bounds:L.LatLngBounds){
+    if(!map.current)return;
+    const error=areaError(boundsBbox(bounds));
+    const style={color:error?'#8a391f':'#193e32',weight:2,dashArray:'6 4',fillOpacity:.16,interactive:false};
+    if(preview.current)preview.current.setBounds(bounds).setStyle(style);
+    else preview.current=L.rectangle(bounds,style).addTo(map.current);
+    setSelectionError(error||'');
+  }
   function acceptBounds(bounds:L.LatLngBounds){
-    const bbox:SatelliteArea['bbox']=[bounds.getWest(),bounds.getSouth(),bounds.getEast(),bounds.getNorth()];
-    const error=areaError(bbox);clearDraft();
-    if(error){setSelectionError(error);return false;}
+    const bbox=boundsBbox(bounds),error=areaError(bbox);
+    if(error){if(anchor.current)showDraft(bounds);else setSelectionError(error);return false;}
+    clearDraft();
     onArea({bbox});setDrawing(false);setSelectionError('');setMessage('Area selected. Choose dates below to find observations.');return true;
   }
   function pointerDown(event:ReactPointerEvent<HTMLDivElement>){
@@ -78,9 +93,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   }
   function pointerMove(event:ReactPointerEvent<HTMLDivElement>){
     if(!event.isPrimary||!anchor.current||!map.current)return;
-    const bounds=L.latLngBounds(anchor.current,map.current.mouseEventToLatLng(event.nativeEvent));
-    if(preview.current)preview.current.setBounds(bounds);
-    else preview.current=L.rectangle(bounds,{color:'#193e32',weight:2,dashArray:'6 4',fillOpacity:.16,interactive:false}).addTo(map.current);
+    showDraft(L.latLngBounds(anchor.current,map.current.mouseEventToLatLng(event.nativeEvent)));
   }
   function pointerUp(event:ReactPointerEvent<HTMLDivElement>){
     if(!event.isPrimary)return;
@@ -129,7 +142,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
       <div ref={container} className="satellite-map" aria-label="Goa investigation map. Pan and zoom, then draw an area. Coordinate fields below provide a keyboard alternative." />
       {drawing&&<div className="satellite-draw-surface" role="group" tabIndex={0} aria-label="Draw a rectangle by dragging or tapping two opposite corners. Escape cancels." onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={clearDraft} onLostPointerCapture={()=>{if(press.current)clearDraft();}}/>}
       <div className="satellite-map-zoom"><Button type="button" size="sm" variant="secondary" aria-label="Zoom in" disabled={drawing} onClick={()=>map.current?.zoomIn()}><Plus size={20}/></Button><Button type="button" size="sm" variant="secondary" aria-label="Zoom out" disabled={drawing} onClick={()=>map.current?.zoomOut()}><Minus size={20}/></Button></div>
-      <div className="satellite-map-bottom"><p role="status">{selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):message||'Find a place, then draw the area you want to explore.')}</p><Button type="button" variant="secondary" size="sm" disabled={disabled||drawing} onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title="Select the visible map" aria-label="Use visible map area"><Scan size={18}/><span className="satellite-use-view-label">Use view</span></Button></div>
+      <div className="satellite-map-bottom"><p id="satellite-map-selection-status" role="status">{selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):[message,viewportGuidance].filter(Boolean).join(' ')||'Find a place, then draw the area you want to explore.')}</p><Button type="button" variant="secondary" size="sm" disabled={disabled||drawing||!!viewportError} aria-describedby="satellite-map-selection-status" onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title={viewportGuidance||'Select the visible map'} aria-label="Use visible map area"><Scan size={18}/><span className="satellite-use-view-label">Use view</span></Button></div>
     </div>
     <AmcheLayers map={mapInstance}/>
     {tileError&&<p className="satellite-note">Some street-map tiles could not load. Selected areas and loaded satellite images remain available.</p>}

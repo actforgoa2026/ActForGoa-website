@@ -89,3 +89,7 @@
  .satellite-map-expanded{padding:12px}.satellite-map-expanded .satellite-map{height:100%;min-height:280px}
  .satellite-map-caption p{font-size:13px}
 }
+
+.satellite-workbench h2{margin-top:0;font-size:24px}.satellite-job{padding:20px;background:var(--pale);margin-block:20px;overflow-wrap:anywhere}.satellite-job button{margin:0 12px 8px 0}.satellite-planner{margin-block:24px}.satellite-planner>summary{min-height:44px;padding-block:12px;cursor:pointer;font-weight:650}.satellite-score{display:block;margin-top:8px;font-size:13px;color:var(--muted);line-height:1.6}.satellite-page code{overflow-wrap:anywhere}
+
+.satellite-page>.satellite-evidence,.satellite-page>.satellite-planner,.satellite-page>.satellite-job,.satellite-page>.satellite-limitations{max-width:1120px;margin-inline:auto}

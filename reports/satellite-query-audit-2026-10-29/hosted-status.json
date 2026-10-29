@@ -1,0 +1,357 @@
+{
+  "schema_version": 1,
+  "observed_date": "2026-10-29",
+  "observed_at": null,
+  "timestamp_note": "The exact observation time was not retained. These are earlier HTTP responses from this audit, not newly repeated checks.",
+  "scope": "Unauthenticated, read-only HTTPS GET requests and inspection of publicly served JavaScript. No browser rendering, authenticated service readiness check, imagery retrieval or model call was performed.",
+  "credentials_sent": false,
+  "browser_verified": false,
+  "authenticated_readiness_verified": false,
+  "checks": [
+    {
+      "url": "https://satellite-app-production.up.railway.app/map",
+      "method": "GET",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 442,
+      "referrer_policy": "no-referrer",
+      "title": "Goa satellite investigations | ActForGoa",
+      "script": "/assets/satellite-BEhbf4YD.js"
+    },
+    {
+      "url": "https://satellite-app-production.up.railway.app/api/admin/config",
+      "method": "GET",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "response": {
+        "available": true
+      }
+    },
+    {
+      "url": "https://satellite-app-production.up.railway.app/api/admin/session",
+      "method": "GET",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "response": {
+        "error": "Sign in to continue."
+      }
+    },
+    {
+      "url": "https://satellite-app-production.up.railway.app/api/admin/satellite/status",
+      "method": "GET",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "response": {
+        "error": "Sign in to continue."
+      }
+    },
+    {
+      "url": "https://satellite-app-production.up.railway.app/api/status",
+      "method": "GET",
+      "status": 404,
+      "bytes": 0,
+      "note": "The standalone satellite app does not expose the combined site's research status route."
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/map",
+      "method": "GET",
+      "status": 200,
+      "content_type": "text/html; charset=utf-8",
+      "bytes": 897,
+      "referrer_policy": "strict-origin-when-cross-origin",
+      "title": "ActForGoa · A field guide to caring for Goa",
+      "script": "/assets/index-Aot8OuBz.js",
+      "note": "This HTML response alone does not establish a working client-side map route; the served router bundle did not define /map."
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/api/admin/config",
+      "method": "GET",
+      "status": 200,
+      "content_type": "application/json; charset=utf-8",
+      "response": {
+        "available": true
+      }
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/api/admin/session",
+      "method": "GET",
+      "status": 401,
+      "content_type": "application/json; charset=utf-8",
+      "response": {
+        "error": "Sign in to continue."
+      }
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/api/admin/satellite/status",
+      "method": "GET",
+      "status": 404,
+      "content_type": "text/plain; charset=utf-8",
+      "response_summary": "The page could not be found; NOT_FOUND."
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/api/status",
+      "method": "GET",
+      "status": 200,
+      "content_type": "application/json",
+      "response_fields": {
+        "search_ready": true,
+        "chat_ready": true,
+        "generation": "20261027T065155-law-5bc5619b",
+        "provider": "anthropic",
+        "model": "claude-sonnet-5-5",
+        "domains": [
+          "legal",
+          "ecology"
+        ],
+        "domain_counts": {
+          "legal": 368,
+          "ecology": 289
+        },
+        "outside_context_supported": true,
+        "answer_mode": "library_first",
+        "chat_unavailable_reason": null,
+        "embedding_model": "all-MiniLM-L6-v2",
+        "search_mode": "zvec+fts5+rrf"
+      },
+      "note": "Public readiness metadata was read. No research answer was requested or independently evaluated."
+    },
+    {
+      "url": "https://satellite-production-9bd0.up.railway.app/healthz",
+      "method": "GET",
+      "status": 200,
+      "content_type": "application/json",
+      "response": {
+        "status": "ok",
+        "service": "goa-satellite"
+      }
+    },
+    {
+      "url": "https://satellite-production-9bd0.up.railway.app/status",
+      "method": "GET",
+      "status": 401,
+      "content_type": "application/json",
+      "response": {
+        "error": "Authentication required.",
+        "code": "unauthorized"
+      }
+    }
+  ],
+  "public_bundles": [
+    {
+      "url": "https://satellite-app-production.up.railway.app/assets/satellite-BEhbf4YD.js",
+      "bytes": 629244,
+      "sha256": "23fe6f1bfdd474d1ef8163c1b97b879063428aaddb4ea9683f9498752245ce4a",
+      "inspection_method": "Read the served public JavaScript and inspect literal feature text and router declarations. Quoted-string inspection included backtick literals used by the minifier.",
+      "router_defines_map": true,
+      "feature_text_present": [
+        "Explore Goa through time",
+        "Move through time",
+        "Prepare investigation",
+        "Loading this acquisition"
+      ],
+      "osm_referrer_policy_marker": "strict-origin",
+      "feature_interpretation": "The served standalone bundle includes the navigable satellite workspace, dated timeline and explicit acquisition-loading implementation. This is source-delivery evidence, not a fresh interactive acceptance check."
+    },
+    {
+      "url": "https://actforgoa-field-guide.vercel.app/assets/index-Aot8OuBz.js",
+      "bytes": 900429,
+      "sha256": "6fc2943de62ef503b95ce3313185a705e17a2f3ff1f8fcfe403885b265c948d3",
+      "inspection_method": "Read the served public JavaScript, inspect its lazy module references and router declarations, and inspect every /map substring. The only /map substrings belonged to external Google Maps links.",
+      "router_defines_map": false,
+      "satellite_module_reference_found": false,
+      "feature_text_absent": [
+        "Explore Goa through time",
+        "Move through time",
+        "Prepare investigation",
+        "Loading this acquisition"
+      ],
+      "referenced_application_modules": [
+        "AdminDashboard-cUHlpSMD.js",
+        "Blog-B3GF8NMV.js",
+        "CRM-DqbkFsip.js",
+        "GuideRoute-CsBfOM6L.js",
+        "McpPage-D7OZuGR5.js",
+        "OrbitLanding-0E0-zN4t.js",
+        "ReportInbox-CfBzn7Bu.js",
+        "ReportIncident-BA4gRmBk.js",
+        "TemplateEditor-QIMO-67v.js"
+      ],
+      "feature_interpretation": "The observed main review deployment did not include the satellite route or satellite proxy endpoint, despite returning SPA HTML at /map."
+    }
+  ],
+  "limits": [
+    "No account session or service credentials were used; 401 responses do not establish authenticated imagery readiness.",
+    "No browser was operated. Rendered map tiles, pixel contents, layout, input behavior and current user session were not inspected.",
+    "No satellite or research provider requests were initiated through application actions.",
+    "Deployment identities and configured credentials were not freshly queried from hosting control APIs.",
+    "The status of optional satellite planning, classification and ecology integration cannot be inferred from the unauthenticated status responses."
+  ],
+  "immutable_preview_followup": {
+    "origin": "https://actforgoa-field-guide-jmd8zml88-zakkrevitt-gmailcoms-projects.vercel.app",
+    "target_kind": "Immutable recorded-imagery preview, distinct from the main review alias and standalone Railway workspace",
+    "observed_at": "2026-10-29T11:51:50.338404+00:00",
+    "scope": "Unauthenticated HTTP GET only. No browser, credentials, cookies, share-token bypass or redirected authentication flow used.",
+    "checks": [
+      {
+        "url": "https://actforgoa-field-guide-jmd8zml88-zakkrevitt-gmailcoms-projects.vercel.app/",
+        "method": "GET",
+        "status": 302,
+        "content_type": "text/plain",
+        "bytes": 263,
+        "observed_at": "2026-10-29T11:51:50.338404+00:00",
+        "redirect_destination": {
+          "scheme": "https",
+          "host": "vercel.com",
+          "path": "/sso-api"
+        },
+        "note": "Redirect was not followed. Query parameters are omitted.",
+        "protection_or_redirect_encountered": true
+      },
+      {
+        "url": "https://actforgoa-field-guide-jmd8zml88-zakkrevitt-gmailcoms-projects.vercel.app/map",
+        "method": "GET",
+        "status": 302,
+        "content_type": "text/plain",
+        "bytes": 263,
+        "observed_at": "2026-10-29T11:51:50.338404+00:00",
+        "redirect_destination": {
+          "scheme": "https",
+          "host": "vercel.com",
+          "path": "/sso-api"
+        },
+        "note": "Redirect was not followed. Query parameters are omitted.",
+        "protection_or_redirect_encountered": true
+      },
+      {
+        "url": "https://actforgoa-field-guide-jmd8zml88-zakkrevitt-gmailcoms-projects.vercel.app/api/admin/satellite/status",
+        "method": "GET",
+        "status": 302,
+        "content_type": "text/plain",
+        "bytes": 263,
+        "observed_at": "2026-10-29T11:51:50.338404+00:00",
+        "redirect_destination": {
+          "scheme": "https",
+          "host": "vercel.com",
+          "path": "/sso-api"
+        },
+        "note": "Redirect was not followed. Query parameters are omitted.",
+        "protection_or_redirect_encountered": true
+      }
+    ],
+    "public_bundles": []
+  },
+  "deployment_followups": [
+    {
+      "observed_at": "2026-10-29T11:58:20.701956+00:00",
+      "reason": "Targeted recheck after a newer combined-review deployment was reported during this audit. Earlier findings are retained as historical observations.",
+      "scope": "Unauthenticated HTTP GET and public JavaScript inspection only; no browser, credentials, cookies, provider calls or private status access.",
+      "checks": [
+        {
+          "url": "https://actforgoa-field-guide.vercel.app/map",
+          "method": "GET",
+          "status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "bytes": 897,
+          "title": [
+            "ActForGoa · A field guide to caring for Goa"
+          ],
+          "scripts": [
+            "/assets/index-T-5RG4v3.js"
+          ]
+        },
+        {
+          "url": "https://actforgoa-field-guide.vercel.app/api/admin/satellite/status",
+          "method": "GET",
+          "status": 404,
+          "content_type": "text/plain; charset=utf-8",
+          "bytes": 79,
+          "response_summary": "The page could not be found; NOT_FOUND."
+        },
+        {
+          "url": "https://satellite-app-production.up.railway.app/map",
+          "method": "GET",
+          "status": 200,
+          "content_type": "text/html; charset=utf-8",
+          "bytes": 442,
+          "title": [
+            "Goa satellite investigations | ActForGoa"
+          ],
+          "scripts": [
+            "/assets/satellite-CwQx7wub.js"
+          ]
+        }
+      ],
+      "public_bundles": [
+        {
+          "url": "https://actforgoa-field-guide.vercel.app/assets/index-T-5RG4v3.js",
+          "bytes": 896252,
+          "sha256": "cdc12323b1ab7cf764665e7a16728e931b272b09164137c05f4ffc7ef68d8c0e",
+          "router_defines_map": true,
+          "satellite_module_references": [
+            "./Satellite-Cqln0E5s.js"
+          ],
+          "feature_markers": {
+            "Explore Goa through time": false,
+            "Move through time": false,
+            "Search evidence for this area": false,
+            "referrerPolicy": true,
+            "strict-origin": false
+          }
+        },
+        {
+          "url": "https://actforgoa-field-guide.vercel.app/assets/Satellite-Cqln0E5s.js",
+          "bytes": 185708,
+          "sha256": "06ec6fe93d6d8357eaa01d272f8e778c3a78f195093744fe44132f59cb3c51d1",
+          "feature_markers": {
+            "Explore Goa through time": true,
+            "Move through time": true,
+            "Search evidence for this area": false,
+            "referrerPolicy": true,
+            "strict-origin": true
+          }
+        },
+        {
+          "url": "https://satellite-app-production.up.railway.app/assets/satellite-CwQx7wub.js",
+          "bytes": 655194,
+          "sha256": "d3b3a4d3dc3af0eb58c3f43bc66127a578c1f5fe238893d642554dfbb57d407e",
+          "router_defines_map": true,
+          "satellite_module_references": [],
+          "feature_markers": {
+            "Explore Goa through time": true,
+            "Move through time": true,
+            "Search evidence for this area": false,
+            "referrerPolicy": true,
+            "strict-origin": true
+          }
+        }
+      ],
+      "limits": [
+        "The main review satellite status endpoint still returned404. No authenticated upstream readiness was established; the standalone status endpoint was not repeated in this targeted follow-up.",
+        "Bundle markers establish source delivery, not rendered or end-to-end behavior.",
+        "The new saved-evidence workflow remains local source unless its marker appears in a served bundle."
+      ],
+      "interpretation": "The combined review frontend now includes the satellite map and timeline, superseding the initial absent-route observation. Its satellite API route remains unavailable at the checked URL. The standalone public bundle also changed; neither served satellite bundle contains the new saved-evidence search workflow marker."
+    }
+  ],
+  "pending_route_fix": {
+    "state": "implemented_and_locally_tested_not_deployed",
+    "problem": "The latest main review frontend includes the map, but GET /api/admin/satellite/status still returned404 during the11:58:20UTC check.",
+    "source_finding": "The generic api/admin/[...path].ts entry does not supply the explicit deeper satellite function entries. This follows the repository's existing explicit nested editorial-route pattern for plain Node Vercel functions.",
+    "new_entries": [
+      "api/admin/satellite/[action].ts",
+      "api/admin/satellite/jobs/[id].ts"
+    ],
+    "behavior": "Both entries use the existing shared admin proxy, including its fixed-origin destination, route allowlist, session cookie and CSRF transport. No authentication or upstream service configuration was changed.",
+    "local_checks": {
+      "targeted_node_tests_passed": 9,
+      "test_files": [
+        "tests/satellite-entrypoints.test.ts",
+        "tests/admin-proxy.test.ts",
+        "tests/satellite-proxy.test.ts"
+      ],
+      "api_typescript": "passed",
+      "scope": "Local HTTP tests with a synthetic upstream; function forwarding, upstream401 preservation, cookie/CSRF/origin forwarding, forged authorization/actor-header removal and unknown-route rejection. This does not verify Vercel deployment routing."
+    },
+    "remaining": "Deploy the explicit functions through the coordinated review-site release, verify their actual hosted responses, and separately confirm the configured admin service has the satellite origin/token and supports the requested routes."
+  }
+}

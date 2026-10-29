@@ -165,7 +165,9 @@ def test_auth_catalog_provenance_classification_and_job_access(tmp_path,credenti
         assert data['after']['acquired_at']==[TIMES[1]]
         assert data['observation_interval']['query_window_relation']=='overlaps_window'
         assert data['classification']['answers']['canopy_change']['choice']=='uncertain'
-        assert all('confidence' not in answer for answer in data['classification']['answers'].values())
+        assert all(answer['confidence']==.99 for answer in data['classification']['answers'].values())
+        assert data['classification']['calibration']=='not_calibrated'
+        assert data['classification']['confidence_threshold'] is None
         assert data['fire_detections']['state']=='not_queried'
         assert client.get('/jobs/'+job,headers={**HEADERS,'X-Actor-ID':'different-editor'}).status_code==404
         assert calls.count(TOKEN_URL)==1
@@ -317,8 +319,8 @@ def test_presence_and_change_disagreement_is_explicit():
 
 @pytest.mark.parametrize('count,before,after,change,state',[
     (0,'yes','yes','no_visible_loss','no_candidate_detected'),
-    (1,'yes','yes','no_visible_loss','conflicting_evidence'),
-    (0,'yes','no','possible_loss','conflicting_evidence'),
+    (1,'yes','yes','no_visible_loss','review_required'),
+    (0,'yes','no','possible_loss','review_required'),
     (1,'yes','no','possible_loss','review_required'),
     (1,'yes','no','no_visible_loss','conflicting_evidence'),
 ])

@@ -1,0 +1,102 @@
+{
+  "commit": "97cde8be5cd79e1a2e1e620a216a3f9f7c133048",
+  "tree": "fe89412bd9350403349949b17614aa12cd44874e",
+  "scope": "Satellite frontend and auth runtime only; no catalogue, credentials, accounts, imagery or research corpus.",
+  "files": [
+    {
+      "path": "Dockerfile",
+      "bytes": 339,
+      "sha256": "ec4aa3ccc7c3a6ba23a7c3209a0467d5b24e16b76195d8040d16a36ce91d5583"
+    },
+    {
+      "path": "dist-satellite/assets/manrope-cyrillic-wght-normal-Dvxsihut.woff2",
+      "bytes": 14500,
+      "sha256": "c268b459a9329e59fecf39a17618efd44c71735532048d60b12aab76a8c14914"
+    },
+    {
+      "path": "dist-satellite/assets/manrope-greek-wght-normal-DL7QRZyv.woff2",
+      "bytes": 9444,
+      "sha256": "2fb2e8cbfd52ae46179a8b6024eb162f1f9c6de3d22d6e3a30d8f395de7220be"
+    },
+    {
+      "path": "dist-satellite/assets/manrope-latin-ext-wght-normal-Ch3YOpNY.woff2",
+      "bytes": 15120,
+      "sha256": "3911b66d9f2e005a4b989223405d0e5032619c668597ba467cc76a23c8fffcfb"
+    },
+    {
+      "path": "dist-satellite/assets/manrope-latin-wght-normal-DHIcAJRg.woff2",
+      "bytes": 24836,
+      "sha256": "a30ddcd349703aff7464c34bef3fffdff405ee50c113440d7c8693c02d210972"
+    },
+    {
+      "path": "dist-satellite/assets/manrope-vietnamese-wght-normal-usUDDRr7.woff2",
+      "bytes": 8520,
+      "sha256": "6bbb044ab420e07edb0a3042d2eb314b85e83a0182e945a15ab3b9092668dfd5"
+    },
+    {
+      "path": "dist-satellite/assets/satellite-B8YSoWbe.js",
+      "bytes": 678252,
+      "sha256": "e22c874c8190da8b15af6aa6a5e9cf1fd2faba5e9e266bfd087960f8fcda1053"
+    },
+    {
+      "path": "dist-satellite/assets/satellite-Cvi3y8eF.css",
+      "bytes": 96159,
+      "sha256": "f435e9e92852a868f6075093b09a099bbc24c77782e16f3216ade511217233bb"
+    },
+    {
+      "path": "dist-satellite/satellite.html",
+      "bytes": 442,
+      "sha256": "bf23abcc5303f3601baf525170c35d9011725f8a36b5f5945b808039a400d6f4"
+    },
+    {
+      "path": "package-lock.json",
+      "bytes": 15000,
+      "sha256": "22287f894e2f28c812ab825a2d9f9f4c2ec9c559710835dfb61ec551ddfbfb8b"
+    },
+    {
+      "path": "package.json",
+      "bytes": 241,
+      "sha256": "7714f62036d17e219c2b2d70f85ca1b8277b45862d8c38b3bc46cd2b20d5ef13"
+    },
+    {
+      "path": "railway.json",
+      "bytes": 249,
+      "sha256": "71cb502d049630a42c133525a5eb0fedea00f593688a44373f328438a9b3d065"
+    },
+    {
+      "path": "server/admin-accounts.ts",
+      "bytes": 2486,
+      "sha256": "b45a5385e06d97e6f6091bf5175c3ade0d6778f379f0ee8ac2dc2df06d704d4f"
+    },
+    {
+      "path": "server/admin-store.ts",
+      "bytes": 18720,
+      "sha256": "151ff82387649da39f70f341d6f3e600163464e3302cd7556c872f0130ca24b8"
+    },
+    {
+      "path": "server/admin.ts",
+      "bytes": 11576,
+      "sha256": "532e3b041a97405731e46a07c8a250e485e733fbac902c825efd66e4053f3a3d"
+    },
+    {
+      "path": "server/map-places.ts",
+      "bytes": 4729,
+      "sha256": "b7f7864f29d585c1212ec5568ba3aad4ac22ab87370139014e2994ef11dc8dcd"
+    },
+    {
+      "path": "server/satellite-proxy.ts",
+      "bytes": 2555,
+      "sha256": "66d5fc5bdeafbff9eae5bdeccdad16fab20d3bf7fa2552104ab392d225e005bc"
+    },
+    {
+      "path": "server/satellite-web.ts",
+      "bytes": 3169,
+      "sha256": "18236d9b188b399bbcc051bff38facd1d8e5a32d53891208edff5993443a887c"
+    },
+    {
+      "path": "shared/admin.ts",
+      "bytes": 1768,
+      "sha256": "01966e18f16358c662b4fdc72d795535defcd4b8154ccf17ea15918e867b9949"
+    }
+  ]
+}
