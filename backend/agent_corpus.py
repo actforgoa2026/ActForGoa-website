@@ -75,11 +75,29 @@ class AgentCorpus:
         doc=self.document(doc_id);max_chars=min(24000,max(1000,max_chars))
         rows=self.pages(doc_id,page,1)
         if not rows or rows[0]['page']!=page:raise KeyError('Page not found')
-        text=rows[0]['text'];offset=max(0,offset);end=min(len(text),offset+max_chars)
+        text=rows[0]['text'];offset=max(0,offset)
+        # This reviewed edition stores two printed pages per PDF page. Read the
+        # complete native spread so a caller's short excerpt cannot drop its
+        # table qualifiers. The existing 24,000-character tool bound remains.
+        spreads=doc.get('extraction_version')=='goa-sapcc-native-spreads-v1'
+        if spreads and offset==0:max_chars=24000
+        end=min(len(text),offset+max_chars)
         if offset>len(text):raise ValueError('Offset outside page')
         evidence=self.evidence(doc_id,page,offset,end)
         next_cursor={'page':page,'offset':end} if end<len(text) else {'page':page+1,'offset':0} if page<doc['page_count'] else None
-        return {'document':doc,'pages':[evidence],'next_cursor':next_cursor,'full_text_url':doc['text_url']}
+        pages=[evidence]
+        if spreads and offset==0 and not evidence['answer_excluded']:
+            remaining=24000-len(evidence['text'])
+            for neighbour in (page-1,page+1):
+                if not 1<=neighbour<=doc['page_count']:continue
+                context=self.evidence(doc_id,neighbour)
+                # Original adjoining pages supply table headers/qualifiers;
+                # no rows or column names are reconstructed across pages.
+                if (context['answer_excluded'] or len(context['text'])>remaining
+                    or max(text.count('\t'),context['text'].count('\t'))<4):continue
+                pages.append(context);remaining-=len(context['text'])
+            if len(pages)>1:evidence['context_ids']=[item['id'] for item in pages[1:]]
+        return {'document':doc,'pages':pages,'next_cursor':next_cursor,'full_text_url':doc['text_url']}
 
     def search(self, query, limit=8, doc_id=None, domain='all', offset=0):
         if domain not in ('all','legal','ecology'):raise ValueError('Unknown collection')

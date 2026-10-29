@@ -32,14 +32,18 @@ class ResearchTools:
         self.extra_terms=extra_terms;self.evidence={};self.citable_ids=set();self.trace=[];self.questions=[]
 
     def record(self, result):
-        for evidence in result.get('results',[])+result.get('pages',[]):self.evidence[evidence['id']]=evidence
+        for evidence in result.get('results',[])+result.get('pages',[]):
+            previous=self.evidence.get(evidence['id'],{})
+            if previous.get('context_ids') and not evidence.get('context_ids'):
+                evidence={**evidence,'context_ids':previous['context_ids']}
+            self.evidence[evidence['id']]=evidence
         return result
 
     @staticmethod
     def evidence_for_agent(evidence):
         # Full metadata stays in the immutable corpus and read_document result.
         # Avoid repeating PDF metadata and file paths with every search/page hit.
-        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded')
+        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded','context_ids')
         return {k:evidence[k] for k in fields if k in evidence}
 
     def catalogue(self, args):
@@ -93,7 +97,17 @@ def validate_answer(raw, readers, domain):
     result=AgentAnswer.model_validate(raw);paragraphs=[];cited={}
     for p in result.paragraphs:
         ids=[]
+        identifiers=list(p.supports)
         for identifier in p.supports:
+            source=readers.evidence.get(identifier,{})
+            for context_id in source.get('context_ids',[]):
+                context=readers.evidence.get(context_id,{})
+                if any(source.get(key)!=context.get(key) for key in ('document_id','generation')):
+                    raise ValueError('Read context must stay within the original document edition')
+                if context_id not in identifiers:identifiers.append(context_id)
+        # Keep the original neighbouring headers with the cited table, even if
+        # the model names only the primary spread from that read operation.
+        for identifier in identifiers:
             evidence=readers.evidence.get(identifier)
             if not evidence or identifier not in readers.citable_ids or not evidence['text'].strip():raise ValueError('Citation must identify a source read in this conversation')
             if evidence.get('answer_excluded'):raise ValueError('This source span has a preserved answer exclusion')
