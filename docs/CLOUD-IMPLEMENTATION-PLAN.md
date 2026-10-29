@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Local SDK accounting handoff — 30 October 2026 IST
+
+Under the user's explicit local-development instruction, the isolated `codex/research-agent-local` checkout contains the full immutable 1,174-document / 21,534-page corpus and public CRM snapshot (499 community + 2,768 government records). Local runtime `55121d0`, handoff `734b31f`, and SDK/accounting follow-up `bf00575` are local commits only. The live-reloading UI remains at <http://127.0.0.1:4276/ask>. Shared unfinished work and production are untouched.
+
+The cloud chat “AI” exported its complete existing dev ledger after confirming its writer was stopped. Four prior attempts/$0.441196 were imported with all receipts and checksums preserved. One local end-to-end SDK request failed to return a verified answer (HTTP 502); seven new conservative reservations total $1.282389. The continuing dev ledger now has 11 attempts/$1.723585 reserved, leaving $0.276415 under the original $2 cap. No reservations were reset or refunded. The original expiry, 2026-10-29T18:54:01.867828+00:00, is preserved and has passed, so paid answers are paused.
+
+The follow-up fixes missing SDK gateway headers and preserves visible accounting after expiry, with private diagnostics for future failures. Fifteen focused Python tests, TypeScript checking, a real SDK subprocess against a synthetic localhost provider exercising all six tools, and local HTTP checks pass. No successful live model answer is claimed after the fix, and no further paid retry was made. See [local workspace evidence and continuation limits](../dev/LOCAL-WORKSPACE.md). No deployment, production-accounting changes, paused-agent activation or full release checklist occurred.
+
 ## Private live development workspace — 29 October 2026
 
 The user rejected the public snapshot and explicitly authorized a real private development workspace, then separately approved up to $2 additional dev AI spend. This supersedes the public-preview iteration approach. `backend/dev_app.py`, `dev/workbench.html`, `dev/private-gateway.mjs`, `dev/relay_worker.py` and the combined launcher provide a private session-based frontend/backend workflow. See `dev/PRIVATE-WORKSPACE.md` for restart, limits, paths and actual evidence.
