@@ -1,5 +1,14 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Private live development workspace — 29 October 2026
+
+The user rejected the public snapshot and explicitly authorized a real private development workspace, then separately approved up to $2 additional dev AI spend. This supersedes the public-preview iteration approach. `backend/dev_app.py`, `dev/workbench.html`, `dev/private-gateway.mjs`, `dev/relay_worker.py` and the combined launcher provide a private session-based frontend/backend workflow. See `dev/PRIVATE-WORKSPACE.md` for restart, limits, paths and actual evidence.
+
+Actual Vite source is served over an authenticated running-sandbox relay; backend code reloads, and browser-edited prompt/retrieval settings apply to the next request. Source retrieval uses the hosted index read-only, while generation and validation execute locally with the managed Anthropic binding. No provider credential is copied to the sandbox/browser. Source-index rebuilds and corpus-wide contextual embedding work remain separate and pending. The public preview alias's anonymous access override was revoked; production alias/runtime/accounting are unchanged.
+
+One paid dev request, explicitly within the separate $2 allowance, answered the bar example with four cited paragraphs/four sources; retrieval 1200ms, provider 12880ms, total14080ms. The dev ledger preserves that reservation. Unauthenticated private settings access returned401; authenticated live settings changed and restored without build/deployment, and authenticated HTML served actual Vite development modules. This is a bounded smoke check, not repeated release testing or semantic acceptance. The workspace is session-based (about five hours from sandbox creation), not permanent hosting. Secrets/invitations, configuration and accounting stay outside Git under `/workspace/.research-private/`.
+
+
 ## Research clarity and early feedback — 29 October 2026
 
 Branch `fix/research-clarity-latency`, based on `origin/main` at `1c4ac7c`, prepares the user's requested short top-level takeaway with deeper information below. The answer brief makes the first existing cited paragraph the takeaway; the API marks the new presentation with `summary_first` so older API responses retain their layout. All existing citation, qualification, word-limit and outside-context checks remain in place. No extra model call, provider/model change or budget change.
