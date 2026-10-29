@@ -70,7 +70,7 @@ export function SatelliteMap({area,onArea,observation,candidates,disabled=false}
   },[expanded]);
   useEffect(()=>{
     if(!mapInstance)return;
-    cancelDraw();selection.current?.setMap(null);selection.current=null;
+    cancelDraw();setMessage('');pin.current?.setMap(null);pin.current=null;selection.current?.setMap(null);selection.current=null;
     if(area){const bounds=bboxBounds(area.bbox);selection.current=new google.maps.Rectangle({map:mapInstance,bounds,strokeColor:'#193e32',strokeWeight:3,fillOpacity:.06,clickable:false});
       // Zoom in before recentering so the broad Goa restriction cannot clamp
       // a coastal selection to the middle of the state at the overview zoom.
