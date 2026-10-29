@@ -15,7 +15,7 @@ from .service import SatelliteService
 from .providers import ImageClassifier
 from .earth_engine import EarthEngine
 from .google_maps import GoogleMaps
-from .domain import AreaRequest
+from .domain import AreaRequest, PreviewRequest
 
 
 def create_app(service=None):
@@ -126,6 +126,12 @@ def create_app(service=None):
     @app.post('/catalog')
     def catalog(query:CatalogRequest):
         return service.catalog(query)
+
+    @app.post('/preview')
+    def preview(query:PreviewRequest):
+        if service.imagery_provider != 'earth-engine':
+            raise DomainError('imagery_unavailable', 'Earth Engine is not selected on this server.', 503)
+        return service.cdse.preview(query, on_generate=lambda: service.store.reserve('earth_engine_preview', 50))
 
     @app.post('/environment')
     def environment(query:AreaRequest):

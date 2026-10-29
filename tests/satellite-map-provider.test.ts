@@ -24,7 +24,7 @@ test('standalone config selects satellite mode while retaining a production buil
   assert.equal(config.env.PROD, true);
 });
 
-test('main and local builds exclude Google; only standalone includes it', async () => {
+test('main-site builds exclude Google; satellite mode includes it', async () => {
   // Bundle the real provider boundary with harmless stand-ins for map vendors.
   // This checks import elimination without requesting tiles, Places or any key.
   for (const mode of ['production', 'development', 'satellite']) {

@@ -11,3 +11,12 @@ test('map selection bounds work before sending provider requests',()=>{
   assert.equal(areaError([73.82,15.48,73.83,15.49]),null);
   for(const bbox of [[73,15,74,16],[73.8,15,73.9,15.1],[73.8,15,73.80001,15.00001],[74,15,73.8,15.1],[NaN,15,74,15.1]])assert.ok(areaError(bbox));
 });
+
+test('cloud suggestions use different days and preserve chronological comparison order',async()=>{
+  const {suggestedPair}=await import('../src/satellite-timeline.ts');
+  const candidates=[...scenes,{id:'same-day-tile',acquired_at:'2026-10-20T05:44:12Z',scene_cloud_percent:0}];
+  assert.deepEqual(suggestedPair(candidates),['earlier','same-day-tile']);
+  assert.equal(suggestedPair([scenes[0],scenes[2]]),null);
+  assert.equal(suggestedPair([]),null);
+  assert.deepEqual(suggestedPair(scenes.map(s=>({...s,scene_cloud_percent:null}))),['earlier','same-time']);
+});
