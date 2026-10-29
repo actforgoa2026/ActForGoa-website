@@ -1,0 +1,16 @@
+{
+  "checked_at": "2026-10-28T11:32:50.723741+00:00",
+  "provider_credentials_passed": false,
+  "checks": {
+    "health": "passed",
+    "history_auth_and_empty_result": "passed",
+    "saved_history_dates_and_actor_isolation": "passed",
+    "saved_result_survives_restart": "passed",
+    "sqlite_permissions": "0600"
+  },
+  "package_commit": "f42617bb956f20c5b2ca921f3cf8e08226f3d3d8",
+  "files_verified": 17,
+  "image_id": "sha256:42cead7b4391f579116428636bf87c648bcf599402b802c2ef78683e05b9f664",
+  "host_port_changed_on_restart": true,
+  "state": "passed"
+}

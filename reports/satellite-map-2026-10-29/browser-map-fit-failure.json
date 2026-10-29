@@ -1,0 +1,84 @@
+{
+  "scope": "Synthetic providers and real local auth/service; genuine remote Amche records; additional explicitly labelled local replay of recorded real imagery. No new live satellite/model calls or field accuracy.",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "real_named_auth": true,
+      "synthetic_provider_only": true,
+      "map_area_selection": true,
+      "dated_three_scene_timeline": true,
+      "explicit_load_only": true,
+      "scrub_no_provider_calls": true,
+      "before_after_order_enforced": true,
+      "pair_reuses_observations": true,
+      "decisions_only_on_analysis": true,
+      "cached_observation_http200": true,
+      "area_date_change_clear": true,
+      "decoded_map_overlay": true,
+      "overflow": false,
+      "page_errors": [],
+      "observation_statuses": [
+        202,
+        202,
+        202,
+        200
+      ],
+      "actual_amche_sources": [
+        {
+          "title": "Water bodies",
+          "url": "https://gist.githubusercontent.com/planemad/e5ccc47bf2a1aa458a86d6839476f539/raw/6922fcc2d5ffd4d58b0fb069b9f57334f13cd953/goa-water-bodies.geojson",
+          "http_status": 200,
+          "bytes": 8594423,
+          "sha256": "55c34660d6ea7c820194072b83d54370b0037acfd4d687d95bc7a0551aac25fa",
+          "features": 3854,
+          "real_remote_response": true
+        },
+        {
+          "title": "Private forest records",
+          "url": "https://gist.githubusercontent.com/planemad/54b84c11fc0325889f1127e49b5740db/raw/1f99740ddb55a1528d76a5364aa9a95c1fe800da/goa_private_forest_plots-jun-2026.geojson",
+          "http_status": 200,
+          "bytes": 1863866,
+          "sha256": "2212306378794a01daacc57bbc809788c1f35286d797ca1af85ed2d42b97355a",
+          "features": 849,
+          "real_remote_response": true
+        }
+      ],
+      "recorded_real_replay": {
+        "source": "comparison.json from satellite-map-live-20261029",
+        "source_sha256": "3bce62cdf33854a9cb4dbae5df0a0a76227c0e53fab9963e9461cb009bf7ad2c",
+        "local_browser_response_replay": true,
+        "no_new_provider_calls": true,
+        "selected_area": {
+          "bbox": [
+            73.878,
+            15.499,
+            73.892,
+            15.511
+          ]
+        },
+        "before": [
+          "2026-10-20T05:44:40.053Z"
+        ],
+        "after": [
+          "2026-10-25T05:44:40.103Z"
+        ],
+        "overlay_exactly_matches_recorded_display_image": true
+      }
+    }
+  ],
+  "provider_mock_calls": {
+    "process": 3,
+    "decisions": 2,
+    "catalog": 9
+  },
+  "working_directory": "/workspace/actforgoa-satellite/.reports/satellite-timeline-oebkj2c8",
+  "failure": {
+    "viewport": "phone",
+    "assertion": "Recorded overlay rectangle intersects map viewport after selecting a new saved area",
+    "observed": "Correct recorded image source and selected bbox, but Leaflet viewport remained at previous selection even after 650 ms",
+    "cause": "Leaflet drops a new fitBounds during active animated zoom",
+    "fix": "Disable map zoomAnimation; stop previous movement and use animate:false for area fitBounds",
+    "superseded_by": "browser.json final passing rerun"
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "mode": "recorded_preview",
+  "recorded_at": "2026-10-28T10:27:55.512504+00:00",
+  "source_validation_sha256": "7788cdf8e3161cce3f48266024f32fc013f6a41b80467d2f01ef664c8e3e81cc",
+  "area": {
+    "bbox": [
+      73.82,
+      15.48,
+      73.83,
+      15.49
+    ],
+    "area_m2": 1186875
+  },
+  "observation_interval": {
+    "before": "2026-10-10T05:44:41.348Z",
+    "after": "2026-10-20T05:44:40.053Z"
+  },
+  "evidence": {
+    "common_usable_fraction": 1.0,
+    "state": "observable",
+    "metrics": {
+      "ndvi": {
+        "before_median": 0.5838,
+        "after_median": 0.6657,
+        "median_paired_change": 0.0757,
+        "paired_pixels": 11925
+      },
+      "ndwi": {
+        "before_median": -0.5595,
+        "after_median": -0.6394,
+        "median_paired_change": -0.0712,
+        "paired_pixels": 11925
+      },
+      "nbr": {
+        "before_median": 0.3068,
+        "after_median": 0.2993,
+        "median_paired_change": -0.0075,
+        "paired_pixels": 11925
+      }
+    },
+    "candidates": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "water_change": {
+      "before_area_m2": 0,
+      "after_area_m2": 0,
+      "gained_area_m2": 0,
+      "lost_area_m2": 0,
+      "method": "Area classified as water by Sentinel-2 SCL on common usable pixels. Native 20 m classification; not river flow, water quality or a surveyed shoreline."
+    },
+    "water_candidates": {
+      "type": "FeatureCollection",
+      "features": []
+    },
+    "method": "Exploratory reflectance changes; thresholds require Goa field validation. Vegetation is not necessarily tree canopy.",
+    "water_candidates_truncated": false,
+    "candidates_truncated": false
+  },
+  "classification": {
+    "state": "unavailable",
+    "answers": {},
+    "message": "OpenAI image decisions have not run for this recorded pair."
+  },
+  "summaries": {
+    "canopy_loss": {
+      "state": "no_candidate_detected",
+      "headline": "The numeric check found no qualifying vegetation-loss patches.",
+      "statements": [
+        {
+          "text": "The selected observations were acquired on 10 Oct 2026, 11:14 IST and 20 Oct 2026, 11:14 IST.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "100.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+          "sources": [
+            "coverage"
+          ]
+        },
+        {
+          "text": "At least one presence decision is uncertain. A reliable presence-to-absence change cannot be inferred.",
+          "sources": [
+            "assessment",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "No vegetation-loss patches met the current reflectance and minimum-size thresholds. This does not rule out smaller changes or tree removal.",
+          "sources": [
+            "spectral"
+          ]
+        },
+        {
+          "text": "No image assessment is available; the result above is a numeric vegetation check.",
+          "sources": [
+            "assessment"
+          ]
+        },
+        {
+          "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "method": "checked-evidence-v1"
+    },
+    "surface_water": {
+      "state": "inconclusive",
+      "headline": "The available evidence does not resolve this question.",
+      "statements": [
+        {
+          "text": "The selected observations were acquired on 10 Oct 2026, 11:14 IST and 20 Oct 2026, 11:14 IST.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "100.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+          "sources": [
+            "coverage"
+          ]
+        },
+        {
+          "text": "The available evidence does not resolve this question. The assessment remains unvalidated and may miss small or obscured features.",
+          "sources": [
+            "assessment",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "On the common usable area, the scene classification labels 0 m\u00b2 as water before and 0 m\u00b2 afterward; 0 m\u00b2 gained and 0 m\u00b2 lost that label.",
+          "sources": [
+            "spectral"
+          ]
+        },
+        {
+          "text": "Tides, seasonality, sediment and classification errors can affect these boundaries. This does not measure flow, depth or water quality.",
+          "sources": [
+            "spectral",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "method": "checked-evidence-v1"
+    },
+    "land_change": {
+      "state": "inconclusive",
+      "headline": "The available evidence does not resolve this question.",
+      "statements": [
+        {
+          "text": "The selected observations were acquired on 10 Oct 2026, 11:14 IST and 20 Oct 2026, 11:14 IST.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "100.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+          "sources": [
+            "coverage"
+          ]
+        },
+        {
+          "text": "The available evidence does not resolve this question. The assessment remains unvalidated and may miss small or obscured features.",
+          "sources": [
+            "assessment",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "Visible development does not establish whether construction is lawful. Parcel permissions and applicable planning records have not been checked.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "method": "checked-evidence-v1"
+    },
+    "waste": {
+      "state": "inconclusive",
+      "headline": "The available evidence does not resolve this question.",
+      "statements": [
+        {
+          "text": "The selected observations were acquired on 10 Oct 2026, 11:14 IST and 20 Oct 2026, 11:14 IST.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "100.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+          "sources": [
+            "coverage"
+          ]
+        },
+        {
+          "text": "The available evidence does not resolve this question. The assessment remains unvalidated and may miss small or obscured features.",
+          "sources": [
+            "assessment",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "Ordinary litter, small dumps and the type of material cannot be reliably identified at this resolution. Field reports or finer imagery are needed to establish dumping.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "method": "checked-evidence-v1"
+    },
+    "fire": {
+      "state": "inconclusive",
+      "headline": "The available evidence does not resolve this question.",
+      "statements": [
+        {
+          "text": "The selected observations were acquired on 10 Oct 2026, 11:14 IST and 20 Oct 2026, 11:14 IST.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "100.0% of the selected area is usable in both observations under the current cloud and shadow mask.",
+          "sources": [
+            "coverage"
+          ]
+        },
+        {
+          "text": "The available evidence does not resolve this question. The assessment remains unvalidated and may miss small or obscured features.",
+          "sources": [
+            "assessment",
+            "before",
+            "after"
+          ]
+        },
+        {
+          "text": "FIRMS fire detections have not been queried. These images cannot establish that no fire occurred.",
+          "sources": [
+            "assessment"
+          ]
+        },
+        {
+          "text": "These observations do not establish an individual-tree count, a cause of change, or an exact event date. Findings need local review.",
+          "sources": [
+            "before",
+            "after"
+          ]
+        }
+      ],
+      "method": "checked-evidence-v1"
+    }
+  },
+  "observations": [
+    {
+      "label": "before",
+      "quality": {
+        "usable_fraction": 1.0,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.0
+      },
+      "spectral_sha256": "05e3467c49c43cfe9ab460cf05851c0a4082b30923ba28573b059c4439f6ac11",
+      "catalog_scene_id": "S2C_MSIL2A_20261010T052731_N0513_R105_T43PCT_20261010T102100.SAFE",
+      "acquired_at": "2026-10-10T05:44:41.348Z"
+    },
+    {
+      "label": "after",
+      "quality": {
+        "usable_fraction": 1.0,
+        "missing_fraction": 0.0,
+        "cloud_shadow_or_uncertain_fraction": 0.0
+      },
+      "spectral_sha256": "6973678b4f3126ec339d3a4c70d423b7e72bc3aabfb967d85d408804bea4b3ee",
+      "catalog_scene_id": "S2C_MSIL2A_20261020T052841_N0513_R105_T43PCT_20261020T101804.SAFE",
+      "acquired_at": "2026-10-20T05:44:40.053Z"
+    }
+  ]
+}

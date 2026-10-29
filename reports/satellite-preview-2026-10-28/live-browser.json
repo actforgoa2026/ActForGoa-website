@@ -1,0 +1,56 @@
+{
+  "source_commit": "18112a26ad278677bb5cbb2716758ad0fd532b62",
+  "deployment_id": "dpl_4b7qNRdy2VsQEhXLig7bBF2sgEhP",
+  "deployment_url_without_share_token": "https://actforgoa-field-guide-jmd8zml88-zakkrevitt-gmailcoms-projects.vercel.app",
+  "share_expires": 1793795126,
+  "scope": "One real recorded image pair; no live comparisons or OpenAI inference",
+  "checks": [
+    {
+      "viewport": "desktop",
+      "width": 1440,
+      "anonymous_shared_access": true,
+      "real_images_decoded": true,
+      "recorded_limit_visible": true,
+      "slider_keyboard": true,
+      "paired_view": true,
+      "topic_evidence": true,
+      "evidence_links": true,
+      "overflow": false,
+      "page_errors": []
+    },
+    {
+      "viewport": "phone",
+      "width": 390,
+      "anonymous_shared_access": true,
+      "real_images_decoded": true,
+      "recorded_limit_visible": true,
+      "slider_keyboard": true,
+      "paired_view": true,
+      "topic_evidence": true,
+      "evidence_links": true,
+      "overflow": false,
+      "page_errors": []
+    },
+    {
+      "viewport": "small-phone",
+      "width": 320,
+      "anonymous_shared_access": true,
+      "real_images_decoded": true,
+      "recorded_limit_visible": true,
+      "slider_keyboard": true,
+      "paired_view": true,
+      "topic_evidence": true,
+      "evidence_links": true,
+      "overflow": false,
+      "page_errors": []
+    }
+  ],
+  "production_deployment_id": "dpl_FzbANqhz96u2JNt2eb6fK4BDtS7c",
+  "production_unchanged": true,
+  "project_build_settings": {
+    "framework": null,
+    "buildCommand": null,
+    "installCommand": null,
+    "outputDirectory": null
+  }
+}

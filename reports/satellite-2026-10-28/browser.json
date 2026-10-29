@@ -1,0 +1,26 @@
+[
+  {
+    "viewport": "desktop",
+    "public_access": true,
+    "real_session_login": true,
+    "synthetic_comparison": true,
+    "actual_dates": true,
+    "interval_caveat": true,
+    "result_reset": true,
+    "no_horizontal_overflow": true,
+    "upright_text": true,
+    "page_errors": []
+  },
+  {
+    "viewport": "phone",
+    "public_access": true,
+    "real_session_login": true,
+    "synthetic_comparison": true,
+    "actual_dates": true,
+    "interval_caveat": true,
+    "result_reset": true,
+    "no_horizontal_overflow": true,
+    "upright_text": true,
+    "page_errors": []
+  }
+]

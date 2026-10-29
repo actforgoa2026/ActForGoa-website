@@ -5,6 +5,7 @@ import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { AdminError, AdminStore, type PostPageOptions } from './admin-store.ts';
+import { forwardSatellite } from './satellite-proxy.ts';
 
 const cookieName = 'afg_admin_session';
 const fail = (status: number, message: string): never => { throw new AdminError(status, message); };
@@ -109,6 +110,10 @@ export function createAdminServer(options: AdminServerOptions) {
         store.logout(token);
         res.setHeader('Set-Cookie', `${cookieName}=; HttpOnly; SameSite=Strict; Path=/api/admin; Max-Age=0${origin.protocol === 'https:' ? '; Secure' : ''}`);
         return json(res, 200, { ok: true });
+      }
+      if (path.startsWith('/api/admin/satellite/')) {
+        const data = unsafe ? await readJson(req) : undefined;
+        return forwardSatellite(path, method, session.user.id, data, res, {local:options.local});
       }
       if (path === '/api/admin/stars' && method === 'GET') return json(res, 200, { stars: store.stars() });
       if (path === '/api/admin/stars' && method === 'PUT') {

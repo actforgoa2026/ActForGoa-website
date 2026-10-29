@@ -1,0 +1,53 @@
+[
+  {
+    "viewport": "desktop",
+    "width": 1440,
+    "real_named_account_login": true,
+    "synthetic_provider_flow": true,
+    "yes_no_pair": true,
+    "grounded_interpretation": true,
+    "overlapping_window_caveat": true,
+    "working_evidence_links": true,
+    "decoded_images": true,
+    "result_cleared_on_date_change": true,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
+  },
+  {
+    "viewport": "phone",
+    "width": 390,
+    "real_named_account_login": true,
+    "synthetic_provider_flow": true,
+    "yes_no_pair": true,
+    "grounded_interpretation": true,
+    "overlapping_window_caveat": true,
+    "working_evidence_links": true,
+    "decoded_images": true,
+    "result_cleared_on_date_change": true,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
+  },
+  {
+    "viewport": "small-phone",
+    "width": 320,
+    "real_named_account_login": true,
+    "synthetic_provider_flow": true,
+    "yes_no_pair": true,
+    "grounded_interpretation": true,
+    "overlapping_window_caveat": true,
+    "working_evidence_links": true,
+    "decoded_images": true,
+    "result_cleared_on_date_change": true,
+    "horizontal_overflow": false,
+    "page_errors": [],
+    "saved_history_search_and_reopen": true,
+    "ecology_citation": true,
+    "freshness": true
+  }
+]

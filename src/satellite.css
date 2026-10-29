@@ -1,0 +1,37 @@
+.satellite-page{padding-block:40px 72px;max-width:1120px}
+.satellite-heading h1{font-size:clamp(32px,5vw,54px);line-height:1.15;letter-spacing:-.035em;margin:0 0 20px}
+.satellite-heading p{max-width:72ch;font-size:18px;line-height:1.7}
+.satellite-qualification,.satellite-note{color:var(--muted);font-size:14px;line-height:1.7}
+.satellite-access,.satellite-plan{padding-block:20px;border-block:1px solid var(--line)}
+.satellite-question{display:grid;gap:16px;margin-block:28px;justify-items:start}
+.satellite-question>div{width:100%}
+.satellite-controls{border:0;padding:0;margin:32px 0;min-width:0;display:grid;gap:20px}
+.satellite-controls legend{font-size:24px;font-weight:750;margin-bottom:20px}
+.satellite-map{height:390px;background:var(--pale);z-index:0;border:1px solid var(--line);font-family:inherit}
+.satellite-map-toolbar{display:flex;gap:20px;align-items:center;flex-wrap:wrap;margin-top:16px}
+.satellite-map-toolbar p{font-size:14px;margin:0;flex:1;min-width:180px}
+.satellite-coordinates{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px}
+.satellite-dates{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
+.satellite-dates label{display:grid;gap:8px;font-weight:650;min-width:0;font-size:14px}
+.satellite-dates select{min-height:44px;max-width:100%;width:100%;font:inherit;font-size:16px;color:var(--green);background:var(--white);border:1px solid var(--line);border-radius:4px;padding:10px}
+.satellite-error{color:#8a271e;font-weight:650}
+.satellite-results,.satellite-context{border-top:1px solid var(--line);padding-top:32px;margin-top:40px}
+.satellite-results h2,.satellite-context h2{font-size:28px;line-height:1.3}
+.satellite-results p,.satellite-context p{line-height:1.7}
+.satellite-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-block:24px}
+.satellite-pair figure{margin:0;min-width:0}
+.satellite-pair img{width:100%;height:auto;background:var(--pale);image-rendering:auto}
+.satellite-pair figcaption{display:grid;gap:6px;font-size:14px;padding-top:12px;overflow-wrap:anywhere}
+.satellite-pair figcaption strong{font-size:18px}
+.satellite-assessments{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
+.satellite-assessments dt{text-transform:capitalize;font-weight:750}.satellite-assessments dd{margin:6px 0 0}
+.satellite-table{overflow-x:auto}.satellite-table table{border-collapse:collapse;width:100%;font-size:14px;margin-top:16px}.satellite-table th,.satellite-table td{text-align:left;padding:12px;border-bottom:1px solid var(--line)}
+.satellite-results summary{cursor:pointer;min-height:44px;padding-block:12px;font-weight:750}
+.satellite-page a{color:var(--green);text-underline-offset:4px}.satellite-context>a{display:inline-block;padding-block:12px;font-weight:750}
+.satellite-page fieldset:disabled .satellite-map{pointer-events:none}
+.satellite-history{margin-block:32px;padding-block:24px;border-block:1px solid var(--line)}.satellite-history h2{font-size:28px;margin-top:0}.satellite-history p{line-height:1.7}.satellite-history form{display:grid;gap:16px;justify-items:start}.satellite-history form>.satellite-dates{width:100%}.satellite-history-list{padding:0;list-style:none;margin:24px 0 0}.satellite-history-list li{display:flex;align-items:center;justify-content:space-between;gap:24px;padding-block:20px;border-top:1px solid var(--line)}.satellite-history-list li>div{min-width:0;overflow-wrap:anywhere}.satellite-history-list h3{font-size:18px;line-height:1.5;margin:4px 0}.satellite-history-list p{margin:4px 0;font-size:14px}.satellite-history-list button{flex-shrink:0}.satellite-history-topic{color:var(--muted)}.satellite-history-pages{display:flex;gap:16px;flex-wrap:wrap}.satellite-library{margin-top:32px}.satellite-library article{padding-block:20px;border-top:1px solid var(--line)}.satellite-library h4{font-size:18px;line-height:1.5;margin:0}.satellite-excerpt{white-space:pre-line;overflow-wrap:anywhere}.satellite-freshness{background:var(--pale);padding:16px;font-size:14px;line-height:1.7}.satellite-freshness p{margin:0 0 8px}.satellite-results{scroll-margin-top:100px}
+@media(max-width:620px){.satellite-history-list li{align-items:flex-start;flex-direction:column;gap:12px}.satellite-history h2{font-size:24px}}
+.satellite-answer{max-width:78ch}.satellite-evidence-links{display:inline-flex;gap:10px;flex-wrap:wrap;font-size:12px}.satellite-presence{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px;padding-block:16px;border-block:1px solid var(--line)}.satellite-presence dt{font-size:14px;line-height:1.6}.satellite-presence dd{margin:8px 0 0;font-size:24px;font-weight:750}.satellite-results [id]{scroll-margin-top:100px}
+@media(max-width:620px){.satellite-page{padding-block:24px 48px}.satellite-map{height:320px}.satellite-coordinates{grid-template-columns:repeat(2,minmax(0,1fr))}.satellite-pair,.satellite-assessments{grid-template-columns:1fr}.satellite-dates{grid-template-columns:minmax(0,1fr)}.satellite-heading p{font-size:16px}}
+
+.satellite-workbench{margin-block:28px;border-block:1px solid var(--line);padding-block:20px}.satellite-workbench .satellite-map{height:min(60vh,600px);min-height:340px}.satellite-workbench .satellite-map-toolbar{margin:0 0 16px}.satellite-map-caption{display:flex;flex-wrap:wrap;gap:12px 32px;align-items:center;justify-content:space-between}.satellite-map-caption label{display:flex;align-items:center;gap:12px;font-size:14px}.satellite-map-caption input{width:100px;min-height:44px;accent-color:var(--green)}.satellite-timeline{border-top:1px solid var(--line);padding-top:20px;margin-top:20px}.satellite-timeline-title{display:flex;align-items:center;justify-content:space-between;gap:12px}.satellite-timeline-title h3{font-size:22px;margin:0 0 12px}.satellite-timeline-title span{font-size:13px;color:var(--muted)}.satellite-timeline>label{font-size:18px;font-weight:750;display:block}.satellite-timeline>input{width:100%;min-height:44px;accent-color:var(--green)}.satellite-timeline-ends{display:flex;justify-content:space-between;gap:20px;font-size:12px;color:var(--muted)}.satellite-timeline-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}.satellite-timeline p{font-size:14px;line-height:1.6}.satellite-coordinate-details summary{cursor:pointer;min-height:44px;font-weight:650}.satellite-coordinate-details .satellite-coordinates{margin-bottom:16px}.satellite-workbench .leaflet-container{font-family:inherit}.satellite-workbench .leaflet-control-attribution{font-size:10px;max-width:100%;white-space:normal}@media(max-width:620px){.satellite-workbench .satellite-map{height:430px;min-height:300px}.satellite-map-toolbar{gap:12px}.satellite-timeline-ends span{max-width:45%}.satellite-timeline-ends span:last-child{text-align:right}.satellite-map-caption label{width:100%}.satellite-map-caption input{flex:1}.satellite-timeline-title{align-items:baseline}}

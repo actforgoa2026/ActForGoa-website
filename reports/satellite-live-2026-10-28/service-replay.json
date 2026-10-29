@@ -1,0 +1,10 @@
+{
+  "mode": "Local HTTP service replay of the recorded real CDSE bodies; no additional provider calls",
+  "status": "complete",
+  "common_usable_fraction": 1.0,
+  "candidate_count": 0,
+  "window_relation": "overlaps_window",
+  "classification_state": "unavailable",
+  "other_actor_status": 404,
+  "requests_replayed": 4
+}

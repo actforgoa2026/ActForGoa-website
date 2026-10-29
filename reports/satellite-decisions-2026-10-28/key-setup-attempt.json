@@ -1,0 +1,25 @@
+{
+  "checked_at": "2026-10-28T11:51:04.174785+00:00",
+  "key_name": "SatAnalysis2",
+  "requested_expiry_seconds": 2592000,
+  "creation_attempts": 1,
+  "state": "platform_rejected",
+  "error": "OpenAI Platform rejected the API key request.",
+  "detail_provided": false,
+  "key_returned": false,
+  "key_saved": false,
+  "live_decisions_calls": 0,
+  "confirmed_destination_git_ignored": true,
+  "credential_helper": "Packaged helper unavailable; local equivalent prepared and independently reviewed, with no plaintext output. No key was returned to decrypt.",
+  "local_helper_selftest": "RSA4096 OAEP256 synthetic roundtrip, unsupported-format rejection, private no-overwrite atomic write, workspace and symlink checks passed.",
+  "temporary_private_key_removed": true,
+  "recorded_input_preflight": {
+    "state": "passed",
+    "observations": 2,
+    "acquisitions": [
+      "2026-10-10T05:44:41.348000+00:00",
+      "2026-10-20T05:44:40.053000+00:00"
+    ],
+    "recording_sha256": "7788cdf8e3161cce3f48266024f32fc013f6a41b80467d2f01ef664c8e3e81cc"
+  }
+}

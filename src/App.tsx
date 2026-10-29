@@ -88,6 +88,7 @@ const GuideRoute = lazy(() => import("./GuideRoute"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
 const ReportInbox = lazy(() => import("./ReportInbox"));
+const Satellite = lazy(() => import('./Satellite'));
 const AdminDashboard = lazy(() => import('./AdminDashboard'));
 const Blog = lazy(() => import('./Blog'));
 
@@ -205,7 +206,7 @@ const navigation = [
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
   { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", links: [{ label: "Legal questions", description: "Find guidance in our legal framework and source documents.", href: "/ask/legal" }, { label: "Environment & ecosystems", description: "Ask about Goa’s environment and explore the research.", href: "/ask/ecology" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
+  { value: "resources", label: "Resources", links: [{ label: "Legal questions", description: "Find guidance in our legal framework and source documents.", href: "/ask/legal" }, { label: "Environment & ecosystems", description: "Ask about Goa’s environment and explore the research.", href: "/ask/ecology" }, { label: "Explore changes on the map", description: "Compare dated satellite observations in Goa.", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "All research sources", href: "/ask" }] },
   { value: "about", label: "About", links: [
     { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
     { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/read/wp-8905" },
@@ -1416,6 +1417,7 @@ export default function App() {
             <Route path="/blog/archive" element={<Catalogue key="blog-archive" records={records} mode="blog" />} />
             <Route path="/blog/:slug" element={<Blog />} />
             <Route path="/admin/*" element={<AdminDashboard />} />
+            <Route path="/map" element={<Satellite />} />
             <Route path="/read/:id" element={<Detail records={records} />} />
             <Route path="/templates/:id" element={<TemplateEditor />} />
             <Route path="/about" element={<About />} />

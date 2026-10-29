@@ -1,0 +1,22 @@
+{
+  "satellite_python": {
+    "passed": 72,
+    "warnings": "Existing Shapely deprecations"
+  },
+  "node": {
+    "passed": 182,
+    "failed": 0
+  },
+  "production_build": "passed",
+  "standalone_build": "passed",
+  "server_types": "passed",
+  "diff_check": "passed",
+  "new_provider_calls": 0,
+  "physical_phone_tested": false,
+  "browser_engine": "Chromium",
+  "viewport_widths": [
+    1440,
+    390,
+    320
+  ]
+}
