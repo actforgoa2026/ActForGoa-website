@@ -1,5 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Separate ActForGoa landing release authorized · 30 October 2026
+
+The user explicitly requested publishing the Butter-inspired base at `/landing`, then reordering later, and added a map image-analysis section. Isolated `codex/actforgoa-landing` starts from current main and preserves the current homepage AI button, carousel, app routes and services. The separate Vite entry in `landing/` includes direct AI explanations, source-backed examples, real AI/map screenshots, guided resources, original Goa stipple scene and matching motifs. Provider branding is removed from this page and its screenshot. The local fifteen-section ordering board stays on port 4386 for the next pass.
+
+Pre-release: all 281 existing tests passed; the extended release guard's 26 tests also passed, including two new landing-route/asset refusal cases. The integrated production build passed. Actual 1440/390 retained-route browser checks cover root, AI, explore, topic, directory/archive, emergency, reporting, guide, template, legal/ecology chat, admin login, blog/archive and a real source document. Landing captures cover 1440/768/390/320, with examples, resources, FAQ, menu, motion and form checked. No report, AI answer or image-analysis request was submitted. Source/map readiness was checked read-only. The release guard adds staged landing HTML/asset probes while preserving every existing condition. Final publication evidence and commit will be recorded after promotion.
+
+
 ## Homepage AI library button live · 30 October 2026
 
 PR #136 merged as `4fdbfdbcd7eb4dbeeb602d732877943cabbf1f89`, tree `88f6752c3b4f194b1aa2099742f8fd6832c80b6f`, and is live at the existing field-guide alias on Vercel `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m`. Existing Arc ButtonLink “Use AI to explore our vetted library of surveys and guides” targets `/ai`, precedes the homepage search, and shares its width. Latest carousel, category groups and footer are preserved.

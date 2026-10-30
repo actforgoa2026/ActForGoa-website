@@ -4,6 +4,14 @@
   "outputDirectory": "dist",
   "rewrites": [
     {
+      "source": "/landing",
+      "destination": "/landing/index.html"
+    },
+    {
+      "source": "/landing/",
+      "destination": "/landing/index.html"
+    },
+    {
       "source": "/api/status",
       "destination": "https://research-production-b579.up.railway.app/api/status"
     },
@@ -20,7 +28,7 @@
       "destination": "https://research-production-b579.up.railway.app/api/documents/:path*"
     },
     {
-      "source": "/((?!api/|assets/|data/|models/|guides/|wasm/|robots.txt).*)",
+      "source": "/((?!landing/|api/|assets/|data/|models/|guides/|wasm/|robots.txt).*)",
       "destination": "/index.html"
     }
   ],

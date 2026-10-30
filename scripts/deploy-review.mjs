@@ -138,6 +138,20 @@ try {
         throw new Error(`Staged newsletter asset is unavailable: ${asset}. Nothing promoted.`);
       }
     }
+    if (existsSync('landing/index.html')) {
+      // The separate landing entry must resolve to its own HTML and static assets.
+      const html = run('vercel', ['curl', '/landing', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--max-time', '30']);
+      const script = html.match(/src="(\/landing\/assets\/[^"]+\.js)"/)?.[1];
+      if (!html.includes('Answers for Goa. Backed by sources.') || !script) {
+        throw new Error('Staged landing route is unavailable. Nothing promoted.');
+      }
+      for (const [asset, type] of [[script, 'javascript'], ['/landing/assets/goa-motifs.webp', 'image/webp'], ['/landing/assets/ai-homepage.webp', 'image/webp']]) {
+        const headers = run('vercel', ['curl', asset, '--deployment', deploymentUrl,
+          '--', '--fail', '--silent', '--show-error', '--head', '--max-time', '30']);
+        if (!headers.toLowerCase().includes(type)) throw new Error('Staged landing asset is unavailable. Nothing promoted.');
+      }
+    }
     if (existsSync('api/mcp.ts')) smokeMcp(deploymentUrl);
     // Remote builds take time too. Check the release boundary again before promotion.
     git('fetch', 'origin', 'main');
