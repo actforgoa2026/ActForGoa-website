@@ -3,8 +3,9 @@ import assert from 'node:assert/strict';
 import translations from '../src/content/priority-topic-translations.json';
 import { topicFlows, topicDescriptions, type TopicAction } from '../src/topic-flows';
 import { translatePriority } from '../src/priority-translations';
+import pending from '../src/content/mission-translation-pending.json';
 
-test('each topic action label, question, step and destination has a draft in both languages', () => {
+test('topic copy keeps its translations or an explicit English editorial fallback', () => {
   const phrases = new Set<string>();
   const add = (s?: string) => { if (s?.trim()) phrases.add(s.trim()); };
   const collect = (actions: TopicAction[]) => actions.forEach(action => {
@@ -14,7 +15,7 @@ test('each topic action label, question, step and destination has a draft in bot
   });
   topicFlows.forEach(flow => { add(flow.label); add(topicDescriptions[flow.slug]); collect(flow.actions); });
   for (const text of phrases) for (const language of ['hi', 'gom'] as const) {
-    assert.ok((translations[language] as Record<string, string>)[text], `${language}: ${text}`);
+    assert.ok((translations[language] as Record<string, string>)[text] || translatePriority(text, language === 'hi' ? 'hi' : 'gom-Deva') !== text || pending.phrases.includes(text), `${language}: ${text}`);
   }
   assert.equal(translatePriority('An untranslated string', 'hi'), 'An untranslated string');
   assert.equal(translatePriority('Report illegal dumping', 'en'), 'Report illegal dumping');

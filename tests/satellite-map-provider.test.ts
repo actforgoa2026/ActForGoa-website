@@ -24,7 +24,7 @@ test('standalone config selects satellite mode while retaining a production buil
   assert.equal(config.env.PROD, true);
 });
 
-test('main-site builds exclude Google; satellite mode includes it', async () => {
+test('main-site and satellite builds both use the Earth Engine Google map', async () => {
   // Bundle the real provider boundary with harmless stand-ins for map vendors.
   // This checks import elimination without requesting tiles, Places or any key.
   for (const mode of ['production', 'development', 'satellite']) {
@@ -34,8 +34,7 @@ test('main-site builds exclude Google; satellite mode includes it', async () => 
     });
     const outputs = (Array.isArray(result) ? result : [result]).flatMap(item => 'output' in item ? item.output : []);
     const code = outputs.filter(item => item.type === 'chunk').map(item => item.code).join('\n');
-    const standalone = mode === 'satellite';
-    assert.equal(code.includes('GOOGLE_PROVIDER_SENTINEL'), standalone, `${mode}: Google import`);
-    assert.equal(code.includes('LEAFLET_PROVIDER_SENTINEL'), !standalone, `${mode}: Leaflet import`);
+    assert.equal(code.includes('GOOGLE_PROVIDER_SENTINEL'), true, `${mode}: Google import`);
+    assert.equal(code.includes('LEAFLET_PROVIDER_SENTINEL'), false, `${mode}: Leaflet import`);
   }
 });

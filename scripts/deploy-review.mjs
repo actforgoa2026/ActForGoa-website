@@ -105,6 +105,29 @@ try {
         '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
       if (!Array.isArray(blog.posts)) throw new Error('Staged public journal is unavailable. Nothing promoted.');
     }
+    if (existsSync('api/satellite/[action].ts')) {
+      // Verify anonymous visitor transport without requesting imagery or AI.
+      const sessionResponse = run('vercel', ['curl', '/api/satellite/session', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--include', '--max-time', '30']);
+      const cookie = sessionResponse.match(/^set-cookie:\s*(afg_map_visitor=[^;\r\n]+)/im)?.[1];
+      if (!cookie || !/httponly/i.test(sessionResponse) || !/samesite=strict/i.test(sessionResponse)) {
+        throw new Error('Staged public map session is unavailable. Nothing promoted.');
+      }
+      const satellite = JSON.parse(run('vercel', ['curl', '/api/satellite/status', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--max-time', '30', '--header', `Cookie: ${cookie}`]));
+      if (satellite.imagery_ready !== true) throw new Error('Staged public imagery is unavailable. Nothing promoted.');
+      const mapConfig = JSON.parse(run('vercel', ['curl', '/api/map-config', '--deployment', deploymentUrl,
+        '--', '--fail', '--silent', '--show-error', '--max-time', '30']));
+      if (typeof mapConfig.browserKey !== 'string' || !/^AIza[\w-]{35}$/.test(mapConfig.browserKey)) {
+        throw new Error('Staged Google Maps configuration is unavailable. Nothing promoted.');
+      }
+      const nested = run('vercel', ['curl', '/api/satellite/jobs/00000000-0000-0000-0000-000000000000', '--deployment', deploymentUrl,
+        '--', '--silent', '--show-error', '--max-time', '30', '--write-out', '\n%{http_code}']);
+      const separator = nested.lastIndexOf('\n');
+      if (nested.slice(separator + 1) !== '401' || JSON.parse(nested.slice(0, separator)).error !== 'Your map session expired. Retry to reconnect.') {
+        throw new Error('Staged public map job routing is unavailable. Nothing promoted.');
+      }
+    }
     for (const [asset, contentType] of [
       ['/assets/newsletters/2025-year-end.pdf', 'application/pdf'],
       ['/assets/newsletters/2025-year-end-page-1.webp', 'image/webp'],

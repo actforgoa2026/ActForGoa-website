@@ -26,18 +26,18 @@ test('medical and emergency searches offer official help independently of archiv
 
 test('independent pages do not fetch the catalogue, including on cold starts', async () => {
   const loader = createCatalogueLoader((async () => { throw new Error('Should not fetch'); }) as typeof fetch);
-  for (const path of ['/ask', '/documents/source-id', '/directory', '/directory/example', '/crm', '/crm/example', '/emergency', '/emergency/', '/contact', '/get-involved', '/templates/03-rti-records-request', '/read/guide-farming', '/read/guide-sources', '/missing']) {
+  for (const path of ['/', '/heritage/share', '/map', '/collaborate', '/ask', '/documents/source-id', '/directory', '/directory/example', '/crm', '/crm/example', '/emergency', '/emergency/', '/contact', '/get-involved', '/templates/03-rti-records-request', '/read/guide-farming', '/read/guide-sources', '/missing']) {
     assert(!needsCatalogue(path), path);
     assert.deepEqual(await loader(path), { records: [], error: false });
   }
-  for (const path of ['/', '/search', '/directory/archive', '/library', '/about', '/read/org-27']) assert(needsCatalogue(path), path);
+  for (const path of ['/explore', '/search', '/directory/archive', '/library', '/about', '/read/org-27']) assert(needsCatalogue(path), path);
 });
 
 test('catalogue request is shared and sanitised, and is reused after an independent page', async () => {
   let calls = 0;
   const raw = JSON.parse(readFileSync('public/data/catalog.json', 'utf8')).slice(0, 2);
   const loader = createCatalogueLoader((async () => { calls++; return new Response(JSON.stringify(raw)); }) as typeof fetch);
-  const [a, b] = await Promise.all([loader('/'), loader('/directory/archive')]);
+  const [a, b] = await Promise.all([loader('/explore'), loader('/directory/archive')]);
   assert.equal(calls, 1);
   assert.equal(a, b);
   assert(!a?.error);
@@ -47,7 +47,7 @@ test('catalogue request is shared and sanitised, and is reused after an independ
   assert.equal(calls, 1);
 });
 
-test('opening explore directly loads the same collection as the homepage', async () => {
+test('opening explore directly reuses the collection across trailing-slash variants', async () => {
   let calls = 0;
   const raw = JSON.parse(readFileSync('public/data/catalog.json', 'utf8')).slice(0, 2);
   const loader = createCatalogueLoader((async () => { calls++; return new Response(JSON.stringify(raw)); }) as typeof fetch);
@@ -55,14 +55,14 @@ test('opening explore directly loads the same collection as the homepage', async
   assert.equal(explored.error, false);
   assert(explored.records.length >= raw.length);
   assert.equal(calls, 1);
-  assert.equal(await loader('/'), explored);
+  assert.equal(await loader('/explore'), explored);
   assert.equal(calls, 1);
 });
 
 test('a failed catalogue request can recover on a later route', async () => {
   let calls = 0;
   const loader = createCatalogueLoader((async () => ++calls === 1 ? new Response('', { status: 503 }) : new Response('[]')) as typeof fetch);
-  assert.equal((await loader('/'))?.error, true);
+  assert.equal((await loader('/explore'))?.error, true);
   assert.equal((await loader('/emergency'))?.error, false);
   assert.equal((await loader('/search'))?.error, false);
   assert.equal(calls, 2);
@@ -72,13 +72,13 @@ test('a stalled catalogue request times out rather than trapping navigation inde
   const loader = createCatalogueLoader(((_url, options) => new Promise((_resolve, reject) => {
     options?.signal?.addEventListener('abort', () => reject(new Error('Aborted')));
   })) as typeof fetch, 10);
-  assert.equal((await loader('/'))?.error, true);
+  assert.equal((await loader('/explore'))?.error, true);
 });
 
 test('malformed catalogue responses recover into the explicit failure state', async () => {
   for (const body of ['not json', '{}', '[{}]']) {
     const loader = createCatalogueLoader((async () => new Response(body)) as typeof fetch);
-    assert.equal((await loader('/'))?.error, true);
+    assert.equal((await loader('/explore'))?.error, true);
   }
 });
 

@@ -21,3 +21,9 @@ The former local **ORCHESTRATOR** (`01a17774-6d09-7751-915c-3fbf3a8994c4`), LAW,
 Never add eyebrow labels above headings. Do not use uppercase eyebrow text. The user explicitly requires no eyebrows, including on the orbit landing page.
 
 Use the actual installed Arc UI and shadcn components for new or changed buttons and controls, including map tools. Preserve their accessible behavior and provenance; do not imitate their appearance with unrelated custom controls.
+
+## Grid and alignment requirements
+
+For task interfaces, establish a shared grid before placing controls. Related controls must share column edges and align on their control baseline. Use one consistent control height within a group, 8 or 12px internal gaps, and 24 or 32px between task groups. Reuse the same page gutter for headings, toolbars, content and support sections.
+
+Do not alternate left, right and centre alignment between adjacent rows. Avoid isolated short controls occupying a whole row, incidental flex wrapping and arbitrary auto margins. Give a control a full row only when its content, touch target or task role requires it. At narrow widths, reflow an entire group into a deliberate two-column or single-column grid, preserving the visual and keyboard order. Verify the actual rendered edges and long labels at phone, tablet and desktop widths before completion.

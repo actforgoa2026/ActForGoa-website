@@ -1,4 +1,4 @@
-/* Standalone Earth Engine workspace. The guide keeps satellite-layout.css. */
+/* Shared Earth Engine workspace inside ActForGoa and its local preview. */
 body:has(.satellite-page) {
  --font-sans: "Figtree Variable", sans-serif;
  --font-body: var(--font-sans);
@@ -45,8 +45,6 @@ body:has(.satellite-page) {
 .satellite-page .satellite-controls legend { float: left; width: 100%; padding: 0; margin: 0; font-size: 24px; font-weight: 650; }
 .satellite-page .satellite-controls > button { justify-self: start; }
 .satellite-page .satellite-controls p { margin: 0; }
-.satellite-page .satellite-limitations, .satellite-page .satellite-planner { border-block: 1px solid var(--line); padding-block: 8px; }
-.satellite-page .satellite-limitations summary, .satellite-page .satellite-planner > summary { font-size: 15px; font-weight: 600; }
 .satellite-page .satellite-access { border: 0; max-width: 1120px; margin: 24px auto; font-size: 15px; }
 .satellite-page .satellite-access a { text-decoration: underline; }
 .satellite-page .satellite-evidence h2, .satellite-page .satellite-history h2, .satellite-page .satellite-context h2 { font-size: 26px; font-weight: 650; }
@@ -75,14 +73,12 @@ body:has(.satellite-page) {
  .satellite-page .satellite-map-expanded { padding: 8px; }
  .satellite-page .satellite-controls { margin-block: 28px; padding: 0 12px; gap: 20px; }
  .satellite-page .satellite-controls legend { font-size: 22px; }
- .satellite-page > :is(.satellite-access,.satellite-limitations,.satellite-evidence,.satellite-planner,.satellite-context,.satellite-history) { margin-inline: 12px; }
+ .satellite-page > :is(.satellite-access,.satellite-evidence,.satellite-context,.satellite-history) { margin-inline: 12px; }
  .satellite-page .satellite-controls > button { white-space: normal; }
 }
 
-/* Satellite imagery controls stay beside the map, using the actual Arc calendar. */
-.satellite-period-bar { position: relative; z-index: 700; display: grid; grid-template-columns: minmax(160px,220px) minmax(160px,220px) auto minmax(220px,1fr); align-items: end; gap: 16px; margin: 0 8px 16px; }
-.satellite-period-bar > button { min-height: 44px; margin-bottom: 1px; }
-.satellite-period-bar > p { align-self: center; margin: 18px 0 0; max-width: 55ch; font-size: 14px; line-height: 1.5; color: var(--muted); }
+/* Period controls precede the map at every size; the actual Arc calendar stays intact. */
+
 .satellite-date-picker { --surface: var(--white); --surface-raised: var(--white); --radius-panel: 20px; }
 .satellite-date-picker > label { font-weight: 600; font-size: 14px; }
 .satellite-date-picker button[aria-haspopup="dialog"] { min-height: 44px; font-size: 16px; font-weight: 500; }
@@ -90,30 +86,19 @@ body:has(.satellite-page) {
 .satellite-date-end [role="dialog"] { left: auto; right: 0; transform-origin: calc(100% - 22px) -8px; }
 .satellite-date-picker [role="dialog"] h2 { font-size: 16px; font-weight: 650; line-height: 1.5; margin: 0; }
 .satellite-date-picker [role="dialog"] button:focus-visible { outline: 2px solid var(--green); outline-offset: 2px; }
-.satellite-map-source { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; min-height: 44px; margin: 0 8px 12px; }
-.satellite-map-source > p { margin: 0; font-size: 14px; line-height: 1.5; color: var(--muted); }
-.satellite-map-source [role="group"] { flex-shrink: 0; background: var(--white); border: 1px solid var(--line); border-radius: 14px; padding: 2px; }
+
 .satellite-map-interactive { position: relative; }
 .satellite-map-section:not(.satellite-map-expanded) .satellite-map { height: calc(100svh - 280px); min-height: 460px; }
 .satellite-earth-loading { position: absolute; inset: 100px 72px 110px; z-index: 400; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; text-align: center; pointer-events: none; }
 .satellite-earth-loading p { max-width: 42ch; font-size: 18px; line-height: 1.6; }
 .satellite-earth-loading :is(button,a) { pointer-events: auto; }
-.satellite-earth-credit { margin: 10px 8px 0; color: var(--muted); font-size: 13px; line-height: 1.5; }
 .satellite-map-expanded .satellite-map-interactive { flex: 1; display: flex; min-height: 360px; }
 .satellite-map-expanded .satellite-map-canvas { width: 100%; }
-.satellite-map-expanded .satellite-map-source { margin-bottom: 12px; }
+
 .satellite-page .satellite-map-expanded .satellite-map-search { inset: 16px 16px auto; }
-@media(max-width:900px) {
- .satellite-period-bar { grid-template-columns: minmax(0,1fr) minmax(0,1fr) auto; }
- .satellite-period-bar > p { grid-column: 1 / -1; margin: 0; max-width: none; }
- .satellite-map-source { align-items: flex-start; flex-direction: column; gap: 8px; }
-}
+
 @media(max-width:620px) {
- .satellite-period-bar { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 10px 12px; margin: 0 12px 16px; }
- .satellite-period-bar > button { grid-column: 1; justify-self: start; }
- .satellite-period-bar > p { grid-column: 2; font-size: 12px; align-self: center; margin: 0; }
- .satellite-map-source { margin-inline: 12px; }
- .satellite-map-source > p { font-size: 12px; }
+
  .satellite-map-section:not(.satellite-map-expanded) .satellite-map { height: 60svh; min-height: 460px; }
  .satellite-earth-loading { inset: 160px 32px 110px; }
  .satellite-earth-loading p { font-size: 16px; }
@@ -124,18 +109,14 @@ body:has(.satellite-page) {
 .satellite-investigation-layout { display: grid; grid-template-columns: minmax(0,1fr) 400px; align-items: start; gap: 24px; }
 .satellite-map-column { position: sticky; top: 16px; min-width: 0; }
 .satellite-analysis-column { min-width: 0; padding: 0 8px 24px 0; }
-.satellite-analysis-column .satellite-period-bar { grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 12px; margin: 0 0 24px; }
-.satellite-analysis-column .satellite-period-bar > button { grid-column: 1/-1; justify-self: start; }
-.satellite-analysis-column .satellite-period-bar > p { grid-column: 1/-1; margin: 0; font-size: 13px; }
-.satellite-analysis-column .satellite-controls { border: 0; background: none; border-radius: 0; margin: 0; padding: 24px 0; border-top: 1px solid var(--line); gap: 16px; }
-.satellite-analysis-column .satellite-controls legend { font-size: 22px; }
+.satellite-analysis-column .satellite-controls { border: 0; background: none; border-radius: 0; margin: 0; padding: 8px 0 24px; gap: 20px; }
+.satellite-analysis-column .satellite-controls legend { font-size: 22px; line-height: 1.3; }
 .satellite-analysis-column .satellite-controls h3 { font-size: 17px; margin: 12px 0 0; }
 .satellite-analysis-column .satellite-controls p { font-size: 13px; line-height: 1.55; }
 .satellite-analysis-column .satellite-dates { grid-template-columns: minmax(0,1fr); gap: 12px; }
 .satellite-analysis-column .satellite-dates label { font-size: 14px; }
 .satellite-analysis-column .satellite-dates select { width: 100%; min-width: 0; font-size: 14px; }
 .satellite-analysis-column .satellite-freshness { background: none; padding: 0; }
-.satellite-analysis-column .satellite-coordinate-details { order: 10; }
 .satellite-analysis-column .satellite-results { padding: 24px 0; border-top: 1px solid var(--line); margin: 0; }
 .satellite-synopsis { scroll-margin: 24px; }
 .satellite-synopsis h2 { font-size: 22px; font-weight: 650; margin: 0 0 16px; }
@@ -145,13 +126,11 @@ body:has(.satellite-page) {
 .satellite-ai-status span { color: var(--muted); }
 .satellite-synopsis .satellite-answer { border: 0; padding: 0; background: none; }
 .satellite-synopsis .satellite-note { font-size: 12px; }
-.satellite-analysis-empty { border-top: 1px solid var(--line); padding-top: 24px; }
 .satellite-analysis-detail { margin-top: 24px; }
 .satellite-analysis-detail > summary { font-size: 14px; }
 .satellite-analysis-detail .satellite-pair { grid-template-columns: 1fr; }
 .satellite-analysis-detail :is(h3,p,dt,dd) { font-size: 14px; }
-.satellite-map-column .satellite-map-source { flex-wrap: wrap; }
-.satellite-map-column .satellite-map-source > p { font-size: 12px; }
+
 .satellite-map-column .satellite-map-search { flex-wrap: wrap; gap: 8px; }
 .satellite-map-column .satellite-map-search form { flex: 1 1 220px; }
 .satellite-map-column .satellite-map-tools { margin-left: auto; }
@@ -160,7 +139,7 @@ body:has(.satellite-page) {
 .satellite-map-column .satellite-timeline p { font-size: 12px; }
 .satellite-map-column .satellite-timeline-actions { gap: 4px 8px; }
 .satellite-map-column .satellite-timeline-actions button { min-height: 36px; padding: 6px 12px; font-size: 13px; }
-.satellite-page > :is(.satellite-limitations,.satellite-planner,.satellite-evidence,.satellite-history) { margin-top: 32px; }
+.satellite-page > :is(.satellite-evidence,.satellite-history) { margin-top: 32px; }
 @media(min-width:1001px) {
  .satellite-map-column .satellite-map-section:not(.satellite-map-expanded) .satellite-map { height: calc(100svh - 390px); min-height: 380px; }
 }
@@ -168,20 +147,16 @@ body:has(.satellite-page) {
  .satellite-investigation-layout { grid-template-columns: minmax(0,1fr); gap: 24px; }
  .satellite-map-column { position: static; }
  .satellite-analysis-column { padding: 0 12px 24px; }
- .satellite-analysis-column .satellite-period-bar { max-width: 560px; }
  .satellite-analysis-column .satellite-dates { grid-template-columns: repeat(2,minmax(0,1fr)); }
- .satellite-analysis-column .satellite-controls > .satellite-dates:first-of-type { grid-template-columns: 1fr; }
 }
 @media(max-width:620px) {
  .satellite-analysis-column .satellite-dates { grid-template-columns: 1fr; }
- .satellite-analysis-column .satellite-period-bar > p { grid-column: 1/-1; }
- .satellite-date-picker [role="dialog"] { max-width: calc(100vw - 48px); }
+ .satellite-date-picker [role="dialog"] { width: min(320px, calc(100vw - 48px)); max-width: calc(100vw - 48px); }
 }
 @media(min-width:1001px) {
  .satellite-investigation-layout { scroll-margin-top: 80px; }
  .satellite-map-column { top: 80px; }
  .satellite-analysis-column { position: sticky; top: 80px; max-height: calc(100svh - 100px); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--line) transparent; padding-right: 12px; scroll-padding: 12px; }
- .satellite-analysis-column .satellite-period-bar { padding-bottom: 8px; }
 }
 .satellite-synopsis { scroll-margin-top: 84px; }
 
@@ -189,6 +164,111 @@ body:has(.satellite-page) {
  .satellite-map-column .satellite-map-search form { flex: none; }
 }
 
-.satellite-page > .satellite-environment { max-width: 1120px; margin-inline: auto; }
-.satellite-page .satellite-environment summary { min-height: 44px; font-weight: 600; font-size: 15px; }
-@media(max-width:620px) { .satellite-page > .satellite-environment { margin-inline: 12px; } }
+/* Supporting tools share a single Arc accordion rhythm, without nested rules. */
+.satellite-support { margin: 24px 8px 0; }
+.satellite-support > div { border-top: 0; }
+.satellite-support + .satellite-evidence { border-top: 0; }
+.satellite-page :is(.satellite-support,.satellite-analysis-options,.satellite-context-disclosure) { --border: var(--line); --text-secondary: var(--muted); --text-muted: var(--muted); }
+.satellite-page :is(.satellite-support,.satellite-analysis-options,.satellite-context-disclosure) h3 { margin: 0; }
+.satellite-page :is(.satellite-support,.satellite-analysis-options,.satellite-context-disclosure) h3 > button { min-height: 52px; font-size: 15px; font-weight: 550; }
+.satellite-page :is(.satellite-support,.satellite-analysis-options,.satellite-context-disclosure) [role="region"] p { font-size: 14px; line-height: 1.6; max-width: 72ch; margin: 12px 0; }
+.satellite-page .satellite-support .satellite-question { margin: 8px 0 0; max-width: 680px; }
+.satellite-page .satellite-support .satellite-qualification { margin-top: 12px; }
+.satellite-page .satellite-context-disclosure { border: 0; padding: 0; margin: 16px 8px 0; }
+.satellite-page .satellite-context-disclosure > div { border-top: 0; }
+.satellite-intent-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
+.satellite-intent-row > div { margin-left: auto; }
+.satellite-intent-row > span { color: var(--muted); font-size: 14px; }
+.satellite-selection-hint { color: var(--muted); max-width: 36ch; }
+.satellite-analysis-options { min-width: 0; }
+.satellite-analysis-options .satellite-coordinates { margin-block: 8px 16px; }
+.satellite-analysis-options [role="region"] > div { padding-right: 0; }
+.satellite-analysis-column .satellite-dates > * { min-width: 0; max-width: 100%; }
+@media(max-width:620px) {
+ .satellite-support { margin: 8px 12px 24px; }
+ .satellite-page .satellite-context-disclosure { margin-inline: 12px; }
+ .satellite-date-picker button[aria-haspopup="dialog"] { font-size: 14px; gap: 8px; padding-inline: 10px; }
+ .satellite-date-picker button[aria-haspopup="dialog"] > svg { width: 17px; height: 17px; }
+}
+
+.satellite-comparison-actions { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.satellite-comparison-actions > button { font-size: 13px; padding-inline: 12px; }
+
+/* Phone tools sit above a useful map canvas, with a single page scroll. */
+@media(max-width:1000px) {
+ .satellite-page .satellite-map-search { position: relative; inset: auto; display: flex; flex-direction: column; gap: 10px; margin: 0 4px 12px; }
+ .satellite-page .satellite-map-search form { flex: none; width: 100%; max-width: none; }
+ .satellite-page .satellite-map-tools { align-self: flex-end; }
+ .satellite-page .satellite-map-section:not(.satellite-map-expanded) .satellite-map { height: clamp(360px, 52svh, 560px); min-height: 360px; }
+ .satellite-page .satellite-map-zoom { top: 16px; right: 12px; }
+ .satellite-page .satellite-place-results { top: 58px; left: 4px; width: calc(100% - 8px); }
+ .satellite-page .satellite-map-caption { display: grid; grid-template-columns: minmax(0,1fr); gap: 12px; padding: 12px 4px; }
+ .satellite-page .satellite-map-caption p { margin: 0; }
+ .satellite-page .satellite-map-caption > div { width: 100%; }
+ .satellite-page .satellite-map-expanded .satellite-map-interactive { flex-direction: column; min-height: 0; }
+ .satellite-page .satellite-map-expanded .satellite-map-search { position: relative; inset: auto; flex-shrink: 0; }
+ .satellite-page .satellite-map-expanded .satellite-map-canvas { flex: 1; min-height: 0; }
+ .satellite-page .satellite-map-expanded .satellite-map { height: 100%; min-height: 0; }
+ .satellite-page .satellite-earth-loading { inset: 80px 24px 100px; }
+}
+@media(max-width:380px) {
+
+ .satellite-date-picker button[aria-haspopup="dialog"] { width: 100%; }
+
+}
+
+/* Shared grid: two equal field columns, 12px gutters, 48px controls. */
+.satellite-page { --map-control-height: 48px; --map-control-gap: 12px; }
+.satellite-page .satellite-heading { display: grid; gap: 4px; margin: 0 0 24px; }
+.satellite-page .satellite-heading p { margin: 0; }
+.satellite-page .satellite-map-configuration { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); align-items: end; gap: var(--map-control-gap); margin: 0 0 16px; position: relative; z-index: 700; }
+.satellite-map-configuration > * { min-width: 0; }
+.satellite-map-configuration :is(button[aria-haspopup],button[type="button"]) { min-height: var(--map-control-height); }
+.satellite-map-configuration > button { width: 100%; padding-inline: 12px; }
+.satellite-map-configuration [role="combobox"] { width: 100%; --ms-h: var(--map-control-height); }
+.satellite-map-configuration .satellite-period-error { grid-column: 1/-1; margin: 0; font-size: 14px; }
+.satellite-page .satellite-map-search { position: relative; inset: auto; display: grid; grid-template-columns: minmax(0,1fr) auto; gap: var(--map-control-gap); align-items: center; margin: 0 0 16px; }
+.satellite-page .satellite-map-search form { display: grid; grid-template-columns: minmax(0,1fr) var(--map-control-height); gap: var(--map-control-gap); margin: 0; max-width: none; width: 100%; }
+.satellite-page .satellite-map-search form > button { width: var(--map-control-height); height: var(--map-control-height); }
+.satellite-page .satellite-map-tools { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)) var(--map-control-height) var(--map-control-height); gap: var(--map-control-gap); margin: 0; padding: 0; width: 100%; }
+.satellite-page .satellite-map-tools > button { width: 100%; min-height: var(--map-control-height); }
+.satellite-page .satellite-map-zoom { top: 16px; right: 16px; }
+.satellite-page .satellite-place-results { top: 60px; left: 0; width: 100%; }
+.satellite-page .satellite-overview-caption { margin: 12px 0 0; font-size: 12px; line-height: 1.5; color: var(--muted); }
+.satellite-page .satellite-map-expanded .satellite-map-search { position: relative; inset: auto; }
+.satellite-page .satellite-map-expanded .satellite-map-interactive { flex-direction: column; }
+.satellite-page .satellite-analysis-column { padding-inline: 0; }
+@media(min-width:1400px) {
+ .satellite-page .satellite-map-configuration { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+@media(max-width:760px) {
+ .satellite-page.shell { width: calc(100% - 32px); }
+ .satellite-page .satellite-map-search { grid-template-columns: minmax(0,1fr); }
+ .satellite-page .satellite-map-tools { align-self: stretch; }
+ .satellite-page .satellite-controls { padding-inline: 0; }
+ .satellite-page .satellite-map-caption { padding-inline: 0; }
+ .satellite-page .satellite-workbench { margin: 0; padding: 0; }
+}
+@media(max-width:360px) {
+ .satellite-page { --map-control-gap: 8px; }
+ .satellite-map-configuration button[aria-haspopup="dialog"] { font-size: 14px; padding-inline: 10px; }
+}
+
+.satellite-page .satellite-map-configuration :is(label,[id$="-label"]) { font-size: 14px; font-weight: 600; line-height: 1.4; color: var(--muted); }
+.satellite-page .satellite-context-disclosure { margin-inline: 0; }
+.satellite-page .satellite-support { margin-inline: 0; }
+
+@media(max-width:360px) {
+ .satellite-map-configuration .satellite-date-picker button[aria-haspopup="dialog"] > svg:first-child { display: none; }
+}
+
+.satellite-page .satellite-intent-row { display: grid; grid-template-columns: minmax(0,1fr); gap: 0; }
+.satellite-page .satellite-intent-row > div { margin: 0; }
+.satellite-analysis-select { justify-items: stretch; }
+.satellite-analysis-select > div, .satellite-analysis-select > div > div { min-width: 100%; }
+.satellite-page .satellite-comparison-actions { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; align-items: stretch; }
+.satellite-page .satellite-comparison-actions > button { min-width: 0; min-height: 48px; white-space: normal; }
+.satellite-page .satellite-analysis-options .satellite-coordinates { grid-template-columns: repeat(2,minmax(0,1fr)); gap: 12px; }
+
+.satellite-page .satellite-map-tools > button { padding-inline: 8px; }
+.satellite-page .satellite-map-tools > button:nth-child(-n+2) { width: 100%; }

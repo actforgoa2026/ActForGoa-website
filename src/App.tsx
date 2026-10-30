@@ -29,6 +29,7 @@ import {
 import {
   ArrowRight,
   ArrowUp,
+  ArrowUpRight,
   Search,
   Leaf,
   Recycle,
@@ -55,6 +56,8 @@ import {
 import SiteHeader from "./components/arc/site-header/site-header";
 import { LanguageSwitcher, useLanguage } from "./language";
 import { translatePriority } from "./priority-translations";
+import MissionHome from "./MissionHome";
+const CollaborativeAction = lazy(() => import("./CollaborativeActionRedirect"));
 import { RecordCard } from "./components/RecordCard";
 import { TopicIcon } from "./components/TopicIcon";
 import { TopicPage, TopicChoices } from "./TopicPage";
@@ -94,12 +97,13 @@ const ClimatePlan = lazy(() => import("./ClimatePlan"));
 const TemplateEditor = lazy(() => import("./TemplateEditor"));
 const ReportIncident = lazy(() => import("./ReportIncident"));
 const ReportInbox = lazy(() => import("./ReportInbox"));
-const Satellite = lazy(() => import('./Satellite'));
+const Satellite = lazy(() => import('./SatelliteWorkspace'));
 const AdminDashboard = lazy(() => import('./AdminDashboard'));
 const Blog = lazy(() => import('./Blog'));
 const Newsletters = lazy(() => import('./Newsletters'));
 const ResearchLibrary = lazy(() => import('./ResearchLibrary'));
 const GovernmentContacts = lazy(() => import('./GovernmentContacts'));
+const HeritageStory = lazy(() => import("./HeritageStory"));
 
 const topicIcons = [
   Recycle,
@@ -149,39 +153,13 @@ function SearchBox({
       preventScrollReset: location.pathname !== "/",
     });
   }
-  if (large) return (
-    <form className="ask-box" role="search" onSubmit={submit} aria-label="Ask ActForGoa">
-      <Textarea
-        id="home-search"
-        label="What would you like help with in Goa?"
-        placeholder="What would you like help with in Goa?"
-        value={value}
-        onChange={(event) => {
-          setValue(event.target.value);
-          setNeedsTopic(false);
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" && !event.shiftKey && !event.nativeEvent.isComposing) {
-            event.preventDefault();
-            if (value.trim()) event.currentTarget.form?.requestSubmit();
-          }
-        }}
-        rows={2}
-        autoComplete="off"
-        enterKeyHint="send"
-        aria-describedby={needsTopic ? "ask-hint ask-topic-feedback" : "ask-hint"}
-      />
-      <div className="ask-toolbar">
-        <span id="ask-hint">Find the right topic for your next step</span>
-        <Button type="submit" size="sm" disabled={!value.trim()} aria-label="Ask ActForGoa">
-          <ArrowUp size={21} aria-hidden="true" />
-        </Button>
-      </div>
-      {needsTopic && <p id="ask-topic-feedback" className="ask-topic-feedback" role="status">
-        I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading">choose a topic below</a>.
-      </p>}
-    </form>
-  );
+  if (large) return <form className="mission-search" role="search" onSubmit={submit}>
+    <div className="mission-search-controls">
+      <SearchField id="home-search" label="How would you like to care for Goa?" placeholder="Trees, waste, water…" value={value} onValueChange={next => { setValue(next); setNeedsTopic(false); }} autoComplete="off" />
+      <Button type="submit" size="lg" disabled={!value.trim()} aria-label="Find a topic"><ArrowRight size={20} aria-hidden="true" /></Button>
+    </div>
+    {needsTopic && <p className="ask-topic-feedback" role="status">I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading">choose a topic below</a>.</p>}
+  </form>;
   return (
     <form
       className={"search-box " + (large ? "large" : "")}
@@ -205,23 +183,24 @@ function SearchBox({
 const navigation = [
   { value: "home", label: "Home", href: "/" },
   { value: "action", label: "Take action", links: [
-    { label: "Report an infraction", href: "/report", icon: <MapPin size={21} aria-hidden="true" /> },
-    { label: "Emergency services", href: "/emergency", icon: <Siren size={21} aria-hidden="true" /> },
-    { label: "Get involved", href: "/get-involved" },
-    { label: "Green Viksit Goa", href: "/read/wp-9389" },
-    { label: "Amche Mollem", href: "/read/wp-6263" },
-    { label: "Work with us", href: "/contact?reason=Work%20with%20ActForGoa" },
-    { label: "Volunteer", href: "/read/wp-2249" },
-    { label: "Donations", href: "https://actforgoa.org/donation-form/" },
+    { label: "Emergency helpline numbers", description: "Police, ambulance, fire and other helplines.", href: "/emergency", icon: <Siren size={21} aria-hidden="true" /> },
+    { label: "Take action", description: "Find your way to contribute to Goa.", href: "/get-involved" },
+    { label: "Green Viksit Goa", description: "Read the archived 2025 consultation.", href: "/read/wp-9389" },
+    { label: "Amche Mollem", description: "Learn about the campaign for Mollem.", href: "/read/wp-6263" },
+    { label: "Collaborative Action", description: "Join community efforts for a greener Goa.", href: "https://actforgoa.lovable.app/" },
+    { label: "Donations", description: "Support ActForGoa through the original site.", href: "https://actforgoa.org/donation-form/" },
+    { label: "Report an infraction", description: "Record a concern with photos and a location.", href: "/report", icon: <MapPin size={21} aria-hidden="true" /> },
   ] },
   { value: "blog", label: "Blog", href: "/blog" },
-  { value: "stories", label: "Inspiring stories", href: "/stories" },
-  { value: "resources", label: "Resources", links: [{ label: "Legal questions", href: "/ask/legal" }, { label: "Environment & ecosystems", href: "/ask/ecology" }, { label: "Explore changes on the map", href: "/map" }, { label: "Reading library", href: "/library" }, { label: "Browse research library", href: "/research-library" }] },
+  { value: "stories", label: "Inspiring stories", links: [{ label: "Inspiring stories", href: "/stories" }, { label: "Blog", href: "/blog" }] },
+  { value: "resources", label: "Resources", links: [{ label: "Explore the field guide", href: "/explore" }, { label: "Guides & resources", href: "/library" }, { label: "Goa’s Climate Action Plan", href: "/climate-plan" }, { label: "Explore changes on the map", href: "/map" }, { label: "Legal questions", href: "/ask/legal" }, { label: "Environment & ecosystems", href: "/ask/ecology" }, { label: "Browse research library", href: "/research-library" }] },
   { value: "about", label: "About", links: [
-    { label: "About ActForGoa", href: "/about" },
-    { label: "Newsletters", href: "/newsletters" },
-    { label: "Annual reports", href: "/read/wp-8903" },
-    { label: "Press coverage", href: "/read/wp-7377" },
+    { label: "About ActForGoa", description: "Enabling people to care for Goa.", href: "/about" },
+    { label: "Newsletters", description: "Updates from the ActForGoa community.", href: "/newsletters" },
+    { label: "Annual reports", description: "Read about the work over the years.", href: "/read/wp-8903" },
+    { label: "Work with us", href: "/contact?reason=Work%20with%20ActForGoa" },
+    { label: "Volunteer", href: "/read/wp-2249" },
+    { label: "Press coverage", description: "ActForGoa in the news.", href: "/read/wp-7377" },
   ] },
   { value: "directory", label: "Directory", href: "/directory" },
 ];
@@ -229,42 +208,18 @@ function Header() {
   const { pathname } = useLocation();
   const { language } = useLanguage();
   const labels = language === "hi" ? ["मुखपृष्ठ", "कार्रवाई करें", "ब्लॉग", "प्रेरक कहानियाँ", "संसाधन", "हमारे बारे में", "निर्देशिका"] : language === "gom-Deva" ? ["मुखेल पान", "कृती करात", "ब्लॉग", "प्रेरणादायी कथा", "संसाधनां", "आमचे विशीं", "निर्देशिका"] : [];
-  const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language }));
-  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "directory" : (pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/") || pathname === "/research-library" || pathname.startsWith("/climate-plan") || pathname === "/read/goa-sapcc") ? "resources" : ["/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'blog' : pathname.slice(1);
+  const items = navigation.map((item, index) => ({ ...item, label: labels[index] || item.label, lang: language })).filter(item => item.value !== "blog");
+  const current = pathname === "/" ? "home" : (pathname.startsWith("/directory") || pathname.startsWith("/crm")) ? "directory" : (pathname === "/map" || pathname === "/explore" || pathname === "/library" || pathname.startsWith("/ask") || pathname.startsWith("/documents/") || pathname === "/research-library" || pathname.startsWith("/climate-plan") || pathname === "/read/goa-sapcc") ? "resources" : ["/collaborate", "/get-involved", "/emergency", "/report", "/reports/review"].includes(pathname) ? "action" : pathname.startsWith('/blog') ? 'stories' : pathname.slice(1);
   return <SiteHeader
-    variant="mega" brand={{ name: "actforgoa.", href: "/", mark: <></> }}
+    variant="mega" brand={{ name: "actforgoa.", tagline: "Love Goa. Give back to Goa.", href: "/", mark: <></> }}
     items={items} current={current} label="Main navigation" extraAction={<LanguageSwitcher />}
     secondaryAction={null} primaryAction={{ label: "Search", href: "/search" }}
     onNavigate={({href}) => { if (href === "/" && pathname === "/") window.scrollTo({top: 0, behavior: "instant"}); }}
   />;
 }
 
-function Home({ records }: { records: RecordItem[] }) {
-  const { language } = useLanguage();
-  return (
-    <main>
-      <OrbitLanding embedded />
-      <GoaLandscape placement="horizon" />
-      <section className="home-actions shell" aria-labelledby="home-actions-heading">
-        <div className="section-heading">
-          <h2 id="home-actions-heading" tabIndex={-1} lang={language}>{language === "hi" ? "आप किस विषय की परवाह करते हैं?" : language === "gom-Deva" ? "तुमकां खंयच्या विशयाची काळजी आसा?" : "What do you care about?"}</h2>
-          <ButtonLink to="/emergency" className="emergency-entry">
-            <Siren size={20} aria-hidden="true" />
-            <span lang={language}>{translatePriority("Emergency services", language)}</span>
-          </ButtonLink>
-        </div>
-        <nav className="home-topic-choices" aria-label="Choose a topic">
-          {topicFlows.map(flow => (
-            <ButtonLink wrap variant="secondary" key={flow.slug} className="home-topic-choice" to={topicHref(flow.topic)}>
-              <TopicIcon name={flow.icon} />
-              <span><strong lang={translatePriority(flow.label, language) === flow.label ? "en" : language}>{translatePriority(flow.label, language)}</strong></span>
-            </ButtonLink>
-          ))}
-        </nav>
-      </section>
-      <DiscoveryFeed records={records} />
-    </main>
-  );
+function Home() {
+  return <MissionHome search={<SearchBox large />} />;
 }
 
 function DiscoveryFeed({ records }: { records: RecordItem[] }) {
@@ -332,7 +287,8 @@ function DiscoveryFeed({ records }: { records: RecordItem[] }) {
     <section className="discovery shell" aria-labelledby="discovery-heading">
       <div className="section-heading">
         <div>
-          <h2 id="discovery-heading">Explore the field guide</h2>
+          <h1 id="discovery-heading">Explore the field guide</h1>
+          <p>Practical help first. Then people, stories and more ways to take part.</p>
         </div>
       </div>
       <div className="discovery-controls">
@@ -1110,7 +1066,7 @@ function Contact({ involve = false }: { involve?: boolean }) {
   function submit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const d = new FormData(e.currentTarget);
-    const subject = String(d.get("reason"));
+    const subject = [d.get("reason"), params.get("subject")].filter(Boolean).join(": ");
     const message = `${d.get("message")}\n\nName: ${d.get("name")}\nReply to: ${d.get("email")}${params.get("entry") ? "\nEntry: " + params.get("entry") : ""}`;
     setMailUrl(
       "mailto:info@actforgoa.org?subject=" +
@@ -1187,10 +1143,11 @@ function Contact({ involve = false }: { involve?: boolean }) {
               />
             </div>
             <MorphSelect label="I’d like to" name="reason"
-              defaultValue={params.get("entry") ? "Suggest a correction" : params.get("reason") === "Work with ActForGoa" ? "Work with ActForGoa" : involve ? "Volunteer with ActForGoa" : "Ask a question"}
+              defaultValue={params.get("entry") ? "Suggest a correction" : ["Ask a question", "Work with ActForGoa", "Suggest a correction", "Suggest an improvement", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].includes(params.get("reason") || "") ? params.get("reason")! : involve ? "Volunteer with ActForGoa" : "Ask a question"}
               onValueChange={() => setPrepared(false)}
-              items={["Ask a question", "Work with ActForGoa", "Suggest a correction", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].map(value => ({value, label: value}))}
+              items={["Ask a question", "Work with ActForGoa", "Suggest a correction", "Suggest an improvement", "List an organisation", "Share a story or resource", "Volunteer with ActForGoa"].map(value => ({value, label: value}))}
             />
+            {params.get("subject") && <p className="entry-reference">About: {params.get("subject")}</p>}
             {params.get("entry") && (
               <p className="entry-reference">About: {params.get("entry")}</p>
             )}
@@ -1318,7 +1275,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <>{pathname === "/" || pathname.toLowerCase() === "/ai" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}{pathname !== "/" && !pathname.toLowerCase().startsWith("/ai") && !orbitLanding && pathname !== "/map" && !pathname.startsWith("/ask") && !pathname.startsWith("/templates/") && pathname !== "/report" && pathname !== "/research-library" && !pathname.startsWith("/documents/") && <TeamBrowsingBar />}</>}
+      {!internal && <>{pathname.replace(/\/$/, "").toLowerCase() === "/ai" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}{pathname !== "/" && pathname.replace(/\/$/, "").toLowerCase() !== "/ai" && !orbitLanding && pathname !== "/map" && !pathname.startsWith("/ask") && !pathname.startsWith("/templates/") && pathname !== "/report" && pathname !== "/research-library" && !pathname.startsWith("/documents/") && <TeamBrowsingBar />}</>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
@@ -1338,10 +1295,13 @@ export default function App() {
             <a href="https://actforgoa.org/">Visit ActForGoa</a>
           </main>
         ) : (
-          <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency services</Link></main>}>
+          <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency helpline numbers</Link></main>}>
           <Routes>
+<<<<<<< HEAD
             <Route path="/AI" element={<AIHome />} />
             <Route path="/explore" element={<Home records={records} />} />
+=======
+>>>>>>> origin/main
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />
@@ -1349,7 +1309,10 @@ export default function App() {
             <Route path="/documents/:id" element={<ResearchDocument />} />
             <Route path="/research-library" element={<ResearchLibrary />} />
             <Route path="/contacts/:department" element={<GovernmentContacts />} />
-            <Route path="/" element={<Home records={records} />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/explore" element={<main><DiscoveryFeed records={records} /></main>} />
+            <Route path="/heritage/share" element={<HeritageStory />} />
+            <Route path="/collaborate" element={<CollaborativeAction />} />
             <Route path="/topics/:slug/:actionId?/:choiceId?" element={<TopicPage records={records} />} />
             <Route path="/search" element={<Catalogue records={records} />} />
             <Route path="/climate-plan/:topicId?" element={<ClimatePlan />} />

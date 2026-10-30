@@ -1,21 +1,26 @@
 import {useEffect,useRef,useState,type FormEvent,type PointerEvent as ReactPointerEvent} from 'react';
 import {bboxBounds,boundsBbox,GOA_BOUNDS,loadGoogleMap,searchGooglePlaces,withinGoa} from './google-map';
-import {LocateFixed,Maximize2,Minimize2,Minus,Plus,Scan,SquareDashed,X,MapPin,Search} from 'lucide-react';
+import {LocateFixed,Maximize2,Minimize2,Minus,Plus,Scan,SquareDashed,X,MapPin,Search,RotateCw} from 'lucide-react';
 import {AmcheGoogleLayers} from './AmcheGoogleLayers';
 import {Slider} from './components/arc/slider/slider';
 import {Button} from './components/arc/button/button';
-import SegmentedControl from './components/arc/segmented-control/segmented-control';
+import type {SatelliteMapProps} from './SatelliteMap';
 import {SearchField} from './components/arc/search-field/search-field';
-import type {SatelliteArea,SatelliteObservation,SatellitePreview} from './satellite-api';
+import type {SatelliteArea} from './satellite-api';
 import {areaError} from './satellite-timeline';
 import {observationDate as dateLabel} from './SatelliteHistory';
+import {EarthEngineTileCache} from './satellite-tile-cache';
+import {EarthEngineLayer,type EarthTileState} from './satellite-earth-layer';
 
 type Place={id:string;name:string;detail:string;longitude:number;latitude:number};
-export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=false,preview=null,previewBusy=false,previewError='',onRetryPreview,progress='',error='',accessMessage=''}:{area:SatelliteArea|null;onArea:(area:SatelliteArea)=>boolean|void;observation?:SatelliteObservation;candidates?:GeoJSON.FeatureCollection;disabled?:boolean;preview?:SatellitePreview|null;previewBusy?:boolean;previewError?:string;onRetryPreview?:()=>void;progress?:string;error?:string;accessMessage?:string}) {
+export function SatelliteGoogleMap({periodControls,updateControl,periodError,area,onArea,observation,candidates,disabled=false,preview=null,previewBusy=false,previewError='',onRetryPreview,progress='',error='',accessMessage=''}:SatelliteMapProps) {
   const container=useRef<HTMLDivElement>(null),workspace=useRef<HTMLDivElement>(null),map=useRef<google.maps.Map|null>(null),selection=useRef<google.maps.Rectangle|null>(null),features=useRef<google.maps.Data|null>(null),overlay=useRef<google.maps.GroundOverlay|null>(null);
   const draftRectangle=useRef<google.maps.Rectangle|null>(null),pin=useRef<google.maps.Circle|null>(null),anchor=useRef<google.maps.LatLng|null>(null),cornerPin=useRef<google.maps.Circle|null>(null),projection=useRef<google.maps.OverlayView|null>(null);
   const skipSelectionFit=useRef(false);
-  const [mapView,setMapView]=useState('earth-engine');
+  const [tileCache]=useState(()=>new EarthEngineTileCache());
+  const [tileState,setTileState]=useState<EarthTileState>({pending:0,failed:0,loaded:0});
+  const [tileRevision,setTileRevision]=useState(0),[earthLayerId,setEarthLayerId]=useState('earth-engine');
+  const layerSequence=useRef(0);
   const press=useRef<{x:number;y:number;second:boolean}|null>(null),searchRequest=useRef(0),locationAttempt=useRef(0);
   const [mapInstance,setMapInstance]=useState<google.maps.Map|null>(null),[mapError,setMapError]=useState(''),[loadAttempt,setLoadAttempt]=useState(0);
   const [drawing,setDrawing]=useState(false),[corner,setCorner]=useState(false),[expanded,setExpanded]=useState(false),[opacity,setOpacity]=useState(100);
@@ -52,14 +57,15 @@ export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=
     };
   },[loadAttempt]);
   useEffect(()=>{
-    if(!mapInstance)return;
-    if(preview){
-      const id='earth-engine-'+preview.start_date+'-'+preview.end_date;
-      const layer=new google.maps.ImageMapType({tileSize:new google.maps.Size(256,256),minZoom:8,maxZoom:17,name:'Earth Engine',
-        getTileUrl:(tile,zoom)=>preview.tile_url.replace('{z}',String(zoom)).replace('{x}',String(tile.x)).replace('{y}',String(tile.y))});
-      mapInstance.mapTypes.set(id,layer);mapInstance.setMapTypeId(mapView==='earth-engine'?id:'roadmap');
-    }else mapInstance.setMapTypeId(mapView==='earth-engine'?'earth-engine':'roadmap');
-  },[mapInstance,preview,mapView]);
+    if(!mapInstance||!preview){setEarthLayerId('earth-engine');return;}
+    const id='earth-engine-'+(++layerSequence.current);
+    const layer=new EarthEngineLayer(preview.tile_url,tileCache,setTileState,preview.expires_at?Date.parse(preview.expires_at):undefined,preview.bounds);
+    setTileState({pending:0,failed:0,loaded:0});mapInstance.mapTypes.set(id,layer);setEarthLayerId(id);
+    return()=>{layer.dispose();mapInstance.mapTypes.set(id,null);};
+  },[mapInstance,preview?.tile_url,preview?.expires_at,tileCache,tileRevision]);
+  useEffect(()=>{
+    if(mapInstance)mapInstance.setMapTypeId(earthLayerId);
+  },[mapInstance,earthLayerId]);
   useEffect(()=>{if(disabled)cancelDraw();},[disabled]);
   useEffect(()=>{
     map.current?.setOptions({gestureHandling:drawing?'none':'greedy',disableDoubleClickZoom:drawing,keyboardShortcuts:!drawing});
@@ -105,6 +111,7 @@ export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=
   useEffect(()=>{overlay.current?.setOpacity(opacity/100);},[opacity,observation,mapInstance]);
   const viewportError=viewport?areaError(viewport):'The map is loading.';
   const viewportGuidance=viewportError==='Choose a valid area around Goa.'?'Zoom in within Goa, or draw a smaller area up to 25 km².':viewportError;
+  const tileMessage=tileState.failed?'Some imagery could not load. Retry the missing tiles.':tileState.pending?'Loading Earth Engine imagery for this view…':'';
   function showDraft(bounds:google.maps.LatLngBounds){
     if(!map.current)return;
     const error=areaError(boundsBbox(bounds));
@@ -169,12 +176,16 @@ export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=
     },error=>{if(attempt!==locationAttempt.current)return;setLocating(false);setMessage(error.code===1?'Location access was declined. Allow it in your browser settings, or search for a place.':error.code===3?'Location took too long. Try again or search for a place.':'Your location is unavailable. Try again or search for a place.');},{enableHighAccuracy:false,timeout:10000,maximumAge:60000});
   }
   return <div ref={workspace} className={'satellite-map-section'+(expanded?' satellite-map-expanded':'')}>
-    <div className="satellite-map-source"><SegmentedControl label="Map view" options={[{value:'earth-engine',label:'Earth Engine'},{value:'streets',label:'Streets'}]} value={mapView} onValueChange={setMapView}/><p>{mapView==='earth-engine'?(preview?`${preview.start_date} to ${preview.end_date} · Cloud-masked Sentinel-2 overview`:'Dated Sentinel-2 imagery'):'Google street map for navigation'}</p></div>
+    <section className="satellite-map-configuration" aria-label="Earth Engine imagery period">
+      {periodControls}
+      {periodError&&<p className="satellite-period-error" role="status">{periodError}</p>}
+    </section>
     <div className="satellite-map-interactive">
     <div className="satellite-map-search">
-      <form onSubmit={search}><SearchField label="Find an area or business in Goa" placeholder="Try Panaji or a business name" value={query} maxLength={120} minLength={3} onValueChange={value=>{setQuery(value);searchRequest.current++;setSearching(false);setPlaces([]);setSearchMessage('');}}/><Button type="submit" size="sm" loading={searching} disabled={query.trim().length<3||!mapInstance||!!mapError} aria-label="Search places"><Search size={18} aria-hidden="true"/></Button></form>
+      <form onSubmit={search}><SearchField label="Find an area or business in Goa" placeholder="Search Goa" value={query} maxLength={120} minLength={3} onValueChange={value=>{setQuery(value);searchRequest.current++;setSearching(false);setPlaces([]);setSearchMessage('');}}/><Button type="submit" size="sm" loading={searching} disabled={query.trim().length<3||!mapInstance||!!mapError} aria-label="Search places"><Search size={18} aria-hidden="true"/></Button></form>
       <div className="satellite-map-tools">
-        <Button type="button" size="sm" variant={drawing?'primary':'secondary'} aria-pressed={drawing} disabled={disabled||!mapInstance||!!mapError} onClick={()=>{if(drawing)cancelDraw();else{clearDraft();setSelectionError('');setDrawing(true);}}}>{drawing?<X size={18}/>:<SquareDashed size={18}/>}<span>{drawing?'Cancel drawing':'Draw area'}</span></Button>
+        {updateControl}
+        <Button type="button" size="sm" variant={drawing?'primary':'secondary'} aria-label={drawing?'Cancel drawing':'Draw area'} aria-pressed={drawing} disabled={disabled||!mapInstance||!!mapError} onClick={()=>{if(drawing)cancelDraw();else{clearDraft();setSelectionError('');setDrawing(true);}}}>{drawing?<X size={18}/>:<SquareDashed size={18}/>}<span>{drawing?'Cancel':'Draw'}</span></Button>
         <Button type="button" size="sm" variant="secondary" loading={locating} disabled={!mapInstance||!!mapError} onClick={locate} title="Use my current location" aria-label="Use my current location"><LocateFixed size={18}/></Button>
         <Button type="button" size="sm" variant="secondary" aria-label={expanded?'Exit expanded map':'Expand map'} title={expanded?'Exit expanded map':'Expand map'} aria-pressed={expanded} onClick={()=>setExpanded(v=>!v)}>{expanded?<Minimize2 size={18}/>:<Maximize2 size={18}/>}</Button>
       </div>
@@ -183,13 +194,13 @@ export function SatelliteGoogleMap({area,onArea,observation,candidates,disabled=
     <div className="satellite-map-canvas">
       <div ref={container} className="satellite-map" aria-label="Goa investigation map. Pan and zoom, then draw an area. Coordinate fields below provide a keyboard alternative." />
       {(!mapInstance||mapError)&&<div className="satellite-map-loading" role="status"><p>{mapError||'Loading Google Maps…'}</p>{mapError&&<Button type="button" variant="secondary" size="sm" onClick={()=>setLoadAttempt(value=>value+1)}>Retry map</Button>}</div>}
-      {mapInstance&&mapView==='earth-engine'&&!preview&&!observation&&!mapError&&<div className="satellite-earth-loading" role="status"><p>{previewBusy?'Loading Earth Engine satellite imagery…':previewError||accessMessage||'Choose a period to load Earth Engine imagery.'}</p>{previewError&&<Button type="button" variant="secondary" onClick={onRetryPreview}>Retry Earth Engine</Button>}{accessMessage.startsWith('Sign in')&&<a href="/admin">Sign in to load imagery</a>}</div>}
+      {mapInstance&&!preview&&!observation&&!mapError&&<div className="satellite-earth-loading" role="status"><p>{previewBusy?'Loading Earth Engine satellite imagery…':previewError||accessMessage||'Choose a period to load Earth Engine imagery.'}</p>{previewError&&<Button type="button" variant="secondary" onClick={onRetryPreview}>Retry Earth Engine</Button>}</div>}
       {drawing&&!mapError&&<div className="satellite-draw-surface" role="group" tabIndex={0} aria-label="Draw a rectangle by dragging or tapping two opposite corners. Escape cancels." onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={pointerUp} onPointerCancel={clearDraft} onLostPointerCapture={()=>{if(press.current)clearDraft();}}/>}
       {mapInstance&&!mapError&&<><div className="satellite-map-zoom"><Button type="button" size="sm" variant="secondary" aria-label="Zoom in" disabled={drawing||!mapInstance||!!mapError} onClick={()=>{const m=map.current;if(m)m.setZoom((m.getZoom()||10)+1);}}><Plus size={20}/></Button><Button type="button" size="sm" variant="secondary" aria-label="Zoom out" disabled={drawing||!mapInstance||!!mapError} onClick={()=>{const m=map.current;if(m)m.setZoom((m.getZoom()||10)-1);}}><Minus size={20}/></Button></div>
-      <div className="satellite-map-bottom"><p id="satellite-map-selection-status" role="status">{observation?.map_layer&&<strong className="satellite-map-date">{dateLabel(observation.acquired_at[0])} · Sentinel-2</strong>}{error||selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):progress||accessMessage||message||(area?(observation?'Selected area · Exact dated acquisition.':'Area selected. Update imagery to load this period.'):previewBusy?'Loading Earth Engine overview…':viewportGuidance||'Draw an area to load its latest satellite image.'))}</p><Button type="button" variant="secondary" size="sm" disabled={disabled||drawing||!!viewportError||!!mapError} aria-describedby="satellite-map-selection-status" onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title={viewportGuidance||'Select the visible map'} aria-label="Use visible map area"><Scan size={18}/><span className="satellite-use-view-label">Use view</span></Button></div></>}
+      <div className="satellite-map-bottom"><p id="satellite-map-selection-status" role="status">{observation?.map_layer&&<strong className="satellite-map-date">{dateLabel(observation.acquired_at[0])} · Sentinel-2</strong>}{error||selectionError|| (drawing?(corner?'Drag or tap the opposite corner. Escape cancels.':'Drag a rectangle, or tap two opposite corners. Up to 25 km².'):progress||accessMessage||tileMessage||message||(area?(observation?'Selected area · Exact dated acquisition.':'Area selected. Update imagery to load this period.'):previewBusy?'Loading Earth Engine overview…':viewportGuidance||'Draw an area to load its latest satellite image.'))}</p>{tileState.failed>0&&<Button type="button" variant="secondary" size="sm" aria-label="Retry imagery" title="Retry imagery" onClick={()=>{setTileRevision(value=>value+1);onRetryPreview?.();}}><RotateCw size={18}/></Button>}<Button type="button" variant="secondary" size="sm" disabled={disabled||drawing||!!viewportError||!!mapError} aria-describedby="satellite-map-selection-status" onClick={()=>{const bounds=map.current?.getBounds();if(bounds)acceptBounds(bounds);}} title={viewportGuidance||'Select the visible map'} aria-label="Use visible map area"><Scan size={18}/><span className="satellite-use-view-label">Use view</span></Button></div></>}
     </div>
     </div>
-    {preview&&mapView==='earth-engine'&&<p className="satellite-earth-credit">Google Earth Engine · Contains modified Copernicus Sentinel data · {preview.scene_count} scenes in the overview. {observation?'The selected rectangle shows the exact acquisition labelled on the map.':'The overview is a cloud-masked median, not a single acquisition.'}</p>}
+    <p className="satellite-overview-caption">{preview?`${preview.start_date} to ${preview.end_date} · Cloud-masked Sentinel-2 overview`:'Dated Sentinel-2 imagery'}</p>
     <AmcheGoogleLayers map={mapInstance}/>
 
     {observation&&<div className="satellite-map-caption"><p><strong>{dateLabel(observation.acquired_at[0])}</strong> · Contains modified Copernicus Sentinel data · 10 m grid · {observation.provider==='earth-engine'?'Google Earth Engine':'Copernicus Data Space'}{!observation.map_layer?' · This saved observation predates map overlays; see its image below.':''}</p>

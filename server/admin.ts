@@ -6,6 +6,7 @@ import { resolve } from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { AdminError, AdminStore, type PostPageOptions } from './admin-store.ts';
 import { forwardSatellite } from './satellite-proxy.ts';
+import {createPublicSatellite} from './satellite-public.ts';
 
 const cookieName = 'afg_admin_session';
 const fail = (status: number, message: string): never => { throw new AdminError(status, message); };
@@ -68,6 +69,7 @@ export function createAdminServer(options: AdminServerOptions) {
   if (!options.local && origin.protocol !== 'https:') throw new Error('Production admin requires an HTTPS public origin.');
   if (options.local && origin.protocol === 'http:' && !['127.0.0.1', 'localhost', '[::1]'].includes(origin.hostname)) throw new Error('HTTP admin is only supported on localhost.');
   const store = new AdminStore(options.databasePath, options.knownRecordIds, options.now);
+  const publicSatellite=createPublicSatellite(options);
   let pendingLogins = 0;
   const server = createServer(async (req, res) => {
     res.setHeader('X-Content-Type-Options', 'nosniff');
@@ -78,6 +80,7 @@ export function createAdminServer(options: AdminServerOptions) {
       if ((req.url?.length ?? 0) > 4096) fail(414, 'Request URL is too long.');
       const url = new URL(req.url ?? '/', 'http://localhost');
       const path = url.pathname, method = req.method ?? 'GET';
+      if(path.startsWith('/api/satellite/'))return publicSatellite(req,res);
       const unsafe = !['GET', 'HEAD', 'OPTIONS'].includes(method);
       if (req.headers.origin && req.headers.origin !== options.publicOrigin) fail(403, 'Open the dashboard on the ActForGoa site.');
       if (unsafe && req.headers['sec-fetch-site'] === 'cross-site') fail(403, 'This request must come from the dashboard.');

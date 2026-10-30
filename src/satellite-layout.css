@@ -1,4 +1,4 @@
-/* Shared by the guide and standalone app: map and analysis stay in one workspace. */
+/* Integrated map: a desktop workspace, with ordinary page flow on narrow screens. */
 body:has(.satellite-page) {
  --font-sans: "Figtree Variable", sans-serif;
  --font-body: var(--font-sans);
@@ -48,6 +48,10 @@ body:has(.satellite-page) {
 .satellite-page .satellite-controls p { margin: 0; font-size: 14px; }
 .satellite-analysis .satellite-dates, .satellite-analysis .satellite-coordinates { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
 .satellite-analysis .satellite-dates > div { min-width: 0; }
+.satellite-analysis .satellite-comparison-dates { grid-template-columns: minmax(0,1fr); }
+.satellite-catalog-details summary { cursor: pointer; }
+.satellite-catalog-details .satellite-freshness { background: none; padding: 0; }
+.satellite-catalog-details p + p { margin-top: 12px; }
 .satellite-analysis .satellite-dates button { max-width: 100%; }
 .satellite-coordinate-details summary { min-height: 44px; padding: 12px 0; cursor: pointer; font-size: 14px; }
 .satellite-coordinate-details > button { margin-top: 12px; }
@@ -84,30 +88,38 @@ body:has(.satellite-page) .satellite-standalone-footer { display: none; }
 }
 @media(min-width:1600px) { .satellite-workspace { grid-template-columns: minmax(0,1fr) 440px; } }
 @media(max-width:900px) {
- .satellite-page.shell { width: calc(100% - 24px); padding: 8px 0 0; }
- .satellite-page .satellite-heading { margin: 0 0 12px; }
- .satellite-page .satellite-heading h1 { font-size: 20px; }
+ .satellite-page.shell { width: calc(100% - 32px); height: auto; min-height: calc(100dvh - 72px); padding: 12px 0 40px; }
+ .satellite-page .satellite-heading { margin: 0 0 20px; }
+ .satellite-page .satellite-heading h1 { font-size: 24px; }
  .satellite-page .satellite-heading p { display: none; }
- .satellite-workspace { grid-template-columns: minmax(0,1fr); grid-template-rows: minmax(280px,50%) minmax(0,1fr); gap: 12px; }
- .satellite-analysis { gap: 12px; }
- .satellite-page .satellite-map-section > .amche-layers { position: static; max-height: 120px; margin-top: 4px; }
- .satellite-page .satellite-map-bottom { display: none; }
- .satellite-page .satellite-map-caption { grid-template-columns: minmax(0,1fr) 160px; gap: 4px 12px; padding-top: 0; }
+ .satellite-workspace { flex: none; grid-template-columns: minmax(0,1fr); grid-template-rows: auto auto; gap: 28px; }
+ .satellite-workbench > .satellite-map-section:not(.satellite-map-expanded) { height: auto; gap: 12px; }
+ .satellite-workbench > .satellite-map-section:not(.satellite-map-expanded) .satellite-map-canvas { height: clamp(360px,52svh,560px); flex: none; }
+ .satellite-map-section:not(.satellite-map-expanded) .satellite-map-search { position: relative; inset: auto; display: flex; flex-wrap: wrap; gap: 12px; }
+ .satellite-map-section:not(.satellite-map-expanded) .satellite-map-search form { max-width: none; flex-basis: 100%; margin: 0; }
+ .satellite-map-section:not(.satellite-map-expanded) .satellite-map-tools { width: 100%; margin: 0; }
+ .satellite-map-section:not(.satellite-map-expanded) .satellite-map-tools > button:first-child { margin-right: auto; }
+ .satellite-analysis { gap: 20px; }
+ .satellite-panel-scroll { flex: none; overflow: visible; overscroll-behavior: auto; scrollbar-gutter: auto; padding: 0; }
+ .satellite-page .satellite-controls { gap: 20px; }
+ .satellite-page .satellite-controls p, .satellite-analysis summary { font-size: 16px; line-height: 1.6; }
+ .satellite-page .satellite-map-section > .amche-layers { position: static; max-height: none; overflow: visible; margin: 0; }
+ .satellite-page .satellite-map-bottom { display: flex; left: 12px; right: 68px; bottom: 44px; gap: 8px; }
+ .satellite-page .satellite-map-bottom p { max-width: none; font-size: 13px; }
+ .satellite-page .satellite-map-caption { grid-template-columns: minmax(0,1fr); gap: 16px; padding-top: 0; }
  .satellite-page .satellite-map-caption > div { min-width: 0; }
- .satellite-page .satellite-map-caption p { font-size: 12px; }
- .satellite-map-section .satellite-map-search { inset: 12px 12px auto; gap: 8px; }
- .satellite-page .satellite-map-tools { margin-left: 0; }
- .satellite-page .satellite-map-zoom { display: flex; top: auto; bottom: 28px; right: 12px; }
- .satellite-page .satellite-map-canvas:has(.satellite-draw-surface) .satellite-map-bottom { display: flex; bottom: 80px; }
- .satellite-map-section .satellite-place-results { top: 64px; left: 12px; max-height: 200px; }
- .satellite-page .satellite-map-expanded .satellite-map-bottom { display: flex; }
+ .satellite-page .satellite-map-caption p { font-size: 14px; line-height: 1.5; }
+ .satellite-page .satellite-map-zoom { display: grid; top: auto; bottom: 44px; right: 12px; }
+ .satellite-map-section .satellite-place-results { top: 60px; left: 0; width: 100%; max-height: min(320px,50svh); }
  .satellite-page .satellite-map-expanded .satellite-map-search { inset: 24px 24px auto; }
+ .satellite-page .satellite-map-expanded .satellite-map-caption { grid-template-columns: minmax(0,1fr) minmax(140px,1fr); gap: 12px; }
  .satellite-page .satellite-map-expanded .satellite-map-section > .amche-layers { position: static; }
 }
-/* Short landscape/zoomed screens need document flow so tools cannot collapse. */
+/* Short landscape screens retain a usable map and a single page scroll. */
 @media(max-width:900px) and (max-height:600px) {
- .satellite-page.shell { height: auto; min-height: calc(100dvh - 72px); padding-bottom: 24px; }
- .satellite-workspace { flex: none; grid-template-rows: 320px auto; }
- .satellite-analysis { min-height: 360px; }
- .satellite-panel-scroll { overflow: visible; flex: none; }
+ .satellite-workbench > .satellite-map-section:not(.satellite-map-expanded) .satellite-map-canvas { height: 360px; }
+}
+@media(max-width:360px) {
+ .satellite-page.shell { width: calc(100% - 24px); }
+ .satellite-analysis .satellite-dates { grid-template-columns: minmax(0,1fr); }
 }

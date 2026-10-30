@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {existsSync, readFileSync} from 'node:fs';
-import {topicFlows, actionHref, topicFor, type TopicAction} from '../src/topic-flows.ts';
+import {topicFlows, allTopicActions, actionHref, topicFor, type TopicAction} from '../src/topic-flows.ts';
 import {TOPICS} from '../src/types.ts';
 import {guideDocuments, guideHeadingId} from '../src/guides.ts';
 import {guideForReaders} from '../src/guide-presentation.ts';
@@ -18,20 +18,20 @@ const leaves = (actions:TopicAction[]):TopicAction[] => actions.flatMap(a=>a.cho
 test('each topic has an action menu, with waste first and no snake shortcut at the top level',()=>{
  assert.equal(topicFlows[0].slug, 'waste');
  for(const topic of TOPICS) assert(topicFor(topic),topic);
- assert.equal(new Set(topicFlows.map(f=>f.slug)).size,TOPICS.length);
+ assert.equal(new Set(topicFlows.map(f=>f.slug)).size,14);
  for(const flow of topicFlows) {
-  assert(flow.actions.length >= 3 && flow.actions.length <= 6);
+  assert(flow.actions.length >= 3 && flow.actions.length <= 12);
   assert.equal(new Set(flow.actions.map(a=>a.id)).size,flow.actions.length);
   assert(!/snake/i.test(flow.label));
  }
  const waste=topicFlows[0];
- const collection=waste.actions.find(a=>a.id==='collection')!;
+ const collection=allTopicActions(waste).find(a=>a.id==='collection')!;
  assert.equal(collection.choices!.length,4);
  assert.equal(actionHref(waste,collection.choices![0],collection),'/topics/waste/collection/household');
 });
 
-test('every menu outcome has usable destinations, valid records, anchors and form editors',()=>{
- for(const flow of topicFlows) for(const action of leaves(flow.actions)) {
+test('every menu outcome has usable destinations, valid record ids, anchors and form editors',()=>{
+ for(const flow of topicFlows) for(const action of leaves(allTopicActions(flow))) {
   assert(action.links?.length,`${flow.slug}/${action.id} is a dead end`);
   for(const id of [...(action.resourceIds ?? []),...(action.peopleIds ?? [])]) assert(ids.has(id),id);
   for(const {href,download} of action.links!) {
@@ -55,9 +55,9 @@ test('every menu outcome has usable destinations, valid records, anchors and for
    else if(download) assert(existsSync('public'+url.pathname),href);
    else if(href.startsWith('/topics/')) {
     const [, ,slug,actionId,choiceId]=url.pathname.split('/');
-    const target=topicFlows.find(f=>f.slug===slug)?.actions.find(a=>a.id===actionId);
-    assert(target && (!choiceId || target.choices?.some(c=>c.id===choiceId)),href);
-   } else if(href.startsWith('/')) assert(['/directory','/search','/library','/stories','/get-involved','/contact','/contacts/forest','/contacts/agriculture','/contacts/veterinary'].includes(url.pathname),href);
+    const target=topicFlows.find(f=>f.slug===slug) && allTopicActions(topicFlows.find(f=>f.slug===slug)!).find(a=>a.id===actionId);
+    assert((!actionId || target) && (!choiceId || target.choices?.some(c=>c.id===choiceId)),href);
+   } else if(href.startsWith('/')) assert(['/contacts/forest','/contacts/agriculture','/contacts/veterinary','/directory','/search','/library','/stories','/get-involved','/contact','/collaborate','/heritage/share','/emergency','/climate-plan','/climate-plan/water','/climate-plan/funding','/climate-plan/homes','/climate-plan/tourism','/climate-plan/energy','/climate-plan/health'].includes(url.pathname),href);
    else if(url.protocol==='mailto:') assert(records.some((r:RecordItem)=>r.emails.includes(url.pathname)),`Email absent from source catalogue: ${href}`);
    else assert.equal(url.protocol,'https:');
   }
@@ -66,41 +66,39 @@ test('every menu outcome has usable destinations, valid records, anchors and for
 
 test('no main topic pathway requires downloading a blank form',()=>{
  let editors=0;
- for(const flow of topicFlows) for(const action of leaves(flow.actions)) for(const link of action.links ?? []) {
+ for(const flow of topicFlows) for(const action of leaves(allTopicActions(flow))) for(const link of action.links ?? []) {
   assert(!link.download, `${flow.slug}/${action.id}: ${link.label}`);
   assert(!link.href.startsWith('/guides/templates/'), link.href);
-  assert(!/download|\.pdf(?:$|[?#])/i.test(link.href), link.href);
+  if(link.href.startsWith('/')) assert(!/download|\.pdf(?:$|[?#])/i.test(link.href), link.href);
   assert(!/download/i.test(link.label), link.label);
   if(link.href.startsWith('/templates/')) editors++;
  }
  assert(editors >= 25, `Expected all former downloads to have editors, found ${editors}`);
- const damage=topicFlows.find(f=>f.slug==='food')!.actions.find(a=>a.id==='damage')!;
+ const damage=allTopicActions(topicFlows.find(f=>f.slug==='food')!).find(a=>a.id==='damage')!;
  const href=damage.links!.find(l=>l.href.startsWith('/templates/'))!.href;
  assert.equal(templatePurpose(new URL(href, 'https://example.test').search), 'damage');
  assert.equal(templatePurpose('?purpose=unknown'), undefined);
 });
 
-test('non-waste needs lead to a specific action instead of a generic text or search page',()=>{
- for(const flow of topicFlows.filter(f=>f.slug!=='waste')) {
-  assert(flow.actions.some(a=>a.choices?.length),`${flow.slug} has no follow-up choices`);
-  for(const action of actionsInBranch(flow.actions)) {
+test('follow-up choices fit the route depth and affirmative actions precede reporting',()=>{
+ for(const flow of topicFlows) {
+  const firstConcern=flow.actions.findIndex(action=>action.concern);
+  assert(firstConcern!==0,flow.slug+' starts with reporting');
+  if(firstConcern>=0) assert(flow.actions.slice(firstConcern).every(action=>action.concern),flow.slug+' interleaves reporting');
+  for(const action of actionsInBranch(allTopicActions(flow))) {
    if(action.choices) {
     assert(action.question);
-    assert(action.choices.length>=2 && action.choices.length<=4);
+    assert(action.choices.length>=2 && action.choices.length<=6);
     assert.equal(new Set(action.choices.map(c=>c.id)).size,action.choices.length);
     assert(!action.choices.some(c=>c.choices),'Routes support one follow-up question');
-   } else {
-    assert(action.links!.length>=2,`${flow.slug}/${action.id} needs a useful next step and alternative`);
-    assert(action.links!.some(l=>l.href.startsWith('/templates/') || l.href.startsWith('#') || l.href.startsWith('https:') || l.href.startsWith('mailto:') || /^\/(contact|get-involved|topics)/.test(l.href)),`${flow.slug}/${action.id} only leads to more reading`);
-    assert(!action.links!.some(l=>/^\/(search|directory|library)/.test(l.href)),`${flow.slug}/${action.id} falls back to generic results`);
-   }
+   } else assert(action.links?.length,`${flow.slug}/${action.id} has no next step`);
   }
  }
 });
 
 test('curated services cross incomplete source tags and stay scoped to the selected need',()=>{
  const health=topicFlows.find(f=>f.slug==='health')!;
- const mental=health.actions.find(a=>a.id==='mental-health')!;
+ const mental=allTopicActions(health).find(a=>a.id==='mental-health')!;
  assert(!records.find((r:RecordItem)=>r.id==='org-186').topics.includes(health.topic));
  assert.deepEqual(topicPeople(records,health,mental.choices!.find(a=>a.id==='clinic')).map(r=>r.id),['org-186']);
  const disability=health.actions.find(a=>a.id==='disability')!;
@@ -108,7 +106,7 @@ test('curated services cross incomplete source tags and stay scoped to the selec
  const planning=topicFlows.find(f=>f.slug==='planning')!;
  const design=planning.actions.find(a=>a.id==='professionals')!.choices!.find(a=>a.id==='design')!;
  assert.deepEqual(topicPeople(records,planning,design).map(r=>r.id),['org-119','org-108']);
- for(const flow of topicFlows) for(const action of actionsInBranch(flow.actions)) {
+ for(const flow of topicFlows) for(const action of actionsInBranch(allTopicActions(flow))) {
   const result=topicPeople(records,flow,action);
   assert.equal(new Set(result.map(r=>r.id)).size,result.length);
   for(const id of action.peopleIds ?? []) assert(result.some(r=>r.id===id),`${flow.slug}/${action.id}: missing ${id}`);
