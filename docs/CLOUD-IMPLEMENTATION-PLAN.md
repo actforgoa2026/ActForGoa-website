@@ -1,5 +1,15 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## AI homepage · 30 October 2026
+
+The user superseded the separate-project fork request with one new `/AI` homepage on the existing site. Search starts a conversation on the existing `/ask` route; topic buttons open the existing topic/submenu pages. No separate answer routes, Vercel project, backend, corpus or accounting change.
+
+Implemented in isolated branch `codex/ai-resources-fork` from main `79a9d81`: reused spiral photo hero with AI copy/composer, original eight topic paths, six links to existing research/library/climate/map/MCP tools, and a narrowly opt-in `start=ai` question handoff to existing research. Tab-memory sessions preserve citation returns and follow-ups; unavailability retains the submitted question in the composer. The standard homepage keeps its original topic search behavior.
+
+Validation: all 259 Node tests and production build pass. Actual Chromium at 1440, 390 and 320 pixels verifies 39 loaded photos, eight topic links, existing submenu navigation, one main landmark, no overflow and no page errors. Desktop/phone intercepted model transport confirms exactly one initial submission and follow-up history; no paid AI request was made. Rendered desktop/phone captures were inspected. Impeccable is unavailable in this executor. Evidence is in ignored `.reports/ai-home/`.
+
+The user explicitly authorized shipping PR #126. Release integration preserves main `5029172` (new mission homepage, action menus, heritage and public Earth Engine map). AI starter buttons reuse the existing reviewed cached questions; new questions and follow-ups remain on the existing agent. The cloud credential authenticates project-scoped REST but cannot load the user profile required by the general CLI. A project-scoped REST command transport runs the unchanged guarded `release:review` workflow; its source and evidence stay in ignored `.reports/ai-home/`. No credential, corpus or accounting setting is changed. Verify all new main-site gates and coordinate with the combined NOTES owner before promotion.
+
 ## Combined NOTES release authorized · 30 October 2026
 
 The user has now said “ok, ship it when ready” after requiring all NOTES changes in the integrated4197 preview and preserving4176. NOTES owns this combined main-site promotion and coordinates the existing satellite owner for the Railway gateway/API deployment. The isolated `codex/satellite-public-map` tree carries both scopes; primary dirty checkout remains untouched. Production target is the existing field-guide alias only. New public-map readiness gates extend `release:review` without weakening staff authentication checks. Exact source, browser evidence, service backups and hosted acceptance must be recorded before completion. See `reports/TEAM-NOTES-2026-10-30.md` and `docs/SATELLITE-PUBLIC-MAP.md`.
