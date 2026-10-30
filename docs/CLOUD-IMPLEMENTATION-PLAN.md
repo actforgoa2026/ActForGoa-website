@@ -1,8 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## AI composer follow-up · 30 October 2026
+## Taller AI composer live · 30 October 2026
 
-The user requested a taller ChatGPT-style entry box on `/AI`. The homepage now uses the installed Arc multiline Textarea in a single chat surface, with a bottom-right send button, Enter to send and Shift+Enter for a newline. Existing destinations and non-AI search are preserved. Validate desktop/phone geometry and keyboard handoff, then publish through the existing guarded workflow under the continuing shipping authorization.
+User-requested ChatGPT-style entry box is live at https://actforgoa-field-guide.vercel.app/AI. PR #130 merged as `7ede7b29255933a468149635972a76c0645bf195`, preserving the map owner's intervening page-stacking fix `87207f0`. Runtime tree is `a78f0b813cc3fc13579281b93f8d1720e5612657`; Vercel deployment is `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. The installed Arc Textarea replaces only the AI hero's single-line field. It has a 174px chat surface, bottom-right send button, Enter to send and Shift+Enter for a newline. Existing destinations and standard search are preserved.
+
+The unchanged guarded release passed all 279 Node tests, build, freshness checks and all staged service probes before promotion. Desktop/390px/320px local browser checks and native public desktop/phone checks confirm the height, multiline editing and exactly one submitted question. Public chat handoff returns the real reviewed cached answer, zero model calls. Rendered desktop/phone captures were inspected. Protected evidence is under ignored `.reports/ai-home/` (`composer-evidence.json`, `composer-release.log`, `composer-live-results.json`, `composer-live-1440.png`, `composer-live-390.png`). Previous frontend `dpl_59Hcgb6KL2cpydMBJksKg6sv8jUL` is the rollback baseline. No backend, corpus, credential or accounting configuration changed. This documentation-only follow-up is excluded from deployment uploads.
 
 ## AI homepage live · 30 October 2026
 
