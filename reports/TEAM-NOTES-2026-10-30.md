@@ -2,6 +2,8 @@
 
 Local preview: http://127.0.0.1:4197/
 
+Published and verified: https://actforgoa-field-guide.vercel.app/. See the [final combined release record](notes-release-2026-10-30/README.md) for exact source/deployments, public browser acceptance, security configuration, rollback and remaining team dependencies. Earlier local-only statements below describe their dated checkpoints.
+
 The site now puts climate and cultural resilience, greener everyday choices and community participation first. Reporting remains available after affirmative actions. The user subsequently authorized shipping the integrated preview. Release checks and deployment records follow in the combined release report; earlier local-only checkpoints below are historical.
 
 ## Action plan and implementation
