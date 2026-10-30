@@ -1297,11 +1297,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency helpline numbers</Link></main>}>
           <Routes>
-<<<<<<< HEAD
             <Route path="/AI" element={<AIHome />} />
-            <Route path="/explore" element={<Home records={records} />} />
-=======
->>>>>>> origin/main
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />

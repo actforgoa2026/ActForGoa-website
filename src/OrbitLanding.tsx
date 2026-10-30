@@ -3,6 +3,7 @@ import {Link, useNavigate} from 'react-router-dom';
 import {ChevronDown} from 'lucide-react';
 import {createOrbitPath, orbitEntranceSpeed} from './orbit-motion';
 import {homeSearchDestination} from './home-search';
+import {researchDomains} from './research-model';
 import photos from './content/orbit-photos.json';
 import {Button} from './components/arc/button/button';
 import {SearchField} from './components/arc/search-field/search-field';
@@ -99,7 +100,7 @@ export default function OrbitLanding({embedded = false, ai = false}: {embedded?:
       </form>
       <p id="orbit-search-hint" className="goa-orbit-search-hint">{ai?"Answers grounded in original sources. Powered by Claude.":"Find the right topic for your next step"}</p>
       {needsTopic && <p id="orbit-topic-feedback" className="goa-orbit-topic-feedback" role="status">I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading" onClick={scrollToPaths}>choose a topic below</a>.</p>}
-      <div className="goa-orbit-suggestions" aria-label="Suggested questions">{suggestions.map((text)=><Button key={text} variant="secondary" size="sm" onClick={()=>search(text)}>{text}</Button>)}</div>
+      <div className="goa-orbit-suggestions" aria-label="Suggested questions">{(ai?researchDomains.all.starters:suggestions).map((text)=><Button key={text} variant="secondary" size="sm" onClick={()=>search(text)}>{text}</Button>)}</div>
       <Link className="goa-orbit-chat-link" to={ai?"/research-library":"/ask"}>{ai?"Explore the source library":"Or start a conversation"}</Link>
     </section>
     <a className="goa-orbit-scroll" href={embedded?"#home-actions-heading":"/#home-actions-heading"} onClick={scrollToPaths} aria-label="Scroll to ways to take action"><ChevronDown size={23} aria-hidden="true"/></a>
