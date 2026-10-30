@@ -104,7 +104,8 @@ export function Research({domain:providedDomain}:{domain?:ResearchDomain}={}){
  const domain=providedDomain||researchDomain(location.pathname);
  const [params]=useSearchParams();const docId=params.get('document')||undefined;const sourceGeneration=params.get('generation')||undefined;
  const query=docId?'?'+new URLSearchParams({document:docId,...(sourceGeneration?{generation:sourceGeneration}:{})}):'';
- const scope=researchDomains[domain].path+query;
+ const initialQuestion=!docId&&params.get('start')==='ai'?params.get('q')?.trim().slice(0,2000):undefined;
+ const scope=researchDomains[domain].path+(initialQuestion?'?'+new URLSearchParams({q:initialQuestion,start:'ai'}):query);
  useEffect(()=>{
   const state=location.state as {draftQuestion?:string}|null;
   if(!state?.draftQuestion?.trim())return;
@@ -112,12 +113,12 @@ export function Research({domain:providedDomain}:{domain?:ResearchDomain}={}){
   // Consume the draft once, so returning from a citation keeps an edited follow-up.
   navigate(location.pathname+location.search+location.hash,{replace:true,state:{...state,draftQuestion:undefined}});
  },[location.key,scope]);
- return <ResearchConversation key={scope} scope={scope} domain={domain} docId={docId} sourceGeneration={sourceGeneration}/>;
+ return <ResearchConversation key={scope} initialQuestion={initialQuestion} scope={scope} domain={domain} docId={docId} sourceGeneration={sourceGeneration}/>;
 }
-function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:string;domain:ResearchDomain;docId?:string;sourceGeneration?:string}){
+function ResearchConversation({scope,domain,docId,sourceGeneration,initialQuestion}:{scope:string;domain:ResearchDomain;docId?:string;sourceGeneration?:string;initialQuestion?:string}){
  const navigate=useNavigate();const transcript=useRef<HTMLDivElement>(null);const heading=useRef<HTMLElement>(null);
  const memory=useContext(ResearchMemory);if(!memory)throw Error('Research memory provider is required.');
- const {question,turns,mode}=memory.sessions[scope]||emptySession;const returnTo=scope;const content=researchDomains[domain];
+ const {question,turns,mode}=memory.sessions[scope]||{...emptySession,question:initialQuestion||''};const returnTo=scope;const content=researchDomains[domain];
  const isClimatePlan=isClimatePlanResearch(docId,sourceGeneration);
  const setQuestion=(question:string)=>memory.update(scope,{question});
  const setMode=(mode:'search'|'ask')=>memory.update(scope,{mode});
@@ -152,6 +153,12 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
   }catch(e){patchTurn(id,(e as Error).name==='AbortError'?{pending:undefined,stopped:true}:{pending:undefined,error:(e as Error).message});}
   finally{if(request.current===controller){request.current=null;setBusy(false);}}
  }
+ const autoStarted=useRef(false);
+ useEffect(()=>{
+  if(!initialQuestion||initialQuestion.length<2||autoStarted.current||turns.length||!canAsk)return;
+  autoStarted.current=true;
+  void run(initialQuestion,'ask');
+ },[initialQuestion,canAsk,turns.length]);
  const submit=(event:FormEvent)=>{event.preventDefault();void run();};
  const statusText=statusError||(!status?'Connecting to the library…':!status.search_ready?'The research library is not ready yet.':!domainSupported?'This collection is not available on the research service yet.':!canAsk?'Source search is ready. AI answers are not available yet.':'Library search and AI answers are available.');
  return <main className={`research research-chat shell ${hasTurns?'has-conversation':''}`}><header ref={heading} className="research-heading"><Link to={isClimatePlan?"/climate-plan":"/library"} className="back-link"><ArrowLeft size={16}/>{isClimatePlan?"Climate plan guide":"Reading library"}</Link><h1>{isClimatePlan?"Ask about Goa’s climate plan":content.title}</h1><p>{isClimatePlan?"Explore SAPCC proposals and official flood preparedness guidance, with sources for both.":"Ask a question. Explore the answer together, grounded in our library."}</p></header>

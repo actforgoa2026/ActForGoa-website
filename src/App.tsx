@@ -88,6 +88,7 @@ import { browsingState, semanticCache, homeFeedState } from "./browsing-state";
 import { useStarredIds } from './CurationProvider';
 import { prioritizeStarred } from './curation';
 import {CurationStar, TeamBrowsingBar} from './TeamAccess';
+const AIHome = lazy(() => import("./AIHome"));
 const OrbitLanding = lazy(() => import("./OrbitLanding"));
 const CRM = lazy(() => import("./CRM"));
 const McpPage = lazy(() => import("./McpPage"));
@@ -1274,7 +1275,7 @@ export default function App() {
       <a href="#content" className="skip-link">
         Skip to content
       </a>
-      {!internal && <>{orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}{pathname !== "/" && !orbitLanding && pathname !== "/map" && !pathname.startsWith("/ask") && !pathname.startsWith("/templates/") && pathname !== "/report" && pathname !== "/research-library" && !pathname.startsWith("/documents/") && <TeamBrowsingBar />}</>}
+      {!internal && <>{pathname.replace(/\/$/, "").toLowerCase() === "/ai" || orbitLanding ? <div className="goa-orbit-navigation"><Header /></div> : <Header />}{pathname !== "/" && pathname.replace(/\/$/, "").toLowerCase() !== "/ai" && !orbitLanding && pathname !== "/map" && !pathname.startsWith("/ask") && !pathname.startsWith("/templates/") && pathname !== "/report" && pathname !== "/research-library" && !pathname.startsWith("/documents/") && <TeamBrowsingBar />}</>}
       {!internal && language !== "en" && <div className="translation-notice" role="status"><span lang={language}>{language === "hi" ? "अनुवाद अभी तैयार हो रहा है। कुछ सामग्री अंग्रेज़ी में है; खोज अभी अंग्रेज़ी में उपलब्ध है।" : "भाशांतराचें काम चालू आसा. कांय मजकूर इंग्लिशांत आसा; सोद सध्या इंग्लिशांत उपलब्ध आसा."}</span><span lang="en"> Translation preview: some content and search are in English. Translations have not yet been locally reviewed.</span></div>}
       <div id="content" tabIndex={-1}>
         {pathname.replace(/\/$/, "") === "/emergency" ? <EmergencyServices /> : error ? (
@@ -1296,6 +1297,7 @@ export default function App() {
         ) : (
           <Suspense fallback={<main className="loading-state shell" role="status"><p>Opening this page…</p><Link to="/emergency">Emergency helpline numbers</Link></main>}>
           <Routes>
+            <Route path="/AI" element={<AIHome />} />
             <Route path="/mcp" element={<McpPage />} />
             <Route path="/ask" element={<Research />} />
             <Route path="/ask/legal" element={<Research domain="legal" />} />
