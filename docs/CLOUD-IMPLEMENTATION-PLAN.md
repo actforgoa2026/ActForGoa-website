@@ -1,10 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Document reader formatting · 30 October 2026
+## Document reader formatting live · 30 October 2026
 
-Branch `codex/reader-cleanup`, based on fresh main `ada1387`, removes citation background highlighting from Read text and reflows extracted print lines into paragraphs. Short headings, figure captions, lists and tab-separated table rows remain separate; stored corpus text, original-page view and citation URLs remain intact. No backend or corpus changes.
+User authorized “ship it”. PR #135 merged as `2f21e6192b7a00fe78ce3ffbd87d9a52b669d9e3`, tree `c66faf26c1bd841c0fe528a786e9776fe975e1c8`, preserving the newer AI composer release. Plain Read text removes passage backgrounds, reflows print lines into paragraphs and keeps headings, captions, lists and table rows separate. Stored source text, citation URLs and Original page remain intact.
 
-Validation: existing 279 Node tests passed, two focused reflow tests passed, production build passed; actual Chromium at 1440/390/320px used the linked hosted document metadata and page 27 text with intercepted read-only API responses. Verified paragraph flow, no marks, headings, no horizontal overflow and Original page switching with an explicit image fixture. Desktop/phone screenshots inspected in ignored `.reports/reader-cleanup/`. Impeccable is unavailable in this executor. User subsequently authorized “ship it”; this chat owns the bounded reader release through `docs/RELEASING.md`, preserving the newer AI composer release.
+The unchanged guarded `release:review` promoted Vercel `dpl_6Z5f6f1ZbXeXzJaY5qnGcdFdwZsH`. All 281 Node tests, production build and staged research/editorial/public-map/newsletter/MCP service probes passed. Local Chromium checked 34 desktop/phone route renders; the focused reader also passed at 320px. Actual public desktop/390px acceptance confirms plain paragraph flow, no marks/overflow/page errors, loaded original PDF page image, next/previous navigation, and retained `/`, `/AI`, `/explore` pages. Rendered public desktop/phone screenshots were inspected. No model call or submitted report ran; no backend, corpus or credential configuration changed.
+
+Evidence and project-scoped REST transport are under ignored `.reports/reader-cleanup/`: `evidence.json`, `retry-release.log`, `live-identity.json`, `live-checks.json`, `live-{1440,390}.png`. Initial redundant upload failed authentication before creating a deployment; retry reused unchanged content-addressed files and uploaded the changed source. Final alias identity and release commit independently verified. Impeccable is unavailable in this executor. Rollback: `dpl_icX57yDd1PWwh6PnCfFd4M3McfXi`. Original WordPress domain unchanged. This documentation-only record is excluded from deployment uploads; no further deployment is required.
 
 ## AI composer surface, source intro and arrow live · 30 October 2026
 
