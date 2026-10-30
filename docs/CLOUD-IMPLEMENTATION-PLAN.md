@@ -1,5 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Hero AI button placement correction · 30 October 2026
+
+User requested the AI library button on the hero image. Branch `codex/hero-ai-button`, based on main `4fba25e`, moves the same Arc ButtonLink into HomeCarousel below the mission copy, with 24px spacing. The search remains in the section below. Destination/copy and all carousel controls are preserved. Actual Chromium at 1440/768/390/320px verifies the full button inside the hero and above the fold; desktop/phone click reaches `/ai`, and forty retained route renders have no horizontal overflow. Desktop/phone screenshots inspected; production build passes. Impeccable unavailable. This chat retains bounded field-guide release ownership under the existing ship authorization; guarded release evidence is in ignored `.reports/hero-ai-button/`. Rollback baseline `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m`.
+
+
 ## Homepage AI library button live · 30 October 2026
 
 PR #136 merged as `4fdbfdbcd7eb4dbeeb602d732877943cabbf1f89`, tree `88f6752c3b4f194b1aa2099742f8fd6832c80b6f`, and is live at the existing field-guide alias on Vercel `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m`. Existing Arc ButtonLink “Use AI to explore our vetted library of surveys and guides” targets `/ai`, precedes the homepage search, and shares its width. Latest carousel, category groups and footer are preserved.
