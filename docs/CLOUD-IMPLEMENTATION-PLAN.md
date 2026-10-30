@@ -1,8 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## AI composer surface and intro follow-up · 30 October 2026
+## AI composer surface, source intro and arrow live · 30 October 2026
 
-User requested removing the inner surface visible while typing and mentioning vetted surveys and data above the composer. The cause is Arc Textarea's higher-specificity hover treatment. AI-only hover/focus overrides keep the field transparent while preserving the outer keyboard focus outline. Intro copy now explicitly says the AI draws on vetted surveys and data. Validate hovered/focused/typing states on desktop and phone and publish through `release:review` under continuing shipping authorization. The same follow-up removes provider-branding copy from the homepage and replaces the text send label with an up-arrow inside the installed Arc Button, retaining a 46px target and accessible “Send question” name. No destination or backend change.
+User requested removing the inner surface visible while typing and mentioning vetted surveys and data above the composer. The cause is Arc Textarea's higher-specificity hover treatment. AI-only hover/focus overrides keep the field transparent while preserving the outer keyboard focus outline. Intro copy now explicitly says the AI draws on vetted surveys and data.  The same follow-up removes provider-branding copy from the homepage and replaces the text send label with an up-arrow inside the installed Arc Button, retaining a 46px target and accessible “Send question” name. No destination or backend change.
+
+Live verification: PR #133 merged as `bbfb018aade2f39344ea1fd86bdac4530ded0f5c`, tree `675d18691c1c6bed98aec80f7362677313f9531f`, promoted via the unchanged guarded release to Vercel `dpl_icX57yDd1PWwh6PnCfFd4M3McfXi`. All 279 tests, build and staged service probes passed. Desktop/390px/320px public browser checks verify transparent hover/focus/typing states, the vetted-surveys/data intro, no provider-branding copy and the accessible Arc arrow. Clicking the arrow on public desktop/phone opens exactly one actual reviewed cached answer; zero model calls. Local checks cover 34 retained/new route renders. Rendered desktop/phone screenshots were inspected. Evidence: ignored `.reports/ai-home/surface-{release.log,evidence.json,live-checks.json,live-final.json,live-1440.png,live-390.png}` and `composer-live-results.json`. Rollback: `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. No further deployment is needed for this excluded documentation-only record.
 
 ## NOTES and public map verified live · 30 October 2026
 
