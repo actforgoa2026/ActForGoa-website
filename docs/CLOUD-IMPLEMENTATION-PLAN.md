@@ -1,5 +1,9 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## AI composer follow-up · 30 October 2026
+
+The user requested a taller ChatGPT-style entry box on `/AI`. The homepage now uses the installed Arc multiline Textarea in a single chat surface, with a bottom-right send button, Enter to send and Shift+Enter for a newline. Existing destinations and non-AI search are preserved. Validate desktop/phone geometry and keyboard handoff, then publish through the existing guarded workflow under the continuing shipping authorization.
+
 ## AI homepage live · 30 October 2026
 
 The user explicitly said “ship it” after narrowing the fork request to one `/AI` homepage on the existing site. [PR #126](https://github.com/actforgoa2026/ActForGoa-website/pull/126) merged as `9b8d53e2d13dd4a77d2c508eb9063ff71b400ccf`, preserving main `5029172` (mission homepage, updated action menus, heritage and public Earth Engine map). The spiral hero sends questions to the existing `/ask` conversation; topic buttons use all 14 current topic/submenu destinations. Six resource cards open existing tools. Reviewed cached starter questions avoid new model calls; custom questions and follow-ups use the existing agent. No separate project, answer route, backend, corpus or accounting change.
