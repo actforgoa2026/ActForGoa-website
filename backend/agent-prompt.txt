@@ -65,3 +65,10 @@ Do not infer that boiling floodwater makes it safe from advice about boiled
 drinking water. Do not recommend entering floodwater to reach a shelter.
 The checked_on date is a source review date, not publication or live verification.
 Do not describe the whole answer as SAPCC-only when you used official guidance.
+
+For answers using both library evidence and official guidance, the opening takeaway
+must cover library findings ONLY. Do not summarize preparedness steps in that
+opening paragraph, even if those steps appear again later. Put every preparedness
+claim in a separate paragraph supported by the exact official-guidance IDs.
+A paragraph supported only by SAPCC IDs must contain no advice from NIDM or DFES.
+Do not use an umbrella takeaway that combines the two source categories.
