@@ -3,10 +3,11 @@ import { useReducedMotion } from "motion/react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { Button } from "./components/arc/button/button";
 import photos from "./content/hero-photos.json";
-import HomeHeroWordWheel, { HERO_BEAT_MS, HERO_WORDS } from "./HomeHeroWordWheel";
+
+const PHOTO_INTERVAL_MS = 8000;
 
 export default function HomeCarousel({ children }: { children: ReactNode }) {
-  const [beat, setBeat] = useState(0);
+  const [slide, setSlide] = useState(0);
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState(false);
   const [visible, setVisible] = useState(true);
@@ -18,8 +19,7 @@ export default function HomeCarousel({ children }: { children: ReactNode }) {
   const pointer = useRef<{ x: number; y: number } | null>(null);
   const available = photos.map((_, index) => index).filter((index) => !failed.includes(index));
   const wrap = (value: number, length: number) => ((value % length) + length) % length;
-  const shown = available[wrap(Math.floor(beat / 2), available.length)];
-  const word = HERO_WORDS[wrap(beat, HERO_WORDS.length)];
+  const shown = available[wrap(slide, available.length)];
   const playing = !paused && !reducedMotion;
   const canAdvance = available.length > 1;
 
@@ -33,21 +33,21 @@ export default function HomeCarousel({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (!playing || hovered || !visible || !inView) return;
-    const next = available[wrap(Math.floor((beat + 1) / 2), available.length)];
+    if (!canAdvance || !playing || hovered || !visible || !inView) return;
+    const next = available[wrap(slide + 1, available.length)];
     if (available.length && !loaded.includes(next)) return;
-    // Dizko's shared clock: words every beat, photos every second beat.
-    const timer = window.setTimeout(() => setBeat((current) => current + 1), HERO_BEAT_MS);
+    const timer = window.setTimeout(() => setSlide((current) => current + 1), PHOTO_INTERVAL_MS);
     return () => window.clearTimeout(timer);
-  }, [beat, playing, hovered, visible, inView, loaded, failed]);
+  }, [slide, playing, hovered, visible, inView, loaded, failed]);
 
   function advance(direction: number) {
     setPaused(true);
-    if (canAdvance) setBeat((current) => Math.floor(current / 2) * 2 + direction * 2);
+    if (canAdvance) setSlide((current) => current + direction);
   }
 
   return (
     <section ref={root} className="home-hero home-carousel shell" aria-label="For the Goa we love" aria-roledescription="carousel"
+      onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}
       onPointerDown={(event) => {
         if (event.pointerType === "touch" && !(event.target as HTMLElement).closest("input, textarea, button, a")) {
           pointer.current = { x: event.clientX, y: event.clientY };
@@ -85,10 +85,6 @@ export default function HomeCarousel({ children }: { children: ReactNode }) {
       </div>
       <div className="home-hero-shade" aria-hidden="true" />
       <div className="home-hero-content">
-        <h1 id="home-heading" aria-label={`${word} in Goa`}>
-          <HomeHeroWordWheel beat={beat} /><span aria-hidden="true">in Goa</span>
-        </h1>
-        <p>Enabling people to care for Goa.</p>
         {children}
       </div>
       <div className="home-carousel-footer">
@@ -100,7 +96,7 @@ export default function HomeCarousel({ children }: { children: ReactNode }) {
             </span>}
           </> : <span>ActForGoa</span>}
         </div>
-        <div className="home-carousel-controls" onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)}>
+        <div className="home-carousel-controls">
           <Button variant="ghost" size="sm" onClick={() => advance(-1)} disabled={!canAdvance} aria-label="Previous photo"><ChevronLeft size={18} aria-hidden="true" /></Button>
           <span className="home-carousel-count" aria-hidden="true">{available.indexOf(shown) + 1} / {available.length}</span>
           <Button variant="ghost" size="sm" onClick={() => advance(1)} disabled={!canAdvance} aria-label="Next photo"><ChevronRight size={18} aria-hidden="true" /></Button>

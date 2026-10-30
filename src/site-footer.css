@@ -1,7 +1,7 @@
-.site-footer { margin-top: 40px; padding-bottom: 28px; background: var(--paper); color: var(--green); }
-.site-footer-landscape { width: 100%; overflow: hidden; }
-.site-footer-landscape img { display: block; width: 100%; height: clamp(220px, 30vw, 480px); object-fit: cover; object-position: center bottom; }
-.site-footer-content { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.25fr; gap: 40px; padding-block: 12px 44px; }
+.site-footer { position: relative; isolation: isolate; margin-top: 24px; padding-bottom: 28px; background: var(--paper); color: var(--green); }
+.site-footer-landscape { width: 100%; height: clamp(420px, 42vw, 640px); overflow: hidden; pointer-events: none; mask-image: linear-gradient(to bottom, #000 48%, rgb(0 0 0 / .65) 62%, rgb(0 0 0 / .12) 82%, transparent 100%); }
+.site-footer-landscape img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center bottom; }
+.site-footer-content { position: relative; display: grid; grid-template-columns: 1.5fr 1fr 1fr 1.25fr; gap: 40px; margin-top: -160px; padding-block: 24px 44px; }
 .site-footer-intro .wordmark { display: inline-block; margin-bottom: 12px; font-size: 30px; }
 .site-footer p { margin: 0 0 16px; max-width: 30ch; font-size: 15px; line-height: 1.6; color: var(--muted); }
 .site-footer nav { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
@@ -22,8 +22,9 @@
 }
 @media(max-width:620px) {
  .site-footer { margin-top: 24px; }
- .site-footer-landscape img { height: 210px; width: 150%; max-width: none; margin-left: -25%; }
- .site-footer-content { grid-template-columns: 1fr 1fr; gap: 28px; padding-block: 8px 28px; }
+ .site-footer-landscape { height: 400px; mask-image: linear-gradient(to bottom, #000 40%, rgb(0 0 0 / .55) 58%, rgb(0 0 0 / .08) 80%, transparent 100%); }
+ .site-footer-landscape img { width: 180%; max-width: none; margin-left: -40%; }
+ .site-footer-content { grid-template-columns: 1fr 1fr; gap: 28px; margin-top: -144px; padding-block: 8px 28px; }
  .site-footer-intro,.site-footer-note { grid-column: 1 / -1; }
  .site-footer-intro p { max-width: 36ch; }
  .site-footer a { min-height: 40px; }
