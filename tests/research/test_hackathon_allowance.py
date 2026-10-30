@@ -27,8 +27,9 @@ def test_hackathon_opt_in_and_expiry_without_restart(tmp_path):
     limits = PublicLimits(tmp_path, release_allowance=True, hackathon_allowance=True)
     assert ordinary.effective_limits('2026-10-29') == (100, 5_000_000)
     assert limits.effective_limits('2026-10-28') == (160, 15_300_000)
-    for day in ('2026-10-29', '2026-10-30', '2026-10-31'):
-        assert limits.effective_limits(day) == (500, 50_000_000)
+    assert limits.effective_limits('2026-10-29') == (500, 50_000_000)
+    for day in ('2026-10-30', '2026-10-31'):
+        assert limits.effective_limits(day) == (500, 100_000_000)
     assert limits.effective_limits('2026-11-01') == (100, 5_000_000)
     assert limits.effective_limits('2027-10-29') == (100, 5_000_000)
 
@@ -75,4 +76,25 @@ def test_app_requires_explicit_hackathon_flag(tmp_path, monkeypatch):
     monkeypatch.setenv('RESEARCH_HACKATHON_ALLOWANCE_20261029', '1')
     app_module.create_app(root=tmp_path)
     assert captured[-1].effective_limits('2026-10-29') == (500, 50_000_000)
+    assert captured[-1].effective_limits('2026-10-30') == (500, 100_000_000)
     assert captured[-1].effective_limits('2026-11-01') == (100, 5_000_000)
+
+
+def test_october_increase_reopens_existing_ledger_without_reset(tmp_path, clock):
+    clock.day = '2026-10-30'
+    limits = PublicLimits(tmp_path, hackathon_allowance=True)
+    assert limits.reserve_stage(1, clock.day, 'e' * 32, 'draft')['reserved']
+    with sqlite3.connect(tmp_path / 'answer-usage.sqlite') as db:
+        db.execute('INSERT INTO usage VALUES (?,158)', ('2026-10-28',))
+        db.execute('UPDATE spend SET reserved_microusd=50_000_000')
+    limits = PublicLimits(tmp_path, require_existing=True, hackathon_allowance=True)
+    assert limits.reserve_stage(49_900_000, clock.day, 'f' * 32, 'draft')['reserved']
+    with sqlite3.connect(tmp_path / 'answer-usage.sqlite') as db:
+        assert db.execute('SELECT reserved_microusd FROM spend').fetchone()[0] == 99_900_000
+        assert db.execute('SELECT attempts FROM usage WHERE day=?', ('2026-10-28',)).fetchone()[0] == 158
+        before = list(db.iterdump())
+    assert limits.reserve_stage(100_001, clock.day, '0' * 32, 'draft')['reason'] == 'monthly_limit'
+    with sqlite3.connect(tmp_path / 'answer-usage.sqlite') as db:
+        assert list(db.iterdump()) == before
+    clock.day = '2026-11-01'
+    assert limits.reserve_stage(5_000_001, clock.day, '1' * 32, 'draft')['reason'] == 'monthly_limit'

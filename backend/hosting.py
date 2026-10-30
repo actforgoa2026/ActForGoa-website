@@ -156,7 +156,9 @@ class PublicLimits:
         # User-approved October 29-31 public hackathon allowance. The monthly
         # limit includes every earlier reservation; this never resets accounting.
         if self.hackathon_allowance and '2026-10-29' <= day <= '2026-10-31':
-            return 500, 50_000_000
+            # October 30 authorization raises the total to $100 for the rest
+            # of October, preserving the earlier $50 ceiling and November reset.
+            return 500, 100_000_000 if day >= '2026-10-30' else 50_000_000
         # Explicit user authorization for this launch only. Evaluate against the
         # transaction's UTC date so an already-running service expires correctly.
         daily = 160 if self.release_allowance and day == '2026-10-28' else self.chat_limit
