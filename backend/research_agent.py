@@ -110,7 +110,9 @@ class ResearchTools:
         for source in result['sources']:
             self.evidence[source['id']]=source
             self.citable_ids.add(source['id'])
-        return result
+        # Keep one copyable citation identifier. The full checksum stays in the
+        # server evidence; exposing it twice led the model to expand a short ID.
+        return {**result,'sources':[{k:v for k,v in source.items() if k!='sha256'} for source in result['sources']]}
 
     def server(self):
         schemas={

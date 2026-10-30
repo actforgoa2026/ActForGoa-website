@@ -62,3 +62,15 @@ def test_sdk_exposes_guidance_without_broadening_other_document_tools(tmp_path):
         options = agent_options(readers, 'Test', 'http://127.0.0.1:1', 'test', 0, state=tmp_path)
         assert ('mcp__research__read_official_guidance' in options.allowed_tools) == allowed
         assert options.tools == []
+
+
+def test_guidance_exposes_one_citation_id_without_a_competing_digest():
+    readers = ResearchTools(Corpus())
+    source = readers.official_guidance({'topic': 'floods'})['sources'][0]
+    assert 'sha256' not in source
+    original = readers.evidence[source['id']]
+    assert len(original['sha256']) == 64
+    assert validate_answer(raw([source['id']]), readers, 'all')['citations'][0] == original
+    expanded = source['id'].rsplit(':', 1)[0] + ':' + original['sha256']
+    with pytest.raises(ValueError, match='source read'):
+        validate_answer(raw([expanded]), readers, 'all')
