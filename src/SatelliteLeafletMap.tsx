@@ -131,7 +131,7 @@ export function SatelliteLeafletMap({area,onArea,observation,candidates,disabled
   }
   return <div ref={workspace} className={'satellite-map-section'+(expanded?' satellite-map-expanded':'')}>
     <div className="satellite-map-search">
-      <form onSubmit={search}><SearchField label="Find an area or business in Goa" placeholder="Search places in Goa" value={query} maxLength={120} minLength={3} onValueChange={value=>{setQuery(value);searchRequest.current?.abort();setSearching(false);setPlaces([]);setSearchMessage('');}}/><Button type="submit" size="sm" loading={searching} disabled={query.trim().length<3} aria-label="Search places"><Search size={18} aria-hidden="true"/></Button></form>
+      <form onSubmit={search}><SearchField label="Find an area or business in Goa" placeholder="Search Goa" value={query} maxLength={120} minLength={3} onValueChange={value=>{setQuery(value);searchRequest.current?.abort();setSearching(false);setPlaces([]);setSearchMessage('');}}/><Button type="submit" size="sm" loading={searching} disabled={query.trim().length<3} aria-label="Search places"><Search size={18} aria-hidden="true"/></Button></form>
       <div className="satellite-map-tools">
         <Button type="button" size="sm" variant={drawing?'primary':'secondary'} aria-pressed={drawing} disabled={disabled} onClick={()=>{if(drawing)cancelDraw();else{clearDraft();setSelectionError('');setDrawing(true);}}}>{drawing?<X size={18}/>:<SquareDashed size={18}/>}<span>{drawing?'Cancel drawing':'Draw area'}</span></Button>
         <Button type="button" size="sm" variant="secondary" loading={locating} onClick={locate} title="Use my current location" aria-label="Use my current location"><LocateFixed size={18}/></Button>

@@ -148,3 +148,23 @@
 :global(body:has(.satellite-page)) .sheetInner { max-height: calc(100dvh - 65px); }
 
 @container site-header (max-width: 1399px) { .nav { display: none; } }
+
+/* The language selector and search keep their full hit areas on narrow phones. */
+@container site-header (max-width: 480px) {
+  .bar { height: auto; min-height: 80px; flex-wrap: wrap; gap: 8px; padding-block: 12px; }
+  .brandSlot { flex: 0 0 100%; }
+  .actions { width: 100%; margin-left: 0; justify-content: space-between; }
+}
+
+.brandText { display: grid; gap: 3px; }
+.sheetExtras { display: none; }
+.tagline { font-size: 13px; font-weight: 650; letter-spacing: 0; line-height: 1.4; white-space: normal; }
+@container site-header (max-width: 480px) {
+  .bar { flex-wrap: nowrap; min-height: 88px; gap: 12px; }
+  .brandSlot { flex: 1; min-width: 0; }
+  .actions { width: auto; }
+  .actions > :not(.menuButton) { display: none; }
+  .sheetExtras { display: flex; padding-block: 12px; }
+  .sheetExtras select { max-width: 100%; min-height: 44px; font-size: 16px; }
+  .sheetInner { max-height: calc(100dvh - 90px); }
+}

@@ -1,5 +1,6 @@
 import {useEffect, useRef, useState} from 'react';
 
+import {Accordion} from './components/arc/accordion/accordion';
 import {Checkbox} from './components/arc/checkbox/checkbox';
 import {AMCHE_LAYERS, amcheFeatureLabel, loadAmcheLayer, type AmcheLayerId} from './amche-layers';
 import './amche-layers.css';
@@ -60,7 +61,7 @@ export function AmcheGoogleLayers({map}: {map: google.maps.Map | null}) {
     }
   }
 
-  return <details className="amche-layers"><summary>Local context from Amche Atlas</summary>
+  return <div className="amche-layers satellite-context-disclosure"><Accordion defaultOpen={-1} items={[{title:"Local context from Amche Atlas",content:<>
     <p>Show reference records on this map. Their dates are separate from the satellite observations.</p>
     <div className="amche-layer-options">{AMCHE_LAYERS.map(source => <div className="amche-layer-option" key={source.id}>
       <Checkbox label={source.title} description={source.date} checked={state[source.id].checked} disabled={!map} onCheckedChange={checked => void toggle(source.id, checked===true)}/>
@@ -68,5 +69,5 @@ export function AmcheGoogleLayers({map}: {map: google.maps.Map | null}) {
       <p>{source.note} <a href={source.sourceUrl} target="_blank" rel="noreferrer">Source records</a></p>
     </div>)}</div>
     <p className="amche-layer-credit">Sources curated by <a href="https://amche.in/?atlas=goa" target="_blank" rel="noreferrer">Amche Atlas</a>. The base map is Google Maps. Layers load only when selected.</p>
-  </details>;
+  </>}]} /></div>;
 }

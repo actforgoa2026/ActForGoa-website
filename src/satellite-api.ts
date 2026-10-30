@@ -6,7 +6,7 @@ export type SatelliteObservation = {catalog_scene_id:string;provider?:string; ac
 export type SatelliteFreshness = {catalog_searched_at:string;latest_acquired_at_in_search:string;selected_after_acquired_at:string;newer_acquisitions_in_search:number;search_start:string;search_end:string;catalog_truncated:boolean;note:string};
 export type SatelliteContext = {state:string;message:string;searched_at?:string;sources:{id:string;title:string;text:string;url:string;reader_url:string;generation:string;label:string;retrieved_at:string;warning:string;excerpt_truncated:boolean}[]};
 export type SatelliteRequest = {area:SatelliteArea;start_date:string;end_date:string;before_id:string;after_id:string;intent:SatelliteIntent;question?:string;window_start?:string;window_end?:string};
-export type SatellitePreview = {provider:'earth-engine';tile_url:string;start_date:string;end_date:string;first_acquired_at:string;last_acquired_at:string;scene_count:number;method:string;scope:string};
+export type SatellitePreview = {provider:'earth-engine';tile_url:string;start_date:string;end_date:string;first_acquired_at:string;last_acquired_at:string;scene_count:number;method:string;scope:string;expires_at?:string;bounds?:[number,number,number,number]};
 export type SatelliteSpatialMatch={relation:'same_area'|'partial_overlap';query_fraction:number;comparison_fraction:number;intersection_area_m2:number};
 export type SatelliteHistory = {scan_truncated?:boolean;items:{id:string;status:string;created_at:string;spatial?:SatelliteSpatialMatch;request:SatelliteRequest|null;summary:SatelliteResult['summary']|null;observation_interval:SatelliteResult['observation_interval']|null;freshness:SatelliteFreshness|null;'evidence.common_usable_fraction':number|null;error?:string}[];next_offset:number|null;retention_days:number;scope:string};
 export type SatelliteDecision = {choice:string;confidence?:number;probabilities?:{value:string;probability:number}[];probabilities_complete?:boolean};
@@ -25,13 +25,16 @@ export class SatelliteApiError extends Error {
   constructor(message:string,readonly status:number){super(message);this.name='SatelliteApiError';}
 }
 export async function satelliteApi<T>(route:string, csrfToken:string, body?:unknown, signal?:AbortSignal):Promise<T> {
-  const response = await fetch('/api/admin/satellite'+route, {
+  const response = await fetch('/api/satellite'+route, {
     method:body === undefined ? 'GET':'POST',credentials:'same-origin',
     headers:{'Content-Type':'application/json',...(body === undefined ? {}:{'X-CSRF-Token':csrfToken})},
     ...(body === undefined ? {}:{body:JSON.stringify(body)}),signal:AbortSignal.any([AbortSignal.timeout(65000),...(signal?[signal]:[])]),
   });
   const data=await response.json().catch(()=>null);
   signal?.throwIfAborted();
-  if (!response.ok || !data) throw new SatelliteApiError(data?.error || (response.status===404?'Satellite routes are unavailable on this host. Open the standalone satellite workspace.':'Satellite monitoring could not respond. Please try again.'),response.status);
+  if (!response.ok || !data) throw new SatelliteApiError(data?.error || (response.status===404?'Satellite imagery is temporarily unavailable. Please retry on this page.':'Satellite monitoring could not respond. Please try again.'),response.status);
   return data as T;
 }
+
+export type SatelliteSession={visitorId:string;csrfToken:string};
+export const satelliteSession=(signal?:AbortSignal)=>satelliteApi<SatelliteSession>('/session','',undefined,signal);

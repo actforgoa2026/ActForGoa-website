@@ -1,5 +1,17 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Combined NOTES release authorized · 30 October 2026
+
+The user has now said “ok, ship it when ready” after requiring all NOTES changes in the integrated4197 preview and preserving4176. NOTES owns this combined main-site promotion and coordinates the existing satellite owner for the Railway gateway/API deployment. The isolated `codex/satellite-public-map` tree carries both scopes; primary dirty checkout remains untouched. Production target is the existing field-guide alias only. New public-map readiness gates extend `release:review` without weakening staff authentication checks. Exact source, browser evidence, service backups and hosted acceptance must be recorded before completion. See `reports/TEAM-NOTES-2026-10-30.md` and `docs/SATELLITE-PUBLIC-MAP.md`.
+
+## Integrated public Earth Engine map and control grid · 30 October 2026
+
+Local `codex/satellite-public-map`, based on 2c7e006, now uses the latest Google/Earth Engine SatelliteWorkspace on the main `/map` route, automatic browser visitor sessions and same-origin `/api/satellite/*`. The user rejected the retained OSM provider; that build-mode split is removed. Their latest correction removes the map-view selector entirely. Earth Engine is the sole view. The control grid uses shared edges, equal date columns, consistent 48px targets and coherent search/map-tool rows. The persistent grid rule is recorded in AGENTS.md and DESIGN.md.
+
+The satellite-google owner's latest cache/UI work is reconciled; NOTES has added its requested homepage/menu/heritage changes into this isolated checkout. The user-authorized NOTES port handoff is complete: 4197 serves the integrated tree,4183 redirects, and4176 remains running. Existing browser-key website restrictions are restored to4176/4197/Railway. See `docs/SATELLITE-PUBLIC-MAP.md` for exact access boundaries, cache changes and release prerequisites.
+
+Map validation before the NOTES merge: 266 Node and 144 Python tests, both builds, real anonymous 25 October Earth Engine acquisition, 320/390/768/1440px browser geometry, calendars and expanded-map exit. No AI call ran. NOTES owns the combined full-suite rerun and the user-authorized release; this map chat has not committed, pushed or deployed. Hosted publication must configure the main public browser key/exact field-guide origin and deploy the public satellite gateway and main functions together, preserving data/budgets/credentials. No concurrent promotion and no change to original WordPress domain.
+
 ## SAPCC research assistant live · 30 October 2026
 
 The resident SAPCC question flow is live, with entry points on the plan overview/topics and general research assistant. PRs #119, #121 and #122 are merged; runtime `977c55a4ebbef9d1a609c24ca6c260fdff213ef5` is deployed as research service `986679ef-46fd-4a65-9086-01085913e051` and guarded frontend `dpl_ENfoDDJTZrG7wAmJQvsC2Qo8AR4f`. Active generation is `20261030-sapcc-native-v2`. The completed SDK workflow, current map/Explore source and unrelated corpus documents are preserved. The primary dirty checkout was untouched.

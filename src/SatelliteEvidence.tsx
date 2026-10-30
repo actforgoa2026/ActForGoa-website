@@ -142,7 +142,7 @@ export function SatelliteEvidence({csrfToken,area,startDate,endDate,intent,quest
   useEffect(()=>()=>controller.current?.abort(),[]);
   useEffect(()=>{if(!pending)return;const started=Date.now();setElapsed(0);const timer=setInterval(()=>setElapsed(Math.floor((Date.now()-started)/1000)),1000);return()=>clearInterval(timer);},[pending]);
   const invalidDates=!/^\d{4}-\d{2}-\d{2}$/.test(startDate)||!/^\d{4}-\d{2}-\d{2}$/.test(endDate)||!Number.isFinite(Date.parse(startDate))||!Number.isFinite(Date.parse(endDate))||startDate>endDate;
-  const reason=!csrfToken?'Sign in to search your saved evidence.':!area?'Select an area on the map first.':invalidDates?'Choose an ordered start and end date.':question.trim().length<3?'Enter a question or a few words about what you want to investigate.':busy?'Wait for the current imagery operation to finish.':'';
+  const reason=!csrfToken?'Connecting your saved evidence…':!area?'Select an area on the map first.':invalidDates?'Choose an ordered start and end date.':question.trim().length<3?'Enter a question or a few words about what you want to investigate.':busy?'Wait for the current imagery operation to finish.':'';
   async function search(event:FormEvent) {
     event.preventDefault();if(reason||controller.current)return;
     const abort=new AbortController(),submittedKey=key;controller.current=abort;setPending(true);setAnswer(null);setError('');
@@ -174,7 +174,7 @@ export function SatelliteEvidence({csrfToken,area,startDate,endDate,intent,quest
       {!!result.cards.length&&<><p>Showing {result.cards.length} of {result.matched_count} matching saved comparison{result.matched_count!==1?'s':''}. Your question ranks these records; the selected area, period and topic determine their scope.</p>
         <div className="satellite-evidence-cards">{result.cards.map((card,index)=><SavedEvidence key={card.id} card={card} index={index} onOpen={onOpen} disabled={busy||pending}/>)}</div></>}
       {(result.scan_truncated||result.results_truncated)&&<p>This is a partial result list. Narrow the period or topic to search a more focused set of records.</p>}
-      <p className="satellite-evidence-muted">Searched {result.scanned_count} retained comparisons from your account. Saved comparisons are retained for {result.retention_days} days; this is not statewide or continuous monitoring coverage.</p>
+      <p className="satellite-evidence-muted">Searched {result.scanned_count} retained comparisons from this browser. Saved comparisons are retained for {result.retention_days} days; this is not statewide or continuous monitoring coverage.</p>
       {result.amche_context&&<AmcheEvidence context={result.amche_context}/>}
       {result.library_context&&<LibraryEvidence context={result.library_context}/>}
     </div>}

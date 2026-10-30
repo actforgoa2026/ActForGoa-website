@@ -6,7 +6,7 @@ import {createAdminServer} from './admin.ts';
 import {createPlaceSearch,serveMapPlaces} from './map-places.ts';
 import {serveMapConfig} from './map-config.ts';
 
-/** Standalone satellite frontend, using the same named-account auth and proxy. */
+/** Satellite service frontend and public visitor API, with separate staff access. */
 export function createSatelliteWeb(options:{publicOrigin:string;databasePath:string;staticRoot:string;local?:boolean}){
   const {server,store}=createAdminServer({...options,knownRecordIds:new Set<string>(),trustRailwayProxy:Boolean(process.env.RAILWAY_PROJECT_ID)});
   const admin=server.listeners('request')[0] as (req:import('node:http').IncomingMessage,res:import('node:http').ServerResponse)=>void;
@@ -19,12 +19,17 @@ export function createSatelliteWeb(options:{publicOrigin:string;databasePath:str
     let pathname:string;
     try{pathname=decodeURIComponent(new URL(req.url||'/','http://localhost').pathname);}catch{res.writeHead(400);return res.end();}
     if(pathname.startsWith('/api/')){
+      if(pathname.startsWith('/api/satellite/'))return admin(req,res);
       if(pathname==='/api/map-config')return serveMapConfig(req,res);
       if(pathname==='/api/map-places')return serveMapPlaces(req,res,searchPlaces);
       if(!/^\/api\/admin\/(?:config|login|logout|session|satellite\/.+)$/.test(pathname)){res.writeHead(404);return res.end();}
       return admin(req,res);
     }
     if(!['GET','HEAD'].includes(req.method||'GET')){res.writeHead(405,{Allow:'GET, HEAD'});return res.end();}
+    // Old public bookmarks return to the map inside the main ActForGoa site.
+    if(!options.local&&['/','/map','/admin'].includes(pathname)){
+      res.writeHead(302,{Location:'https://actforgoa-field-guide.vercel.app/map','Cache-Control':'no-store'});return res.end();
+    }
     const route=['/','/map','/admin'].includes(pathname);
     const target=resolve(root,route?'satellite.html':'.'+pathname);
     if(!target.startsWith(root+sep)||(!route&&!pathname.startsWith('/assets/'))){res.writeHead(404);return res.end();}

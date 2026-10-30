@@ -1,9 +1,11 @@
 from concurrent.futures import ThreadPoolExecutor
+from copy import deepcopy
 from datetime import datetime, timezone
 import hashlib
 import json
 import os
 import threading
+import time
 import httpx
 from .domain import CatalogRequest, CompareRequest, ObservationRequest, EvidenceRequest, DomainError, Query, make_plan, change_interval
 from .eve_cdse import CDSE
@@ -29,14 +31,31 @@ class SatelliteService:
         self.context = EcologyContext(self.http)
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.capacity = threading.BoundedSemaphore(1)
+        self._catalog_lock = threading.Lock()
+        self._catalogs = {}
 
     def plan(self, query: Query):
         self.store.reserve('plans', 30)
         return make_plan(query, self.planner.interpret(query))
 
     def catalog(self, request: CatalogRequest):
-        self.store.reserve('catalog', 100)
-        return self.cdse.catalog(request)
+        # The browser searches immediately before loading an observation. Reuse
+        # that verified, short-lived catalog instead of repeating the provider
+        # request in the worker. Only public scene metadata is shared; imagery
+        # and jobs retain their existing actor-scoped storage.
+        key = (self.imagery_provider, request.area.bbox, request.start_date, request.end_date)
+        with self._catalog_lock:
+            now = time.monotonic()
+            self._catalogs = {k: v for k, v in self._catalogs.items() if v[0] > now}
+            cached = self._catalogs.get(key)
+            if cached:
+                return {**deepcopy(cached[1]), 'cache_hit': True}
+            self.store.reserve('catalog', 100)
+            result = self.cdse.catalog(request)
+            if len(self._catalogs) >= 32:
+                self._catalogs.pop(next(iter(self._catalogs)))
+            self._catalogs[key] = (time.monotonic() + 120, deepcopy(result))
+            return {**result, 'cache_hit': False}
 
     def evidence(self, request: EvidenceRequest, actor: str):
         rows, truncated = self.store.evidence_rows(actor, request)

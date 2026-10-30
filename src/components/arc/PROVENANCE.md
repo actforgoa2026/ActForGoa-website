@@ -29,3 +29,9 @@ SiteHeader uses React Router Links for local destinations and ordinary images in
 The satellite timeline and opacity controls use the actual [Slider](https://uiarc.dev/r/slider.json) source, retrieved 29 October 2026. Keyboard interaction, pointer capture, value formatting and reduced-motion handling are preserved.
 
 The standalone Earth Engine workspace retains the accepted registry-derived date picker as `date-picker/inline-date-picker.tsx` with its companion CSS. The guide uses the portalled variant added in PR #115. Both reuse the same Arc Calendar and motion tokens; this keeps independently approved layouts intact during release reconciliation.
+
+30 October 2026: standalone satellite disclosures use the actual [Accordion](https://uiarc.dev/r/accordion.json) registry source, copied unchanged with its Radix dependency. Existing Motion tokens are reused. Workspace-scoped layout uses one continuous group for supporting information.
+
+## NOTES heritage flow integration (local, 30 October 2026)
+
+Retained the current Arc ButtonLink, input, textarea, header and theme. Copied the existing installed Arc Alert and ConfirmMorph from the NOTES checkout for heritage draft status and undoable removal. The NOTES menus use the current ButtonLink directly, with their grid layout in mission.css.

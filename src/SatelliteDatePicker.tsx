@@ -1,4 +1,4 @@
-import {InlineDatePicker as DatePicker} from './components/arc/date-picker/inline-date-picker';
+import {DatePicker} from './components/arc/date-picker/date-picker';
 import {calendarDate,dateValue} from './satellite-dates';
 
 export function SatelliteDatePicker({label,value,onChange,min,max,disabled=false,alignEnd=false}:{label:string;value:string;onChange:(value:string)=>void;min?:string;max?:string;disabled?:boolean;alignEnd?:boolean}){

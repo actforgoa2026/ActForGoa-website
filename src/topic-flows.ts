@@ -1,13 +1,14 @@
 import {templatePath} from './template-path';
 
+import { buildMissionTopics } from './mission-topics';
 export type TopicIconName = 'waste' | 'nature' | 'water' | 'community' | 'grow' | 'heritage' | 'mobility' | 'health' | 'report' | 'truck' | 'recycle' | 'book' | 'animal' | 'building' | 'access' | 'stethoscope' | 'message' | 'file' | 'map';
 export interface ActionLink { label: string; href: string; download?: boolean; icon?: TopicIconName }
 export interface TopicAction {
  id: string; label: string; icon: TopicIconName; query: string;
- question?: string; choices?: TopicAction[];
+ question?: string; choices?: TopicAction[]; description?: string; concern?: boolean; infographic?: { src: string; alt: string; source: string; caption: string };
  steps?: string[]; links?: ActionLink[]; resourceIds?: string[]; peopleIds?: string[];
 }
-export interface TopicFlow { slug: string; topic: string; label: string; icon: TopicIconName; actions: TopicAction[] }
+export interface TopicFlow { slug: string; topic: string; label: string; icon: TopicIconName; actions: TopicAction[]; introduction?: string; catalogueTopics?: string[]; legacyActions?: TopicAction[] }
 export const topicDescriptions: Record<string, string> = {
  waste: 'Collection, recycling & dumping',
  nature: 'Animal help & conservation',
@@ -40,7 +41,7 @@ const volunteer = (id: string, label: string, icon: TopicIconName, query: string
  steps:['Choose a group and tell them your interests, skills and available time.','Ask what help is needed now and agree the role and arrangements before going.'],
 });
 
-export const topicFlows: TopicFlow[] = [
+const originalTopicFlows: TopicFlow[] = [
  {slug:'waste',topic:'Waste & recycling',label:'Waste & recycling',icon:'waste',actions:[
   {id:'report-dumping',label:'Report illegal dumping',icon:'report',query:'waste dumping pollution',steps:['Note the location, date and what has been dumped. Add photos if you can take them safely.','Report it to the Panchayat or municipal council responsible for that location. The government complaint service can help route the issue.','Keep the complaint reference so you can follow up.'],links:[report(),complaint,guide('How to report and follow up','guide-reporting')],resourceIds:['guide-reporting','resource-4ff53417d5']},
   {id:'collection',label:'Get extra rubbish collected',icon:'truck',query:'waste collection disposal',peopleIds:['org-165','org-20','org-182'],question:'What do you need to get rid of?',choices:[
@@ -166,6 +167,9 @@ export const topicFlows: TopicFlow[] = [
   ]},
  ]},
 ];
+
+export const topicFlows = buildMissionTopics(originalTopicFlows);
+export const allTopicActions = (flow: TopicFlow) => [...flow.actions, ...(flow.legacyActions ?? [])];
 
 export const topicFor = (topic: string) => topicFlows.find(flow => flow.topic === topic);
 export const topicHref = (topic: string) => '/topics/' + (topicFor(topic)?.slug ?? 'community');
