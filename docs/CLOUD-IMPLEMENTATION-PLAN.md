@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## NOTES and public map verified live · 30 October 2026
+
+All feasible team-note changes and the public Google/Earth Engine map are published on the existing field-guide site. PR127 carries the mission homepage, action-first topic menus and Google heritage pin form; PR129 fixes phone map/header stacking and expanded-map layering. The later guarded PR130 release includes both: runtime commit `7ede7b29255933a468149635972a76c0645bf195`, tree `a78f0b813cc3fc13579281b93f8d1720e5612657`, deployment `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. Vercel metadata and final public desktop/phone acceptance independently confirm this; no further frontend deployment is required. Earlier pending wording below is historical.
+
+The exact Google website restriction was added after direct user approval, retaining existing origins and two API restrictions. Coordinated Railway API `fa0b1552-b5e6-46b2-80e4-8d5ebec46020` and gateway `7b9a57c4-3567-4a24-a2a2-635d47db9f42` are verified with preserved databases/configuration and revoked temporary SSH access. Actual imagery from 25 October, Google click-to-pin, 40 public route renders and phone/desktop map layering passed. All 279 Node tests, 144 Python tests and both builds passed. No satellite AI, report submission or story email was triggered. Local ports 4176 and 4197 remain running; original WordPress is unchanged. See [complete release evidence, rollback and remaining team dependencies](../reports/notes-release-2026-10-30/README.md). This record is documentation only and excluded from deployment uploads.
+
 ## Taller AI composer live · 30 October 2026
 
 User-requested ChatGPT-style entry box is live at https://actforgoa-field-guide.vercel.app/AI. PR #130 merged as `7ede7b29255933a468149635972a76c0645bf195`, preserving the map owner's intervening page-stacking fix `87207f0`. Runtime tree is `a78f0b813cc3fc13579281b93f8d1720e5612657`; Vercel deployment is `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. The installed Arc Textarea replaces only the AI hero's single-line field. It has a 174px chat surface, bottom-right send button, Enter to send and Shift+Enter for a newline. Existing destinations and standard search are preserved.
