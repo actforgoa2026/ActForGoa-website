@@ -99,3 +99,15 @@ def test_native_spread_carries_original_headers_into_read_and_citations(corpus):
     result = validate_answer(answer(pages[0]), tools, 'ecology')
     assert [c['page'] for c in result['citations']] == [2, 1]
     assert result['paragraphs'][0]['citations'] == [pages[0]['id'], pages[1]['id']]
+
+
+def test_batched_read_preserves_complete_native_spread_and_excludes_scans(corpus,monkeypatch):
+    corpus.documents['plan']['extraction_version']='goa-sapcc-native-spreads-v1'
+    text='Complete original table context. '*400
+    with sqlite3.connect(corpus.index/'library.sqlite') as db:
+        db.execute('UPDATE pages SET text=? WHERE page=1',(text,))
+    monkeypatch.setattr(corpus,'search',lambda *args:{'results':[corpus.evidence('plan',1),corpus.evidence('plan',2)]})
+    readers=ResearchTools(corpus,'ecology','plan')
+    result=readers.batch({'queries':['proposed solar'],'limit':2})
+    assert len(result['reads'])==1 and result['reads'][0]['pages'][0]['text']==text
+    assert all(':p2:' not in identifier for identifier in readers.citable_ids)

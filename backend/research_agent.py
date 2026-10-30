@@ -2,6 +2,8 @@
 import asyncio
 import json
 import os
+from time import perf_counter
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
@@ -66,6 +68,29 @@ class ResearchTools:
         result=self.record(self.corpus.read_document(args['document_id'],args.get('page',1),args.get('offset',0),args.get('max_chars',18000)))
         self.citable_ids.update(e['id'] for e in result['pages'])
         return {**result,'pages':[self.evidence_for_agent(e) for e in result['pages']]}
+    def batch(self,args):
+        queries=list(dict.fromkeys(q.strip() for q in args['queries'] if isinstance(q,str) and q.strip()))
+        if not 1<=len(queries)<=3 or any(len(q)>500 for q in queries):raise ValueError('Use one to three focused queries')
+        limit=max(1,min(3,args.get('limit',2)))
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            searches=list(pool.map(lambda q:self.corpus.search((q+' '+self.extra_terms).strip(),limit,self.document_id,self.domain),queries))
+        hits={}
+        for result in searches:
+            for hit in result['results']:
+                if not hit['answer_excluded']:hits.setdefault((hit['document_id'],hit['page']),hit)
+        chosen=list(hits)[:3]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            reads=list(pool.map(lambda key:self.corpus.read_document(key[0],key[1],max_chars=6000),chosen))
+        accepted=[];used=0
+        for result in reads:
+            size=sum(len(p['text']) for p in result['pages'])
+            if used+size>30000:continue
+            used+=size;self.record(result)
+            self.citable_ids.update(p['id'] for p in result['pages'])
+            accepted.append({**result,'pages':[self.evidence_for_agent(p) for p in result['pages']]})
+        return {'reads':accepted,'discovered_pages':len(hits),'read_pages':len(accepted),
+                'generation':self.corpus.generation,'note':'Bounded first pass. Follow next_cursor for remaining page text; use search_documents/read_document for other sources. Original adjacent table context is preserved.'}
+
     def crm_search(self,args):
         if self.document_id:raise ValueError('This conversation uses only the selected document. Open all research to investigate directory records.')
         return crm_store.search_records(args.get('query',''),args.get('collection','all'),args.get('location',''),min(20,args.get('limit',10)),args.get('offset',0))
@@ -83,6 +108,7 @@ class ResearchTools:
             'browse_catalogue':('Browse every document with stable pagination and metadata; empty query lists the full catalogue.',{'query':str,'offset':int,'limit':int},self.catalogue),
             'search_documents':('Search all extracted pages with FTS5. Use multiple distinct searches for different concepts. All original warnings are retained.',{'query':str,'offset':int,'limit':int},self.search),
             'read_document':('Read a complete document one page at a time. Follow next_cursor for full page/document text; no text is silently omitted.',{'document_id':str,'page':int,'offset':int,'max_chars':int},self.read),
+            'search_and_read':('Search up to three focused queries and read up to three relevant original pages in one batch. Prefer this for a first evidence pass; follow returned cursors and expand with other tools when needed.',{'type':'object','properties':{'queries':{'type':'array','items':{'type':'string'},'minItems':1,'maxItems':3},'limit':{'type':'integer','minimum':1,'maximum':3}},'required':['queries','limit'],'additionalProperties':False},self.batch),
             'query_crm':('Browse or search the complete public CRM; collection is community, government or all. Filter by location. Not personal CRM notes.',{'query':str,'collection':str,'location':str,'offset':int,'limit':int},self.crm_search),
             'read_crm_record':('Read one complete CRM record with provenance and verification notes before citing it.',{'record_id':str},self.crm_read),
             'ask_clarifying_question':('Ask for a missing fact that materially changes the answer. Return it to the user and wait.',{'question':str},self.clarify),
@@ -90,11 +116,13 @@ class ResearchTools:
         built=[]
         for name,(description,schema,fn) in schemas.items():
             async def handler(args, fn=fn, name=name):
+                started=perf_counter();ok=False
                 try:
-                    result=await asyncio.to_thread(fn,args);self.trace.append({'tool':name,'arguments':args})
+                    result=await asyncio.to_thread(fn,args);ok=True
                     return {'content':[{'type':'text','text':json.dumps(result,ensure_ascii=False)}]}
                 except (KeyError,ValueError) as error:
                     return {'content':[{'type':'text','text':str(error)}],'isError':True}
+                finally:self.trace.append({'tool':name,'arguments':args,'elapsed_ms':round((perf_counter()-started)*1000,2),'ok':ok})
             built.append(tool(name,description,schema)(handler))
         self.names=['mcp__research__'+name for name in schemas]
         return create_sdk_mcp_server(name='research',version='1.0.0',tools=built)

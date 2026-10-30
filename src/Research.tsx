@@ -7,7 +7,8 @@ import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
 import SegmentedControl from './components/arc/segmented-control/segmented-control';
 import {researchApi as api} from './research-api';
-import {citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
+import {requestResearch} from './research-request';
+import {canUseCachedExample,citedLibraryParagraphs,researchDomain,researchDomains,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchDomain,type ResearchEvidence as Evidence,type ResearchAnswer as Answer,type ResearchStatus as Status} from './research-model';
 import {researchCommunityMatches,needsBuildingAuthority,buildingAuthorityMatches} from './research-community';
 import {reviewPolytechnicSnapshot} from './polytechnic-directory';
 import {words,type CRMSnapshot} from './crm-model';
@@ -57,6 +58,7 @@ function AnswerSections({answer,returnTo}:{answer:Answer;returnTo:string}){
  const outside=answer.outside_context?.provenance==='model_knowledge'?answer.outside_context:null;
  return <div className="research-answer">
   <section className="research-answer-section" aria-label="From our library"><h3><BookOpen size={18}/>From our library</h3>
+   {answer.cache?.hit&&<p className="research-small">Saved example, checked {date(answer.cache.reviewed_at)}. Follow-ups are researched live.</p>}
    {paragraphs.length?paragraphs.map((paragraph,index)=>{
     const content=<>{paragraph.text}{paragraph.citations.map(id=>{const n=answer.citations.findIndex(c=>c.id===id);const cite=answer.citations[n];return <Link className="citation-link" key={id} to={cite.reader_url} target="_blank" rel="noopener noreferrer" state={{researchReturn:returnTo}} aria-label={`Source ${n+1}: ${cite.title}, ${cite.label}`}>[{n+1}]</Link>;})}</>;
     return answer.summary_first&&index===0?<ul key={index} aria-label="Key takeaway"><li className="answer-paragraph">{content}</li></ul>:<div key={index}>{answer.summary_first&&index===1&&<h4>More detail</h4>}<p className="answer-paragraph">{content}</p></div>;
@@ -117,6 +119,7 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
  const [busy,setBusy]=useState(false);const request=useRef<AbortController|null>(null);const questionInput=useRef<HTMLTextAreaElement>(null);const latestTurn=useRef<HTMLElement|null>(null);
  const [community,setCommunity]=useState<CRMSnapshot|null>(null);const [communityError,setCommunityError]=useState(false);
  const domainSupported=supportsResearchDomain(status,domain);const canAsk=domainSupported&&!!status?.chat_ready&&status.provider==='anthropic';
+ const cachedExample=(value:string)=>canUseCachedExample(status,value,domain,docId,turns.length,sourceGeneration);
  useEffect(()=>{const controller=new AbortController();setStatusError('');api<Status>('/api/status',{signal:controller.signal}).then(setStatus).catch(e=>{if(e.name!=='AbortError')setStatusError('The research service could not connect. Please try again.');});return()=>controller.abort();},[statusAttempt]);
  useEffect(()=>()=>request.current?.abort(),[]);
  const hasTurns=turns.length>0;
@@ -131,19 +134,14 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
  function stop(){request.current?.abort();setBusy(false);setTurns(current=>current.map(turn=>turn.pending?{...turn,pending:undefined,stopped:true}:turn));}
  function newChat(){stop();memory!.update(scope,{...emptySession});requestAnimationFrame(()=>{heading.current?.closest('main')?.scrollIntoView({block:'start'});questionInput.current?.focus({preventScroll:true});});}
  async function run(value=question,requested=mode){
-  const clean=value.trim();if(clean.length<2||request.current&&!request.current.signal.aborted||!domainSupported||(requested==='ask'&&!canAsk))return;
+  const clean=value.trim();if(clean.length<2||request.current&&!request.current.signal.aborted||!domainSupported||(requested==='ask'&&!canAsk&&!cachedExample(clean)))return;
   const id=crypto.randomUUID();const controller=new AbortController();request.current=controller;
   setBusy(true);setQuestion('');
   // Paint the submitted question before either network request starts.
-  setTurns(current=>[...current,{id,question:clean,results:[],mode:requested,pending:'searching'}]);
+  setTurns(current=>[...current,{id,question:clean,results:[],mode:requested,pending:requested==='ask'?'answering':'searching'}]);
   try{
-   const result=await api<{results:Evidence[];domain?:ResearchDomain}>('/api/search?'+new URLSearchParams({q:clean,domain,...(docId?{document_id:docId}:{}),...(sourceGeneration?{generation:sourceGeneration}:{})}),{signal:controller.signal});
-   if(domain!=='all'&&result.domain!==domain)throw Error('This section is not available on the research service yet. Use All research to explore the current collection.');
-   patchTurn(id,{results:result.results,pending:requested==='ask'?'answering':undefined});
-   if(requested==='ask'){
-    const answer=await api<Answer>('/api/chat',{method:'POST',signal:controller.signal,headers:{'Content-Type':'application/json'},body:JSON.stringify({question:clean,domain,include_outside_context:!isClimatePlan,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer).flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:[...citedLibraryParagraphs(t.answer!).map(p=>p.text),t.answer?.clarification].filter(Boolean).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)})});
-    patchTurn(id,{answer,pending:undefined});
-   }
+   const result=await requestResearch({question:clean,domain,include_outside_context:!isClimatePlan,document_id:docId,generation:sourceGeneration,history:turns.filter(t=>t.answer).flatMap(t=>[{role:'user',content:t.question},{role:'assistant',content:[...citedLibraryParagraphs(t.answer!).map(p=>p.text),t.answer?.clarification].filter(Boolean).join('\n').slice(0,4000)}]).filter(message=>message.content).slice(-8)},requested,controller.signal);
+   patchTurn(id,{...result,pending:undefined});
   }catch(e){patchTurn(id,(e as Error).name==='AbortError'?{pending:undefined,stopped:true}:{pending:undefined,error:(e as Error).message});}
   finally{if(request.current===controller){request.current=null;setBusy(false);}}
  }
@@ -167,11 +165,11 @@ function ResearchConversation({scope,domain,docId,sourceGeneration}:{scope:strin
    </div>
    <form className="research-composer chat-composer" onSubmit={submit}>
     <div className="chat-input"><Textarea label={turns.length?'Ask a follow-up':'Message ActForGoa'} ref={questionInput} id="research-question" value={question} onChange={event=>setQuestion(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();void run();}}} rows={1} maxLength={2000} minLength={2} required placeholder={turns.length?'Ask a follow-up…':isClimatePlan?'Ask about flooding, heat or solar…':domain==='all'?'Ask anything about Goa…':domain==='legal'?'Ask about Goa’s legal framework…':'Ask about Goa’s ecosystems…'}/></div>
-    <div className="composer-actions"><fieldset className="research-mode-fieldset" disabled={busy}><SegmentedControl label="Research mode" options={[{value:'ask',label:'Answer'},{value:'search',label:'Find sources'}]} value={mode} onValueChange={value=>{if(!busy)setMode(value as 'search'|'ask');}}/></fieldset>{busy?<Button className="research-submit" type="button" aria-label="Stop response" title="Stop response" onClick={stop}><Square size={16}/></Button>:<Button className="research-submit" type="submit" aria-label={mode==='ask'?'Ask':'Find sources'} title={mode==='ask'?'Send message':'Find sources'} disabled={question.trim().length<2||!domainSupported||(mode==='ask'&&!canAsk)}><ArrowUp size={21}/></Button>}</div>
+    <div className="composer-actions"><fieldset className="research-mode-fieldset" disabled={busy}><SegmentedControl label="Research mode" options={[{value:'ask',label:'Answer'},{value:'search',label:'Find sources'}]} value={mode} onValueChange={value=>{if(!busy)setMode(value as 'search'|'ask');}}/></fieldset>{busy?<Button className="research-submit" type="button" aria-label="Stop response" title="Stop response" onClick={stop}><Square size={16}/></Button>:<Button className="research-submit" type="submit" aria-label={mode==='ask'?'Ask':'Find sources'} title={mode==='ask'?'Send message':'Find sources'} disabled={question.trim().length<2||!domainSupported||(mode==='ask'&&!canAsk&&!cachedExample(question))}><ArrowUp size={21}/></Button>}</div>
    </form>
    <div className="chat-composer-meta"><p>{busy?'': 'Enter to send · Shift + Enter for a new line'}</p><p>{isClimatePlan?"From the 2023 plan. Check current delivery locally.":"Grounded in our library. Check the sources."}</p></div>
-   {mode==='ask'&&!canAsk&&domainSupported&&(status||statusError)&&<div className="chat-availability" role="status"><p>Answers are unavailable right now. Choose “Find sources” to browse the library while we restore them.</p><Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button></div>}
-   {!turns.length&&<div className="research-starters"><h2>Start with a question</h2>{(isClimatePlan?climatePlanResearch.starters:content.starters).map(question=><Button wrap variant="secondary" key={question} type="button" disabled={busy||!domainSupported||(mode==='ask'&&!canAsk)} onClick={()=>void run(question)}><span className="chat-starter-label">{question}</span></Button>)}</div>}
+   {mode==='ask'&&!canAsk&&domainSupported&&(status||statusError)&&<div className="chat-availability" role="status"><p>{!docId&&domain==='all'&&!!status?.cached_examples?.length?'Live answers are unavailable right now. Saved examples still open; choose “Find sources” for other questions.':'Live answers are unavailable right now. Choose “Find sources” to browse the library.'}</p><Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button></div>}
+   {!turns.length&&<div className="research-starters"><h2>Start with a question</h2>{(isClimatePlan?climatePlanResearch.starters:content.starters).map(question=><Button wrap variant="secondary" key={question} type="button" disabled={busy||!domainSupported||(mode==='ask'&&!canAsk&&!cachedExample(question))} onClick={()=>void run(question)}><span className="chat-starter-label">{question}{cachedExample(question)&&<span className="research-small"> — saved answer</span>}</span></Button>)}</div>}
   </div><details className="research-aside chat-library-info"><summary><BookOpen size={16}/>About the library and your chat</summary><div className="chat-library-body"><h2>Our library comes first.</h2><p>Answers start with evidence from this collection. Source links let you check the passage and the full document.</p>{isClimatePlan?<p>This conversation uses only the saved SAPCC. It may not answer questions about current delivery. Tables and scanned pages can be difficult to extract; check the original page when an answer is incomplete.</p>:<p>The research assistant can search the collection, read full pages and look up public directory records. It asks for missing details when they matter.</p>}<p>{mode==='ask'&&canAsk?isClimatePlan?'Your question, recent chat and selected SAPCC passages go to Anthropic.':'Your question, recent chat and source passages read during the investigation go to Anthropic. Answers cite the sources used.':'Source search uses our library and does not send your question to an AI provider.'} Your chat stays in this tab’s memory and clears on reload.</p>
    <p className="research-service-status" role="status">{statusText}</p>{(statusError||status&&!canAsk)&&<Button variant="ghost" type="button" onClick={()=>setStatusAttempt(value=>value+1)}>Check availability</Button>}
    {status?.search_ready&&<p className="research-coverage">{isClimatePlan?'One source: Goa SAPCC 2023–2033, 111 PDF pages.':domain==='all'?`${status.stats.documents?.toLocaleString()||'Available'} documents in the collection`:status.domain_counts?.[domain]!==undefined?`${status.domain_counts[domain].toLocaleString()} documents in this section`:'Coverage is limited to the indexed collection.'}<br/>{localAgent?"Keyword search across all extracted pages. Original semantic index preserved separately.":"Matched by meaning and keywords."}</p>}
