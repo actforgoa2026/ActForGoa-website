@@ -1,8 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Hero AI button placement correction · 30 October 2026
+## Hero AI button placement live · 30 October 2026
 
-User requested the AI library button on the hero image. Branch `codex/hero-ai-button`, based on main `4fba25e`, moves the same Arc ButtonLink into HomeCarousel below the mission copy, with 24px spacing. The search remains in the section below. Destination/copy and all carousel controls are preserved. Actual Chromium at 1440/768/390/320px verifies the full button inside the hero and above the fold; desktop/phone click reaches `/ai`, and forty retained route renders have no horizontal overflow. Desktop/phone screenshots inspected; production build passes. Impeccable unavailable. This chat retains bounded field-guide release ownership under the existing ship authorization; guarded release evidence is in ignored `.reports/hero-ai-button/`. Rollback baseline `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m`.
+User requested the AI library button on the hero image. PR #141 merged as `c86d951dbc904abd3c373f3aed11a11eb9758045`, tree `3c984034ac3a81bd04ef979cb7689a781e647e3b`. The same Arc ButtonLink sits inside HomeCarousel beneath the mission copy, with 24px spacing. Search stays below the hero; `/ai`, wording, photos and carousel controls are preserved.
+
+The unchanged guarded release passed all 281 tests, production build and staged research/editorial/staff/public-map/newsletter/MCP probes, then promoted `dpl_2GuShZHoTctWhS1krFXoTaJrpJMh` and confirmed the exact alias. Local and public Chromium cover forty retained desktop/phone route renders, no horizontal overflow, and the complete button inside the hero above the fold at 1440/768/390/320px. Desktop/phone click reaches `/ai`; rendered screenshots inspected. Impeccable unavailable. No model call/report submission or backend/corpus/credential/original WordPress change. Previous deployment `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m` remains the rollback. Protected evidence is ignored `.reports/hero-ai-button/{evidence.json,release.log,published.json,live-routes.json,live-check.log,live-1440.png,live-390.png}`. This completion record is excluded from uploads and needs no further deployment.
 
 
 ## Homepage AI library button live · 30 October 2026
