@@ -6,6 +6,7 @@ import {homeSearchDestination} from './home-search';
 import {researchDomains} from './research-model';
 import photos from './content/orbit-photos.json';
 import {Button} from './components/arc/button/button';
+import {Textarea} from './components/arc/textarea/textarea';
 import {SearchField} from './components/arc/search-field/search-field';
 import './orbit-landing.css';
 
@@ -95,7 +96,7 @@ export default function OrbitLanding({embedded = false, ai = false}: {embedded?:
       </h1>
       <p className="goa-orbit-intro">{ai ? 'Explore Goa’s legal and ecological knowledge with AI. Ask a question. Follow the evidence.' : 'Big questions. Local knowledge. A place to begin.'}</p>
       <form className="goa-orbit-composer" onSubmit={ask} role="search" aria-label={ai?"Ask ActForGoa AI":"Search ActForGoa"}>
-        <SearchField id={embedded?"home-search":"explore-search"} label="What would you like to know about Goa?" placeholder={ai?"Ask about Goa’s laws, land or ecosystems…":"Find help with a topic"} value={question} onValueChange={value=>{setQuestion(value);setNeedsTopic(false);}} aria-describedby={needsTopic?"orbit-search-hint orbit-topic-feedback":"orbit-search-hint"} maxLength={2000}/>
+        {ai ? <Textarea id="home-search" label="What would you like to know about Goa?" placeholder="Ask about Goa’s laws, land or ecosystems…" value={question} onChange={event=>setQuestion(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();search(question);}}} rows={3} maxLength={2000} aria-describedby="orbit-search-hint"/> : <SearchField id={embedded?"home-search":"explore-search"} label="What would you like to know about Goa?" placeholder={ai?"Ask about Goa’s laws, land or ecosystems…":"Find help with a topic"} value={question} onValueChange={value=>{setQuestion(value);setNeedsTopic(false);}} aria-describedby={needsTopic?"orbit-search-hint orbit-topic-feedback":"orbit-search-hint"} maxLength={2000}/>}
         <Button type="submit" disabled={question.trim().length < (ai?2:1)}>{ai?"Ask AI":"Search"}</Button>
       </form>
       <p id="orbit-search-hint" className="goa-orbit-search-hint">{ai?"Answers grounded in original sources. Powered by Claude.":"Find the right topic for your next step"}</p>

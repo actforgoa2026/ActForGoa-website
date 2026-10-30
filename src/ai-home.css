@@ -21,3 +21,10 @@
 .ai-home .goa-orbit-suggestions button { font-size:13px; }
 @media(max-width:1000px) { .ai-topic-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } .ai-topic-grid .ai-topic-button { display:flex; flex-direction:column; align-items:flex-start; gap:22px; min-height:160px; } .ai-resource-grid { gap:12px; } .ai-resource-grid>a { padding:24px; } }
 @media(max-width:600px) { .ai-paths { padding-block:40px; } .ai-section-heading { align-items:start; flex-direction:column; gap:16px; } .ai-topic-grid { gap:10px; } .ai-topic-grid .ai-topic-button { padding:20px 14px; min-height:174px; border-radius:16px; } .ai-topic-button strong { font-size:17px; } .ai-topic-button small { font-size:13px; } .ai-topic-button .topic-icon { width:30px; height:30px; } .ai-resource-grid { grid-template-columns:1fr; } .ai-resources { padding-block:20px 48px; } .ai-resource-grid>a { min-height:210px; } .ai-home .goa-orbit-composer { padding:6px; border-radius:16px; } .ai-home .goa-orbit-center:before { inset:-45px -35px; } .ai-home .goa-orbit-scene { transform:scale(.65); transform-origin:50% 49%; } }
+
+/* A multiline chat surface, with the send action on its own bottom row. */
+.ai-home .goa-orbit-composer { flex-direction:column; align-items:stretch; padding:12px; gap:8px; border-radius:24px; }
+.ai-home .goa-orbit-composer:focus-within { outline:2px solid var(--green); outline-offset:3px; }
+.ai-home .goa-orbit-composer textarea { min-height:92px; max-height:180px; resize:none; border:0; background:transparent; box-shadow:none; outline:none; padding:10px 12px; font-size:16px; line-height:1.5; }
+.ai-home .goa-orbit-composer > button { align-self:flex-end; }
+@media(max-width:600px) { .ai-home .goa-orbit-composer { padding:10px; border-radius:20px; } .ai-home .goa-orbit-composer textarea { min-height:96px; padding:8px; } }
