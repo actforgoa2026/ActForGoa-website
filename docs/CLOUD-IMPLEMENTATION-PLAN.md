@@ -1,5 +1,15 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## AI homepage · 30 October 2026
+
+The user superseded the separate-project fork request with one new `/AI` homepage on the existing site. Search starts a conversation on the existing `/ask` route; topic buttons open the existing topic/submenu pages. No separate answer routes, Vercel project, backend, corpus or accounting change.
+
+Implemented in isolated branch `codex/ai-resources-fork` from main `79a9d81`: reused spiral photo hero with AI copy/composer, original eight topic paths, six links to existing research/library/climate/map/MCP tools, and a narrowly opt-in `start=ai` question handoff to existing research. Tab-memory sessions preserve citation returns and follow-ups; unavailability retains the submitted question in the composer. The standard homepage keeps its original topic search behavior.
+
+Validation: all 259 Node tests and production build pass. Actual Chromium at 1440, 390 and 320 pixels verifies 39 loaded photos, eight topic links, existing submenu navigation, one main landmark, no overflow and no page errors. Desktop/phone intercepted model transport confirms exactly one initial submission and follow-up history; no paid AI request was made. Rendered desktop/phone captures were inspected. Impeccable is unavailable in this executor. Evidence is in ignored `.reports/ai-home/`.
+
+Status: implemented and tested; source PR pending. Not merged or deployed. The original site and current review deployment are unchanged. Any promotion must use `release:review` with fresh exact-tree retained-route evidence. The installed Vercel CLI rejects the managed proxy credential placeholder locally, although the supported Vercel REST API can authenticate; do not claim a live `/AI` route until publication and public verification succeed.
+
 ## Research speed release — 30 October 2026
 
 The user authorized cached starter answers, timing measurements and batched retrieval, followed by a live release. The focused local release owner holds issue #89; other local agents remain paused. Branch `codex/research-speed-release` starts at fresh main `2c7e006` and integrates reviewed flood-guidance PR124 (`bb9d311`). Existing live SAPCC generation `20261030-sapcc-native-v2` and every original corpus/accounting record are preserved.

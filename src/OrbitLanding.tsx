@@ -15,7 +15,7 @@ const rings = [
 ];
 const headlineExamples = ['find local help.', 'protect nature.', 'know your rights.', 'take local action.', 'care for Goa.'];
 const suggestions = ['How can I protect a wetland?', 'Understand my village panchayat', 'Explore Goa’s ecosystems'];
-export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
+export default function OrbitLanding({embedded = false, ai = false}: {embedded?: boolean; ai?: boolean}){
   const Container = embedded ? 'section' : 'main';
   const scene = useRef<HTMLDivElement>(null);
   useEffect(() => {
@@ -64,9 +64,9 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
   const [needsTopic,setNeedsTopic]=useState(false);
   const navigate=useNavigate();
   function search(value:string){
-    if (!value.trim()) return;
+    if (value.trim().length < (ai ? 2 : 1)) return;
     setQuestion(value);
-    const destination = homeSearchDestination(value);
+    const destination = ai ? '/ask?' + new URLSearchParams({q:value.trim(),start:'ai'}) : homeSearchDestination(value);
     setNeedsTopic(!destination);
     if (destination) navigate(destination);
   }
@@ -92,15 +92,15 @@ export default function OrbitLanding({embedded = false}: {embedded?: boolean}){
           <span key={text} className="goa-headline-phrase" style={{animationDelay: `${index * 4 - .6}s`}}>{text}</span>
         )}</span>
       </h1>
-      <p className="goa-orbit-intro">Big questions. Local knowledge. A place to begin.</p>
-      <form className="goa-orbit-composer" onSubmit={ask} role="search" aria-label="Search ActForGoa">
-        <SearchField id={embedded?"home-search":"explore-search"} label="What would you like to know about Goa?" placeholder="Find help with a topic" value={question} onValueChange={value=>{setQuestion(value);setNeedsTopic(false);}} aria-describedby={needsTopic?"orbit-search-hint orbit-topic-feedback":"orbit-search-hint"} maxLength={2000}/>
-        <Button type="submit" disabled={!question.trim()}>Search</Button>
+      <p className="goa-orbit-intro">{ai ? 'Explore Goa’s legal and ecological knowledge with AI. Ask a question. Follow the evidence.' : 'Big questions. Local knowledge. A place to begin.'}</p>
+      <form className="goa-orbit-composer" onSubmit={ask} role="search" aria-label={ai?"Ask ActForGoa AI":"Search ActForGoa"}>
+        <SearchField id={embedded?"home-search":"explore-search"} label="What would you like to know about Goa?" placeholder={ai?"Ask about Goa’s laws, land or ecosystems…":"Find help with a topic"} value={question} onValueChange={value=>{setQuestion(value);setNeedsTopic(false);}} aria-describedby={needsTopic?"orbit-search-hint orbit-topic-feedback":"orbit-search-hint"} maxLength={2000}/>
+        <Button type="submit" disabled={question.trim().length < (ai?2:1)}>{ai?"Ask AI":"Search"}</Button>
       </form>
-      <p id="orbit-search-hint" className="goa-orbit-search-hint">Find the right topic for your next step</p>
+      <p id="orbit-search-hint" className="goa-orbit-search-hint">{ai?"Answers grounded in original sources. Powered by Claude.":"Find the right topic for your next step"}</p>
       {needsTopic && <p id="orbit-topic-feedback" className="goa-orbit-topic-feedback" role="status">I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading" onClick={scrollToPaths}>choose a topic below</a>.</p>}
       <div className="goa-orbit-suggestions" aria-label="Suggested questions">{suggestions.map((text)=><Button key={text} variant="secondary" size="sm" onClick={()=>search(text)}>{text}</Button>)}</div>
-      <Link className="goa-orbit-chat-link" to="/ask">Or start a conversation</Link>
+      <Link className="goa-orbit-chat-link" to={ai?"/research-library":"/ask"}>{ai?"Explore the source library":"Or start a conversation"}</Link>
     </section>
     <a className="goa-orbit-scroll" href={embedded?"#home-actions-heading":"/#home-actions-heading"} onClick={scrollToPaths} aria-label="Scroll to ways to take action"><ChevronDown size={23} aria-hidden="true"/></a>
     <footer className="goa-orbit-footer"><span>Rooted in Goa. Made for all of us.</span>{!embedded && <Link to="/about">About ActForGoa</Link>}</footer>
