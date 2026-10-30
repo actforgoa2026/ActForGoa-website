@@ -134,7 +134,7 @@ class ProductionAgent:
             config={'extra_retrieval_terms':'','answer_brief':'','effort':'medium'}
             answer=await asyncio.wait_for(run_agent(request,corpus,config,'http://127.0.0.1:'+os.getenv('PORT','8091')+'/internal-agent',token,run.ceiling/1e6,state=self.state,retain_content=False),110)
             private=answer.pop('_dev')
-            answer['agent']={'engine':'claude-agent-sdk','run_id':run.identifier,'model':MODEL,'tools':[c['tool'] for c in private['tool_calls']], 'model_calls':len(run.receipts),'citation_validation':'read-source IDs and exact original passages'}
+            answer['agent']={'engine':'claude-agent-sdk','run_id':run.identifier,'model':MODEL,'tools':[c['tool'] for c in private['tool_calls']], 'model_calls':len(run.receipts),'citation_validation':'read-source IDs; original passages or labelled official guidance summaries'}
             self.record(event='completed',run=run.identifier,tools=answer['agent']['tools'],model_calls=len(run.receipts),reserved_microusd=run.reserved)
             return answer
         finally:

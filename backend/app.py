@@ -105,7 +105,7 @@ def create_app(root=None, index_root=None, client=None):
                 'stats':lib.manifest['stats'] if lib else {},'model':model,'provider':'anthropic',
                 'domains':['legal','ecology'],'domain_counts':lib.domain_counts() if lib else {'legal':0,'ecology':0},
                 'outside_context_supported':not agent_enabled,'answer_mode':'agent_library_first' if agent_enabled else 'library_first',
-                'agent':{'engine':'claude-agent-sdk','tools':['browse_catalogue','search_documents','read_document','query_crm','read_crm_record','ask_clarifying_question']} if app.state.agent else None,
+                'agent':{'engine':'claude-agent-sdk','tools':['browse_catalogue','search_documents','read_document','query_crm','read_crm_record','ask_clarifying_question','read_official_guidance']} if app.state.agent else None,
                 'chat_unavailable_reason':reason,
                 'embedding_model':'all-MiniLM-L6-v2','search_mode':'zvec+fts5+rrf' if lib else 'unavailable'}
 

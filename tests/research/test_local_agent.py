@@ -115,7 +115,7 @@ def test_sdk_readers_multi_search_and_exact_source_resolution(corpus):
     if search_e['id'] not in r.citable_ids:
         with pytest.raises(ValueError):validate_answer(raw,r,'all')
     o=agent_options(r,'Test prompt','http://127.0.0.1:8093/provider','local-capability',0)
-    assert o.tools==[] and o.setting_sources==[] and len(o.allowed_tools)==6
+    assert o.tools==[] and o.setting_sources==[] and len(o.allowed_tools)==7
     assert o.env['ANTHROPIC_API_KEY']=='local-capability'
 
 def test_premises_query_keeps_existing_intent_expansion(corpus):

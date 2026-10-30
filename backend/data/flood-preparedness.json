@@ -1,0 +1,29 @@
+{
+  "version": "official-flood-guidance-20261030",
+  "checked_on": "2026-10-30",
+  "alerts_url": "https://sachet.ndma.gov.in/",
+  "sources": [
+    {
+      "key": "nidm-prepare",
+      "title": "NIDM: prepare your household for floods",
+      "publisher": "National Institute of Disaster Management, Ministry of Home Affairs, Government of India",
+      "url": "https://nidm.mha.gov.in/PDF/IEC/DOS_E_24.pdf#page=5",
+      "label": "Floods: Before & During, PDF page 5",
+      "format": "pdf",
+      "page": 5,
+      "published_on": null,
+      "text": "Prepare before flooding: agree a safe route to a nearby raised shelter with everyone in the household. Follow warnings and instructions on local radio or television. Pack medicines, menstrual supplies, baby food and important papers in an emergency kit. Have drinking water, dry food and clothing ready. Keep children away from floodwater. These are selected preparedness points from the Floods section, not a complete emergency-response manual."
+    },
+    {
+      "key": "goa-dfes-floods",
+      "title": "Goa Fire & Emergency Services: flood safety",
+      "publisher": "Directorate of Fire & Emergency Services, Government of Goa",
+      "url": "https://dfes.goa.gov.in/floods/",
+      "label": "Flood alerts and warnings; Dos and Don’ts During Floods",
+      "format": "html",
+      "page": 1,
+      "published_on": null,
+      "text": "Before flooding, follow IMD forecasts and instructions from local authorities. Move important belongings upstairs in advance and help children, older people and people with limited mobility prepare. When authorities advise evacuation, leave early for higher ground or a designated shelter. If safe evacuation is impossible, stay on an upper floor away from windows. Never walk, swim or drive through floodwater: currents, hidden obstacles and electrical hazards can make even shallow water dangerous. Avoid electrical appliances during flooding, especially after water enters a home. Use bottled or boiled drinking water. After a flood, wait for authorities to confirm it is safe before returning."
+    }
+  ]
+}

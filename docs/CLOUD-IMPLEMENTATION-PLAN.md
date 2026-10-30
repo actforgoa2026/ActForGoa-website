@@ -1,5 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Official flood preparedness addition ready for integration · 30 October 2026
+
+The user requested official resident flood guidance alongside SAPCC proposals. Isolated branch `codex/sapcc-flood-preparedness` starts from main `2c7e006` and adds a read-only SDK tool for reviewed Goa DFES/NIDM summaries, strict source-category separation, direct official citations, checked-date labels and a live-alert link. No corpus generation, budget, credential or accounting change. The original domain and satellite remain outside scope.
+
+Validation: 256 frontend tests, 225 backend tests, build, four-width UI with explicitly mocked model transport and real source links; original NIDM flood page rendered and reviewed. No paid request or deployment ran in this feature branch. ORCHESTRATOR holds the active cache/timing/batched-retrieval release in issue #89 and requested this reviewed PR for combined integration. Preserve both sets of changes; include the guidance version in example-cache invalidation. See [source review and verification](../reports/sapcc/FLOOD-PREPAREDNESS.md).
+
+
 ## SAPCC research assistant live · 30 October 2026
 
 The resident SAPCC question flow is live, with entry points on the plan overview/topics and general research assistant. PRs #119, #121 and #122 are merged; runtime `977c55a4ebbef9d1a609c24ca6c260fdff213ef5` is deployed as research service `986679ef-46fd-4a65-9086-01085913e051` and guarded frontend `dpl_ENfoDDJTZrG7wAmJQvsC2Qo8AR4f`. Active generation is `20261030-sapcc-native-v2`. The completed SDK workflow, current map/Explore source and unrelated corpus documents are preserved. The primary dirty checkout was untouched.
