@@ -28,3 +28,10 @@
 .ai-home .goa-orbit-composer textarea { min-height:92px; max-height:180px; resize:none; border:0; background:transparent; box-shadow:none; outline:none; padding:10px 12px; font-size:16px; line-height:1.5; }
 .ai-home .goa-orbit-composer > button { align-self:flex-end; }
 @media(max-width:600px) { .ai-home .goa-orbit-composer { padding:10px; border-radius:20px; } .ai-home .goa-orbit-composer textarea { min-height:96px; padding:8px; } }
+
+/* Keep Arc's hover/focus field treatment from creating a second filled surface. */
+.ai-home .goa-orbit-composer textarea:hover,
+.ai-home .goa-orbit-composer textarea:focus,
+.ai-home .goa-orbit-composer textarea:focus-visible { background:transparent; border:0; box-shadow:none; outline:none; }
+
+.ai-home .goa-orbit-composer .ai-send-button { width:46px; height:46px; min-width:46px; padding:0; border-radius:50%; }

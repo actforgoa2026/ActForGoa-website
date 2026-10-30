@@ -1,5 +1,9 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## AI composer surface and intro follow-up · 30 October 2026
+
+User requested removing the inner surface visible while typing and mentioning vetted surveys and data above the composer. The cause is Arc Textarea's higher-specificity hover treatment. AI-only hover/focus overrides keep the field transparent while preserving the outer keyboard focus outline. Intro copy now explicitly says the AI draws on vetted surveys and data. Validate hovered/focused/typing states on desktop and phone and publish through `release:review` under continuing shipping authorization. The same follow-up removes provider-branding copy from the homepage and replaces the text send label with an up-arrow inside the installed Arc Button, retaining a 46px target and accessible “Send question” name. No destination or backend change.
+
 ## NOTES and public map verified live · 30 October 2026
 
 All feasible team-note changes and the public Google/Earth Engine map are published on the existing field-guide site. PR127 carries the mission homepage, action-first topic menus and Google heritage pin form; PR129 fixes phone map/header stacking and expanded-map layering. The later guarded PR130 release includes both: runtime commit `7ede7b29255933a468149635972a76c0645bf195`, tree `a78f0b813cc3fc13579281b93f8d1720e5612657`, deployment `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. Vercel metadata and final public desktop/phone acceptance independently confirm this; no further frontend deployment is required. Earlier pending wording below is historical.

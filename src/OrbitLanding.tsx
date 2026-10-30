@@ -1,6 +1,6 @@
 import {useEffect, useRef, useState, type CSSProperties, type FormEvent} from 'react';
 import {Link, useNavigate} from 'react-router-dom';
-import {ChevronDown} from 'lucide-react';
+import {ChevronDown, ArrowUp} from 'lucide-react';
 import {createOrbitPath, orbitEntranceSpeed} from './orbit-motion';
 import {homeSearchDestination} from './home-search';
 import {researchDomains} from './research-model';
@@ -94,12 +94,12 @@ export default function OrbitLanding({embedded = false, ai = false}: {embedded?:
           <span key={text} className="goa-headline-phrase" style={{animationDelay: `${index * 4 - .6}s`}}>{text}</span>
         )}</span>
       </h1>
-      <p className="goa-orbit-intro">{ai ? 'Explore Goa’s legal and ecological knowledge with AI. Ask a question. Follow the evidence.' : 'Big questions. Local knowledge. A place to begin.'}</p>
+      <p className="goa-orbit-intro">{ai ? 'Explore Goa’s legal and ecological knowledge with AI, drawing on vetted surveys and data.' : 'Big questions. Local knowledge. A place to begin.'}</p>
       <form className="goa-orbit-composer" onSubmit={ask} role="search" aria-label={ai?"Ask ActForGoa AI":"Search ActForGoa"}>
         {ai ? <Textarea id="home-search" label="What would you like to know about Goa?" placeholder="Ask about Goa’s laws, land or ecosystems…" value={question} onChange={event=>setQuestion(event.target.value)} onKeyDown={event=>{if(event.key==='Enter'&&!event.shiftKey&&!event.nativeEvent.isComposing){event.preventDefault();search(question);}}} rows={3} maxLength={2000} aria-describedby="orbit-search-hint"/> : <SearchField id={embedded?"home-search":"explore-search"} label="What would you like to know about Goa?" placeholder={ai?"Ask about Goa’s laws, land or ecosystems…":"Find help with a topic"} value={question} onValueChange={value=>{setQuestion(value);setNeedsTopic(false);}} aria-describedby={needsTopic?"orbit-search-hint orbit-topic-feedback":"orbit-search-hint"} maxLength={2000}/>}
-        <Button type="submit" disabled={question.trim().length < (ai?2:1)}>{ai?"Ask AI":"Search"}</Button>
+        <Button type="submit" aria-label={ai?"Send question":undefined} className={ai?"ai-send-button":undefined} disabled={question.trim().length < (ai?2:1)}>{ai?<ArrowUp size={22} aria-hidden="true"/>:"Search"}</Button>
       </form>
-      <p id="orbit-search-hint" className="goa-orbit-search-hint">{ai?"Answers grounded in original sources. Powered by Claude.":"Find the right topic for your next step"}</p>
+      <p id="orbit-search-hint" className="goa-orbit-search-hint">{ai?"Answers grounded in original sources.":"Find the right topic for your next step"}</p>
       {needsTopic && <p id="orbit-topic-feedback" className="goa-orbit-topic-feedback" role="status">I couldn’t find a clear topic. Try a little more detail, or <a href="#home-actions-heading" onClick={scrollToPaths}>choose a topic below</a>.</p>}
       <div className="goa-orbit-suggestions" aria-label="Suggested questions">{(ai?researchDomains.all.starters:suggestions).map((text)=><Button key={text} variant="secondary" size="sm" onClick={()=>search(text)}>{text}</Button>)}</div>
       <Link className="goa-orbit-chat-link" to={ai?"/research-library":"/ask"}>{ai?"Explore the source library":"Or start a conversation"}</Link>
