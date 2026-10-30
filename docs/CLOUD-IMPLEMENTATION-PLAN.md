@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Document reader formatting · 30 October 2026
+
+Branch `codex/reader-cleanup`, based on fresh main `ada1387`, removes citation background highlighting from Read text and reflows extracted print lines into paragraphs. Short headings, figure captions, lists and tab-separated table rows remain separate; stored corpus text, original-page view and citation URLs remain intact. No backend or corpus changes.
+
+Validation: existing 279 Node tests passed, two focused reflow tests passed, production build passed; actual Chromium at 1440/390/320px used the linked hosted document metadata and page 27 text with intercepted read-only API responses. Verified paragraph flow, no marks, headings, no horizontal overflow and Original page switching with an explicit image fixture. Desktop/phone screenshots inspected in ignored `.reports/reader-cleanup/`. Impeccable is unavailable in this executor. User subsequently authorized “ship it”; this chat owns the bounded reader release through `docs/RELEASING.md`, preserving the newer AI composer release.
+
 ## AI composer surface, source intro and arrow live · 30 October 2026
 
 User requested removing the inner surface visible while typing and mentioning vetted surveys and data above the composer. The cause is Arc Textarea's higher-specificity hover treatment. AI-only hover/focus overrides keep the field transparent while preserving the outer keyboard focus outline. Intro copy now explicitly says the AI draws on vetted surveys and data.  The same follow-up removes provider-branding copy from the homepage and replaces the text send label with an up-arrow inside the installed Arc Button, retaining a 46px target and accessible “Send question” name. No destination or backend change.
