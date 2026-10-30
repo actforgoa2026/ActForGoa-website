@@ -1,5 +1,13 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## October research budget increase authorized · 30 October 2026
+
+The user explicitly selected **$100 total for October** after the live research service reported `monthly_limit` under its existing $50 buildathon allowance. Isolated `codex/research-budget-october` starts from fresh main `d4cf8cc`. The only runtime change raises the dated October 30–31 total ceiling to $100. October 29 remains $50, daily 500 remains unchanged, and November automatically returns to 100/day and $5/month. Prior reservations, failures and imports remain counted; no accounting reset or provider-credential change is authorized or needed.
+
+Validation: 80 focused allowance, hosting, transactional reservation and reconciliation tests passed. Backend source otherwise matches accepted production `333cb3b` exactly. Deployment targets only the existing research Railway service; the main frontend alias and satellite services remain intact. Preserve the live SQLite ledger and reviewed starter answers across the budget-only runtime fingerprint change. Final deployment and read-only preservation evidence will be recorded in `reports/research-budget-2026-10-30/README.md`.
+
+Completed: committed runtime `4aeed67` is live as Railway `98e770fd-b085-4dcb-ba2f-3964bb8f0aca`; public AI readiness is restored and one fresh SAPCC question returned a cited answer. All ledger rows were identical across deployment before the live check. Corpus database and reviewed starter contents/expiry are preserved. All 283 Node tests and the complete production build passed in addition to the 80 accounting tests. See [release and preservation evidence](../reports/research-budget-2026-10-30/README.md). October 30 verification ended at $51.730972 reserved of $100 and 73 model attempts of 500. No frontend promotion is needed.
+
 ## Hero search placement live · 30 October 2026
 
 User requested the search field and arrow on the hero too. PR #145 merged as `488cfc034fe9916bcdc686679ba538fc48df5af1`, tree `8d5423a8f82cc5abe8d40d9fbcabee003894b743`. Existing search now sits directly under the AI link inside one 620px grid with 24px gaps and shared edges. Hero labels and topic-feedback links remain legible. Search routing, AI destination, carousel controls and separate landing page are preserved.
