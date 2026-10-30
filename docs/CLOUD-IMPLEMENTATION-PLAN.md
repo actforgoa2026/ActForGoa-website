@@ -1,5 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Homepage AI library button release authorized · 30 October 2026
+
+The user said “ship it” for PR #136. This chat owns the bounded field-guide release. Latest main `7a2dfb9` and its live carousel/categories/footer are preserved. The existing Arc ButtonLink reads “Use AI to explore our vetted library of surveys and guides” and targets `/ai`. It now precedes the homepage search to keep the full button above the fold with the new carousel at 1440/768/390/320px. All 281 tests and production build pass. Desktop/phone retained-route checks and inspected screenshots are in ignored `.reports/home-ai-button/`. Impeccable unavailable here. Release uses the unchanged `release:review` guard with project-scoped REST transport, retaining all source/alias/health checks. Previous live deployment: `dpl_D5QinYMGKHoHPe7rof1Jwb5mkgCb`. No other service or original WordPress deployment is in scope.
+
+
 ## Homepage carousel and categories verified live · 30 October 2026
 
 The user corrected the standard homepage after the NOTES release: restore the original hero photo carousel with centered mission wording, group topics into Climate/Civic/Culture, enlarge and describe the field-guide sections, and blend the taller stippled footer illustration behind its links. Isolated `codex/home-carousel-categories` preserves current main `2f21e61`, the separate AI homepage, reader cleanup and all NOTES destinations. Actual Arc controls and credited existing photos are reused; the heading stays still while photos rotate. New English copy is tracked for editorial translation.
