@@ -1,5 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Hero search placement release authorized · 30 October 2026
+
+User requested the search field and arrow on the hero too. Branch `codex/hero-search`, based on main `c209a04`, places the existing search directly under the AI link inside one 620px grid with 24px gaps and shared edges. Hero labels and topic-feedback links remain legible. Existing search routing, AI destination and all carousel controls are preserved. The newer separate landing page and its extended release guard remain intact.
+
+Validation: 283 tests and integrated production build pass. Actual desktop/phone checks cover forty retained route renders, real search submission to `/topics/waste`, AI navigation to `/ai`, and 1440/768/390/320px shared edges, hero containment and above-fold visibility of both controls. Screenshots inspected; Impeccable unavailable. This chat retains bounded field-guide release ownership; guarded evidence is in ignored `.reports/hero-search/`. Current baseline is landing deployment `dpl_Gd21aUqvYNmQQKQtp2mSGVFBncK2`; no other deployment scope.
+
+
 ## ActForGoa landing verified live · 30 October 2026
 
 The user requested shipping the base at `/landing` before reordering, then added satellite-map image analysis. PR #143 merged as `e551897092a303a9f9a5cba64d6cbc4258d717e9`, tree `db7baa2f079bd3a34f51d378f8cc859c05d8f542`. Guarded `release:review` promoted `dpl_Gd21aUqvYNmQQKQtp2mSGVFBncK2` and confirmed the public alias. The separate Vite entry preserves the latest root hero AI button, carousel, existing app and services. It includes AI/source explanations, real AI and map screenshots, action resources, stippled Goa artwork, responsive and reduced-motion layouts, and actual installed Arc controls. Provider branding was removed from the landing and its screenshot.

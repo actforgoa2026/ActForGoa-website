@@ -79,3 +79,8 @@
 
 .mission-ai-link { display: flex; width: min(100%, 620px); margin-top: 24px; justify-content: space-between; text-align: left; gap: 12px; }
 .mission-ai-link > svg { flex-shrink: 0; }
+
+.mission-hero-actions { display: grid; gap: 24px; width: min(100%, 620px); margin-top: 24px; text-align: left; }
+.mission-hero-actions .mission-ai-link { width: 100%; margin: 0; }
+.mission-hero-actions .mission-search { width: 100%; }
+.mission-hero-actions .ask-topic-feedback, .mission-hero-actions .ask-topic-feedback a { color: var(--white); }
