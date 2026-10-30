@@ -35,6 +35,7 @@ export default function MissionHome({ search }: { search: ReactNode }) {
       <p className="mission-opener"><span>contribute to climate and cultural resilience</span><span>become more responsible residents and guests</span><span>Safeguard a green future for Goa</span></p>
     </HomeCarousel>
     <section className="mission-intro shell" aria-label="Find your next action" lang="en">
+      <ButtonLink className="mission-ai-link" wrap to="/ai">Use AI to explore our vetted library of surveys and guides <ArrowRight size={18} aria-hidden="true" /></ButtonLink>
       {search}
       <nav className="mission-shortcuts" aria-label="Start here">
         <ButtonLink wrap variant="secondary" to="/climate-plan">Goa’s Climate Action Plan <ArrowRight size={18} aria-hidden="true" /></ButtonLink>
