@@ -35,7 +35,7 @@ export function SatelliteHistory({csrfToken,revision,busy,onOpen,area=null}:{csr
   function search(event:FormEvent){event.preventDefault();setPagination({scope:'',offset:0});setFilters({query,intent,start_date:start,end_date:end});setRefresh(value=>value+1);}
   return <section className="satellite-history" aria-labelledby="satellite-history-heading"><h2 id="satellite-history-heading">Your investigations</h2>
     <p>{area?'Showing your saved comparisons that overlap the selected map area. Their measurements describe each original comparison footprint.':'Showing your private history across all saved areas. Select an area on the map to narrow this list.'}</p>
-    <p>Revisit comparisons by topic and observation period. Results are private to your account and retained for 30 days. These selected areas do not represent monitoring coverage across Goa.</p>
+    <p>Revisit comparisons by topic and observation period. Results are saved for this browser for up to 30 days. Clearing site data removes access to them. These selected areas do not represent monitoring coverage across Goa.</p>
     <form onSubmit={search}><div className="satellite-dates"><Input label="Search saved questions and findings" value={query} maxLength={300} onChange={e=>setQuery(e.target.value)}/>
       <MorphSelect label="Topic" value={intent} onValueChange={setIntent} items={[{value:'',label:'All topics'},...Object.entries(satelliteIntents).map(([value,label])=>({value,label}))]}/>
       <SatelliteDatePicker label="Observation period from" value={start} max={end||undefined} onChange={setStart}/><SatelliteDatePicker label="Observation period until" value={end} min={start||undefined} onChange={setEnd} alignEnd/></div>

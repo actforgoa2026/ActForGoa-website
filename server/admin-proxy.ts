@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from 'node:http';
 
 const MAX_BODY = 420000;
+const publicSatellitePath=/^\/api\/satellite\/(?:session|status|plan|catalog|compare|history|observation|evidence|environment|preview|jobs\/[a-f0-9-]{36})$/;
 const permittedPath = /^\/api\/(?:curation|blog(?:\/[a-z0-9][a-z0-9-]{0,159})?|admin\/(?:config|session|login|logout|stars|satellite\/(?:status|plan|catalog|compare|history|observation|evidence|environment|jobs\/[a-f0-9-]{36})|posts(?:\/[a-zA-Z0-9-]+(?:\/(?:publish|unpublish))?)?))$/;
 
 export function configuredAdminOrigin(raw = process.env.ADMIN_API_ORIGIN): string | null {
@@ -32,31 +33,33 @@ async function requestBody(req: IncomingMessage & {body?:unknown}): Promise<Uint
 }
 
 /** Same-origin session transport to one configured service; never an open URL proxy. */
-export function createAdminProxy(options: {origin?:string; fetcher?:typeof fetch} = {}) {
+export function createAdminProxy(options: {origin?:string; satelliteOrigin?:string; fetcher?:typeof fetch} = {}) {
   return async (req: IncomingMessage, res: ServerResponse) => {
     res.setHeader('Cache-Control','no-store');
     res.setHeader('Content-Type','application/json; charset=utf-8');
     res.setHeader('X-Content-Type-Options','nosniff');
     const fail = (code:number, error:string) => { res.statusCode=code; res.end(JSON.stringify({error})); };
     const url = new URL(req.url || '/', 'https://actforgoa.invalid');
-    if (!permittedPath.test(url.pathname)) return fail(404,'This tool route does not exist.');
-    const origin = configuredAdminOrigin(options.origin ?? process.env.ADMIN_API_ORIGIN);
-    if (!origin) return fail(503,'The team tools service is not configured yet.');
+    const publicSatellite=publicSatellitePath.test(url.pathname);
+    if (!publicSatellite && !permittedPath.test(url.pathname)) return fail(404,'This tool route does not exist.');
+    const origin = configuredAdminOrigin(publicSatellite ? (options.satelliteOrigin ?? process.env.SATELLITE_WEB_ORIGIN ?? 'https://satellite-app-production.up.railway.app') : (options.origin ?? process.env.ADMIN_API_ORIGIN));
+    if (!origin) return fail(503,publicSatellite?'Satellite imagery is temporarily unavailable. Please try again shortly.':'The team tools service is not configured yet.');
     if (!['GET','HEAD','POST','PUT','PATCH','DELETE','OPTIONS'].includes(req.method || 'GET')) return fail(405,'Method not allowed.');
     const isAdmin = url.pathname.startsWith('/api/admin/');
+    const isSatellite=publicSatellite||url.pathname.startsWith('/api/admin/satellite/');
     const headers = new Headers({accept:'application/json'});
-    for (const key of ['content-type','origin','sec-fetch-site','x-csrf-token', ...(isAdmin ? ['cookie'] : [])]) {
+    for (const key of ['content-type','origin','sec-fetch-site','x-csrf-token', ...((isAdmin||publicSatellite) ? ['cookie'] : [])]) {
       const value = req.headers[key];
-      if (typeof value === 'string') headers.set(key,value);
+      if (typeof value === 'string') headers.set(key,publicSatellite&&key==='cookie'?value.split(';').map(item=>item.trim()).filter(item=>item.startsWith('afg_map_visitor=')).join('; '):value);
     }
     try {
       const body = await requestBody(req);
       const response = await (options.fetcher ?? fetch)(origin + url.pathname + url.search, {
         method:req.method || 'GET', headers, body:body as BodyInit | undefined,
-        redirect:'manual', signal:AbortSignal.timeout(url.pathname.startsWith('/api/admin/satellite/') ? 60_000 : 20_000),
+        redirect:'manual', signal:AbortSignal.timeout(isSatellite ? 60_000 : 20_000),
       });
       if (response.status >= 300 && response.status < 400) return fail(502,'The team tools service returned an unexpected redirect.');
-      const maximum = (url.pathname.startsWith('/api/admin/satellite/') ? 4 : 2) * 1024 * 1024;
+      const maximum = (isSatellite ? 4 : 2) * 1024 * 1024;
       const chunks: Uint8Array[] = [];
       let size = 0;
       const reader = response.body?.getReader();
@@ -75,7 +78,7 @@ export function createAdminProxy(options: {origin?:string; fetcher?:typeof fetch
       const payload = Buffer.concat(chunks);
       res.statusCode=response.status;
       res.setHeader('Content-Type',response.headers.get('content-type') || 'application/json; charset=utf-8');
-      if (isAdmin) {
+      if (isAdmin||publicSatellite) {
         const cookies=response.headers.getSetCookie();
         if (cookies.length) res.setHeader('Set-Cookie',cookies);
       }

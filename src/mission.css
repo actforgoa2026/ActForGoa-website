@@ -1,0 +1,51 @@
+.mission-intro { padding-block: 40px 32px; }
+.mission-intro h1 { max-width: 20ch; font-size: clamp(40px, 5vw, 64px); font-weight: 800; line-height: 1.12; letter-spacing: -.035em; text-wrap: balance; }
+.mission-intro h1 > span { display: block; }
+.mission-intro .mission-heading-lead { font-size: clamp(24px, 3.2vw, 40px); line-height: 1.3; letter-spacing: -.025em; margin-bottom: 6px; }
+.mission-intro > p { max-width: 64ch; margin: 20px 0 24px; font-size: 18px; line-height: 1.65; color: var(--muted); text-wrap: pretty; }
+.mission-opener > span { display: block; }
+.mission-search { width: min(100%, 760px); }
+.mission-search-controls { display: flex; align-items: end; gap: 12px; }
+.mission-search-controls > :first-child { flex: 1; min-width: 0; }
+.mission-shortcuts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
+.mission-shortcuts a { max-width: 100%; }
+.mission-topics { padding-block: 8px 32px; }
+.mission-topics h2, .mission-explore h2 { font-size: clamp(24px, 3vw, 32px); line-height: 1.3; margin-bottom: 16px; }
+.mission-topic-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
+.mission-topic-list a { min-width: 0; min-height: 72px; }
+.mission-topic-list .topic-icon { width: 22px; height: 22px; }
+.mission-emergency { margin-top: 20px; min-height: 44px; font-size: 15px; }
+.mission-explore { padding-block: 24px 48px; border-top: 1px solid var(--line); }
+.mission-collections { display: flex; flex-wrap: wrap; gap: 8px; margin-block: 16px; }
+.instagram-feed { margin-top: 24px; max-width: 720px; }
+.instagram-feed p { color: var(--muted); margin-block: 12px; }
+.instagram-feed iframe { display: block; width: 100%; height: 440px; border: 1px solid var(--line); background: var(--white); margin-block: 16px; }
+.topic-introduction { max-width: 72ch; margin: -12px 0 32px; color: var(--muted); font-size: 18px; line-height: 1.65; }
+.topic-support { display: flex; flex-wrap: wrap; gap: 12px 28px; border-top: 1px solid var(--line); padding-top: 20px; margin-top: 32px; }
+.topic-support a { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; font-weight: 700; }
+.topic-concerns { margin-top: 32px; padding-top: 24px; border-top: 1px solid var(--line); }
+.topic-concerns h3 { font-size: 20px; margin-bottom: 16px; }
+.choice-copy { display: grid; gap: 8px; }
+.choice-description { font-size: 15px; font-weight: 550; line-height: 1.5; color: var(--muted); }
+.topic-infographic { margin-block: 32px; max-width: 900px; }
+.topic-infographic img { display: block; width: 100%; height: auto; background: var(--white); }
+.topic-infographic figcaption { font-size: 14px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+.topic-infographic a { text-decoration: underline; text-underline-offset: 3px; }
+@media (min-width: 680px) { .mission-topic-list { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (min-width: 1100px) { .mission-topic-list { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (max-width: 620px) {
+  .mission-intro { padding-block: 28px 24px; }
+  .mission-intro > p { font-size: 16px; margin-block: 16px 20px; }
+  .mission-shortcuts { display: grid; gap: 10px; }
+  .mission-collections { display: grid; gap: 8px; }
+  .topic-introduction { font-size: 16px; }
+  .topic-support { display: grid; gap: 8px; }
+  .choice-description { font-size: 16px; }
+}
+
+.topic-action-link { min-width: 0; min-height: 80px; }
+.topic-action-link .topic-icon { width: 24px; height: 24px; }
+
+/* Use the current Arc link's direct children on the shared navigation grid. */
+.mission-topic-list a, .topic-action-link { display: grid; grid-template-columns: 24px minmax(0, 1fr) 22px; text-align: left; gap: 12px; }
+.mission-topic-list a > svg, .topic-action-link > svg { flex-shrink: 0; }

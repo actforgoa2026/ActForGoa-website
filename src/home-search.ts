@@ -6,6 +6,12 @@ type Signal = readonly [pattern: RegExp, weight: number];
 // Match the needs covered by the homepage menus, not incidental article text.
 // Specific tasks outweigh broad subjects and generic actions such as reporting.
 const signals: Record<string, readonly Signal[]> = {
+  tourism: [[/\b(touris\w*|hospitality|responsible (?:guest|visitor|venue|event|operator))\b/, 10]],
+  carbon: [[/\b(net zero|carbon (?:reduction|footprint|emissions)|cleaner energy|energy efficiency)\b/, 10]],
+  flooding: [[/\b(flood(?:ing)? (?:preparation|preparedness)|prepare.*flood|fire prevention|disaster preparedness|floods and fires)\b/, 10]],
+  business: [[/\b(green business|sustainable business|responsible business|circular business)\b/, 10]],
+  laws: [[/\b(green laws|environmental (?:law|laws|rights|responsibilities)|forest rights)\b/, 10]],
+  education: [[/\b(green (?:education|courses)|environmental (?:education|course|courses|workshops)|climate (?:course|education))\b/, 10]],
   waste: [
     [/\b(waste|rubbish|garbage|trash|litter|recycl\w*|compost\w*|dumping|landfill)\b/, 4],
     [/\b(food scraps|kitchen scraps|food waste|garden waste|e waste|clean ?ups?|missed collection|bulky items|illegal dumping)\b/, 7],
@@ -13,7 +19,7 @@ const signals: Record<string, readonly Signal[]> = {
   ],
   water: [
     [/\b(water|sewage|sewer\w*|pollution|polluted|rainwater|rivers?|lakes?|wetlands?|coast\w*|beaches?|environment\w*|flood\w*)\b/, 4],
-    [/\b(water supply|water pressure|tap water|water quality|rain ?water harvesting|leaking pipe|broken pipe|sewage discharge|air pollution|noise pollution|oil spill)\b/, 7],
+    [/\b(water supply|water pressure|tap water|water quality|rain ?water harvesting|leaking pipe|broken pipe|sewage discharge|noise pollution|oil spill)\b/, 7],
     [/\b(taps?|pipes?|drains?|drainage|leak\w*)\b/, 3],
   ],
   community: [
@@ -22,6 +28,7 @@ const signals: Record<string, readonly Signal[]> = {
     [/\b(volunteer\w*|donat\w*|complaint\w*|report\w*|participat\w*|neighbou?rhood|hungry)\b/, 2],
   ],
   nature: [
+    [/\b(plant\w* (?:a |some )?(?:tree|trees)|khazans?|plateaus?|wildlife monitoring)\b/, 10],
     [/\b(nature|ecosystems?|wildlife|animals?|dogs?|cats?|cows?|cattle|birds?|snakes?|cobras?|vipers?|pythons?|trees?|forest\w*|biodiversity|vets?|veterinar\w*)\b/, 4],
     [/\b(animals?|dogs?|cats?|cows?|cattle|birds?|snakes?|cobras?|vipers?|pythons?|vets?|veterinar\w*)\b/, 3],
     [/\b(animal rescue|animal welfare|animal cruelty|injured (?:dog|cat|bird|animal)|tree cutting|cutting (?:down )?trees?|trees? (?:cut|being cut|chopped|felled)|wildlife rescue|snake rescue)\b/, 7],
@@ -32,10 +39,12 @@ const signals: Record<string, readonly Signal[]> = {
     [/\b(grow\w* (?:my own |some )?(?:food|vegetables|plants)|plant\w* (?:a |some )?(?:tree|trees|seeds)|kitchen garden|krishi card|crop damage|farm support|organic farming)\b/, 7],
   ],
   planning: [
+    [/\b(female taxi|women taxi|women drivers|car pool\w*|cooling|construction waste)\b/, 8],
     [/\b(build\w*|construct\w*|transport\w*|planning|mobility|roads?|traffic|buses?|cycling|potholes?|architect\w*|renovat\w*|zoning|permits?)\b/, 4],
     [/\b(building permission|construction permit|illegal construction|public transport|bus routes?|road safety|land use|town planning|solar panels?)\b/, 7],
   ],
   health: [
+    [/\b(air pollution|burning waste health)\b/, 10],
     [/\b(health|wellbeing|wellness|hospital\w*|clinics?|doctors?|medical|disabilit\w*|accessib\w*|counsell?\w*|therapy|depression|anxiety|psychiatr\w*|blind|wheelchair\w*)\b/, 4],
     [/\b(mental health|disability (?:support|rights)|sight loss|learning support|daily living|child development|health care|healthcare)\b/, 7],
   ],

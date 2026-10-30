@@ -14,7 +14,7 @@ if (git('status', '--porcelain', '--untracked-files=all')) throw new Error('Comm
 const mappings = [
   ['deploy/admin/package.json','package.json'], ['deploy/admin/package-lock.json','package-lock.json'],
   ['deploy/admin/Dockerfile','Dockerfile'], ['deploy/admin/railway.json','railway.json'],
-  ...['server/admin.ts','server/admin-store.ts','server/admin-accounts.ts','server/satellite-proxy.ts','shared/admin.ts',
+  ...['server/admin.ts','server/admin-store.ts','server/admin-accounts.ts','server/satellite-proxy.ts','server/satellite-public.ts','shared/admin.ts',
     'public/data/catalog.json','public/data/crm.json','src/content/guide-records.json'].map(path => [path,path]),
 ];
 for (const [source] of mappings) if (!existsSync(resolve(root, source))) throw new Error(`Missing required source: ${source}`);

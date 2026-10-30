@@ -57,7 +57,7 @@ export interface SiteHeaderDestination {
 export interface SiteHeaderProps {
   /** `simple` puts links beside the brand, `centered` centers them in a quiet capsule, `mega` opens panels for items with links. */
   variant?: SiteHeaderVariant;
-  brand?: { name: string; href?: string; mark?: ReactNode };
+  brand?: { name: string; href?: string; mark?: ReactNode; tagline?: string };
   items?: SiteHeaderItem[];
   /** Value of the item that holds the current page (controlled). */
   current?: string;
@@ -281,7 +281,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
     if (!menuOpen) return;
     const trap = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
-      const elements = Array.from(rootRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled])') ?? []).filter(node => node.getClientRects().length > 0);
+      const elements = Array.from(rootRef.current?.querySelectorAll<HTMLElement>('a[href], button:not([disabled]), select:not([disabled]), input:not([disabled]), textarea:not([disabled]), [tabindex="0"]') ?? []).filter(node => node.getClientRects().length > 0);
       const first = elements[0], last = elements.at(-1);
       if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus({ preventScroll: true }); }
       else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus({ preventScroll: true }); }
@@ -367,7 +367,7 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
   };
 
   const brandNode = <Destination link={{ label: brand.name, href: brand.href }} className={styles.brand} onChoose={() => { onNavigate?.({ label: brand.name, href: brand.href }); close(); closeMenu(); }}>
-    {brand.mark ?? <ArcMark className={styles.brandMark} />}<span>{brand.name}</span>
+    {brand.mark ?? <ArcMark className={styles.brandMark} />}<span className={styles.brandText}><span>{brand.name}</span>{brand.tagline && <span className={styles.tagline}>{brand.tagline}</span>}</span>
   </Destination>;
 
   return <header
@@ -481,14 +481,14 @@ export const SiteHeader = forwardRef<HTMLElement, SiteHeaderProps>(function Site
 
     <AnimatePresence>
       {menuOpen && <>
-        <motion.div key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
+        <motion.div key="scrim" className={styles.scrim} onClick={() => closeMenu()} initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, transition: { duration: 0 } }} transition={{ duration: reduced ? 0 : motionTokens.duration.standard, ease: standard }} aria-hidden="true" />
         <motion.div
           key="sheet"
           id={`${id}-sheet`}
           className={styles.sheet}
           initial={reduced ? { opacity: 0 } : { height: 0 }}
           animate={reduced ? { opacity: 1 } : { height: "auto" }}
-          exit={reduced ? { opacity: 0 } : { height: 0, transition: SHRINK }}
+          exit={{ opacity: 0, transition: { duration: 0 } }}
           transition={reduced ? { duration: 0 } : GROW}
         >
           <nav className={styles.sheetInner} aria-label={label}>

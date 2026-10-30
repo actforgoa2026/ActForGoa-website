@@ -21,7 +21,7 @@ export default function EmergencyServices() {
   return (
     <main className="emergency-page shell">
       <Link className="text-link" to="/"><ArrowLeft size={17} aria-hidden="true" /> <span lang={language}>{t("Back")}</span></Link>
-      <h1 lang={language}>{t("Emergency services")}</h1>
+      <h1 lang={language}>{t("Emergency helpline numbers")}</h1>
       <p className="emergency-intro"><span lang={language}>{t("Goa helplines. Tap a number to call.")}</span></p>
       <ButtonLink wrap className="emergency-number" href="tel:112" aria-label="Call all emergencies on 112">
         <Siren size={24} aria-hidden="true" />

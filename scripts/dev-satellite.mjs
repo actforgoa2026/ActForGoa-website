@@ -31,9 +31,6 @@ const api=spawn(python,['-m','uvicorn','satellite.app:create_app','--factory','-
 process.env.SATELLITE_API_ORIGIN=apiOrigin;process.env.SATELLITE_SERVICE_TOKEN=env.SATELLITE_SERVICE_TOKEN;
 const {server:admin,store}=createAdminServer({publicOrigin:origin,databasePath:resolve(privateRoot,'admin.sqlite'),knownRecordIds:new Set(),local:true});
 const adminHandler=admin.listeners('request')[0];
-const email='local-satellite@localhost.test',password=randomBytes(32).toString('hex');
-await store.provision(email,'Local satellite workspace',password,'editor');
-let session=await store.login(email,password,null);
 const vite=await createViteServer({mode:'satellite',configFile:resolve(root,'vite.satellite.config.ts'),server:{host:'127.0.0.1',middlewareMode:true,watch:{ignored:['**/dist/**','**/dist-server/**','**/dist-api/**','**/.reports/**']},hmr:{port:4177,host:'127.0.0.1'}},appType:'custom'});
 const server=createHttpServer(async(req,res)=>{
   const path=new URL(req.url||'/',origin).pathname;
@@ -43,14 +40,7 @@ const server=createHttpServer(async(req,res)=>{
   }
   res.setHeader('Referrer-Policy','strict-origin-when-cross-origin');res.setHeader('X-Content-Type-Options','nosniff');
   if(path==='/api/map-config')return serveMapConfig(req,res,browserKey);
-  // Local-only session: normal CSRF/authenticated proxy, isolated local account/data.
-  // The listener is loopback-only, rejects foreign Host/Origin and cross-site requests.
-  if(path==='/api/admin/session'&&req.method==='GET'){
-    if(session.expiresAt<Date.now()+60000)session=await store.login(email,password,null);
-    res.writeHead(200,{'Content-Type':'application/json','Cache-Control':'no-store','Set-Cookie':`afg_admin_session=${session.token}; HttpOnly; SameSite=Strict; Path=/api/admin; Max-Age=43200`});
-    return res.end(JSON.stringify({user:session.user,csrfToken:session.csrfToken}));
-  }
-  if(path.startsWith('/api/admin/satellite/'))return adminHandler(req,res);
+  if(path.startsWith('/api/satellite/'))return adminHandler(req,res);
   if(path.startsWith('/api/')){res.writeHead(404);return res.end();}
   if(['/','/map','/admin'].includes(path)){
     try{const html=await vite.transformIndexHtml(req.url||'/map',readFileSync(resolve(root,'satellite.html'),'utf8'));res.writeHead(200,{'Content-Type':'text/html','Cache-Control':'no-store'});res.end(html);}catch(error){vite.ssrFixStacktrace(error);res.writeHead(500);res.end('The local satellite build could not load. Check the dev terminal.');}
@@ -62,4 +52,4 @@ let stopping=false;
 async function stop(){if(stopping)return;stopping=true;server.close();await vite.close();api.kill('SIGTERM');store.db.close();}
 process.on('SIGINT',()=>void stop());process.on('SIGTERM',()=>void stop());
 api.on('exit',code=>{if(!stopping){console.error('Local satellite API stopped:',code);void stop();}});
-server.listen(4176,'127.0.0.1',()=>console.log(`Satellite workspace: ${origin}/map\nLive reload enabled. Local account and imagery are isolated from the hosted app. Ctrl+C stops both servers.`));
+server.listen(4176,'127.0.0.1',()=>console.log(`Satellite workspace: ${origin}/map\nLive reload enabled. Browser sessions and imagery are isolated from the hosted app. Ctrl+C stops both servers.`));

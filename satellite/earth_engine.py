@@ -84,9 +84,11 @@ class EarthEngine:
                     raise ValueError('Unexpected tile destination')
                 result = {'provider': 'earth-engine', 'collection': COLLECTION,
                     'tile_url': tile_url, 'start_date': key[0], 'end_date': key[1],
+                    'bounds': list(GOA.bounds),
                     'first_acquired_at': datetime.fromtimestamp(metadata['first']/1000, timezone.utc).isoformat(),
                     'last_acquired_at': datetime.fromtimestamp(metadata['last']/1000, timezone.utc).isoformat(),
                     'scene_count': metadata['count'], 'method': 'cloud-masked median',
+                    'expires_at': (datetime.now(timezone.utc)+timedelta(minutes=45)).isoformat(),
                     'scope': 'Goa navigation overview; not an exact acquisition or change measurement.',
                     'cache_hit': False}
                 self._previews = {k:v for k,v in self._previews.items() if v[0] > time.monotonic()}

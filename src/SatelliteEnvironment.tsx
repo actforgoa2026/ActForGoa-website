@@ -9,7 +9,13 @@ type Environment = {
 };
 const time=(value:string)=>value?new Date(value).toLocaleString('en-IN',{timeZone:'Asia/Kolkata',dateStyle:'medium',timeStyle:'short'})+' IST':'Time unavailable';
 
-export function SatelliteEnvironment({area,csrfToken,ready}:{area:SatelliteArea|null;csrfToken:string;ready:boolean}){
+type EnvironmentProps={area:SatelliteArea|null;csrfToken:string;ready:boolean};
+
+export function SatelliteEnvironment(props:EnvironmentProps){
+  return <details className="satellite-environment"><summary>Current conditions and directions</summary><SatelliteEnvironmentContent {...props}/></details>;
+}
+
+export function SatelliteEnvironmentContent({area,csrfToken,ready}:EnvironmentProps){
   const [data,setData]=useState<Environment|null>(null),[busy,setBusy]=useState(false),[error,setError]=useState('');
   const request=useRef<AbortController|null>(null);
   useEffect(()=>{request.current?.abort();setData(null);setBusy(false);setError('');return()=>request.current?.abort();},[area,csrfToken]);
@@ -22,8 +28,8 @@ export function SatelliteEnvironment({area,csrfToken,ready}:{area:SatelliteArea|
     finally{if(!controller.signal.aborted)setBusy(false);}
   }
   const centre=area?[(area.bbox[1]+area.bbox[3])/2,(area.bbox[0]+area.bbox[2])/2]:null;
-  const reason=!area?'Select an area to check its current conditions.':!csrfToken?'Sign in to check current conditions.':!ready?'Google environmental services are not connected yet.':'';
-  return <details className="satellite-environment"><summary>Current conditions and directions</summary>
+  const reason=!area?'Select an area to check its current conditions.':!csrfToken?'Connecting current conditions…':!ready?'Google environmental services are not connected yet.':'';
+  return <>
     <p>Weather and air quality at the centre of your selected area. These are current readings, separate from the historical satellite images.</p>
     <div className="satellite-environment-actions"><Button type="button" variant="secondary" loading={busy} disabled={!!reason} onClick={load}>{data?'Refresh current conditions':'Check current conditions'}</Button>
       {centre&&<a href={'https://www.google.com/maps/dir/?api=1&destination='+centre.join(',')} target="_blank" rel="noreferrer">Get directions in Google Maps</a>}</div>
@@ -37,5 +43,5 @@ export function SatelliteEnvironment({area,csrfToken,ready}:{area:SatelliteArea|
       <p className="satellite-google-credit">Google Maps</p>
     </div>}
     <p className="satellite-note">Checking conditions sends the selected area’s centre to Google. Readings are not saved with your investigation. <a href="https://maps.google.com/help/terms_maps/" target="_blank" rel="noreferrer">Google Maps terms</a> · <a href="https://policies.google.com/privacy" target="_blank" rel="noreferrer">Google privacy policy</a></p>
-  </details>;
+  </>;
 }

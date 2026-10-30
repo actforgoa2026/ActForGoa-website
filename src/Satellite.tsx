@@ -3,11 +3,10 @@ import {DatePicker} from './components/arc/date-picker/date-picker';
 import {calendarDate,calendarValue} from './satellite-calendar';
 import {MorphSelect} from './components/arc/morph-select/morph-select';
 import {useEffect,useRef,useState,type FormEvent} from 'react';
-import {Link} from 'react-router-dom';
 import {Button} from './components/arc/button/button';
 import {Input} from './components/arc/input/input';
 import {Textarea} from './components/arc/textarea/textarea';
-import {adminApi,AdminApiError,type AdminSession} from './admin-api';
+import {satelliteSession,type SatelliteSession} from './satellite-api';
 import {satelliteApi,SatelliteApiError,type SatelliteArea,type SatelliteScene,type SatellitePlan,type SatelliteResult,type SatelliteIntent,type SatelliteRequest,type SatelliteObservation} from './satellite-api';
 import {SatelliteHistory,satelliteIntents as intents,observationDate as dateLabel} from './SatelliteHistory';
 import {SatelliteContext} from './SatelliteContext';
@@ -21,6 +20,7 @@ import './satellite.css';
 import './satellite-layout.css';
 
 const percent=(n:number)=>`${Math.round(n*100)}%`;
+const sceneDate=(value:string)=>new Intl.DateTimeFormat('en-GB',{timeZone:'Asia/Kolkata',day:'numeric',month:'short',year:'numeric'}).format(new Date(value));
 const today=()=>new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Kolkata',year:'numeric',month:'2-digit',day:'2-digit'}).format(new Date());
 type Readiness={imagery_ready:boolean;imagery_provider?:string;google_maps_ready?:boolean;planner_ready:boolean;decisions_ready:boolean;classification_ready?:boolean;classification_provider?:string|null};
 type SavedJob={id:string;status:string;request:(SatelliteRequest&{kind?:string;scene_id?:string})|null;result:(SatelliteResult&{observation?:SatelliteObservation;error?:string})|null};
@@ -41,7 +41,7 @@ export default function Satellite(){
   const [panel,setPanel]=useState('analyse');
   const panelScroll=useRef<HTMLDivElement>(null);
   useEffect(()=>{panelScroll.current?.scrollTo({top:0});},[panel]);
-  const [session,setSession]=useState<AdminSession|null>(null),[authChecked,setAuthChecked]=useState(false),[accessError,setAccessError]=useState(''),[accessRevision,setAccessRevision]=useState(0),[pendingJob,setPendingJob]=useState('');
+  const [session,setSession]=useState<SatelliteSession|null>(null),[authChecked,setAuthChecked]=useState(false),[accessError,setAccessError]=useState(''),[accessRevision,setAccessRevision]=useState(0),[pendingJob,setPendingJob]=useState('');
   const [area,setArea]=useState<SatelliteArea|null>(null),[coords,setCoords]=useState(['73.82','15.48','73.83','15.49']);
   const [question,setQuestion]=useState('');
   const [start,setStart]=useState(()=>{const d=new Date();d.setDate(d.getDate()-40);return d.toISOString().slice(0,10);}),[end,setEnd]=useState(today);
@@ -57,17 +57,17 @@ export default function Satellite(){
     const abort=new AbortController();setAuthChecked(false);setAccessError('');setReadiness(null);
     async function check(){
       try {
-        const account=await adminApi<AdminSession>('/api/admin/session',{signal:abort.signal});
+        const account=await satelliteSession(abort.signal);
         if(abort.signal.aborted)return;
-        if(verifiedActor.current!==null&&verifiedActor.current!==account.user.id)clearPrivateState();
-        verifiedActor.current=account.user.id;setSession(account);
-        try {const id=sessionStorage.getItem(pendingJobKey(account.user.id));setPendingJob(validJobId(id)?id:'');}catch{/* Storage may be unavailable; in-memory recovery still works. */}
+        if(verifiedActor.current!==null&&verifiedActor.current!==account.visitorId)clearPrivateState();
+        verifiedActor.current=account.visitorId;setSession(account);
+        try {const id=sessionStorage.getItem(pendingJobKey(account.visitorId));setPendingJob(validJobId(id)?id:'');}catch{/* Storage may be unavailable; in-memory recovery still works. */}
         const status=await satelliteApi<Readiness>('/status',account.csrfToken,undefined,abort.signal);
         if(!abort.signal.aborted)setReadiness(status);
       }catch(e){
         if(abort.signal.aborted)return;
-        if(e instanceof AdminApiError&&e.status===401){if(verifiedActor.current!==null)clearPrivateState();verifiedActor.current=null;setSession(null);setPendingJob('');}
-        else setAccessError(e instanceof SatelliteApiError&&e.status===401?'The satellite service rejected access after your account was verified. Retry the check; if it persists, the service connection needs attention.':e instanceof Error?e.message:'Unable to check satellite access.');
+        if(e instanceof SatelliteApiError&&e.status===401){if(verifiedActor.current!==null)clearPrivateState();verifiedActor.current=null;setSession(null);setPendingJob('');}
+        setAccessError(e instanceof SatelliteApiError&&e.status===401?'Satellite imagery could not connect. Please retry.':e instanceof Error?e.message:'Satellite imagery could not load. Please retry.');
       }finally{if(!abort.signal.aborted)setAuthChecked(true);}
     }
     void check();return()=>abort.abort();
@@ -75,7 +75,7 @@ export default function Satellite(){
   useEffect(()=>{const recheck=()=>setAccessRevision(value=>value+1);window.addEventListener('focus',recheck);return()=>{window.removeEventListener('focus',recheck);controller.current?.abort();};},[]);
   function trackJob(id:string){
     setPendingJob(id);
-    if(session)try{if(id)sessionStorage.setItem(pendingJobKey(session.user.id),id);else sessionStorage.removeItem(pendingJobKey(session.user.id));}catch{/* Retain the visible reference when storage is unavailable. */}
+    if(session)try{if(id)sessionStorage.setItem(pendingJobKey(session.visitorId),id);else sessionStorage.removeItem(pendingJobKey(session.visitorId));}catch{/* Retain the visible reference when storage is unavailable. */}
   }
   function clearResults(){setPanel('analyse');setActiveId('');setObservations({});setScenes([]);setBefore('');setAfter('');setResult(null);setNotice('');setError('');setCatalogFreshness(null);}
   function chooseArea(value:SatelliteArea){if(lock.current)return;const message=areaError(value.bbox);if(message){setError(message);return;}setArea(value);setCoords(value.bbox.map(v=>v.toFixed(5)));setPlan(null);clearResults();}
@@ -144,7 +144,7 @@ export default function Satellite(){
   });}
   const periodDays=(Date.parse(end)-Date.parse(start))/86400000;
   const periodError=!start||!end||!Number.isFinite(periodDays)||periodDays<0?'Choose an ordered start and end date.':start<'2017-03-28'||end>today()?'Choose dates from 28 March 2017 through today.':periodDays>120?'New imagery searches cover up to 120 days. Use a shorter period; saved-evidence search can span longer periods.':'';
-  const findReason=!authChecked?'Checking your access…':accessError?'Retry the access check to enable imagery.':!session?'Sign in to retrieve imagery.':!readiness?.imagery_ready?'Satellite imagery retrieval is not configured on this server.':!area?'Select an area on the map first.':periodError;
+  const findReason=!authChecked?'Connecting satellite imagery…':accessError?'Retry imagery to reconnect.':!session?'Reconnect to load imagery.':!readiness?.imagery_ready?'Satellite imagery retrieval is not configured on this server.':!area?'Select an area on the map first.':periodError;
   const centre=area?[(area.bbox[0]+area.bbox[2])/2,(area.bbox[1]+area.bbox[3])/2]:[74,15.4];
   return <main className="satellite-page shell"><header className="satellite-heading"><h1>Explore Goa through time</h1><p>Find a place. Draw an area. Explore what changed.</p></header>
     <div className="satellite-workspace">
@@ -154,10 +154,9 @@ export default function Satellite(){
     <aside className="satellite-analysis" aria-label="Satellite analysis tools">
       <SegmentedControl fullWidth label="Investigation view" value={panel} onValueChange={setPanel} options={[{value:'analyse',label:'Analyse'},{value:'results',label:'Results'},{value:'evidence',label:'Saved evidence'}]}/>
       <div ref={panelScroll} className="satellite-panel-scroll" role="region" tabIndex={0} aria-label="Analysis panel">
-    {!authChecked&&<p role="status">Checking satellite access…</p>}
-    {accessError&&<div className="satellite-access" role="alert"><p>{accessError}</p><Button type="button" variant="secondary" disabled={!authChecked} onClick={()=>setAccessRevision(v=>v+1)}>Retry access check</Button><p><a href="https://satellite-app-production.up.railway.app/map">Open the standalone satellite workspace</a></p></div>}
+    {!authChecked&&<p role="status">Connecting satellite imagery…</p>}
+    {accessError&&<div className="satellite-access" role="alert"><p>{accessError}</p><Button type="button" variant="secondary" disabled={!authChecked} onClick={()=>setAccessRevision(v=>v+1)}>Retry imagery</Button></div>}
     {session&&readiness&&!readiness.imagery_ready&&<p role="status">New imagery retrieval is unavailable until the imagery service is connected. You can explore the map and open saved results.</p>}
-    {authChecked&&!session&&!accessError&&<p className="satellite-access">The map and source links are open to explore. <Link to="/admin">Sign in to the team workspace</Link> to retrieve and compare imagery.</p>}
     {pendingJob&&<div className="satellite-job" role="status"><p>Imagery job reference: <code>{pendingJob}</code>. Checking resumes this job without submitting new imagery or AI work.</p><Button type="button" variant="secondary" disabled={!!busy||!session} onClick={resumeJob}>Check job</Button><Button type="button" variant="ghost" disabled={!!busy} onClick={()=>trackJob('')}>Stop tracking</Button><p className="satellite-note">Stopping tracking does not cancel the server job. Completed comparisons remain in your history.</p></div>}
     {busy&&<p role="status" aria-live="polite">{busy}</p>}{error&&<p className="satellite-error" role="alert">{error}</p>}
       <div hidden={panel!=='analyse'}>
@@ -168,12 +167,14 @@ export default function Satellite(){
       </div><div className="satellite-investigation-topic"><MorphSelect label="Investigate" value={intent} disabled={!!busy} onValueChange={value=>{setIntent(value as SatelliteIntent);setResult(null);setPlan(null);}} items={Object.entries(intents).map(([value,label])=>({value,label}))}/></div>
       <Button type="button" disabled={!!findReason||!!busy} aria-describedby={findReason?"satellite-find-reason":undefined} onClick={findScenes}>Find dated observations</Button>
       {findReason&&<p id="satellite-find-reason" role="status">{findReason}</p>}
+      <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready&&!pendingJob} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
+      {!!scenes.length&&<><h3>Compare observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates satellite-comparison-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${sceneDate(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      <details className="satellite-catalog-details"><summary>Imagery sources and availability</summary>
       <p className="satellite-note">Search up to 120 days of dated Sentinel-2 imagery.</p>
       {readiness?.imagery_provider==='earth-engine'&&<p className="satellite-note">Sentinel-2 acquisitions supplied by Google Earth Engine.</p>}
       {notice&&<p role="status">{notice}</p>}
       {catalogFreshness?.latest_acquired_at&&<p className="satellite-freshness">Latest acquisition found in this search: <strong>{dateLabel(catalogFreshness.latest_acquired_at)}</strong>. Catalog checked {dateLabel(catalogFreshness.searched_at)}. Availability does not guarantee clear local visibility.</p>}
-      <SatelliteTimeline scenes={scenes} activeId={activeId} onSelect={setActiveId} observations={observations} onLoad={loadObservation} busy={!!busy} canLoad={!!session&&!!readiness?.imagery_ready&&!pendingJob} before={before} after={after} onBefore={id=>{setBefore(id);setResult(null);}} onAfter={id=>{setAfter(id);setResult(null);}}/>
-      {!!scenes.length&&<><h3>Compare observations</h3><p>Choose an earlier and a later acquisition. Analysis checks visibility and measured changes; configured image decisions add a separate assessment.</p><div className="satellite-dates">{(['Before','After'] as const).map(label=><MorphSelect key={label} label={`${label} observation`} disabled={!!busy} value={label==='Before'?before:after} onValueChange={value=>{(label==='Before'?setBefore:setAfter)(value);setResult(null);}} items={[{value:'',label:'Choose an acquisition'},...scenes.map(s=>({value:s.id,label:`${dateLabel(s.acquired_at)} · scene cloud ${s.scene_cloud_percent===null?'unknown':Math.round(s.scene_cloud_percent)+'%'}`}))]}/>)}</div><Button type="button" onClick={compare} disabled={!session||!area||!readiness?.imagery_ready||!!pendingJob||!!periodError||!orderedPair(scenes,before,after)}>Analyse this pair</Button>{before&&after&&!orderedPair(scenes,before,after)&&<p role="status">Choose an after acquisition later than the before acquisition.</p>}</>}
+      </details>
       <details className="satellite-coordinate-details"><summary>Set area by coordinates</summary><div className="satellite-coordinates">{['West longitude','South latitude','East longitude','North latitude'].map((label,i)=><Input key={label} label={label} type="number" step="0.00001" value={coords[i]} onChange={e=>setCoords(v=>v.map((old,j)=>i===j?e.target.value:old))}/>)}</div>
       <Button type="button" variant="secondary" onClick={()=>{if(coords.some(s=>!s.trim())){setError('Enter all four area coordinates.');return;}chooseArea({bbox:coords.map(Number) as SatelliteArea['bbox']});}}>Use these coordinates</Button></details>
     </fieldset>
