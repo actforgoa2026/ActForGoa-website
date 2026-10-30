@@ -77,5 +77,5 @@
 .mission-topic-list a, .topic-action-link { display: grid; grid-template-columns: 24px minmax(0, 1fr) 22px; text-align: left; gap: 12px; }
 .mission-topic-list a > svg, .topic-action-link > svg { flex-shrink: 0; }
 
-.mission-ai-link { display: flex; width: min(100%, 620px); margin-bottom: 20px; justify-content: space-between; text-align: left; gap: 12px; }
+.mission-ai-link { display: flex; width: min(100%, 620px); margin-top: 24px; justify-content: space-between; text-align: left; gap: 12px; }
 .mission-ai-link > svg { flex-shrink: 0; }

@@ -6,6 +6,12 @@ The user explicitly requested publishing the Butter-inspired base at `/landing`,
 
 Pre-release: all 281 existing tests passed; the extended release guard's 26 tests also passed, including two new landing-route/asset refusal cases. The integrated production build passed. Actual 1440/390 retained-route browser checks cover root, AI, explore, topic, directory/archive, emergency, reporting, guide, template, legal/ecology chat, admin login, blog/archive and a real source document. Landing captures cover 1440/768/390/320, with examples, resources, FAQ, menu, motion and form checked. No report, AI answer or image-analysis request was submitted. Source/map readiness was checked read-only. The release guard adds staged landing HTML/asset probes while preserving every existing condition. Final publication evidence and commit will be recorded after promotion.
 
+## Hero AI button placement live · 30 October 2026
+
+User requested the AI library button on the hero image. PR #141 merged as `c86d951dbc904abd3c373f3aed11a11eb9758045`, tree `3c984034ac3a81bd04ef979cb7689a781e647e3b`. The same Arc ButtonLink sits inside HomeCarousel beneath the mission copy, with 24px spacing. Search stays below the hero; `/ai`, wording, photos and carousel controls are preserved.
+
+The unchanged guarded release passed all 281 tests, production build and staged research/editorial/staff/public-map/newsletter/MCP probes, then promoted `dpl_2GuShZHoTctWhS1krFXoTaJrpJMh` and confirmed the exact alias. Local and public Chromium cover forty retained desktop/phone route renders, no horizontal overflow, and the complete button inside the hero above the fold at 1440/768/390/320px. Desktop/phone click reaches `/ai`; rendered screenshots inspected. Impeccable unavailable. No model call/report submission or backend/corpus/credential/original WordPress change. Previous deployment `dpl_5APj4U1KGWzZE1BfUTA9iHamUG9m` remains the rollback. Protected evidence is ignored `.reports/hero-ai-button/{evidence.json,release.log,published.json,live-routes.json,live-check.log,live-1440.png,live-390.png}`. This completion record is excluded from uploads and needs no further deployment.
+
 
 ## Homepage AI library button live · 30 October 2026
 
