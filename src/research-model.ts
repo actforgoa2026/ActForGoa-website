@@ -1,5 +1,5 @@
 export type ResearchDomain = 'all' | 'legal' | 'ecology';
-export type ResearchEvidence = {id:string;document_id:string;page:number;label:string;title:string;url:string;text:string;origin:string;warning:string;retrieved_at:string;format:string;matches:string[];reader_url:string;generation:string;domains?:string[];legal_currency?:string;publisher_class?:string;guide_verification?:{limitations?:string;source_file?:string;citation?:string;location?:string;review_date_local?:string;review_timezone?:string}};
+export type ResearchEvidence = {id:string;document_id:string;page:number;label:string;title:string;url:string;text:string;origin:string;warning:string;retrieved_at:string;format:string;matches:string[];reader_url:string;generation:string;checked_on?:string;publisher?:string;domains?:string[];legal_currency?:string;publisher_class?:string;guide_verification?:{limitations?:string;source_file?:string;citation?:string;location?:string;review_date_local?:string;review_timezone?:string}};
 export type ResearchParagraph = {text:string;citations:string[]};
 export type ResearchAnswer = {cache?:{hit:boolean;kind:string;reviewed_at:string;generation:string};timings?:{total_ms:number;provider_ms:number;tool_ms:number;model_calls:number};clarification?:string|null;followups?:string[];summary_first?:boolean;status:'answered'|'insufficient_evidence';paragraphs:ResearchParagraph[];citations:ResearchEvidence[];notice?:string;library_notice?:string|null;outside_context?:{text:string;provenance:'model_knowledge';notice:string}|null;domain?:ResearchDomain};
 export type ResearchStatus = {cached_examples?:string[];generation?:string;crm?:{community:number;government:number};chat_unavailable_reason?:string|null;search_ready:boolean;chat_ready:boolean;stats:{documents?:number;pages?:number;chunks?:number};domains?:string[];domain_counts?:Partial<Record<ResearchDomain,number>>;provider?:string;outside_context_supported?:boolean};
@@ -23,6 +23,24 @@ export function supportsResearchDomain(status: ResearchStatus|null, domain: Rese
 export function citedLibraryParagraphs(answer: ResearchAnswer): ResearchParagraph[] {
   const ids = new Set(answer.citations.map(citation => citation.id));
   return answer.paragraphs.filter(paragraph => paragraph.text.trim() && paragraph.citations.length > 0 && paragraph.citations.every(id => ids.has(id)));
+}
+
+export function isOfficialGuidance(source: ResearchEvidence): boolean {
+  return source.origin === 'official_guidance_summary' && source.publisher_class === 'official_preparedness_guidance';
+}
+
+/** Source provenance, not model-written labels, determines the answer sections. */
+export function researchParagraphGroups(answer: ResearchAnswer) {
+  const sources = new Map(answer.citations.map(source => [source.id, source]));
+  const library: ResearchParagraph[] = [], guidance: ResearchParagraph[] = [];
+  for (const paragraph of citedLibraryParagraphs(answer)) {
+    const kinds = new Set(paragraph.citations.map(id => isOfficialGuidance(sources.get(id)!)));
+    if (kinds.size !== 1) continue;
+    (kinds.has(true) ? guidance : library).push(paragraph);
+  }
+  const guidanceIds = new Set(guidance.flatMap(paragraph => paragraph.citations));
+  const checkedDates = [...new Set(answer.citations.filter(source => guidanceIds.has(source.id)).map(source => source.checked_on).filter((value): value is string => !!value))];
+  return {library, guidance, checkedDates};
 }
 
 /** Review and retrieval dates do not establish that a law is current. */

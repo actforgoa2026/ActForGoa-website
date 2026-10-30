@@ -161,7 +161,7 @@ class ProductionAgent:
             answer=await asyncio.wait_for(run_agent(request,corpus,config,'http://127.0.0.1:'+os.getenv('PORT','8091')+'/internal-agent',token,run.ceiling/1e6,state=self.state,retain_content=False),110)
             private=answer.pop('_dev')
             answer['timings']={'total_ms':round((perf_counter()-started)*1000,2),'provider_ms':round(run.provider_ms,2),'tool_ms':round(sum(c.get('elapsed_ms',0) for c in private['tool_calls']),2),'model_calls':len(run.receipts)}
-            answer['agent']={'engine':'claude-agent-sdk','run_id':run.identifier,'model':MODEL,'tools':[c['tool'] for c in private['tool_calls']], 'model_calls':len(run.receipts),'citation_validation':'read-source IDs and exact original passages'}
+            answer['agent']={'engine':'claude-agent-sdk','run_id':run.identifier,'model':MODEL,'tools':[c['tool'] for c in private['tool_calls']], 'model_calls':len(run.receipts),'citation_validation':'read-source IDs; original passages or labelled official guidance summaries'}
             self.record(event='completed',run=run.identifier,tools=answer['agent']['tools'],model_calls=len(run.receipts),reserved_microusd=run.reserved,timings=answer['timings'],tool_timings=[{k:c[k] for k in ('tool','elapsed_ms') if k in c} for c in private['tool_calls']])
             return answer
         finally:

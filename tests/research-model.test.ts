@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {citedLibraryParagraphs,researchDomain,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchAnswer,type ResearchEvidence,type ResearchStatus} from '../src/research-model.ts';
+import {citedLibraryParagraphs,researchParagraphGroups,researchDomain,researchReturnPath,researchSourceNotes,supportsResearchDomain,type ResearchAnswer,type ResearchEvidence,type ResearchStatus} from '../src/research-model.ts';
 
 test('legal and ecology maintain distinct routes and document return paths',()=>{
  assert.equal(researchDomain('/ask/legal'),'legal');
@@ -42,4 +42,17 @@ test('library status enums render as readable caveats without altering source te
  const source={warning:'',legal_currency:'not_consolidated_or_legally_verified'} as ResearchEvidence;
  assert.deepEqual(researchSourceNotes(source),[{label:'Legal status',text:'Not verified as consolidated or current law.'}]);
  assert.equal(source.legal_currency,'not_consolidated_or_legally_verified');
+});
+
+test('preparedness advice is separated by source provenance and mixed paragraphs are hidden',()=>{
+ const answer={status:'answered',paragraphs:[
+  {text:'Proposed drainage work.',citations:['plan']},
+  {text:'Follow evacuation instructions.',citations:['official']},
+  {text:'Ambiguous mixed claim.',citations:['plan','official']},
+  {text:'Unverified advice.',citations:['missing']},
+ ],citations:[{id:'plan',origin:'native'},{id:'official',origin:'official_guidance_summary',publisher_class:'official_preparedness_guidance',checked_on:'2026-10-30'}]} as ResearchAnswer;
+ const groups=researchParagraphGroups(answer);
+ assert.deepEqual(groups.library.map(p=>p.text),['Proposed drainage work.']);
+ assert.deepEqual(groups.guidance.map(p=>p.text),['Follow evacuation instructions.']);
+ assert.deepEqual(groups.checkedDates,['2026-10-30']);
 });

@@ -20,8 +20,8 @@ def eligible(request):
 
 def runtime_digest():
     root = Path(__file__).parent
-    files = sorted(root.glob('*.py')) + sorted(root.glob('*.json')) + [root/'agent-prompt.txt']
-    return hashlib.sha256(b''.join(p.name.encode()+p.read_bytes() for p in files)).hexdigest()
+    files = sorted(root.glob('*.py')) + sorted(root.rglob('*.json')) + [root/'agent-prompt.txt']
+    return hashlib.sha256(b''.join(str(p.relative_to(root)).encode()+p.read_bytes() for p in files)).hexdigest()
 
 class ExampleAnswers:
     def __init__(self, state, runtime, crm_digest):
@@ -42,7 +42,7 @@ class ExampleAnswers:
         ids = set()
         for citation in answer['citations']:
             # Starter records use original corpus evidence, not mutable directory records.
-            if citation.get('format') == 'crm': raise ValueError('Directory answers are not cached')
+            if citation.get('format') == 'crm' or citation.get('origin') == 'official_guidance_summary': raise ValueError('Only original corpus answers are cached')
             source = corpus.evidence(citation['document_id'], citation['page'], citation['start'], citation['end'])
             if (source['answer_excluded'] or any(source.get(k) != citation.get(k) for k in ('id','text','sha256','generation','reader_url'))):
                 raise ValueError('Cached citation differs from its original source')

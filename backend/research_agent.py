@@ -12,6 +12,7 @@ from claude_agent_sdk import ClaudeAgentOptions, ResultMessage, create_sdk_mcp_s
 from pydantic import BaseModel, ConfigDict, Field
 from . import crm_store
 from .agent_protocol import MODEL
+from .official_guidance import flood_guidance, guidance_allowed
 STATE=Path(os.getenv("ACTFORGOA_DEV_STATE", str(Path.home()/".local/share/actforgoa-research-dev")))
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -45,7 +46,7 @@ class ResearchTools:
     def evidence_for_agent(evidence):
         # Full metadata stays in the immutable corpus and read_document result.
         # Avoid repeating PDF metadata and file paths with every search/page hit.
-        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded','context_ids')
+        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded','context_ids','publisher','checked_on','published_on')
         return {k:evidence[k] for k in fields if k in evidence}
 
     def catalogue(self, args):
@@ -103,6 +104,15 @@ class ResearchTools:
         return {'snapshot':result['snapshot'],'crm_url':result['crm_url'],'citation_id':identifier,'citable_text':text}
     def clarify(self,args):self.questions.append(args['question']);return {'question':args['question'],'instruction':'Return this question in clarification and wait for the user in the next conversation turn.'}
 
+    def official_guidance(self,args):
+        if args.get('topic') != 'floods':raise ValueError('Reviewed guidance is available only for floods')
+        if not guidance_allowed(self.corpus,self.document_id):raise ValueError('Official guidance is outside this selected document')
+        result=flood_guidance()
+        for source in result['sources']:
+            self.evidence[source['id']]=source
+            self.citable_ids.add(source['id'])
+        return result
+
     def server(self):
         schemas={
             'browse_catalogue':('Browse every document with stable pagination and metadata; empty query lists the full catalogue.',{'query':str,'offset':int,'limit':int},self.catalogue),
@@ -113,6 +123,10 @@ class ResearchTools:
             'read_crm_record':('Read one complete CRM record with provenance and verification notes before citing it.',{'record_id':str},self.crm_read),
             'ask_clarifying_question':('Ask for a missing fact that materially changes the answer. Return it to the user and wait.',{'question':str},self.clarify),
         }
+        if guidance_allowed(self.corpus,self.document_id):
+            schemas['read_official_guidance']=(
+                'Read reviewed official flood preparedness summaries from Goa Fire & Emergency Services and NIDM. Topic must be floods. Required for practical flood safety questions. These sources are separate from SAPCC policy proposals and are not live alerts.',
+                {'topic':str},self.official_guidance)
         built=[]
         for name,(description,schema,fn) in schemas.items():
             async def handler(args, fn=fn, name=name):
@@ -149,7 +163,9 @@ def validate_answer(raw, readers, domain):
             # Resolve the complete, exact source text like backend.chat does.
             # The model selects IDs; it never has to retype damaged PDF glyphs.
             cited[identifier]=evidence
-        paragraphs.append({'text':p.text,'citations':ids})
+        kinds={cited[identifier].get('origin')=='official_guidance_summary' for identifier in ids}
+        if len(kinds)>1:raise ValueError('Official preparedness guidance and library findings must be in separate paragraphs')
+        paragraphs.append({'text':p.text,'citations':ids,'source_kind':'official_guidance' if True in kinds else 'library'})
     return {'status':'answered' if paragraphs else 'insufficient_evidence','summary_first':True,'paragraphs':paragraphs,'citations':list(cited.values()),'clarification':result.clarification or (readers.questions[-1] if readers.questions else None),'followups':result.followups,'library_notice':result.limitation,'outside_context':None,'domain':domain,'_dev':{'tool_calls':readers.trace,'citation_check':'Read-source ID validation and exact original text resolution; not automatic semantic acceptance.'}}
 
 def agent_options(readers, prompt, proxy_url, proxy_token, budget_usd, effort='medium', state=None):

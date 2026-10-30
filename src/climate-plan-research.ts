@@ -5,6 +5,7 @@ export const climatePlanResearch = {
   generation: '20261030-sapcc-native-v2',
   sha256: 'd1b64d562f93c9cbabc39e1d4be65f0515a06734792cfa5ea4eebf9544ff3cc6',
   starters: [
+    'What does the SAPCC say about flooding, and what can residents do?',
     'What does Goa’s SAPCC propose for rainwater harvesting?',
     'What does Goa’s SAPCC propose for heat and health?',
     'What does Goa’s SAPCC propose for rooftop solar?',

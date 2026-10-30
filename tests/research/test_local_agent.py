@@ -115,7 +115,7 @@ def test_sdk_readers_multi_search_and_exact_source_resolution(corpus):
     if search_e['id'] not in r.citable_ids:
         with pytest.raises(ValueError):validate_answer(raw,r,'all')
     o=agent_options(r,'Test prompt','http://127.0.0.1:8093/provider','local-capability',0)
-    assert o.tools==[] and o.setting_sources==[] and set(o.allowed_tools)=={'mcp__research__'+name for name in ('browse_catalogue','search_documents','read_document','search_and_read','query_crm','read_crm_record','ask_clarifying_question')}
+    assert o.tools==[] and o.setting_sources==[] and set(o.allowed_tools)=={'mcp__research__'+name for name in ('browse_catalogue','search_documents','read_document','search_and_read','query_crm','read_crm_record','ask_clarifying_question','read_official_guidance')}
     assert o.env['ANTHROPIC_API_KEY']=='local-capability'
 
 def test_premises_query_keeps_existing_intent_expansion(corpus):
