@@ -13,4 +13,19 @@ The carousel uses actual Arc buttons, previous/next/pause controls, eight-second
 - Actual Impeccable workflow and rendered review were used. Regex scan of changed UI files finds zero anti-patterns; type-ramp advisories are deliberate surface scale choices for the restored hero and enlarged sections. Existing Arc controls and Figtree/cream/forest styling are retained. Source checks find no added italic/oblique or side-stripe styling.
 - Physical phone gestures and Safari were not tested. Reduced-motion handling is preserved in source; the host preference was not changed. No report/story submission, paid model request, backend change or Device Hub use occurred.
 
-Protected local evidence: `.reports/home-refinement/` contains `layout.json`, `routes.json`, screenshots at four widths, `design-scan.txt`, test/build logs and the release evidence. Publication and final public checks are recorded below when complete. Local ports4176/4197 remain available throughout.
+Protected local evidence: `.reports/home-refinement/` contains `layout.json`, `routes.json`, screenshots at four widths, `design-scan.txt`, test/build logs and the release evidence. Local ports 4176 and 4197 remain available throughout.
+
+## Published and verified
+
+- Public site: https://actforgoa-field-guide.vercel.app/.
+- Source: [PR138](https://github.com/actforgoa2026/ActForGoa-website/pull/138), merged as `00c34d494ed2699f6b9793cf86f40c1efce657dc`.
+- Runtime tree: `e33879ef6843c537aac03c69001e25c70e91c175`.
+- Vercel deployment: `dpl_D5QinYMGKHoHPe7rof1Jwb5mkgCb`.
+- Immutable URL: https://actforgoa-field-guide-h349fx0lt-zakkrevitt-gmailcoms-projects.vercel.app.
+- Rollback baseline: `dpl_6Z5f6f1ZbXeXzJaY5qnGcdFdwZsH`.
+
+The guarded release repeated all 281 tests and the production build, then passed staged research, editorial/staff authentication, public satellite readiness/session, map configuration, newsletter and MCP probes before promotion. The existing nonfatal Vercel `vite/client` function-transpilation diagnostic remains; the build and deployed service gates passed. The reader owner's documentation-only update was reconciled before publication without changing the tested runtime files. No guard was bypassed.
+
+Final public verification covers forty successful route renders (twenty desktop and phone), all three category headings, all four expanded field-guide sections, actual carousel next/previous and pause state, the stationary exact heading and the shared footer mask. Published desktop/phone screenshots were inspected; no horizontal overflow or computed italic type was found. The artwork overlaps the links with a 605px illustration area on the checked desktop. Both local previews returned HTTP200 after publication. Original WordPress, backend settings and stored data are unchanged.
+
+Final evidence: `.reports/home-refinement/{live-identity.json,live-routes.json,published-home.png,published-footer.png,published-phone.png,published-full-phone.png,release.log}`. This completion record is documentation only and excluded from deployment uploads.

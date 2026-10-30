@@ -1,10 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Homepage carousel and category refinement · 30 October 2026
+## Homepage carousel and categories verified live · 30 October 2026
 
 The user corrected the standard homepage after the NOTES release: restore the original hero photo carousel with centered mission wording, group topics into Climate/Civic/Culture, enlarge and describe the field-guide sections, and blend the taller stippled footer illustration behind its links. Isolated `codex/home-carousel-categories` preserves current main `2f21e61`, the separate AI homepage, reader cleanup and all NOTES destinations. Actual Arc controls and credited existing photos are reused; the heading stays still while photos rotate. New English copy is tracked for editorial translation.
 
-All 281 tests and the production build pass. Local 320/390/768/1440px renders, carousel autoplay/manual/pause controls, topic search, all fifteen topic/plan links and forty retained desktop/phone route renders pass. Impeccable and rendered checks found no overflow, italic text or decorative side stripes. Publication follows `release:review`; final identity and public acceptance will be recorded in `reports/home-refinement-2026-10-30/README.md`. Keep local4176/4197 running and the original WordPress site unchanged.
+PR138 is live through `release:review`: runtime `00c34d494ed2699f6b9793cf86f40c1efce657dc`, tree `e33879ef6843c537aac03c69001e25c70e91c175`, Vercel `dpl_D5QinYMGKHoHPe7rof1Jwb5mkgCb`. All 281 tests, the production build and staged service probes passed. Local 320/390/768/1440px renders, carousel autoplay/manual/pause controls, topic search, all fifteen topic/plan links and forty retained desktop/phone route renders passed; final public acceptance repeated the forty route renders and confirmed the carousel, categories and blended footer. Impeccable and rendered checks found no overflow, italic text or decorative side stripes. See `reports/home-refinement-2026-10-30/README.md` for evidence and rollback. Local ports 4176/4197 remain running; original WordPress is unchanged. This completion record needs no further deployment.
 
 ## Document reader formatting live · 30 October 2026
 
