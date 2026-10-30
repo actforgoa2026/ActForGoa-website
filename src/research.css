@@ -63,6 +63,10 @@
 .research-chat .research-answer-section { padding-block: 0 12px; }
 .research-chat .research-answer-section h3 { font-size: 14px; font-weight: 550; gap: 8px; color: var(--muted); margin-bottom: 12px; }
 .research-chat .research-answer-section h3 svg { width: 16px; height: 16px; }
+.research-chat .research-official-guidance { margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--line); }
+.research-chat .research-official-guidance h3 { font-size: 18px; font-weight: 650; color: var(--green); }
+.guidance-steps { padding-left: 22px; }
+.guidance-steps .answer-paragraph { padding-left: 4px; margin-block: 16px; }
 .research-chat .answer-paragraph { font-size: 17px; line-height: 1.8; margin-bottom: 16px; max-width: 72ch; }
 .research-chat .research-outside { margin-top: 16px; padding-top: 18px; }
 .research-chat .research-sources { border: 0; margin: 8px 0; }
@@ -126,6 +130,13 @@
  .research-chat.has-conversation { height: calc(100svh - 72px); min-height: 540px; padding-block: 12px 8px; }
  .research-chat.has-conversation .research-heading h1 { font-size: 20px; }
  .research-chat.has-conversation .chat-transcript { padding-right: 4px; }
+}
+/* Short phone windows need page scrolling, not a few lines trapped above the composer. */
+@media(max-width:620px) and (max-height:700px) {
+ .research-chat.has-conversation { height: auto; min-height: 0; }
+ .research-chat.has-conversation .chat-transcript { overflow: visible; flex: none; min-height: 0; }
+ .research-chat .chat-toolbar { flex-wrap: wrap; gap: 8px 16px; }
+ .research-chat .chat-toolbar .text-link { flex-shrink: 0; }
 }
 
 .research-library { max-width: 1120px; padding-block: 28px 64px; }

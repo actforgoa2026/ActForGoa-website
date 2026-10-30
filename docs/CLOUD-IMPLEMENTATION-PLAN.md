@@ -1,5 +1,20 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Research speed release — 30 October 2026
+
+The user authorized cached starter answers, timing measurements and batched retrieval, followed by a live release. The focused local release owner holds issue #89; other local agents remain paused. Branch `codex/research-speed-release` starts at fresh main `2c7e006` and integrates reviewed flood-guidance PR124 (`bb9d311`). Existing live SAPCC generation `20261030-sapcc-native-v2` and every original corpus/accounting record are preserved.
+
+Implemented: three allowlisted, manually reviewed public starter answers with exact citations and runtime/corpus/CRM invalidation; new questions and follow-ups stay live. A bounded batch tool searches and reads originals together, and the frontend avoids its redundant pre-answer search. Metadata-only timing separates provider, tool and total elapsed time. Official preparedness remains separate from SAPCC proposals. October's $50 / 500-attempt daily allowance and dated reversion are unchanged. The durable production ledger has a pre-release backup.
+
+Next: run integrated automated and rendered acceptance, publish clean source and the backend package, review and preload bounded hosted starter investigations, verify a live follow-up and official guidance, then promote through `release:review`. Keep backend deployment `986679ef-46fd-4a65-9086-01085913e051` and frontend `dpl_ENfoDDJTZrG7wAmJQvsC2Qo8AR4f` available for rollback. No original-domain or satellite deployment is part of this release.
+
+## Official flood preparedness addition ready for integration · 30 October 2026
+
+The user requested official resident flood guidance alongside SAPCC proposals. Isolated branch `codex/sapcc-flood-preparedness` starts from main `2c7e006` and adds a read-only SDK tool for reviewed Goa DFES/NIDM summaries, strict source-category separation, direct official citations, checked-date labels and a live-alert link. No corpus generation, budget, credential or accounting change. The original domain and satellite remain outside scope.
+
+Validation: 256 frontend tests, 225 backend tests, build, four-width UI with explicitly mocked model transport and real source links; original NIDM flood page rendered and reviewed. No paid request or deployment ran in this feature branch. ORCHESTRATOR holds the active cache/timing/batched-retrieval release in issue #89 and requested this reviewed PR for combined integration. Preserve both sets of changes; include the guidance version in example-cache invalidation. See [source review and verification](../reports/sapcc/FLOOD-PREPAREDNESS.md).
+
+
 ## SAPCC research assistant live · 30 October 2026
 
 The resident SAPCC question flow is live, with entry points on the plan overview/topics and general research assistant. PRs #119, #121 and #122 are merged; runtime `977c55a4ebbef9d1a609c24ca6c260fdff213ef5` is deployed as research service `986679ef-46fd-4a65-9086-01085913e051` and guarded frontend `dpl_ENfoDDJTZrG7wAmJQvsC2Qo8AR4f`. Active generation is `20261030-sapcc-native-v2`. The completed SDK workflow, current map/Explore source and unrelated corpus documents are preserved. The primary dirty checkout was untouched.
@@ -594,3 +609,10 @@ Implemented: Claude Agent SDK with six restricted read-only/clarification tools,
 Tested: 12 focused Python checks, 18 existing focused Node checks, TypeScript checking, and desktop/390/320 browser flows including PDF rendering, full text, authority lookup and live settings. Paid Claude SDK generation is not tested: the prior cloud dev reservation ledger and allowance are unavailable on this Mac, so remaining approved additional $2 is unknown and paid dispatch is blocked. No new AI spend, fabricated zero baseline, production ledger fallback or accounting reset. A checksum-bound, one-time final DEV-ledger importer and atomic per-attempt lifetime cap are prepared; obtain the existing cloud dev accounting before activation. See `dev/LOCAL-WORKSPACE.md` and `reports/local-agent-2026-10-29/verification.json` for exact paths, evidence and restart instructions. Implemented/tested locally only; not merged, pushed or deployed. No full release checklist repeated.
 
 Runtime/source commit: `55121d0` (`codex/research-agent-local`). Independent Impeccable verdict scored both requested UI fixes resolved: short initial source disclosure with direct workspace navigation, and readable legal-status copy. Existing design sidecar drift is documented without changing the design system. The localhost launcher remains running on ports 4276/8093; next required action is to obtain and reconcile the final prior cloud DEV accounting before any paid SDK call.
+
+
+## Research speed release — 30 October 2026
+
+The release coordinator integrated reviewed starter-answer caching, bounded batched retrieval and metadata-only timing measurements with PR #124's official flood guidance. Backend source `333cb3bda02773ba301ba56a559102adb1bc574c` is running on existing Railway deployment `96bfcdbe-22e5-4ab9-9f16-3986ad1ac2f7`; all 28 packaged runtime files match. Three approved cached answers returned through the public API in 0.37–0.52 seconds without model calls or ledger changes. Fresh follow-up `9a89dbf1a4c449daa4f43c5bef10d2e6` used both batched retrieval and official guidance and passed original-passage, semantic and desktop/phone review after documented citation/prompt corrections.
+
+The entire production corpus and all prior reservations/imports remain intact. Acceptance ends at 48 attempts today and $45.052337 in October conservative reservations, within unchanged 500/day and $50 October limits. No development accounting was used. See `reports/research-speed-2026-10-30/README.md` for checks, failed attempts, cache boundaries and rollback. Frontend promotion remains owned by this coordinator through `release:review`; issue #89 records final deployment identity and public verification.
