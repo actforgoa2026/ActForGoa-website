@@ -1,10 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Hero search placement release authorized · 30 October 2026
+## Hero search placement live · 30 October 2026
 
-User requested the search field and arrow on the hero too. Branch `codex/hero-search`, based on main `c209a04`, places the existing search directly under the AI link inside one 620px grid with 24px gaps and shared edges. Hero labels and topic-feedback links remain legible. Existing search routing, AI destination and all carousel controls are preserved. The newer separate landing page and its extended release guard remain intact.
+User requested the search field and arrow on the hero too. PR #145 merged as `488cfc034fe9916bcdc686679ba538fc48df5af1`, tree `8d5423a8f82cc5abe8d40d9fbcabee003894b743`. Existing search now sits directly under the AI link inside one 620px grid with 24px gaps and shared edges. Hero labels and topic-feedback links remain legible. Search routing, AI destination, carousel controls and separate landing page are preserved.
 
-Validation: 283 tests and integrated production build pass. Actual desktop/phone checks cover forty retained route renders, real search submission to `/topics/waste`, AI navigation to `/ai`, and 1440/768/390/320px shared edges, hero containment and above-fold visibility of both controls. Screenshots inspected; Impeccable unavailable. This chat retains bounded field-guide release ownership; guarded evidence is in ignored `.reports/hero-search/`. Current baseline is landing deployment `dpl_Gd21aUqvYNmQQKQtp2mSGVFBncK2`; no other deployment scope.
+The unchanged extended `release:review` passed all 283 tests, integrated production build and staged research/editorial/staff/public-map/newsletter/landing/MCP probes, then promoted and confirmed `dpl_7Ujo1HoyTHxa5iPviyUbURzpFHDJ`. Actual local and public desktop/phone browser checks cover retained routes, real search submission to `/topics/waste`, AI navigation to `/ai`, and 1440/768/390/320px shared edges, hero containment and above-fold visibility of both controls. Public checks also retain `/landing`. Screenshots inspected; Impeccable unavailable. No model calls, report submissions or backend/corpus/credential/original WordPress change. Rollback: `dpl_Gd21aUqvYNmQQKQtp2mSGVFBncK2`. Protected evidence: ignored `.reports/hero-search/{evidence.json,release.log,published.json,live-routes.json,live-check.log,live-1440.png,live-390.png}`. This completion record is excluded from deployment uploads; no further deployment needed.
 
 
 ## ActForGoa landing verified live · 30 October 2026
