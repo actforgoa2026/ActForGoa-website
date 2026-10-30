@@ -7,6 +7,8 @@
 .mission-search { width: min(100%, 760px); }
 .mission-search-controls { display: flex; align-items: end; gap: 12px; }
 .mission-search-controls > :first-child { flex: 1; min-width: 0; }
+.mission-ai-link { display: flex; width: min(100%, 760px); margin-top: 20px; justify-content: space-between; text-align: left; gap: 12px; }
+.mission-ai-link > svg { flex-shrink: 0; }
 .mission-shortcuts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; }
 .mission-shortcuts a { max-width: 100%; }
 .mission-topics { padding-block: 8px 32px; }

@@ -1,5 +1,10 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Homepage AI library entry · 30 October 2026
+
+Branch `codex/home-ai-button`, based on fresh main `2f21e61`, adds the existing Arc ButtonLink directly below the homepage search: “Use AI to explore our vetted library of surveys and guides”, targeting `/ai`. It aligns with the search width and wraps on phones. Chromium at 1440/768/390/320px confirms the full button is above the fold, no horizontal overflow, and click navigation to `/ai`; inspected desktop/phone screenshots are in ignored `.reports/home-ai-button/`. Production build and Node suite pass. Impeccable is unavailable in this executor. This change is ready for the primary coordinator to merge and include in the guarded review-site release; no merge or deployment performed here.
+
+
 ## Document reader formatting · 30 October 2026
 
 Branch `codex/reader-cleanup`, based on fresh main `ada1387`, removes citation background highlighting from Read text and reflows extracted print lines into paragraphs. Short headings, figure captions, lists and tab-separated table rows remain separate; stored corpus text, original-page view and citation URLs remain intact. No backend or corpus changes.
