@@ -1,5 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Document reader formatting · 30 October 2026
+
+Branch `codex/reader-cleanup`, based on fresh main `ada1387`, removes citation background highlighting from Read text and reflows extracted print lines into paragraphs. Short headings, figure captions, lists and tab-separated table rows remain separate; stored corpus text, original-page view and citation URLs remain intact. No backend or corpus changes.
+
+Validation: existing 279 Node tests passed, two focused reflow tests passed, production build passed; actual Chromium at 1440/390/320px used the linked hosted document metadata and page 27 text with intercepted read-only API responses. Verified paragraph flow, no marks, headings, no horizontal overflow and Original page switching with an explicit image fixture. Desktop/phone screenshots inspected in ignored `.reports/reader-cleanup/`. Impeccable is unavailable in this executor. Not merged or live; combined release coordinator owns promotion under `docs/RELEASING.md`.
+
+
 ## NOTES and public map verified live · 30 October 2026
 
 All feasible team-note changes and the public Google/Earth Engine map are published on the existing field-guide site. PR127 carries the mission homepage, action-first topic menus and Google heritage pin form; PR129 fixes phone map/header stacking and expanded-map layering. The later guarded PR130 release includes both: runtime commit `7ede7b29255933a468149635972a76c0645bf195`, tree `a78f0b813cc3fc13579281b93f8d1720e5612657`, deployment `dpl_E4dHjcZFCzeiR1wwbvBysrAwb3vy`. Vercel metadata and final public desktop/phone acceptance independently confirm this; no further frontend deployment is required. Earlier pending wording below is historical.
