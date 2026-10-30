@@ -1,5 +1,11 @@
 # Cloud implementation and landing plan — 28 October 2026
 
+## Separate ActForGoa landing release authorized · 30 October 2026
+
+The user explicitly requested publishing the Butter-inspired base at `/landing`, then reordering later, and added a map image-analysis section. Isolated `codex/actforgoa-landing` starts from current main and preserves the current homepage AI button, carousel, app routes and services. The separate Vite entry in `landing/` includes direct AI explanations, source-backed examples, real AI/map screenshots, guided resources, original Goa stipple scene and matching motifs. Provider branding is removed from this page and its screenshot. The local fifteen-section ordering board stays on port 4386 for the next pass.
+
+Pre-release: all 281 existing tests passed; the extended release guard's 26 tests also passed, including two new landing-route/asset refusal cases. The integrated production build passed. Actual 1440/390 retained-route browser checks cover root, AI, explore, topic, directory/archive, emergency, reporting, guide, template, legal/ecology chat, admin login, blog/archive and a real source document. Landing captures cover 1440/768/390/320, with examples, resources, FAQ, menu, motion and form checked. No report, AI answer or image-analysis request was submitted. Source/map readiness was checked read-only. The release guard adds staged landing HTML/asset probes while preserving every existing condition. Final publication evidence and commit will be recorded after promotion.
+
 ## Hero AI button placement live · 30 October 2026
 
 User requested the AI library button on the hero image. PR #141 merged as `c86d951dbc904abd3c373f3aed11a11eb9758045`, tree `3c984034ac3a81bd04ef979cb7689a781e647e3b`. The same Arc ButtonLink sits inside HomeCarousel beneath the mission copy, with 24px spacing. Search stays below the hero; `/ai`, wording, photos and carousel controls are preserved.

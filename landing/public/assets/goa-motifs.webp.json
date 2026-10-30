@@ -1,0 +1,10 @@
+{
+  "kind": "generated decorative illustration",
+  "createdOn": "2026-10-30",
+  "tool": "OpenAI built-in image_gen",
+  "sourceOutput": "/Users/zakkrevitt/.codex/generated_images/01a18b9c-e305-7fa3-b71c-84b2c95212fb/exec-f79ec128-94bc-4a4b-ba05-2c6c3551228b.png",
+  "reference": "ActForGoa existing goa-stippled-landscape.webp",
+  "prompt": "Create one high-resolution square 2x2 transparent illustration asset sheet containing four separate detailed Goa ink stipple illustrations: a curving coconut palm, a full-body Goan zebu cow facing left, a Goan Hindu temple and deepastambha, an Arabian Sea wave and beach. Match the attached panorama\u2019s forest green #193e32 fine-dot engraving style. Generous gaps, no text, borders, shadows, captions or logos.",
+  "processing": "Converted to WebP quality 90 with alpha; displayed as CSS sprite regions",
+  "usage": "Decorative, not a documentary representation of a specific site"
+}
