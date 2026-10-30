@@ -132,3 +132,81 @@ def test_complete_readers_page_cursor_and_exact_citation(corpus):
     answer=validate_answer({'paragraphs':[{'text':'Conditions apply.','supports':[e['id']]}],'clarification':None,'followups':[],'limitation':None},readers,'all')
     assert answer['citations'][0]['text']=='Conditions apply.'
     with pytest.raises(ValueError):ResearchTools(corpus,'ecology').read({'document_id':'legal'})
+
+
+def starter_answer(corpus):
+    readers=ResearchTools(corpus)
+    e=readers.read({'document_id':'eco','page':1})['pages'][0]
+    return validate_answer({'paragraphs':[{'text':'Wetland biodiversity evidence.','supports':[e['id']]}],'clarification':None,'followups':['What does this mean?'],'limitation':None},readers,'all')
+
+
+def test_reviewed_examples_preserve_citations_and_do_not_use_accounting(corpus,gateway):
+    from backend.example_answers import ExampleAnswers,EXAMPLES
+    from backend.chat import ChatRequest
+    gateway.examples=ExampleAnswers(gateway.state,'runtime-v1','crm-v1')
+    gateway.library=SimpleNamespace(generation=corpus.generation)
+    gateway.corpora={corpus.generation:corpus}
+    req=ChatRequest(question=EXAMPLES[0]);answer=starter_answer(corpus)
+    assert gateway.cached_answer(req) is None
+    gateway.examples.approve(req,answer,corpus,review_note='Fixture support reviewed')
+    gateway.reserve(Run(),payload())  # Existing charged attempt must remain unchanged.
+    baseline=snapshot(gateway)
+    result=gateway.cached_answer(req)
+    assert result['paragraphs']==answer['paragraphs'] and result['citations']==answer['citations']
+    assert result['followups']==answer['followups'] and result['agent']['model_calls']==0
+    assert result['timings']['provider_ms']==0 and result['cache']['hit']
+    assert snapshot(gateway)==baseline
+    (gateway.limits.root/'answer-usage.sqlite').rename(gateway.limits.root/'offline.sqlite')
+    assert gateway.cached_answer(req)['cache']['hit']
+
+
+def test_example_cache_scope_expiry_runtime_and_source_invalidation(corpus,tmp_path):
+    from backend.example_answers import ExampleAnswers,EXAMPLES
+    from backend.chat import ChatRequest,Message
+    from datetime import timedelta
+    cache=ExampleAnswers(tmp_path,'runtime','crm');req=ChatRequest(question=EXAMPLES[0])
+    now=datetime.now(timezone.utc);answer=starter_answer(corpus)
+    path=cache.approve(req,answer,corpus,review_note='Fixture',now=now)
+    assert cache.get(req,corpus,now=now)
+    for changes in ({'history':[Message(role='user',content='My private situation')]},{'domain':'ecology'},{'include_outside_context':False},{'question':EXAMPLES[0]+' in Panaji'}):
+        assert cache.get(req.model_copy(update=changes),corpus,now=now) is None
+    assert cache.get(req,corpus,now=now+timedelta(days=8)) is None
+    assert ExampleAnswers(tmp_path,'new-runtime','crm').get(req,corpus) is None
+    assert ExampleAnswers(tmp_path,'runtime','new-crm').get(req,corpus) is None
+    old=corpus.source_digest;corpus.source_digest='changed'
+    assert cache.get(req,corpus) is None
+    corpus.source_digest=old
+    data=json.loads(path.read_text());data['answer']['paragraphs'][0]['text']='Changed'
+    path.write_text(json.dumps(data));assert cache.get(req,corpus) is None
+    answer['citations'][0]['text']='Not the original'
+    with pytest.raises(ValueError):cache.approve(req,answer,corpus,review_note='Bad source')
+
+
+def test_batched_retrieval_preserves_scopes_cursors_and_read_source_validation(corpus):
+    readers=ResearchTools(corpus,'ecology')
+    result=readers.batch({'queries':['wetland','biodiversity'],'limit':2})
+    assert len(result['reads'])==1
+    evidence=result['reads'][0]['pages'][0]
+    assert evidence['document_id']=='eco' and evidence['id'] in readers.citable_ids
+    answer=validate_answer({'paragraphs':[{'text':'Wetland biodiversity evidence.','supports':[evidence['id']]}],'clarification':None,'followups':[],'limitation':None},readers,'ecology')
+    assert answer['citations'][0]['text']=='Wetland biodiversity evidence.'
+    scoped=ResearchTools(corpus,'all','legal')
+    result=scoped.batch({'queries':['building permission'],'limit':2})
+    assert all(p['document_id']=='legal' for r in result['reads'] for p in r['pages'])
+    assert result['reads'][0]['next_cursor']['offset']==6000
+    assert not ResearchTools(corpus,'legal').batch({'queries':['wetland'],'limit':2})['reads']
+    with pytest.raises(ValueError):readers.batch({'queries':['a','b','c','d']})
+
+
+def test_tool_timing_contains_no_source_content(corpus,monkeypatch):
+    monkeypatch.setattr("backend.research_agent.create_sdk_mcp_server",lambda **kwargs:kwargs)
+    readers=ResearchTools(corpus)
+    server=readers.server()
+    # Exercise the registered async MCP handler, not just its underlying function.
+    async def invoke():
+        handler=next(tool.handler for tool in server['tools'] if tool.name=='search_and_read')
+        result=await handler({'queries':['wetland'],'limit':1})
+        return result
+    asyncio.run(invoke())
+    assert readers.trace[-1]['tool']=='search_and_read'
+    assert readers.trace[-1]['elapsed_ms']>=0

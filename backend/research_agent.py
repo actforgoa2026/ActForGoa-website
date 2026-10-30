@@ -2,6 +2,8 @@
 import asyncio
 import json
 import os
+from time import perf_counter
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Literal
@@ -10,6 +12,7 @@ from claude_agent_sdk import ClaudeAgentOptions, ResultMessage, create_sdk_mcp_s
 from pydantic import BaseModel, ConfigDict, Field
 from . import crm_store
 from .agent_protocol import MODEL
+from .official_guidance import flood_guidance, guidance_allowed
 STATE=Path(os.getenv("ACTFORGOA_DEV_STATE", str(Path.home()/".local/share/actforgoa-research-dev")))
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -43,7 +46,7 @@ class ResearchTools:
     def evidence_for_agent(evidence):
         # Full metadata stays in the immutable corpus and read_document result.
         # Avoid repeating PDF metadata and file paths with every search/page hit.
-        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded','context_ids')
+        fields=('id','document_id','title','text','page','label','start','end','url','reader_url','generation','sha256','format','origin','warning','answer_excluded','context_ids','publisher','checked_on','published_on')
         return {k:evidence[k] for k in fields if k in evidence}
 
     def catalogue(self, args):
@@ -54,11 +57,10 @@ class ResearchTools:
     def search(self,args):
         result=self.record(self.corpus.search((args['query']+' '+self.extra_terms).strip(),min(12,args.get('limit',8)),self.document_id,self.domain,args.get('offset',0)))
         discoveries=[self.evidence_for_agent(e) for e in result['results']]
-        if self.document_id:
-            # Discovery snippets cannot be cited. Only a full source read
-            # exposes citation IDs, so the agent must inspect its context.
-            discoveries=[{key:value for key,value in hit.items() if key not in ('id','reader_url')}
-                         for hit in discoveries]
+        # Discovery snippets cannot be cited in any scope. Only source reads
+        # expose citation IDs, so the agent must inspect the original context.
+        discoveries=[{key:value for key,value in hit.items() if key not in ('id','reader_url')}
+                     for hit in discoveries]
         return {**result,'results':discoveries}
     def read(self,args):
         if self.document_id and args['document_id']!=self.document_id:raise ValueError('This conversation is scoped to one document')
@@ -66,6 +68,29 @@ class ResearchTools:
         result=self.record(self.corpus.read_document(args['document_id'],args.get('page',1),args.get('offset',0),args.get('max_chars',18000)))
         self.citable_ids.update(e['id'] for e in result['pages'])
         return {**result,'pages':[self.evidence_for_agent(e) for e in result['pages']]}
+    def batch(self,args):
+        queries=list(dict.fromkeys(q.strip() for q in args['queries'] if isinstance(q,str) and q.strip()))
+        if not 1<=len(queries)<=3 or any(len(q)>500 for q in queries):raise ValueError('Use one to three focused queries')
+        limit=max(1,min(3,args.get('limit',2)))
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            searches=list(pool.map(lambda q:self.corpus.search((q+' '+self.extra_terms).strip(),limit,self.document_id,self.domain),queries))
+        hits={}
+        for result in searches:
+            for hit in result['results']:
+                if not hit['answer_excluded']:hits.setdefault((hit['document_id'],hit['page']),hit)
+        chosen=list(hits)[:3]
+        with ThreadPoolExecutor(max_workers=3) as pool:
+            reads=list(pool.map(lambda key:self.corpus.read_document(key[0],key[1],max_chars=6000),chosen))
+        accepted=[];used=0
+        for result in reads:
+            size=sum(len(p['text']) for p in result['pages'])
+            if used+size>30000:continue
+            used+=size;self.record(result)
+            self.citable_ids.update(p['id'] for p in result['pages'])
+            accepted.append({**result,'pages':[self.evidence_for_agent(p) for p in result['pages']]})
+        return {'reads':accepted,'discovered_pages':len(hits),'read_pages':len(accepted),
+                'generation':self.corpus.generation,'note':'Bounded first pass. Follow next_cursor for remaining page text; use search_documents/read_document for other sources. Original adjacent table context is preserved.'}
+
     def crm_search(self,args):
         if self.document_id:raise ValueError('This conversation uses only the selected document. Open all research to investigate directory records.')
         return crm_store.search_records(args.get('query',''),args.get('collection','all'),args.get('location',''),min(20,args.get('limit',10)),args.get('offset',0))
@@ -78,23 +103,41 @@ class ResearchTools:
         return {'snapshot':result['snapshot'],'crm_url':result['crm_url'],'citation_id':identifier,'citable_text':text}
     def clarify(self,args):self.questions.append(args['question']);return {'question':args['question'],'instruction':'Return this question in clarification and wait for the user in the next conversation turn.'}
 
+    def official_guidance(self,args):
+        if args.get('topic') != 'floods':raise ValueError('Reviewed guidance is available only for floods')
+        if not guidance_allowed(self.corpus,self.document_id):raise ValueError('Official guidance is outside this selected document')
+        result=flood_guidance()
+        for source in result['sources']:
+            self.evidence[source['id']]=source
+            self.citable_ids.add(source['id'])
+        # Keep one copyable citation identifier. The full checksum stays in the
+        # server evidence; exposing it twice led the model to expand a short ID.
+        return {**result,'sources':[{k:v for k,v in source.items() if k!='sha256'} for source in result['sources']]}
+
     def server(self):
         schemas={
             'browse_catalogue':('Browse every document with stable pagination and metadata; empty query lists the full catalogue.',{'query':str,'offset':int,'limit':int},self.catalogue),
             'search_documents':('Search all extracted pages with FTS5. Use multiple distinct searches for different concepts. All original warnings are retained.',{'query':str,'offset':int,'limit':int},self.search),
             'read_document':('Read a complete document one page at a time. Follow next_cursor for full page/document text; no text is silently omitted.',{'document_id':str,'page':int,'offset':int,'max_chars':int},self.read),
+            'search_and_read':('Search up to three focused queries and read up to three relevant original pages in one batch. Prefer this for a first evidence pass; follow returned cursors and expand with other tools when needed.',{'type':'object','properties':{'queries':{'type':'array','items':{'type':'string'},'minItems':1,'maxItems':3},'limit':{'type':'integer','minimum':1,'maximum':3}},'required':['queries','limit'],'additionalProperties':False},self.batch),
             'query_crm':('Browse or search the complete public CRM; collection is community, government or all. Filter by location. Not personal CRM notes.',{'query':str,'collection':str,'location':str,'offset':int,'limit':int},self.crm_search),
             'read_crm_record':('Read one complete CRM record with provenance and verification notes before citing it.',{'record_id':str},self.crm_read),
             'ask_clarifying_question':('Ask for a missing fact that materially changes the answer. Return it to the user and wait.',{'question':str},self.clarify),
         }
+        if guidance_allowed(self.corpus,self.document_id):
+            schemas['read_official_guidance']=(
+                'Read reviewed official flood preparedness summaries from Goa Fire & Emergency Services and NIDM. Topic must be floods. Required for practical flood safety questions. These sources are separate from SAPCC policy proposals and are not live alerts.',
+                {'topic':str},self.official_guidance)
         built=[]
         for name,(description,schema,fn) in schemas.items():
             async def handler(args, fn=fn, name=name):
+                started=perf_counter();ok=False
                 try:
-                    result=await asyncio.to_thread(fn,args);self.trace.append({'tool':name,'arguments':args})
+                    result=await asyncio.to_thread(fn,args);ok=True
                     return {'content':[{'type':'text','text':json.dumps(result,ensure_ascii=False)}]}
                 except (KeyError,ValueError) as error:
                     return {'content':[{'type':'text','text':str(error)}],'isError':True}
+                finally:self.trace.append({'tool':name,'arguments':args,'elapsed_ms':round((perf_counter()-started)*1000,2),'ok':ok})
             built.append(tool(name,description,schema)(handler))
         self.names=['mcp__research__'+name for name in schemas]
         return create_sdk_mcp_server(name='research',version='1.0.0',tools=built)
@@ -121,7 +164,9 @@ def validate_answer(raw, readers, domain):
             # Resolve the complete, exact source text like backend.chat does.
             # The model selects IDs; it never has to retype damaged PDF glyphs.
             cited[identifier]=evidence
-        paragraphs.append({'text':p.text,'citations':ids})
+        kinds={cited[identifier].get('origin')=='official_guidance_summary' for identifier in ids}
+        if len(kinds)>1:raise ValueError('Official preparedness guidance and library findings must be in separate paragraphs')
+        paragraphs.append({'text':p.text,'citations':ids,'source_kind':'official_guidance' if True in kinds else 'library'})
     return {'status':'answered' if paragraphs else 'insufficient_evidence','summary_first':True,'paragraphs':paragraphs,'citations':list(cited.values()),'clarification':result.clarification or (readers.questions[-1] if readers.questions else None),'followups':result.followups,'library_notice':result.limitation,'outside_context':None,'domain':domain,'_dev':{'tool_calls':readers.trace,'citation_check':'Read-source ID validation and exact original text resolution; not automatic semantic acceptance.'}}
 
 def agent_options(readers, prompt, proxy_url, proxy_token, budget_usd, effort='medium', state=None):

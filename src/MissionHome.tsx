@@ -58,4 +58,3 @@ export default function MissionHome({ search }: { search: ReactNode }) {
     </section>
   </main>;
 }
-
