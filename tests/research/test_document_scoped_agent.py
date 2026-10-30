@@ -77,7 +77,7 @@ def test_scoped_discovery_requires_a_read_before_exposing_citation_ids(corpus, m
         validate_answer(answer(evidence), tools, 'ecology')
     read = tools.read({'document_id': 'plan', 'page': 1})['pages'][0]
     assert validate_answer(answer(read), tools, 'ecology')['citations']
-    assert ResearchTools(corpus).search({'query': 'solar'})['results'][0]['id'] == evidence['id']
+    assert 'id' not in ResearchTools(corpus).search({'query': 'solar'})['results'][0]
 
 
 def test_native_spread_carries_original_headers_into_read_and_citations(corpus):

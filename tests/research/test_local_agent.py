@@ -111,9 +111,7 @@ def test_sdk_readers_multi_search_and_exact_source_resolution(corpus):
     assert validate_answer(raw,r,'all')['citations'][0]['text']==r.evidence[e['id']]['text']
     raw['paragraphs'][0]['supports']=['invented-source-id']
     with pytest.raises(ValueError):validate_answer(raw,r,'all')
-    raw['paragraphs'][0]['supports']=[search_e['id']]
-    if search_e['id'] not in r.citable_ids:
-        with pytest.raises(ValueError):validate_answer(raw,r,'all')
+    assert 'id' not in search_e and 'reader_url' not in search_e
     o=agent_options(r,'Test prompt','http://127.0.0.1:8093/provider','local-capability',0)
     assert o.tools==[] and o.setting_sources==[] and set(o.allowed_tools)=={'mcp__research__'+name for name in ('browse_catalogue','search_documents','read_document','search_and_read','query_crm','read_crm_record','ask_clarifying_question','read_official_guidance')}
     assert o.env['ANTHROPIC_API_KEY']=='local-capability'
@@ -176,10 +174,12 @@ def test_additive_renewal_keeps_every_reservation_and_original_receipt(accounted
 
 def test_search_only_evidence_cannot_be_cited_before_reading(corpus):
     readers=ResearchTools(corpus);e=readers.search({'query':'building permission','limit':1})['results'][0]
-    raw={'paragraphs':[{'text':'Discovery is not a source read.','supports':[e['id']]}],'clarification':None,'limitation':None,'followups':[]}
+    assert 'id' not in e and 'reader_url' not in e
+    original=next(iter(readers.evidence.values()))
+    raw={'paragraphs':[{'text':'Discovery is not a source read.','supports':[original['id']]}],'clarification':None,'limitation':None,'followups':[]}
     with pytest.raises(ValueError,match='read in this conversation'):validate_answer(raw,readers,'all')
-    assert e['warning']==readers.evidence[e['id']]['warning']
-    assert e['answer_excluded']==readers.evidence[e['id']]['answer_excluded']
+    assert e['warning']==original['warning']
+    assert e['answer_excluded']==original['answer_excluded']
 
 def test_proxy_preserves_sdk_protocol_headers_and_reserves_before_dispatch(accounted,monkeypatch):
     import httpx
