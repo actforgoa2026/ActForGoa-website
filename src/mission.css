@@ -17,7 +17,7 @@
 .mission-topic-group > p { min-height: 3.2em; font-size: 16px; line-height: 1.6; color: var(--muted); margin: 0 0 24px; max-width: 34ch; }
 .mission-topic-list { display: grid; grid-template-columns: 1fr; gap: 12px; }
 .mission-topic-list a { min-width: 0; min-height: 72px; }
-.mission-topic-list .topic-icon { width: 22px; height: 22px; }
+.mission-topic-list .topic-icon { width: 48px; height: 48px; }
 .mission-emergency { margin-top: 32px; min-height: 44px; font-size: 15px; }
 .mission-explore { padding-block: 56px 32px; border-top: 1px solid var(--line); }
 .mission-explore-heading { display: flex; justify-content: space-between; align-items: end; gap: 24px; margin-bottom: 48px; }
@@ -76,6 +76,7 @@
 /* Use the current Arc link's direct children on the shared navigation grid. */
 .mission-topic-list a, .topic-action-link { display: grid; grid-template-columns: 24px minmax(0, 1fr) 22px; text-align: left; gap: 12px; }
 .mission-topic-list a > svg, .topic-action-link > svg { flex-shrink: 0; }
+.mission-topic-list a { grid-template-columns: 48px minmax(0, 1fr) 22px; }
 
 .mission-ai-link { display: flex; width: min(100%, 620px); margin-top: 24px; justify-content: space-between; text-align: left; gap: 12px; }
 .mission-ai-link > svg { flex-shrink: 0; }

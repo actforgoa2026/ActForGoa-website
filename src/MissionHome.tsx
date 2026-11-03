@@ -6,7 +6,7 @@ import { useLanguage } from './language';
 import { translatePriority } from './priority-translations';
 import { Button } from './components/arc/button/button';
 import { ButtonLink } from './components/arc/button/button-link';
-import { TopicIcon } from './components/TopicIcon';
+import { TopicIllustration } from './components/TopicIllustration';
 import HomeCarousel from './HomeCarousel';
 import './mission.css';
 
@@ -53,11 +53,11 @@ export default function MissionHome({ search }: { search: ReactNode }) {
         <p>{group.description}</p>
         <nav aria-label={group.title+' topics'} className="mission-topic-list">
         {group.slugs.map(slug => topicFlows.find(flow => flow.slug === slug)!).map(flow => <ButtonLink wrap variant="secondary" key={flow.slug} to={'/topics/'+flow.slug}>
-          <TopicIcon name={flow.icon} />
+          <TopicIllustration category={flow.slug} fallback={flow.icon} />
           <span lang={translatePriority(flow.label, language) === flow.label ? 'en' : language}>{translatePriority(flow.label, language)}</span>
           <ArrowRight size={19} aria-hidden="true" />
         </ButtonLink>)}
-        {group.climatePlan && <ButtonLink wrap variant="secondary" to="/climate-plan"><TopicIcon name="nature"/><span>Explore Goa’s Climate Action Plan</span><ArrowRight size={19} aria-hidden="true" /></ButtonLink>}
+        {group.climatePlan && <ButtonLink wrap variant="secondary" to="/climate-plan"><TopicIllustration category="climate-plan" fallback="nature"/><span>Explore Goa’s Climate Action Plan</span><ArrowRight size={19} aria-hidden="true" /></ButtonLink>}
         </nav>
       </section>)}
       </div>

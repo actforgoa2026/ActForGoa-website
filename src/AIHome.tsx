@@ -3,7 +3,7 @@ import {ArrowRight, BookOpen, Leaf, Scale, Globe, Map, MessagesSquare} from 'luc
 import {Link} from 'react-router-dom';
 import OrbitLanding from './OrbitLanding';
 import {ButtonLink} from './components/arc/button/button-link';
-import {TopicIcon} from './components/TopicIcon';
+import {TopicIllustration} from './components/TopicIllustration';
 import {topicFlows, topicDescriptions, topicHref} from './topic-flows';
 import './ai-home.css';
 
@@ -11,7 +11,7 @@ import './ai-home.css';
 export function AITopicPaths() {
  return <section className="ai-paths shell" aria-labelledby="home-actions-heading">
   <div className="ai-section-heading"><div><h2 id="home-actions-heading" tabIndex={-1}>What do you care about?</h2><p>Choose a topic. Find the tools and knowledge to take your next step.</p></div><Link to="/research-library">Browse the library <ArrowRight size={18}/></Link></div>
-  <nav className="ai-topic-grid" aria-label="Choose a topic">{topicFlows.map(item=><ButtonLink wrap variant="secondary" key={item.slug} className="ai-topic-button" to={topicHref(item.topic)}><TopicIcon name={item.icon}/><span><strong>{item.label}</strong><small>{topicDescriptions[item.slug]}</small></span></ButtonLink>)}</nav>
+  <nav className="ai-topic-grid" aria-label="Choose a topic">{topicFlows.map(item=><ButtonLink wrap variant="secondary" key={item.slug} className="ai-topic-button" to={topicHref(item.topic)}><TopicIllustration category={item.slug} fallback={item.icon}/><span><strong>{item.label}</strong><small>{topicDescriptions[item.slug]}</small></span></ButtonLink>)}</nav>
  </section>;
 }
 

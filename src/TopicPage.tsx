@@ -6,6 +6,7 @@ import {Link, useLocation, useParams} from 'react-router-dom';
 import {ArrowLeft, ArrowRight, ArrowUpRight, Download} from 'lucide-react';
 import {topicFlows, allTopicActions, actionHref, type TopicFlow, type TopicAction} from './topic-flows';
 import {TopicIcon} from './components/TopicIcon';
+import {TopicIllustration} from './components/TopicIllustration';
 import {RecordCard} from './components/RecordCard';
 import {hybridSearch} from './search';
 import {actionsInBranch, topicPeople} from './topic-records';
@@ -58,7 +59,7 @@ export function TopicPage({records}: {records:RecordItem[]}) {
    {action ? <><Link to={'/topics/'+flow.slug}>{translatePriority(flow.label, language)}</Link></> : null}
    {choiceId && parent && <><span aria-hidden="true">/</span><Link to={'/topics/'+flow.slug+'/'+parent.id}>{translatePriority(parent.label, language)}</Link></>}
   </nav>
-  <header className="topic-page-heading"><TopicIcon name={action?.icon || flow.icon}/><h1 lang={translatePriority(action?.label || flow.label, language) === (action?.label || flow.label) ? 'en' : language}>{translatePriority(action?.label || flow.label, language)}</h1></header>
+  <header className="topic-page-heading">{action ? <TopicIcon name={action.icon}/> : <TopicIllustration category={flow.slug} fallback={flow.icon}/>}<h1 lang={translatePriority(action?.label || flow.label, language) === (action?.label || flow.label) ? 'en' : language}>{translatePriority(action?.label || flow.label, language)}</h1></header>
   {(action?.description || (!action && flow.introduction)) && <p className="topic-introduction" lang="en">{action?.description || flow.introduction}</p>}
   {!action ? <TopicChoices flow={flow}/> : action.choices ? <TopicChoices flow={flow} parent={action}/> : <>
    {!!action.links?.length && <section className="action-destinations" aria-label="Take your next step"><div className="choice-grid">
