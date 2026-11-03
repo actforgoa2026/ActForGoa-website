@@ -1,6 +1,6 @@
 # Illustrated category buttons
 
-Implemented on `codex/illustrated-category-icons`, based on freshly fetched `origin/main` at `ee2989b`. Prepared for draft review only; not merged or deployed.
+Implemented on `codex/illustrated-category-icons`, based on freshly fetched `origin/main` at `ee2989b`. Implementation commit: `b9bbcc3ef843ceec75a72414c668669fefb2cba4`. Prepared for draft review only; not merged or deployed.
 
 The main site's categories now use fifteen original illustrations matching the landing page's forest-green engraved palm, cow and temple artwork. The set covers all fourteen existing topics and the Climate Action Plan. The same topic artwork appears on the AI homepage and the fourteen topic headings. Specific action icons remain unchanged.
 
@@ -19,6 +19,7 @@ Asset provenance, source image path, extraction regions and individual sizes are
 - Real Chromium against the production build: **10 responsive layouts passed**, covering `/` and `/ai` at 1440, 1024, 768, 390 and 320px. All 15/14 images load, retain their aspect ratio, fit the controls and remain decorative. No horizontal page/control overflow or page exceptions; no failed asset requests.
 - Compared labels, destinations, font family/size/weight/line-height, and accessible navigation snapshots with unchanged main at every width. They match. Verified Figtree actually loads, visible keyboard focus, tab order and category clicks to `/topics/water`.
 - All fourteen topic headers load the correct image at 390px; `/topics/waste/segregation` retains its existing action icon. The separate `/landing/` still renders its original motifs without horizontal overflow.
+- Hindi and Konkani main-page labels match unchanged main at 320px, without page/control overflow; touch navigation opens the Water topic in both languages. See [languages.json](languages.json).
 - Actual pixels inspected for the generated sheet, main desktop, AI desktop, main tablet, main phone and narrow AI phone. The repository-requested Impeccable skill is absent from this executor; no automated Impeccable review is claimed.
 - `git diff --check`: **passed**.
 

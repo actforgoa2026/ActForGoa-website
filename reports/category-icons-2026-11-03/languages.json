@@ -1,0 +1,16 @@
+[
+  {
+    "language": "hi",
+    "width": 320,
+    "labelsMatchMain": true,
+    "noOverflow": true,
+    "touchNavigation": "/topics/water"
+  },
+  {
+    "language": "gom-Deva",
+    "width": 320,
+    "labelsMatchMain": true,
+    "noOverflow": true,
+    "touchNavigation": "/topics/water"
+  }
+]
