@@ -1,12 +1,12 @@
 # Cloud implementation and landing plan — 28 October 2026
 
-## Illustrated category buttons prepared for draft review · 3 November 2026
+## Illustrated category buttons in draft PR #148 · 3 November 2026
 
 User requested category-button illustrations matching the landing page's cows and palms, then explicitly approved opening a draft PR. Isolated `codex/illustrated-category-icons` starts from freshly fetched main `ee2989b14a71a44657361242faa6b91ac58b371d`; implementation commit is `b9bbcc3ef843ceec75a72414c668669fefb2cba4`. Fifteen generated forest-green engraved motifs cover all fourteen current categories and the Climate Action Plan. They appear on the main and AI category buttons and topic headings, using existing Arc ButtonLink controls. Labels, destinations, translations, typography, keyboard behavior and responsive category grouping are preserved. Assets have transparent backgrounds, natural proportions, explicit dimensions and provenance. Action-menu utility icons and the separate landing remain unchanged.
 
 Implemented and tested: all 283 Node tests pass with the documented `NODE_USE_ENV_PROXY=1` setting, and the complete main/landing production build passes. Actual Chromium checks compare accessible names, typography and links to unchanged main across 1440/1024/768/390/320px. All ten homepage layouts, fourteen topic headers, one action route and the separate landing pass; screenshots inspected. Hindi and Konkani labels and touch navigation also pass at 320px. No page errors, missing assets or horizontal overflow. Impeccable is unavailable in this executor; manual pixel review completed. See [illustration report and rendered previews](../reports/category-icons-2026-11-03/README.md).
 
-State: prepared for an authorized draft PR; **not merged or deployed**. No chat generation, report submission, backend/service/configuration change or production promotion. Next action is review of the illustrated buttons; any later merge or deployment remains with the release coordinator under separate authorization. Task workspace: `/workspace/ActForGoa-category-icons`; local built preview port 4393. Original shared checkout remains unchanged.
+State: [authorized draft PR #148](https://github.com/actforgoa2026/ActForGoa-website/pull/148) is open; **not merged or deployed**. No chat generation, report submission, backend/service/configuration change or production promotion. Next action is review of the illustrated buttons; any later merge or deployment remains with the release coordinator under separate authorization. Task workspace: `/workspace/ActForGoa-category-icons`; local built preview port 4393. Original shared checkout remains unchanged.
 
 ## October research budget increase authorized · 30 October 2026
 

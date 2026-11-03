@@ -1,6 +1,6 @@
 # Illustrated category buttons
 
-Implemented on `codex/illustrated-category-icons`, based on freshly fetched `origin/main` at `ee2989b`. Implementation commit: `b9bbcc3ef843ceec75a72414c668669fefb2cba4`. Prepared for draft review only; not merged or deployed.
+Implemented on `codex/illustrated-category-icons`, based on freshly fetched `origin/main` at `ee2989b`. Implementation commit: `b9bbcc3ef843ceec75a72414c668669fefb2cba4`. [Draft PR #148](https://github.com/actforgoa2026/ActForGoa-website/pull/148) is open for review; not merged or deployed.
 
 The main site's categories now use fifteen original illustrations matching the landing page's forest-green engraved palm, cow and temple artwork. The set covers all fourteen existing topics and the Climate Action Plan. The same topic artwork appears on the AI homepage and the fourteen topic headings. Specific action icons remain unchanged.
 
