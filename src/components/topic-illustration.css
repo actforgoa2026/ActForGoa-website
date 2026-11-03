@@ -1,0 +1,21 @@
+.topic-illustration {
+  display: block;
+  width: 48px;
+  height: 48px;
+  flex: none;
+  object-fit: contain;
+}
+
+.ai-topic-button .topic-illustration,
+.topic-page-heading .topic-illustration {
+  width: 64px;
+  height: 64px;
+}
+
+@media (max-width: 600px) {
+  .ai-topic-button .topic-illustration,
+  .topic-page-heading .topic-illustration {
+    width: 56px;
+    height: 56px;
+  }
+}

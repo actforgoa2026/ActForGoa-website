@@ -1,0 +1,208 @@
+{
+  "kind": "Generated decorative category illustrations",
+  "createdOn": "2026-11-03",
+  "tool": "OpenAI built-in image_gen",
+  "reference": "landing/public/assets/goa-motifs.webp",
+  "sourceOutput": "/workspace/generated_images/exec-36dad29e-bc72-481d-95ca-2185143f5d7a.png",
+  "style": "Forest-green natural-history engraving with etched hatching, stippled shading and pale interior highlights; transparent backgrounds.",
+  "promptSummary": "15 coherent, distinct category motifs in a 4 × 4 asset sheet matching the existing palm, zebu cow and temple artwork. No labels, logos or background shapes. Last cell empty.",
+  "processing": "Individually extracted from the generated 1254 × 1254 sheet using the regions below, trimmed and proportionally contained with transparent padding in 192 × 192 WebP exports. Quality 92; alpha quality 100. No stretching or recoloring.",
+  "usage": "Decorative navigation artwork. Existing visible labels provide accessible names. Not documentary depictions of specific sites.",
+  "assets": [
+    {
+      "category": "nature",
+      "file": "nature.webp",
+      "region": {
+        "left": 0,
+        "top": 0,
+        "width": 313,
+        "height": 331
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 26930
+    },
+    {
+      "category": "water",
+      "file": "water.webp",
+      "region": {
+        "left": 313,
+        "top": 0,
+        "width": 313,
+        "height": 331
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 14206
+    },
+    {
+      "category": "waste",
+      "file": "waste.webp",
+      "region": {
+        "left": 626,
+        "top": 0,
+        "width": 314,
+        "height": 331
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 21018
+    },
+    {
+      "category": "food",
+      "file": "food.webp",
+      "region": {
+        "left": 940,
+        "top": 0,
+        "width": 314,
+        "height": 331
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 29698
+    },
+    {
+      "category": "carbon",
+      "file": "carbon.webp",
+      "region": {
+        "left": 0,
+        "top": 331,
+        "width": 313,
+        "height": 306
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 22780
+    },
+    {
+      "category": "flooding",
+      "file": "flooding.webp",
+      "region": {
+        "left": 313,
+        "top": 331,
+        "width": 313,
+        "height": 306
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 21782
+    },
+    {
+      "category": "community",
+      "file": "community.webp",
+      "region": {
+        "left": 626,
+        "top": 331,
+        "width": 314,
+        "height": 306
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 26034
+    },
+    {
+      "category": "planning",
+      "file": "planning.webp",
+      "region": {
+        "left": 940,
+        "top": 331,
+        "width": 314,
+        "height": 306
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 24254
+    },
+    {
+      "category": "health",
+      "file": "health.webp",
+      "region": {
+        "left": 0,
+        "top": 637,
+        "width": 313,
+        "height": 302
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 17784
+    },
+    {
+      "category": "laws",
+      "file": "laws.webp",
+      "region": {
+        "left": 313,
+        "top": 637,
+        "width": 313,
+        "height": 302
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 23630
+    },
+    {
+      "category": "business",
+      "file": "business.webp",
+      "region": {
+        "left": 626,
+        "top": 637,
+        "width": 314,
+        "height": 302
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 22068
+    },
+    {
+      "category": "culture",
+      "file": "culture.webp",
+      "region": {
+        "left": 940,
+        "top": 637,
+        "width": 314,
+        "height": 302
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 22780
+    },
+    {
+      "category": "tourism",
+      "file": "tourism.webp",
+      "region": {
+        "left": 0,
+        "top": 939,
+        "width": 313,
+        "height": 315
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 31508
+    },
+    {
+      "category": "education",
+      "file": "education.webp",
+      "region": {
+        "left": 313,
+        "top": 939,
+        "width": 313,
+        "height": 315
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 18522
+    },
+    {
+      "category": "climate-plan",
+      "file": "climate-plan.webp",
+      "region": {
+        "left": 626,
+        "top": 939,
+        "width": 314,
+        "height": 315
+      },
+      "width": 192,
+      "height": 192,
+      "bytes": 23912
+    }
+  ]
+}

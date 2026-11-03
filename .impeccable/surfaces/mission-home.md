@@ -12,6 +12,8 @@ The user's 30 October correction restores the original rectangular Goa photo car
 
 “What do you care about?” groups the existing routes under Climate, Civic and Culture. Keep all fourteen topic routes and the Climate Action Plan. Desktop uses three aligned open groups; tablet and phone reflow by whole category. Preserve affirmative actions and reporting order inside each destination.
 
+The 3 November category illustrations reuse the landing's forest-green engraving and stippling style. `TopicIllustration` supplies one distinct transparent WebP per topic, plus the Climate Action Plan, inside the existing Arc links. Main-page icons occupy a 48px column; AI cards and topic headings use 64px, or 56px on phones. Contain the art without stretching. These images are decorative: visible labels and the existing links remain the accessibility authority. Specific action icons remain functional line icons. Provenance and browser evidence are in `reports/category-icons-2026-11-03/` and `public/assets/topics/illustrations.json`.
+
 “Explore the field guide” has four generous, open sections with explanatory copy and actual Arc links: Guides & resources, People & services, Stories and Collaborative Action. Browse everything stays available. Collaborative Action goes directly to the user-supplied Lovable URL.
 
 The shared decorative footer illustration grows taller and overlaps the link columns through a gradual mask over its existing stippled edge. Keep the original image and provenance, upright Figtree, cream/forest palette, visible focus and readable contrast. No new control skins, eyebrows, italic type or side stripes. The separate `/AI` homepage retains its own visual composition.
